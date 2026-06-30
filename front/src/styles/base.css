@@ -1,0 +1,44 @@
+/* Premium aesthetic */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-secondary);
+  background-image: radial-gradient(
+    115% 75% at 50% -15%,
+    color-mix(in srgb, var(--color-brand) 6%, transparent) 0%,
+    transparent 55%
+  );
+  background-repeat: no-repeat;
+  color: var(--color-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+::selection {
+  background-color: color-mix(in srgb, var(--color-brand) 28%, transparent);
+  color: var(--color-primary);
+}
+
+.prose-premium p {
+  margin-bottom: 1.25rem;
+  line-height: 1.8;
+}
+
+.prose-premium strong {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.prose-premium ul,
+.prose-premium ol {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.prose-premium li {
+  margin-bottom: 0.5rem;
+  line-height: 1.7;
+}

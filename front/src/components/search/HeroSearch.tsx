@@ -1,0 +1,80 @@
+import { Sparkles } from 'lucide-react';
+import type { SearchFilters } from '../../api/destinos';
+import { useSearchFilters } from '../../hooks/useSearchFilters';
+import HeroBackground from './HeroBackground';
+import SearchBar from './SearchBar';
+import FilterPanel from './FilterPanel';
+
+interface Props {
+  onSearch: (filters: SearchFilters) => void;
+  activeFilterCount?: number;
+}
+
+export default function HeroSearch({ onSearch, activeFilterCount = 0 }: Props) {
+  const {
+    q,
+    setQ,
+    filters,
+    filtersOpen,
+    setFiltersOpen,
+    updateFilter,
+    resetFilters,
+    buildPayload,
+    localActiveCount,
+  } = useSearchFilters();
+
+  const handleApply = () => {
+    onSearch(buildPayload());
+    setFiltersOpen(false);
+  };
+
+  const handleReset = () => {
+    resetFilters();
+    onSearch({ q: '', presupuesto: '', masificacion: '', ubicacion: '', tipoTurismo: '', actividades: '' });
+  };
+
+  const badgeCount = localActiveCount || activeFilterCount;
+
+  return (
+    <section id="buscar" className="relative min-h-[92vh] flex items-center justify-center overflow-hidden hero-mesh grain">
+      <HeroBackground />
+
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-6 pt-28 pb-20">
+        <div className="text-center mb-12 animate-fade-up">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--color-brand)]/20 bg-[var(--color-brand)]/10 text-[var(--color-brand)] text-xs font-medium tracking-wide mb-6">
+            <Sparkles className="w-3.5 h-3.5" />
+            Curado para viajeros exigentes
+          </div>
+          <h1 className="font-serif text-5xl md:text-7xl font-medium text-white tracking-tight leading-[1.1] mb-5">
+            Descubre tu
+            <br />
+            <span className="text-gradient-brand italic">destino ideal</span>
+          </h1>
+          <p className="text-white/60 text-lg max-w-xl mx-auto font-light">
+            Filtra por presupuesto, masificación y tipo de turismo para encontrar el lugar perfecto en España.
+          </p>
+        </div>
+
+        <div className="animate-fade-up animate-fade-up-delay-1">
+          <div className="glass rounded-2xl p-2 shadow-2xl shadow-black/20">
+            <SearchBar
+              q={q}
+              onQChange={setQ}
+              onSearch={handleApply}
+              filtersOpen={filtersOpen}
+              onToggleFilters={() => setFiltersOpen(!filtersOpen)}
+              activeCount={badgeCount}
+            />
+            <FilterPanel
+              open={filtersOpen}
+              filters={filters}
+              onUpdateFilter={updateFilter}
+              onReset={handleReset}
+              onApply={handleApply}
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

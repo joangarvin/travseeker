@@ -1,0 +1,12 @@
+{
+  "name": "travseeker",
+  "private": true,
+  "description": "TravSeeker monorepo — frontend + backend",
+  "scripts": {
+    "dev:backend": "cd backend && npm run dev",
+    "dev:front": "cd front && npm run dev",
+    "build:front": "cd front && npm run build",
+    "start:backend": "cd backend && npm start",
+    "install:all": "cd backend && npm install && cd ../front && npm install"
+  }
+}
