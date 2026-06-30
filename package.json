@@ -7,6 +7,9 @@
     "dev:front": "cd front && npm run dev",
     "build:front": "cd front && npm run build",
     "start:backend": "cd backend && npm start",
-    "install:all": "cd backend && npm install && cd ../front && npm install"
+    "install:all": "cd backend && npm install && cd ../front && npm install",
+    "db:push": "cd backend && npm run db:push",
+    "db:seed": "cd backend && npm run db:seed",
+    "db:coords": "cd backend && npm run db:coords"
   }
 }
