@@ -156,6 +156,46 @@
     left: 50%;
     animation-delay: -8s;
   }
+
+  .safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .safe-top {
+    padding-top: max(0px, env(safe-area-inset-top));
+  }
+
+  /* Action buttons on cards: always visible on touch, hover on desktop */
+  @media (hover: none), (max-width: 767px) {
+    .card-actions-touch {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+  }
+
+  /* Minimum touch target (44×44px) */
+  .touch-target {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
+
+  .scroll-filters {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .scroll-filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .animate-menu-in {
+    animation: menuIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
+@keyframes menuIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes fadeUp {

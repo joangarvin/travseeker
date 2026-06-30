@@ -87,7 +87,7 @@ export default function Colecciones() {
     return (
       <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
         <Header />
-        <div className="pt-32 px-6 pb-20 max-w-lg mx-auto text-center">
+        <div className="pt-24 sm:pt-32 px-4 sm:px-6 pb-20 max-w-lg mx-auto text-center">
           <div className="glass rounded-2xl border border-[var(--color-border)] p-10">
             <FolderHeart className="w-12 h-12 text-[var(--color-brand)] mx-auto mb-4" />
             <h1 className="font-serif text-3xl text-[var(--color-primary)] mb-3">Tus colecciones</h1>
@@ -112,7 +112,7 @@ export default function Colecciones() {
     <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
       <Header />
 
-      <section className="relative pt-32 pb-12 px-6 hero-mesh grain overflow-hidden">
+      <section className="relative pt-24 sm:pt-32 pb-10 sm:pb-12 px-4 sm:px-6 hero-mesh grain overflow-hidden">
         <div className="blob blob-3 opacity-40" />
         <div className="relative z-10 max-w-7xl mx-auto flex flex-wrap items-end justify-between gap-4">
           <ScrollReveal>
@@ -136,7 +136,7 @@ export default function Colecciones() {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-6 md:px-10 pb-20 -mt-4">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pb-20 -mt-4">
         {showForm && (
           <form onSubmit={handleCreate} className="mb-8 p-6 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-sm space-y-4 animate-fade-up">
             <div className="grid md:grid-cols-2 gap-4">

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Globe, Menu, X } from 'lucide-react';
 import logo from '../../assets/logo.png';
@@ -6,50 +6,64 @@ import ThemeToggle from '../ui/ThemeToggle';
 import UserMenu from '../auth/UserMenu';
 import { useAuth } from '../../context/AuthContext';
 
+const NAV_ITEMS: { to: string; label: string; hash?: boolean; auth?: boolean }[] = [
+  { to: '/', label: 'Inicio' },
+  { to: '/#destinos', label: 'Destinos', hash: true },
+  { to: '/mapa', label: 'Mapa' },
+  { to: '/comparar', label: 'Comparar' },
+  { to: '/favoritos', label: 'Favoritos', auth: true },
+  { to: '/colecciones', label: 'Colecciones', auth: true },
+  { to: '/sobre-nosotros', label: 'Sobre nosotros' },
+];
+
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const { user } = useAuth();
 
-  const navLink = (to: string, label: string, onClick?: () => void) => {
-    const isActive = location.pathname === to;
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
+
+  const navLink = (to: string, label: string, onClick?: () => void, isHash = false) => {
+    const isActive = !isHash && location.pathname === to;
+    const className = `block py-3 md:py-0 text-base md:text-sm font-medium transition-colors ${
+      isActive
+        ? 'text-[var(--color-brand-dark)] font-semibold'
+        : 'text-[var(--color-primary)]/80 hover:text-[var(--color-primary)] active:text-[var(--color-brand-dark)]'
+    }`;
+    if (isHash) {
+      return (
+        <a href={to} onClick={onClick} className={className}>
+          {label}
+        </a>
+      );
+    }
     return (
-      <Link
-        to={to}
-        onClick={onClick}
-        className={`transition-colors ${
-          isActive
-            ? 'text-[var(--color-brand-dark)] font-semibold'
-            : 'text-[var(--color-primary)]/80 hover:text-[var(--color-primary)]'
-        }`}
-      >
+      <Link to={to} onClick={onClick} className={className}>
         {label}
       </Link>
     );
   };
 
+  const visibleNav = NAV_ITEMS.filter((item) => !item.auth || user);
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50">
+    <header className="fixed top-0 left-0 right-0 z-[2000] safe-top">
       <div className="glass border-b border-[var(--color-border)] shadow-sm">
-        <div className="max-w-7xl mx-auto flex justify-between items-center py-3 px-6 md:px-10 gap-6">
-          <Link to="/" className="flex items-center gap-3 group shrink-0">
-            <img src={logo} alt="Travseeker" className="h-9 w-auto group-hover:scale-105 transition-transform" />
+        <div className="max-w-7xl mx-auto flex justify-between items-center py-2.5 sm:py-3 px-4 sm:px-6 md:px-10 gap-4">
+          <Link to="/" className="flex items-center gap-3 group shrink-0 touch-target">
+            <img src={logo} alt="Travseeker" className="h-8 sm:h-9 w-auto group-hover:scale-105 transition-transform" />
           </Link>
 
           <div className="hidden md:flex items-center gap-8 flex-1 justify-end">
             <nav className="flex gap-8 text-sm font-medium">
-              {navLink('/', 'Inicio')}
-              <a
-                href="/#destinos"
-                className="text-[var(--color-primary)]/80 hover:text-[var(--color-primary)] transition-colors"
-              >
-                Destinos
-              </a>
-              {navLink('/mapa', 'Mapa')}
-              {navLink('/comparar', 'Comparar')}
-              {user && navLink('/favoritos', 'Favoritos')}
-              {user && navLink('/colecciones', 'Colecciones')}
-              {navLink('/sobre-nosotros', 'Sobre nosotros')}
+              {visibleNav.map((item) => navLink(item.to, item.label, undefined, item.hash))}
             </nav>
 
             <div className="flex items-center gap-3 pl-6 ml-2 border-l border-[var(--color-border-strong)]">
@@ -65,37 +79,43 @@ export default function Header() {
             </div>
           </div>
 
-          <div className="flex md:hidden items-center gap-2">
+          <div className="flex md:hidden items-center gap-1.5">
             <UserMenu />
             <ThemeToggle />
             <button
               type="button"
-              className="p-2 rounded-lg text-[var(--color-primary)] hover:bg-[var(--color-border)] transition-colors"
+              className="touch-target p-2 rounded-xl text-[var(--color-primary)] hover:bg-[var(--color-border)] active:bg-[var(--color-brand)]/10 transition-colors"
               onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Menú"
+              aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
+              aria-expanded={mobileOpen}
             >
-              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden glass border-b border-[var(--color-border)] px-6 py-4 space-y-4 animate-fade-up">
-          {navLink('/', 'Inicio', () => setMobileOpen(false))}
-          <a
-            href="/#destinos"
-            className="block text-sm text-[var(--color-primary)]/80"
+        <>
+          <button
+            type="button"
+            className="fixed inset-0 top-[var(--header-height,56px)] bg-black/50 backdrop-blur-sm md:hidden"
+            aria-label="Cerrar menú"
             onClick={() => setMobileOpen(false)}
+          />
+          <nav
+            className="fixed left-0 right-0 top-[var(--header-height,56px)] bottom-0 md:hidden overflow-y-auto bg-[var(--color-surface)] border-b border-[var(--color-border)] shadow-xl px-5 py-4 safe-bottom animate-menu-in"
+            aria-label="Navegación principal"
           >
-            Destinos
-          </a>
-          {navLink('/mapa', 'Mapa', () => setMobileOpen(false))}
-          {navLink('/comparar', 'Comparar', () => setMobileOpen(false))}
-          {user && navLink('/favoritos', 'Favoritos', () => setMobileOpen(false))}
-          {user && navLink('/colecciones', 'Colecciones', () => setMobileOpen(false))}
-          {navLink('/sobre-nosotros', 'Sobre nosotros', () => setMobileOpen(false))}
-        </div>
+            <div className="flex flex-col">
+              {visibleNav.map((item) => (
+                <div key={item.to} className="border-b border-[var(--color-border)] last:border-0">
+                  {navLink(item.to, item.label, () => setMobileOpen(false), item.hash)}
+                </div>
+              ))}
+            </div>
+          </nav>
+        </>
       )}
     </header>
   );

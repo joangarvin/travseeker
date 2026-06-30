@@ -61,7 +61,7 @@ export default function DestinationDetail() {
         tipoTurismo={facts.tipoTurismo}
       />
 
-      <div className="max-w-5xl mx-auto px-6 md:px-8 py-16 space-y-16">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-10 sm:py-16 space-y-10 sm:space-y-16 pb-24 sm:pb-16">
         <ScrollReveal>
           <article>
             <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-dark)] mb-6">Sobre el destino</h2>

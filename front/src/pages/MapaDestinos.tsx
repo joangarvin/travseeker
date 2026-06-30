@@ -48,48 +48,52 @@ export default function MapaDestinos() {
     setFilters((prev) => ({ ...prev, [key]: value }));
 
   return (
-    <div className="h-screen flex flex-col bg-[var(--color-secondary)] font-sans overflow-hidden">
+    <div className="h-[100dvh] flex flex-col bg-[var(--color-secondary)] font-sans overflow-hidden">
       <Header />
 
-      <div className="pt-[68px] flex flex-col flex-1 min-h-0">
-        <div className="border-b border-[var(--color-border)] bg-[var(--color-surface)] px-4 md:px-8 py-3 z-[1000] shadow-sm">
-          <div className="max-w-7xl mx-auto flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-2 text-[var(--color-primary)] font-semibold mr-2">
-              <MapPin className="w-4 h-4 text-[var(--color-brand-dark)]" />
-              Mapa
-              <span className="text-xs font-normal text-[var(--color-muted)]">
-                {loading ? 'cargando...' : `${destinos.length} destinos`}
-              </span>
+      <div className="pt-[56px] sm:pt-[68px] flex flex-col flex-1 min-h-0">
+        <div className="border-b border-[var(--color-border)] bg-[var(--color-surface)] relative z-10 shadow-sm shrink-0">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 py-3">
+            <div className="flex items-center gap-3 mb-2 sm:mb-0">
+              <div className="flex items-center gap-2 text-[var(--color-primary)] font-semibold shrink-0">
+                <MapPin className="w-4 h-4 text-[var(--color-brand-dark)]" />
+                Mapa
+                <span className="text-xs font-normal text-[var(--color-muted)]">
+                  {loading ? 'cargando...' : `${destinos.length} destinos`}
+                </span>
+              </div>
+
+              {activeCount > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setFilters({})}
+                  className="ml-auto sm:ml-0 flex items-center gap-1 text-sm text-[var(--color-muted)] hover:text-[var(--color-danger)] transition-colors touch-target shrink-0"
+                >
+                  <X className="w-3.5 h-3.5" /> Limpiar
+                </button>
+              )}
             </div>
 
-            {mapFilters.map((f) => (
-              <select
-                key={f.key}
-                value={(filters[f.key as keyof SearchFilters] as string) || ''}
-                onChange={(e) => updateFilter(f.key, e.target.value)}
-                className="text-sm border border-[var(--color-border-strong)] rounded-lg px-3 py-2 bg-[var(--color-surface)] text-[var(--color-primary)] focus:outline-none focus:border-[var(--color-brand)] cursor-pointer"
-              >
-                {f.options.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.value === '' ? f.label : opt.label}
-                  </option>
-                ))}
-              </select>
-            ))}
-
-            {activeCount > 0 && (
-              <button
-                type="button"
-                onClick={() => setFilters({})}
-                className="flex items-center gap-1 text-sm text-[var(--color-muted)] hover:text-[var(--color-danger)] transition-colors"
-              >
-                <X className="w-3.5 h-3.5" /> Limpiar
-              </button>
-            )}
+            <div className="flex gap-2 overflow-x-auto scroll-filters pb-1 -mx-1 px-1 sm:flex-wrap sm:overflow-visible">
+              {mapFilters.map((f) => (
+                <select
+                  key={f.key}
+                  value={(filters[f.key as keyof SearchFilters] as string) || ''}
+                  onChange={(e) => updateFilter(f.key, e.target.value)}
+                  className="text-sm border border-[var(--color-border-strong)] rounded-lg px-3 py-2.5 bg-[var(--color-surface)] text-[var(--color-primary)] focus:outline-none focus:border-[var(--color-brand)] cursor-pointer shrink-0 min-w-[9.5rem]"
+                >
+                  {f.options.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.value === '' ? f.label : opt.label}
+                    </option>
+                  ))}
+                </select>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="flex-1 min-h-0">
+        <div className="flex-1 min-h-0 relative z-0 isolate">
           <MapContainer
             center={SPAIN_CENTER}
             zoom={6}

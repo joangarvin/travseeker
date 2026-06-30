@@ -46,7 +46,7 @@ function DestinationCard({ destino, index = 0, enableCollection = false, enableC
       to={`/destino/${destino.id}`}
       className="group card-shine relative rounded-2xl overflow-hidden bg-[var(--color-surface)] border border-[var(--color-border)] shadow-sm hover:shadow-2xl hover:border-[var(--color-brand)]/20 transition-all duration-500 hover:-translate-y-1.5 block"
     >
-      <div className="relative h-80 overflow-hidden">
+      <div className="relative h-56 sm:h-72 md:h-80 overflow-hidden">
         <img
           src={getImageUrl(destino.imagen, index)}
           alt={destino.nombre}
@@ -55,7 +55,7 @@ function DestinationCard({ destino, index = 0, enableCollection = false, enableC
           decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#080c0a] via-[#080c0a]/40 to-transparent opacity-85 group-hover:opacity-95 transition-opacity" />
-        <div className="absolute top-5 right-5 w-10 h-10 rounded-full glass flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+        <div className="absolute top-3 right-3 sm:top-5 sm:right-5 w-11 h-11 rounded-full glass flex items-center justify-center card-actions-touch opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
           <ArrowUpRight className="w-4 h-4 text-[var(--color-primary)]" />
         </div>
         {enableCompare && (
@@ -63,7 +63,7 @@ function DestinationCard({ destino, index = 0, enableCollection = false, enableC
             type="button"
             onClick={handleCompare}
             disabled={!inCompare && !canAdd}
-            className={`absolute top-5 left-5 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 -translate-y-2 group-hover:translate-y-0 disabled:opacity-40 ${
+            className={`absolute top-3 left-3 sm:top-5 sm:left-5 w-11 h-11 rounded-full flex items-center justify-center card-actions-touch transition-all duration-300 opacity-0 group-hover:opacity-100 -translate-y-2 group-hover:translate-y-0 disabled:opacity-40 ${
               inCompare
                 ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)]'
                 : 'glass-dark text-white/90 hover:bg-white/15'
@@ -77,7 +77,7 @@ function DestinationCard({ destino, index = 0, enableCollection = false, enableC
           <button
             type="button"
             onClick={openCollection}
-            className="absolute top-5 left-16 w-10 h-10 rounded-full glass-dark flex items-center justify-center text-white/90 hover:bg-white/15 transition-all duration-300 opacity-0 group-hover:opacity-100 -translate-y-2 group-hover:translate-y-0"
+            className="absolute top-3 left-14 sm:top-5 sm:left-16 w-11 h-11 rounded-full glass-dark flex items-center justify-center text-white/90 hover:bg-white/15 card-actions-touch transition-all duration-300 opacity-0 group-hover:opacity-100 -translate-y-2 group-hover:translate-y-0"
             aria-label="Guardar en colección"
           >
             <Bookmark className="w-4 h-4" />
@@ -85,12 +85,12 @@ function DestinationCard({ destino, index = 0, enableCollection = false, enableC
         )}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-7">
-        <div className="flex items-center gap-1.5 text-white/70 text-xs font-medium mb-2 tracking-wide uppercase">
-          <MapPin className="w-3 h-3" />
-          {ubicacion}
+      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-7">
+        <div className="flex items-center gap-1.5 text-white/70 text-[11px] sm:text-xs font-medium mb-1.5 sm:mb-2 tracking-wide uppercase">
+          <MapPin className="w-3 h-3 shrink-0" />
+          <span className="truncate">{ubicacion}</span>
         </div>
-        <h3 className="text-2xl font-semibold text-white mb-4 tracking-tight leading-tight">
+        <h3 className="text-xl sm:text-2xl font-semibold text-white mb-3 sm:mb-4 tracking-tight leading-tight line-clamp-2">
           {destino.nombre}
         </h3>
         <div className="flex flex-wrap gap-2">

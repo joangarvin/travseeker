@@ -108,22 +108,22 @@ export default function Comparador() {
     <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
       <Header />
 
-      <section className="relative pt-32 pb-12 px-6 hero-mesh grain overflow-hidden">
+      <section className="relative pt-24 sm:pt-32 pb-10 sm:pb-12 px-4 sm:px-6 hero-mesh grain overflow-hidden">
         <div className="blob blob-2 opacity-40" />
         <div className="relative z-10 max-w-7xl mx-auto">
           <ScrollReveal>
             <div className="flex items-center gap-3 mb-2">
               <GitCompare className="w-6 h-6 text-[var(--color-brand)]" />
-              <h1 className="font-serif text-4xl md:text-5xl font-medium text-white tracking-tight">Comparador</h1>
+              <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium text-white tracking-tight">Comparador</h1>
             </div>
-            <p className="text-white/60 text-lg font-light">
+            <p className="text-white/60 text-base sm:text-lg font-light">
               Compara hasta {MAX} destinos lado a lado: presupuesto, masificación, tipo de turismo y mejor época.
             </p>
           </ScrollReveal>
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-6 md:px-10 pb-20 -mt-4 space-y-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pb-20 -mt-4 space-y-6 sm:space-y-8">
         <div className="p-5 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-sm">
           <div className="flex flex-wrap items-center gap-2 mb-4">
             {compareItems.length === 0 && (

@@ -36,21 +36,21 @@ export default function HeroSearch({ onSearch, activeFilterCount = 0 }: Props) {
   const badgeCount = localActiveCount || activeFilterCount;
 
   return (
-    <section id="buscar" className="relative min-h-[92vh] flex items-center justify-center overflow-hidden hero-mesh grain">
+    <section id="buscar" className="relative min-h-[100dvh] sm:min-h-[92vh] flex items-center justify-center overflow-hidden hero-mesh grain">
       <HeroBackground />
 
-      <div className="relative z-10 w-full max-w-5xl mx-auto px-6 pt-28 pb-20">
-        <div className="text-center mb-12 animate-fade-up">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--color-brand)]/20 bg-[var(--color-brand)]/10 text-[var(--color-brand)] text-xs font-medium tracking-wide mb-6">
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 pt-24 sm:pt-28 pb-16 sm:pb-20">
+        <div className="text-center mb-8 sm:mb-12 animate-fade-up">
+          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full border border-[var(--color-brand)]/20 bg-[var(--color-brand)]/10 text-[var(--color-brand)] text-xs font-medium tracking-wide mb-4 sm:mb-6">
             <Sparkles className="w-3.5 h-3.5" />
             Curado para viajeros exigentes
           </div>
-          <h1 className="font-serif text-5xl md:text-7xl font-medium text-white tracking-tight leading-[1.1] mb-5">
+          <h1 className="font-serif text-[2.35rem] leading-[1.12] sm:text-5xl md:text-7xl font-medium text-white tracking-tight mb-4 sm:mb-5">
             Descubre tu
             <br />
             <span className="text-gradient-brand italic">destino ideal</span>
           </h1>
-          <p className="text-white/60 text-lg max-w-xl mx-auto font-light">
+          <p className="text-white/60 text-base sm:text-lg max-w-xl mx-auto font-light px-2">
             Filtra por presupuesto, masificación y tipo de turismo para encontrar el lugar perfecto en España.
           </p>
         </div>

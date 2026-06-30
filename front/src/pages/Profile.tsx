@@ -240,7 +240,7 @@ export default function Profile() {
     <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
       <Header />
 
-      <section className="relative pt-32 pb-16 px-6 hero-mesh grain overflow-hidden">
+      <section className="relative pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 sm:px-6 hero-mesh grain overflow-hidden">
         <div className="blob blob-1 opacity-40" />
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col sm:flex-row items-center sm:items-end gap-6 text-center sm:text-left">
           <Avatar user={user} size="xl" className="shadow-xl" />

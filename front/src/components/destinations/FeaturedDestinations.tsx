@@ -23,17 +23,17 @@ function FeaturedDestinations({
   const count = totalCount ?? destinos.length;
 
   return (
-    <section id="destinos" className="py-24 px-6 md:px-8 max-w-7xl mx-auto">
+    <section id="destinos" className="py-16 sm:py-24 px-4 sm:px-6 md:px-8 max-w-7xl mx-auto pb-24 sm:pb-24">
       <ScrollReveal>
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 sm:mb-16">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand)] mb-3 block">
             {loading ? 'Cargando...' : `${count} destino${count !== 1 ? 's' : ''}`}
           </span>
-          <h2 className="text-4xl md:text-5xl font-semibold text-[var(--color-primary)] tracking-tight mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[var(--color-primary)] tracking-tight mb-3 sm:mb-4">
             {title}
           </h2>
           {subtitle && (
-            <p className="text-[var(--color-muted)] text-lg max-w-2xl mx-auto font-light">{subtitle}</p>
+            <p className="text-[var(--color-muted)] text-base sm:text-lg max-w-2xl mx-auto font-light px-2">{subtitle}</p>
           )}
         </div>
       </ScrollReveal>
@@ -41,7 +41,7 @@ function FeaturedDestinations({
       {loading ? (
         <LoadingSkeleton count={6} />
       ) : destinos.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {destinos.map((destino, i) => (
             <ScrollReveal key={destino.id} delay={(i % 3 + 1) as 1 | 2 | 3}>
               <DestinationCard destino={destino} index={i} />

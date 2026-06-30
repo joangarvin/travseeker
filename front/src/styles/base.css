@@ -1,6 +1,14 @@
 /* Premium aesthetic */
 html {
   scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+  --header-height: 56px;
+}
+
+@media (min-width: 640px) {
+  html {
+    --header-height: 64px;
+  }
 }
 
 body {
@@ -15,6 +23,16 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.4s ease, color 0.4s ease;
+  overflow-x: hidden;
+  min-height: 100dvh;
+}
+
+/* Comfortable reading width on phones */
+@media (max-width: 640px) {
+  .prose-premium {
+    font-size: 1rem;
+    line-height: 1.75;
+  }
 }
 
 ::selection {
@@ -41,4 +59,15 @@ body {
 .prose-premium li {
   margin-bottom: 0.5rem;
   line-height: 1.7;
+}
+
+/* Leaflet panes must stay below app chrome (header z-2000) */
+.leaflet-container {
+  z-index: 0;
+}
+
+.leaflet-pane,
+.leaflet-top,
+.leaflet-bottom {
+  z-index: auto;
 }

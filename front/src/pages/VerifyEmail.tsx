@@ -42,7 +42,7 @@ export default function VerifyEmail() {
   return (
     <div className="min-h-screen bg-[var(--color-secondary)] font-sans flex flex-col">
       <Header />
-      <section className="flex-1 flex items-center justify-center px-6 pt-32 pb-20">
+      <section className="flex-1 flex items-center justify-center px-4 sm:px-6 pt-24 sm:pt-32 pb-20">
         <div className="max-w-md w-full text-center glass rounded-2xl border border-[var(--color-border)] p-10 shadow-xl">
           {status === 'loading' && (
             <>

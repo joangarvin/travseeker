@@ -4,9 +4,9 @@ import logo from '../../assets/logo.png';
 
 export default function Footer() {
   return (
-    <footer className="bg-[#080c0a] text-white mt-8 border-t border-[var(--color-brand)]/10">
-      <div className="max-w-7xl mx-auto px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+    <footer className="bg-[#080c0a] text-white mt-8 border-t border-[var(--color-brand)]/10 pb-24 sm:pb-0">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-10 sm:py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 sm:gap-12">
           <div>
             <img src={logo} alt="Travseeker" className="h-10 w-auto mb-4" />
             <p className="text-white/50 text-sm leading-relaxed max-w-xs">
@@ -38,7 +38,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/30">
+        <div className="mt-10 sm:mt-14 pt-6 sm:pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/30 text-center md:text-left">
           <span>© {new Date().getFullYear()} Travseeker. Todos los derechos reservados.</span>
           <span className="font-serif italic text-[var(--color-brand)]/50">Viaja con intención.</span>
         </div>

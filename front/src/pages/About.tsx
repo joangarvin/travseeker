@@ -32,7 +32,7 @@ export default function About() {
     <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
       <Header />
 
-      <section className="relative pt-32 pb-20 px-6 hero-mesh grain overflow-hidden">
+      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-20 px-4 sm:px-6 hero-mesh grain overflow-hidden">
         <div className="blob blob-1 opacity-50" />
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <ScrollReveal>

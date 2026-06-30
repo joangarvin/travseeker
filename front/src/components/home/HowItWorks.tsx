@@ -22,13 +22,13 @@ const STEPS = [
 export default function HowItWorks() {
   return (
     <section className="bg-[var(--color-surface)] border-y border-[var(--color-border)]">
-      <div className="max-w-7xl mx-auto px-6 md:px-8 py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-16 sm:py-24">
         <ScrollReveal>
-          <div className="text-center mb-16">
+          <div className="text-center mb-10 sm:mb-16">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-dark)] mb-3 block">
               Así funciona
             </span>
-            <h2 className="text-4xl md:text-5xl font-semibold text-[var(--color-primary)] tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[var(--color-primary)] tracking-tight">
               Tu viaje en tres pasos
             </h2>
           </div>

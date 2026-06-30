@@ -85,7 +85,7 @@ export default function ColeccionDetail() {
     <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
       <Header />
 
-      <section className="relative pt-28 pb-12 px-6 hero-mesh grain overflow-hidden">
+      <section className="relative pt-24 sm:pt-28 pb-10 sm:pb-12 px-4 sm:px-6 hero-mesh grain overflow-hidden">
         <div className="blob blob-1 opacity-30" />
         <div className="relative z-10 max-w-7xl mx-auto">
           <Link to="/colecciones" className="inline-flex items-center gap-2 text-white/70 hover:text-white text-sm mb-6 transition-colors">
