@@ -58,7 +58,7 @@ export default function Colecciones() {
     setCreating(true);
     try {
       const created = await createCollection({ nombre: name, descripcion: desc, color }, token);
-      setCollections((prev) => [created, ...prev]);
+      setCollections((prev) => [created, ...(prev ?? [])]);
       setName('');
       setDesc('');
       setColor('emerald');
@@ -71,7 +71,7 @@ export default function Colecciones() {
   const handleDelete = async (id: string) => {
     if (!token) return;
     if (!window.confirm('¿Eliminar esta colección? Los destinos no se borrarán de favoritos.')) return;
-    setCollections((prev) => prev.filter((c) => c.id !== id));
+    setCollections((prev) => (prev ?? []).filter((c) => c.id !== id));
     try {
       await deleteCollection(id, token);
     } catch {

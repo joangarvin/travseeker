@@ -3,7 +3,7 @@ import { GitCompare, X } from 'lucide-react';
 import { useCompare } from '../../context/CompareContext';
 
 export default function CompareBar() {
-  const { items, removeCompare, clearCompare } = useCompare();
+  const { items, clearCompare } = useCompare();
   const location = useLocation();
 
   if (items.length === 0 || location.pathname === '/comparar') return null;
