@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FolderHeart, LogIn, Plus, Trash2, X } from 'lucide-react';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import PageLoader from '../components/ui/PageLoader';
 import ScrollReveal from '../components/ui/ScrollReveal';
+import PageHero from '../components/layout/PageHero';
+import ListToolbar from '../components/ui/ListToolbar';
 import { useAuth } from '../context/AuthContext';
 import { useAbortableFetch } from '../hooks/useAbortableFetch';
 import { getCollections, createCollection, deleteCollection } from '../api/collections';
@@ -51,6 +53,21 @@ export default function Colecciones() {
   const [desc, setDesc] = useState('');
   const [color, setColor] = useState('emerald');
   const [creating, setCreating] = useState(false);
+  const [query, setQuery] = useState('');
+  const [sortBy, setSortBy] = useState<'recent' | 'name' | 'items'>('recent');
+
+  const visibleCollections = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const base = q
+      ? collections.filter((c) =>
+          c.nombre.toLowerCase().includes(q) || (c.descripcion ?? '').toLowerCase().includes(q),
+        )
+      : collections;
+
+    if (sortBy === 'name') return [...base].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+    if (sortBy === 'items') return [...base].sort((a, b) => b.count - a.count);
+    return base;
+  }, [collections, query, sortBy]);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,33 +129,40 @@ export default function Colecciones() {
     <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
       <Header />
 
-      <section className="relative pt-24 sm:pt-32 pb-10 sm:pb-12 px-4 sm:px-6 hero-mesh grain overflow-hidden">
-        <div className="blob blob-3 opacity-40" />
-        <div className="relative z-10 max-w-7xl mx-auto flex flex-wrap items-end justify-between gap-4">
-          <ScrollReveal>
-            <div className="flex items-center gap-3 mb-2">
-              <FolderHeart className="w-6 h-6 text-[var(--color-brand)]" />
-              <h1 className="font-serif text-4xl md:text-5xl font-medium text-white tracking-tight">
-                Mis colecciones
-              </h1>
-            </div>
-            <p className="text-white/60 text-lg font-light">
-              Agrupa destinos en itinerarios y añade tus notas de viaje.
-            </p>
-          </ScrollReveal>
+      <PageHero
+        icon={<FolderHeart className="w-6 h-6 text-[var(--color-brand)]" />}
+        title="Mis colecciones"
+        description="Agrupa destinos en itinerarios y añade tus notas de viaje."
+        blobClassName="blob blob-3 opacity-40"
+        action={(
           <button
             onClick={() => setShowForm((v) => !v)}
-            className="flex items-center gap-2 px-5 py-3 rounded-full bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:brightness-105 transition-all"
+            className="flex items-center gap-2 px-5 py-3 rounded-full bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:brightness-105 transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
             {showForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
             {showForm ? 'Cancelar' : 'Nueva colección'}
           </button>
-        </div>
-      </section>
+        )}
+      />
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pb-20 -mt-4">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pb-20">
+        {collections.length > 0 && (
+          <ListToolbar
+            query={query}
+            onQueryChange={setQuery}
+            queryPlaceholder="Buscar colección..."
+            sortValue={sortBy}
+            onSortChange={(value) => setSortBy(value as 'recent' | 'name' | 'items')}
+            sortOptions={[
+              { value: 'recent', label: 'Más recientes' },
+              { value: 'name', label: 'Nombre A-Z' },
+              { value: 'items', label: 'Más destinos' },
+            ]}
+          />
+        )}
+
         {showForm && (
-          <form onSubmit={handleCreate} className="mb-8 p-6 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-sm space-y-4 animate-fade-up">
+          <form onSubmit={handleCreate} className="mb-8 p-6 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-sm ring-1 ring-[var(--color-border)]/40 space-y-4 animate-fade-up">
             <div className="grid md:grid-cols-2 gap-4">
               <input
                 autoFocus
@@ -180,11 +204,11 @@ export default function Colecciones() {
           </form>
         )}
 
-        {collections.length > 0 ? (
+        {visibleCollections.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {collections.map((c, index) => (
+            {visibleCollections.map((c, index) => (
               <ScrollReveal key={c.id} delay={(index % 3) as 0 | 1 | 2}>
-                <div className="group relative rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                <div className="group relative rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                   <Link to={`/colecciones/${c.id}`} className="block">
                     <CoverCollage covers={c.covers} color={c.color} />
                     <div className="p-5">
@@ -202,7 +226,7 @@ export default function Colecciones() {
                   </Link>
                   <button
                     onClick={() => handleDelete(c.id)}
-                    className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm text-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-[var(--color-danger)] transition-all"
+                    className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm text-white/90 flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-[var(--color-danger)] transition-all"
                     aria-label="Eliminar colección"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -216,11 +240,15 @@ export default function Colecciones() {
             <div className="text-center py-20 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)]">
               <FolderHeart className="w-10 h-10 text-[var(--color-muted)] mx-auto mb-4" />
               <p className="text-[var(--color-muted)] mb-6">
-                Aún no tienes colecciones. Crea tu primer itinerario para empezar a organizar tus viajes.
+                {collections.length > 0
+                  ? 'No encontramos colecciones que coincidan con tu búsqueda.'
+                  : 'Aún no tienes colecciones. Crea tu primer itinerario para empezar a organizar tus viajes.'}
               </p>
-              <button onClick={() => setShowForm(true)} className="text-[var(--color-brand-dark)] font-semibold hover:underline">
-                Crear mi primera colección
-              </button>
+              {collections.length === 0 && (
+                <button onClick={() => setShowForm(true)} className="text-[var(--color-brand-dark)] font-semibold hover:underline">
+                  Crear mi primera colección
+                </button>
+              )}
             </div>
           )
         )}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Check, Compass, Pencil, Trash2, X } from 'lucide-react';
+import { ArrowLeft, Check, Compass, Pencil, Search, Trash2, X } from 'lucide-react';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import PageLoader from '../components/ui/PageLoader';
@@ -27,6 +27,7 @@ export default function ColeccionDetail() {
   const [desc, setDesc] = useState('');
   const [color, setColor] = useState('emerald');
   const [saving, setSaving] = useState(false);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     if (collection) {
@@ -58,6 +59,12 @@ export default function ColeccionDetail() {
   const handleRemoveItem = (destinoId: string) => {
     setCollection((prev) => (prev ? { ...prev, items: prev.items.filter((i) => i.destinoId !== destinoId) } : prev));
   };
+
+  const visibleItems = (collection?.items ?? []).filter((item) => {
+    const q = query.trim().toLowerCase();
+    if (!q) return true;
+    return item.destino.nombre.toLowerCase().includes(q);
+  });
 
   if (authLoading || (user && loading)) return <PageLoader label="Cargando colección..." />;
 
@@ -155,9 +162,23 @@ export default function ColeccionDetail() {
       </section>
 
       <section className="max-w-7xl mx-auto px-6 md:px-10 pb-20 -mt-4">
-        {collection.items.length > 0 ? (
+        {collection.items.length > 0 && (
+          <div className="mb-6 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] p-3 sm:p-4">
+            <div className="relative max-w-md">
+              <Search className="w-4 h-4 text-[var(--color-muted)] absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Buscar destino en la colección..."
+                className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border-strong)] text-sm text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-brand)]"
+              />
+            </div>
+          </div>
+        )}
+
+        {visibleItems.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {collection.items.map((item, index) => (
+            {visibleItems.map((item, index) => (
               <ScrollReveal key={item.id} delay={(index % 3) as 0 | 1 | 2}>
                 <CollectionItemCard collectionId={collection.id} item={item} onRemove={handleRemoveItem} />
               </ScrollReveal>

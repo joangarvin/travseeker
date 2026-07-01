@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { GitCompare, Plus, Search, X, Check, MapPin } from 'lucide-react';
+import { GitCompare, Plus, Search, X, Check, MapPin, Sparkles, RotateCcw } from 'lucide-react';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
-import ScrollReveal from '../components/ui/ScrollReveal';
+import PageHero from '../components/layout/PageHero';
 import { useCompare, COMPARE_MAX } from '../context/CompareContext';
 import { useAbortableFetch } from '../hooks/useAbortableFetch';
 import { destinosApi } from '../api/destinos';
@@ -38,11 +38,13 @@ function Chip({ children, highlight }: { children: React.ReactNode; highlight?: 
 
 export default function Comparador() {
   const [params, setParams] = useSearchParams();
-  const { items: compareItems, setItems, addCompare, removeCompare } = useCompare();
+  const { items: compareItems, setItems, addCompare, removeCompare, clearCompare } = useCompare();
   const selectedIds = useMemo(() => compareItems.map((x) => x.id), [compareItems]);
   const initialized = useRef(false);
 
   const [query, setQuery] = useState('');
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const pickerRef = useRef<HTMLDivElement>(null);
 
   const { data: catalog } = useAbortableFetch<Destino[]>(
     (signal) => destinosApi.search({}, signal),
@@ -77,6 +79,21 @@ export default function Comparador() {
     else setParams({}, { replace: true });
   }, [compareItems, setParams]);
 
+  useEffect(() => {
+    const onPointerDown = (e: PointerEvent) => {
+      if (!pickerRef.current?.contains(e.target as Node)) setPickerOpen(false);
+    };
+    const onEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setPickerOpen(false);
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onEscape);
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onEscape);
+    };
+  }, []);
+
   const { data: items, loading } = useAbortableFetch<ComparableDestino[]>(
     (signal) => destinosApi.compare(selectedIds, signal),
     [selectedIds.join(',')],
@@ -85,52 +102,64 @@ export default function Comparador() {
 
   const add = (destino: Destino) => {
     if (selectedIds.includes(destino.id)) return;
-    if (addCompare({ id: destino.id, nombre: destino.nombre })) setQuery('');
+    if (addCompare({ id: destino.id, nombre: destino.nombre })) {
+      setQuery('');
+      setPickerOpen(false);
+    }
   };
   const remove = (id: string) => removeCompare(id);
 
   const suggestions = useMemo(() => {
     const pool = (catalog ?? []).filter((d) => !selectedIds.includes(d.id));
     const q = query.trim().toLowerCase();
-    if (!q) return pool.slice(0, 6);
+    if (!q) return [];
     return pool.filter((d) => d.nombre.toLowerCase().includes(q)).slice(0, 8);
   }, [catalog, selectedIds, query]);
+  const canCompare = selectedIds.length >= 2;
 
   const cols = items ?? [];
   const minPres = cols.length ? Math.min(...cols.map((d) => presupuestoIndex(d.presupuesto)).filter((i) => i >= 0)) : -1;
   const minMas = cols.length ? Math.min(...cols.map((d) => masificacionIndex(d.masificacion)).filter((i) => i >= 0)) : -1;
 
   const gridStyle = { gridTemplateColumns: `132px repeat(${cols.length}, minmax(0, 1fr))` };
-  const labelCell = 'p-4 bg-[var(--color-surface)] flex items-center text-xs font-semibold uppercase tracking-wide text-[var(--color-muted)]';
+  const labelCell = 'sticky left-0 z-10 p-4 bg-[var(--color-surface)] flex items-center text-xs font-semibold uppercase tracking-wide text-[var(--color-muted)]';
   const cell = 'p-4 bg-[var(--color-surface)]';
 
   return (
     <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
       <Header />
 
-      <section className="relative pt-24 sm:pt-32 pb-10 sm:pb-12 px-4 sm:px-6 hero-mesh grain overflow-hidden">
-        <div className="blob blob-2 opacity-40" />
-        <div className="relative z-10 max-w-7xl mx-auto">
-          <ScrollReveal>
-            <div className="flex items-center gap-3 mb-2">
-              <GitCompare className="w-6 h-6 text-[var(--color-brand)]" />
-              <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium text-white tracking-tight">Comparador</h1>
-            </div>
-            <p className="text-white/60 text-base sm:text-lg font-light">
-              Compara hasta {MAX} destinos lado a lado: presupuesto, masificación, tipo de turismo y mejor época.
-            </p>
-          </ScrollReveal>
-        </div>
-      </section>
+      <PageHero
+        icon={<GitCompare className="w-6 h-6 text-[var(--color-brand)]" />}
+        title="Comparador"
+        description={`Compara hasta ${MAX} destinos lado a lado: presupuesto, masificación, tipo de turismo y mejor época.`}
+      />
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pb-20 -mt-4 space-y-6 sm:space-y-8">
-        <div className="p-5 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-sm">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pb-20 space-y-6 sm:space-y-8">
+        <div className="p-5 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-sm ring-1 ring-[var(--color-border)]/40">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div className="inline-flex items-center gap-2 text-sm text-[var(--color-muted)]">
+              <Sparkles className="w-4 h-4 text-[var(--color-brand-dark)]" />
+              Comparativa profesional de destinos
+            </div>
+            {compareItems.length > 0 && (
+              <button
+                type="button"
+                onClick={clearCompare}
+                className="inline-flex items-center gap-1.5 text-sm font-medium px-3 py-2 rounded-xl text-[var(--color-muted)] hover:text-[var(--color-danger)] hover:bg-[var(--color-danger)]/10 transition-colors"
+              >
+                <RotateCcw className="w-4 h-4" />
+                Reiniciar comparador
+              </button>
+            )}
+          </div>
+
           <div className="flex flex-wrap items-center gap-2 mb-4">
             {compareItems.length === 0 && (
               <p className="text-sm text-[var(--color-muted)]">Añade destinos para comparar.</p>
             )}
             {compareItems.map((d) => (
-              <span key={d.id} className="inline-flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border-strong)] text-sm font-medium text-[var(--color-primary)]">
+              <span key={d.id} className="inline-flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border-strong)] text-sm font-medium text-[var(--color-primary)] shadow-sm">
                 {d.nombre.trim()}
                 <button onClick={() => remove(d.id)} className="w-5 h-5 rounded-full hover:bg-[var(--color-danger)]/15 hover:text-[var(--color-danger)] flex items-center justify-center transition-colors" aria-label={`Quitar ${d.nombre}`}>
                   <X className="w-3.5 h-3.5" />
@@ -140,15 +169,19 @@ export default function Comparador() {
           </div>
 
           {selectedIds.length < MAX && (
-            <div className="relative max-w-md">
+            <div ref={pickerRef} className="relative max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-muted)]" />
               <input
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onFocus={() => setPickerOpen(true)}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setPickerOpen(true);
+                }}
                 placeholder="Buscar un destino para añadir..."
                 className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border-strong)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-brand)] transition-colors"
               />
-              {suggestions.length > 0 && (
+              {pickerOpen && suggestions.length > 0 && (
                 <ul className="absolute z-20 mt-1 w-full max-h-64 overflow-y-auto rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface)] shadow-xl py-1">
                   {suggestions.map((d) => (
                     <li key={d.id}>
@@ -164,11 +197,16 @@ export default function Comparador() {
                   ))}
                 </ul>
               )}
+              {pickerOpen && query.trim() && suggestions.length === 0 && (
+                <div className="absolute z-20 mt-1 w-full rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface)] shadow-xl px-3 py-2 text-sm text-[var(--color-muted)]">
+                  No hay coincidencias con esa búsqueda.
+                </div>
+              )}
             </div>
           )}
         </div>
 
-        {selectedIds.length < 2 ? (
+        {!canCompare ? (
           <div className="text-center py-20 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)]">
             <GitCompare className="w-10 h-10 text-[var(--color-muted)] mx-auto mb-4" />
             <p className="text-[var(--color-muted)]">Selecciona al menos 2 destinos para ver la comparación.</p>
@@ -176,10 +214,10 @@ export default function Comparador() {
         ) : loading ? (
           <div className="text-center py-20 text-[var(--color-muted)]">Cargando comparación...</div>
         ) : (
-          <div className="overflow-x-auto">
-            <div className="min-w-[640px] grid gap-px bg-[var(--color-border)] rounded-2xl overflow-hidden border border-[var(--color-border)]" style={gridStyle}>
+          <div className="overflow-x-auto rounded-2xl border border-[var(--color-border)] shadow-sm">
+            <div className="min-w-[640px] grid gap-px bg-[var(--color-border)] overflow-hidden" style={gridStyle}>
               {/* Header row */}
-              <div className={`${cell}`} />
+              <div className={`${cell} sticky left-0 z-10`} />
               {cols.map((d) => (
                 <div key={d.id} className={`${cell} relative`}>
                   <Link to={`/destino/${d.id}`} className="block group">

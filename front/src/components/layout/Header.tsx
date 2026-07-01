@@ -54,7 +54,7 @@ export default function Header() {
   const visibleNav = NAV_ITEMS.filter((item) => !item.auth || user);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[2000] safe-top">
+    <header className="fixed top-0 left-0 right-0 z-[5000] safe-top">
       <div className="glass border-b border-[var(--color-border)] shadow-sm">
         <div className="max-w-7xl mx-auto flex justify-between items-center py-2.5 sm:py-3 px-4 sm:px-6 md:px-10 gap-4">
           <Link to="/" className="flex items-center gap-3 group shrink-0 touch-target">
