@@ -20,7 +20,6 @@ export default function AdminWorkspace({
   setForm,
   filtered,
   municipioText,
-  showList,
   showForm,
   editorOpen,
   loadingEditId,
