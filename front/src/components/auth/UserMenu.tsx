@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown, FolderHeart, Heart, LogIn, LogOut, Settings } from 'lucide-react';
+import { ChevronDown, FolderHeart, Heart, LogIn, LogOut, Settings, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { getDisplayName } from '../../utils/user';
 import Avatar from '../ui/Avatar';
@@ -147,6 +147,17 @@ export default function UserMenu() {
               <Settings className="w-4 h-4 text-[var(--color-brand-dark)] shrink-0" />
               Configuración
             </Link>
+            {user.role === 'admin' && (
+              <Link
+                to="/admin"
+                role="menuitem"
+                className="flex items-center gap-2.5 px-4 py-3 text-sm text-[var(--color-primary)] hover:bg-[var(--color-secondary)] active:bg-[var(--color-secondary)] transition-colors"
+                onClick={close}
+              >
+                <ShieldCheck className="w-4 h-4 text-[var(--color-brand-dark)] shrink-0" />
+                Panel admin
+              </Link>
+            )}
             <div className="my-1 border-t border-[var(--color-border)]" />
             <button
               type="button"

@@ -20,6 +20,8 @@ El servidor escucha en `http://localhost:3001` (configurable con `PORT` en `.env
 | `package-lock.json` | Versiones exactas de dependencias instaladas. |
 | `prisma.config.ts` | Configuración del CLI de Prisma 7: ruta del schema, migraciones y `DATABASE_URL`. |
 | `seed.js` | Script para poblar la base de datos leyendo CSVs e insertando destinos y municipios. |
+| `scripts/promote-admin.js` | Promueve un usuario a `role = 'admin'`. Ver [Cuenta administrador](#cuenta-administrador). |
+| `scripts/coords.js` | Asigna coordenadas curadas a destinos para el mapa. |
 | `.env` | Variables de entorno (`DATABASE_URL`, `JWT_SECRET`, etc.). No se sube a git. |
 | `.gitignore` | Archivos y carpetas ignorados por git. |
 
@@ -45,3 +47,31 @@ El servidor escucha en `http://localhost:3001` (configurable con `PORT` en `.env
 | `GET` | `/api/favoritos` | Lista de favoritos del usuario |
 | `POST` | `/api/favoritos/:destinoId` | Añadir favorito |
 | `DELETE` | `/api/favoritos/:destinoId` | Quitar favorito |
+| `GET` | `/api/admin/destinos` | Lista destinos (solo admin) |
+| `POST` | `/api/admin/destinos` | Crear destino (solo admin) |
+| `PUT` | `/api/admin/destinos/:id` | Actualizar destino (solo admin) |
+| `DELETE` | `/api/admin/destinos/:id` | Eliminar destino (solo admin) |
+| `POST` | `/api/admin/destinos/:id/municipios` | Crear municipio (solo admin) |
+| `PUT` | `/api/admin/municipios/:id` | Actualizar municipio (solo admin) |
+| `DELETE` | `/api/admin/municipios/:id` | Eliminar municipio (solo admin) |
+
+## Scripts útiles
+
+```bash
+npm run db:push          # Sincronizar schema Prisma
+npm run db:seed          # Importar destinos desde CSV
+npm run db:coords        # Rellenar coordenadas del mapa
+npm run db:promote-admin -- otro@email.com   # Dar rol admin a un usuario
+```
+
+## Cuenta administrador
+
+1. El usuario debe existir (registrarse en la app).
+2. Ejecutar con el `DATABASE_URL` correcto (local o producción):
+
+```bash
+cd backend
+npm run db:promote-admin -- otro@email.com
+```
+
+3. Cerrar sesión en la web y volver a entrar para ver `/admin` en el menú.

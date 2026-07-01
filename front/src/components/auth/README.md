@@ -6,7 +6,8 @@ Componentes relacionados con la sesión del usuario.
 
 | Archivo | Descripción |
 |---------|-------------|
-| `UserMenu.tsx` | Menú desplegable del header: nombre del usuario, enlace a favoritos, cerrar sesión. Si no hay sesión, muestra enlace a `/auth`. |
+| `UserMenu.tsx` | Menú desplegable del header: favoritos, colecciones, configuración, panel admin (si `role === 'admin'`) y cerrar sesión. |
+| `AdminRoute.tsx` | Protege rutas admin: redirige a `/auth` o `/` si no hay sesión o no es administrador. |
 
 ## Dependencias
 

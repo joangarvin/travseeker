@@ -84,6 +84,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, [token]);
 
+  const refreshUser = useCallback(async () => {
+    if (!token) return;
+    try {
+      const me = await authApi.getMe(token);
+      setUser(me);
+    } catch { /* ignore */ }
+  }, [token]);
+
+  useEffect(() => {
+    if (!token) return;
+
+    const syncUser = () => {
+      if (document.visibilityState === 'visible') {
+        void refreshUser();
+      }
+    };
+
+    document.addEventListener('visibilitychange', syncUser);
+    window.addEventListener('focus', syncUser);
+
+    return () => {
+      document.removeEventListener('visibilitychange', syncUser);
+      window.removeEventListener('focus', syncUser);
+    };
+  }, [token, refreshUser]);
+
   const persistSession = useCallback((nextUser: User, nextToken: string) => {
     localStorage.setItem(TOKEN_KEY, nextToken);
     setToken(nextToken);
@@ -91,11 +117,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
-    const { user: nextUser, token: nextToken } = await authApi.login(email, password);
-    persistSession(nextUser, nextToken);
+    const { token: nextToken } = await authApi.login(email, password);
+    localStorage.setItem(TOKEN_KEY, nextToken);
+    setToken(nextToken);
+    const me = await authApi.getMe(nextToken);
+    setUser(me);
     const { ids } = await favoritosApi.getFavoriteIds(nextToken);
     setFavoriteIds(new Set(ids));
-  }, [persistSession]);
+  }, []);
 
   const register = useCallback(async (email: string, password: string, nombre?: string) => {
     const { user: nextUser, token: nextToken } = await authApi.register(email, password, nombre);
@@ -154,14 +183,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const changePassword = useCallback(async (currentPassword: string, newPassword: string) => {
     if (!token) throw new Error('Debes iniciar sesión');
     await authApi.changePassword(currentPassword, newPassword, token);
-  }, [token]);
-
-  const refreshUser = useCallback(async () => {
-    if (!token) return;
-    try {
-      const me = await authApi.getMe(token);
-      setUser(me);
-    } catch { /* ignore */ }
   }, [token]);
 
   const value = useMemo(

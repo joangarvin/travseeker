@@ -9,6 +9,7 @@ Componentes React reutilizables, organizados por dominio funcional.
 | `auth/` | Componentes de autenticación y menú de usuario. [README](./auth/README.md) |
 | `destinations/` | Tarjetas, hero, gráficos y listados de destinos. [README](./destinations/README.md) |
 | `layout/` | Estructura global: cabecera y pie. [README](./layout/README.md) |
+| `admin/` | Panel de administración: CRUD de destinos. [README](./admin/README.md) |
 | `search/` | Hero de búsqueda, barra y panel de filtros. [README](./search/README.md) |
 | `ui/` | Componentes genéricos de interfaz. [README](./ui/README.md) |
 

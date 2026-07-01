@@ -11,6 +11,7 @@ Capa de comunicación con el backend. Centraliza `fetch`, manejo de errores y ca
 | `destinos.ts` | API de destinos: destacados, búsqueda con filtros, detalle y relacionados. |
 | `auth.ts` | API de autenticación: registro, login y perfil (`/api/auth/me`). |
 | `favoritos.ts` | API de favoritos: listar, obtener IDs, añadir y eliminar. |
+| `admin.ts` | API del panel admin: CRUD de destinos y municipios (`/api/admin/*`). Requiere token con `role = admin`. |
 
 ## Uso típico
 

@@ -11,6 +11,7 @@ Páginas completas asociadas a rutas en `App.tsx`. Cada una compone layout, comp
 | `DestinationDetail.tsx` | Detalle de destino (`/destino/:id`): hero, descripción, gráfico de masificación, imprescindibles, municipios y relacionados. |
 | `Auth.tsx` | Login y registro (`/auth`): formulario con pestañas, validación y redirección a favoritos. |
 | `Favoritos.tsx` | Lista de destinos guardados (`/favoritos`). Si no hay sesión, invita a iniciar sesión. |
+| `AdminPanel.tsx` | Panel de administración (`/admin`). Orquesta layout; la lógica vive en `hooks/useAdminPanel` y `components/admin/`. |
 
 ## Carga diferida
 

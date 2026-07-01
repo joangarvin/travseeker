@@ -21,6 +21,9 @@ Definición del modelo de datos y configuración de Prisma ORM.
 npx prisma db push      # Sincronizar schema con la base de datos
 npx prisma generate     # Regenerar el cliente Prisma
 node seed.js            # Poblar datos desde CSV
+npm run db:promote-admin -- otro@email.com   # Promover usuario a admin
 ```
+
+El campo `User.role` admite valores como `user` (por defecto) y `admin`. Solo los administradores acceden a `/api/admin/*` y al panel `/admin` del frontend.
 
 La URL de conexión se configura en `../prisma.config.ts` y `../.env`.

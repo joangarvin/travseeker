@@ -50,5 +50,8 @@ export interface DestinoDetail {
   mesesJulioAgosto: number;
   mesesMayJunSeptOct: number;
   mesesNovAbril: number;
+  latitud?: number | null;
+  longitud?: number | null;
+  destinosItem?: string | null;
   municipios: Municipio[];
 }

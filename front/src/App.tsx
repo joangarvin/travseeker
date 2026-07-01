@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { CompareProvider } from './context/CompareContext';
 import CompareBar from './components/compare/CompareBar';
 import PageLoader from './components/ui/PageLoader';
+import AdminRoute from './components/auth/AdminRoute';
 
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
@@ -18,6 +19,7 @@ const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
 const RecoverPassword = lazy(() => import('./pages/RecoverPassword'));
 const MapaDestinos = lazy(() => import('./pages/MapaDestinos'));
 const DestinationDetail = lazy(() => import('./pages/DestinationDetail'));
+const AdminPanel = lazy(() => import('./pages/AdminPanel'));
 
 function App() {
   return (
@@ -39,6 +41,7 @@ function App() {
               <Route path="/recuperar" element={<RecoverPassword />} />
               <Route path="/mapa" element={<MapaDestinos />} />
               <Route path="/destino/:id" element={<DestinationDetail />} />
+              <Route path="/admin" element={<AdminRoute><AdminPanel /></AdminRoute>} />
               </Routes>
             </Suspense>
             <CompareBar />

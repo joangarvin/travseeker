@@ -188,6 +188,23 @@
     display: none;
   }
 
+  .admin-panel-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--color-brand) 35%, transparent) transparent;
+  }
+
+  .admin-panel-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .admin-panel-scroll::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--color-brand) 35%, transparent);
+    border-radius: 999px;
+  }
+
   .animate-menu-in {
     animation: menuIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }

@@ -9,7 +9,8 @@
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "node seed.js",
-    "db:coords": "node scripts/coords.js"
+    "db:coords": "node scripts/coords.js",
+    "db:promote-admin": "node scripts/promote-admin.js"
   },
   "keywords": [],
   "author": "",

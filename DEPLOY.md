@@ -209,3 +209,12 @@ En local no hace falta `VITE_API_URL`: Vite hace proxy de `/api` al backend.
 **404 al recargar rutas** → Falta `vercel.json` o `_redirects`.
 
 **DB vacía** → `npx prisma db push` + `node seed.js` en la DB de producción.
+
+**No veo el panel admin** → El usuario debe tener `role = 'admin'` en la **misma base de datos** que usa el backend desplegado. En tu máquina, con el `DATABASE_URL` de producción en `backend/.env`:
+
+```bash
+cd backend
+npm run db:promote-admin -- tu@email.com
+```
+
+Luego cierra sesión en la web y vuelve a entrar.

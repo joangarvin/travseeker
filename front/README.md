@@ -40,3 +40,7 @@ La app se sirve en `http://localhost:5173`. En desarrollo, las peticiones a `/ap
 | `/destino/:id` | Detalle de un destino |
 | `/auth` | Login y registro |
 | `/favoritos` | Destinos guardados del usuario |
+| `/colecciones` | Colecciones de viaje |
+| `/comparar` | Comparador de destinos |
+| `/mapa` | Mapa interactivo |
+| `/admin` | Panel de administración (solo `role = admin`) |

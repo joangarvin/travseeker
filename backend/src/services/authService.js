@@ -91,7 +91,8 @@ async function login({ email, password }) {
   });
 
   const token = signToken(user.id);
-  return { user: sanitizeUser(user), token };
+  const publicUser = await getMe(user.id);
+  return { user: publicUser, token };
 }
 
 async function getMe(userId) {

@@ -6,13 +6,14 @@ import ThemeToggle from '../ui/ThemeToggle';
 import UserMenu from '../auth/UserMenu';
 import { useAuth } from '../../context/AuthContext';
 
-const NAV_ITEMS: { to: string; label: string; hash?: boolean; auth?: boolean }[] = [
+const NAV_ITEMS: { to: string; label: string; hash?: boolean; auth?: boolean; admin?: boolean }[] = [
   { to: '/', label: 'Inicio' },
   { to: '/#destinos', label: 'Destinos', hash: true },
   { to: '/mapa', label: 'Mapa' },
   { to: '/comparar', label: 'Comparar' },
   { to: '/favoritos', label: 'Favoritos', auth: true },
   { to: '/colecciones', label: 'Colecciones', auth: true },
+  { to: '/admin', label: 'Admin', auth: true, admin: true },
   { to: '/sobre-nosotros', label: 'Sobre nosotros' },
 ];
 
@@ -51,7 +52,11 @@ export default function Header() {
     );
   };
 
-  const visibleNav = NAV_ITEMS.filter((item) => !item.auth || user);
+  const visibleNav = NAV_ITEMS.filter((item) => {
+    if (item.auth && !user) return false;
+    if (item.admin && user?.role !== 'admin') return false;
+    return true;
+  });
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[5000] safe-top">
