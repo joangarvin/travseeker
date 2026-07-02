@@ -92,10 +92,9 @@ export default function ColeccionDetail() {
     <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
       <Header />
 
-      <section className="relative pt-24 sm:pt-28 pb-10 sm:pb-12 px-4 sm:px-6 hero-mesh grain overflow-hidden">
-        <div className="blob blob-1 opacity-30" />
+      <section className="relative pt-24 sm:pt-28 pb-10 sm:pb-12 px-4 sm:px-6 border-b border-[var(--color-border)] bg-[var(--color-surface)]/20 backdrop-blur-sm overflow-hidden">
         <div className="relative z-10 max-w-7xl mx-auto">
-          <Link to="/colecciones" className="inline-flex items-center gap-2 text-white/70 hover:text-white text-sm mb-6 transition-colors">
+          <Link to="/colecciones" className="inline-flex items-center gap-2 text-[var(--color-muted)] hover:text-[var(--color-primary)] text-sm mb-6 transition-colors font-medium">
             <ArrowLeft className="w-4 h-4" /> Colecciones
           </Link>
 
@@ -105,14 +104,14 @@ export default function ColeccionDetail() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 maxLength={80}
-                className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white text-2xl font-serif placeholder:text-white/40 focus:outline-none focus:border-[var(--color-brand)]"
+                className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] text-[var(--color-primary)] text-2xl font-serif placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]/35"
                 placeholder="Nombre"
               />
               <input
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
                 maxLength={280}
-                className="w-full px-4 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:border-[var(--color-brand)]"
+                className="w-full px-4 py-2.5 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]/35"
                 placeholder="Descripción"
               />
               <div className="flex items-center gap-2">
@@ -121,7 +120,7 @@ export default function ColeccionDetail() {
                     key={col.id}
                     type="button"
                     onClick={() => setColor(col.id)}
-                    className={`w-7 h-7 rounded-full transition-transform ${color === col.id ? 'ring-2 ring-offset-2 ring-offset-[#0d1f17] scale-110' : ''}`}
+                    className={`w-7 h-7 rounded-full transition-transform ${color === col.id ? 'ring-2 ring-offset-2 ring-offset-[var(--color-surface)] scale-110' : ''}`}
                     style={{ backgroundColor: col.hex, '--tw-ring-color': col.hex } as React.CSSProperties}
                     aria-label={col.label}
                   />
@@ -131,7 +130,7 @@ export default function ColeccionDetail() {
                 <button onClick={handleSave} disabled={saving || !name.trim()} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:brightness-105 transition-all disabled:opacity-50">
                   <Check className="w-4 h-4" /> {saving ? 'Guardando...' : 'Guardar'}
                 </button>
-                <button onClick={() => setEditing(false)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-white/80 hover:bg-white/10 transition-colors">
+                <button onClick={() => setEditing(false)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[var(--color-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-surface-2)] transition-colors">
                   <X className="w-4 h-4" /> Cancelar
                 </button>
               </div>
@@ -141,18 +140,18 @@ export default function ColeccionDetail() {
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <span className="w-3.5 h-3.5 rounded-full" style={{ backgroundColor: colorHex(collection.color) }} />
-                  <h1 className="font-serif text-4xl md:text-5xl font-medium text-white tracking-tight">{collection.nombre}</h1>
+                  <h1 className="font-serif text-4xl md:text-5xl font-medium text-[var(--color-primary)] tracking-tight">{collection.nombre}</h1>
                 </div>
-                {collection.descripcion && <p className="text-white/60 text-lg font-light max-w-2xl">{collection.descripcion}</p>}
-                <p className="text-white/50 text-sm mt-2">
+                {collection.descripcion && <p className="text-[var(--color-muted)] text-lg font-light max-w-2xl">{collection.descripcion}</p>}
+                <p className="text-[var(--color-muted)]/80 text-sm mt-2">
                   {collection.items.length} {collection.items.length === 1 ? 'destino' : 'destinos'}
                 </p>
               </div>
               <div className="flex gap-2">
-                <button onClick={() => setEditing(true)} className="flex items-center gap-2 px-4 py-2.5 rounded-full glass-dark text-white/90 text-sm font-medium hover:bg-white/10 transition-colors">
+                <button onClick={() => setEditing(true)} className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-[var(--color-border-strong)] bg-[var(--color-surface)] text-[var(--color-primary-light)] text-sm font-semibold hover:border-[var(--color-brand)] hover:text-[var(--color-brand-dark)] hover:bg-[var(--color-surface-2)] transition-all shadow-sm">
                   <Pencil className="w-4 h-4" /> Editar
                 </button>
-                <button onClick={handleDelete} className="flex items-center gap-2 px-4 py-2.5 rounded-full glass-dark text-white/90 text-sm font-medium hover:bg-[var(--color-danger)] transition-colors">
+                <button onClick={handleDelete} className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-[var(--color-border-strong)] bg-[var(--color-surface)] text-[var(--color-danger)] text-sm font-semibold hover:border-[var(--color-danger)] hover:bg-[var(--color-danger)]/5 transition-all shadow-sm">
                   <Trash2 className="w-4 h-4" /> Eliminar
                 </button>
               </div>

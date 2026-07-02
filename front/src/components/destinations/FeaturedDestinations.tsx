@@ -50,7 +50,7 @@ function FeaturedDestinations({
         </div>
       ) : (
         <ScrollReveal>
-          <div className="text-center py-20 px-8 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)]">
+          <div className="text-center py-20 px-8 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)]">
             <MapPin className="w-10 h-10 text-[var(--color-muted)] mx-auto mb-4 opacity-40" />
             <h3 className="text-xl font-semibold text-[var(--color-primary)] mb-2">Sin resultados</h3>
             <p className="text-[var(--color-muted)] max-w-md mx-auto">

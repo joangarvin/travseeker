@@ -6,7 +6,7 @@ import DestinoList from './DestinoList';
 
 type AdminPanelState = ReturnType<typeof useAdminPanel>;
 
-interface Props extends AdminPanelState {}
+type Props = AdminPanelState;
 
 export default function AdminWorkspace({
   query,

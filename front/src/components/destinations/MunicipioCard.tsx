@@ -6,7 +6,7 @@ interface Props {
 
 export default function MunicipioCard({ municipio }: Props) {
   return (
-    <div className="p-6 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-brand)]/20 transition-colors">
+    <div className="p-6 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] hover:bg-[var(--color-surface-2)] transition-colors">
       <h3 className="font-semibold text-[var(--color-primary)] mb-4 uppercase tracking-wide text-sm">
         {municipio.nombre}
       </h3>

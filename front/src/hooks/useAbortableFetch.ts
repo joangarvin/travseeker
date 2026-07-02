@@ -24,7 +24,9 @@ export function useAbortableFetch<T>(
   const [nonce, setNonce] = useState(0);
 
   const fetcherRef = useRef(fetcher);
-  fetcherRef.current = fetcher;
+  useEffect(() => {
+    fetcherRef.current = fetcher;
+  }, [fetcher]);
 
   const reload = useCallback(() => setNonce((n) => n + 1), []);
 

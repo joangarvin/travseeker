@@ -240,13 +240,12 @@ export default function Profile() {
     <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
       <Header />
 
-      <section className="relative pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 sm:px-6 hero-mesh grain overflow-hidden">
-        <div className="blob blob-1 opacity-40" />
+      <section className="relative pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 sm:px-6 border-b border-[var(--color-border-strong)] bg-[var(--color-surface)]">
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col sm:flex-row items-center sm:items-end gap-6 text-center sm:text-left">
-          <Avatar user={user} size="xl" className="shadow-xl" />
+          <Avatar user={user} size="xl" className="shadow-sm border border-[var(--color-border-strong)]" />
           <div className="flex-1">
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mb-2">
-              <h1 className="font-serif text-4xl md:text-5xl font-medium text-white tracking-tight">
+              <h1 className="font-serif text-4xl md:text-5xl font-medium text-[var(--color-primary)] tracking-tight">
                 {displayName}
               </h1>
               {user.emailVerified ? (
@@ -259,7 +258,7 @@ export default function Profile() {
                 </span>
               )}
             </div>
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-5 gap-y-1 text-white/60 text-sm">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-5 gap-y-1 text-[var(--color-muted)] text-sm">
               <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5" />{user.email}</span>
               <span className="flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5" />Miembro desde {memberSince}</span>
             </div>
@@ -269,7 +268,7 @@ export default function Profile() {
 
       <div className="max-w-5xl mx-auto px-6 py-12 grid md:grid-cols-[220px_1fr] gap-8 -mt-6">
         <aside className="md:sticky md:top-28 h-max">
-          <nav className="flex md:flex-col gap-1 overflow-x-auto rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] p-2 shadow-sm">
+          <nav className="flex md:flex-col gap-1 overflow-x-auto rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] p-2 shadow-sm">
             {TABS.map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
@@ -326,7 +325,7 @@ export default function Profile() {
           )}
 
           {tab === 'perfil' && (
-            <form onSubmit={handleSaveProfile} className="rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] p-6 md:p-8 shadow-sm space-y-5">
+            <form onSubmit={handleSaveProfile} className="rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] p-6 md:p-8 shadow-sm space-y-5">
               <div>
                 <h2 className="text-xl font-semibold text-[var(--color-primary)]">Información personal</h2>
                 <p className="text-sm text-[var(--color-muted)] mt-1">Cómo te verán otros viajeros en Travseeker.</p>
@@ -375,7 +374,7 @@ export default function Profile() {
           )}
 
           {tab === 'preferencias' && (
-            <div className="rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] p-6 md:p-8 shadow-sm space-y-6">
+            <div className="rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] p-6 md:p-8 shadow-sm space-y-6">
               <div>
                 <h2 className="text-xl font-semibold text-[var(--color-primary)]">Preferencias</h2>
                 <p className="text-sm text-[var(--color-muted)] mt-1">Personaliza tu experiencia en la plataforma.</p>
@@ -464,7 +463,7 @@ export default function Profile() {
           )}
 
           {tab === 'seguridad' && (
-            <form onSubmit={handleChangePassword} className="rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] p-6 md:p-8 shadow-sm space-y-5">
+            <form onSubmit={handleChangePassword} className="rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] p-6 md:p-8 shadow-sm space-y-5">
               <div>
                 <h2 className="text-xl font-semibold text-[var(--color-primary)]">Seguridad</h2>
                 <p className="text-sm text-[var(--color-muted)] mt-1">Cambia tu contraseña periódicamente para mantener tu cuenta segura.</p>

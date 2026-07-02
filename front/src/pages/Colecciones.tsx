@@ -47,7 +47,7 @@ export default function Colecciones() {
     [token],
     { enabled: !authLoading && !!user && !!token, initialData: [] },
   );
-  const collections = data ?? [];
+  const collections = useMemo(() => data ?? [], [data]);
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
@@ -133,7 +133,6 @@ export default function Colecciones() {
         icon={<FolderHeart className="w-6 h-6 text-[var(--color-brand)]" />}
         title="Mis colecciones"
         description="Agrupa destinos en itinerarios y añade tus notas de viaje."
-        blobClassName="blob blob-3 opacity-40"
         action={(
           <button
             onClick={() => setShowForm((v) => !v)}
@@ -162,7 +161,7 @@ export default function Colecciones() {
         )}
 
         {showForm && (
-          <form onSubmit={handleCreate} className="mb-8 p-6 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-sm ring-1 ring-[var(--color-border)]/40 space-y-4 animate-fade-up">
+          <form onSubmit={handleCreate} className="mb-8 p-6 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] shadow-sm space-y-4 animate-fade-up">
             <div className="grid md:grid-cols-2 gap-4">
               <input
                 autoFocus
@@ -208,7 +207,7 @@ export default function Colecciones() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {visibleCollections.map((c, index) => (
               <ScrollReveal key={c.id} delay={(index % 3) as 0 | 1 | 2}>
-                <div className="group relative rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <div className="group relative rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] overflow-hidden shadow-sm hover:bg-[var(--color-surface-2)] transition-colors duration-300">
                   <Link to={`/colecciones/${c.id}`} className="block">
                     <CoverCollage covers={c.covers} color={c.color} />
                     <div className="p-5">
@@ -237,7 +236,7 @@ export default function Colecciones() {
           </div>
         ) : (
           !showForm && (
-            <div className="text-center py-20 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)]">
+            <div className="text-center py-20 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)]">
               <FolderHeart className="w-10 h-10 text-[var(--color-muted)] mx-auto mb-4" />
               <p className="text-[var(--color-muted)] mb-6">
                 {collections.length > 0

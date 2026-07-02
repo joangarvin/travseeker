@@ -13,12 +13,6 @@ html {
 
 body {
   background-color: var(--color-secondary);
-  background-image: radial-gradient(
-    115% 75% at 50% -15%,
-    color-mix(in srgb, var(--color-brand) 6%, transparent) 0%,
-    transparent 55%
-  );
-  background-repeat: no-repeat;
   color: var(--color-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

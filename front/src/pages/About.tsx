@@ -32,20 +32,19 @@ export default function About() {
     <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
       <Header />
 
-      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-20 px-4 sm:px-6 hero-mesh grain overflow-hidden">
-        <div className="blob blob-1 opacity-50" />
+      <main className="pt-24 sm:pt-32 pb-20 max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <ScrollReveal>
             <img src={logo} alt="Travseeker" className="h-16 w-auto mx-auto mb-8" />
-            <h1 className="font-serif text-4xl md:text-6xl font-medium text-white tracking-tight mb-6">
+            <h1 className="font-serif text-4xl md:text-6xl font-medium text-[var(--color-primary)] tracking-tight mb-6">
               Viajar bien es <span className="text-gradient-brand italic">viajar informado</span>
             </h1>
-            <p className="text-white/60 text-lg max-w-2xl mx-auto font-light leading-relaxed">
+            <p className="text-[var(--color-muted)] text-lg max-w-2xl mx-auto font-light leading-relaxed">
               Travseeker nació de una idea simple: que encontrar tu próximo destino en España no debería depender del algoritmo ni del turismo de masas.
             </p>
           </ScrollReveal>
         </div>
-      </section>
+      </main>
 
       <section className="max-w-4xl mx-auto px-6 py-20">
         <ScrollReveal>

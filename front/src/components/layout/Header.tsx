@@ -35,8 +35,8 @@ export default function Header() {
     const isActive = !isHash && location.pathname === to;
     const className = `block py-3 md:py-0 text-base md:text-sm font-medium transition-colors ${
       isActive
-        ? 'text-[var(--color-brand-dark)] font-semibold'
-        : 'text-[var(--color-primary)]/80 hover:text-[var(--color-primary)] active:text-[var(--color-brand-dark)]'
+        ? 'text-[var(--color-primary)] font-semibold'
+        : 'text-[var(--color-muted)] hover:text-[var(--color-primary)] active:text-[var(--color-primary)]'
     }`;
     if (isHash) {
       return (
@@ -60,7 +60,7 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[5000] safe-top">
-      <div className="glass border-b border-[var(--color-border)] shadow-sm">
+      <div className="bg-[var(--color-surface)]/90 backdrop-blur-md border-b border-[var(--color-border-strong)]">
         <div className="max-w-7xl mx-auto flex justify-between items-center py-2.5 sm:py-3 px-4 sm:px-6 md:px-10 gap-4">
           <Link to="/" className="flex items-center gap-3 group shrink-0 touch-target">
             <img src={logo} alt="Travseeker" className="h-8 sm:h-9 w-auto group-hover:scale-105 transition-transform" />

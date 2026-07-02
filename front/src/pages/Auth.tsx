@@ -46,10 +46,9 @@ export default function Auth() {
     <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
       <Header />
 
-      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-20 px-4 sm:px-6 hero-mesh grain overflow-hidden">
-        <div className="blob blob-1 opacity-40" />
+      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-20 px-4 sm:px-6 grain overflow-hidden">
         <div className="relative z-10 max-w-md mx-auto">
-          <div className="glass rounded-2xl border border-[var(--color-border)] p-8 shadow-xl">
+          <div className="bg-[var(--color-surface)] rounded-xl border border-[var(--color-border-strong)] p-8 shadow-sm">
             <div className="flex gap-2 mb-8 p-1 rounded-full bg-[var(--color-border)]/50">
               <button
                 type="button"
@@ -89,7 +88,7 @@ export default function Auth() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {mode === 'register' && (
                 <div>
-                  <label htmlFor="nombre" className="block text-xs font-medium text-[var(--color-muted)] mb-1.5 uppercase tracking-wide">
+                  <label htmlFor="nombre" className="block text-sm font-medium text-[var(--color-primary)] mb-1.5">
                     Nombre
                   </label>
                   <input
@@ -97,14 +96,14 @@ export default function Auth() {
                     type="text"
                     value={nombre}
                     onChange={(e) => setNombre(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-brand)]/50 transition-colors"
+                    className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border-strong)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]/20 focus:border-[var(--color-brand)] transition-all shadow-sm"
                     placeholder="Tu nombre"
                   />
                 </div>
               )}
 
               <div>
-                <label htmlFor="email" className="block text-xs font-medium text-[var(--color-muted)] mb-1.5 uppercase tracking-wide">
+                <label htmlFor="email" className="block text-sm font-medium text-[var(--color-primary)] mb-1.5">
                   Email
                 </label>
                 <input
@@ -113,13 +112,13 @@ export default function Auth() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-brand)]/50 transition-colors"
+                  className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border-strong)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]/20 focus:border-[var(--color-brand)] transition-all shadow-sm"
                   placeholder="tu@email.com"
                 />
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-xs font-medium text-[var(--color-muted)] mb-1.5 uppercase tracking-wide">
+                <label htmlFor="password" className="block text-sm font-medium text-[var(--color-primary)] mb-1.5">
                   Contraseña
                 </label>
                 <input
@@ -129,7 +128,7 @@ export default function Auth() {
                   minLength={8}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-brand)]/50 transition-colors"
+                  className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border-strong)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]/20 focus:border-[var(--color-brand)] transition-all shadow-sm"
                   placeholder="Mínimo 8 caracteres"
                 />
               </div>

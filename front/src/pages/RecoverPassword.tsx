@@ -55,10 +55,9 @@ export default function RecoverPassword() {
   return (
     <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
       <Header />
-      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-20 px-4 sm:px-6 hero-mesh grain overflow-hidden">
-        <div className="blob blob-1 opacity-40" />
+      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-20 px-4 sm:px-6 grain overflow-hidden">
         <div className="relative z-10 max-w-md mx-auto">
-          <div className="glass rounded-2xl border border-[var(--color-border)] p-8 shadow-xl">
+          <div className="bg-[var(--color-surface)] rounded-xl border border-[var(--color-border-strong)] p-8 shadow-sm">
             <div className="w-12 h-12 rounded-xl bg-[var(--color-brand)]/15 flex items-center justify-center text-[var(--color-brand-dark)] mb-5">
               <KeyRound className="w-6 h-6" />
             </div>

@@ -31,21 +31,23 @@ export default function TravelStyles({ onSelect }: Props) {
         </div>
       </ScrollReveal>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-[var(--color-border-strong)] border border-[var(--color-border-strong)] rounded-xl overflow-hidden shadow-sm">
         {STYLES.map(({ value, label, icon: Icon, desc }, i) => (
-          <ScrollReveal key={value} delay={(i % 3 + 1) as 1 | 2 | 3}>
-            <button
-              type="button"
-              onClick={() => onSelect(value)}
-              className="group w-full h-full flex flex-col items-center text-center gap-2 sm:gap-3 p-4 sm:p-6 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-sm hover:shadow-lg hover:border-[var(--color-brand)]/40 hover:-translate-y-1 transition-all duration-300 active:scale-[0.98]"
-            >
-              <span className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[var(--color-secondary)] flex items-center justify-center text-[var(--color-brand-dark)] group-hover:bg-[var(--color-brand)] group-hover:text-[var(--color-on-brand)] transition-colors">
-                <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
-              </span>
-              <span className="text-xs sm:text-sm font-semibold text-[var(--color-primary)]">{label}</span>
-              <span className="text-xs text-[var(--color-muted)] leading-snug hidden sm:block">{desc}</span>
-            </button>
-          </ScrollReveal>
+          <div key={value} className="bg-[var(--color-surface)] group hover:bg-[var(--color-surface-2)] transition-colors">
+            <ScrollReveal delay={(i % 3 + 1) as 1 | 2 | 3} className="h-full">
+              <button
+                type="button"
+                onClick={() => onSelect(value)}
+                className="w-full h-full flex flex-col items-center justify-center text-center gap-2 sm:gap-3 p-5 sm:p-6 outline-none"
+              >
+                <span className="w-10 h-10 rounded-lg border border-[var(--color-border-strong)] bg-[var(--color-surface)] flex items-center justify-center text-[var(--color-primary)] group-hover:border-[var(--color-primary-light)]/30 group-hover:text-[var(--color-brand)] transition-colors">
+                  <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                </span>
+                <span className="text-xs sm:text-sm font-semibold text-[var(--color-primary)] tracking-tight">{label}</span>
+                <span className="text-xs text-[var(--color-muted)] leading-snug hidden sm:block opacity-80">{desc}</span>
+              </button>
+            </ScrollReveal>
+          </div>
         ))}
       </div>
     </section>

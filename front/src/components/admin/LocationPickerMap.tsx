@@ -33,7 +33,7 @@ function MapClickHandler({ onPick }: { onPick: (lat: number, lng: number) => voi
 function FlyToPin({ lat, lng }: { lat: number | null; lng: number | null }) {
   const map = useMap();
   useEffect(() => {
-    if (lat != null && lng != null) {
+    if (lat != null && lng != null && !isNaN(lat) && !isNaN(lng)) {
       map.flyTo([lat, lng], PIN_ZOOM, { duration: 0.6 });
     }
   }, [lat, lng, map]);
@@ -41,7 +41,7 @@ function FlyToPin({ lat, lng }: { lat: number | null; lng: number | null }) {
 }
 
 export default function LocationPickerMap({ lat, lng, onChange }: Props) {
-  const hasPoint = lat != null && lng != null;
+  const hasPoint = lat != null && lng != null && !isNaN(lat) && !isNaN(lng);
   const center = useMemo<[number, number]>(
     () => (hasPoint ? [lat!, lng!] : SPAIN_CENTER),
     [hasPoint, lat, lng],

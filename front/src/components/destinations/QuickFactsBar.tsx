@@ -14,7 +14,7 @@ export default function QuickFactsBar({ presupuesto, masificacion, tipoTurismo }
   ];
 
   return (
-    <div className="sticky top-0 z-40 glass border-b border-[var(--color-border)] shadow-sm safe-top">
+    <div className="sticky top-0 z-40 bg-[var(--color-surface)] border-b border-[var(--color-border-strong)] safe-top">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-3 sm:py-4">
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-6 md:gap-10">
           {facts.map(({ icon: Icon, label, value }) => (

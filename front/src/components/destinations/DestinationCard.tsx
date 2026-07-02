@@ -44,9 +44,9 @@ function DestinationCard({ destino, index = 0, enableCollection = false, enableC
   return (
     <Link
       to={`/destino/${destino.id}`}
-      className="group card-shine relative rounded-2xl overflow-hidden bg-[var(--color-surface)] border border-[var(--color-border)] shadow-sm hover:shadow-2xl hover:border-[var(--color-brand)]/20 transition-all duration-500 hover:-translate-y-1.5 block"
+      className="group relative rounded-xl overflow-hidden bg-[var(--color-surface)] border border-[var(--color-border-strong)] hover:border-[var(--color-brand)]/40 hover:bg-[var(--color-surface-2)]/30 hover:shadow-md transition-all duration-300 flex flex-col h-full shadow-sm"
     >
-      <div className="relative h-56 sm:h-72 md:h-80 overflow-hidden">
+      <div className="relative h-48 sm:h-56 overflow-hidden shrink-0">
         <img
           src={getImageUrl(destino.imagen, index)}
           alt={destino.nombre}
@@ -54,19 +54,19 @@ function DestinationCard({ destino, index = 0, enableCollection = false, enableC
           loading="lazy"
           decoding="async"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#080c0a] via-[#080c0a]/40 to-transparent opacity-85 group-hover:opacity-95 transition-opacity" />
-        <div className="absolute top-3 right-3 sm:top-5 sm:right-5 w-11 h-11 rounded-full glass flex items-center justify-center card-actions-touch opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-          <ArrowUpRight className="w-4 h-4 text-[var(--color-primary)]" />
+        <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/40 to-transparent pointer-events-none" />
+        <div className="absolute top-3 right-3 sm:top-4 sm:right-4 w-9 h-9 rounded-full bg-black/30 backdrop-blur-md border border-white/15 flex items-center justify-center card-actions-touch opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-1 group-hover:translate-y-0">
+          <ArrowUpRight className="w-4 h-4 text-white" />
         </div>
         {enableCompare && (
           <button
             type="button"
             onClick={handleCompare}
             disabled={!inCompare && !canAdd}
-            className={`absolute top-3 left-3 sm:top-5 sm:left-5 w-11 h-11 rounded-full flex items-center justify-center card-actions-touch transition-all duration-300 opacity-0 group-hover:opacity-100 -translate-y-2 group-hover:translate-y-0 disabled:opacity-40 ${
+            className={`absolute top-3 left-3 sm:top-4 sm:left-4 w-9 h-9 rounded-full flex items-center justify-center card-actions-touch transition-all duration-300 opacity-0 group-hover:opacity-100 -translate-y-1 group-hover:translate-y-0 disabled:opacity-45 ${
               inCompare
                 ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)]'
-                : 'glass-dark text-white/90 hover:bg-white/15'
+                : 'bg-black/35 backdrop-blur-md border border-white/15 text-white/90 hover:bg-black/50'
             }`}
             aria-label={inCompare ? 'Quitar de comparación' : 'Añadir a comparación'}
           >
@@ -77,7 +77,7 @@ function DestinationCard({ destino, index = 0, enableCollection = false, enableC
           <button
             type="button"
             onClick={openCollection}
-            className="absolute top-3 left-14 sm:top-5 sm:left-16 w-11 h-11 rounded-full glass-dark flex items-center justify-center text-white/90 hover:bg-white/15 card-actions-touch transition-all duration-300 opacity-0 group-hover:opacity-100 -translate-y-2 group-hover:translate-y-0"
+            className="absolute top-3 left-13 sm:top-4 sm:left-14 w-9 h-9 rounded-full bg-black/35 backdrop-blur-md border border-white/15 flex items-center justify-center text-white/90 hover:bg-black/50 card-actions-touch transition-all duration-300 opacity-0 group-hover:opacity-100 -translate-y-1 group-hover:translate-y-0"
             aria-label="Guardar en colección"
           >
             <Bookmark className="w-4 h-4" />
@@ -85,19 +85,21 @@ function DestinationCard({ destino, index = 0, enableCollection = false, enableC
         )}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-7">
-        <div className="flex items-center gap-1.5 text-white/70 text-[11px] sm:text-xs font-medium mb-1.5 sm:mb-2 tracking-wide uppercase">
-          <MapPin className="w-3 h-3 shrink-0" />
-          <span className="truncate">{ubicacion}</span>
+      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-1 text-[var(--color-muted)] text-[10px] sm:text-xs font-semibold tracking-wider uppercase">
+            <MapPin className="w-3.5 h-3.5 text-[var(--color-brand-dark)] shrink-0" />
+            <span className="truncate">{ubicacion}</span>
+          </div>
+          <h3 className="text-base sm:text-lg font-semibold text-[var(--color-primary)] tracking-tight leading-snug line-clamp-2 group-hover:text-[var(--color-brand-dark)] transition-colors">
+            {destino.nombre}
+          </h3>
         </div>
-        <h3 className="text-xl sm:text-2xl font-semibold text-white mb-3 sm:mb-4 tracking-tight leading-tight line-clamp-2">
-          {destino.nombre}
-        </h3>
-        <div className="flex flex-wrap gap-2">
-          <span className="text-xs font-medium px-3 py-1 rounded-full bg-white/15 backdrop-blur-sm text-white/90 border border-white/10">
+        <div className="flex flex-wrap gap-1.5 mt-4 pt-3 border-t border-[var(--color-border)]">
+          <span className="text-[10px] sm:text-xs font-medium px-2 py-0.5 rounded-full bg-[var(--color-surface-2)] text-[var(--color-primary-light)] border border-[var(--color-border)]">
             {presupuesto}
           </span>
-          <span className="text-xs font-medium px-3 py-1 rounded-full bg-white/15 backdrop-blur-sm text-white/90 border border-white/10">
+          <span className="text-[10px] sm:text-xs font-medium px-2 py-0.5 rounded-full bg-[var(--color-surface-2)] text-[var(--color-primary-light)] border border-[var(--color-border)]">
             {masificacion}
           </span>
         </div>

@@ -20,7 +20,7 @@ export default function Favoritos() {
     [token],
     { enabled: !authLoading && !!user && !!token, initialData: [] },
   );
-  const favoritos = data ?? [];
+  const favoritos = useMemo(() => data ?? [], [data]);
   const [query, setQuery] = useState('');
   const [sortBy, setSortBy] = useState<'recent' | 'name'>('recent');
 
@@ -45,7 +45,7 @@ export default function Favoritos() {
       <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
         <Header />
         <div className="pt-24 sm:pt-32 px-4 sm:px-6 pb-20 max-w-lg mx-auto text-center">
-          <div className="glass rounded-2xl border border-[var(--color-border)] p-10">
+          <div className="rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] p-10">
             <Heart className="w-12 h-12 text-[var(--color-brand)] mx-auto mb-4" />
             <h1 className="font-serif text-3xl text-[var(--color-primary)] mb-3">Tus favoritos</h1>
             <p className="text-[var(--color-muted)] mb-8">
@@ -53,7 +53,7 @@ export default function Favoritos() {
             </p>
             <Link
               to="/auth"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--color-brand)] text-[#0a0f0d] font-semibold hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:opacity-90 transition-opacity"
             >
               <LogIn className="w-4 h-4" />
               Iniciar sesión
@@ -81,7 +81,7 @@ export default function Favoritos() {
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pb-20">
         {error && (
-          <p className="text-center text-red-400 mb-8">{error}</p>
+          <p className="text-center text-[var(--color-danger)] mb-8">{error}</p>
         )}
 
         {favoritos.length > 0 && (
@@ -107,7 +107,7 @@ export default function Favoritos() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)]">
+          <div className="text-center py-20 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)]">
             <Heart className="w-10 h-10 text-[var(--color-muted)] mx-auto mb-4" />
             <p className="text-[var(--color-muted)] mb-6">
               {favoritos.length > 0

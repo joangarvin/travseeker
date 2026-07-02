@@ -15,13 +15,10 @@ export default function BestSeasonCard({ data }: { data: SeasonalData }) {
   const bestColor = getMasificationColor(best.value);
 
   return (
-    <div className="rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-sm overflow-hidden">
-      <div
-        className="p-6 md:p-8 flex flex-col sm:flex-row sm:items-center gap-6"
-        style={{ background: `linear-gradient(135deg, ${bestColor}14, transparent 70%)` }}
-      >
+    <div className="rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] shadow-sm overflow-hidden">
+      <div className="p-6 md:p-8 flex flex-col sm:flex-row sm:items-center gap-6">
         <div
-          className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0"
+          className="w-16 h-16 rounded-xl flex items-center justify-center shrink-0 border border-[var(--color-border-strong)]"
           style={{ backgroundColor: `${bestColor}1f`, color: bestColor }}
         >
           <BestIcon className="w-8 h-8" />

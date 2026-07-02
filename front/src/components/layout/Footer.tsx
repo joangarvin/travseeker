@@ -4,7 +4,7 @@ import logo from '../../assets/logo.png';
 
 export default function Footer() {
   return (
-    <footer className="bg-[#080c0a] text-white mt-8 border-t border-[var(--color-brand)]/10 pb-24 sm:pb-0">
+    <footer className="bg-[#0a0a0a] text-white mt-8 border-t border-white/5 pb-24 sm:pb-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 py-10 sm:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 sm:gap-12">
           <div>

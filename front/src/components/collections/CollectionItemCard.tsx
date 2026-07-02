@@ -48,40 +48,45 @@ export default function CollectionItemCard({ collectionId, item, onRemove }: Pro
   };
 
   return (
-    <div className="rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] overflow-hidden shadow-sm flex flex-col">
-      <Link to={`/destino/${item.destinoId}`} className="relative block h-40 overflow-hidden group">
+    <div className="rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] overflow-hidden hover:border-[var(--color-brand)]/40 hover:shadow-md transition-all duration-300 flex flex-col shadow-sm">
+      <Link to={`/destino/${item.destinoId}`} className="relative block h-40 overflow-hidden group shrink-0">
         <img
           src={getImageUrl(item.destino.imagen)}
           alt={item.destino.nombre}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-4">
-          <h3 className="text-white font-semibold leading-tight">{item.destino.nombre.trim()}</h3>
-          <p className="text-white/70 text-xs flex items-center gap-1 mt-0.5">
-            <MapPin className="w-3 h-3" />
+      </Link>
+
+      <div className="p-4 flex flex-col gap-3.5 flex-1">
+        <div className="space-y-1">
+          <Link to={`/destino/${item.destinoId}`} className="block">
+            <h3 className="font-semibold text-[var(--color-primary)] leading-tight hover:text-[var(--color-brand-dark)] transition-colors">{item.destino.nombre.trim()}</h3>
+          </Link>
+          <p className="text-[var(--color-muted)] text-xs flex items-center gap-1">
+            <MapPin className="w-3 h-3 text-[var(--color-brand-dark)] shrink-0" />
             {parseJsonSafe(item.destino.ubicacion)}
           </p>
         </div>
-      </Link>
 
-      <div className="p-4 flex flex-col gap-3 flex-1">
-        <textarea
-          value={notas}
-          onChange={(e) => setNotas(e.target.value)}
-          onBlur={saveNotes}
-          rows={2}
-          maxLength={500}
-          placeholder="Añade una nota (mejor en mayo, reservar hotel...)"
-          className="w-full text-sm px-3 py-2 rounded-lg bg-[var(--color-secondary)] border border-[var(--color-border)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-brand)] resize-none"
-        />
-        <div className="text-[11px] text-[var(--color-muted)]">{notas.length}/500</div>
-        <div className="flex items-center justify-between">
+        <div className="space-y-1 pt-2.5 border-t border-[var(--color-border)]">
+          <textarea
+            value={notas}
+            onChange={(e) => setNotas(e.target.value)}
+            onBlur={saveNotes}
+            rows={2}
+            maxLength={500}
+            placeholder="Añade una nota (mejor en mayo, reservar hotel...)"
+            className="w-full text-xs px-3 py-2 rounded-lg bg-[var(--color-secondary)] border border-[var(--color-border-strong)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]/35 resize-none leading-relaxed"
+          />
+          <div className="text-[10px] text-[var(--color-muted)] text-right">{notas.length}/500</div>
+        </div>
+
+        <div className="flex items-center justify-between mt-auto">
           <button
             onClick={remove}
             disabled={removing}
-            className="flex items-center gap-1.5 text-xs text-[var(--color-muted)] hover:text-[var(--color-danger)] transition-colors disabled:opacity-50"
+            className="flex items-center gap-1.5 text-xs text-[var(--color-muted)] hover:text-[var(--color-danger)] transition-colors disabled:opacity-50 font-medium"
           >
             <Trash2 className="w-3.5 h-3.5" /> Quitar
           </button>
@@ -90,7 +95,7 @@ export default function CollectionItemCard({ collectionId, item, onRemove }: Pro
               {saving ? 'Guardando...' : 'Guardar nota'}
             </button>
           ) : justSaved ? (
-            <span className="text-xs text-[var(--color-brand-dark)] flex items-center gap-1">
+            <span className="text-xs text-[var(--color-brand-dark)] flex items-center gap-1 font-semibold">
               <Check className="w-3.5 h-3.5" /> Guardado
             </span>
           ) : null}

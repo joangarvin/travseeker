@@ -136,7 +136,7 @@ export default function Comparador() {
       />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pb-20 space-y-6 sm:space-y-8">
-        <div className="p-5 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-sm ring-1 ring-[var(--color-border)]/40">
+        <div className="p-5 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
             <div className="inline-flex items-center gap-2 text-sm text-[var(--color-muted)]">
               <Sparkles className="w-4 h-4 text-[var(--color-brand-dark)]" />
@@ -179,7 +179,7 @@ export default function Comparador() {
                   setPickerOpen(true);
                 }}
                 placeholder="Buscar un destino para añadir..."
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border-strong)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-brand)] transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border-strong)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]/20 focus:border-[var(--color-brand)] transition-all shadow-sm"
               />
               {pickerOpen && suggestions.length > 0 && (
                 <ul className="absolute z-20 mt-1 w-full max-h-64 overflow-y-auto rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-surface)] shadow-xl py-1">
@@ -214,7 +214,7 @@ export default function Comparador() {
         ) : loading ? (
           <div className="text-center py-20 text-[var(--color-muted)]">Cargando comparación...</div>
         ) : (
-          <div className="overflow-x-auto rounded-2xl border border-[var(--color-border)] shadow-sm">
+          <div className="overflow-x-auto rounded-xl border border-[var(--color-border-strong)] shadow-sm">
             <div className="min-w-[640px] grid gap-px bg-[var(--color-border)] overflow-hidden" style={gridStyle}>
               {/* Header row */}
               <div className={`${cell} sticky left-0 z-10`} />
