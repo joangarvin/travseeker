@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback } from 'react';
 import {
   BookOpen,
   Image as ImageIcon,
@@ -10,7 +10,9 @@ import {
 import { TURISMO_OPTIONS, UBICACION_SUGGESTIONS } from '../../constants/admin';
 import type { DestinoFormState } from '../../types/admin';
 import { masificacionOptions, presupuestoOptions } from '../../utils/admin/destinoForm';
-import { getImageUrl } from '../../utils/images';
+import { uploadDestinoCover } from '../../api/upload';
+import { useAuth } from '../../context/AuthContext';
+import ImageUploadField from '../ui/ImageUploadField';
 import AdminField, { adminInputClass, adminTextareaClass } from './AdminField';
 import AdminSectionCard from './AdminSectionCard';
 import AdminSelect from './AdminSelect';
@@ -38,12 +40,14 @@ export default function DestinoForm({
   onSubmit,
   onCancel,
 }: Props) {
+  const { token } = useAuth();
   const patch = (partial: Partial<DestinoFormState>) => onChange({ ...form, ...partial });
 
-  const imagePreview = useMemo(
-    () => getImageUrl(form.imagen, form.nombre.length),
-    [form.imagen, form.nombre],
-  );
+  const handleImageUpload = useCallback(async (file: File) => {
+    if (!token) throw new Error('Debes iniciar sesión');
+    const result = await uploadDestinoCover(file, token, editingId ?? undefined);
+    return result.url;
+  }, [token, editingId]);
 
   return (
     <form onSubmit={onSubmit} className="space-y-4 pb-24 lg:pb-4">
@@ -188,27 +192,15 @@ export default function DestinoForm({
       <AdminSectionCard
         icon={ImageIcon}
         title="Imagen de portada"
-        description="Pega el enlace de una foto. Si no tienes, puedes usar una de Unsplash."
+        description="Sube una foto a la nube o pega un enlace externo (Unsplash, etc.)."
       >
-        <AdminField
-          label="Enlace de la imagen"
-          required
-          hint="Clic derecho en una foto → «Copiar dirección de imagen» y pégala aquí."
-        >
-          <input
-            type="text"
-            value={form.imagen}
-            onChange={(e) => patch({ imagen: e.target.value })}
-            placeholder="https://… o enlace de imagen existente"
-            className={adminInputClass}
-            required
-          />
-        </AdminField>
-        {form.imagen && (
-          <div className="rounded-xl overflow-hidden border border-[var(--color-border)] aspect-[16/9] max-h-48 bg-[var(--color-secondary)]">
-            <img src={imagePreview} alt="Vista previa" className="w-full h-full object-cover" />
-          </div>
-        )}
+        <ImageUploadField
+          label="Foto de portada"
+          value={form.imagen}
+          onChange={(imagen) => patch({ imagen })}
+          onUpload={handleImageUpload}
+          hint="Recomendado: horizontal, mínimo 1200 px de ancho. Se optimiza automáticamente al mostrarse."
+        />
       </AdminSectionCard>
 
       <AdminSectionCard

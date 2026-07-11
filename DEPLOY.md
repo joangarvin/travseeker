@@ -166,6 +166,30 @@ Para Netlify, crea `front/public/_redirects`:
 
 ---
 
+## Cloudinary (imágenes)
+
+1. Crea cuenta en [cloudinary.com](https://cloudinary.com) (plan gratuito suficiente para empezar).
+2. En **Settings → API Keys** copia:
+   - **Cloud name**
+   - **API Key**
+   - **API Secret** (solo backend; nunca en Vercel front ni en el repo)
+3. Añade en Render (backend):
+
+```env
+CLOUDINARY_CLOUD_NAME=tu_cloud_name
+CLOUDINARY_API_KEY=123456789012345
+CLOUDINARY_API_SECRET=tu_secreto
+CLOUDINARY_FOLDER=travseeker
+```
+
+4. Reinicia el backend. Comprueba `GET /api/upload/status` → `{ "configured": true }`.
+
+**Rendimiento:** las URLs de Cloudinary se sirven con `f_auto,q_auto` (WebP/AVIF y calidad adaptativa) y anchos según contexto (tarjeta, hero, avatar). No hace falta configurar nada más en el front.
+
+**Migración:** los destinos con enlaces Unsplash/Wix siguen funcionando. Las nuevas fotos subidas desde el panel admin o el perfil se guardan en `travseeker/destinos/` y `travseeker/avatars/`.
+
+---
+
 ## Variables de entorno — resumen
 
 ### Backend
@@ -177,6 +201,12 @@ Para Netlify, crea `front/public/_redirects`:
 | `APP_URL` | Sí | URL front (emails) |
 | `FRONTEND_URL` | Sí | CORS |
 | `SMTP_*` | No | Email real |
+| `CLOUDINARY_CLOUD_NAME` | No* | Cuenta Cloudinary |
+| `CLOUDINARY_API_KEY` | No* | API key (solo backend) |
+| `CLOUDINARY_API_SECRET` | No* | API secret (solo backend, nunca en el front) |
+| `CLOUDINARY_FOLDER` | No | Carpeta raíz (`travseeker` por defecto) |
+
+\* Sin Cloudinary, las subidas desde el panel admin y el perfil no funcionan; las URLs externas y las ya guardadas siguen mostrándose.
 
 ### Frontend
 

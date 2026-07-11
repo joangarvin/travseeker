@@ -111,7 +111,7 @@ export default function MapaDestinos() {
                 <Popup>
                   <div className="w-52">
                     <img
-                      src={getImageUrl(d.imagen)}
+                      src={getImageUrl(d.imagen, 0, 'map')}
                       alt={d.nombre}
                       className="w-full h-28 object-cover rounded-lg mb-2"
                       loading="lazy"

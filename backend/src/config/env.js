@@ -24,6 +24,12 @@ const env = {
     pass: process.env.SMTP_PASS || '',
     from: process.env.MAIL_FROM || 'TravSeeker <no-reply@travseeker.com>',
   },
+  cloudinary: {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME || '',
+    apiKey: process.env.CLOUDINARY_API_KEY || '',
+    apiSecret: process.env.CLOUDINARY_API_SECRET || '',
+    folder: process.env.CLOUDINARY_FOLDER || 'travseeker',
+  },
 };
 
 module.exports = { env };

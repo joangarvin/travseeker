@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { User } from '../../types/user';
 import { getUserInitials } from '../../utils/user';
+import { getAvatarUrl } from '../../utils/images';
 
 type Size = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -21,11 +22,12 @@ export default function Avatar({ user, size = 'md', className = '' }: Props) {
   const [imgError, setImgError] = useState(false);
   const initials = getUserInitials(user as User);
   const dim = SIZES[size];
+  const src = getAvatarUrl(user.avatarUrl, size);
 
-  if (user.avatarUrl && !imgError) {
+  if (src && !imgError) {
     return (
       <img
-        src={user.avatarUrl}
+        src={src}
         alt=""
         onError={() => setImgError(true)}
         className={`${dim} rounded-full object-cover ring-2 ring-[var(--color-brand)]/30 ${className}`}

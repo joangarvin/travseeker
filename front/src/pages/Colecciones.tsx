@@ -30,7 +30,7 @@ function CoverCollage({ covers, color }: { covers: string[]; color: string }) {
       {covers.slice(0, 4).map((src, i) => (
         <img
           key={i}
-          src={getImageUrl(src, i)}
+          src={getImageUrl(src, i, 'thumb')}
           alt=""
           className={`w-full h-full object-cover ${covers.length === 1 ? 'col-span-2 row-span-2' : ''} ${covers.length === 3 && i === 0 ? 'row-span-2' : ''}`}
           loading="lazy"

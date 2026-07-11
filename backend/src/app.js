@@ -10,6 +10,7 @@ const collectionRoutes = require('./routes/collectionRoutes');
 const recommendationRoutes = require('./routes/recommendationRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 const destinoController = require('./controllers/destinoController');
 const { errorHandler } = require('./middleware/errorHandler');
 
@@ -35,6 +36,7 @@ app.use('/api/recomendaciones', recommendationRoutes);
 app.use('/api/destinos/:destinoId/reviews', reviewRoutes);
 app.use('/api/destinos', destinoRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/upload', uploadRoutes);
 
 app.use(errorHandler);
 

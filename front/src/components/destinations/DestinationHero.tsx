@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Share2, Heart, MapPin, Bookmark, GitCompare } from 'lucide-react';
-import { getImageUrl } from '../../utils/images';
+import { getImageUrl, getHeroSrcSet } from '../../utils/images';
 import ThemeToggle from '../ui/ThemeToggle';
 import AddToCollectionModal from '../collections/AddToCollectionModal';
 import { useAuth } from '../../context/AuthContext';
@@ -63,11 +63,14 @@ export default function DestinationHero({ destinoId, nombre, imagen, ubicacion }
   return (
     <div className="relative h-[52vh] sm:h-[60vh] md:h-[75vh] w-full overflow-hidden">
       <img
-        src={getImageUrl(imagen)}
+        src={getImageUrl(imagen, 0, 'hero')}
+        srcSet={getHeroSrcSet(imagen)}
+        sizes="100vw"
         alt={nombre}
         className={`w-full h-full object-cover transition-opacity duration-700 ${heroLoaded ? 'opacity-100' : 'opacity-0'}`}
         onLoad={() => setHeroLoaded(true)}
         decoding="async"
+        fetchPriority="high"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-[#080c0a] via-[#080c0a]/50 to-transparent opacity-90" />
 

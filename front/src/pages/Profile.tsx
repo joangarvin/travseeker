@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   AlertTriangle,
@@ -23,6 +23,8 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { ApiError } from '../api/client';
 import { requestEmailVerification } from '../api/auth';
+import { uploadAvatar } from '../api/upload';
+import ImageUploadField from '../components/ui/ImageUploadField';
 import { getDisplayName } from '../utils/user';
 import type { UserPreferences } from '../types/user';
 
@@ -144,6 +146,12 @@ export default function Profile() {
       month: 'long',
     });
   }, [user]);
+
+  const handleAvatarUpload = useCallback(async (file: File) => {
+    if (!token) throw new Error('Debes iniciar sesión');
+    const result = await uploadAvatar(file, token);
+    return result.url;
+  }, [token]);
 
   if (authLoading || !user) return <PageLoader label="Cargando perfil..." />;
 
@@ -331,11 +339,19 @@ export default function Profile() {
                 <p className="text-sm text-[var(--color-muted)] mt-1">Cómo te verán otros viajeros en Travseeker.</p>
               </div>
 
-              <div className="flex items-center gap-4">
-                <Avatar user={{ nombre, email: user.email, avatarUrl: avatarUrl || null }} size="lg" />
-                <div className="flex-1">
-                  <label htmlFor="avatarUrl" className={labelClass}>URL del avatar</label>
-                  <input id="avatarUrl" type="url" value={avatarUrl} onChange={(e) => setAvatarUrl(e.target.value)} className={inputClass} placeholder="https://..." />
+              <div className="flex flex-col sm:flex-row sm:items-start gap-4">
+                <Avatar user={{ nombre, email: user.email, avatarUrl: avatarUrl || null }} size="lg" className="shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <ImageUploadField
+                    label="Foto de perfil"
+                    value={avatarUrl}
+                    onChange={setAvatarUrl}
+                    onUpload={handleAvatarUpload}
+                    previewPreset="avatar-lg"
+                    aspectClass="aspect-square max-w-[12rem] rounded-full"
+                    allowUrl={false}
+                    hint="JPG, PNG o WebP. Se recorta y optimiza automáticamente."
+                  />
                 </div>
               </div>
 
