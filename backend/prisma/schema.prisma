@@ -24,7 +24,7 @@ model Destino {
   latitud               Float?
   longitud              Float?
 
-  municipios            Municipio[]
+  municipioLinks        DestinoMunicipio[]
   favoritos             Favorito[]
   reviews               Review[]
   collectionItems       CollectionItem[]
@@ -37,8 +37,18 @@ model Municipio {
   conexiones      String
   tipoTurismo     String?
 
-  destinoId       String?
-  destino         Destino? @relation(fields: [destinoId], references: [id])
+  destinoLinks    DestinoMunicipio[]
+}
+
+model DestinoMunicipio {
+  destinoId   String
+  municipioId String
+
+  destino     Destino   @relation(fields: [destinoId], references: [id], onDelete: Cascade)
+  municipio   Municipio @relation(fields: [municipioId], references: [id], onDelete: Cascade)
+
+  @@id([destinoId, municipioId])
+  @@index([municipioId])
 }
 
 model User {

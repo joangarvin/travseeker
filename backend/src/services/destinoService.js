@@ -10,10 +10,21 @@ async function searchDestinos(query) {
 }
 
 async function getDestinoById(id) {
-  return prisma.destino.findUnique({
+  const destino = await prisma.destino.findUnique({
     where: { id },
-    include: { municipios: true },
+    include: {
+      municipioLinks: {
+        include: { municipio: true },
+      },
+    },
   });
+  if (!destino) return null;
+  const municipios = (destino.municipioLinks || [])
+    .map((link) => link.municipio)
+    .filter(Boolean)
+    .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+  const { municipioLinks, ...rest } = destino;
+  return { ...rest, municipios };
 }
 
 async function getDestacados(limit = 6) {

@@ -4,6 +4,7 @@ export interface AdminMunicipio {
   precios: string;
   conexiones: string;
   tipoTurismo: string;
+  destinosCount?: number;
 }
 
 export interface AdminDestinoRow {
@@ -43,6 +44,13 @@ export interface AdminMunicipioPayload {
   tipoTurismo?: string;
 }
 
+export interface MunicipioFormState {
+  nombre: string;
+  precios: string;
+  conexiones: string;
+  tipoTurismo: string;
+}
+
 export interface ImprescindibleSection {
   title: string;
   items: string[];
@@ -66,3 +74,5 @@ export interface DestinoFormState {
 }
 
 export type AdminMobileView = 'list' | 'form';
+
+export type AdminTab = 'destinos' | 'municipios';

@@ -9,15 +9,12 @@ interface Props {
   loading: boolean;
   query: string;
   editingId: string | null;
-  municipioText: Record<string, string>;
   hiddenOnMobile: boolean;
   onQueryChange: (q: string) => void;
   onCreate: () => void;
   onEdit: (id: string) => void;
   onDelete: (id: string, nombre: string) => void;
-  onMunicipioDraftChange: (destinoId: string, value: string) => void;
-  onAddMunicipio: (destinoId: string) => void;
-  onRemoveMunicipio: (id: string) => void;
+  onUnlinkMunicipio: (destinoId: string, municipioId: string, nombre: string) => void;
 }
 
 export default function DestinoList({
@@ -25,15 +22,12 @@ export default function DestinoList({
   loading,
   query,
   editingId,
-  municipioText,
   hiddenOnMobile,
   onQueryChange,
   onCreate,
   onEdit,
   onDelete,
-  onMunicipioDraftChange,
-  onAddMunicipio,
-  onRemoveMunicipio,
+  onUnlinkMunicipio,
 }: Props) {
   return (
     <div className={`space-y-4 ${hiddenOnMobile ? 'hidden lg:block' : ''}`}>
@@ -62,12 +56,9 @@ export default function DestinoList({
               key={row.id}
               row={row}
               active={editingId === row.id}
-              municipioDraft={municipioText[row.id] || ''}
               onEdit={onEdit}
               onDelete={onDelete}
-              onMunicipioDraftChange={onMunicipioDraftChange}
-              onAddMunicipio={onAddMunicipio}
-              onRemoveMunicipio={onRemoveMunicipio}
+              onUnlinkMunicipio={onUnlinkMunicipio}
             />
           ))}
         </div>

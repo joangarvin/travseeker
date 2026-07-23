@@ -1,27 +1,21 @@
-import { ChevronRight, Edit3, MapPin, Plus, Trash2 } from 'lucide-react';
+import { ChevronRight, Edit3, MapPin, Trash2 } from 'lucide-react';
 import type { AdminDestinoRow } from '../../types/admin';
 import { readStoredText } from '../../utils/admin/storedText';
 
 interface Props {
   row: AdminDestinoRow;
   active: boolean;
-  municipioDraft: string;
   onEdit: (id: string) => void;
   onDelete: (id: string, nombre: string) => void;
-  onMunicipioDraftChange: (destinoId: string, value: string) => void;
-  onAddMunicipio: (destinoId: string) => void;
-  onRemoveMunicipio: (id: string) => void;
+  onUnlinkMunicipio: (destinoId: string, municipioId: string, nombre: string) => void;
 }
 
 export default function DestinoListItem({
   row,
   active,
-  municipioDraft,
   onEdit,
   onDelete,
-  onMunicipioDraftChange,
-  onAddMunicipio,
-  onRemoveMunicipio,
+  onUnlinkMunicipio,
 }: Props) {
   const hasMap = row.latitud != null && row.longitud != null;
 
@@ -62,7 +56,7 @@ export default function DestinoListItem({
 
       <div className="px-4 pb-4 border-t border-[var(--color-border)] pt-3 space-y-2">
         <p className="text-xs font-semibold text-[var(--color-muted)] uppercase tracking-wide">
-          Municipios
+          Municipios en este destino
         </p>
         <div className="flex flex-wrap gap-1.5">
           {row.municipios.map((m) => (
@@ -73,9 +67,10 @@ export default function DestinoListItem({
               {m.nombre}
               <button
                 type="button"
-                onClick={() => onRemoveMunicipio(m.id)}
+                onClick={() => onUnlinkMunicipio(row.id, m.id, m.nombre)}
                 className="p-1 rounded-full text-[var(--color-muted)] hover:text-[var(--color-danger)] hover:bg-[var(--color-danger)]/10"
                 aria-label={`Quitar ${m.nombre}`}
+                title="Solo lo quita de este destino"
               >
                 <Trash2 className="w-3 h-3" />
               </button>
@@ -85,28 +80,9 @@ export default function DestinoListItem({
             <span className="text-xs text-[var(--color-muted)]">Ninguno aún</span>
           )}
         </div>
-        <div className="flex flex-col sm:flex-row gap-2">
-          <input
-            value={municipioDraft}
-            onChange={(e) => onMunicipioDraftChange(row.id, e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                onAddMunicipio(row.id);
-              }
-            }}
-            placeholder="Nombre del municipio…"
-            className="flex-1 px-3 py-2.5 rounded-xl border border-[var(--color-border-strong)] bg-[var(--color-secondary)] text-sm"
-          />
-          <button
-            type="button"
-            onClick={() => onAddMunicipio(row.id)}
-            className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-[var(--color-brand)]/15 text-[var(--color-brand-dark)] text-sm font-semibold"
-          >
-            <Plus className="w-4 h-4" />
-            Añadir
-          </button>
-        </div>
+        <p className="text-xs text-[var(--color-muted)]">
+          El contenido (precios, conexiones…) se gestiona en la pestaña Municipios.
+        </p>
         <button
           type="button"
           onClick={() => onDelete(row.id, row.nombre)}

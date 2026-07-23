@@ -20,9 +20,10 @@ export function useAdminPanel() {
   const [success, setSuccess] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<DestinoFormState>(emptyDestinoForm());
-  const [municipioText, setMunicipioText] = useState<Record<string, string>>({});
   const [mobileView, setMobileView] = useState<AdminMobileView>('list');
   const [loadingEditId, setLoadingEditId] = useState<string | null>(null);
+  const [linkedMunicipios, setLinkedMunicipios] = useState<{ id: string; nombre: string }[]>([]);
+  const [linkingMunicipio, setLinkingMunicipio] = useState(false);
 
   const load = useCallback(async () => {
     if (!token) return;
@@ -56,6 +57,7 @@ export function useAdminPanel() {
   const openCreate = useCallback(() => {
     setEditingId(null);
     setForm(emptyDestinoForm());
+    setLinkedMunicipios([]);
     setError('');
     setSuccess('');
     setMobileView('form');
@@ -71,8 +73,12 @@ export function useAdminPanel() {
     try {
       const detail = await destinosApi.getById(id);
       setForm(destinoDetailToForm(detail));
+      setLinkedMunicipios(
+        (detail.municipios ?? []).map((m) => ({ id: m.id, nombre: m.nombre })),
+      );
     } catch (e) {
       setEditingId(null);
+      setLinkedMunicipios([]);
       if (window.innerWidth < 1024) setMobileView('list');
       setError(e instanceof Error ? e.message : 'No se pudo cargar el destino');
     } finally {
@@ -84,6 +90,7 @@ export function useAdminPanel() {
     setEditingId(null);
     setLoadingEditId(null);
     setForm(emptyDestinoForm());
+    setLinkedMunicipios([]);
     setMobileView('list');
     setError('');
   }, []);
@@ -101,12 +108,18 @@ export function useAdminPanel() {
         setSuccess('Destino actualizado correctamente.');
         await load();
       } else {
-        await adminApi.createDestino(payload, token);
-        setSuccess('Destino publicado correctamente.');
-        setMobileView('list');
-        setEditingId(null);
-        setForm(emptyDestinoForm());
+        const created = await adminApi.createDestino(payload, token);
+        setSuccess('Destino publicado. Ya puedes añadir municipios del catálogo.');
         await load();
+        if (created.id) {
+          setEditingId(created.id);
+          setLinkedMunicipios([]);
+          if (window.innerWidth < 1024) setMobileView('form');
+        } else {
+          setMobileView('list');
+          setEditingId(null);
+          setForm(emptyDestinoForm());
+        }
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'No se pudo guardar');
@@ -117,30 +130,66 @@ export function useAdminPanel() {
 
   const removeDestino = useCallback(async (id: string, nombre: string) => {
     if (!token) return;
-    if (!window.confirm(`¿Eliminar «${nombre}» y todos sus municipios?`)) return;
+    if (!window.confirm(`¿Eliminar «${nombre}»? Los municipios del catálogo no se borran.`)) return;
     await adminApi.deleteDestino(id, token);
     if (editingId === id) cancelForm();
     await load();
   }, [token, editingId, cancelForm, load]);
 
-  const addMunicipio = useCallback(async (destinoId: string) => {
-    if (!token) return;
-    const nombre = (municipioText[destinoId] || '').trim();
-    if (!nombre) return;
-    await adminApi.createMunicipio(destinoId, { nombre }, token);
-    setMunicipioText((prev) => ({ ...prev, [destinoId]: '' }));
-    await load();
-  }, [token, municipioText, load]);
+  const linkMunicipio = useCallback(async (municipioId: string) => {
+    if (!token || !editingId) return;
+    setLinkingMunicipio(true);
+    setError('');
+    try {
+      const linked = await adminApi.linkMunicipio(editingId, municipioId, token);
+      setLinkedMunicipios((prev) =>
+        [...prev, { id: linked.id, nombre: linked.nombre }].sort((a, b) =>
+          a.nombre.localeCompare(b.nombre, 'es'),
+        ),
+      );
+      setSuccess(`«${linked.nombre}» añadido a este destino.`);
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'No se pudo añadir el municipio');
+    } finally {
+      setLinkingMunicipio(false);
+    }
+  }, [token, editingId, load]);
 
-  const removeMunicipio = useCallback(async (id: string) => {
-    if (!token) return;
-    await adminApi.deleteMunicipio(id, token);
-    await load();
-  }, [token, load]);
+  const unlinkMunicipio = useCallback(async (municipioId: string, nombre: string) => {
+    if (!token || !editingId) return;
+    if (!window.confirm(`¿Quitar «${nombre}» de este destino? La ficha del municipio no se elimina.`)) {
+      return;
+    }
+    try {
+      await adminApi.unlinkMunicipio(editingId, municipioId, token);
+      setLinkedMunicipios((prev) => prev.filter((m) => m.id !== municipioId));
+      setSuccess(`«${nombre}» quitado de este destino.`);
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'No se pudo quitar el municipio');
+    }
+  }, [token, editingId, load]);
 
-  const setMunicipioDraft = useCallback((destinoId: string, value: string) => {
-    setMunicipioText((prev) => ({ ...prev, [destinoId]: value }));
-  }, []);
+  /** Unlink from list card (destino may not be open in editor). */
+  const unlinkMunicipioFromDestino = useCallback(async (
+    destinoId: string,
+    municipioId: string,
+    nombre: string,
+  ) => {
+    if (!token) return;
+    if (!window.confirm(`¿Quitar «${nombre}» de este destino? La ficha no se elimina.`)) return;
+    try {
+      await adminApi.unlinkMunicipio(destinoId, municipioId, token);
+      if (editingId === destinoId) {
+        setLinkedMunicipios((prev) => prev.filter((m) => m.id !== municipioId));
+      }
+      setSuccess(`«${nombre}» quitado del destino.`);
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'No se pudo quitar el municipio');
+    }
+  }, [token, editingId, load]);
 
   return {
     query,
@@ -159,13 +208,15 @@ export function useAdminPanel() {
     cancelForm,
     saveDestino,
     removeDestino,
-    addMunicipio,
-    removeMunicipio,
-    municipioText,
-    setMunicipioDraft,
+    linkedMunicipios,
+    linkingMunicipio,
+    linkMunicipio,
+    unlinkMunicipio,
+    unlinkMunicipioFromDestino,
     loadingEditId,
     showList: mobileView === 'list',
     showForm: mobileView === 'form',
     editorOpen: editingId !== null || mobileView === 'form',
+    reload: load,
   };
 }

@@ -11,7 +11,8 @@ Hooks personalizados que encapsulan lógica de datos, filtros y efectos de UI.
 | `useRelatedDestinos.ts` | Carga destinos relacionados para la página de detalle. |
 | `useSearchFilters.ts` | Estado y lógica de los filtros de búsqueda (valores, contador activo, limpiar). |
 | `useScrollReveal.ts` | Intersection Observer para detectar cuándo un elemento entra en viewport. Usado por `ScrollReveal`. |
-| `useAdminPanel.ts` | Estado del panel admin: lista, formulario, municipios y operaciones CRUD. |
+| `useAdminPanel.ts` | Panel admin de destinos: lista, formulario y vincular/desvincular municipios. |
+| `useAdminMunicipios.ts` | Catálogo compartido de municipios (CRUD) en la pestaña Municipios. |
 
 ## Patrón
 
