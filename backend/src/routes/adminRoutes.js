@@ -11,8 +11,12 @@ router.post('/destinos', adminController.createDestino);
 router.put('/destinos/:destinoId', adminController.updateDestino);
 router.delete('/destinos/:destinoId', adminController.deleteDestino);
 
-router.post('/destinos/:destinoId/municipios', adminController.createMunicipio);
+router.get('/municipios', adminController.listMunicipios);
+router.post('/municipios', adminController.createMunicipio);
 router.put('/municipios/:municipioId', adminController.updateMunicipio);
 router.delete('/municipios/:municipioId', adminController.deleteMunicipio);
+
+router.post('/destinos/:destinoId/municipios', adminController.linkMunicipio);
+router.delete('/destinos/:destinoId/municipios/:municipioId', adminController.unlinkMunicipio);
 
 module.exports = router;

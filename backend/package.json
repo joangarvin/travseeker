@@ -10,7 +10,8 @@
     "db:push": "prisma db push",
     "db:seed": "node seed.js",
     "db:coords": "node scripts/coords.js",
-    "db:promote-admin": "node scripts/promote-admin.js"
+    "db:promote-admin": "node scripts/promote-admin.js",
+    "db:migrate-municipios": "node scripts/migrate-municipios-m2m.js"
   },
   "keywords": [],
   "author": "",

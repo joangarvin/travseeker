@@ -17,8 +17,12 @@ const deleteDestino = asyncHandler(async (req, res) => {
   res.json(await adminService.deleteDestino(req.params.destinoId));
 });
 
+const listMunicipios = asyncHandler(async (_req, res) => {
+  res.json(await adminService.listMunicipios());
+});
+
 const createMunicipio = asyncHandler(async (req, res) => {
-  res.status(201).json(await adminService.createMunicipio(req.params.destinoId, req.body));
+  res.status(201).json(await adminService.createMunicipio(req.body));
 });
 
 const updateMunicipio = asyncHandler(async (req, res) => {
@@ -29,12 +33,26 @@ const deleteMunicipio = asyncHandler(async (req, res) => {
   res.json(await adminService.deleteMunicipio(req.params.municipioId));
 });
 
+const linkMunicipio = asyncHandler(async (req, res) => {
+  const municipioId = req.body.municipioId;
+  res.status(201).json(await adminService.linkMunicipio(req.params.destinoId, municipioId));
+});
+
+const unlinkMunicipio = asyncHandler(async (req, res) => {
+  res.json(
+    await adminService.unlinkMunicipio(req.params.destinoId, req.params.municipioId),
+  );
+});
+
 module.exports = {
   listDestinos,
   createDestino,
   updateDestino,
   deleteDestino,
+  listMunicipios,
   createMunicipio,
   updateMunicipio,
   deleteMunicipio,
+  linkMunicipio,
+  unlinkMunicipio,
 };

@@ -30,7 +30,8 @@ const parseCSV = (filePath) => {
 async function main() {
   console.log('Iniciando importación...');
   
-  // Limpiar base de datos
+  // Limpiar base de datos (orden: unión → municipios → destinos)
+  await prisma.destinoMunicipio.deleteMany();
   await prisma.municipio.deleteMany();
   await prisma.destino.deleteMany();
 
@@ -66,30 +67,48 @@ async function main() {
 
   console.log('Destinos importados correctamente.');
 
-  // Insertar Municipios
+  // Insertar Municipios (catálogo) y vincular a destinos
   for (const row of tablaRaw) {
     if (!row.ID || !row.Municipio) continue;
 
-    // Verificar si existe el destino asociado
-    let destinoId = null;
-    if (row.Referencia) {
-      const exists = await prisma.destino.findUnique({ where: { id: row.Referencia } });
-      if (exists) destinoId = row.Referencia;
-    }
-
-    await prisma.municipio.create({
-      data: {
+    await prisma.municipio.upsert({
+      where: { id: row.ID },
+      create: {
         id: row.ID,
         nombre: row.Municipio,
         precios: row.Precios || '',
         conexiones: row.Conexiones || '',
         tipoTurismo: row['Tipo de Turismo'] || '',
-        destinoId: destinoId,
-      }
+      },
+      update: {
+        nombre: row.Municipio,
+        precios: row.Precios || '',
+        conexiones: row.Conexiones || '',
+        tipoTurismo: row['Tipo de Turismo'] || '',
+      },
     });
+
+    if (row.Referencia) {
+      const exists = await prisma.destino.findUnique({ where: { id: row.Referencia } });
+      if (exists) {
+        await prisma.destinoMunicipio.upsert({
+          where: {
+            destinoId_municipioId: {
+              destinoId: row.Referencia,
+              municipioId: row.ID,
+            },
+          },
+          create: {
+            destinoId: row.Referencia,
+            municipioId: row.ID,
+          },
+          update: {},
+        });
+      }
+    }
   }
 
-  console.log('Municipios importados correctamente.');
+  console.log('Municipios importados y vinculados correctamente.');
 }
 
 main()

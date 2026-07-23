@@ -13,6 +13,8 @@ Componentes del panel de administración (`/admin`). Organizados por responsabil
 | `DestinoForm.tsx` | Formulario por secciones (tipo documento). |
 | `DestinoFormActions.tsx` | Botones guardar/cancelar (escritorio + móvil sticky). |
 | `ImprescindiblesEditor.tsx` | Editor visual de categorías y puntos imprescindibles. |
+| `MunicipioCatalog.tsx` | Catálogo compartido: lista y formulario de municipios. |
+| `MunicipioLinker.tsx` | Asignar/quitar municipios de un destino (sin editar ficha). |
 | `SeasonPicker.tsx` | Barras de masificación por temporada. |
 | `LocationPickerMap.tsx` | Mapa para colocar el pin del destino. |
 | `AdminField.tsx` | Campo con etiqueta, hint y estilos compartidos. |
