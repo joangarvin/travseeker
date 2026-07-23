@@ -17,7 +17,7 @@ export default function FilterPanel({ open, filters, onUpdateFilter, onReset, on
           <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 items-end ${open ? 'filter-stagger' : ''}`}>
             {SEARCH_FILTERS.map(({ key, label, options }) => (
               <div key={key} className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-semibold uppercase tracking-widest text-[var(--color-muted)]">
+                <label className="field-label text-[var(--color-muted)]">
                   {label}
                 </label>
                 <select
@@ -33,20 +33,20 @@ export default function FilterPanel({ open, filters, onUpdateFilter, onReset, on
             ))}
 
             <div className="flex flex-col gap-1.5 sm:col-span-2 lg:col-span-1">
-              <span className="text-[10px] font-semibold uppercase tracking-widest text-[var(--color-muted)]">
+              <span className="field-label text-[var(--color-muted)]">
                 Acciones
               </span>
               <div className="flex gap-2 h-[46px]">
                 <button
                   onClick={onReset}
-                  className="flex-1 flex items-center justify-center gap-1.5 rounded-xl border border-[var(--color-border)] text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-brand)]/30 transition-all duration-300 active:scale-[0.98]"
+                  className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-[var(--color-border-strong)] text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary-light)] transition-all duration-200 active:scale-[0.98]"
                 >
                   <X className="w-4 h-4" />
                   Limpiar
                 </button>
                 <button
                   onClick={onApply}
-                  className="flex-1 rounded-xl bg-[var(--color-brand)] text-[#0a0f0d] text-sm font-semibold hover:bg-[var(--color-accent-hover)] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                  className="flex-1 rounded-lg bg-[var(--color-brand)] text-[var(--color-on-brand)] text-sm font-semibold hover:bg-[var(--color-accent-hover)] transition-all duration-200 active:scale-[0.98]"
                 >
                   Aplicar
                 </button>

@@ -24,7 +24,7 @@ const MAX = COMPARE_MAX;
 function Chip({ children, highlight }: { children: React.ReactNode; highlight?: boolean }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1 rounded-full border ${
+      className={`inline-flex items-center gap-1.5 text-sm font-medium px-2.5 py-1 rounded-md border ${
         highlight
           ? 'bg-[var(--color-brand)]/12 border-[var(--color-brand)]/30 text-[var(--color-brand-dark)]'
           : 'bg-[var(--color-secondary)] border-[var(--color-border)] text-[var(--color-primary)]'
@@ -130,17 +130,18 @@ export default function Comparador() {
       <Header />
 
       <PageHero
+        eyebrow="Comparador"
         icon={<GitCompare className="w-6 h-6 text-[var(--color-brand)]" />}
-        title="Comparador"
-        description={`Compara hasta ${MAX} destinos lado a lado: presupuesto, masificación, tipo de turismo y mejor época.`}
+        title="Cara a cara"
+        description={`Dos destinos entran (hasta ${MAX}). Tú decides cuál gana: presupuesto, gente, tipo de turismo y mejor época.`}
       />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pb-20 space-y-6 sm:space-y-8">
-        <div className="p-5 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] shadow-sm">
+        <div className="ui-card p-5">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
             <div className="inline-flex items-center gap-2 text-sm text-[var(--color-muted)]">
               <Sparkles className="w-4 h-4 text-[var(--color-brand-dark)]" />
-              Comparativa profesional de destinos
+              Datos sin humo, uno al lado del otro.
             </div>
             {compareItems.length > 0 && (
               <button
@@ -156,12 +157,12 @@ export default function Comparador() {
 
           <div className="flex flex-wrap items-center gap-2 mb-4">
             {compareItems.length === 0 && (
-              <p className="text-sm text-[var(--color-muted)]">Añade destinos para comparar.</p>
+              <p className="text-sm text-[var(--color-muted)]">Añade destinos y móntales el combate.</p>
             )}
             {compareItems.map((d) => (
-              <span key={d.id} className="inline-flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-full bg-[var(--color-secondary)] border border-[var(--color-border-strong)] text-sm font-medium text-[var(--color-primary)] shadow-sm">
+              <span key={d.id} className="inline-flex items-center gap-2 pl-3 pr-1.5 py-1.5 rounded-lg bg-[var(--color-secondary)] border border-[var(--color-border-strong)] text-sm font-medium text-[var(--color-primary)]">
                 {d.nombre.trim()}
-                <button onClick={() => remove(d.id)} className="w-5 h-5 rounded-full hover:bg-[var(--color-danger)]/15 hover:text-[var(--color-danger)] flex items-center justify-center transition-colors" aria-label={`Quitar ${d.nombre}`}>
+                <button onClick={() => remove(d.id)} className="w-6 h-6 rounded-md hover:bg-[var(--color-danger)]/15 hover:text-[var(--color-danger)] flex items-center justify-center transition-colors" aria-label={`Quitar ${d.nombre}`}>
                   <X className="w-3.5 h-3.5" />
                 </button>
               </span>
@@ -207,9 +208,10 @@ export default function Comparador() {
         </div>
 
         {!canCompare ? (
-          <div className="text-center py-20 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)]">
-            <GitCompare className="w-10 h-10 text-[var(--color-muted)] mx-auto mb-4" />
-            <p className="text-[var(--color-muted)]">Selecciona al menos 2 destinos para ver la comparación.</p>
+          <div className="ui-card text-center py-16 px-6">
+            <GitCompare className="w-10 h-10 text-[var(--color-muted)] mx-auto mb-4 opacity-70" />
+            <p className="font-serif text-xl text-[var(--color-primary)] mb-2">Falta pelea</p>
+            <p className="text-[var(--color-muted)]">Añade al menos dos destinos. Con uno solo no hay pelea.</p>
           </div>
         ) : loading ? (
           <div className="text-center py-20 text-[var(--color-muted)]">Cargando comparación...</div>

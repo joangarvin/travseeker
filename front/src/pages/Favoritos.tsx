@@ -8,6 +8,7 @@ import PageLoader from '../components/ui/PageLoader';
 import ScrollReveal from '../components/ui/ScrollReveal';
 import PageHero from '../components/layout/PageHero';
 import ListToolbar from '../components/ui/ListToolbar';
+import { Button, EmptyState } from '../components/ui/primitives';
 import { useAuth } from '../context/AuthContext';
 import { useAbortableFetch } from '../hooks/useAbortableFetch';
 import { getFavoritos } from '../api/favoritos';
@@ -37,28 +38,27 @@ export default function Favoritos() {
   }, [favoritos, query, sortBy]);
 
   if (authLoading || (user && loading)) {
-    return <PageLoader label="Cargando favoritos..." />;
+    return <PageLoader label="Abriendo tus sitios…" />;
   }
 
   if (!user) {
     return (
       <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
         <Header />
-        <div className="pt-24 sm:pt-32 px-4 sm:px-6 pb-20 max-w-lg mx-auto text-center">
-          <div className="rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] p-10">
-            <Heart className="w-12 h-12 text-[var(--color-brand)] mx-auto mb-4" />
-            <h1 className="font-serif text-3xl text-[var(--color-primary)] mb-3">Tus favoritos</h1>
-            <p className="text-[var(--color-muted)] mb-8">
-              Inicia sesión para guardar destinos y acceder a ellos cuando quieras.
-            </p>
-            <Link
-              to="/auth"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:opacity-90 transition-opacity"
-            >
-              <LogIn className="w-4 h-4" />
-              Iniciar sesión
-            </Link>
-          </div>
+        <div className="pt-24 sm:pt-32 px-4 sm:px-6 pb-20 max-w-lg mx-auto">
+          <EmptyState
+            icon={<Heart className="w-10 h-10" />}
+            title="Tus sitios"
+            description="Entra y todo lo que marques con el corazón quedará guardado en un solo cajón."
+            action={(
+              <Link to="/auth">
+                <Button>
+                  <LogIn className="w-4 h-4" />
+                  Entrar
+                </Button>
+              </Link>
+            )}
+          />
         </div>
         <Footer />
       </div>
@@ -70,16 +70,17 @@ export default function Favoritos() {
       <Header />
 
       <PageHero
-        icon={<Heart className="w-6 h-6 text-[var(--color-brand)] fill-[var(--color-brand)]" />}
-        title="Mis favoritos"
+        eyebrow="Favoritos"
+        icon={<Heart className="w-6 h-6 fill-[var(--color-brand)]" />}
+        title="Tus sitios"
         description={
           filtered.length === 0
-            ? 'Aún no has guardado ningún destino.'
-            : `${filtered.length} destino${filtered.length === 1 ? '' : 's'} guardado${filtered.length === 1 ? '' : 's'}`
+            ? 'Todo lo que marques con el corazón, en un solo cajón.'
+            : `${filtered.length} destino${filtered.length === 1 ? '' : 's'} en el cajón`
         }
       />
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pb-20">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pb-20">
         {error && (
           <p className="text-center text-[var(--color-danger)] mb-8">{error}</p>
         )}
@@ -88,7 +89,7 @@ export default function Favoritos() {
           <ListToolbar
             query={query}
             onQueryChange={setQuery}
-            queryPlaceholder="Buscar en favoritos..."
+            queryPlaceholder="Buscar en el cajón…"
             sortValue={sortBy}
             onSortChange={(value) => setSortBy(value as 'recent' | 'name')}
             sortOptions={[
@@ -99,7 +100,7 @@ export default function Favoritos() {
         )}
 
         {filtered.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
             {filtered.map((fav, index) => (
               <ScrollReveal key={fav.id} delay={(index % 4) as 0 | 1 | 2 | 3}>
                 <DestinationCard destino={fav.destino} index={index} enableCollection />
@@ -107,20 +108,20 @@ export default function Favoritos() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)]">
-            <Heart className="w-10 h-10 text-[var(--color-muted)] mx-auto mb-4" />
-            <p className="text-[var(--color-muted)] mb-6">
-              {favoritos.length > 0
-                ? 'No encontramos favoritos con ese criterio de búsqueda.'
-                : 'Explora destinos y pulsa el corazón para guardarlos aquí.'}
-            </p>
-            <Link
-              to="/"
-              className="text-[var(--color-brand)] font-medium hover:underline"
-            >
-              Descubrir destinos
-            </Link>
-          </div>
+          <EmptyState
+            icon={<Heart className="w-10 h-10" />}
+            title={favoritos.length > 0 ? 'Nada con ese nombre' : 'De momento, silencio'}
+            description={
+              favoritos.length > 0
+                ? 'Prueba con otra palabra.'
+                : 'Toca el corazón en cualquier destino y esto empieza a llenarse.'
+            }
+            action={(
+              <Link to="/">
+                <Button variant="secondary">Ver destinos</Button>
+              </Link>
+            )}
+          />
         )}
       </section>
 

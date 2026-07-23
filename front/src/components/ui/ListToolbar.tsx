@@ -23,21 +23,21 @@ export default function ListToolbar({
   sortOptions = [],
 }: ListToolbarProps) {
   return (
-    <div className="mb-6 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] p-3 sm:p-4 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between shadow-sm ring-1 ring-[var(--color-border)]/40">
+    <div className="ui-card mb-6 p-3 sm:p-4 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
       <div className="relative w-full sm:max-w-md">
-        <Search className="w-4 h-4 text-[var(--color-muted)] absolute left-3 top-1/2 -translate-y-1/2" />
+        <Search className="w-4 h-4 text-[var(--color-muted)] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
         <input
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
           placeholder={queryPlaceholder}
-          className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border-strong)] text-sm text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-brand)]"
+          className="ui-input pl-10"
         />
       </div>
       {sortValue && onSortChange && sortOptions.length > 0 && (
         <select
           value={sortValue}
           onChange={(e) => onSortChange(e.target.value)}
-          className="px-3 py-2 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border-strong)] text-sm text-[var(--color-primary)] focus:outline-none focus:border-[var(--color-brand)]"
+          className="ui-input sm:w-auto sm:min-w-[11rem] cursor-pointer"
         >
           {sortOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>

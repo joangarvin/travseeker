@@ -1,54 +1,121 @@
-import { Landmark, Trees, Sun, Wheat, Mountain, Castle } from 'lucide-react';
+import { useState } from 'react';
+import type { CSSProperties } from 'react';
 import ScrollReveal from '../ui/ScrollReveal';
 
 interface Props {
   onSelect: (tipoTurismo: string) => void;
 }
 
+const STROKE = {
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 1.5,
+  strokeLinecap: 'round' as const,
+  strokeLinejoin: 'round' as const,
+};
+
+const ICONS: Record<string, React.ReactNode> = {
+  Cultural: (
+    <svg viewBox="0 0 32 32" className="w-7 h-7" {...STROKE}>
+      <path d="M5 26h22M7 26v-3m5 3v-3m8 3v-3m5 3v-3M5 22.5h22M16 5.5 5.5 12h21L16 5.5Z" />
+      <path d="M8.5 12v10.5m5-10.5v10.5m5-10.5v10.5m5-10.5v10.5" />
+    </svg>
+  ),
+  Naturaleza: (
+    <svg viewBox="0 0 32 32" className="w-7 h-7" {...STROKE}>
+      <path d="M16 27v-9m0 0c-5.5 0-8-3.8-8-8.5 0-2 .4-3.6 1-5 3 .8 7 3.4 7 9.5Zm0 0c4.5-.5 7.5-3 7.5-7 0-1.5-.3-2.6-.8-3.7-2.6.8-6.2 3-6.7 8.2" />
+      <path d="M9 27h14" />
+    </svg>
+  ),
+  'Sol y playa': (
+    <svg viewBox="0 0 32 32" className="w-7 h-7" {...STROKE}>
+      <circle cx="16" cy="13" r="4.5" />
+      <path d="M16 3.5v2.6m6.7.2-1.8 1.8m4.6 4.9h-2.6m-13.8 0H6.5m4.6-6.7L9.3 6.3" />
+      <path d="M4 24.5c2-1.6 4-1.6 6 0s4 1.6 6 0 4-1.6 6-0 4 1.6 6 0" />
+    </svg>
+  ),
+  Rural: (
+    <svg viewBox="0 0 32 32" className="w-7 h-7" {...STROKE}>
+      <path d="M6 26V15L16 7l10 8v11" />
+      <path d="M6 26h20M13 26v-6.5a3 3 0 0 1 6 0V26" />
+      <path d="M3.5 16.5 16 6.5l12.5 10" />
+    </svg>
+  ),
+  Montaña: (
+    <svg viewBox="0 0 32 32" className="w-7 h-7" {...STROKE}>
+      <path d="M3 26 12 9l5.5 10L21 13l8 13H3Z" />
+      <path d="m9.5 14 2.5-2.2 2.3 2.6" />
+    </svg>
+  ),
+  Patrimonial: (
+    <svg viewBox="0 0 32 32" className="w-7 h-7" {...STROKE}>
+      <path d="M7 26V12h4v2h4v-2h2v2h4v-2h4v14" />
+      <path d="M5 26h22M13 26v-5a3 3 0 0 1 6 0v5M7 12V8.5m18 3.5V8.5M11 12V6.5m10 5.5V6.5m-5 5.5V5" />
+    </svg>
+  ),
+};
+
 const STYLES = [
-  { value: 'Cultural', label: 'Cultural', icon: Landmark, desc: 'Museos, arte e historia' },
-  { value: 'Naturaleza', label: 'Naturaleza', icon: Trees, desc: 'Paisajes y vida salvaje' },
-  { value: 'Sol y playa', label: 'Sol y playa', icon: Sun, desc: 'Costa y descanso' },
-  { value: 'Rural', label: 'Rural', icon: Wheat, desc: 'Pueblos con encanto' },
-  { value: 'Montaña', label: 'Montaña', icon: Mountain, desc: 'Aventura en altura' },
-  { value: 'Patrimonial', label: 'Patrimonial', icon: Castle, desc: 'Joyas Patrimonio' },
+  { value: 'Cultural', label: 'Cultural', desc: 'Museos y piedras con historia', offset: 'mt-0 md:mt-0', tilt: '-1deg' },
+  { value: 'Naturaleza', label: 'Naturaleza', desc: 'Sendero, bosque y silencio', offset: 'mt-2 md:mt-4', tilt: '0.9deg' },
+  { value: 'Sol y playa', label: 'Sol y playa', desc: 'Toalla, sal y siesta', offset: 'mt-0 md:mt-1.5', tilt: '-0.7deg' },
+  { value: 'Rural', label: 'Rural', desc: 'Pueblos donde te saludan', offset: 'mt-2 md:mt-6', tilt: '0.8deg' },
+  { value: 'Montaña', label: 'Montaña', desc: 'Cuestas que valen la pena', offset: 'mt-0 md:mt-0.5', tilt: '-1.1deg' },
+  { value: 'Patrimonial', label: 'Patrimonial', desc: 'Lo que protege la UNESCO', offset: 'mt-2 md:mt-3.5', tilt: '0.6deg' },
 ] as const;
 
 export default function TravelStyles({ onSelect }: Props) {
+  const [active, setActive] = useState<string | null>(null);
+
+  const handleSelect = (value: string) => {
+    setActive(value);
+    onSelect(value);
+    document.getElementById('destinos')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pt-16 sm:pt-24 pb-4">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pt-12 sm:pt-20 pb-4">
       <ScrollReveal>
-        <div className="text-center mb-8 sm:mb-12">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-dark)] mb-3 block">
-            Inspírate
-          </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[var(--color-primary)] tracking-tight mb-3 sm:mb-4">
-            ¿Qué tipo de viaje buscas?
+        <div className="mb-8 sm:mb-10 max-w-xl">
+          <span className="field-label text-[var(--color-teja)] mb-3 block">El humor del viaje</span>
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium text-[var(--color-primary)] tracking-tight mb-3">
+            ¿Qué plan te pide el cuerpo?
           </h2>
-          <p className="text-[var(--color-muted)] text-base sm:text-lg max-w-2xl mx-auto font-light px-2">
-            Elige un estilo y te mostramos los destinos que mejor encajan.
+          <p className="text-[var(--color-muted)] text-base sm:text-lg">
+            No es lo mismo buscar siesta que buscar sendero. Elige el plan y afinamos la lista.
           </p>
         </div>
       </ScrollReveal>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-px bg-[var(--color-border-strong)] border border-[var(--color-border-strong)] rounded-xl overflow-hidden shadow-sm">
-        {STYLES.map(({ value, label, icon: Icon, desc }, i) => (
-          <div key={value} className="bg-[var(--color-surface)] group hover:bg-[var(--color-surface-2)] transition-colors">
-            <ScrollReveal delay={(i % 3 + 1) as 1 | 2 | 3} className="h-full">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-3.5 items-start">
+        {STYLES.map(({ value, label, desc, offset, tilt }, i) => {
+          const isActive = active === value;
+          return (
+            <ScrollReveal key={value} delay={((i % 3) + 1) as 1 | 2 | 3} className={offset}>
               <button
                 type="button"
-                onClick={() => onSelect(value)}
-                className="w-full h-full flex flex-col items-center justify-center text-center gap-2 sm:gap-3 p-5 sm:p-6 outline-none"
+                onClick={() => handleSelect(value)}
+                className={`ficha-tilt w-full flex flex-col items-start text-left gap-2 p-4 sm:p-5 rounded-lg border transition-colors duration-150 touch-target ${
+                  isActive
+                    ? 'bg-[var(--color-brand)] border-[var(--color-brand)] text-[var(--color-on-brand)]'
+                    : 'bg-[var(--color-surface)] border-[var(--color-border-strong)] text-[var(--color-primary)] hover:border-[var(--color-primary-light)]'
+                }`}
+                style={{
+                  '--tilt': tilt,
+                  boxShadow: isActive ? 'var(--shadow-card)' : 'var(--shadow-card)',
+                } as CSSProperties}
               >
-                <span className="w-10 h-10 rounded-lg border border-[var(--color-border-strong)] bg-[var(--color-surface)] flex items-center justify-center text-[var(--color-primary)] group-hover:border-[var(--color-primary-light)]/30 group-hover:text-[var(--color-brand)] transition-colors">
-                  <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className={isActive ? 'text-[var(--color-on-brand)]' : 'text-[var(--color-brand-dark)]'}>
+                  {ICONS[value]}
                 </span>
-                <span className="text-xs sm:text-sm font-semibold text-[var(--color-primary)] tracking-tight">{label}</span>
-                <span className="text-xs text-[var(--color-muted)] leading-snug hidden sm:block opacity-80">{desc}</span>
+                <span className="text-sm font-semibold tracking-tight">{label}</span>
+                <span className={`text-xs leading-snug ${isActive ? 'text-[var(--color-on-brand)]/75' : 'text-[var(--color-muted)]'}`}>
+                  {desc}
+                </span>
               </button>
             </ScrollReveal>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

@@ -6,8 +6,9 @@ export function getMasificationLabel(value: number): string {
 }
 
 export function getMasificationColor(value: number): string {
-  if (value <= 25) return '#3ecf8e';
-  if (value <= 50) return '#2eb87a';
-  if (value <= 75) return '#fbbf24';
-  return '#f87171';
+  // Paleta «cuaderno de campo»: verde botella → mostaza → teja → lacre
+  if (value <= 25) return '#3a7050';
+  if (value <= 50) return '#2f5d3f';
+  if (value <= 75) return '#d9a441';
+  return '#c4622d';
 }

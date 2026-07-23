@@ -1,51 +1,74 @@
-import { Search, SlidersHorizontal, Heart } from 'lucide-react';
 import ScrollReveal from '../ui/ScrollReveal';
 
 const STEPS = [
   {
-    icon: Search,
-    title: 'Explora',
-    text: 'Busca entre destinos curados por todo el territorio, sin trampas ni patrocinios.',
+    title: 'Acota',
+    text: 'Dinos presupuesto y cuánta gente soportas alrededor.',
   },
   {
-    icon: SlidersHorizontal,
-    title: 'Filtra',
-    text: 'Ajusta por presupuesto, masificación y tipo de turismo hasta dar con tu sitio ideal.',
+    title: 'Compara',
+    text: 'Pon dos o tres destinos frente a frente, con datos y sin humo.',
   },
   {
-    icon: Heart,
     title: 'Guarda',
-    text: 'Añade tus destinos favoritos y crea tu propia lista para tu próxima aventura.',
+    text: 'Favoritos y colecciones, listos para el grupo del viaje.',
   },
 ];
 
+/* Escalones de la escalera diagonal (solo en pantallas medianas o más) */
+const INDENTS = ['md:ml-0', 'md:ml-[88px]', 'md:ml-[176px]'];
+
 export default function HowItWorks() {
   return (
-    <section className="bg-[var(--color-surface)] border-y border-[var(--color-border)]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-16 sm:py-24">
-        <ScrollReveal>
-          <div className="text-center mb-10 sm:mb-16">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-dark)] mb-3 block">
-              Así funciona
-            </span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[var(--color-primary)] tracking-tight">
-              Tu viaje en tres pasos
-            </h2>
-          </div>
-        </ScrollReveal>
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-16 sm:py-24">
+      <ScrollReveal>
+        <div className="mb-10 sm:mb-14 max-w-xl">
+          <span className="field-label text-[var(--color-teja)] mb-3 block">Sin magia</span>
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium text-[var(--color-primary)] tracking-tight">
+            Sin magia. Método.
+          </h2>
+        </div>
+      </ScrollReveal>
 
-        <div className="grid md:grid-cols-3 gap-px bg-[var(--color-border-strong)] border border-[var(--color-border-strong)] rounded-xl overflow-hidden shadow-sm">
-          {STEPS.map(({ icon: Icon, title, text }, i) => (
-            <div key={title} className="bg-[var(--color-surface)] flex flex-col items-start relative group hover:bg-[var(--color-surface-2)] transition-colors">
-              <ScrollReveal delay={(i + 1) as 1 | 2 | 3} className="w-full h-full p-8 md:p-10 flex flex-col">
-                <span className="absolute top-8 right-8 text-[var(--color-muted)] font-mono text-sm font-medium tracking-wider opacity-40">0{i + 1}</span>
-                <span className="w-12 h-12 rounded-lg border border-[var(--color-border-strong)] bg-[var(--color-surface)] flex items-center justify-center text-[var(--color-primary)] mb-6 shadow-sm group-hover:border-[var(--color-primary-light)]/30 transition-colors">
-                  <Icon className="w-5 h-5" />
+      <div className="relative max-w-3xl">
+        {/* Ruta punteada que une los pasos, como trazo en un mapa */}
+        <svg
+          aria-hidden
+          className="hidden md:block absolute left-10 top-14 h-[calc(100%-56px)] w-[240px] pointer-events-none"
+          viewBox="0 0 240 260"
+          preserveAspectRatio="none"
+          fill="none"
+        >
+          <path
+            d="M20 10C10 90 80 100 108 130s16 90 96 116"
+            stroke="var(--color-teja)"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeDasharray="1 10"
+          />
+        </svg>
+
+        <div className="flex flex-col gap-10 sm:gap-12">
+          {STEPS.map(({ title, text }, i) => (
+            <ScrollReveal key={title} delay={(i + 1) as 1 | 2 | 3} className={INDENTS[i]}>
+              <div className="flex items-center gap-5 sm:gap-7">
+                <span
+                  className={`font-mono leading-none text-6xl sm:text-[80px] select-none ${
+                    i === 2 ? 'text-[var(--color-brand)]' : 'text-[var(--color-primary)]/30'
+                  }`}
+                >
+                  {i + 1}
                 </span>
-                <h3 className="text-lg font-semibold text-[var(--color-primary)] mb-2 tracking-tight">{title}</h3>
-                <p className="text-[var(--color-muted)] text-sm leading-relaxed">{text}</p>
-              </ScrollReveal>
-            </div>
+                <div>
+                  <h3 className="font-serif text-xl sm:text-2xl font-medium text-[var(--color-primary)] mb-1">
+                    {title}
+                  </h3>
+                  <p className="text-[var(--color-muted)] text-sm sm:text-base leading-relaxed max-w-sm">
+                    {text}
+                  </p>
+                </div>
+              </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

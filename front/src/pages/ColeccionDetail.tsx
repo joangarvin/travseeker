@@ -187,11 +187,11 @@ export default function ColeccionDetail() {
           <div className="text-center py-20 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)]">
             <Compass className="w-10 h-10 text-[var(--color-muted)] mx-auto mb-4" />
             <p className="text-[var(--color-muted)] mb-6">
-              Esta colección está vacía. Explora destinos y guárdalos aquí desde el botón "Guardar en colección".
+              Esta lista está en blanco. Pásate por el mapa y trae algo.
             </p>
             <div className="flex items-center justify-center gap-4">
-              <Link to="/" className="text-[var(--color-brand-dark)] font-semibold hover:underline">Explorar destinos</Link>
-              <Link to="/mapa" className="text-[var(--color-brand-dark)] font-semibold hover:underline">Ver el mapa</Link>
+              <Link to="/mapa" className="text-[var(--color-brand-dark)] font-semibold hover:underline">Abrir el mapa</Link>
+              <Link to="/" className="text-[var(--color-brand-dark)] font-semibold hover:underline">Ver destinos</Link>
             </div>
           </div>
         )}

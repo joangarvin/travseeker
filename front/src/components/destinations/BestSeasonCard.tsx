@@ -15,37 +15,39 @@ export default function BestSeasonCard({ data }: { data: SeasonalData }) {
   const bestColor = getMasificationColor(best.value);
 
   return (
-    <div className="rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] shadow-sm overflow-hidden">
-      <div className="p-6 md:p-8 flex flex-col sm:flex-row sm:items-center gap-6">
-        <div
-          className="w-16 h-16 rounded-xl flex items-center justify-center shrink-0 border border-[var(--color-border-strong)]"
-          style={{ backgroundColor: `${bestColor}1f`, color: bestColor }}
-        >
-          <BestIcon className="w-8 h-8" />
-        </div>
-        <div className="flex-1">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-brand-dark)] mb-1.5">
-            <CalendarCheck className="w-3.5 h-3.5" />
-            Mejor época para viajar
-          </div>
-          <h3 className="text-2xl font-semibold text-[var(--color-primary)] tracking-tight">{best.label}</h3>
-          <p className="text-[var(--color-muted)]">{best.months}</p>
-        </div>
-        <div className="sm:text-right">
-          <span
-            className="inline-flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded-full"
-            style={{ backgroundColor: `${bestColor}1f`, color: bestColor }}
+    <div className="ui-card overflow-hidden">
+      <div className="p-5 sm:p-6 flex flex-col gap-5">
+        <div className="flex items-start gap-4">
+          <div
+            className="w-14 h-14 rounded-lg flex items-center justify-center shrink-0 border border-[var(--color-border-strong)]"
+            style={{ backgroundColor: `${bestColor}22`, color: bestColor }}
           >
-            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: bestColor }} />
+            <BestIcon className="w-7 h-7" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="field-label text-[var(--color-teja)] mb-1.5 flex items-center gap-1.5">
+              <CalendarCheck className="w-3.5 h-3.5" />
+              Cuándo ir
+            </div>
+            <h3 className="font-serif text-xl sm:text-2xl font-medium text-[var(--color-primary)] tracking-tight">{best.label}</h3>
+            <p className="text-sm text-[var(--color-muted)]">{best.months}</p>
+          </div>
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          <span
+            className="inline-flex items-center gap-1.5 text-sm font-semibold px-2.5 py-1 rounded-md"
+            style={{ backgroundColor: `${bestColor}22`, color: bestColor }}
+          >
+            <span className="w-2 h-2 rounded-sm" style={{ backgroundColor: bestColor }} />
             {getMasificationLabel(best.value)}
           </span>
-          <p className="text-xs text-[var(--color-muted)] mt-2">{best.value}% de afluencia</p>
+          <span className="field-label text-[var(--color-muted)]">{best.value}% aforo</span>
         </div>
       </div>
-      <div className="px-6 md:px-8 py-3.5 border-t border-[var(--color-border)] flex items-center gap-2 text-sm text-[var(--color-muted)]">
-        <TrendingUp className="w-4 h-4 text-[var(--color-danger)]" />
+      <div className="px-5 sm:px-6 py-3 border-t border-[var(--color-border)] flex items-center gap-2 text-sm text-[var(--color-muted)]">
+        <TrendingUp className="w-4 h-4 text-[var(--color-teja)] shrink-0" />
         Más concurrido en <span className="font-medium text-[var(--color-primary)]">{worst.label}</span>
-        <span className="text-[var(--color-muted)]">({worst.months}) · {worst.value}%</span>
+        <span>({worst.months}) · {worst.value}%</span>
       </div>
     </div>
   );

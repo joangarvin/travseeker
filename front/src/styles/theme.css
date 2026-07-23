@@ -1,40 +1,96 @@
-@theme {
-  --color-brand: #1f9d6a;
-  --color-brand-dark: #0e7a50;
-  --color-brand-deep: #0d3d2e;
-  --color-primary: #090d16;
-  --color-primary-light: #334155;
-  --color-secondary: #f8fafc;
-  --color-accent: #1f9d6a;
-  --color-accent-hover: #17875a;
-  --color-accent-muted: #0e7a50;
-  --color-surface: #ffffff;
-  --color-surface-2: #f1f5f9;
-  --color-muted: #64748b;
-  --color-border: rgba(9, 13, 22, 0.05);
-  --color-border-strong: rgba(9, 13, 22, 0.1);
-  --color-on-brand: #ffffff;
-  --color-danger: #ef4444;
+/* TravSeeker — Cuaderno de campo */
 
-  --shadow-card: 0 1px 2px rgba(9, 13, 22, 0.03), 0 0px 1px rgba(9, 13, 22, 0.08);
+:root,
+[data-theme="light"] {
+  color-scheme: light;
 
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-serif: "Cormorant Garamond", Georgia, serif;
+  /* Tipografía */
+  --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+
+  /* Tinta y papel */
+  --color-primary: #23281f;
+  --color-secondary: #f3efe4;
+  --color-surface: #f3efe4;
+  --color-surface-2: #ebe6d8;
+  --color-muted: #6b7266;
+
+  /* Verde botella — dosificado */
+  --color-brand: #1f4d38;
+  --color-brand-deep: #163828;
+  --color-brand-dark: #163828;
+  --color-accent-hover: #163828;
+  --color-on-brand: #f3efe4;
+  --color-on-deep: #ede7d8;
+
+  /* Acentos */
+  --color-teja: #c46a4a;
+  --color-mostaza: #d4a84b;
+  --color-mapa: #2f6fed;
+
+  /* UI */
+  --color-nav: #4a5248;
+  --color-primary-light: #6b7266;
+  --color-border: rgba(35, 40, 31, 0.12);
+  --color-border-strong: rgba(35, 40, 31, 0.22);
+  --color-ring: rgba(31, 77, 56, 0.35);
+  --color-overlay: rgba(15, 28, 19, 0.45);
+  --shadow-soft: 0 1px 0 rgba(35, 40, 31, 0.04);
+  --shadow-card: 3px 3px 0 rgba(35, 40, 31, 0.08);
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+
+  /* Compat */
+  --color-accent: var(--color-brand);
+  --color-bg: var(--color-secondary);
+  --color-fg: var(--color-primary);
+  --color-card: var(--color-surface);
+  --color-success: #2f6b4f;
+  --color-warning: var(--color-mostaza);
+  --color-danger: #b42318;
+  --color-info: var(--color-mapa);
 }
 
 [data-theme="dark"] {
-  --color-brand: #4ade94;
-  --color-brand-dark: #6ee7a8;
-  --color-primary: #f8fafc;
-  --color-primary-light: #cbd5e1;
-  --color-secondary: #030712;
-  --color-surface: #0b0f19;
-  --color-surface-2: #1e293b;
-  --color-muted: #94a3b8;
-  --color-border: rgba(255, 255, 255, 0.06);
-  --color-border-strong: rgba(255, 255, 255, 0.12);
-  --color-on-brand: #062a1c;
-  --color-danger: #f87171;
+  color-scheme: dark;
 
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 0px 1px rgba(255, 255, 255, 0.1);
+  /* Papel carbón verdoso — no flat black */
+  --color-primary: #f3efe4;
+  --color-secondary: #101411;
+  --color-surface: #222b22;
+  --color-surface-2: #2e382e;
+  --color-muted: #b4bcae;
+
+  /* Botella sólida (CTAs) + verde claro solo para texto/iconos */
+  --color-brand: #3f6d52;
+  --color-brand-deep: #0c1610;
+  --color-brand-dark: #b0d0b6;
+  --color-accent-hover: #335a44;
+  --color-on-brand: #f3efe4;
+  --color-on-deep: #f0ebe0;
+
+  --color-teja: #d99478;
+  --color-mostaza: #e8bc68;
+  --color-mapa: #6b9cff;
+
+  --color-nav: #d6dacf;
+  --color-primary-light: #c4cabd;
+  --color-border: rgba(243, 239, 228, 0.18);
+  --color-border-strong: rgba(243, 239, 228, 0.34);
+  --color-ring: rgba(63, 109, 82, 0.45);
+  --color-overlay: rgba(6, 10, 8, 0.55);
+  --shadow-soft: 0 1px 0 rgba(243, 239, 228, 0.06);
+  --shadow-card: 3px 3px 0 rgba(243, 239, 228, 0.1);
+
+  --color-accent: var(--color-brand);
+  --color-bg: var(--color-secondary);
+  --color-fg: var(--color-primary);
+  --color-card: var(--color-surface);
+  --color-success: #7eb08c;
+  --color-warning: var(--color-mostaza);
+  --color-danger: #f97066;
+  --color-info: var(--color-mapa);
 }

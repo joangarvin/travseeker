@@ -6,8 +6,7 @@ Componentes del bloque de búsqueda en la página de inicio.
 
 | Archivo | Descripción |
 |---------|-------------|
-| `HeroSearch.tsx` | Sección hero principal: título, subtítulo, barra de búsqueda y panel de filtros. Orquesta `HeroBackground`, `SearchBar` y `FilterPanel`. |
-| `HeroBackground.tsx` | Fondo decorativo del hero: gradiente mesh, blobs animados y watermark del logo. |
+| `HeroSearch.tsx` | Sección hero principal: titular editorial desalineado, ficha de búsqueda girada (con grapa y sello «revisado a mano») y panel de filtros. Orquesta `SearchBar` y `FilterPanel`. |
 | `SearchBar.tsx` | Campo de búsqueda por texto libre con botón de envío. |
 | `FilterPanel.tsx` | Filtros desplegables (presupuesto, masificación, ubicación, tipo de turismo, actividades) con botones Aplicar y Limpiar. |
 

@@ -67,4 +67,4 @@ export const EMPTY_FILTERS: Record<string, string> = {
 };
 
 export const SELECT_CLASS =
-  'w-full border border-[var(--color-border)] px-4 py-3 rounded-xl bg-[var(--color-surface)] text-[var(--color-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]/40 cursor-pointer appearance-none h-[46px]';
+  'w-full border border-[var(--color-border-strong)] px-4 py-3 rounded-lg bg-[var(--color-surface)] text-[var(--color-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]/40 cursor-pointer appearance-none h-[46px]';

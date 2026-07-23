@@ -89,10 +89,10 @@ export default function UserMenu() {
     return (
       <Link
         to="/auth"
-        className="flex items-center gap-2 text-sm font-semibold text-[var(--color-primary)] bg-[var(--color-surface)] border border-[var(--color-border-strong)] rounded-full px-3 sm:px-4 py-2 hover:border-[var(--color-brand)] hover:text-[var(--color-brand-dark)] transition-colors shadow-sm touch-target"
+        className="flex items-center gap-2 text-sm font-semibold text-[var(--color-on-brand)] bg-[var(--color-brand)] rounded-lg px-3 sm:px-4 py-2 hover:bg-[var(--color-accent-hover)] transition-colors touch-target"
       >
         <LogIn className="w-4 h-4" />
-        <span className="hidden sm:inline">Iniciar sesión</span>
+        <span className="hidden sm:inline">Entrar</span>
       </Link>
     );
   }
@@ -110,8 +110,8 @@ export default function UserMenu() {
           <div
             ref={panelRef}
             role="menu"
-            className="fixed z-[2110] rounded-2xl border border-[var(--color-border-strong)] bg-[var(--color-surface)] shadow-2xl py-2 animate-menu-in origin-top-right"
-            style={{ top: pos.top, right: pos.right, width: pos.width }}
+            className="fixed z-[2110] rounded-lg border border-[var(--color-border-strong)] bg-[var(--color-surface)] py-2 animate-menu-in origin-top-right"
+            style={{ top: pos.top, right: pos.right, width: pos.width, boxShadow: 'var(--shadow-card)' }}
           >
             <div className="px-4 py-3 border-b border-[var(--color-border)] flex items-center gap-3">
               <Avatar user={user} />
@@ -127,7 +127,7 @@ export default function UserMenu() {
               onClick={close}
             >
               <Heart className="w-4 h-4 text-[var(--color-brand-dark)] shrink-0" />
-              Mis favoritos
+              Mis sitios
             </Link>
             <Link
               to="/colecciones"
@@ -136,7 +136,7 @@ export default function UserMenu() {
               onClick={close}
             >
               <FolderHeart className="w-4 h-4 text-[var(--color-brand-dark)] shrink-0" />
-              Mis colecciones
+              Mis listas
             </Link>
             <Link
               to="/perfil"
@@ -183,10 +183,10 @@ export default function UserMenu() {
         onClick={toggle}
         aria-expanded={open}
         aria-haspopup="menu"
-        className={`flex items-center gap-1.5 sm:gap-2 text-sm font-medium text-[var(--color-primary)] bg-[var(--color-surface)] border rounded-full pl-1.5 pr-2 sm:pr-3 py-1.5 transition-colors shadow-sm touch-target ${
+        className={`flex items-center gap-1.5 sm:gap-2 text-sm font-medium text-[var(--color-primary)] bg-[var(--color-surface)] border rounded-lg pl-1.5 pr-2 sm:pr-3 py-1.5 transition-colors touch-target ${
           open
-            ? 'border-[var(--color-brand)]/50 ring-2 ring-[var(--color-brand)]/20'
-            : 'border-[var(--color-border-strong)] hover:border-[var(--color-brand)]/50'
+            ? 'border-[var(--color-brand)]'
+            : 'border-[var(--color-border-strong)] hover:border-[var(--color-primary-light)]'
         }`}
       >
         <Avatar user={user} />

@@ -1,22 +1,12 @@
 import { useMemo, useState } from 'react';
-import {
-  ChevronDown,
-  Landmark,
-  Leaf,
-  Footprints,
-  Home,
-  UtensilsCrossed,
-  Waves,
-  Sparkles,
-  MapPin,
-} from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 
 interface Section {
   title: string;
   items: string[];
 }
 
-const ITEMS_PREVIEW = 5;
+const ITEMS_PREVIEW = 6;
 
 function parseSections(html: string): Section[] {
   if (typeof window === 'undefined' || !html) return [];
@@ -47,18 +37,6 @@ function parseSections(html: string): Section[] {
   return sections.filter((s) => s.items.length > 0);
 }
 
-function iconFor(title: string) {
-  const t = title.toLowerCase();
-  if (/(gastron|vino|enotur|product|jamón|jamon)/.test(t)) return UtensilsCrossed;
-  if (/(playa|mar\b|sol y|costa|náut|nautic)/.test(t)) return Waves;
-  if (/(natur|paisaj|laguna|parque|montañ|\bmont|protegid|aire libre)/.test(t)) return Leaf;
-  if (/(sender|activ|ruta|btt|aventur|bici)/.test(t)) return Footprints;
-  if (/(pueblo|urban|vida local|encanto)/.test(t)) return Home;
-  if (/(cultur|patrimon|histó|histor|relig|artíst|artist|museo)/.test(t)) return Landmark;
-  if (/(experien|especial|astro|singular)/.test(t)) return Sparkles;
-  return MapPin;
-}
-
 export default function Imprescindibles({ html }: { html: string }) {
   const sections = useMemo(() => parseSections(html), [html]);
   const [openSections, setOpenSections] = useState<Set<number>>(() => new Set([0]));
@@ -67,7 +45,7 @@ export default function Imprescindibles({ html }: { html: string }) {
   if (sections.length === 0) {
     return (
       <div
-        className="prose-premium text-[var(--color-primary)]/80"
+        className="prose-premium text-[var(--color-primary)]/85 text-base sm:text-lg leading-relaxed"
         dangerouslySetInnerHTML={{ __html: html }}
       />
     );
@@ -76,74 +54,66 @@ export default function Imprescindibles({ html }: { html: string }) {
   const toggleSection = (i: number) =>
     setOpenSections((prev) => {
       const next = new Set(prev);
-      if (next.has(i)) {
-        next.delete(i);
-      } else {
-        next.add(i);
-      }
+      if (next.has(i)) next.delete(i);
+      else next.add(i);
       return next;
     });
 
   const toggleItems = (i: number) =>
     setExpandedItems((prev) => {
       const next = new Set(prev);
-      if (next.has(i)) {
-        next.delete(i);
-      } else {
-        next.add(i);
-      }
+      if (next.has(i)) next.delete(i);
+      else next.add(i);
       return next;
     });
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       {sections.map((section, i) => {
-        const Icon = iconFor(section.title);
         const isOpen = openSections.has(i);
         const showAll = expandedItems.has(i);
         const items = showAll ? section.items : section.items.slice(0, ITEMS_PREVIEW);
         const hidden = section.items.length - ITEMS_PREVIEW;
+        const num = String(i + 1).padStart(2, '0');
 
         return (
           <div
             key={i}
-            className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-2)] overflow-hidden transition-colors"
+            className="border-b border-[var(--color-border-strong)] last:border-b-0"
           >
             <button
               type="button"
               onClick={() => toggleSection(i)}
               aria-expanded={isOpen}
-              className="w-full flex items-center gap-3.5 px-5 py-4 text-left hover:bg-[var(--color-border)]/40 transition-colors"
+              className="w-full flex items-center gap-4 py-4 text-left group"
             >
-              <span className="w-9 h-9 rounded-lg bg-[var(--color-brand)]/12 text-[var(--color-brand-dark)] flex items-center justify-center shrink-0">
-                <Icon className="w-5 h-5" />
+              <span className="font-mono text-sm text-[var(--color-teja)] shrink-0 w-7">{num}</span>
+              <span className="flex-1 font-serif text-lg sm:text-xl font-medium text-[var(--color-primary)] tracking-tight group-hover:text-[var(--color-brand-dark)] transition-colors">
+                {section.title || 'Apunte'}
               </span>
-              <span className="flex-1 font-semibold text-[var(--color-primary)]">
-                {section.title || 'Imprescindibles'}
-              </span>
-              <span className="text-xs text-[var(--color-muted)] tabular-nums bg-[var(--color-border)]/60 px-2 py-0.5 rounded-full">
-                {section.items.length}
-              </span>
+              <span className="field-label text-[var(--color-muted)] shrink-0">{section.items.length}</span>
               <ChevronDown
-                className={`w-4 h-4 text-[var(--color-muted)] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+                className={`w-4 h-4 text-[var(--color-muted)] transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
               />
             </button>
 
             {isOpen && (
-              <div className="px-5 pb-5 pt-1 animate-fade-up">
-                <ul className="space-y-2.5">
+              <div className="pb-5 pl-11 sm:pl-11">
+                <ol className="space-y-2.5">
                   {items.map((item, k) => (
                     <li key={k} className="flex gap-3 text-[var(--color-primary)]/85 leading-relaxed">
-                      <span className="mt-[0.55rem] w-1.5 h-1.5 rounded-full bg-[var(--color-brand)] shrink-0" />
+                      <span className="font-mono text-xs text-[var(--color-muted)]/60 mt-1 shrink-0 w-4">
+                        {k + 1}.
+                      </span>
                       <span>{item}</span>
                     </li>
                   ))}
-                </ul>
+                </ol>
                 {hidden > 0 && (
                   <button
                     type="button"
                     onClick={() => toggleItems(i)}
-                    className="mt-3.5 text-sm font-semibold text-[var(--color-brand-dark)] hover:underline"
+                    className="mt-4 text-sm font-semibold text-[var(--color-brand-dark)] hover:underline"
                   >
                     {showAll ? 'Ver menos' : `Ver ${hidden} más`}
                   </button>
