@@ -27,22 +27,25 @@ function App() {
       <AuthProvider>
         <CompareProvider>
           <Router>
+            <a href="#app-content" className="skip-link">Saltar al contenido</a>
             <Suspense fallback={<PageLoader />}>
-              <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/sobre-nosotros" element={<About />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/favoritos" element={<Favoritos />} />
-              <Route path="/colecciones" element={<Colecciones />} />
-              <Route path="/colecciones/:id" element={<ColeccionDetail />} />
-              <Route path="/comparar" element={<Comparador />} />
-              <Route path="/perfil" element={<Profile />} />
-              <Route path="/verificar-email" element={<VerifyEmail />} />
-              <Route path="/recuperar" element={<RecoverPassword />} />
-              <Route path="/mapa" element={<MapaDestinos />} />
-              <Route path="/destino/:id" element={<DestinationDetail />} />
-              <Route path="/admin" element={<AdminRoute><AdminPanel /></AdminRoute>} />
-              </Routes>
+              <div id="app-content" tabIndex={-1}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/sobre-nosotros" element={<About />} />
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/favoritos" element={<Favoritos />} />
+                  <Route path="/colecciones" element={<Colecciones />} />
+                  <Route path="/colecciones/:id" element={<ColeccionDetail />} />
+                  <Route path="/comparar" element={<Comparador />} />
+                  <Route path="/perfil" element={<Profile />} />
+                  <Route path="/verificar-email" element={<VerifyEmail />} />
+                  <Route path="/recuperar" element={<RecoverPassword />} />
+                  <Route path="/mapa" element={<MapaDestinos />} />
+                  <Route path="/destino/:id" element={<DestinationDetail />} />
+                  <Route path="/admin" element={<AdminRoute><AdminPanel /></AdminRoute>} />
+                </Routes>
+              </div>
             </Suspense>
             <CompareBar />
           </Router>

@@ -10,7 +10,7 @@ const PIN_ZOOM = 10;
 
 const pickerIcon = L.divIcon({
   className: 'ts-picker-marker',
-  html: `<span style="display:block;width:22px;height:22px;border-radius:50% 50% 50% 0;background:#2eb87a;border:3px solid #fff;transform:rotate(-45deg);box-shadow:0 3px 8px rgba(0,0,0,0.4);"></span>`,
+  html: `<span style="display:block;width:22px;height:22px;border-radius:50% 50% 50% 0;background:#2f5d3f;border:3px solid #f5f0e6;transform:rotate(-45deg);box-shadow:0 3px 8px rgba(0,0,0,0.4);"></span>`,
   iconSize: [22, 22],
   iconAnchor: [11, 22],
 });

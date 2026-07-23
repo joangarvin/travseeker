@@ -8,13 +8,13 @@ import { useAuth } from '../../context/AuthContext';
 
 const NAV_ITEMS: { to: string; label: string; hash?: boolean; auth?: boolean; admin?: boolean }[] = [
   { to: '/', label: 'Inicio' },
-  { to: '/#destinos', label: 'Destinos', hash: true },
-  { to: '/mapa', label: 'Mapa' },
-  { to: '/comparar', label: 'Comparar' },
-  { to: '/favoritos', label: 'Favoritos', auth: true },
-  { to: '/colecciones', label: 'Colecciones', auth: true },
+  { to: '/#destinos', label: 'La selección', hash: true },
+  { to: '/mapa', label: 'El mapa' },
+  { to: '/comparar', label: 'Cara a cara' },
+  { to: '/favoritos', label: 'Tus sitios', auth: true },
+  { to: '/colecciones', label: 'Tus listas', auth: true },
   { to: '/admin', label: 'Admin', auth: true, admin: true },
-  { to: '/sobre-nosotros', label: 'Sobre nosotros' },
+  { to: '/sobre-nosotros', label: 'Quiénes somos' },
 ];
 
 export default function Header() {
@@ -33,20 +33,20 @@ export default function Header() {
 
   const navLink = (to: string, label: string, onClick?: () => void, isHash = false) => {
     const isActive = !isHash && location.pathname === to;
-    const className = `block py-3 md:py-0 text-base md:text-sm font-medium transition-colors ${
+    const className = `block py-3.5 md:py-0 text-base md:text-sm font-medium transition-colors ${
       isActive
-        ? 'text-[var(--color-primary)] font-semibold'
-        : 'text-[var(--color-muted)] hover:text-[var(--color-primary)] active:text-[var(--color-primary)]'
+        ? 'text-[var(--color-primary)]'
+        : 'text-[var(--color-nav)] hover:text-[var(--color-primary)]'
     }`;
     if (isHash) {
       return (
-        <a href={to} onClick={onClick} className={className}>
+        <a key={to} href={to} onClick={onClick} className={className}>
           {label}
         </a>
       );
     }
     return (
-      <Link to={to} onClick={onClick} className={className}>
+      <Link key={to} to={to} onClick={onClick} className={className}>
         {label}
       </Link>
     );
@@ -60,23 +60,26 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[5000] safe-top">
-      <div className="bg-[var(--color-surface)]/90 backdrop-blur-md border-b border-[var(--color-border-strong)]">
-        <div className="max-w-7xl mx-auto flex justify-between items-center py-2.5 sm:py-3 px-4 sm:px-6 md:px-10 gap-4">
-          <Link to="/" className="flex items-center gap-3 group shrink-0 touch-target">
-            <img src={logo} alt="Travseeker" className="h-8 sm:h-9 w-auto group-hover:scale-105 transition-transform" />
+      <div className="bg-[var(--color-secondary)]/95 border-b border-[var(--color-border-strong)]">
+        <div className="max-w-7xl mx-auto flex justify-between items-center py-2.5 sm:py-3 px-4 sm:px-6 md:px-8 gap-4">
+          <Link to="/" className="flex items-center gap-2.5 group shrink-0 touch-target">
+            <img src={logo} alt="" className="h-8 sm:h-9 w-auto" />
+            <span className="font-serif text-lg sm:text-xl font-medium text-[var(--color-primary)] tracking-tight hidden xs:inline sm:inline">
+              Travseeker
+            </span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-8 flex-1 justify-end">
-            <nav className="flex gap-8 text-sm font-medium">
+          <div className="hidden md:flex items-center gap-7 flex-1 justify-end">
+            <nav className="flex gap-6 text-sm">
               {visibleNav.map((item) => navLink(item.to, item.label, undefined, item.hash))}
             </nav>
 
-            <div className="flex items-center gap-3 pl-6 ml-2 border-l border-[var(--color-border-strong)]">
+            <div className="flex items-center gap-2 pl-5 ml-1 border-l border-[var(--color-border-strong)]">
               <button
                 type="button"
-                className="flex items-center gap-2 text-sm font-medium text-[var(--color-primary)]/80 border border-[var(--color-border)] rounded-full px-3 py-2 hover:border-[var(--color-brand)]/40 hover:text-[var(--color-primary)] transition-colors"
+                className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[var(--color-muted)] border border-[var(--color-border-strong)] rounded-lg px-2.5 py-2 hover:text-[var(--color-primary)] hover:border-[var(--color-primary-light)] transition-colors"
               >
-                <Globe className="w-4 h-4" />
+                <Globe className="w-3.5 h-3.5" />
                 ES
               </button>
               <ThemeToggle />
@@ -84,12 +87,12 @@ export default function Header() {
             </div>
           </div>
 
-          <div className="flex md:hidden items-center gap-1.5">
+          <div className="flex md:hidden items-center gap-1">
             <UserMenu />
             <ThemeToggle />
             <button
               type="button"
-              className="touch-target p-2 rounded-xl text-[var(--color-primary)] hover:bg-[var(--color-border)] active:bg-[var(--color-brand)]/10 transition-colors"
+              className="touch-target p-2 rounded-lg text-[var(--color-primary)] hover:bg-[var(--color-surface-2)] transition-colors"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
               aria-expanded={mobileOpen}
@@ -104,12 +107,12 @@ export default function Header() {
         <>
           <button
             type="button"
-            className="fixed inset-0 top-[var(--header-height,56px)] bg-black/50 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 top-[var(--header-height,56px)] bg-[var(--color-primary)]/40 md:hidden"
             aria-label="Cerrar menú"
             onClick={() => setMobileOpen(false)}
           />
           <nav
-            className="fixed left-0 right-0 top-[var(--header-height,56px)] bottom-0 md:hidden overflow-y-auto bg-[var(--color-surface)] border-b border-[var(--color-border)] shadow-xl px-5 py-4 safe-bottom animate-menu-in"
+            className="fixed left-0 right-0 top-[var(--header-height,56px)] bottom-0 md:hidden overflow-y-auto bg-[var(--color-secondary)] border-b border-[var(--color-border)] px-5 py-2 safe-bottom animate-menu-in"
             aria-label="Navegación principal"
           >
             <div className="flex flex-col">

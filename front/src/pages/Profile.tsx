@@ -4,6 +4,7 @@ import {
   AlertTriangle,
   BadgeCheck,
   Bell,
+  CalendarDays,
   Compass,
   Lock,
   Mail,
@@ -11,9 +12,9 @@ import {
   Send,
   Settings,
   Shield,
-  Sparkles,
   Sun,
   User as UserIcon,
+  Users,
 } from 'lucide-react';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
@@ -67,6 +68,7 @@ function Toggle({ checked, onChange, label, description, icon: Icon }: {
         type="button"
         role="switch"
         aria-checked={checked}
+        aria-label={label}
         onClick={() => onChange(!checked)}
         className={`relative w-11 h-6 rounded-full transition-colors shrink-0 ${
           checked ? 'bg-[var(--color-brand)]' : 'bg-[var(--color-border-strong)]'
@@ -83,10 +85,10 @@ function Toggle({ checked, onChange, label, description, icon: Icon }: {
 }
 
 const inputClass =
-  'w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-brand)] focus:ring-2 focus:ring-[var(--color-brand)]/20 transition-all';
+  'ui-input';
 
 const labelClass =
-  'block text-xs font-semibold text-[var(--color-muted)] mb-1.5 uppercase tracking-wide';
+  'mb-1.5 block text-sm font-medium text-[var(--color-primary)]';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -253,7 +255,7 @@ export default function Profile() {
           <Avatar user={user} size="xl" className="shadow-sm border border-[var(--color-border-strong)]" />
           <div className="flex-1">
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mb-2">
-              <h1 className="font-serif text-4xl md:text-5xl font-medium text-[var(--color-primary)] tracking-tight">
+              <h1 className="text-4xl font-semibold tracking-[-0.04em] text-[var(--color-primary)] md:text-5xl">
                 {displayName}
               </h1>
               {user.emailVerified ? (
@@ -268,7 +270,7 @@ export default function Profile() {
             </div>
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-5 gap-y-1 text-[var(--color-muted)] text-sm">
               <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5" />{user.email}</span>
-              <span className="flex items-center gap-1.5"><Sparkles className="w-3.5 h-3.5" />Miembro desde {memberSince}</span>
+              <span className="flex items-center gap-1.5"><CalendarDays className="w-3.5 h-3.5" />Miembro desde {memberSince}</span>
             </div>
           </div>
         </div>
@@ -276,13 +278,14 @@ export default function Profile() {
 
       <div className="max-w-5xl mx-auto px-6 py-12 grid md:grid-cols-[220px_1fr] gap-8 -mt-6">
         <aside className="md:sticky md:top-28 h-max">
-          <nav className="flex md:flex-col gap-1 overflow-x-auto rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] p-2 shadow-sm">
+          <nav className="flex gap-1 overflow-x-auto rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-2 shadow-sm md:flex-col" aria-label="Configuración del perfil">
             {TABS.map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
                 type="button"
                 onClick={() => { setTab(id); setFeedback(null); }}
-                className={`flex items-center gap-2.5 px-4 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                aria-current={tab === id ? 'page' : undefined}
+                className={`flex min-h-11 items-center gap-2.5 whitespace-nowrap rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
                   tab === id
                     ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)] shadow-sm'
                     : 'text-[var(--color-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-secondary)]'
@@ -298,6 +301,7 @@ export default function Profile() {
         <div className="space-y-6">
           {feedback && (
             <div
+              role={feedback.type === 'error' ? 'alert' : 'status'}
               className={`rounded-xl px-4 py-3 text-sm border ${
                 feedback.type === 'ok'
                   ? 'text-[var(--color-brand-dark)] bg-[var(--color-brand)]/10 border-[var(--color-brand)]/25'
@@ -462,7 +466,7 @@ export default function Profile() {
                   </select>
                 </div>
 
-                <Toggle checked={avoidCrowds} onChange={setAvoidCrowds} icon={Sparkles} label="Evitar masificación" description="Priorizamos destinos tranquilos y poco concurridos en tus recomendaciones." />
+                <Toggle checked={avoidCrowds} onChange={setAvoidCrowds} icon={Users} label="Evitar masificación" description="Priorizamos destinos tranquilos y poco concurridos en tus recomendaciones." />
               </div>
 
               <div className="border-t border-[var(--color-border)] pt-2">

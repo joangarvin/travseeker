@@ -1,3 +1,24 @@
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 10000;
+  padding: 0.65rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--color-brand);
+  color: var(--color-on-brand);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+  outline: 2px solid var(--color-teja);
+  outline-offset: 2px;
+}
+
 /* Premium aesthetic */
 html {
   scroll-behavior: smooth;
@@ -19,6 +40,41 @@ body {
   transition: background-color 0.4s ease, color 0.4s ease;
   overflow-x: hidden;
   min-height: 100dvh;
+  /* Textura de papel suave en toda la web */
+  background-image:
+    radial-gradient(ellipse 120% 80% at 10% -10%, color-mix(in srgb, var(--color-mostaza) 8%, transparent), transparent 55%),
+    radial-gradient(ellipse 90% 60% at 100% 0%, color-mix(in srgb, var(--color-brand) 6%, transparent), transparent 50%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  background-attachment: fixed;
+}
+
+[data-theme="dark"] body {
+  background-image:
+    radial-gradient(ellipse 110% 75% at 8% -5%, color-mix(in srgb, var(--color-brand) 16%, transparent), transparent 55%),
+    radial-gradient(ellipse 85% 55% at 100% 8%, color-mix(in srgb, var(--color-teja) 10%, transparent), transparent 50%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, color-mix(in srgb, var(--color-mostaza) 6%, transparent), transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+}
+
+/* Leaflet popups siguen el tema (el chrome por defecto es blanco) */
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: var(--color-surface);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-card);
+}
+
+.leaflet-popup-content-wrapper {
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0.5rem;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: var(--color-muted);
+}
+
+.leaflet-container a.leaflet-popup-close-button:hover {
+  color: var(--color-primary);
 }
 
 /* Comfortable reading width on phones */

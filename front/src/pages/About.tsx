@@ -7,23 +7,23 @@ import logo from '../assets/logo.png';
 const VALUES = [
   {
     icon: Compass,
-    title: 'Curación experta',
-    text: 'Cada destino pasa por un proceso de selección basado en autenticidad, accesibilidad y experiencia real del viajero.',
+    title: 'Revisado a mano',
+    text: 'Cada destino pasa por manos humanas antes de entrar en el cuaderno. Si no se lo recomendaríamos a un amigo, fuera.',
   },
   {
     icon: Users,
-    title: 'Contra la masificación',
-    text: 'Medimos la afluencia turística por época del año para que elijas cuándo visitar cada lugar con tranquilidad.',
+    title: 'Alergia a las colas',
+    text: 'Medimos la afluencia por temporada para que llegues cuando el sitio respira, no cuando revienta.',
   },
   {
     icon: MapPin,
-    title: 'España al detalle',
-    text: 'Desde costas escondidas hasta pueblos de interior: mapeamos municipios, precios y conexiones para que planifiques sin sorpresas.',
+    title: 'Números al aire',
+    text: 'Municipios, precios y conexiones apuntados sin adornos. El dato es el argumento.',
   },
   {
     icon: Heart,
-    title: 'Viaje con intención',
-    text: 'No vendemos paquetes. Te damos la información para que construyas tu propia aventura, a tu ritmo y con tu presupuesto.',
+    title: 'Sin paquetes',
+    text: 'No vendemos viajes ni cobramos por aparecer. Te damos la información y el viaje lo firmas tú.',
   },
 ] as const;
 
@@ -32,48 +32,50 @@ export default function About() {
     <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
       <Header />
 
-      <main className="pt-24 sm:pt-32 pb-20 max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <ScrollReveal>
-            <img src={logo} alt="Travseeker" className="h-16 w-auto mx-auto mb-8" />
-            <h1 className="font-serif text-4xl md:text-6xl font-medium text-[var(--color-primary)] tracking-tight mb-6">
-              Viajar bien es <span className="text-gradient-brand italic">viajar informado</span>
+      <main className="pt-24 sm:pt-32 pb-16 max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
+        <ScrollReveal>
+          <div className="text-center">
+            <img src={logo} alt="Travseeker" className="h-14 w-auto mx-auto mb-7" />
+            <h1 className="font-serif text-4xl md:text-6xl font-medium text-[var(--color-primary)] tracking-tight mb-6 leading-[1.08]">
+              Nos gusta España cuando <span className="italic hand-underline">no está llena</span>.
             </h1>
-            <p className="text-[var(--color-muted)] text-lg max-w-2xl mx-auto font-light leading-relaxed">
-              Travseeker nació de una idea simple: que encontrar tu próximo destino en España no debería depender del algoritmo ni del turismo de masas.
+            <p className="text-[var(--color-muted)] text-lg max-w-2xl mx-auto leading-relaxed">
+              Travseeker nació de un cabreo concreto: llegar a un sitio precioso y no poder ni
+              aparcar. Desde entonces apuntamos los lugares que aguantan bien una visita — y cuándo
+              ir para no estropearlos.
             </p>
-          </ScrollReveal>
-        </div>
+          </div>
+        </ScrollReveal>
       </main>
 
-      <section className="max-w-4xl mx-auto px-6 py-20">
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <ScrollReveal>
-          <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand)] mb-4">Nuestra historia</h2>
-          <div className="space-y-6 text-[var(--color-primary)]/80 text-lg font-light leading-relaxed">
+          <span className="field-label text-[var(--color-teja)] mb-4 block">De dónde viene esto</span>
+          <div className="space-y-6 text-[var(--color-primary)]/85 text-lg leading-relaxed">
             <p>
-              Empezamos recopilando datos de decenas de destinos españoles — presupuesto, tipo de turismo, nivel de masificación por temporada, municipios recomendados — y los organizamos para que cualquier viajero pueda filtrarlos según lo que realmente le importa.
+              Empezamos con una libreta y una hoja de cálculo: presupuesto por día, cuánta gente hay en agosto, qué municipios tienen cama y a qué precio. Aquello creció hasta convertirse en esto — fichas de destinos con sus números al aire, para que filtres por lo que de verdad te importa.
             </p>
             <p>
-              No somos una agencia de viajes. Somos una herramienta de descubrimiento: te mostramos opciones que encajan contigo y te damos la información para que tomes la mejor decisión.
+              No somos una agencia de viajes. Te enseñamos los datos y tú montas el viaje: a tu ritmo, con tu presupuesto y sin nadie soplándote la nuca.
             </p>
           </div>
         </ScrollReveal>
       </section>
 
-      <section className="max-w-6xl mx-auto px-6 pb-24">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-20 sm:pb-24">
         <ScrollReveal>
-          <h2 className="text-3xl font-semibold text-[var(--color-primary)] text-center mb-14 tracking-tight">
-            Lo que nos define
+          <h2 className="font-serif text-3xl sm:text-4xl font-medium text-[var(--color-primary)] text-center mb-10 sm:mb-12 tracking-tight">
+            De qué pie cojeamos
           </h2>
         </ScrollReveal>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
           {VALUES.map(({ icon: Icon, title, text }, i) => (
             <ScrollReveal key={title} delay={(i % 3 + 1) as 1 | 2 | 3}>
-              <div className="p-8 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-brand)]/20 transition-colors h-full">
-                <div className="w-10 h-10 rounded-xl bg-[var(--color-brand)]/10 flex items-center justify-center mb-5">
-                  <Icon className="w-5 h-5 text-[var(--color-brand)]" />
+              <div className="ui-card p-7 sm:p-8 h-full">
+                <div className="w-10 h-10 rounded-lg border border-[var(--color-border-strong)] bg-[var(--color-surface-2)] flex items-center justify-center mb-5 text-[var(--color-brand)]">
+                  <Icon className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-semibold text-[var(--color-primary)] mb-2">{title}</h3>
+                <h3 className="font-serif text-xl font-medium text-[var(--color-primary)] mb-2 tracking-tight">{title}</h3>
                 <p className="text-[var(--color-muted)] text-sm leading-relaxed">{text}</p>
               </div>
             </ScrollReveal>

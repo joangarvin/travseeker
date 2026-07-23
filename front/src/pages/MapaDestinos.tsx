@@ -14,7 +14,7 @@ const SPAIN_CENTER: [number, number] = [40.0, -3.5];
 
 const markerIcon = L.divIcon({
   className: 'ts-map-marker',
-  html: `<span style="display:block;width:18px;height:18px;border-radius:50% 50% 50% 0;background:#2eb87a;border:2px solid #fff;transform:rotate(-45deg);box-shadow:0 2px 6px rgba(0,0,0,0.35);"></span>`,
+  html: `<span style="display:block;width:18px;height:18px;border-radius:50% 50% 50% 0;background:#2f5d3f;border:2px solid #f5f0e6;transform:rotate(-45deg);box-shadow:0 2px 6px rgba(0,0,0,0.35);"></span>`,
   iconSize: [18, 18],
   iconAnchor: [9, 18],
   popupAnchor: [0, -18],
@@ -57,9 +57,9 @@ export default function MapaDestinos() {
             <div className="flex items-center gap-3 mb-2 sm:mb-0">
               <div className="flex items-center gap-2 text-[var(--color-primary)] font-semibold shrink-0">
                 <MapPin className="w-4 h-4 text-[var(--color-brand-dark)]" />
-                Mapa
+                El mapa
                 <span className="text-xs font-normal text-[var(--color-muted)]">
-                  {loading ? 'cargando...' : `${destinos.length} destinos`}
+                  {loading ? 'cargando…' : `toda la España tranquila · ${destinos.length} destinos`}
                 </span>
               </div>
 
@@ -116,13 +116,13 @@ export default function MapaDestinos() {
                       className="w-full h-28 object-cover rounded-lg mb-2"
                       loading="lazy"
                     />
-                    <h3 className="font-semibold text-sm text-[#0a0f0d] mb-1">{d.nombre.trim()}</h3>
-                    <p className="text-xs text-gray-500 mb-2">
+                    <h3 className="font-semibold text-sm text-[var(--color-primary)] mb-1">{d.nombre.trim()}</h3>
+                    <p className="text-xs text-[var(--color-muted)] mb-2">
                       {parseJsonSafe(d.ubicacion)} · {parseJsonSafe(d.presupuesto)}
                     </p>
                     <Link
                       to={`/destino/${d.id}`}
-                      className="inline-block text-xs font-semibold text-[#156b4f] hover:underline"
+                      className="inline-block text-xs font-semibold text-[var(--color-brand-dark)] hover:underline"
                     >
                       Ver destino →
                     </Link>

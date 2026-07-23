@@ -12,9 +12,20 @@ interface Props {
   nombre: string;
   imagen: string;
   ubicacion: string;
+  presupuesto: string;
+  masificacion: string;
+  tipoTurismo: string;
 }
 
-export default function DestinationHero({ destinoId, nombre, imagen, ubicacion }: Props) {
+export default function DestinationHero({
+  destinoId,
+  nombre,
+  imagen,
+  ubicacion,
+  presupuesto,
+  masificacion,
+  tipoTurismo,
+}: Props) {
   const navigate = useNavigate();
   const { user, isFavorite, toggleFavorite } = useAuth();
   const { isInCompare, toggleCompare, canAdd } = useCompare();
@@ -61,34 +72,37 @@ export default function DestinationHero({ destinoId, nombre, imagen, ubicacion }
   };
 
   return (
-    <div className="relative h-[52vh] sm:h-[60vh] md:h-[75vh] w-full overflow-hidden">
+    <div className="relative min-h-[72vh] sm:min-h-[78vh] md:min-h-[85vh] w-full overflow-hidden flex flex-col justify-end">
       <img
         src={getImageUrl(imagen, 0, 'hero')}
         srcSet={getHeroSrcSet(imagen)}
         sizes="100vw"
         alt={nombre}
-        className={`w-full h-full object-cover transition-opacity duration-700 ${heroLoaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${heroLoaded ? 'opacity-100' : 'opacity-0'}`}
         onLoad={() => setHeroLoaded(true)}
         decoding="async"
         fetchPriority="high"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#080c0a] via-[#080c0a]/50 to-transparent opacity-90" />
+      {/* Viñeta editorial: oscuro abajo, limpio arriba */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-secondary)] via-[var(--color-secondary)]/55 to-[var(--color-secondary)]/15" />
+      <div className="absolute inset-0 grain pointer-events-none opacity-60" />
 
-      <div className="absolute top-0 left-0 right-0 p-4 sm:p-6 md:p-10 flex justify-between items-center z-10 safe-top">
+      {/* Barra superior */}
+      <div className="absolute top-0 left-0 right-0 p-4 sm:p-5 md:p-8 flex justify-between items-center z-20 safe-top">
         <Link
           to="/"
-          className="flex items-center gap-2 glass-dark text-white/90 px-3 sm:px-4 py-2.5 rounded-full text-sm font-medium hover:bg-white/10 transition-colors touch-target"
+          className="flex items-center gap-2 ink-chip px-3 sm:px-4 py-2.5 rounded-lg text-sm font-medium transition-colors touch-target"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span className="hidden sm:inline">Volver</span>
+          <span className="hidden sm:inline">Al cuaderno</span>
         </Link>
-        <div className="flex gap-1.5 sm:gap-2 items-center">
-          <div className="hidden sm:block">
+        <div className="flex gap-1.5 items-center">
+          <div className="hidden sm:block [&_button]:border-white/20 [&_button]:text-white/80 [&_button]:hover:text-white [&_button]:hover:border-white/40">
             <ThemeToggle />
           </div>
           <button
             onClick={handleShare}
-            className="w-11 h-11 rounded-full glass-dark flex items-center justify-center text-white/90 hover:bg-white/10 transition-colors touch-target"
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg ink-chip flex items-center justify-center transition-colors touch-target"
             aria-label="Compartir"
           >
             <Share2 className="w-4 h-4" />
@@ -96,8 +110,8 @@ export default function DestinationHero({ destinoId, nombre, imagen, ubicacion }
           <button
             onClick={handleCompare}
             disabled={!inCompare && !canAdd}
-            className={`w-11 h-11 rounded-full flex items-center justify-center transition-colors touch-target disabled:opacity-40 ${
-              inCompare ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)]' : 'glass-dark text-white/90 hover:bg-white/10'
+            className={`w-10 h-10 sm:w-11 sm:h-11 rounded-lg flex items-center justify-center transition-colors touch-target disabled:opacity-40 ${
+              inCompare ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)]' : 'ink-chip'
             }`}
             aria-label={inCompare ? 'Quitar de comparación' : 'Añadir a comparación'}
           >
@@ -105,7 +119,7 @@ export default function DestinationHero({ destinoId, nombre, imagen, ubicacion }
           </button>
           <button
             onClick={handleCollection}
-            className="w-11 h-11 rounded-full glass-dark flex items-center justify-center text-white/90 hover:bg-white/10 transition-colors touch-target"
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg ink-chip flex items-center justify-center transition-colors touch-target"
             aria-label="Guardar en colección"
           >
             <Bookmark className="w-4 h-4" />
@@ -113,8 +127,8 @@ export default function DestinationHero({ destinoId, nombre, imagen, ubicacion }
           <button
             onClick={handleFavorite}
             disabled={toggling}
-            className={`w-11 h-11 rounded-full flex items-center justify-center transition-colors touch-target disabled:opacity-60 ${
-              saved ? 'bg-[var(--color-brand)] text-[#0a0f0d]' : 'glass-dark text-white/90 hover:bg-white/10'
+            className={`w-10 h-10 sm:w-11 sm:h-11 rounded-lg flex items-center justify-center transition-colors touch-target disabled:opacity-60 ${
+              saved ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)]' : 'ink-chip'
             }`}
             aria-label={saved ? 'Quitar de favoritos' : 'Guardar en favoritos'}
           >
@@ -123,15 +137,40 @@ export default function DestinationHero({ destinoId, nombre, imagen, ubicacion }
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-8 md:p-16 z-10">
-        <div className="max-w-5xl">
-          <div className="flex items-center gap-2 text-white/60 text-xs sm:text-sm mb-3 sm:mb-4 tracking-wide uppercase">
-            <MapPin className="w-3.5 h-3.5 shrink-0" />
-            <span className="truncate">{ubicacion}</span>
+      {/* Portada de ficha */}
+      <div className="relative z-10 px-4 sm:px-8 md:px-12 lg:px-16 pb-8 sm:pb-12 md:pb-14 pt-28 max-w-7xl w-full mx-auto">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 lg:gap-10">
+          <div className="min-w-0 max-w-3xl">
+            <p className="field-label text-white/55 mb-3 flex items-center gap-2">
+              <MapPin className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">{ubicacion}</span>
+            </p>
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium text-white tracking-tight leading-[1.02] mb-5">
+              {nombre}
+            </h1>
+            {/* Datos en mono, la voz del cuaderno */}
+            <p className="field-label text-white/70 flex flex-wrap items-center gap-x-3 gap-y-1">
+              <span>{presupuesto}</span>
+              <span aria-hidden className="text-white/35">·</span>
+              <span>{masificacion}</span>
+              <span aria-hidden className="text-white/35">·</span>
+              <span>{tipoTurismo}</span>
+            </p>
           </div>
-          <h1 className="font-serif text-3xl sm:text-5xl md:text-7xl font-medium text-white tracking-tight leading-[1.08]">
-            {nombre}
-          </h1>
+
+          {/* Sello de ficha */}
+          <div
+            aria-hidden
+            className="hidden md:flex shrink-0 w-24 h-24 rounded-full border-2 border-[var(--color-teja)] text-[var(--color-teja)] items-center justify-center text-center rotate-[-10deg] self-start lg:self-end bg-black/20"
+          >
+            <span className="field-label leading-tight" style={{ fontSize: '0.58rem' }}>
+              Ficha
+              <br />
+              revisada
+              <br />
+              a mano
+            </span>
+          </div>
         </div>
       </div>
 

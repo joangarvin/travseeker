@@ -75,8 +75,8 @@ export default function AddToCollectionModal({ destinoId, destinoNombre, onClose
 
   return createPortal(
     <div className="fixed inset-0 z-[2000] flex items-end sm:items-center justify-center">
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full sm:max-w-md bg-[var(--color-surface)] rounded-t-2xl sm:rounded-2xl border border-[var(--color-border)] shadow-2xl max-h-[82vh] flex flex-col animate-fade-up">
+      <div className="absolute inset-0 bg-[var(--color-primary)]/45" onClick={onClose} />
+      <div className="relative w-full sm:max-w-md bg-[var(--color-surface)] rounded-t-lg sm:rounded-lg border border-[var(--color-border-strong)] max-h-[82vh] flex flex-col animate-fade-up" style={{ boxShadow: 'var(--shadow-card)' }}>
         <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--color-border)]">
           <div className="flex items-center gap-2.5">
             <Bookmark className="w-5 h-5 text-[var(--color-brand-dark)]" />

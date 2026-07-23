@@ -5,6 +5,7 @@ import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import { useAuth } from '../context/AuthContext';
 import { ApiError } from '../api/client';
+import { Alert, Button, Field, Input } from '../components/ui/primitives';
 
 type Mode = 'login' | 'register';
 
@@ -48,116 +49,96 @@ export default function Auth() {
 
       <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-20 px-4 sm:px-6 grain overflow-hidden">
         <div className="relative z-10 max-w-md mx-auto">
-          <div className="bg-[var(--color-surface)] rounded-xl border border-[var(--color-border-strong)] p-8 shadow-sm">
-            <div className="flex gap-2 mb-8 p-1 rounded-full bg-[var(--color-border)]/50">
+          <div className="ui-card p-7 sm:p-8">
+            <div className="flex gap-1 mb-7 p-1 rounded-lg bg-[var(--color-surface-2)] border border-[var(--color-border)]">
               <button
                 type="button"
                 onClick={() => { setMode('login'); setError(''); }}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-full text-sm font-medium transition-colors ${
+                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md text-sm font-medium transition-colors ${
                   mode === 'login'
-                    ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)] shadow-sm'
+                    ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)]'
                     : 'text-[var(--color-muted)] hover:text-[var(--color-primary)]'
                 }`}
               >
                 <LogIn className="w-4 h-4" />
-                Iniciar sesión
+                Entrar
               </button>
               <button
                 type="button"
                 onClick={() => { setMode('register'); setError(''); }}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-full text-sm font-medium transition-colors ${
+                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md text-sm font-medium transition-colors ${
                   mode === 'register'
-                    ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)] shadow-sm'
+                    ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)]'
                     : 'text-[var(--color-muted)] hover:text-[var(--color-primary)]'
                 }`}
               >
                 <UserPlus className="w-4 h-4" />
-                Registrarse
+                Registro
               </button>
             </div>
 
-            <h1 className="font-serif text-2xl font-medium text-[var(--color-primary)] mb-2">
-              {mode === 'login' ? 'Bienvenido de nuevo' : 'Crea tu cuenta'}
+            <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[var(--color-primary)] mb-2 tracking-tight">
+              {mode === 'login' ? 'Vuelve dentro' : 'Hazte un hueco'}
             </h1>
-            <p className="text-sm text-[var(--color-muted)] mb-6">
+            <p className="text-sm text-[var(--color-muted)] mb-6 leading-relaxed">
               {mode === 'login'
-                ? 'Accede para ver y gestionar tus destinos favoritos.'
-                : 'Guarda destinos y planifica tus viajes desde un solo lugar.'}
+                ? 'Tus favoritos siguen donde los dejaste.'
+                : 'La cuenta es gratis y sirve para guardar sitios, no para llenarte el correo.'}
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {mode === 'register' && (
-                <div>
-                  <label htmlFor="nombre" className="block text-sm font-medium text-[var(--color-primary)] mb-1.5">
-                    Nombre
-                  </label>
-                  <input
+                <Field id="nombre" label="Nombre">
+                  <Input
                     id="nombre"
                     type="text"
                     value={nombre}
                     onChange={(e) => setNombre(e.target.value)}
-                    className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border-strong)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]/20 focus:border-[var(--color-brand)] transition-all shadow-sm"
-                    placeholder="Tu nombre"
+                    placeholder="Cómo te llamamos"
                   />
-                </div>
+                </Field>
               )}
 
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-[var(--color-primary)] mb-1.5">
-                  Email
-                </label>
-                <input
+              <Field id="email" label="Email">
+                <Input
                   id="email"
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border-strong)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]/20 focus:border-[var(--color-brand)] transition-all shadow-sm"
                   placeholder="tu@email.com"
                 />
-              </div>
+              </Field>
 
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-[var(--color-primary)] mb-1.5">
-                  Contraseña
-                </label>
-                <input
+              <Field id="password" label="Contraseña">
+                <Input
                   id="password"
                   type="password"
                   required
                   minLength={8}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border-strong)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]/20 focus:border-[var(--color-brand)] transition-all shadow-sm"
                   placeholder="Mínimo 8 caracteres"
                 />
-              </div>
+              </Field>
 
-              {error && (
-                <p className="text-sm text-[var(--color-danger)] bg-[var(--color-danger)]/10 border border-[var(--color-danger)]/25 rounded-xl px-4 py-3">
-                  {error}
-                </p>
-              )}
+              {error && <Alert tone="error">{error}</Alert>}
 
-              <button
-                type="submit"
-                disabled={submitting}
-                className="w-full py-3.5 rounded-xl bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:brightness-105 transition-all disabled:opacity-50"
-              >
-                {submitting ? 'Procesando...' : mode === 'login' ? 'Entrar' : 'Crear cuenta'}
-              </button>
+              <Button type="submit" fullWidth loading={submitting}>
+                {mode === 'login' ? 'Entrar' : 'Crear cuenta'}
+              </Button>
             </form>
 
             {mode === 'login' && (
               <p className="text-center text-sm mt-4">
-                <Link to="/recuperar" className="text-[var(--color-muted)] hover:text-[var(--color-brand-dark)] hover:underline">
+                <Link to="/recuperar" className="text-[var(--color-nav)] hover:text-[var(--color-brand-dark)] hover:underline">
                   ¿Olvidaste tu contraseña?
                 </Link>
               </p>
             )}
 
-            <p className="text-center text-sm text-[var(--color-muted)] mt-6">
-              <Link to="/" className="text-[var(--color-brand)] hover:underline">
+            <p className="text-center text-sm mt-6">
+              <Link to="/" className="text-[var(--color-brand-dark)] hover:underline">
                 Volver al inicio
               </Link>
             </p>

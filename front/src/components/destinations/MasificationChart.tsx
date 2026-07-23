@@ -51,10 +51,10 @@ export default function MasificationChart({ julioAgosto, mayJunSeptOct, novAbril
   const best = getBestSeason({ mesesJulioAgosto: julioAgosto, mesesMayJunSeptOct: mayJunSeptOct, mesesNovAbril: novAbril });
 
   return (
-    <div className="space-y-8 p-6 md:p-8 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] shadow-sm">
+    <div className="space-y-8 p-6 md:p-8 ui-card">
       <div>
-        <h2 className="text-xl font-semibold text-[var(--color-primary)] tracking-tight mb-1">Masificación</h2>
-        <p className="text-sm text-[var(--color-muted)]">Nivel de afluencia turística según la época del año</p>
+        <h2 className="font-serif text-xl sm:text-2xl font-medium text-[var(--color-primary)] tracking-tight mb-1">Cuándo ir (y cuándo no)</h2>
+        <p className="text-sm text-[var(--color-muted)]">Cuánta gente te vas a encontrar según la época.</p>
       </div>
       <div className="space-y-7">
         <Bar label="Julio y Agosto" value={julioAgosto} delay={100} highlight={best.key === 'verano'} />

@@ -19,8 +19,8 @@ export default function StarRating({ value, onChange, size = 20, readOnly = fals
         const filled = star <= Math.round(active);
         const StarEl = (
           <Star
-            style={{ width: size, height: size }}
-            className={filled ? 'fill-amber-400 text-amber-400' : 'fill-transparent text-[var(--color-border-strong)]'}
+            style={{ width: size, height: size, color: filled ? 'var(--color-mostaza)' : undefined }}
+            className={filled ? 'fill-[var(--color-mostaza)]' : 'fill-transparent text-[var(--color-border-strong)]'}
           />
         );
         if (readOnly) return <span key={star}>{StarEl}</span>;
