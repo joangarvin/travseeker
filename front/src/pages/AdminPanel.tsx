@@ -45,7 +45,8 @@ export default function AdminPanel() {
 
       {showForm && <AdminMobileBackBar onBack={handleBack} />}
 
-      <div className="shrink-0 w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pt-2 pb-3">
+      {/* Espaciado ajustado entre Hero y las Pestañas (pt-6 sm:pt-8 pb-4) */}
+      <div className="shrink-0 w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pt-6 sm:pt-8 pb-4">
         <div
           className="flex gap-1 p-1 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-sm"
           role="tablist"
@@ -56,11 +57,10 @@ export default function AdminPanel() {
             role="tab"
             aria-selected={tab === 'destinos'}
             onClick={() => handleTabChange('destinos')}
-            className={`flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${
-              tab === 'destinos'
+            className={`flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${tab === 'destinos'
                 ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)] shadow-sm'
                 : 'text-[var(--color-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-secondary)]'
-            }`}
+              }`}
           >
             <MapPinned className="w-4 h-4 shrink-0" />
             Destinos
@@ -70,11 +70,10 @@ export default function AdminPanel() {
             role="tab"
             aria-selected={tab === 'municipios'}
             onClick={() => handleTabChange('municipios')}
-            className={`flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${
-              tab === 'municipios'
+            className={`flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${tab === 'municipios'
                 ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)] shadow-sm'
                 : 'text-[var(--color-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-secondary)]'
-            }`}
+              }`}
           >
             <Building2 className="w-4 h-4 shrink-0" />
             Municipios

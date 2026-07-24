@@ -74,7 +74,7 @@ export default function TravelStyles({ onSelect }: Props) {
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pt-12 sm:pt-20 pb-4">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pt-2 sm:pt-4 pb-4">
       <ScrollReveal>
         <div className="mb-8 sm:mb-10 max-w-xl">
           <span className="field-label text-[var(--color-teja)] mb-3 block">El humor del viaje</span>
@@ -95,11 +95,10 @@ export default function TravelStyles({ onSelect }: Props) {
               <button
                 type="button"
                 onClick={() => handleSelect(value)}
-                className={`ficha-tilt w-full flex flex-col items-start text-left gap-2 p-4 sm:p-5 rounded-lg border transition-colors duration-150 touch-target ${
-                  isActive
-                    ? 'bg-[var(--color-brand)] border-[var(--color-brand)] text-[var(--color-on-brand)]'
-                    : 'bg-[var(--color-surface)] border-[var(--color-border-strong)] text-[var(--color-primary)] hover:border-[var(--color-primary-light)]'
-                }`}
+                className={`ficha-tilt w-full flex flex-col items-start text-left gap-2 p-4 sm:p-5 rounded-lg border transition-colors duration-150 touch-target ${isActive
+                  ? 'bg-[var(--color-brand)] border-[var(--color-brand)] text-[var(--color-on-brand)]'
+                  : 'bg-[var(--color-surface)] border-[var(--color-border-strong)] text-[var(--color-primary)] hover:border-[var(--color-primary-light)]'
+                  }`}
                 style={{
                   '--tilt': tilt,
                   boxShadow: isActive ? 'var(--shadow-card)' : 'var(--shadow-card)',

@@ -80,52 +80,56 @@ export default function Favoritos() {
         }
       />
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pb-20">
-        {error && (
-          <p className="text-center text-[var(--color-danger)] mb-8">{error}</p>
-        )}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12">
 
-        {favoritos.length > 0 && (
-          <ListToolbar
-            query={query}
-            onQueryChange={setQuery}
-            queryPlaceholder="Buscar en el cajón…"
-            sortValue={sortBy}
-            onSortChange={(value) => setSortBy(value as 'recent' | 'name')}
-            sortOptions={[
-              { value: 'recent', label: 'Más recientes' },
-              { value: 'name', label: 'Nombre A-Z' },
-            ]}
-          />
-        )}
 
-        {filtered.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
-            {filtered.map((fav, index) => (
-              <ScrollReveal key={fav.id} delay={(index % 4) as 0 | 1 | 2 | 3}>
-                <DestinationCard destino={fav.destino} index={index} enableCollection />
-              </ScrollReveal>
-            ))}
-          </div>
-        ) : (
-          <EmptyState
-            icon={<Heart className="w-10 h-10" />}
-            title={favoritos.length > 0 ? 'Nada con ese nombre' : 'De momento, silencio'}
-            description={
-              favoritos.length > 0
-                ? 'Prueba con otra palabra.'
-                : 'Toca el corazón en cualquier destino y esto empieza a llenarse.'
-            }
-            action={(
-              <Link to="/">
-                <Button variant="secondary">Ver destinos</Button>
-              </Link>
-            )}
-          />
-        )}
-      </section>
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pb-20">
+          {error && (
+            <p className="text-center text-[var(--color-danger)] mb-8">{error}</p>
+          )}
 
-      <Footer />
+          {favoritos.length > 0 && (
+            <ListToolbar
+              query={query}
+              onQueryChange={setQuery}
+              queryPlaceholder="Buscar en el cajón…"
+              sortValue={sortBy}
+              onSortChange={(value) => setSortBy(value as 'recent' | 'name')}
+              sortOptions={[
+                { value: 'recent', label: 'Más recientes' },
+                { value: 'name', label: 'Nombre A-Z' },
+              ]}
+            />
+          )}
+
+          {filtered.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+              {filtered.map((fav, index) => (
+                <ScrollReveal key={fav.id} delay={(index % 4) as 0 | 1 | 2 | 3}>
+                  <DestinationCard destino={fav.destino} index={index} enableCollection />
+                </ScrollReveal>
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              icon={<Heart className="w-10 h-10" />}
+              title={favoritos.length > 0 ? 'Nada con ese nombre' : 'De momento, silencio'}
+              description={
+                favoritos.length > 0
+                  ? 'Prueba con otra palabra.'
+                  : 'Toca el corazón en cualquier destino y esto empieza a llenarse.'
+              }
+              action={(
+                <Link to="/">
+                  <Button variant="secondary">Ver destinos</Button>
+                </Link>
+              )}
+            />
+          )}
+        </section>
+
+        <Footer />
+      </div>
     </div>
   );
 }

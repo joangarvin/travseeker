@@ -30,7 +30,7 @@ export default function ListToolbar({
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
           placeholder={queryPlaceholder}
-          className="ui-input pl-10"
+          className="ui-input !pl-10"
         />
       </div>
       {sortValue && onSortChange && sortOptions.length > 0 && (

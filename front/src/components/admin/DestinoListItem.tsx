@@ -21,11 +21,10 @@ export default function DestinoListItem({
 
   return (
     <article
-      className={`rounded-2xl border bg-[var(--color-surface)] overflow-hidden transition-shadow ${
-        active
-          ? 'border-[var(--color-brand)] shadow-md ring-1 ring-[var(--color-brand)]/20'
-          : 'border-[var(--color-border)]'
-      }`}
+      className={`rounded-2xl border bg-[var(--color-surface)] overflow-hidden transition-shadow ${active
+        ? 'border-[var(--color-brand)] shadow-md ring-1 ring-[var(--color-brand)]/20'
+        : 'border-[var(--color-border)]'
+        }`}
     >
       <button
         type="button"
@@ -62,7 +61,7 @@ export default function DestinoListItem({
           {row.municipios.map((m) => (
             <span
               key={m.id}
-              className="inline-flex items-center gap-1.5 pl-2.5 pr-1 py-1 rounded-full bg-[var(--color-secondary)] text-xs text-[var(--color-primary)]"
+              className="inline-flex items-center gap-1.5 pl-2.5 pr-1 py-1 rounded-full bg-[var(--color-brand)]/10 text-xs text-[var(--color-primary)]"
             >
               {m.nombre}
               <button
