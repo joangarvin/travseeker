@@ -60,8 +60,8 @@ export default function Colecciones() {
     const q = query.trim().toLowerCase();
     const base = q
       ? collections.filter((c) =>
-          c.nombre.toLowerCase().includes(q) || (c.descripcion ?? '').toLowerCase().includes(q),
-        )
+        c.nombre.toLowerCase().includes(q) || (c.descripcion ?? '').toLowerCase().includes(q),
+      )
       : collections;
 
     if (sortBy === 'name') return [...base].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
@@ -145,119 +145,122 @@ export default function Colecciones() {
         )}
       />
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pb-20">
-        {collections.length > 0 && (
-          <ListToolbar
-            query={query}
-            onQueryChange={setQuery}
-            queryPlaceholder="Buscar colección..."
-            sortValue={sortBy}
-            onSortChange={(value) => setSortBy(value as 'recent' | 'name' | 'items')}
-            sortOptions={[
-              { value: 'recent', label: 'Más recientes' },
-              { value: 'name', label: 'Nombre A-Z' },
-              { value: 'items', label: 'Más destinos' },
-            ]}
-          />
-        )}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12">
 
-        {showForm && (
-          <form onSubmit={handleCreate} className="ui-card mb-8 p-6 space-y-4 animate-fade-up">
-            <div className="grid md:grid-cols-2 gap-4">
-              <input
-                autoFocus
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                maxLength={80}
-                placeholder="Nombre de plan (p. ej. Puente de mayo)"
-                className="ui-input"
-              />
-              <input
-                value={desc}
-                onChange={(e) => setDesc(e.target.value)}
-                maxLength={280}
-                placeholder="Descripción (opcional)"
-                className="ui-input"
-              />
-            </div>
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                {COLLECTION_COLORS.map((col) => (
-                  <button
-                    key={col.id}
-                    type="button"
-                    onClick={() => setColor(col.id)}
-                    className={`w-7 h-7 rounded-md transition-transform ${color === col.id ? 'ring-2 ring-offset-2 ring-offset-[var(--color-surface)] scale-105' : ''}`}
-                    style={{ backgroundColor: col.hex, '--tw-ring-color': col.hex } as React.CSSProperties}
-                    aria-label={col.label}
-                  />
-                ))}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pb-20 pb-12 sm:pb-16">
+          {collections.length > 0 && (
+            <ListToolbar
+              query={query}
+              onQueryChange={setQuery}
+              queryPlaceholder="Buscar colección..."
+              sortValue={sortBy}
+              onSortChange={(value) => setSortBy(value as 'recent' | 'name' | 'items')}
+              sortOptions={[
+                { value: 'recent', label: 'Más recientes' },
+                { value: 'name', label: 'Nombre A-Z' },
+                { value: 'items', label: 'Más destinos' },
+              ]}
+            />
+          )}
+
+          {showForm && (
+            <form onSubmit={handleCreate} className="ui-card mb-8 p-6 space-y-4 animate-fade-up">
+              <div className="grid md:grid-cols-2 gap-4">
+                <input
+                  autoFocus
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  maxLength={80}
+                  placeholder="Nombre de plan (p. ej. Puente de mayo)"
+                  className="ui-input"
+                />
+                <input
+                  value={desc}
+                  onChange={(e) => setDesc(e.target.value)}
+                  maxLength={280}
+                  placeholder="Descripción (opcional)"
+                  className="ui-input"
+                />
               </div>
-              <button
-                type="submit"
-                disabled={!name.trim() || creating}
-                className="px-6 py-3 rounded-lg bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:bg-[var(--color-accent-hover)] transition-colors disabled:opacity-50"
-              >
-                {creating ? 'Creando…' : 'Crear lista'}
-              </button>
-            </div>
-          </form>
-        )}
-
-        {visibleCollections.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {visibleCollections.map((c, index) => (
-              <ScrollReveal key={c.id} delay={(index % 3) as 0 | 1 | 2}>
-                <div className="group relative ui-card overflow-hidden hover:bg-[var(--color-surface-2)] transition-colors duration-200">
-                  <Link to={`/colecciones/${c.id}`} className="block">
-                    <CoverCollage covers={c.covers} color={c.color} />
-                    <div className="p-5">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ backgroundColor: colorHex(c.color) }} />
-                        <h2 className="font-serif text-lg font-medium text-[var(--color-primary)] truncate">{c.nombre}</h2>
-                      </div>
-                      {c.descripcion && (
-                        <p className="text-sm text-[var(--color-muted)] line-clamp-2 mb-2">{c.descripcion}</p>
-                      )}
-                      <p className="field-label text-[var(--color-muted)]">
-                        {c.count} {c.count === 1 ? 'destino' : 'destinos'}
-                      </p>
-                    </div>
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(c.id)}
-                    className="absolute top-3 right-3 w-9 h-9 rounded-lg ink-chip flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
-                    aria-label="Eliminar colección"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-2">
+                  {COLLECTION_COLORS.map((col) => (
+                    <button
+                      key={col.id}
+                      type="button"
+                      onClick={() => setColor(col.id)}
+                      className={`w-7 h-7 rounded-md transition-transform ${color === col.id ? 'ring-2 ring-offset-2 ring-offset-[var(--color-surface)] scale-105' : ''}`}
+                      style={{ backgroundColor: col.hex, '--tw-ring-color': col.hex } as React.CSSProperties}
+                      aria-label={col.label}
+                    />
+                  ))}
                 </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        ) : (
-          !showForm && (
-            <div className="ui-card text-center py-16 px-6">
-              <FolderHeart className="w-10 h-10 text-[var(--color-muted)] mx-auto mb-4 opacity-70" />
-              <p className="font-serif text-xl text-[var(--color-primary)] mb-3">
-                {collections.length > 0 ? 'Ninguna lista coincide' : 'Sin listas todavía'}
-              </p>
-              <p className="text-[var(--color-muted)] mb-6 max-w-md mx-auto">
-                {collections.length > 0
-                  ? 'Ninguna lista coincide con esa búsqueda.'
-                  : 'Una colección es una lista con intención. Crea la primera y ponle nombre de plan: «Puente de mayo», «Ruta del cochinillo».'}
-              </p>
-              {collections.length === 0 && (
-                <button onClick={() => setShowForm(true)} className="px-5 py-3 rounded-lg bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:bg-[var(--color-accent-hover)] transition-colors">
-                  Crear mi primera lista
+                <button
+                  type="submit"
+                  disabled={!name.trim() || creating}
+                  className="px-6 py-3 rounded-lg bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:bg-[var(--color-accent-hover)] transition-colors disabled:opacity-50"
+                >
+                  {creating ? 'Creando…' : 'Crear lista'}
                 </button>
-              )}
-            </div>
-          )
-        )}
-      </section>
+              </div>
+            </form>
+          )}
 
-      <Footer />
+          {visibleCollections.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {visibleCollections.map((c, index) => (
+                <ScrollReveal key={c.id} delay={(index % 3) as 0 | 1 | 2}>
+                  <div className="group relative ui-card overflow-hidden hover:bg-[var(--color-surface-2)] transition-colors duration-200">
+                    <Link to={`/colecciones/${c.id}`} className="block">
+                      <CoverCollage covers={c.covers} color={c.color} />
+                      <div className="p-5">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ backgroundColor: colorHex(c.color) }} />
+                          <h2 className="font-serif text-lg font-medium text-[var(--color-primary)] truncate">{c.nombre}</h2>
+                        </div>
+                        {c.descripcion && (
+                          <p className="text-sm text-[var(--color-muted)] line-clamp-2 mb-2">{c.descripcion}</p>
+                        )}
+                        <p className="field-label text-[var(--color-muted)]">
+                          {c.count} {c.count === 1 ? 'destino' : 'destinos'}
+                        </p>
+                      </div>
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(c.id)}
+                      className="absolute top-3 right-3 w-9 h-9 rounded-lg ink-chip flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+                      aria-label="Eliminar colección"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+          ) : (
+            !showForm && (
+              <div className="ui-card text-center py-16 px-6">
+                <FolderHeart className="w-10 h-10 text-[var(--color-muted)] mx-auto mb-4 opacity-70" />
+                <p className="font-serif text-xl text-[var(--color-primary)] mb-3">
+                  {collections.length > 0 ? 'Ninguna lista coincide' : 'Sin listas todavía'}
+                </p>
+                <p className="text-[var(--color-muted)] mb-6 max-w-md mx-auto">
+                  {collections.length > 0
+                    ? 'Ninguna lista coincide con esa búsqueda.'
+                    : 'Una colección es una lista con intención. Crea la primera y ponle nombre de plan: «Puente de mayo», «Ruta del cochinillo».'}
+                </p>
+                {collections.length === 0 && (
+                  <button onClick={() => setShowForm(true)} className="px-5 py-3 rounded-lg bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:bg-[var(--color-accent-hover)] transition-colors">
+                    Crear mi primera lista
+                  </button>
+                )}
+              </div>
+            )
+          )}
+        </section>
+
+        <Footer />
+      </div>
     </div>
   );
 }
