@@ -35,11 +35,11 @@ export default function HeroSearch({ onSearch, activeFilterCount = 0 }: Props) {
   const badgeCount = localActiveCount || activeFilterCount;
 
   return (
-    <section id="buscar" className="relative overflow-hidden grain">
+    <section id="buscar" className="hero-search grain">
       {/* Línea de mapa decorativa de fondo */}
       <svg
         aria-hidden
-        className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.07]"
+        className="hero-search__mapline"
         preserveAspectRatio="none"
       >
         <path
@@ -52,33 +52,33 @@ export default function HeroSearch({ onSearch, activeFilterCount = 0 }: Props) {
         />
       </svg>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pt-24 sm:pt-28 pb-12 sm:pb-20 min-h-[78vh] sm:min-h-[88vh] flex items-center">
-        <div className="w-full max-w-5xl mx-auto">
-          <div className="animate-fade-up text-center">
-            <p className="field-label text-[var(--color-muted)] mb-4 sm:mb-5">
+      <div className="hero-search__inner">
+        <div className="hero-search__content">
+          <div className="hero-search__heading animate-fade-up">
+            <p className="hero-search__eyebrow field-label">
               Guía de campo de la España tranquila
             </p>
-            <h1 className="font-serif text-[2.7rem] leading-[1.03] sm:text-6xl md:text-[4.8rem] font-medium text-[var(--color-primary)] tracking-tight mb-5 sm:mb-6 max-w-[11ch] mx-auto">
+            <h1 className="hero-search__title">
               España, sin la cola para <span className="italic hand-underline">la foto</span>.
             </h1>
-            <p className="text-[var(--color-primary-light)] text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+            <p className="hero-search__copy">
               Busca destinos por ambiente, presupuesto y masificación. Menos ruido, mejores decisiones,
               y planes que sí apetece guardar.
             </p>
           </div>
 
-          <div className="mt-6 sm:mt-7 animate-fade-up animate-fade-up-delay-1">
-            <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 text-center">
-              <span className="field-label text-[var(--color-brand)]">Planifica con datos reales</span>
-              <span className="text-xs text-[var(--color-muted)]">77 destinos revisados</span>
-              <span className="hidden sm:inline text-[var(--color-border-strong)]">•</span>
-              <span className="text-xs text-[var(--color-muted)]">0 patrocinados</span>
-              <span className="hidden sm:inline text-[var(--color-border-strong)]">•</span>
-              <span className="text-xs text-[var(--color-muted)]">Compara antes de decidir</span>
+          <div className="hero-search__meta animate-fade-up animate-fade-up-delay-1">
+            <div className="hero-search__meta-row">
+              <span className="hero-search__meta-label field-label">Planifica con datos reales</span>
+              <span className="hero-search__meta-item">77 destinos revisados</span>
+              <span className="hero-search__meta-dot">•</span>
+              <span className="hero-search__meta-item">0 patrocinados</span>
+              <span className="hero-search__meta-dot">•</span>
+              <span className="hero-search__meta-item">Compara antes de decidir</span>
             </div>
           </div>
 
-          <div className="mt-8 sm:mt-10 animate-fade-up animate-fade-up-delay-1">
+          <div className="hero-search__search animate-fade-up animate-fade-up-delay-1">
             <SearchBar
               q={q}
               onQChange={setQ}

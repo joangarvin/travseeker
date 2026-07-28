@@ -10,7 +10,9 @@ interface Props {
   label?: string;
   hint?: string;
   allowUrl?: boolean;
+  /** @deprecated use previewClassName */
   aspectClass?: string;
+  previewClassName?: string;
 }
 
 export default function ImageUploadField({
@@ -20,9 +22,11 @@ export default function ImageUploadField({
   label = 'Imagen',
   hint,
   allowUrl = true,
-  aspectClass = 'aspect-[16/9] max-h-48',
+  aspectClass,
+  previewClassName = 'image-upload-preview image-upload-preview--landscape',
   previewPreset = 'preview',
 }: Props) {
+  const previewClass = previewClassName || aspectClass || 'image-upload-preview image-upload-preview--landscape';
   const inputId = useId();
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -46,25 +50,25 @@ export default function ImageUploadField({
   }
 
   return (
-    <div className="space-y-3">
-      <div className="flex items-center justify-between gap-2">
-        <label htmlFor={allowUrl && mode === 'url' ? `${inputId}-url` : inputId} className="text-sm font-medium text-[var(--color-primary)]">
+    <div className="image-upload">
+      <div className="image-upload__head">
+        <label htmlFor={allowUrl && mode === 'url' ? `${inputId}-url` : inputId} className="image-upload__label">
           {label}
         </label>
         {allowUrl && (
           <button
             type="button"
             onClick={() => setMode((m) => (m === 'upload' ? 'url' : 'upload'))}
-            className="text-xs text-[var(--color-brand)] hover:underline inline-flex items-center gap-1"
+            className="image-upload__mode-btn"
           >
             {mode === 'upload' ? (
               <>
-                <Link2 className="w-3.5 h-3.5" />
+                <Link2 className="icon-sm" />
                 Usar enlace externo
               </>
             ) : (
               <>
-                <Upload className="w-3.5 h-3.5" />
+                <Upload className="icon-sm" />
                 Subir archivo
               </>
             )}
@@ -72,12 +76,12 @@ export default function ImageUploadField({
         )}
       </div>
 
-      {hint && <p className="text-xs text-[var(--color-muted)]">{hint}</p>}
+      {hint && <p className="image-upload__hint">{hint}</p>}
 
       {mode === 'upload' ? (
         <label
           htmlFor={inputId}
-          className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[var(--color-border-strong)] bg-[var(--color-secondary)]/40 px-4 py-8 cursor-pointer hover:border-[var(--color-brand)]/50 transition-colors ${uploading ? 'pointer-events-none opacity-70' : ''}`}
+          className={`image-upload__drop ${uploading ? 'is-busy' : ''}`}
         >
           <input
             id={inputId}
@@ -89,11 +93,11 @@ export default function ImageUploadField({
             onChange={(e) => void handleFile(e.target.files?.[0] ?? null)}
           />
           {uploading ? (
-            <Loader2 className="w-8 h-8 text-[var(--color-brand)] animate-spin" />
+            <Loader2 className="icon-lg icon-brand icon-spin" />
           ) : (
-            <ImagePlus className="w-8 h-8 text-[var(--color-muted)]" />
+            <ImagePlus className="icon-lg icon-muted" />
           )}
-          <span className="text-sm text-[var(--color-muted)] text-center">
+          <span className="image-upload__drop-text">
             {uploading ? 'Subiendo…' : 'Haz clic o arrastra una imagen (máx. 10 MB)'}
           </span>
         </label>
@@ -104,22 +108,21 @@ export default function ImageUploadField({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="https://…"
-          className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-brand)] focus:ring-2 focus:ring-[var(--color-brand)]/20"
+          className="ui-input"
         />
       )}
 
       {error && (
-        <p className="text-sm text-red-600 dark:text-red-400" role="alert">
+        <p className="ui-field__error" role="alert">
           {error}
         </p>
       )}
 
       {value && (
-        <div className={`rounded-xl overflow-hidden border border-[var(--color-border)] ${aspectClass} bg-[var(--color-secondary)]`}>
+        <div className={previewClass}>
           <img
             src={getImageUrl(value, 0, previewPreset)}
             alt="Vista previa"
-            className="w-full h-full object-cover"
             loading="lazy"
           />
         </div>

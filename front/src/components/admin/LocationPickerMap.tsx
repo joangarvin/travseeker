@@ -48,26 +48,26 @@ export default function LocationPickerMap({ lat, lng, onChange }: Props) {
   );
 
   return (
-    <div className="space-y-2">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <label className="flex items-center gap-2 text-sm font-medium text-[var(--color-primary)]">
-          <MapPin className="w-4 h-4 text-[var(--color-brand-dark)]" />
+    <div className="admin-map-field">
+      <div className="admin-map-field__head">
+        <label className="admin-map-field__label">
+          <MapPin className="icon-sm" />
           Ubicación en el mapa
         </label>
         {hasPoint ? (
-          <span className="text-xs font-mono text-[var(--color-muted)] bg-[var(--color-secondary)] px-2 py-1 rounded-lg">
+          <span className="admin-map-field__coords">
             {lat!.toFixed(5)}, {lng!.toFixed(5)}
           </span>
         ) : (
-          <span className="text-xs text-amber-600 dark:text-amber-400">Haz clic en el mapa para colocar el pin</span>
+          <span className="admin-map-field__hint-warn">Haz clic en el mapa para colocar el pin</span>
         )}
       </div>
-      <div className="h-56 sm:h-72 rounded-xl overflow-hidden border border-[var(--color-border-strong)] ring-1 ring-[var(--color-border)]/50 relative z-0">
+      <div className="admin-map-field__frame">
         <MapContainer
           center={center}
           zoom={hasPoint ? PIN_ZOOM : DEFAULT_ZOOM}
           scrollWheelZoom
-          className="h-full w-full"
+          className="admin-map-field__map"
           style={{ height: '100%', width: '100%' }}
         >
           <TileLayer
@@ -91,7 +91,7 @@ export default function LocationPickerMap({ lat, lng, onChange }: Props) {
           )}
         </MapContainer>
       </div>
-      <p className="text-xs text-[var(--color-muted)]">
+      <p className="admin-map-field__foot">
         El destino solo aparecerá en el mapa público si tiene coordenadas. Puedes arrastrar el pin para afinar la posición.
       </p>
     </div>

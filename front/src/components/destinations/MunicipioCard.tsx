@@ -5,30 +5,29 @@ interface Props {
   index?: number;
 }
 
-/** Ficha compacta de municipio: nombre, precio, tipología y conexiones. */
 export default function MunicipioCard({ municipio, index = 0 }: Props) {
   const num = String(index + 1).padStart(2, '0');
 
   return (
-    <article className="ui-card p-4 sm:p-5 grid grid-cols-[auto_1fr] gap-x-4 gap-y-3 hover:bg-[var(--color-surface-2)] transition-colors">
-      <span className="font-mono text-sm text-[var(--color-muted)]/50 leading-none pt-1 select-none">{num}</span>
-      <div className="min-w-0">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 mb-2">
-          <h3 className="font-serif text-lg font-medium text-[var(--color-primary)] tracking-tight">
+    <article className="ui-card muni-card">
+      <span className="muni-card__num">{num}</span>
+      <div className="muni-card__body">
+        <div className="muni-card__head">
+          <h3 className="muni-card__name">
             {municipio.nombre}
           </h3>
           {municipio.precios && (
-            <span className="field-label text-[var(--color-brand-dark)] shrink-0">
+            <span className="muni-card__price field-label">
               {municipio.precios.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()}
             </span>
           )}
         </div>
 
         {municipio.tipoTurismo && (
-          <div className="mb-2.5">
-            <span className="field-label text-[var(--color-teja)] mr-2">Plan</span>
+          <div className="muni-card__field">
+            <span className="muni-card__field-label field-label">Plan</span>
             <span
-              className="text-sm text-[var(--color-muted)]"
+              className="muni-card__field-text"
               dangerouslySetInnerHTML={{ __html: municipio.tipoTurismo }}
             />
           </div>
@@ -36,9 +35,9 @@ export default function MunicipioCard({ municipio, index = 0 }: Props) {
 
         {municipio.conexiones && (
           <div>
-            <span className="field-label text-[var(--color-teja)] mr-2">Cómo llegar</span>
+            <span className="muni-card__field-label field-label">Cómo llegar</span>
             <span
-              className="text-sm text-[var(--color-muted)] leading-relaxed"
+              className="muni-card__field-text"
               dangerouslySetInnerHTML={{ __html: municipio.conexiones }}
             />
           </div>

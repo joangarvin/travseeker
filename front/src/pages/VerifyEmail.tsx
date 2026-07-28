@@ -40,32 +40,32 @@ export default function VerifyEmail() {
   }, [token, refreshUser]);
 
   return (
-    <div className="min-h-screen bg-[var(--color-secondary)] font-sans flex flex-col">
+    <div className="page-shell page-shell--column">
       <Header />
-      <section className="flex-1 flex items-center justify-center px-4 sm:px-6 pt-24 sm:pt-32 pb-20">
-        <div className="w-full max-w-md rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-10 text-center shadow-[var(--shadow-card)]" aria-live="polite">
+      <section className="auth-status-section">
+        <div className="ui-card status-card" aria-live="polite">
           {status === 'loading' && (
             <>
-              <Loader2 className="w-12 h-12 text-[var(--color-brand)] mx-auto mb-4 animate-spin" />
-              <h1 className="text-2xl font-semibold text-[var(--color-primary)]">Verificando tu email…</h1>
+              <Loader2 className="icon-xl icon-brand icon-spin status-card__icon" />
+              <h1 className="status-card__title status-card__title--sm">Verificando tu email…</h1>
             </>
           )}
           {status === 'ok' && (
             <>
-              <BadgeCheck className="w-14 h-14 text-[var(--color-brand)] mx-auto mb-4" />
-              <h1 className="mb-2 text-3xl font-semibold text-[var(--color-primary)]">Email verificado</h1>
-              <p className="text-[var(--color-muted)] mb-8">{message}</p>
-              <Link to="/" className="inline-flex px-6 py-3 rounded-xl bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:brightness-105 transition-all">
+              <BadgeCheck className="icon-xl icon-brand status-card__icon" style={{ width: '3.5rem', height: '3.5rem' }} />
+              <h1 className="status-card__title">Email verificado</h1>
+              <p className="status-card__text">{message}</p>
+              <Link to="/" className="btn-cta">
                 Ir al inicio
               </Link>
             </>
           )}
           {status === 'error' && (
             <>
-              <XCircle className="w-14 h-14 text-[var(--color-danger)] mx-auto mb-4" />
-              <h1 className="mb-2 text-3xl font-semibold text-[var(--color-primary)]">No se pudo verificar</h1>
-              <p className="text-[var(--color-muted)] mb-8">{message}</p>
-              <Link to="/perfil" className="inline-flex px-6 py-3 rounded-xl bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:brightness-105 transition-all">
+              <XCircle className="icon-xl icon-danger status-card__icon" style={{ width: '3.5rem', height: '3.5rem' }} />
+              <h1 className="status-card__title">No se pudo verificar</h1>
+              <p className="status-card__text">{message}</p>
+              <Link to="/perfil" className="btn-cta">
                 Ir a mi perfil
               </Link>
             </>

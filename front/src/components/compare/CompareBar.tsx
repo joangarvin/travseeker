@@ -11,27 +11,20 @@ export default function CompareBar() {
   const ready = items.length >= 2;
 
   return (
-    <div className="fixed bottom-0 sm:bottom-5 left-0 right-0 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 z-[1500] w-full sm:w-[min(100%,34rem)] px-3 sm:px-0 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:pb-0 animate-fade-up">
-      <div
-        className="flex items-center gap-2.5 sm:gap-3 px-3 sm:px-4 py-3 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border-strong)]"
-        style={{ boxShadow: 'var(--shadow-card)' }}
-      >
-        <GitCompare className="w-5 h-5 text-[var(--color-brand)] shrink-0 hidden sm:block" />
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-[var(--color-primary)] truncate">
+    <div className="compare-bar animate-fade-up">
+      <div className="compare-bar__card">
+        <GitCompare className="compare-bar__icon" aria-hidden />
+        <div className="compare-bar__content">
+          <p className="compare-bar__title">
             {items.length} destino{items.length === 1 ? '' : 's'} en el ring
           </p>
-          <p className="field-label text-[var(--color-muted)] truncate hidden sm:block normal-case tracking-normal" style={{ fontSize: '0.7rem', letterSpacing: 0, textTransform: 'none' }}>
+          <p className="compare-bar__items">
             {items.map((x) => x.nombre.trim()).join(' · ')}
           </p>
         </div>
         <Link
           to={`/comparar?ids=${items.map((x) => x.id).join(',')}`}
-          className={`shrink-0 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors touch-target ${
-            ready
-              ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)] hover:bg-[var(--color-accent-hover)]'
-              : 'bg-[var(--color-surface-2)] text-[var(--color-muted)] pointer-events-none'
-          }`}
+          className={`compare-bar__cta touch-target ${ready ? 'is-ready' : 'is-disabled'}`}
           aria-disabled={!ready}
         >
           Cara a cara
@@ -39,10 +32,10 @@ export default function CompareBar() {
         <button
           type="button"
           onClick={clearCompare}
-          className="shrink-0 w-10 h-10 rounded-lg text-[var(--color-muted)] hover:bg-[var(--color-surface-2)] hover:text-[var(--color-primary)] flex items-center justify-center transition-colors touch-target"
+          className="compare-bar__clear touch-target"
           aria-label="Vaciar comparación"
         >
-          <X className="w-4 h-4" />
+          <X aria-hidden />
         </button>
       </div>
     </div>

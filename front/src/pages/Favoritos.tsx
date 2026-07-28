@@ -43,17 +43,17 @@ export default function Favoritos() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
+      <div className="page-shell">
         <Header />
-        <div className="pt-24 sm:pt-32 px-4 sm:px-6 pb-20 max-w-lg mx-auto">
+        <div className="page-guest">
           <EmptyState
-            icon={<Heart className="w-10 h-10" />}
+            icon={<Heart className="icon-lg" />}
             title="Tus sitios"
             description="Entra y todo lo que marques con el corazón quedará guardado en un solo cajón."
             action={(
               <Link to="/auth">
                 <Button>
-                  <LogIn className="w-4 h-4" />
+                  <LogIn className="icon-sm" />
                   Entrar
                 </Button>
               </Link>
@@ -66,12 +66,12 @@ export default function Favoritos() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
+    <div className="page-shell">
       <Header />
 
       <PageHero
         eyebrow="Favoritos"
-        icon={<Heart className="w-6 h-6 fill-[var(--color-brand)]" />}
+        icon={<Heart className="icon-md icon-heart-filled" style={{ color: 'var(--color-brand)' }} />}
         title="Tus sitios"
         description={
           filtered.length === 0
@@ -80,12 +80,10 @@ export default function Favoritos() {
         }
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12">
-
-
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pb-20">
+      <div className="page-wrap">
+        <section className="page-section">
           {error && (
-            <p className="text-center text-[var(--color-danger)] mb-8">{error}</p>
+            <p className="page-error-banner">{error}</p>
           )}
 
           {favoritos.length > 0 && (
@@ -103,7 +101,7 @@ export default function Favoritos() {
           )}
 
           {filtered.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+            <div className="dest-grid">
               {filtered.map((fav, index) => (
                 <ScrollReveal key={fav.id} delay={(index % 4) as 0 | 1 | 2 | 3}>
                   <DestinationCard destino={fav.destino} index={index} enableCollection />
@@ -112,7 +110,7 @@ export default function Favoritos() {
             </div>
           ) : (
             <EmptyState
-              icon={<Heart className="w-10 h-10" />}
+              icon={<Heart className="icon-lg" />}
               title={favoritos.length > 0 ? 'Nada con ese nombre' : 'De momento, silencio'}
               description={
                 favoritos.length > 0

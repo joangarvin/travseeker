@@ -33,11 +33,7 @@ export default function Header() {
 
   const navLink = (to: string, label: string, onClick?: () => void, isHash = false) => {
     const isActive = !isHash && location.pathname === to;
-    const className = `block py-3.5 md:py-0 text-base md:text-sm font-medium transition-colors ${
-      isActive
-        ? 'text-[var(--color-primary)]'
-        : 'text-[var(--color-nav)] hover:text-[var(--color-primary)]'
-    }`;
+    const className = `site-header__nav-link ${isActive ? 'is-active' : ''}`;
     if (isHash) {
       return (
         <a key={to} href={to} onClick={onClick} className={className}>
@@ -59,27 +55,27 @@ export default function Header() {
   });
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[5000] safe-top">
-      <div className="bg-[var(--color-secondary)]/95 border-b border-[var(--color-border-strong)]">
-        <div className="max-w-7xl mx-auto flex justify-between items-center py-2.5 sm:py-3 px-4 sm:px-6 md:px-8 gap-4">
-          <Link to="/" className="flex items-center gap-2.5 group shrink-0 touch-target">
-            <img src={logo} alt="" className="h-8 sm:h-9 w-auto" />
-            <span className="font-serif text-lg sm:text-xl font-medium text-[var(--color-primary)] tracking-tight hidden xs:inline sm:inline">
+    <header className="site-header safe-top">
+      <div className="site-header__bar">
+        <div className="site-header__inner">
+          <Link to="/" className="site-header__brand touch-target">
+            <img src={logo} alt="" className="site-header__logo" />
+            <span className="site-header__brand-name">
               Travseeker
             </span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-7 flex-1 justify-end">
-            <nav className="flex gap-6 text-sm">
+          <div className="site-header__desktop">
+            <nav className="site-header__nav">
               {visibleNav.map((item) => navLink(item.to, item.label, undefined, item.hash))}
             </nav>
 
-            <div className="flex items-center gap-2 pl-5 ml-1 border-l border-[var(--color-border-strong)]">
+            <div className="site-header__actions">
               <button
                 type="button"
-                className="flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[var(--color-muted)] border border-[var(--color-border-strong)] rounded-lg px-2.5 py-2 hover:text-[var(--color-primary)] hover:border-[var(--color-primary-light)] transition-colors"
+                className="site-header__locale"
               >
-                <Globe className="w-3.5 h-3.5" />
+                <Globe aria-hidden />
                 ES
               </button>
               <ThemeToggle />
@@ -87,17 +83,17 @@ export default function Header() {
             </div>
           </div>
 
-          <div className="flex md:hidden items-center gap-1">
+          <div className="site-header__mobile">
             <UserMenu />
             <ThemeToggle />
             <button
               type="button"
-              className="touch-target p-2 rounded-lg text-[var(--color-primary)] hover:bg-[var(--color-surface-2)] transition-colors"
+              className="site-header__menu-btn touch-target"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
               aria-expanded={mobileOpen}
             >
-              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileOpen ? <X aria-hidden /> : <Menu aria-hidden />}
             </button>
           </div>
         </div>
@@ -107,17 +103,17 @@ export default function Header() {
         <>
           <button
             type="button"
-            className="fixed inset-0 top-[var(--header-height,56px)] bg-[var(--color-primary)]/40 md:hidden"
+            className="site-header__backdrop"
             aria-label="Cerrar menú"
             onClick={() => setMobileOpen(false)}
           />
           <nav
-            className="fixed left-0 right-0 top-[var(--header-height,56px)] bottom-0 md:hidden overflow-y-auto bg-[var(--color-secondary)] border-b border-[var(--color-border)] px-5 py-2 safe-bottom animate-menu-in"
+            className="site-header__mobile-nav safe-bottom animate-menu-in"
             aria-label="Navegación principal"
           >
-            <div className="flex flex-col">
+            <div className="site-header__mobile-list">
               {visibleNav.map((item) => (
-                <div key={item.to} className="border-b border-[var(--color-border)] last:border-0">
+                <div key={item.to} className="site-header__mobile-item">
                   {navLink(item.to, item.label, () => setMobileOpen(false), item.hash)}
                 </div>
               ))}

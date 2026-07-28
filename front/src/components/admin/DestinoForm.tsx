@@ -63,29 +63,23 @@ export default function DestinoForm({
   }, [token, editingId]);
 
   return (
-    <div className="space-y-4 pb-24 lg:pb-4">
-      <form onSubmit={onSubmit} className="space-y-4">
+    <div className="admin-form">
+      <form onSubmit={onSubmit} className="admin-form__stack">
         {loading && (
-          <p className="text-sm text-[var(--color-muted)] rounded-xl bg-[var(--color-secondary)] px-4 py-3">
-            Cargando datos del destino…
-          </p>
+          <p className="admin-form__loading">Cargando datos del destino…</p>
         )}
-        <div className="flex items-center justify-between gap-3">
+        <div className="admin-form__header">
           <div>
-            <h2 className="text-lg sm:text-xl font-semibold text-[var(--color-primary)]">
+            <h2 className="admin-form__title">
               {editingId ? 'Editar destino' : 'Nuevo destino'}
             </h2>
-            <p className="text-sm text-[var(--color-muted)]">
+            <p className="admin-form__subtitle">
               Rellena los campos como si fuera un documento. Los marcados con * son obligatorios.
             </p>
           </div>
           {editingId && (
-            <button
-              type="button"
-              onClick={onCancel}
-              className="lg:hidden inline-flex items-center gap-1.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-primary)] px-3 py-2 rounded-lg"
-            >
-              <X className="w-4 h-4" />
+            <button type="button" onClick={onCancel} className="admin-form__back">
+              <X className="icon-sm" />
               Volver
             </button>
           )}
@@ -96,7 +90,7 @@ export default function DestinoForm({
           title="Lo esencial"
           description="Nombre y datos que verá el visitante de un vistazo."
         >
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="admin-form__grid admin-form__grid--2">
             <AdminField label="Nombre del destino" required hint="Ej: Costa del Sol, Pirineo Aragonés…">
               <input
                 type="text"
@@ -132,7 +126,7 @@ export default function DestinoForm({
           title="Cómo es el destino"
           description="Elige opciones de las listas. Así los filtros de la web funcionan mejor."
         >
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="admin-form__grid admin-form__grid--2">
             <AdminField label="Presupuesto medio" required>
               <AdminSelect
                 value={form.presupuesto}
@@ -186,7 +180,7 @@ export default function DestinoForm({
               onChange={(e) => patch({ descripcion: e.target.value })}
               rows={8}
               placeholder="Describe el destino: paisaje, ambiente, para quién es ideal…"
-              className={`${adminTextareaClass} min-h-[200px]`}
+              className={`${adminTextareaClass} admin-input--textarea-tall`}
               required
             />
           </AdminField>
@@ -254,7 +248,7 @@ export default function DestinoForm({
         {editingId && municipioLinker ? (
           <MunicipioLinker {...municipioLinker} />
         ) : (
-          <p className="text-sm text-[var(--color-muted)]">
+          <p className="admin-form__muted">
             Publica el destino y luego añade municipios del catálogo.
           </p>
         )}

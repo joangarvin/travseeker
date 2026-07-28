@@ -14,13 +14,13 @@ export default function StarRating({ value, onChange, size = 20, readOnly = fals
   const active = hover || value;
 
   return (
-    <div className={`flex items-center gap-0.5 ${className}`} role={readOnly ? 'img' : 'radiogroup'} aria-label={`Valoración ${value} de 5`}>
+    <div className={`star-rating ${className}`} role={readOnly ? 'img' : 'radiogroup'} aria-label={`Valoración ${value} de 5`}>
       {[1, 2, 3, 4, 5].map((star) => {
         const filled = star <= Math.round(active);
         const StarEl = (
           <Star
             style={{ width: size, height: size, color: filled ? 'var(--color-mostaza)' : undefined }}
-            className={filled ? 'fill-[var(--color-mostaza)]' : 'fill-transparent text-[var(--color-border-strong)]'}
+            className={`star-rating__star ${filled ? 'is-filled' : ''}`}
           />
         );
         if (readOnly) return <span key={star}>{StarEl}</span>;
@@ -31,7 +31,7 @@ export default function StarRating({ value, onChange, size = 20, readOnly = fals
             onClick={() => onChange?.(star)}
             onMouseEnter={() => setHover(star)}
             onMouseLeave={() => setHover(0)}
-            className="transition-transform hover:scale-110 cursor-pointer"
+            className="star-rating__button"
             aria-label={`${star} estrella${star > 1 ? 's' : ''}`}
           >
             {StarEl}

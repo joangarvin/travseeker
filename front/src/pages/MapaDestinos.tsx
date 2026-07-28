@@ -48,17 +48,17 @@ export default function MapaDestinos() {
     setFilters((prev) => ({ ...prev, [key]: value }));
 
   return (
-    <div className="h-[100dvh] flex flex-col bg-[var(--color-secondary)] font-sans overflow-hidden">
+    <div className="map-page">
       <Header />
 
-      <div className="pt-[56px] sm:pt-[68px] flex flex-col flex-1 min-h-0">
-        <div className="border-b border-[var(--color-border)] bg-[var(--color-surface)] relative z-10 shadow-sm shrink-0">
-          <div className="max-w-7xl mx-auto px-4 md:px-8 py-3">
-            <div className="flex items-center gap-3 mb-2 sm:mb-0">
-              <div className="flex items-center gap-2 text-[var(--color-primary)] font-semibold shrink-0">
-                <MapPin className="w-4 h-4 text-[var(--color-brand-dark)]" />
+      <div className="map-page__body">
+        <div className="map-page__toolbar">
+          <div className="map-page__toolbar-inner">
+            <div className="map-page__toolbar-head">
+              <div className="map-page__title">
+                <MapPin className="map-page__title-icon" />
                 El mapa
-                <span className="text-xs font-normal text-[var(--color-muted)]">
+                <span className="map-page__subtitle">
                   {loading ? 'cargando…' : `toda la España tranquila · ${destinos.length} destinos`}
                 </span>
               </div>
@@ -67,20 +67,20 @@ export default function MapaDestinos() {
                 <button
                   type="button"
                   onClick={() => setFilters({})}
-                  className="ml-auto sm:ml-0 flex items-center gap-1 text-sm text-[var(--color-muted)] hover:text-[var(--color-danger)] transition-colors touch-target shrink-0"
+                  className="map-page__clear touch-target"
                 >
-                  <X className="w-3.5 h-3.5" /> Limpiar
+                  <X className="icon-sm" /> Limpiar
                 </button>
               )}
             </div>
 
-            <div className="flex gap-2 overflow-x-auto scroll-filters pb-1 -mx-1 px-1 sm:flex-wrap sm:overflow-visible">
+            <div className="map-page__filters scroll-filters">
               {mapFilters.map((f) => (
                 <select
                   key={f.key}
                   value={(filters[f.key as keyof SearchFilters] as string) || ''}
                   onChange={(e) => updateFilter(f.key, e.target.value)}
-                  className="text-sm border border-[var(--color-border-strong)] rounded-lg px-3 py-2.5 bg-[var(--color-surface)] text-[var(--color-primary)] focus:outline-none focus:border-[var(--color-brand)] cursor-pointer shrink-0 min-w-[9.5rem]"
+                  className="map-page__select"
                 >
                   {f.options.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -93,7 +93,7 @@ export default function MapaDestinos() {
           </div>
         </div>
 
-        <div className="flex-1 min-h-0 relative z-0 isolate">
+        <div className="map-page__canvas">
           <MapContainer
             center={SPAIN_CENTER}
             zoom={6}
@@ -109,21 +109,18 @@ export default function MapaDestinos() {
             {destinos.map((d) => (
               <Marker key={d.id} position={[d.latitud, d.longitud]} icon={markerIcon}>
                 <Popup>
-                  <div className="w-52">
+                  <div className="map-popup">
                     <img
                       src={getImageUrl(d.imagen, 0, 'map')}
                       alt={d.nombre}
-                      className="w-full h-28 object-cover rounded-lg mb-2"
+                      className="map-popup__img"
                       loading="lazy"
                     />
-                    <h3 className="font-semibold text-sm text-[var(--color-primary)] mb-1">{d.nombre.trim()}</h3>
-                    <p className="text-xs text-[var(--color-muted)] mb-2">
+                    <h3 className="map-popup__title">{d.nombre.trim()}</h3>
+                    <p className="map-popup__meta">
                       {parseJsonSafe(d.ubicacion)} · {parseJsonSafe(d.presupuesto)}
                     </p>
-                    <Link
-                      to={`/destino/${d.id}`}
-                      className="inline-block text-xs font-semibold text-[var(--color-brand-dark)] hover:underline"
-                    >
+                    <Link to={`/destino/${d.id}`} className="map-popup__link">
                       Ver destino →
                     </Link>
                   </div>

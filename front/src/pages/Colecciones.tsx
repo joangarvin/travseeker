@@ -18,21 +18,21 @@ function CoverCollage({ covers, color }: { covers: string[]; color: string }) {
   if (covers.length === 0) {
     return (
       <div
-        className="h-40 w-full flex items-center justify-center"
+        className="coleccion-cover--empty"
         style={{ background: `linear-gradient(135deg, ${colorHex(color)}, ${colorHex(color)}99)` }}
       >
-        <FolderHeart className="w-10 h-10 text-white/80" />
+        <FolderHeart />
       </div>
     );
   }
   return (
-    <div className="h-40 w-full grid grid-cols-2 grid-rows-2 gap-0.5">
+    <div className="coleccion-cover__grid">
       {covers.slice(0, 4).map((src, i) => (
         <img
           key={i}
           src={getImageUrl(src, i, 'thumb')}
           alt=""
-          className={`w-full h-full object-cover ${covers.length === 1 ? 'col-span-2 row-span-2' : ''} ${covers.length === 3 && i === 0 ? 'row-span-2' : ''}`}
+          className={`${covers.length === 1 ? 'span-all' : ''} ${covers.length === 3 && i === 0 ? 'span-rows' : ''}`}
           loading="lazy"
         />
       ))}
@@ -102,20 +102,17 @@ export default function Colecciones() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
+      <div className="page-shell">
         <Header />
-        <div className="pt-24 sm:pt-32 px-4 sm:px-6 pb-20 max-w-lg mx-auto text-center">
-          <div className="ui-card p-10 text-center">
-            <FolderHeart className="w-12 h-12 text-[var(--color-brand)] mx-auto mb-4" />
-            <h1 className="font-serif text-3xl text-[var(--color-primary)] mb-3">Tus listas de viaje</h1>
-            <p className="text-[var(--color-muted)] mb-8">
+        <div className="page-guest">
+          <div className="ui-card page-guest__card">
+            <FolderHeart className="page-guest__icon" />
+            <h1 className="page-guest__title">Tus listas de viaje</h1>
+            <p className="page-guest__text">
               Entra para agrupar destinos por plan: «Puente de mayo», «Norte con perro», «Escapadas de un día».
             </p>
-            <Link
-              to="/auth"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:bg-[var(--color-accent-hover)] transition-colors"
-            >
-              <LogIn className="w-4 h-4" />
+            <Link to="/auth" className="btn-cta btn-cta--lg">
+              <LogIn className="icon-sm" />
               Entrar
             </Link>
           </div>
@@ -126,28 +123,24 @@ export default function Colecciones() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
+    <div className="page-shell">
       <Header />
 
       <PageHero
         eyebrow="Colecciones"
-        icon={<FolderHeart className="w-6 h-6 text-[var(--color-brand)]" />}
+        icon={<FolderHeart className="icon-md" style={{ color: 'var(--color-brand)' }} />}
         title="Tus listas de viaje"
         description="«Puente de mayo», «Norte con perro», «Escapadas de un día». Cada plan, su lista."
         action={(
-          <button
-            onClick={() => setShowForm((v) => !v)}
-            className="flex items-center gap-2 px-5 py-3 rounded-lg bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:bg-[var(--color-accent-hover)] transition-colors"
-          >
-            {showForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+          <button type="button" onClick={() => setShowForm((v) => !v)} className="btn-cta btn-cta--lg">
+            {showForm ? <X className="icon-sm" /> : <Plus className="icon-sm" />}
             {showForm ? 'Cancelar' : 'Nueva lista'}
           </button>
         )}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12">
-
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pb-20 pb-12 sm:pb-16">
+      <div className="page-wrap">
+        <section className="page-section page-section--tight">
           {collections.length > 0 && (
             <ListToolbar
               query={query}
@@ -164,8 +157,8 @@ export default function Colecciones() {
           )}
 
           {showForm && (
-            <form onSubmit={handleCreate} className="ui-card mb-8 p-6 space-y-4 animate-fade-up">
-              <div className="grid md:grid-cols-2 gap-4">
+            <form onSubmit={handleCreate} className="ui-card colecciones-form animate-fade-up">
+              <div className="colecciones-form__grid">
                 <input
                   autoFocus
                   value={name}
@@ -182,24 +175,20 @@ export default function Colecciones() {
                   className="ui-input"
                 />
               </div>
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-2">
+              <div className="colecciones-form__footer">
+                <div className="colecciones-form__colors">
                   {COLLECTION_COLORS.map((col) => (
                     <button
                       key={col.id}
                       type="button"
                       onClick={() => setColor(col.id)}
-                      className={`w-7 h-7 rounded-md transition-transform ${color === col.id ? 'ring-2 ring-offset-2 ring-offset-[var(--color-surface)] scale-105' : ''}`}
-                      style={{ backgroundColor: col.hex, '--tw-ring-color': col.hex } as React.CSSProperties}
+                      className={`colecciones-color-btn ${color === col.id ? 'is-selected' : ''}`}
+                      style={{ backgroundColor: col.hex, color: col.hex }}
                       aria-label={col.label}
                     />
                   ))}
                 </div>
-                <button
-                  type="submit"
-                  disabled={!name.trim() || creating}
-                  className="px-6 py-3 rounded-lg bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:bg-[var(--color-accent-hover)] transition-colors disabled:opacity-50"
-                >
+                <button type="submit" disabled={!name.trim() || creating} className="btn-cta btn-cta--lg">
                   {creating ? 'Creando…' : 'Crear lista'}
                 </button>
               </div>
@@ -207,31 +196,32 @@ export default function Colecciones() {
           )}
 
           {visibleCollections.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="colecciones-grid">
               {visibleCollections.map((c, index) => (
                 <ScrollReveal key={c.id} delay={(index % 3) as 0 | 1 | 2}>
-                  <div className="group relative ui-card overflow-hidden hover:bg-[var(--color-surface-2)] transition-colors duration-200">
-                    <Link to={`/colecciones/${c.id}`} className="block">
+                  <div className="coleccion-card ui-card">
+                    <Link to={`/colecciones/${c.id}`}>
                       <CoverCollage covers={c.covers} color={c.color} />
-                      <div className="p-5">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ backgroundColor: colorHex(c.color) }} />
-                          <h2 className="font-serif text-lg font-medium text-[var(--color-primary)] truncate">{c.nombre}</h2>
+                      <div className="coleccion-card__body">
+                        <div className="coleccion-card__title-row">
+                          <span className="coleccion-card__dot" style={{ backgroundColor: colorHex(c.color) }} />
+                          <h2 className="coleccion-card__title">{c.nombre}</h2>
                         </div>
                         {c.descripcion && (
-                          <p className="text-sm text-[var(--color-muted)] line-clamp-2 mb-2">{c.descripcion}</p>
+                          <p className="coleccion-card__desc">{c.descripcion}</p>
                         )}
-                        <p className="field-label text-[var(--color-muted)]">
+                        <p className="coleccion-card__count field-label">
                           {c.count} {c.count === 1 ? 'destino' : 'destinos'}
                         </p>
                       </div>
                     </Link>
                     <button
+                      type="button"
                       onClick={() => handleDelete(c.id)}
-                      className="absolute top-3 right-3 w-9 h-9 rounded-lg ink-chip flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+                      className="coleccion-card__delete ink-chip"
                       aria-label="Eliminar colección"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="icon-sm" />
                     </button>
                   </div>
                 </ScrollReveal>
@@ -239,18 +229,18 @@ export default function Colecciones() {
             </div>
           ) : (
             !showForm && (
-              <div className="ui-card text-center py-16 px-6">
-                <FolderHeart className="w-10 h-10 text-[var(--color-muted)] mx-auto mb-4 opacity-70" />
-                <p className="font-serif text-xl text-[var(--color-primary)] mb-3">
+              <div className="ui-card colecciones-empty">
+                <FolderHeart className="colecciones-empty__icon" />
+                <p className="colecciones-empty__title">
                   {collections.length > 0 ? 'Ninguna lista coincide' : 'Sin listas todavía'}
                 </p>
-                <p className="text-[var(--color-muted)] mb-6 max-w-md mx-auto">
+                <p className="colecciones-empty__text">
                   {collections.length > 0
                     ? 'Ninguna lista coincide con esa búsqueda.'
                     : 'Una colección es una lista con intención. Crea la primera y ponle nombre de plan: «Puente de mayo», «Ruta del cochinillo».'}
                 </p>
                 {collections.length === 0 && (
-                  <button onClick={() => setShowForm(true)} className="px-5 py-3 rounded-lg bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:bg-[var(--color-accent-hover)] transition-colors">
+                  <button type="button" onClick={() => setShowForm(true)} className="btn-cta btn-cta--lg">
                     Crear mi primera lista
                   </button>
                 )}

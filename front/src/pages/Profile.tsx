@@ -54,14 +54,14 @@ function Toggle({ checked, onChange, label, description, icon: Icon }: {
   icon: typeof Bell;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 py-4 border-b border-[var(--color-border)] last:border-0">
-      <div className="flex items-start gap-3">
-        <span className="mt-0.5 w-9 h-9 rounded-lg bg-[var(--color-secondary)] flex items-center justify-center text-[var(--color-brand-dark)] shrink-0">
-          <Icon className="w-4 h-4" />
+    <div className="profile-toggle">
+      <div className="profile-toggle__info">
+        <span className="profile-toggle__icon">
+          <Icon className="icon-sm" />
         </span>
         <div>
-          <p className="text-sm font-semibold text-[var(--color-primary)]">{label}</p>
-          <p className="text-xs text-[var(--color-muted)] mt-0.5 max-w-sm">{description}</p>
+          <p className="profile-toggle__label">{label}</p>
+          <p className="profile-toggle__desc">{description}</p>
         </div>
       </div>
       <button
@@ -70,25 +70,13 @@ function Toggle({ checked, onChange, label, description, icon: Icon }: {
         aria-checked={checked}
         aria-label={label}
         onClick={() => onChange(!checked)}
-        className={`relative w-11 h-6 rounded-full transition-colors shrink-0 ${
-          checked ? 'bg-[var(--color-brand)]' : 'bg-[var(--color-border-strong)]'
-        }`}
+        className={`profile-toggle__switch ${checked ? 'is-on' : ''}`}
       >
-        <span
-          className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${
-            checked ? 'translate-x-5' : ''
-          }`}
-        />
+        <span className="profile-toggle__knob" />
       </button>
     </div>
   );
 }
-
-const inputClass =
-  'ui-input';
-
-const labelClass =
-  'mb-1.5 block text-sm font-medium text-[var(--color-primary)]';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -247,88 +235,80 @@ export default function Profile() {
   const displayName = getDisplayName(user);
 
   return (
-    <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
+    <div className="page-shell">
       <Header />
 
-      <section className="relative pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 sm:px-6 border-b border-[var(--color-border-strong)] bg-[var(--color-surface)]">
-        <div className="relative z-10 max-w-5xl mx-auto flex flex-col sm:flex-row items-center sm:items-end gap-6 text-center sm:text-left">
-          <Avatar user={user} size="xl" className="shadow-sm border border-[var(--color-border-strong)]" />
-          <div className="flex-1">
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mb-2">
-              <h1 className="text-4xl font-semibold tracking-[-0.04em] text-[var(--color-primary)] md:text-5xl">
+      <section className="profile-hero">
+        <div className="profile-hero__inner">
+          <Avatar user={user} size="xl" className="profile-hero__avatar" />
+          <div className="profile-hero__content">
+            <div className="profile-hero__title-row">
+              <h1 className="profile-hero__title">
                 {displayName}
               </h1>
               {user.emailVerified ? (
-                <span className="inline-flex items-center gap-1 text-xs font-medium text-[var(--color-brand)] bg-[var(--color-brand)]/10 border border-[var(--color-brand)]/20 rounded-full px-2.5 py-1">
-                  <BadgeCheck className="w-3.5 h-3.5" /> Verificado
+                <span className="profile-badge profile-badge--verified">
+                  <BadgeCheck className="icon-sm" /> Verificado
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-300 bg-amber-300/10 border border-amber-300/20 rounded-full px-2.5 py-1">
+                <span className="profile-badge profile-badge--pending">
                   Sin verificar
                 </span>
               )}
             </div>
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-5 gap-y-1 text-[var(--color-muted)] text-sm">
-              <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5" />{user.email}</span>
-              <span className="flex items-center gap-1.5"><CalendarDays className="w-3.5 h-3.5" />Miembro desde {memberSince}</span>
+            <div className="profile-hero__meta">
+              <span className="profile-hero__meta-item"><Mail className="icon-sm" />{user.email}</span>
+              <span className="profile-hero__meta-item"><CalendarDays className="icon-sm" />Miembro desde {memberSince}</span>
             </div>
           </div>
         </div>
       </section>
 
-      <div className="max-w-5xl mx-auto px-6 py-12 grid md:grid-cols-[220px_1fr] gap-8 -mt-6">
-        <aside className="md:sticky md:top-28 h-max">
-          <nav className="flex gap-1 overflow-x-auto rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-2 shadow-sm md:flex-col" aria-label="Configuración del perfil">
+      <div className="profile-layout">
+        <aside>
+          <nav className="profile-nav" aria-label="Configuración del perfil">
             {TABS.map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
                 type="button"
                 onClick={() => { setTab(id); setFeedback(null); }}
                 aria-current={tab === id ? 'page' : undefined}
-                className={`flex min-h-11 items-center gap-2.5 whitespace-nowrap rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
-                  tab === id
-                    ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)] shadow-sm'
-                    : 'text-[var(--color-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-secondary)]'
-                }`}
+                className={`profile-nav__btn ${tab === id ? 'is-active' : ''}`}
               >
-                <Icon className="w-4 h-4" />
+                <Icon className="icon-sm" />
                 {label}
               </button>
             ))}
           </nav>
         </aside>
 
-        <div className="space-y-6">
+        <div className="profile-main">
           {feedback && (
             <div
               role={feedback.type === 'error' ? 'alert' : 'status'}
-              className={`rounded-xl px-4 py-3 text-sm border ${
-                feedback.type === 'ok'
-                  ? 'text-[var(--color-brand-dark)] bg-[var(--color-brand)]/10 border-[var(--color-brand)]/25'
-                  : 'text-[var(--color-danger)] bg-[var(--color-danger)]/10 border-[var(--color-danger)]/25'
-              }`}
+              className={`profile-flash profile-flash--${feedback.type === 'ok' ? 'ok' : 'error'}`}
             >
               {feedback.msg}
             </div>
           )}
 
           {!user.emailVerified && (
-            <div className="rounded-xl px-4 py-3.5 border border-amber-400/30 bg-amber-400/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex items-start gap-2.5">
-                <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
-                <p className="text-sm text-[var(--color-primary)]">
+            <div className="profile-verify-banner">
+              <div className="profile-verify-banner__content">
+                <AlertTriangle className="profile-verify-banner__icon" />
+                <p className="profile-verify-banner__text">
                   Tu email aún no está verificado.{' '}
-                  <span className="text-[var(--color-muted)]">Verifícalo para proteger tu cuenta.</span>
+                  <span className="profile-verify-banner__muted">Verifícalo para proteger tu cuenta.</span>
                 </p>
               </div>
               {verifySent ? (
-                <span className="text-sm font-medium text-[var(--color-brand-dark)] whitespace-nowrap">Email enviado ✓</span>
+                <span className="profile-verify-banner__sent">Email enviado ✓</span>
               ) : (
                 <button
                   type="button"
                   onClick={handleResendVerification}
                   disabled={verifying}
-                  className="text-sm font-semibold text-amber-600 hover:text-amber-700 whitespace-nowrap disabled:opacity-50"
+                  className="profile-verify-banner__action"
                 >
                   {verifying ? 'Enviando...' : 'Enviar verificación'}
                 </button>
@@ -337,56 +317,56 @@ export default function Profile() {
           )}
 
           {tab === 'perfil' && (
-            <form onSubmit={handleSaveProfile} className="rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] p-6 md:p-8 shadow-sm space-y-5">
+            <form onSubmit={handleSaveProfile} className="profile-panel profile-panel--stack">
               <div>
-                <h2 className="text-xl font-semibold text-[var(--color-primary)]">Información personal</h2>
-                <p className="text-sm text-[var(--color-muted)] mt-1">Cómo te verán otros viajeros en Travseeker.</p>
+                <h2 className="profile-panel__head-title">Información personal</h2>
+                <p className="profile-panel__head-lead">Cómo te verán otros viajeros en Travseeker.</p>
               </div>
 
-              <div className="flex flex-col sm:flex-row sm:items-start gap-4">
-                <Avatar user={{ nombre, email: user.email, avatarUrl: avatarUrl || null }} size="lg" className="shrink-0" />
-                <div className="flex-1 min-w-0">
+              <div className="profile-avatar-row">
+                <Avatar user={{ nombre, email: user.email, avatarUrl: avatarUrl || null }} size="lg" />
+                <div className="profile-avatar-row__upload">
                   <ImageUploadField
                     label="Foto de perfil"
                     value={avatarUrl}
                     onChange={setAvatarUrl}
                     onUpload={handleAvatarUpload}
                     previewPreset="avatar-lg"
-                    aspectClass="aspect-square max-w-[12rem] rounded-full"
+                    previewClassName="image-upload-preview image-upload-preview--avatar"
                     allowUrl={false}
                     hint="JPG, PNG o WebP. Se recorta y optimiza automáticamente."
                   />
                 </div>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-4">
+              <div className="profile-form__grid">
                 <div>
-                  <label htmlFor="nombre" className={labelClass}>Nombre</label>
-                  <input id="nombre" type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} className={inputClass} placeholder="Tu nombre" />
+                  <label htmlFor="nombre" className="form-label">Nombre</label>
+                  <input id="nombre" type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} className="ui-input" placeholder="Tu nombre" />
                 </div>
                 <div>
-                  <label htmlFor="apellidos" className={labelClass}>Apellidos</label>
-                  <input id="apellidos" type="text" value={apellidos} onChange={(e) => setApellidos(e.target.value)} className={inputClass} placeholder="Tus apellidos" />
+                  <label htmlFor="apellidos" className="form-label">Apellidos</label>
+                  <input id="apellidos" type="text" value={apellidos} onChange={(e) => setApellidos(e.target.value)} className="ui-input" placeholder="Tus apellidos" />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="bio" className={labelClass}>Biografía</label>
-                <textarea id="bio" value={bio} onChange={(e) => setBio(e.target.value)} maxLength={280} rows={3} className={`${inputClass} resize-none`} placeholder="Cuéntanos qué tipo de viajero eres..." />
-                <p className="text-right text-xs text-[var(--color-muted)] mt-1">{bio.length}/280</p>
+                <label htmlFor="bio" className="form-label">Biografía</label>
+                <textarea id="bio" value={bio} onChange={(e) => setBio(e.target.value)} maxLength={280} rows={3} className="ui-input profile-textarea" placeholder="Cuéntanos qué tipo de viajero eres..." />
+                <p className="profile-char-count">{bio.length}/280</p>
               </div>
 
               <div>
-                <label htmlFor="locale" className={labelClass}>Idioma preferido</label>
-                <select id="locale" value={locale} onChange={(e) => setLocale(e.target.value)} className={inputClass}>
+                <label htmlFor="locale" className="form-label">Idioma preferido</label>
+                <select id="locale" value={locale} onChange={(e) => setLocale(e.target.value)} className="ui-input">
                   {LOCALES.map((l) => (
                     <option key={l.value} value={l.value}>{l.label}</option>
                   ))}
                 </select>
               </div>
 
-              <div className="flex justify-end pt-2">
-                <button type="submit" disabled={saving} className="px-6 py-3 rounded-xl bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:brightness-105 transition-all disabled:opacity-50">
+              <div className="profile-form__actions">
+                <button type="submit" disabled={saving} className="btn-cta">
                   {saving ? 'Guardando...' : 'Guardar cambios'}
                 </button>
               </div>
@@ -394,49 +374,41 @@ export default function Profile() {
           )}
 
           {tab === 'preferencias' && (
-            <div className="rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] p-6 md:p-8 shadow-sm space-y-6">
+            <div className="profile-panel profile-panel--stack-lg">
               <div>
-                <h2 className="text-xl font-semibold text-[var(--color-primary)]">Preferencias</h2>
-                <p className="text-sm text-[var(--color-muted)] mt-1">Personaliza tu experiencia en la plataforma.</p>
+                <h2 className="profile-panel__head-title">Preferencias</h2>
+                <p className="profile-panel__head-lead">Personaliza tu experiencia en la plataforma.</p>
               </div>
 
               <div>
-                <p className={labelClass}>Apariencia</p>
-                <div className="grid grid-cols-2 gap-3 max-w-sm">
+                <p className="form-label">Apariencia</p>
+                <div className="profile-theme-grid">
                   <button
                     type="button"
                     onClick={() => setTheme('light')}
-                    className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium transition-colors ${
-                      theme === 'light'
-                        ? 'border-[var(--color-brand)] bg-[var(--color-brand)]/10 text-[var(--color-primary)]'
-                        : 'border-[var(--color-border-strong)] text-[var(--color-muted)] hover:text-[var(--color-primary)]'
-                    }`}
+                    className={`profile-theme-btn ${theme === 'light' ? 'is-active' : ''}`}
                   >
-                    <Sun className="w-4 h-4" /> Claro
+                    <Sun className="icon-sm" /> Claro
                   </button>
                   <button
                     type="button"
                     onClick={() => setTheme('dark')}
-                    className={`flex items-center gap-2 px-4 py-3 rounded-xl border text-sm font-medium transition-colors ${
-                      theme === 'dark'
-                        ? 'border-[var(--color-brand)] bg-[var(--color-brand)]/10 text-[var(--color-primary)]'
-                        : 'border-[var(--color-border-strong)] text-[var(--color-muted)] hover:text-[var(--color-primary)]'
-                    }`}
+                    className={`profile-theme-btn ${theme === 'dark' ? 'is-active' : ''}`}
                   >
-                    <Moon className="w-4 h-4" /> Oscuro
+                    <Moon className="icon-sm" /> Oscuro
                   </button>
                 </div>
               </div>
 
-              <div className="border-t border-[var(--color-border)] pt-5">
-                <div className="flex items-center gap-2 mb-1">
-                  <Compass className="w-4 h-4 text-[var(--color-brand-dark)]" />
-                  <p className="text-sm font-semibold text-[var(--color-primary)]">Preferencias de viaje</p>
+              <div className="profile-divider">
+                <div className="profile-subhead">
+                  <Compass className="icon-sm" style={{ color: 'var(--color-brand-dark)' }} />
+                  <p className="profile-subhead__title">Preferencias de viaje</p>
                 </div>
-                <p className="text-xs text-[var(--color-muted)] mb-4">Las usamos para personalizar tus recomendaciones "Para ti".</p>
+                <p className="profile-subhead__lead">Las usamos para personalizar tus recomendaciones "Para ti".</p>
 
-                <p className={labelClass}>Tipos de turismo favoritos</p>
-                <div className="flex flex-wrap gap-2 mb-5">
+                <p className="form-label">Tipos de turismo favoritos</p>
+                <div className="profile-chips">
                   {TRAVEL_TIPOS.map((t) => {
                     const active = travelTipos.includes(t);
                     return (
@@ -444,11 +416,7 @@ export default function Profile() {
                         key={t}
                         type="button"
                         onClick={() => setTravelTipos((prev) => (active ? prev.filter((x) => x !== t) : [...prev, t]))}
-                        className={`px-3.5 py-1.5 rounded-full text-sm font-medium border transition-colors ${
-                          active
-                            ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)] border-[var(--color-brand)]'
-                            : 'bg-[var(--color-surface)] text-[var(--color-muted)] border-[var(--color-border-strong)] hover:text-[var(--color-primary)]'
-                        }`}
+                        className={`profile-chip ${active ? 'is-active' : ''}`}
                       >
                         {t}
                       </button>
@@ -456,9 +424,9 @@ export default function Profile() {
                   })}
                 </div>
 
-                <div className="max-w-xs mb-2">
-                  <label htmlFor="travelPresupuesto" className={labelClass}>Presupuesto preferido</label>
-                  <select id="travelPresupuesto" value={travelPresupuesto} onChange={(e) => setTravelPresupuesto(e.target.value)} className={inputClass}>
+                <div className="profile-field-narrow">
+                  <label htmlFor="travelPresupuesto" className="form-label">Presupuesto preferido</label>
+                  <select id="travelPresupuesto" value={travelPresupuesto} onChange={(e) => setTravelPresupuesto(e.target.value)} className="ui-input">
                     <option value="">Sin preferencia</option>
                     {TRAVEL_PRESUPUESTOS.map((p) => (
                       <option key={p} value={p}>{p}</option>
@@ -469,13 +437,13 @@ export default function Profile() {
                 <Toggle checked={avoidCrowds} onChange={setAvoidCrowds} icon={Users} label="Evitar masificación" description="Priorizamos destinos tranquilos y poco concurridos en tus recomendaciones." />
               </div>
 
-              <div className="border-t border-[var(--color-border)] pt-2">
+              <div className="profile-divider profile-divider--tight">
                 <Toggle checked={notifications} onChange={setNotifications} icon={Bell} label="Notificaciones" description="Recibe avisos sobre nuevos destinos y cambios en tus favoritos." />
                 <Toggle checked={newsletter} onChange={setNewsletter} icon={Send} label="Newsletter" description="Guías de viaje y recomendaciones mensuales en tu email." />
               </div>
 
-              <div className="flex justify-end">
-                <button type="button" onClick={handleSavePreferences} disabled={saving} className="px-6 py-3 rounded-xl bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:brightness-105 transition-all disabled:opacity-50">
+              <div className="profile-form__actions">
+                <button type="button" onClick={handleSavePreferences} disabled={saving} className="btn-cta">
                   {saving ? 'Guardando...' : 'Guardar preferencias'}
                 </button>
               </div>
@@ -483,43 +451,43 @@ export default function Profile() {
           )}
 
           {tab === 'seguridad' && (
-            <form onSubmit={handleChangePassword} className="rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] p-6 md:p-8 shadow-sm space-y-5">
+            <form onSubmit={handleChangePassword} className="profile-panel profile-panel--stack">
               <div>
-                <h2 className="text-xl font-semibold text-[var(--color-primary)]">Seguridad</h2>
-                <p className="text-sm text-[var(--color-muted)] mt-1">Cambia tu contraseña periódicamente para mantener tu cuenta segura.</p>
+                <h2 className="profile-panel__head-title">Seguridad</h2>
+                <p className="profile-panel__head-lead">Cambia tu contraseña periódicamente para mantener tu cuenta segura.</p>
               </div>
 
               <div>
-                <label htmlFor="currentPassword" className={labelClass}>Contraseña actual</label>
-                <input id="currentPassword" type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required className={inputClass} placeholder="••••••••" />
+                <label htmlFor="currentPassword" className="form-label">Contraseña actual</label>
+                <input id="currentPassword" type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required className="ui-input" placeholder="••••••••" />
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-4">
+              <div className="profile-form__grid">
                 <div>
-                  <label htmlFor="newPassword" className={labelClass}>Nueva contraseña</label>
-                  <input id="newPassword" type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required minLength={8} className={inputClass} placeholder="Mínimo 8 caracteres" />
+                  <label htmlFor="newPassword" className="form-label">Nueva contraseña</label>
+                  <input id="newPassword" type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required minLength={8} className="ui-input" placeholder="Mínimo 8 caracteres" />
                 </div>
                 <div>
-                  <label htmlFor="confirmPassword" className={labelClass}>Confirmar contraseña</label>
-                  <input id="confirmPassword" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required minLength={8} className={inputClass} placeholder="Repite la contraseña" />
+                  <label htmlFor="confirmPassword" className="form-label">Confirmar contraseña</label>
+                  <input id="confirmPassword" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required minLength={8} className="ui-input" placeholder="Repite la contraseña" />
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 text-xs text-[var(--color-muted)] bg-[var(--color-secondary)] rounded-lg px-3 py-2">
-                <Lock className="w-3.5 h-3.5 shrink-0" />
+              <div className="profile-hint">
+                <Lock className="icon-sm" />
                 Usa una combinación de letras, números y símbolos.
               </div>
 
-              <div className="flex justify-end">
-                <button type="submit" disabled={saving} className="px-6 py-3 rounded-xl bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:brightness-105 transition-all disabled:opacity-50">
+              <div className="profile-form__actions">
+                <button type="submit" disabled={saving} className="btn-cta">
                   {saving ? 'Actualizando...' : 'Cambiar contraseña'}
                 </button>
               </div>
             </form>
           )}
 
-          <p className="text-center text-sm text-[var(--color-muted)]">
-            <Link to="/favoritos" className="text-[var(--color-brand-dark)] font-medium hover:underline">Ver mis favoritos</Link>
+          <p className="profile-footer-link">
+            <Link to="/favoritos" className="link-brand">Ver mis favoritos</Link>
           </p>
         </div>
       </div>

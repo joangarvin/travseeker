@@ -23,21 +23,21 @@ export default function ListToolbar({
   sortOptions = [],
 }: ListToolbarProps) {
   return (
-    <div className="ui-card mb-6 p-3 sm:p-4 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-      <div className="relative w-full sm:max-w-md">
-        <Search className="w-4 h-4 text-[var(--color-muted)] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+    <div className="list-toolbar ui-card">
+      <div className="list-toolbar__search">
+        <Search className="list-toolbar__search-icon" aria-hidden />
         <input
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
           placeholder={queryPlaceholder}
-          className="ui-input !pl-10"
+          className="list-toolbar__input ui-input"
         />
       </div>
       {sortValue && onSortChange && sortOptions.length > 0 && (
         <select
           value={sortValue}
           onChange={(e) => onSortChange(e.target.value)}
-          className="ui-input sm:w-auto sm:min-w-[11rem] cursor-pointer"
+          className="list-toolbar__select ui-input"
         >
           {sortOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>

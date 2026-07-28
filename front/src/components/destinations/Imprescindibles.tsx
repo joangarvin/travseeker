@@ -45,7 +45,7 @@ export default function Imprescindibles({ html }: { html: string }) {
   if (sections.length === 0) {
     return (
       <div
-        className="prose-premium text-[var(--color-primary)]/85 text-base sm:text-lg leading-relaxed"
+        className="impresc__fallback prose-premium"
         dangerouslySetInnerHTML={{ __html: html }}
       />
     );
@@ -68,7 +68,7 @@ export default function Imprescindibles({ html }: { html: string }) {
     });
 
   return (
-    <div className="space-y-2">
+    <div className="impresc">
       {sections.map((section, i) => {
         const isOpen = openSections.has(i);
         const showAll = expandedItems.has(i);
@@ -77,32 +77,27 @@ export default function Imprescindibles({ html }: { html: string }) {
         const num = String(i + 1).padStart(2, '0');
 
         return (
-          <div
-            key={i}
-            className="border-b border-[var(--color-border-strong)] last:border-b-0"
-          >
+          <div key={i} className="impresc__section">
             <button
               type="button"
               onClick={() => toggleSection(i)}
               aria-expanded={isOpen}
-              className="w-full flex items-center gap-4 py-4 text-left group"
+              className="impresc__toggle"
             >
-              <span className="font-mono text-sm text-[var(--color-teja)] shrink-0 w-7">{num}</span>
-              <span className="flex-1 font-serif text-lg sm:text-xl font-medium text-[var(--color-primary)] tracking-tight group-hover:text-[var(--color-brand-dark)] transition-colors">
+              <span className="impresc__num">{num}</span>
+              <span className="impresc__heading">
                 {section.title || 'Apunte'}
               </span>
-              <span className="field-label text-[var(--color-muted)] shrink-0">{section.items.length}</span>
-              <ChevronDown
-                className={`w-4 h-4 text-[var(--color-muted)] transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-              />
+              <span className="impresc__count field-label">{section.items.length}</span>
+              <ChevronDown className={`impresc__chevron ${isOpen ? 'is-open' : ''}`} />
             </button>
 
             {isOpen && (
-              <div className="pb-5 pl-11 sm:pl-11">
-                <ol className="space-y-2.5">
+              <div className="impresc__panel">
+                <ol className="impresc__list">
                   {items.map((item, k) => (
-                    <li key={k} className="flex gap-3 text-[var(--color-primary)]/85 leading-relaxed">
-                      <span className="font-mono text-xs text-[var(--color-muted)]/60 mt-1 shrink-0 w-4">
+                    <li key={k} className="impresc__item">
+                      <span className="impresc__item-num">
                         {k + 1}.
                       </span>
                       <span>{item}</span>
@@ -113,7 +108,7 @@ export default function Imprescindibles({ html }: { html: string }) {
                   <button
                     type="button"
                     onClick={() => toggleItems(i)}
-                    className="mt-4 text-sm font-semibold text-[var(--color-brand-dark)] hover:underline"
+                    className="impresc__more"
                   >
                     {showAll ? 'Ver menos' : `Ver ${hidden} más`}
                   </button>

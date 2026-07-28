@@ -72,98 +72,87 @@ export default function DestinationHero({
   };
 
   return (
-    <div className="relative min-h-[72vh] sm:min-h-[78vh] md:min-h-[85vh] w-full overflow-hidden flex flex-col justify-end">
+    <div className="dest-hero">
       <img
         src={getImageUrl(imagen, 0, 'hero')}
         srcSet={getHeroSrcSet(imagen)}
         sizes="100vw"
         alt={nombre}
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${heroLoaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`dest-hero__img ${heroLoaded ? 'is-loaded' : 'is-loading'}`}
         onLoad={() => setHeroLoaded(true)}
         decoding="async"
         fetchPriority="high"
       />
-      {/* Viñeta editorial: oscuro abajo, limpio arriba */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-secondary)] via-[var(--color-secondary)]/55 to-[var(--color-secondary)]/15" />
-      <div className="absolute inset-0 grain pointer-events-none opacity-60" />
+      <div className="dest-hero__overlay" />
+      <div className="dest-hero__grain grain" />
 
-      {/* Barra superior */}
-      <div className="absolute top-0 left-0 right-0 p-4 sm:p-5 md:p-8 flex justify-between items-center z-20 safe-top">
-        <Link
-          to="/"
-          className="flex items-center gap-2 ink-chip px-3 sm:px-4 py-2.5 rounded-lg text-sm font-medium transition-colors touch-target"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span className="hidden sm:inline">Al cuaderno</span>
+      <div className="dest-hero__topbar safe-top">
+        <Link to="/" className="dest-hero__back ink-chip touch-target">
+          <ArrowLeft className="icon-sm" />
+          <span className="dest-hero__back-label">Al cuaderno</span>
         </Link>
-        <div className="flex gap-1.5 items-center">
-          <div className="hidden sm:block [&_button]:border-white/20 [&_button]:text-white/80 [&_button]:hover:text-white [&_button]:hover:border-white/40">
+        <div className="dest-hero__actions">
+          <div className="dest-hero__theme">
             <ThemeToggle />
           </div>
           <button
+            type="button"
             onClick={handleShare}
-            className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg ink-chip flex items-center justify-center transition-colors touch-target"
+            className="dest-hero__icon-btn ink-chip touch-target"
             aria-label="Compartir"
           >
-            <Share2 className="w-4 h-4" />
+            <Share2 className="icon-sm" />
           </button>
           <button
+            type="button"
             onClick={handleCompare}
             disabled={!inCompare && !canAdd}
-            className={`w-10 h-10 sm:w-11 sm:h-11 rounded-lg flex items-center justify-center transition-colors touch-target disabled:opacity-40 ${
-              inCompare ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)]' : 'ink-chip'
-            }`}
+            className={`dest-hero__icon-btn touch-target ${inCompare ? 'is-active' : 'ink-chip'}`}
             aria-label={inCompare ? 'Quitar de comparación' : 'Añadir a comparación'}
           >
-            <GitCompare className="w-4 h-4" />
+            <GitCompare className="icon-sm" />
           </button>
           <button
+            type="button"
             onClick={handleCollection}
-            className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg ink-chip flex items-center justify-center transition-colors touch-target"
+            className="dest-hero__icon-btn ink-chip touch-target"
             aria-label="Guardar en colección"
           >
-            <Bookmark className="w-4 h-4" />
+            <Bookmark className="icon-sm" />
           </button>
           <button
+            type="button"
             onClick={handleFavorite}
             disabled={toggling}
-            className={`w-10 h-10 sm:w-11 sm:h-11 rounded-lg flex items-center justify-center transition-colors touch-target disabled:opacity-60 ${
-              saved ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)]' : 'ink-chip'
-            }`}
+            className={`dest-hero__icon-btn dest-hero__icon-btn--fav touch-target ${saved ? 'is-active' : 'ink-chip'}`}
             aria-label={saved ? 'Quitar de favoritos' : 'Guardar en favoritos'}
           >
-            <Heart className={`w-4 h-4 ${saved ? 'fill-current' : ''}`} />
+            <Heart className={`icon-sm ${saved ? 'icon-heart-filled' : ''}`} />
           </button>
         </div>
       </div>
 
-      {/* Portada de ficha */}
-      <div className="relative z-10 px-4 sm:px-8 md:px-12 lg:px-16 pb-8 sm:pb-12 md:pb-14 pt-28 max-w-7xl w-full mx-auto">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 lg:gap-10">
-          <div className="min-w-0 max-w-3xl">
-            <p className="field-label text-white/55 mb-3 flex items-center gap-2">
-              <MapPin className="w-3.5 h-3.5 shrink-0" />
-              <span className="truncate">{ubicacion}</span>
+      <div className="dest-hero__content">
+        <div className="dest-hero__row">
+          <div className="dest-hero__main">
+            <p className="dest-hero__ubicacion field-label">
+              <MapPin className="dest-card__location-icon" />
+              <span>{ubicacion}</span>
             </p>
-            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium text-white tracking-tight leading-[1.02] mb-5">
+            <h1 className="dest-hero__name">
               {nombre}
             </h1>
-            {/* Datos en mono, la voz del cuaderno */}
-            <p className="field-label text-white/70 flex flex-wrap items-center gap-x-3 gap-y-1">
+            <p className="dest-hero__facts field-label">
               <span>{presupuesto}</span>
-              <span aria-hidden className="text-white/35">·</span>
+              <span aria-hidden className="dest-hero__facts-sep">·</span>
               <span>{masificacion}</span>
-              <span aria-hidden className="text-white/35">·</span>
+              <span aria-hidden className="dest-hero__facts-sep">·</span>
               <span>{tipoTurismo}</span>
             </p>
           </div>
 
-          {/* Sello de ficha */}
-          <div
-            aria-hidden
-            className="hidden md:flex shrink-0 w-24 h-24 rounded-full border-2 border-[var(--color-teja)] text-[var(--color-teja)] items-center justify-center text-center rotate-[-10deg] self-start lg:self-end bg-black/20"
-          >
-            <span className="field-label leading-tight" style={{ fontSize: '0.58rem' }}>
+          <div aria-hidden className="dest-hero__seal">
+            <span className="dest-hero__seal-text field-label">
               Ficha
               <br />
               revisada

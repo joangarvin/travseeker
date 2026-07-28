@@ -93,32 +93,32 @@ export default function ReviewSection({ destinoId }: Props) {
   return (
     <ScrollReveal>
       <section id="resenas">
-        <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
+        <div className="reviews-section__head">
           <div>
-            <span className="field-label text-[var(--color-teja)] mb-2 block">Firmas</span>
-            <h2 className="font-serif text-2xl sm:text-3xl font-medium text-[var(--color-primary)] tracking-tight">
+            <span className="reviews-section__eyebrow field-label">Firmas</span>
+            <h2 className="reviews-section__title">
               El libro de visitas
             </h2>
           </div>
-          <div className="text-right">
-            <p className="font-serif text-4xl font-medium text-[var(--color-primary)] leading-none">
+          <div className="reviews-section__score-wrap">
+            <p className="reviews-section__score">
               {stats.count > 0 ? stats.average.toFixed(1) : '—'}
             </p>
-            <StarRating value={stats.average} readOnly size={14} className="mt-1.5 justify-end" />
-            <p className="field-label text-[var(--color-muted)] mt-1">
+            <StarRating value={stats.average} readOnly size={14} className="reviews-section__stars" />
+            <p className="reviews-section__count field-label">
               {stats.count} {stats.count === 1 ? 'firma' : 'firmas'}
             </p>
           </div>
         </div>
 
-        <div className="ui-card p-5 sm:p-6 mb-6">
+        <div className="ui-card reviews-form-card">
           {user ? (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <h3 className="font-serif text-lg font-medium text-[var(--color-primary)]">
+            <form onSubmit={handleSubmit} className="reviews-form">
+              <h3 className="reviews-form__title">
                 {ownReview ? 'Tu firma' : 'Firma el libro'}
               </h3>
               <div>
-                <p className="field-label text-[var(--color-muted)] mb-2">Valoración</p>
+                <p className="reviews-form__label field-label">Valoración</p>
                 <StarRating value={rating} onChange={setRating} size={28} />
               </div>
               <textarea
@@ -127,15 +127,11 @@ export default function ReviewSection({ destinoId }: Props) {
                 rows={3}
                 maxLength={1000}
                 placeholder="Qué tal estuvo, sin florituras…"
-                className="ui-input resize-none min-h-[5.5rem]"
+                className="ui-input reviews-form__textarea"
               />
-              {error && <p className="text-sm text-[var(--color-danger)]">{error}</p>}
-              <div className="flex items-center gap-3">
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="px-5 py-2.5 rounded-lg bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:bg-[var(--color-accent-hover)] transition-colors disabled:opacity-50"
-                >
+              {error && <p className="reviews-form__error">{error}</p>}
+              <div className="reviews-form__actions">
+                <button type="submit" disabled={submitting} className="btn-cta">
                   {submitting ? 'Guardando…' : ownReview ? 'Actualizar' : 'Publicar'}
                 </button>
                 {ownReview && (
@@ -143,53 +139,50 @@ export default function ReviewSection({ destinoId }: Props) {
                     type="button"
                     onClick={handleDelete}
                     disabled={submitting}
-                    className="flex items-center gap-1.5 px-3 py-2.5 rounded-lg text-sm text-[var(--color-danger)] hover:bg-[var(--color-danger)]/10 transition-colors disabled:opacity-50"
+                    className="reviews-form__delete"
                   >
-                    <Trash2 className="w-4 h-4" /> Borrar
+                    <Trash2 className="icon-sm" /> Borrar
                   </button>
                 )}
               </div>
             </form>
           ) : (
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="reviews-guest">
               <div>
-                <h3 className="font-serif text-lg font-medium text-[var(--color-primary)] mb-1">
+                <h3 className="reviews-guest__title">
                   ¿Has pasado por aquí?
                 </h3>
-                <p className="text-sm text-[var(--color-muted)]">Entra y deja tu firma. Sin cuenta no hay libro.</p>
+                <p className="reviews-guest__text">Entra y deja tu firma. Sin cuenta no hay libro.</p>
               </div>
-              <Link
-                to="/auth"
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:bg-[var(--color-accent-hover)] transition-colors shrink-0"
-              >
-                <LogIn className="w-4 h-4" /> Entrar
+              <Link to="/auth" className="btn-cta reviews-guest__cta">
+                <LogIn className="icon-sm" /> Entrar
               </Link>
             </div>
           )}
         </div>
 
         {loading ? (
-          <p className="text-sm text-[var(--color-muted)]">Cargando firmas…</p>
+          <p className="reviews-loading">Cargando firmas…</p>
         ) : reviews.length > 0 ? (
-          <div className="space-y-3">
+          <div className="reviews-list">
             {reviews.map((r) => (
-              <div key={r.id} className="flex gap-4 p-4 sm:p-5 border-b border-[var(--color-border)] last:border-0">
+              <div key={r.id} className="reviews-item">
                 <Avatar user={{ nombre: r.user.nombre, email: '', avatarUrl: r.user.avatarUrl }} size="md" />
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
-                    <span className="font-medium text-[var(--color-primary)]">
+                <div className="reviews-item__body">
+                  <div className="reviews-item__head">
+                    <span className="reviews-item__name">
                       {r.user.nombre || 'Viajero anónimo'}
                     </span>
-                    <span className="field-label text-[var(--color-muted)]">{formatDate(r.createdAt)}</span>
+                    <span className="reviews-item__date field-label">{formatDate(r.createdAt)}</span>
                   </div>
-                  <StarRating value={r.rating} readOnly size={14} className="mb-2" />
-                  {r.comment && <p className="text-[var(--color-primary)]/80 leading-relaxed">{r.comment}</p>}
+                  <StarRating value={r.rating} readOnly size={14} className="reviews-item__stars" />
+                  {r.comment && <p className="reviews-item__comment">{r.comment}</p>}
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-center py-10 text-[var(--color-muted)] border border-dashed border-[var(--color-border-strong)] rounded-lg">
+          <p className="reviews-empty">
             Nadie ha firmado aún el libro de visitas. Estrénalo.
           </p>
         )}

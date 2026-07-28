@@ -13,4 +13,4 @@ Hojas de estilo CSS modularizadas. Se importan desde `index.css`.
 
 ## Integración con Tailwind
 
-`index.css` importa primero `@import "tailwindcss"` y luego estos módulos. Las variables de `theme.css` se usan en componentes con `var(--color-*)`.
+`index.css` importa los módulos de esta carpeta (sin Tailwind). Las variables de `theme.css` se usan en componentes con `var(--color-*)`.
