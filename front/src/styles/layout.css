@@ -1,7 +1,17 @@
 .site-header {
   position: fixed;
-  inset: 0 0 auto 0;
+  top: 0;
+  right: 0;
+  left: 0;
   z-index: 5000;
+  width: 100%;
+  pointer-events: none;
+}
+
+.site-header__bar,
+.site-header__backdrop,
+.site-header__mobile-nav {
+  pointer-events: auto;
 }
 
 .site-header__bar {
@@ -24,6 +34,8 @@
   align-items: center;
   gap: 0.625rem;
   flex-shrink: 0;
+  text-decoration: none;
+  color: inherit;
 }
 
 .site-header__logo {
@@ -60,12 +72,18 @@
   font-size: 1rem;
   font-weight: 500;
   color: var(--color-nav);
+  text-decoration: none;
   transition: color 0.15s ease;
+}
+
+.site-header__nav-link:visited {
+  color: var(--color-nav);
 }
 
 .site-header__nav-link:hover,
 .site-header__nav-link.is-active {
   color: var(--color-primary);
+  text-decoration: none;
 }
 
 .site-header__actions {
@@ -367,11 +385,17 @@
   color: var(--color-on-brand);
   font-size: 0.875rem;
   font-weight: 600;
+  text-decoration: none;
   transition: background-color 0.15s ease;
+}
+
+.user-menu__login:visited {
+  color: var(--color-on-brand);
 }
 
 .user-menu__login:hover {
   background: var(--color-accent-hover);
+  text-decoration: none;
 }
 
 .user-menu__button {
@@ -467,6 +491,7 @@
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
   color: var(--color-primary);
+  text-decoration: none;
   transition: background-color 0.15s ease;
 }
 

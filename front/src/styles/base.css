@@ -48,6 +48,52 @@ body {
   background-attachment: fixed;
 }
 
+/* Sin Tailwind preflight: quitar subrayado por defecto en enlaces internos */
+a:any-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:any-link:hover,
+a:any-link:focus-visible,
+a:any-link:active,
+a:any-link:visited {
+  text-decoration: none;
+}
+
+/* Cursor de mano en controles clickables (sustituye parte del reset de Tailwind) */
+a[href],
+area[href],
+button:not(:disabled),
+label[for],
+select:not(:disabled),
+summary,
+[role="button"]:not([aria-disabled="true"]),
+input[type="button"]:not(:disabled),
+input[type="submit"]:not(:disabled),
+input[type="reset"]:not(:disabled),
+input[type="checkbox"]:not(:disabled),
+input[type="radio"]:not(:disabled) {
+  cursor: pointer;
+}
+
+a[href] *,
+button:not(:disabled) *,
+[role="button"]:not([aria-disabled="true"]) *,
+[role="tab"]:not([aria-disabled="true"]) *,
+[role="switch"]:not([aria-disabled="true"]) * {
+  cursor: inherit;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled,
+[aria-disabled="true"],
+.is-disabled {
+  cursor: not-allowed;
+}
+
 [data-theme="dark"] body {
   background-image:
     radial-gradient(ellipse 110% 75% at 8% -5%, color-mix(in srgb, var(--color-brand) 16%, transparent), transparent 55%),

@@ -3,6 +3,17 @@
 .dest-card-link {
   display: block;
   height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.dest-card-link:visited {
+  color: inherit;
+}
+
+.dest-card-link:hover,
+.dest-card-link:focus-visible {
+  text-decoration: none;
 }
 
 .dest-card-link:hover .dest-card__title {

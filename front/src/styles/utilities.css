@@ -110,9 +110,7 @@
   }
 
   @media (hover: hover) {
-    .ficha-tilt:hover,
-    a:hover > .ficha-tilt,
-    .group:hover .ficha-tilt {
+    .ficha-tilt:hover {
       transform: rotate(0deg);
     }
   }
