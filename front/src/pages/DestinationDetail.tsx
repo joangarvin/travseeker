@@ -35,10 +35,10 @@ export default function DestinationDetail() {
 
   if (error || !destino || !facts) {
     return (
-      <div className="min-h-screen bg-[var(--color-secondary)] flex flex-col items-center justify-center gap-4 px-4">
-        <p className="font-serif text-2xl text-[var(--color-primary)]">{error || 'Esta ficha no existe'}</p>
-        <Link to="/" className="text-sm text-[var(--color-brand)] hover:underline flex items-center gap-2">
-          <ArrowLeft className="w-4 h-4" />
+      <div className="dest-detail-error">
+        <p className="dest-detail-error__title">{error || 'Esta ficha no existe'}</p>
+        <Link to="/" className="dest-detail-error__link">
+          <ArrowLeft className="icon-sm" />
           Volver al cuaderno
         </Link>
       </div>
@@ -48,7 +48,7 @@ export default function DestinationDetail() {
   const municipios = destino.municipios ?? [];
 
   return (
-    <div className="bg-[var(--color-secondary)] min-h-screen">
+    <div className="dest-detail">
       <DestinationHero
         destinoId={destino.id}
         nombre={destino.nombre}
@@ -59,16 +59,14 @@ export default function DestinationDetail() {
         tipoTurismo={facts.tipoTurismo}
       />
 
-      {/* Cuerpo de ficha: lectura ancha + temporada al lado en desktop */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-10 sm:py-14 pb-24 sm:pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-          {/* Columna principal */}
-          <div className="lg:col-span-7 space-y-12 sm:space-y-16">
+      <div className="dest-detail__body">
+        <div className="dest-detail__layout">
+          <div className="dest-detail__main">
             <ScrollReveal>
               <article>
-                <span className="field-label text-[var(--color-teja)] mb-4 block">Notas de campo</span>
+                <span className="dest-detail__section-eyebrow field-label">Notas de campo</span>
                 <div
-                  className="prose-premium text-[var(--color-primary)]/85 text-base sm:text-lg leading-[1.75] max-w-[38rem]"
+                  className="dest-detail__prose prose-premium"
                   dangerouslySetInnerHTML={{ __html: destino.descripcion }}
                 />
               </article>
@@ -76,11 +74,11 @@ export default function DestinationDetail() {
 
             <ScrollReveal delay={1}>
               <section>
-                <span className="field-label text-[var(--color-teja)] mb-2 block">Apuntes</span>
-                <h2 className="font-serif text-2xl sm:text-3xl font-medium text-[var(--color-primary)] tracking-tight mb-2">
+                <span className="dest-detail__block-eyebrow field-label">Apuntes</span>
+                <h2 className="dest-detail__block-title">
                   Imprescindibles
                 </h2>
-                <p className="text-sm text-[var(--color-muted)] mb-6 max-w-md">
+                <p className="dest-detail__block-lead">
                   Lo que no hay que perderse, apuntado por orden.
                 </p>
                 <Imprescindibles html={destino.imprescindibles} />
@@ -88,8 +86,7 @@ export default function DestinationDetail() {
             </ScrollReveal>
           </div>
 
-          {/* Lateral: temporada sticky */}
-          <aside className="lg:col-span-5 lg:sticky lg:top-6 space-y-6">
+          <aside className="dest-detail__aside">
             <ScrollReveal delay={1}>
               <SeasonNotebook
                 julioAgosto={destino.mesesJulioAgosto}
@@ -99,56 +96,52 @@ export default function DestinationDetail() {
             </ScrollReveal>
 
             <ScrollReveal delay={2}>
-              <Link
-                to={`/comparar?ids=${destino.id}`}
-                className="flex items-center justify-center gap-2.5 px-5 py-4 rounded-lg bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:bg-[var(--color-accent-hover)] transition-colors"
-              >
-                <GitCompare className="w-5 h-5" />
+              <Link to={`/comparar?ids=${destino.id}`} className="dest-detail__compare-cta">
+                <GitCompare className="icon-md" />
                 Cara a cara con otro
               </Link>
             </ScrollReveal>
           </aside>
         </div>
 
-        {/* Municipios a sangre de columna */}
         <ScrollReveal>
-          <section className="mt-14 sm:mt-20 pt-12 sm:pt-14 border-t border-[var(--color-border-strong)]">
-            <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
+          <section className="dest-detail__divider-section">
+            <div className="dest-detail__section-head">
               <div>
-                <span className="field-label text-[var(--color-teja)] mb-2 block">Alojamiento</span>
-                <h2 className="font-serif text-2xl sm:text-3xl font-medium text-[var(--color-primary)] tracking-tight">
+                <span className="dest-detail__section-head-eyebrow field-label">Alojamiento</span>
+                <h2 className="dest-detail__section-head-title">
                   Dónde dormir (y cuánto cuesta)
                 </h2>
-                <p className="text-sm text-[var(--color-muted)] mt-2 max-w-lg">
+                <p className="dest-detail__section-head-lead">
                   Municipios con precios reales y cómo llegar.
                 </p>
               </div>
               {municipios.length > 0 && (
-                <span className="field-label text-[var(--color-muted)]">
+                <span className="field-label" style={{ color: 'var(--color-muted)' }}>
                   {municipios.length} municipio{municipios.length === 1 ? '' : 's'}
                 </span>
               )}
             </div>
 
             {municipios.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+              <div className="dest-detail__muni-grid">
                 {municipios.map((mun, i) => (
                   <MunicipioCard key={mun.id} municipio={mun} index={i} />
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 border border-dashed border-[var(--color-border-strong)] rounded-lg text-[var(--color-muted)] text-sm">
+              <div className="dest-detail__muni-empty">
                 Aún no hay municipios apuntados en esta ficha.
               </div>
             )}
           </section>
         </ScrollReveal>
 
-        <div className="mt-14 sm:mt-20 pt-12 sm:pt-14 border-t border-[var(--color-border-strong)]">
+        <div className="dest-detail__divider-section">
           <ReviewSection destinoId={destino.id} />
         </div>
 
-        <div className="mt-14 sm:mt-20 pt-12 sm:pt-14 border-t border-[var(--color-border-strong)]">
+        <div className="dest-detail__divider-section">
           <RelatedDestinations destinoId={destino.id} />
         </div>
       </div>

@@ -29,17 +29,17 @@ const VALUES = [
 
 export default function About() {
   return (
-    <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
+    <div className="page-shell">
       <Header />
 
-      <main className="pt-24 sm:pt-32 pb-16 max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
+      <main className="about-main">
         <ScrollReveal>
-          <div className="text-center">
-            <img src={logo} alt="Travseeker" className="h-14 w-auto mx-auto mb-7" />
-            <h1 className="font-serif text-4xl md:text-6xl font-medium text-[var(--color-primary)] tracking-tight mb-6 leading-[1.08]">
+          <div className="about-hero">
+            <img src={logo} alt="Travseeker" className="about-hero__logo" />
+            <h1 className="about-hero__title">
               Nos gusta España cuando <span className="italic hand-underline">no está llena</span>.
             </h1>
-            <p className="text-[var(--color-muted)] text-lg max-w-2xl mx-auto leading-relaxed">
+            <p className="about-hero__lead">
               Travseeker nació de un cabreo concreto: llegar a un sitio precioso y no poder ni
               aparcar. Desde entonces apuntamos los lugares que aguantan bien una visita — y cuándo
               ir para no estropearlos.
@@ -48,10 +48,10 @@ export default function About() {
         </ScrollReveal>
       </main>
 
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+      <section className="about-story">
         <ScrollReveal>
-          <span className="field-label text-[var(--color-teja)] mb-4 block">De dónde viene esto</span>
-          <div className="space-y-6 text-[var(--color-primary)]/85 text-lg leading-relaxed">
+          <span className="about-story__eyebrow field-label">De dónde viene esto</span>
+          <div className="about-story__body">
             <p>
               Empezamos con una libreta y una hoja de cálculo: presupuesto por día, cuánta gente hay en agosto, qué municipios tienen cama y a qué precio. Aquello creció hasta convertirse en esto — fichas de destinos con sus números al aire, para que filtres por lo que de verdad te importa.
             </p>
@@ -62,21 +62,21 @@ export default function About() {
         </ScrollReveal>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-20 sm:pb-24">
+      <section className="about-values">
         <ScrollReveal>
-          <h2 className="font-serif text-3xl sm:text-4xl font-medium text-[var(--color-primary)] text-center mb-10 sm:mb-12 tracking-tight">
+          <h2 className="about-values__title">
             De qué pie cojeamos
           </h2>
         </ScrollReveal>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+        <div className="about-values__grid">
           {VALUES.map(({ icon: Icon, title, text }, i) => (
             <ScrollReveal key={title} delay={(i % 3 + 1) as 1 | 2 | 3}>
-              <div className="ui-card p-7 sm:p-8 h-full">
-                <div className="w-10 h-10 rounded-lg border border-[var(--color-border-strong)] bg-[var(--color-surface-2)] flex items-center justify-center mb-5 text-[var(--color-brand)]">
-                  <Icon className="w-5 h-5" />
+              <div className="ui-card about-value-card">
+                <div className="about-value-card__icon-wrap">
+                  <Icon className="about-value-card__icon" />
                 </div>
-                <h3 className="font-serif text-xl font-medium text-[var(--color-primary)] mb-2 tracking-tight">{title}</h3>
-                <p className="text-[var(--color-muted)] text-sm leading-relaxed">{text}</p>
+                <h3 className="about-value-card__title">{title}</h3>
+                <p className="about-value-card__text">{text}</p>
               </div>
             </ScrollReveal>
           ))}

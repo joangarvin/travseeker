@@ -13,10 +13,6 @@ const ROWS = [
   { key: 'invierno' as const, label: 'Nov — Abr', full: 'Noviembre a abril' },
 ];
 
-/**
- * Una sola ficha de temporada: mejor época + aforo por franja.
- * Sustituye el dúo BestSeasonCard + MasificationChart.
- */
 export default function SeasonNotebook({ julioAgosto, mayJunSeptOct, novAbril }: Props) {
   const data = {
     mesesJulioAgosto: julioAgosto,
@@ -28,44 +24,44 @@ export default function SeasonNotebook({ julioAgosto, mayJunSeptOct, novAbril }:
   const values = { verano: julioAgosto, media: mayJunSeptOct, invierno: novAbril };
 
   return (
-    <section className="ui-card overflow-hidden">
-      <div className="p-5 sm:p-7 border-b border-[var(--color-border)] bg-[var(--color-surface-2)]/50">
-        <span className="field-label text-[var(--color-teja)] mb-2 block">Temporada</span>
-        <h2 className="font-serif text-2xl sm:text-3xl font-medium text-[var(--color-primary)] tracking-tight mb-2">
+    <section className="ui-card" style={{ overflow: 'hidden' }}>
+      <div className="season-card__head">
+        <span className="season-card__eyebrow field-label">Temporada</span>
+        <h2 className="season-card__title">
           Cuándo ir (y cuándo no)
         </h2>
-        <p className="text-[var(--color-muted)] text-sm sm:text-base leading-relaxed max-w-xl">
-          Mejor ventana: <span className="text-[var(--color-primary)] font-medium">{best.label}</span>
+        <p className="season-card__summary">
+          Mejor ventana: <span className="is-highlight">{best.label}</span>
           {' '}({best.months}) · {getMasificationLabel(best.value)} al {best.value}%.
           Evita {worst.label.toLowerCase()} si puedes ({worst.value}%).
         </p>
       </div>
 
-      <div className="p-5 sm:p-7 space-y-5">
+      <div className="season-card__body">
         {ROWS.map(({ key, label, full }, i) => {
           const value = values[key];
           const color = getMasificationColor(value);
           const isBest = best.key === key;
           return (
-            <div key={key} className="space-y-2">
-              <div className="flex justify-between items-baseline gap-3">
-                <div className="min-w-0">
-                  <span className={`field-label ${isBest ? 'text-[var(--color-brand-dark)]' : 'text-[var(--color-muted)]'}`}>
+            <div key={key}>
+              <div className="season-row__head">
+                <div className={`season-row__label ${isBest ? 'is-best' : ''}`}>
+                  <span className="field-label">
                     {label}
                     {isBest && ' · mejor'}
                   </span>
-                  <p className="text-xs text-[var(--color-muted)]/70 mt-0.5 hidden sm:block">{full}</p>
+                  <p className="season-row__full">{full}</p>
                 </div>
-                <div className="text-right shrink-0">
-                  <span className="font-mono text-sm font-medium text-[var(--color-primary)]">{value}%</span>
-                  <span className="field-label text-[var(--color-muted)] ml-2" style={{ fontSize: '0.6rem' }}>
+                <div className="season-row__stats">
+                  <span className="season-row__pct">{value}%</span>
+                  <span className="season-row__tag field-label">
                     {getMasificationLabel(value)}
                   </span>
                 </div>
               </div>
-              <div className="h-2 rounded-sm bg-[var(--color-surface-2)] overflow-hidden">
+              <div className="season-row__bar">
                 <div
-                  className="h-full rounded-sm transition-all duration-700 ease-out"
+                  className="season-row__fill"
                   style={{
                     width: `${value}%`,
                     backgroundColor: color,

@@ -53,9 +53,9 @@ export default function AdminWorkspace({
     : undefined;
 
   return (
-    <section className="flex flex-col flex-1 min-h-0 w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pb-24 lg:pb-4 lg:overflow-hidden">
+    <section className="admin-workspace">
       {(error || success) && (
-        <div className="shrink-0 space-y-2 mb-4">
+        <div className="admin-workspace__alerts">
           {error && <AdminAlert message={error} variant="error" />}
           {success && <AdminAlert message={success} variant="success" />}
         </div>
@@ -63,7 +63,7 @@ export default function AdminWorkspace({
 
       {tab === 'destinos' && (
         <>
-          <div className="lg:hidden flex flex-col gap-4">
+          <div className="admin-workspace__mobile">
             {!destinos.showForm && (
               <DestinoList
                 rows={destinos.filtered}
@@ -81,11 +81,8 @@ export default function AdminWorkspace({
             {destinos.showForm && <DestinoForm {...destinoFormProps} />}
           </div>
 
-          <div className="hidden lg:flex flex-1 min-h-0 gap-8 overflow-hidden">
-            <aside
-              className="w-[38%] shrink-0 h-full min-h-0 overflow-y-auto overscroll-contain admin-panel-scroll pr-1"
-              aria-label="Lista de destinos"
-            >
+          <div className="admin-workspace__split">
+            <aside className="admin-workspace__aside admin-panel-scroll" aria-label="Lista de destinos">
               <DestinoList
                 rows={destinos.filtered}
                 loading={destinos.loading}
@@ -100,10 +97,7 @@ export default function AdminWorkspace({
               />
             </aside>
 
-            <main
-              className="flex-1 min-w-0 h-full min-h-0 overflow-y-auto overscroll-contain admin-panel-scroll pl-1"
-              aria-label="Editor de destino"
-            >
+            <main className="admin-workspace__main admin-panel-scroll" aria-label="Editor de destino">
               {destinos.editorOpen ? (
                 <DestinoForm {...destinoFormProps} />
               ) : (
@@ -116,7 +110,7 @@ export default function AdminWorkspace({
 
       {tab === 'municipios' && (
         <>
-          <div className="lg:hidden flex flex-col gap-4">
+          <div className="admin-workspace__mobile">
             {!municipios.showForm && (
               <MunicipioCatalogList
                 rows={municipios.filtered}
@@ -142,11 +136,8 @@ export default function AdminWorkspace({
             )}
           </div>
 
-          <div className="hidden lg:flex flex-1 min-h-0 gap-8 overflow-hidden">
-            <aside
-              className="w-[38%] shrink-0 h-full min-h-0 overflow-y-auto overscroll-contain admin-panel-scroll pr-1"
-              aria-label="Lista de municipios"
-            >
+          <div className="admin-workspace__split">
+            <aside className="admin-workspace__aside admin-panel-scroll" aria-label="Lista de municipios">
               <MunicipioCatalogList
                 rows={municipios.filtered}
                 loading={municipios.loading}
@@ -159,10 +150,7 @@ export default function AdminWorkspace({
               />
             </aside>
 
-            <main
-              className="flex-1 min-w-0 h-full min-h-0 overflow-y-auto overscroll-contain admin-panel-scroll pl-1"
-              aria-label="Editor de municipio"
-            >
+            <main className="admin-workspace__main admin-panel-scroll" aria-label="Editor de municipio">
               {municipios.editorOpen ? (
                 <MunicipioCatalogForm
                   editingId={municipios.editingId}
@@ -174,14 +162,14 @@ export default function AdminWorkspace({
                   onCancel={municipios.cancelForm}
                 />
               ) : (
-                <div className="rounded-2xl border border-dashed border-[var(--color-border-strong)] p-10 text-center space-y-3">
-                  <p className="text-[var(--color-muted)] text-sm">
+                <div className="admin-empty admin-empty--spacious">
+                  <p className="admin-empty__text admin-empty__text--sm">
                     Elige un municipio de la lista o crea uno nuevo.
                   </p>
                   <button
                     type="button"
                     onClick={municipios.openCreate}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--color-brand)] text-[var(--color-on-brand)] text-sm font-semibold"
+                    className="ui-btn ui-btn--primary admin-btn-new"
                   >
                     Nuevo municipio
                   </button>

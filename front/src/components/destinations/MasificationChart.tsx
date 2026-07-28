@@ -12,28 +12,24 @@ function Bar({ label, value, delay = 0, highlight = false }: BarProps) {
   const color = getMasificationColor(value);
 
   return (
-    <div
-      className={`space-y-3 rounded-xl transition-colors ${
-        highlight ? 'p-4 -mx-1 bg-[var(--color-brand)]/8 border border-[var(--color-brand)]/25' : ''
-      }`}
-    >
-      <div className="flex justify-between items-end gap-3">
-        <span className="text-xs font-semibold tracking-widest text-[var(--color-primary)] uppercase">
+    <div className={`masif-bar ${highlight ? 'is-highlight' : ''}`}>
+      <div className="masif-bar__head">
+        <span className="masif-bar__label">
           {label}
           {highlight && (
-            <span className="ml-2 normal-case tracking-normal text-[var(--color-brand-dark)] font-bold">
+            <span className="masif-bar__label-hint">
               · Mejor época
             </span>
           )}
         </span>
-        <div className="text-right shrink-0">
-          <span className="text-sm font-semibold text-[var(--color-primary)]">{value}%</span>
-          <span className="text-xs text-[var(--color-muted)] ml-2">{getMasificationLabel(value)}</span>
+        <div className="masif-bar__values">
+          <span className="masif-bar__pct">{value}%</span>
+          <span className="masif-bar__tag">{getMasificationLabel(value)}</span>
         </div>
       </div>
-      <div className="w-full h-2.5 bg-[var(--color-primary)]/5 rounded-full overflow-hidden">
+      <div className="masif-bar__track">
         <div
-          className="h-full rounded-full transition-all duration-1000 ease-out"
+          className="masif-bar__fill"
           style={{ width: `${value}%`, backgroundColor: color, transitionDelay: `${delay}ms` }}
         />
       </div>
@@ -51,12 +47,12 @@ export default function MasificationChart({ julioAgosto, mayJunSeptOct, novAbril
   const best = getBestSeason({ mesesJulioAgosto: julioAgosto, mesesMayJunSeptOct: mayJunSeptOct, mesesNovAbril: novAbril });
 
   return (
-    <div className="space-y-8 p-6 md:p-8 ui-card">
+    <div className="ui-card masif-chart">
       <div>
-        <h2 className="font-serif text-xl sm:text-2xl font-medium text-[var(--color-primary)] tracking-tight mb-1">Cuándo ir (y cuándo no)</h2>
-        <p className="text-sm text-[var(--color-muted)]">Cuánta gente te vas a encontrar según la época.</p>
+        <h2 className="masif-chart__title">Cuándo ir (y cuándo no)</h2>
+        <p className="masif-chart__lead">Cuánta gente te vas a encontrar según la época.</p>
       </div>
-      <div className="space-y-7">
+      <div className="masif-chart__bars">
         <Bar label="Julio y Agosto" value={julioAgosto} delay={100} highlight={best.key === 'verano'} />
         <Bar label="Mayo, Junio, Septiembre y Octubre" value={mayJunSeptOct} delay={200} highlight={best.key === 'media'} />
         <Bar label="Noviembre — Abril" value={novAbril} delay={300} highlight={best.key === 'invierno'} />

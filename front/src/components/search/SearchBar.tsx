@@ -1,4 +1,5 @@
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { Search, SlidersHorizontal, X } from 'lucide-react';
 
 interface Props {
   q: string;
@@ -9,6 +10,14 @@ interface Props {
   activeCount: number;
 }
 
+const SEARCH_MODES = [
+  { id: 'all', label: 'Buscar todo', placeholder: 'Lugares que ver, pueblos bonitos, costas tranquilas...' },
+  { id: 'coast', label: 'Costa', placeholder: 'Calas, pueblos marineros, costa tranquila...' },
+  { id: 'villages', label: 'Pueblos', placeholder: 'Pueblos bonitos, escapadas con encanto...' },
+  { id: 'nature', label: 'Naturaleza', placeholder: 'Bosques, montaña, rutas, lagos...' },
+  { id: 'culture', label: 'Cultural', placeholder: 'Ciudades históricas, patrimonio, museos...' },
+] as const;
+
 export default function SearchBar({
   q,
   onQChange,
@@ -17,42 +26,94 @@ export default function SearchBar({
   onToggleFilters,
   activeCount,
 }: Props) {
+  const [mode, setMode] = useState<(typeof SEARCH_MODES)[number]['id']>('all');
+
+  const currentMode = useMemo(
+    () => SEARCH_MODES.find((item) => item.id === mode) ?? SEARCH_MODES[0],
+    [mode],
+  );
+
   return (
-    <div className="flex flex-col gap-2.5">
-      <div className="flex items-center gap-3 px-4 py-3.5 rounded-lg border border-[var(--color-border-strong)] bg-[var(--color-secondary)]/50 focus-within:border-[var(--color-brand)] transition-colors">
-        <Search className="w-5 h-5 text-[var(--color-muted)] shrink-0" />
-        <input
-          type="text"
-          placeholder="Costa, monte, pueblo con castillo…"
-          className="w-full bg-transparent text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none text-base"
-          value={q}
-          onChange={(e) => onQChange(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && onSearch()}
-        />
+    <div className="search-shell">
+      <div className="search-shell__card">
+        <div className="search-shell__tabs">
+          {SEARCH_MODES.map((item) => {
+            const isActive = item.id === currentMode.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setMode(item.id)}
+                className={`search-shell__tab ${isActive ? 'is-active' : ''}`}
+              >
+                {item.label}
+                <span aria-hidden className="search-shell__tab-indicator" />
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="search-shell__bar-wrap">
+          <div className="search-shell__bar">
+            <span className="search-shell__icon">
+              <Search aria-hidden />
+            </span>
+
+            <div className="search-shell__input-wrap">
+              <p className="search-shell__mode-label">
+                {currentMode.label}
+              </p>
+              <input
+                type="text"
+                placeholder={currentMode.placeholder}
+                className="search-shell__input"
+                value={q}
+                onChange={(e) => onQChange(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && onSearch()}
+                aria-label="Buscar destinos"
+              />
+            </div>
+
+            {q && (
+              <button
+                type="button"
+                onClick={() => onQChange('')}
+                className="search-shell__clear"
+                aria-label="Borrar búsqueda"
+              >
+                <X aria-hidden />
+              </button>
+            )}
+
+            <button
+              onClick={onSearch}
+              className="search-shell__submit touch-target"
+            >
+              Buscar
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="flex gap-2.5">
+
+      <div className="search-shell__footer">
         <button
           onClick={onToggleFilters}
-          className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border font-medium text-sm transition-all duration-200 touch-target ${
-            filtersOpen
-              ? 'border-[var(--color-brand)] bg-[var(--color-brand)]/10 text-[var(--color-brand-dark)]'
-              : 'border-[var(--color-border-strong)] text-[var(--color-primary)] hover:border-[var(--color-primary-light)]'
-          }`}
+          className={`search-shell__filter-btn touch-target ${filtersOpen ? 'is-open' : ''}`}
         >
-          <SlidersHorizontal className={`w-4 h-4 transition-transform duration-200 ${filtersOpen ? 'rotate-180' : ''}`} />
-          Afinar filtros
+          <SlidersHorizontal className="search-shell__filter-icon" aria-hidden />
+          Todos los filtros
           {activeCount > 0 && (
-            <span className="w-5 h-5 rounded-full bg-[var(--color-brand)] text-[var(--color-on-brand)] text-xs flex items-center justify-center font-semibold">
+            <span className="search-shell__filter-count">
               {activeCount}
             </span>
           )}
         </button>
-        <button
-          onClick={onSearch}
-          className="flex-1 px-5 py-3 rounded-lg bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold text-sm hover:bg-[var(--color-accent-hover)] transition-all duration-200 active:scale-[0.98] touch-target"
-        >
-          Enséñame sitios
-        </button>
+
+        <div className="search-shell__hint">
+          {activeCount > 0
+            ? `${activeCount} filtro${activeCount > 1 ? 's' : ''} activo${activeCount > 1 ? 's' : ''}`
+            : 'Afina por presupuesto, masificación, ubicación o estilo de viaje'}
+        </div>
       </div>
     </div>
   );

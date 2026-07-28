@@ -32,12 +32,12 @@ export default function AdminPanel() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--color-secondary)] font-sans lg:h-dvh lg:max-h-dvh lg:overflow-hidden lg:flex lg:flex-col">
+    <div className="admin-page">
       <Header />
 
-      <div className={`shrink-0 ${showForm ? 'hidden lg:block' : ''}`}>
+      <div className={showForm ? 'admin-page__hero--hidden-mobile' : undefined}>
         <PageHero
-          icon={<ShieldCheck className="w-6 h-6 text-[var(--color-brand)]" />}
+          icon={<ShieldCheck className="admin-page__hero-icon" />}
           title="Panel de administración"
           description="Gestiona destinos y municipios de forma sencilla, sin tecnicismos."
         />
@@ -45,24 +45,16 @@ export default function AdminPanel() {
 
       {showForm && <AdminMobileBackBar onBack={handleBack} />}
 
-      {/* Espaciado ajustado entre Hero y las Pestañas (pt-6 sm:pt-8 pb-4) */}
-      <div className="shrink-0 w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-10 pt-6 sm:pt-8 pb-4">
-        <div
-          className="flex gap-1 p-1 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-sm"
-          role="tablist"
-          aria-label="Sección del panel"
-        >
+      <div className="admin-page__tabs-wrap">
+        <div className="admin-tabs" role="tablist" aria-label="Sección del panel">
           <button
             type="button"
             role="tab"
             aria-selected={tab === 'destinos'}
             onClick={() => handleTabChange('destinos')}
-            className={`flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${tab === 'destinos'
-                ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)] shadow-sm'
-                : 'text-[var(--color-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-secondary)]'
-              }`}
+            className={`admin-tabs__tab${tab === 'destinos' ? ' admin-tabs__tab--active' : ''}`}
           >
-            <MapPinned className="w-4 h-4 shrink-0" />
+            <MapPinned className="icon-sm" />
             Destinos
           </button>
           <button
@@ -70,18 +62,15 @@ export default function AdminPanel() {
             role="tab"
             aria-selected={tab === 'municipios'}
             onClick={() => handleTabChange('municipios')}
-            className={`flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-colors ${tab === 'municipios'
-                ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)] shadow-sm'
-                : 'text-[var(--color-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-secondary)]'
-              }`}
+            className={`admin-tabs__tab${tab === 'municipios' ? ' admin-tabs__tab--active' : ''}`}
           >
-            <Building2 className="w-4 h-4 shrink-0" />
+            <Building2 className="icon-sm" />
             Municipios
           </button>
         </div>
       </div>
 
-      <div className="flex-1 min-h-0 flex flex-col lg:overflow-hidden">
+      <div className="admin-page__workspace">
         <AdminWorkspace
           tab={tab}
           onTabChange={handleTabChange}
@@ -91,7 +80,7 @@ export default function AdminPanel() {
         />
       </div>
 
-      <div className={`shrink-0 ${showForm ? 'hidden' : ''} lg:hidden`}>
+      <div className={`admin-page__footer${showForm ? ' admin-page__footer--hidden' : ''}`}>
         <Footer />
       </div>
     </div>

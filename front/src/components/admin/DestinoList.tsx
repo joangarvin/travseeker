@@ -30,27 +30,27 @@ export default function DestinoList({
   onUnlinkMunicipio,
 }: Props) {
   return (
-    <div className={`space-y-4 ${hiddenOnMobile ? 'hidden lg:block' : ''}`}>
-      <div className="flex items-center justify-between gap-3">
-        <h2 className="font-semibold text-[var(--color-primary)]">Destinos</h2>
+    <div className={`admin-list${hiddenOnMobile ? ' admin-list--desktop-only' : ''}`}>
+      <div className="admin-list__header">
+        <h2 className="admin-list__title">Destinos</h2>
         <button
           type="button"
           onClick={onCreate}
-          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--color-brand)] text-[var(--color-on-brand)] text-sm font-semibold touch-target"
+          className="ui-btn ui-btn--primary admin-btn-new touch-target"
         >
-          <Plus className="w-4 h-4" />
-          <span className="hidden sm:inline">Nuevo</span>
+          <Plus className="icon-sm" />
+          <span className="admin-btn-new__label">Nuevo</span>
         </button>
       </div>
 
       <ListToolbar query={query} onQueryChange={onQueryChange} queryPlaceholder="Buscar destino…" />
 
       {loading ? (
-        <p className="text-[var(--color-muted)] py-8 text-center">Cargando…</p>
+        <p className="admin-list__loading">Cargando…</p>
       ) : rows.length === 0 ? (
         <DestinoListEmpty onCreate={onCreate} />
       ) : (
-        <div className="space-y-3">
+        <div className="admin-list__items">
           {rows.map((row) => (
             <DestinoListItem
               key={row.id}

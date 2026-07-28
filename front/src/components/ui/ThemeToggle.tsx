@@ -7,10 +7,10 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="w-9 h-9 rounded-lg border border-[var(--color-border-strong)] flex items-center justify-center text-[var(--color-primary)]/80 hover:text-[var(--color-primary)] hover:border-[var(--color-brand-dark)] hover:bg-[var(--color-surface-2)] transition-colors"
+      className="theme-toggle"
       aria-label={theme === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
     >
-      {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+      {theme === 'light' ? <Moon aria-hidden /> : <Sun aria-hidden />}
     </button>
   );
 }

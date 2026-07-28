@@ -32,11 +32,11 @@ function AforoBar({ level }: { level: number }) {
   if (!level) return null;
   const color = level >= 4 ? 'var(--color-teja)' : 'var(--color-mostaza)';
   return (
-    <span className="flex items-center gap-0.5 shrink-0" aria-hidden>
+    <span className="aforo-bar" aria-hidden>
       {[1, 2, 3, 4].map((n) => (
         <span
           key={n}
-          className="w-1.5 h-3 rounded-[1px]"
+          className="aforo-bar__tick"
           style={{ background: n <= level ? color : 'var(--color-surface-2)' }}
         />
       ))}
@@ -77,23 +77,23 @@ function DestinationCard({
   };
 
   return (
-    <Link to={`/destino/${destino.id}`} className="group block h-full">
+    <Link to={`/destino/${destino.id}`} className="dest-card-link">
       <div
-        className="ficha-tilt relative rounded-lg overflow-hidden bg-[var(--color-surface)] border border-[var(--color-border-strong)] group-hover:border-[var(--color-primary-light)]/60 transition-colors duration-200 flex flex-col h-full"
+        className="dest-card ficha-tilt"
         style={{ '--tilt': TILTS[index % TILTS.length], boxShadow: 'var(--shadow-card)' } as CSSProperties}
       >
-        <div className={`relative overflow-hidden shrink-0 ${featured ? 'h-56 sm:h-72' : 'h-48 sm:h-56'}`}>
+        <div className={`dest-card__media ${featured ? 'dest-card__media--featured' : ''}`}>
           <img
             src={getImageUrl(destino.imagen, index)}
             alt={destino.nombre}
-            className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+            className="dest-card__img"
             loading="lazy"
             decoding="async"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-primary)]/35 via-transparent to-transparent pointer-events-none" />
+          <div className="dest-card__gradient" />
 
-          <div className="absolute top-3 right-3 w-9 h-9 rounded-lg ink-chip flex items-center justify-center card-actions-touch opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <ArrowUpRight className="w-4 h-4" />
+          <div className="dest-card__open ink-chip card-actions-touch">
+            <ArrowUpRight className="icon-sm" />
           </div>
 
           {enableCompare && (
@@ -101,40 +101,36 @@ function DestinationCard({
               type="button"
               onClick={handleCompare}
               disabled={!inCompare && !canAdd}
-              className={`absolute top-3 left-3 w-9 h-9 rounded-lg flex items-center justify-center card-actions-touch transition-all duration-200 opacity-0 group-hover:opacity-100 disabled:opacity-40 ${
-                inCompare
-                  ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)] border border-transparent'
-                  : 'ink-chip'
-              }`}
+              className={`dest-card__action dest-card__action--compare card-actions-touch ${inCompare ? 'is-active' : 'ink-chip'}`}
               aria-label={inCompare ? 'Quitar de comparación' : 'Añadir a comparación'}
             >
-              <GitCompare className="w-4 h-4" />
+              <GitCompare className="icon-sm" />
             </button>
           )}
           {enableCollection && user && (
             <button
               type="button"
               onClick={openCollection}
-              className="absolute top-3 left-13 w-9 h-9 rounded-lg ink-chip flex items-center justify-center card-actions-touch transition-opacity duration-200 opacity-0 group-hover:opacity-100"
+              className="dest-card__action dest-card__action--collection ink-chip card-actions-touch"
               aria-label="Guardar en colección"
             >
-              <Bookmark className="w-4 h-4" />
+              <Bookmark className="icon-sm" />
             </button>
           )}
         </div>
 
-        <div className={`flex-1 flex flex-col justify-between ${featured ? 'p-5 sm:p-6' : 'p-4 sm:p-5'}`}>
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-1.5 text-[var(--color-muted)] field-label">
-              <MapPin className="w-3.5 h-3.5 text-[var(--color-brand)] shrink-0" />
-              <span className="truncate">{ubicacion}</span>
+        <div className={`dest-card__body ${featured ? 'dest-card__body--featured' : ''}`}>
+          <div className="dest-card__meta-top">
+            <div className="dest-card__location field-label">
+              <MapPin className="dest-card__location-icon" />
+              <span>{ubicacion}</span>
             </div>
-            <h3 className={`font-serif font-medium text-[var(--color-primary)] tracking-tight leading-snug line-clamp-2 min-h-[2.6em] group-hover:text-[var(--color-brand-dark)] transition-colors ${featured ? 'text-xl sm:text-2xl' : 'text-lg sm:text-xl'}`}>
+            <h3 className={`dest-card__title ${featured ? 'dest-card__title--featured' : ''}`}>
               {destino.nombre}
             </h3>
           </div>
-          <div className="flex items-center justify-between gap-3 mt-4 pt-3 border-t border-[var(--color-border)]">
-            <span className="field-label text-[var(--color-primary-light)] truncate">
+          <div className="dest-card__footer">
+            <span className="dest-card__stats field-label">
               {presupuesto} · {masificacion}
             </span>
             <AforoBar level={aforoLevel(masificacion)} />

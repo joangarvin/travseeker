@@ -15,38 +15,38 @@ export default function BestSeasonCard({ data }: { data: SeasonalData }) {
   const bestColor = getMasificationColor(best.value);
 
   return (
-    <div className="ui-card overflow-hidden">
-      <div className="p-5 sm:p-6 flex flex-col gap-5">
-        <div className="flex items-start gap-4">
+    <div className="ui-card best-season-card">
+      <div className="best-season-card__body">
+        <div className="best-season-card__main">
           <div
-            className="w-14 h-14 rounded-lg flex items-center justify-center shrink-0 border border-[var(--color-border-strong)]"
+            className="best-season-card__icon-wrap"
             style={{ backgroundColor: `${bestColor}22`, color: bestColor }}
           >
-            <BestIcon className="w-7 h-7" />
+            <BestIcon className="best-season-card__icon" />
           </div>
-          <div className="flex-1 min-w-0">
-            <div className="field-label text-[var(--color-teja)] mb-1.5 flex items-center gap-1.5">
-              <CalendarCheck className="w-3.5 h-3.5" />
+          <div className="best-season-card__content">
+            <div className="best-season-card__eyebrow field-label">
+              <CalendarCheck className="icon-sm" />
               Cuándo ir
             </div>
-            <h3 className="font-serif text-xl sm:text-2xl font-medium text-[var(--color-primary)] tracking-tight">{best.label}</h3>
-            <p className="text-sm text-[var(--color-muted)]">{best.months}</p>
+            <h3 className="best-season-card__season">{best.label}</h3>
+            <p className="best-season-card__months">{best.months}</p>
           </div>
         </div>
-        <div className="flex items-center justify-between gap-3">
+        <div className="best-season-card__stats">
           <span
-            className="inline-flex items-center gap-1.5 text-sm font-semibold px-2.5 py-1 rounded-md"
+            className="best-season-card__badge"
             style={{ backgroundColor: `${bestColor}22`, color: bestColor }}
           >
-            <span className="w-2 h-2 rounded-sm" style={{ backgroundColor: bestColor }} />
+            <span className="best-season-card__badge-dot" style={{ backgroundColor: bestColor }} />
             {getMasificationLabel(best.value)}
           </span>
-          <span className="field-label text-[var(--color-muted)]">{best.value}% aforo</span>
+          <span className="best-season-card__aforo field-label">{best.value}% aforo</span>
         </div>
       </div>
-      <div className="px-5 sm:px-6 py-3 border-t border-[var(--color-border)] flex items-center gap-2 text-sm text-[var(--color-muted)]">
-        <TrendingUp className="w-4 h-4 text-[var(--color-teja)] shrink-0" />
-        Más concurrido en <span className="font-medium text-[var(--color-primary)]">{worst.label}</span>
+      <div className="best-season-card__footer">
+        <TrendingUp className="best-season-card__footer-icon" />
+        Más concurrido en <span className="best-season-card__footer-strong">{worst.label}</span>
         <span>({worst.months}) · {worst.value}%</span>
       </div>
     </div>

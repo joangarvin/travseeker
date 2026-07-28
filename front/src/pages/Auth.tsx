@@ -44,49 +44,41 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
+    <div className="page-shell">
       <Header />
 
-      <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-20 px-4 sm:px-6 grain overflow-hidden">
-        <div className="relative z-10 max-w-md mx-auto">
-          <div className="ui-card p-7 sm:p-8">
-            <div className="flex gap-1 mb-7 p-1 rounded-lg bg-[var(--color-surface-2)] border border-[var(--color-border)]">
+      <section className="auth-section grain">
+        <div className="auth-section__inner">
+          <div className="ui-card auth-card">
+            <div className="auth-tabs">
               <button
                 type="button"
                 onClick={() => { setMode('login'); setError(''); }}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md text-sm font-medium transition-colors ${
-                  mode === 'login'
-                    ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)]'
-                    : 'text-[var(--color-muted)] hover:text-[var(--color-primary)]'
-                }`}
+                className={`auth-tab ${mode === 'login' ? 'is-active' : ''}`}
               >
-                <LogIn className="w-4 h-4" />
+                <LogIn className="icon-sm" />
                 Entrar
               </button>
               <button
                 type="button"
                 onClick={() => { setMode('register'); setError(''); }}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md text-sm font-medium transition-colors ${
-                  mode === 'register'
-                    ? 'bg-[var(--color-brand)] text-[var(--color-on-brand)]'
-                    : 'text-[var(--color-muted)] hover:text-[var(--color-primary)]'
-                }`}
+                className={`auth-tab ${mode === 'register' ? 'is-active' : ''}`}
               >
-                <UserPlus className="w-4 h-4" />
+                <UserPlus className="icon-sm" />
                 Registro
               </button>
             </div>
 
-            <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[var(--color-primary)] mb-2 tracking-tight">
+            <h1 className="auth-title">
               {mode === 'login' ? 'Vuelve dentro' : 'Hazte un hueco'}
             </h1>
-            <p className="text-sm text-[var(--color-muted)] mb-6 leading-relaxed">
+            <p className="auth-lead">
               {mode === 'login'
                 ? 'Tus favoritos siguen donde los dejaste.'
                 : 'La cuenta es gratis y sirve para guardar sitios, no para llenarte el correo.'}
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="auth-form">
               {mode === 'register' && (
                 <Field id="nombre" label="Nombre">
                   <Input
@@ -130,15 +122,15 @@ export default function Auth() {
             </form>
 
             {mode === 'login' && (
-              <p className="text-center text-sm mt-4">
-                <Link to="/recuperar" className="text-[var(--color-nav)] hover:text-[var(--color-brand-dark)] hover:underline">
+              <p className="auth-footer-link">
+                <Link to="/recuperar" className="link-nav">
                   ¿Olvidaste tu contraseña?
                 </Link>
               </p>
             )}
 
-            <p className="text-center text-sm mt-6">
-              <Link to="/" className="text-[var(--color-brand-dark)] hover:underline">
+            <p className="auth-footer-home">
+              <Link to="/" className="link-brand">
                 Volver al inicio
               </Link>
             </p>

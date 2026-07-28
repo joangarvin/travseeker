@@ -14,7 +14,14 @@ interface Props {
   totalCount?: number;
 }
 
-const OFFSETS = ['', 'md:mt-4', 'md:mt-2', 'md:mt-5', 'md:mt-1', 'md:mt-3'];
+const OFFSET_CLASS = [
+  'featured-dest__item--offset-0',
+  'featured-dest__item--offset-1',
+  'featured-dest__item--offset-2',
+  'featured-dest__item--offset-3',
+  'featured-dest__item--offset-4',
+  'featured-dest__item--offset-5',
+];
 
 function FeaturedDestinations({
   destinos,
@@ -26,17 +33,17 @@ function FeaturedDestinations({
   const count = totalCount ?? destinos.length;
 
   return (
-    <section id="destinos" className="py-14 sm:py-20 px-4 sm:px-6 md:px-8 max-w-7xl mx-auto scroll-mt-20">
+    <section id="destinos" className="featured-dest">
       <ScrollReveal>
-        <div className="mb-8 sm:mb-12 max-w-2xl">
-          <span className="field-label text-[var(--color-teja)] mb-3 block">
+        <div className="featured-dest__header">
+          <span className="featured-dest__eyebrow field-label">
             {loading ? 'Cargando…' : `Escogidos a mano · ${count} destino${count !== 1 ? 's' : ''}`}
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium text-[var(--color-primary)] tracking-tight mb-3 sm:mb-4">
+          <h2 className="featured-dest__title">
             {title}
           </h2>
           {subtitle && (
-            <p className="text-[var(--color-muted)] text-base sm:text-lg leading-relaxed">{subtitle}</p>
+            <p className="featured-dest__subtitle">{subtitle}</p>
           )}
         </div>
       </ScrollReveal>
@@ -44,12 +51,12 @@ function FeaturedDestinations({
       {loading ? (
         <LoadingSkeleton count={6} />
       ) : destinos.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-7 items-start">
+        <div className="featured-dest__grid">
           {destinos.map((destino, i) => (
             <ScrollReveal
               key={destino.id}
               delay={((i % 3) + 1) as 1 | 2 | 3}
-              className={`${OFFSETS[i % OFFSETS.length]} ${i === 0 ? 'md:col-span-2 lg:col-span-1 lg:row-span-1' : ''}`}
+              className={`${OFFSET_CLASS[i % OFFSET_CLASS.length]} ${i === 0 ? 'featured-dest__item--hero' : ''}`}
             >
               <DestinationCard destino={destino} index={i} featured={i === 0 && destinos.length > 2} />
             </ScrollReveal>
@@ -58,7 +65,7 @@ function FeaturedDestinations({
       ) : (
         <ScrollReveal>
           <EmptyState
-            icon={<MapPin className="w-10 h-10" />}
+            icon={<MapPin className="icon-lg" />}
             title="Nada por aquí con esos filtros"
             description="Afloja el presupuesto o cambia de zona: España es más grande de lo que parece."
           />

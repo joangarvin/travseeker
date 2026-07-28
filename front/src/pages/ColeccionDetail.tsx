@@ -70,89 +70,89 @@ export default function ColeccionDetail() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-[var(--color-secondary)] flex flex-col items-center justify-center gap-4">
-        <p className="text-[var(--color-primary)] font-semibold text-xl">Inicia sesión para ver tus colecciones</p>
-        <Link to="/auth" className="text-[var(--color-brand-dark)] font-medium hover:underline">Iniciar sesión</Link>
+      <div className="page-center">
+        <p className="page-center__title">Inicia sesión para ver tus colecciones</p>
+        <Link to="/auth" className="link-brand">Iniciar sesión</Link>
       </div>
     );
   }
 
   if (error || !collection) {
     return (
-      <div className="min-h-screen bg-[var(--color-secondary)] flex flex-col items-center justify-center gap-4">
-        <p className="text-[var(--color-primary)] font-semibold text-xl">{error || 'Colección no encontrada'}</p>
-        <Link to="/colecciones" className="text-sm text-[var(--color-brand-dark)] hover:underline flex items-center gap-2">
-          <ArrowLeft className="w-4 h-4" /> Volver a colecciones
+      <div className="page-center">
+        <p className="page-center__title">{error || 'Colección no encontrada'}</p>
+        <Link to="/colecciones" className="page-center__link">
+          <ArrowLeft className="icon-sm" /> Volver a colecciones
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
+    <div className="page-shell">
       <Header />
 
-      <section className="relative pt-24 sm:pt-28 pb-10 sm:pb-12 px-4 sm:px-6 border-b border-[var(--color-border)] bg-[var(--color-surface)]/20 backdrop-blur-sm overflow-hidden">
-        <div className="relative z-10 max-w-7xl mx-auto">
-          <Link to="/colecciones" className="inline-flex items-center gap-2 text-[var(--color-muted)] hover:text-[var(--color-primary)] text-sm mb-6 transition-colors font-medium">
-            <ArrowLeft className="w-4 h-4" /> Colecciones
+      <section className="coleccion-detail-hero">
+        <div className="coleccion-detail-hero__inner">
+          <Link to="/colecciones" className="coleccion-detail-back">
+            <ArrowLeft className="icon-sm" /> Colecciones
           </Link>
 
           {editing ? (
-            <div className="max-w-2xl space-y-3">
+            <div className="coleccion-detail-edit">
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 maxLength={80}
-                className="w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] text-[var(--color-primary)] text-2xl font-serif placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]/35"
+                className="ui-input coleccion-detail-edit__title"
                 placeholder="Nombre"
               />
               <input
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
                 maxLength={280}
-                className="w-full px-4 py-2.5 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border-strong)] text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-brand)]/35"
+                className="ui-input"
                 placeholder="Descripción"
               />
-              <div className="flex items-center gap-2">
+              <div className="colecciones-form__colors">
                 {COLLECTION_COLORS.map((col) => (
                   <button
                     key={col.id}
                     type="button"
                     onClick={() => setColor(col.id)}
-                    className={`w-7 h-7 rounded-full transition-transform ${color === col.id ? 'ring-2 ring-offset-2 ring-offset-[var(--color-surface)] scale-110' : ''}`}
-                    style={{ backgroundColor: col.hex, '--tw-ring-color': col.hex } as React.CSSProperties}
+                    className={`colecciones-color-btn colecciones-color-btn--round ${color === col.id ? 'is-selected' : ''}`}
+                    style={{ backgroundColor: col.hex, color: col.hex }}
                     aria-label={col.label}
                   />
                 ))}
               </div>
-              <div className="flex gap-2">
-                <button onClick={handleSave} disabled={saving || !name.trim()} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--color-brand)] text-[var(--color-on-brand)] font-semibold hover:brightness-105 transition-all disabled:opacity-50">
-                  <Check className="w-4 h-4" /> {saving ? 'Guardando...' : 'Guardar'}
+              <div className="coleccion-detail-edit__actions">
+                <button type="button" onClick={handleSave} disabled={saving || !name.trim()} className="btn-cta">
+                  <Check className="icon-sm" /> {saving ? 'Guardando...' : 'Guardar'}
                 </button>
-                <button onClick={() => setEditing(false)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[var(--color-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-surface-2)] transition-colors">
-                  <X className="w-4 h-4" /> Cancelar
+                <button type="button" onClick={() => setEditing(false)} className="btn-ghost">
+                  <X className="icon-sm" /> Cancelar
                 </button>
               </div>
             </div>
           ) : (
-            <div className="flex flex-wrap items-end justify-between gap-4">
+            <div className="coleccion-detail-head">
               <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="w-3.5 h-3.5 rounded-full" style={{ backgroundColor: colorHex(collection.color) }} />
-                  <h1 className="font-serif text-4xl md:text-5xl font-medium text-[var(--color-primary)] tracking-tight">{collection.nombre}</h1>
+                <div className="coleccion-detail-head__title-row">
+                  <span className="coleccion-detail-head__dot" style={{ backgroundColor: colorHex(collection.color) }} />
+                  <h1 className="coleccion-detail-head__title">{collection.nombre}</h1>
                 </div>
-                {collection.descripcion && <p className="text-[var(--color-muted)] text-lg font-light max-w-2xl">{collection.descripcion}</p>}
-                <p className="text-[var(--color-muted)]/80 text-sm mt-2">
+                {collection.descripcion && <p className="coleccion-detail-head__desc">{collection.descripcion}</p>}
+                <p className="coleccion-detail-head__count">
                   {collection.items.length} {collection.items.length === 1 ? 'destino' : 'destinos'}
                 </p>
               </div>
-              <div className="flex gap-2">
-                <button onClick={() => setEditing(true)} className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-[var(--color-border-strong)] bg-[var(--color-surface)] text-[var(--color-primary-light)] text-sm font-semibold hover:border-[var(--color-brand)] hover:text-[var(--color-brand-dark)] hover:bg-[var(--color-surface-2)] transition-all shadow-sm">
-                  <Pencil className="w-4 h-4" /> Editar
+              <div className="coleccion-detail-head__actions">
+                <button type="button" onClick={() => setEditing(true)} className="btn-pill">
+                  <Pencil className="icon-sm" /> Editar
                 </button>
-                <button onClick={handleDelete} className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-[var(--color-border-strong)] bg-[var(--color-surface)] text-[var(--color-danger)] text-sm font-semibold hover:border-[var(--color-danger)] hover:bg-[var(--color-danger)]/5 transition-all shadow-sm">
-                  <Trash2 className="w-4 h-4" /> Eliminar
+                <button type="button" onClick={handleDelete} className="btn-pill btn-pill--danger">
+                  <Trash2 className="icon-sm" /> Eliminar
                 </button>
               </div>
             </div>
@@ -160,23 +160,23 @@ export default function ColeccionDetail() {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-6 md:px-10 pb-20 -mt-4">
+      <section className="coleccion-detail-section">
         {collection.items.length > 0 && (
-          <div className="mb-6 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] p-3 sm:p-4">
-            <div className="relative max-w-md">
-              <Search className="w-4 h-4 text-[var(--color-muted)] absolute left-3 top-1/2 -translate-y-1/2" />
+          <div className="ui-card coleccion-detail-search">
+            <div className="coleccion-detail-search__wrap">
+              <Search className="coleccion-detail-search__icon" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Buscar destino en la colección..."
-                className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-[var(--color-secondary)] border border-[var(--color-border-strong)] text-sm text-[var(--color-primary)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-brand)]"
+                className="coleccion-detail-search__input"
               />
             </div>
           </div>
         )}
 
         {visibleItems.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="colecciones-grid">
             {visibleItems.map((item, index) => (
               <ScrollReveal key={item.id} delay={(index % 3) as 0 | 1 | 2}>
                 <CollectionItemCard collectionId={collection.id} item={item} onRemove={handleRemoveItem} />
@@ -184,14 +184,14 @@ export default function ColeccionDetail() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)]">
-            <Compass className="w-10 h-10 text-[var(--color-muted)] mx-auto mb-4" />
-            <p className="text-[var(--color-muted)] mb-6">
+          <div className="ui-card coleccion-detail-empty">
+            <Compass className="coleccion-detail-empty__icon" />
+            <p className="coleccion-detail-empty__text">
               Esta lista está en blanco. Pásate por el mapa y trae algo.
             </p>
-            <div className="flex items-center justify-center gap-4">
-              <Link to="/mapa" className="text-[var(--color-brand-dark)] font-semibold hover:underline">Abrir el mapa</Link>
-              <Link to="/" className="text-[var(--color-brand-dark)] font-semibold hover:underline">Ver destinos</Link>
+            <div className="coleccion-detail-empty__links">
+              <Link to="/mapa" className="coleccion-detail-empty__link">Abrir el mapa</Link>
+              <Link to="/" className="coleccion-detail-empty__link">Ver destinos</Link>
             </div>
           </div>
         )}

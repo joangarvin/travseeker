@@ -14,7 +14,7 @@ export default function Home() {
   const { destinos, loading, isSearching, activeFilterCount, connectionError, searchDestinos } = useDestinos();
 
   return (
-    <div className="min-h-screen bg-[var(--color-secondary)] font-sans">
+    <div className="page-shell">
       <Header />
       <HeroSearch onSearch={searchDestinos} activeFilterCount={activeFilterCount} />
       {connectionError && <ConnectionError />}

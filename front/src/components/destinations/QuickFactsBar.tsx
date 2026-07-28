@@ -14,14 +14,14 @@ export default function QuickFactsBar({ presupuesto, masificacion, tipoTurismo }
   ];
 
   return (
-    <div className="sticky top-0 z-40 bg-[var(--color-secondary)]/95 border-b border-[var(--color-border-strong)] safe-top">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-3 sm:py-3.5">
-        <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-x-8 sm:gap-y-2">
+    <div className="quick-facts safe-top">
+      <div className="quick-facts__inner">
+        <div className="quick-facts__row">
           {facts.map(({ icon: Icon, label, value }) => (
-            <div key={label} className="flex items-center gap-2.5 text-sm min-w-0">
-              <Icon className="w-4 h-4 text-[var(--color-brand)] shrink-0" />
-              <span className="field-label text-[var(--color-muted)] shrink-0">{label}</span>
-              <span className="font-semibold text-[var(--color-primary)] truncate">{value}</span>
+            <div key={label} className="quick-facts__item">
+              <Icon className="quick-facts__icon" />
+              <span className="quick-facts__label field-label">{label}</span>
+              <span className="quick-facts__value">{value}</span>
             </div>
           ))}
         </div>

@@ -15,26 +15,24 @@ const STEPS = [
   },
 ];
 
-/* Escalones de la escalera diagonal (solo en pantallas medianas o más) */
-const INDENTS = ['md:ml-0', 'md:ml-[88px]', 'md:ml-[176px]'];
+const INDENT_CLASS = ['home-step__indent-0', 'home-step__indent-1', 'home-step__indent-2'];
 
 export default function HowItWorks() {
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-16 sm:py-24">
+    <section className="home-steps">
       <ScrollReveal>
-        <div className="mb-10 sm:mb-14 max-w-xl">
-          <span className="field-label text-[var(--color-teja)] mb-3 block">Sin magia</span>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium text-[var(--color-primary)] tracking-tight">
+        <div className="home-steps__header">
+          <span className="home-steps__eyebrow field-label">Sin magia</span>
+          <h2 className="home-steps__title">
             Sin magia. Método.
           </h2>
         </div>
       </ScrollReveal>
 
-      <div className="relative max-w-3xl">
-        {/* Ruta punteada que une los pasos, como trazo en un mapa */}
+      <div className="home-steps__track">
         <svg
           aria-hidden
-          className="hidden md:block absolute left-10 top-14 h-[calc(100%-56px)] w-[240px] pointer-events-none"
+          className="home-steps__svg"
           viewBox="0 0 240 260"
           preserveAspectRatio="none"
           fill="none"
@@ -48,22 +46,18 @@ export default function HowItWorks() {
           />
         </svg>
 
-        <div className="flex flex-col gap-10 sm:gap-12">
+        <div className="home-steps__list">
           {STEPS.map(({ title, text }, i) => (
-            <ScrollReveal key={title} delay={(i + 1) as 1 | 2 | 3} className={INDENTS[i]}>
-              <div className="flex items-center gap-5 sm:gap-7">
-                <span
-                  className={`font-mono leading-none text-6xl sm:text-[80px] select-none ${
-                    i === 2 ? 'text-[var(--color-brand)]' : 'text-[var(--color-primary)]/30'
-                  }`}
-                >
+            <ScrollReveal key={title} delay={(i + 1) as 1 | 2 | 3} className={INDENT_CLASS[i]}>
+              <div className="home-step">
+                <span className={`home-step__num ${i === 2 ? 'is-accent' : ''}`}>
                   {i + 1}
                 </span>
                 <div>
-                  <h3 className="font-serif text-xl sm:text-2xl font-medium text-[var(--color-primary)] mb-1">
+                  <h3 className="home-step__title">
                     {title}
                   </h3>
-                  <p className="text-[var(--color-muted)] text-sm sm:text-base leading-relaxed max-w-sm">
+                  <p className="home-step__text">
                     {text}
                   </p>
                 </div>

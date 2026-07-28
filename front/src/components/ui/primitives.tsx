@@ -21,11 +21,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const buttonVariants: Record<ButtonVariant, string> = {
-  primary: 'bg-[var(--color-brand)] text-[var(--color-on-brand)] hover:bg-[var(--color-accent-hover)] border-transparent',
-  secondary: 'bg-[var(--color-surface)] text-[var(--color-primary)] border-[var(--color-border-strong)] hover:bg-[var(--color-surface-2)]',
-  ghost: 'bg-transparent text-[var(--color-primary-light)] border-transparent hover:bg-[var(--color-surface-2)]',
-  danger: 'bg-transparent text-[var(--color-danger)] border-[var(--color-danger)]/30 hover:bg-[var(--color-danger)]/8',
-  mustard: 'bg-[var(--color-mostaza)] text-[#23281f] hover:brightness-105 border-transparent',
+  primary: 'ui-btn--primary',
+  secondary: 'ui-btn--secondary',
+  ghost: 'ui-btn--ghost',
+  danger: 'ui-btn--danger',
+  mustard: 'ui-btn--mustard',
 };
 
 export function Button({
@@ -40,16 +40,16 @@ export function Button({
   return (
     <button
       className={cx(
-        'inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold transition-all duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50',
+        'ui-btn',
         buttonVariants[variant],
-        fullWidth && 'w-full',
+        fullWidth && 'ui-btn--full',
         className,
       )}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       {...props}
     >
-      {loading && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
+      {loading && <Loader2 className="ui-btn__spinner" aria-hidden />}
       {children}
     </button>
   );
@@ -64,10 +64,7 @@ export function IconButton({ label, className, children, ...props }: IconButtonP
     <button
       aria-label={label}
       title={label}
-      className={cx(
-        'inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-transparent text-[var(--color-muted)] transition-colors hover:bg-[var(--color-surface-2)] hover:text-[var(--color-primary)] disabled:opacity-50',
-        className,
-      )}
+      className={cx('ui-icon-btn', className)}
       {...props}
     >
       {children}
@@ -86,12 +83,12 @@ interface FieldProps {
 export function Field({ id, label, hint, error, children }: FieldProps) {
   return (
     <div>
-      <label htmlFor={id} className="field-label mb-2 block text-[var(--color-mostaza)]">
+      <label htmlFor={id} className="ui-field__label field-label">
         {label}
       </label>
       {children}
       {(error || hint) && (
-        <p className={cx('mt-1.5 text-sm', error ? 'text-[var(--color-danger)]' : 'text-[var(--color-muted)]')} role={error ? 'alert' : undefined}>
+        <p className={cx(error ? 'ui-field__error' : 'ui-field__hint')} role={error ? 'alert' : undefined}>
           {error || hint}
         </p>
       )}
@@ -104,12 +101,12 @@ export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElem
 }
 
 export function Textarea({ className, ...props }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return <textarea className={cx('ui-input resize-y', className)} {...props} />;
+  return <textarea className={cx('ui-input', className)} style={{ resize: 'vertical' }} {...props} />;
 }
 
 export function Select({ className, children, ...props }: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
-    <select className={cx('ui-input select-field cursor-pointer', className)} {...props}>
+    <select className={cx('ui-input select-field', className)} style={{ cursor: 'pointer' }} {...props}>
       {children}
     </select>
   );
@@ -129,14 +126,14 @@ interface AlertProps extends HTMLAttributes<HTMLDivElement> {
 
 export function Alert({ tone = 'info', className, children, ...props }: AlertProps) {
   const tones = {
-    info: 'border-[var(--color-border-strong)] bg-[var(--color-surface-2)] text-[var(--color-primary)]',
-    success: 'border-[var(--color-brand)]/30 bg-[var(--color-brand)]/10 text-[var(--color-brand-dark)]',
-    error: 'border-[var(--color-danger)]/30 bg-[var(--color-danger)]/8 text-[var(--color-danger)]',
+    info: 'ui-alert--info',
+    success: 'ui-alert--success',
+    error: 'ui-alert--error',
   };
   return (
     <div
       role={tone === 'error' ? 'alert' : 'status'}
-      className={cx('rounded-lg border px-4 py-3 text-sm', tones[tone], className)}
+      className={cx('ui-alert', tones[tone], className)}
       {...props}
     >
       {children}
@@ -153,19 +150,19 @@ interface EmptyStateProps {
 
 export function EmptyState({ icon, title, description, action }: EmptyStateProps) {
   return (
-    <div className="ui-card flex flex-col items-center px-6 py-16 text-center">
-      {icon && <div className="mb-5 text-[var(--color-muted)] opacity-70">{icon}</div>}
-      <h3 className="font-serif text-xl sm:text-2xl font-medium text-[var(--color-primary)] tracking-tight">{title}</h3>
-      <p className="mt-3 max-w-md text-sm sm:text-base leading-relaxed text-[var(--color-muted)]">{description}</p>
-      {action && <div className="mt-7">{action}</div>}
+    <div className="ui-card ui-empty-state">
+      {icon && <div className="ui-empty-state__icon">{icon}</div>}
+      <h3 className="ui-empty-state__title">{title}</h3>
+      <p className="ui-empty-state__desc">{description}</p>
+      {action && <div className="ui-empty-state__action">{action}</div>}
     </div>
   );
 }
 
 export function Spinner({ label = 'Cargando' }: { label?: string }) {
   return (
-    <span className="inline-flex items-center gap-2 text-sm text-[var(--color-muted)]" role="status">
-      <Loader2 className="h-4 w-4 animate-spin text-[var(--color-brand)]" aria-hidden />
+    <span className="ui-spinner" role="status">
+      <Loader2 className="ui-spinner__icon" aria-hidden />
       {label}
     </span>
   );
@@ -186,15 +183,15 @@ export function SectionHeader({
   className?: string;
 }) {
   return (
-    <div className={cx(align === 'center' && 'text-center mx-auto', 'max-w-2xl mb-8 sm:mb-12', className)}>
+    <div className={cx('section-header', align === 'center' && 'section-header--center', className)}>
       {eyebrow && (
-        <span className="field-label text-[var(--color-teja)] mb-3 block">{eyebrow}</span>
+        <span className="section-header__eyebrow field-label">{eyebrow}</span>
       )}
-      <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-medium text-[var(--color-primary)] tracking-tight leading-[1.1]">
+      <h2 className="section-header__title">
         {title}
       </h2>
       {subtitle && (
-        <p className="mt-3 sm:mt-4 text-[var(--color-muted)] text-base sm:text-lg leading-relaxed">{subtitle}</p>
+        <p className="section-header__subtitle">{subtitle}</p>
       )}
     </div>
   );

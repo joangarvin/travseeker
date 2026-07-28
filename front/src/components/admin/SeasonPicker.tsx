@@ -19,15 +19,13 @@ function SeasonSlider({
   onChange: (v: number) => void;
 }) {
   return (
-    <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-2)] p-4 space-y-3">
-      <div className="flex items-center justify-between gap-3">
+    <div className="admin-season">
+      <div className="admin-season__head">
         <div>
-          <p className="text-sm font-semibold text-[var(--color-primary)]">{label}</p>
-          <p className="text-xs text-[var(--color-muted)]">{months}</p>
+          <p className="admin-season__label">{label}</p>
+          <p className="admin-season__months">{months}</p>
         </div>
-        <span className="text-lg font-bold tabular-nums text-[var(--color-brand-dark)] min-w-[3ch] text-right">
-          {value}%
-        </span>
+        <span className="admin-season__value">{value}%</span>
       </div>
       <input
         type="range"
@@ -36,9 +34,9 @@ function SeasonSlider({
         step={5}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full accent-[var(--color-brand)]"
+        className="admin-season__range"
       />
-      <div className="flex justify-between text-[10px] text-[var(--color-muted)]">
+      <div className="admin-season__scale">
         <span>Poco masificado</span>
         <span>Muy masificado</span>
       </div>
@@ -52,7 +50,7 @@ export default function SeasonPicker({ verano, media, baja, onChange }: Props) {
       label="Masificación por temporada"
       hint="Desliza cada barra según lo lleno que suele estar el destino en esas fechas. No hace falta ser exacto: una estimación visual vale."
     >
-      <div className="grid gap-3 sm:grid-cols-1">
+      <div className="admin-season-grid">
         <SeasonSlider
           label="Verano"
           months="Julio y agosto"

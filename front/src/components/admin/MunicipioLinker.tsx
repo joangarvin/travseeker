@@ -32,44 +32,37 @@ export default function MunicipioLinker({
   }, [catalog, linkedIds, query]);
 
   return (
-    <div className="space-y-4">
-      <p className="text-sm text-[var(--color-muted)]">
+    <div className="admin-linker">
+      <p className="admin-form__muted">
         Elige municipios del catálogo. Para crear o cambiar precios y conexiones, ve a la pestaña
         Municipios.
       </p>
 
-      <button
-        type="button"
-        onClick={onGoToCatalog}
-        className="text-sm font-semibold text-[var(--color-brand-dark)] hover:underline"
-      >
+      <button type="button" onClick={onGoToCatalog} className="admin-linker__link">
         Crear o editar municipios →
       </button>
 
-      <div className="flex flex-wrap gap-1.5">
+      <div className="admin-dest-card__tags">
         {linked.map((m) => (
-          <span
-            key={m.id}
-            className="inline-flex items-center gap-1.5 pl-2.5 pr-1 py-1 rounded-full bg-[var(--color-secondary)] text-xs text-[var(--color-primary)]"
-          >
+          <span key={m.id} className="admin-chip admin-chip--muted">
             {m.nombre}
             <button
               type="button"
               onClick={() => onUnlink(m.id, m.nombre)}
-              className="p-1 rounded-full text-[var(--color-muted)] hover:text-[var(--color-danger)] hover:bg-[var(--color-danger)]/10"
+              className="admin-chip__remove"
               aria-label={`Quitar ${m.nombre} de este destino`}
               title="Solo lo quita de este destino"
             >
-              <Trash2 className="w-3 h-3" />
+              <Trash2 className="icon-sm" />
             </button>
           </span>
         ))}
         {linked.length === 0 && (
-          <span className="text-xs text-[var(--color-muted)]">Ninguno en este destino aún</span>
+          <span className="admin-hint-xs">Ninguno en este destino aún</span>
         )}
       </div>
 
-      <div className="space-y-2">
+      <div className="admin-field">
         <input
           type="search"
           value={query}
@@ -78,9 +71,9 @@ export default function MunicipioLinker({
           className={adminInputClass}
         />
         {suggestions.length > 0 ? (
-          <ul className="rounded-xl border border-[var(--color-border)] divide-y divide-[var(--color-border)] overflow-hidden">
+          <ul className="admin-suggest-list">
             {suggestions.map((m) => (
-              <li key={m.id}>
+              <li key={m.id} className="admin-suggest-list__item">
                 <button
                   type="button"
                   disabled={linking}
@@ -88,11 +81,11 @@ export default function MunicipioLinker({
                     onLink(m.id);
                     setQuery('');
                   }}
-                  className="w-full flex items-center justify-between gap-2 px-3 py-2.5 text-left text-sm hover:bg-[var(--color-secondary)] disabled:opacity-50"
+                  className="admin-suggest-list__btn"
                 >
-                  <span className="text-[var(--color-primary)] font-medium truncate">{m.nombre}</span>
-                  <span className="inline-flex items-center gap-1 text-[var(--color-brand-dark)] shrink-0">
-                    <Plus className="w-4 h-4" />
+                  <span className="admin-suggest-list__name">{m.nombre}</span>
+                  <span className="admin-suggest-list__action">
+                    <Plus className="icon-sm" />
                     Añadir
                   </span>
                 </button>
@@ -100,11 +93,11 @@ export default function MunicipioLinker({
             ))}
           </ul>
         ) : query.trim() ? (
-          <p className="text-xs text-[var(--color-muted)]">
+          <p className="admin-hint-xs">
             No hay coincidencias libres. Créalo en la pestaña Municipios.
           </p>
         ) : catalog.filter((m) => !linkedIds.has(m.id)).length === 0 ? (
-          <p className="text-xs text-[var(--color-muted)]">
+          <p className="admin-hint-xs">
             Todos los municipios del catálogo ya están en este destino, o el catálogo está vacío.
           </p>
         ) : null}
