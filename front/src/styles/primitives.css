@@ -12,6 +12,7 @@
   font-size: 0.875rem;
   font-weight: 600;
   transition: all 0.15s ease;
+  cursor: pointer;
 }
 
 .ui-btn:active:not(:disabled) {

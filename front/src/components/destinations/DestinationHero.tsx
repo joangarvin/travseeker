@@ -89,7 +89,7 @@ export default function DestinationHero({
       <div className="dest-hero__topbar safe-top">
         <Link to="/" className="dest-hero__back ink-chip touch-target">
           <ArrowLeft className="icon-sm" />
-          <span className="dest-hero__back-label">Al cuaderno</span>
+          <span className="dest-hero__back-label">Volver</span>
         </Link>
         <div className="dest-hero__actions">
           <div className="dest-hero__theme">
@@ -149,16 +149,6 @@ export default function DestinationHero({
               <span aria-hidden className="dest-hero__facts-sep">·</span>
               <span>{tipoTurismo}</span>
             </p>
-          </div>
-
-          <div aria-hidden className="dest-hero__seal">
-            <span className="dest-hero__seal-text field-label">
-              Ficha
-              <br />
-              revisada
-              <br />
-              a mano
-            </span>
           </div>
         </div>
       </div>
