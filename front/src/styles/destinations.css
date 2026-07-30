@@ -249,6 +249,48 @@
   border-radius: 1px;
 }
 
+.dest-card__season-insight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.875rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-control);
+  background: var(--color-surface-2);
+}
+
+.dest-card__season-reason {
+  flex: 1;
+  margin: 0;
+  color: var(--color-primary-light);
+  font-size: 0.8125rem;
+  line-height: 1.35;
+}
+
+.season-crowd-ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 4.25rem;
+  height: 4.25rem;
+  flex-shrink: 0;
+}
+
+.season-crowd-ring svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.season-crowd-ring circle { fill: none; stroke-width: 4; }
+.season-crowd-ring__track { stroke: var(--color-border); }
+.season-crowd-ring__value { stroke-linecap: round; transition: stroke-dashoffset .35s ease; }
+.season-crowd-ring__number { color: var(--color-primary); font-size: .875rem; font-weight: 700; line-height: 1; z-index: 1; }
+.season-crowd-ring__number small { font-size: .55rem; }
+.season-crowd-ring__label { position: absolute; bottom: .65rem; color: var(--color-muted); font-size: .48rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+
 /* Featured destinations section */
 .featured-dest {
   padding: 3.5rem 1rem;
