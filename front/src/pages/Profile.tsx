@@ -15,6 +15,7 @@ import {
   Sun,
   User as UserIcon,
   Users,
+  Trash2,
 } from 'lucide-react';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
@@ -28,6 +29,7 @@ import { uploadAvatar } from '../api/upload';
 import ImageUploadField from '../components/ui/ImageUploadField';
 import { getDisplayName } from '../utils/user';
 import type { UserPreferences } from '../types/user';
+import { createAlert, deleteAlert, getAlerts, type DecisionAlert } from '../api/alerts';
 
 type Tab = 'perfil' | 'preferencias' | 'seguridad';
 
@@ -45,6 +47,7 @@ const LOCALES = [
 
 const TRAVEL_TIPOS = ['Cultural', 'Naturaleza', 'Sol y playa', 'Rural', 'Montaña', 'Patrimonial'];
 const TRAVEL_PRESUPUESTOS = ['Bajo', 'Medio-Bajo', 'Medio', 'Medio-Alto', 'Alto'];
+const MONTHS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
 function Toggle({ checked, onChange, label, description, icon: Icon }: {
   checked: boolean;
@@ -98,6 +101,8 @@ export default function Profile() {
   const [travelTipos, setTravelTipos] = useState<string[]>([]);
   const [travelPresupuesto, setTravelPresupuesto] = useState('');
   const [avoidCrowds, setAvoidCrowds] = useState(false);
+  const [alerts, setAlerts] = useState<DecisionAlert[]>([]);
+  const [alertMonth, setAlertMonth] = useState('');
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -128,6 +133,26 @@ export default function Profile() {
     setTravelPresupuesto(typeof travel.presupuesto === 'string' ? travel.presupuesto : '');
     setAvoidCrowds(travel.evitarMasificacion ?? false);
   }, [user]);
+
+  useEffect(() => {
+    if (!token) return;
+    getAlerts(token).then(setAlerts).catch(() => {});
+  }, [token]);
+
+  const handleCreateAlert = async () => {
+    if (!token) return;
+    try {
+      const alert = await createAlert({ month: alertMonth ? Number(alertMonth) : null, tipos: travelTipos, presupuesto: travelPresupuesto || null, avoidCrowds }, token);
+      setAlerts((current) => [alert, ...current]);
+      flash('ok', 'Alerta creada');
+    } catch (err) { flash('error', err instanceof ApiError ? err.message : 'No se pudo crear la alerta'); }
+  };
+
+  const handleDeleteAlert = async (id: string) => {
+    if (!token) return;
+    await deleteAlert(id, token);
+    setAlerts((current) => current.filter((alert) => alert.id !== id));
+  };
 
   const memberSince = useMemo(() => {
     if (!user) return '';
@@ -440,6 +465,16 @@ export default function Profile() {
               <div className="profile-divider profile-divider--tight">
                 <Toggle checked={notifications} onChange={setNotifications} icon={Bell} label="Notificaciones" description="Recibe avisos sobre nuevos destinos y cambios en tus favoritos." />
                 <Toggle checked={newsletter} onChange={setNewsletter} icon={Send} label="Newsletter" description="Guías de viaje y recomendaciones mensuales en tu email." />
+              </div>
+
+              <div className="profile-divider profile-divider--tight">
+                <div className="profile-subhead"><Bell className="icon-sm" style={{ color: 'var(--color-brand-dark)' }} /><p className="profile-subhead__title">Alertas de decisión</p></div>
+                <p className="profile-subhead__lead">Te avisaremos cuando haya novedades editoriales que encajen con este plan, no precios inventados.</p>
+                <div className="profile-form__grid">
+                  <select value={alertMonth} onChange={(e) => setAlertMonth(e.target.value)} className="ui-input" aria-label="Mes de la alerta"><option value="">Cualquier mes</option>{MONTHS.map((month, index) => <option key={month} value={index + 1}>{month}</option>)}</select>
+                  <button type="button" onClick={handleCreateAlert} className="btn-pill">Crear alerta con mis preferencias</button>
+                </div>
+                {alerts.map((alert) => <div key={alert.id} className="profile-alert"><span>{alert.month ? `${MONTHS[alert.month - 1]} · ` : ''}{alert.avoidCrowds ? 'evitar aglomeraciones' : 'sin prioridad de afluencia'}</span><button type="button" onClick={() => handleDeleteAlert(alert.id)} aria-label="Eliminar alerta"><Trash2 className="icon-sm" /></button></div>)}
               </div>
 
               <div className="profile-form__actions">
