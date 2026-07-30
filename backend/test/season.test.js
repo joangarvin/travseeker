@@ -29,3 +29,9 @@ test('prioriza menor afluencia y explica el resultado si se solicita', () => {
   assert.equal(ranked[0].seasonCrowd, 35);
   assert.match(ranked[0].matchReason, /Julio/);
 });
+
+test('prioriza la afluencia media si se evita gente sin seleccionar mes', () => {
+  const busy = { ...quiet, nombre: 'Concurrido', mesesJulioAgosto: 90, mesesMayJunSeptOct: 80, mesesNovAbril: 70 };
+  const ranked = rankForSeason([busy, quiet], { month: null, avoidCrowds: true });
+  assert.deepEqual(ranked.map((item) => item.nombre), ['Calma', 'Concurrido']);
+});

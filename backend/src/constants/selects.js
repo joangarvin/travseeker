@@ -6,6 +6,9 @@ const LIST_SELECT = {
   masificacion: true,
   ubicacion: true,
   tipoTurismoPrincipal: true,
+  mesesJulioAgosto: true,
+  mesesMayJunSeptOct: true,
+  mesesNovAbril: true,
 };
 
 const MAP_SELECT = {
@@ -18,6 +21,9 @@ const MAP_SELECT = {
   masificacion: true,
   ubicacion: true,
   tipoTurismoPrincipal: true,
+  mesesJulioAgosto: true,
+  mesesMayJunSeptOct: true,
+  mesesNovAbril: true,
 };
 
 const COMPARE_SELECT = {

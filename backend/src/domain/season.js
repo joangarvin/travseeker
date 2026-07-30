@@ -26,7 +26,15 @@ function seasonReason(destino, month) {
 }
 
 function rankForSeason(destinos, { month, avoidCrowds }) {
-  if (!month) return destinos;
+  if (!month) {
+    if (!avoidCrowds) return destinos;
+    const overallCrowd = (destino) => {
+      const values = [destino.mesesJulioAgosto, destino.mesesMayJunSeptOct, destino.mesesNovAbril]
+        .filter(Number.isFinite);
+      return values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : Number.MAX_SAFE_INTEGER;
+    };
+    return [...destinos].sort((a, b) => overallCrowd(a) - overallCrowd(b) || a.nombre.localeCompare(b.nombre, 'es'));
+  }
 
   return destinos
     .map((destino) => {
