@@ -101,13 +101,21 @@ export default function ReviewSection({ destinoId }: Props) {
             </h2>
           </div>
           <div className="reviews-section__score-wrap">
-            <p className="reviews-section__score">
-              {stats.count > 0 ? stats.average.toFixed(1) : '—'}
-            </p>
-            <StarRating value={stats.average} readOnly size={14} className="reviews-section__stars" />
-            <p className="reviews-section__count field-label">
-              {stats.count} {stats.count === 1 ? 'firma' : 'firmas'}
-            </p>
+            {stats.count > 0 ? (
+              <>
+                <p className="reviews-section__score">
+                  {stats.average.toFixed(1)}
+                </p>
+                <StarRating value={stats.average} readOnly size={14} className="reviews-section__stars" />
+                <p className="reviews-section__count field-label">
+                  {stats.count} {stats.count === 1 ? 'firma' : 'firmas'}
+                </p>
+              </>
+            ) : (
+              <p className="reviews-section__count field-label">
+                Ficha editorial · sin firmas aún
+              </p>
+            )}
           </div>
         </div>
 

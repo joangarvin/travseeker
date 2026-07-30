@@ -38,6 +38,7 @@ export default function ListToolbar({
           value={sortValue}
           onChange={(e) => onSortChange(e.target.value)}
           className="list-toolbar__select ui-input"
+          aria-label="Ordenar por"
         >
           {sortOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>

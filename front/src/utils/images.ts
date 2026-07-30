@@ -4,6 +4,7 @@ export type ImagePreset =
   | 'card'
   | 'hero'
   | 'thumb'
+  | 'collage'
   | 'map'
   | 'preview'
   | 'avatar-sm'
@@ -13,7 +14,8 @@ export type ImagePreset =
 const PRESETS: Record<ImagePreset, string> = {
   card: 'f_auto,q_auto,w_480,c_fill,g_auto',
   hero: 'f_auto,q_auto,w_1600,c_fill,g_auto',
-  thumb: 'f_auto,q_auto,w_160,c_fill,g_auto',
+  thumb: 'f_auto,q_auto,w_320,c_fill,g_auto',
+  collage: 'f_auto,q_auto,w_400,c_fill,g_auto',
   map: 'f_auto,q_auto,w_360,c_fill,g_auto',
   preview: 'f_auto,q_auto,w_800,c_fill,g_auto',
   'avatar-sm': 'f_auto,q_auto,w_64,c_fill,g_face',

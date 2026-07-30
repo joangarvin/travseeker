@@ -12,6 +12,7 @@ interface Props {
   subtitle?: string;
   loading?: boolean;
   totalCount?: number;
+  isSearching?: boolean;
 }
 
 const OFFSET_CLASS = [
@@ -29,6 +30,7 @@ function FeaturedDestinations({
   subtitle,
   loading = false,
   totalCount,
+  isSearching = false,
 }: Props) {
   const count = totalCount ?? destinos.length;
 
@@ -37,7 +39,11 @@ function FeaturedDestinations({
       <ScrollReveal>
         <div className="featured-dest__header">
           <span className="featured-dest__eyebrow field-label">
-            {loading ? 'Cargando…' : `Escogidos a mano · ${count} destino${count !== 1 ? 's' : ''}`}
+            {loading
+              ? 'Cargando…'
+              : isSearching
+                ? `${count} resultado${count !== 1 ? 's' : ''}`
+                : `Escogidos a mano · ${count} destino${count !== 1 ? 's' : ''}`}
           </span>
           <h2 className="featured-dest__title">
             {title}

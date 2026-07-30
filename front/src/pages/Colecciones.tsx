@@ -27,15 +27,18 @@ function CoverCollage({ covers, color }: { covers: string[]; color: string }) {
   }
   return (
     <div className="coleccion-cover__grid">
-      {covers.slice(0, 4).map((src, i) => (
-        <img
-          key={i}
-          src={getImageUrl(src, i, 'thumb')}
-          alt=""
-          className={`${covers.length === 1 ? 'span-all' : ''} ${covers.length === 3 && i === 0 ? 'span-rows' : ''}`}
-          loading="lazy"
-        />
-      ))}
+      {covers.slice(0, 4).map((src, i) => {
+        const isLarge = covers.length === 1 || (covers.length === 3 && i === 0);
+        return (
+          <img
+            key={i}
+            src={getImageUrl(src, i, isLarge ? 'card' : 'collage')}
+            alt=""
+            className={`${covers.length === 1 ? 'span-all' : ''} ${covers.length === 3 && i === 0 ? 'span-rows' : ''}`}
+            loading="lazy"
+          />
+        );
+      })}
     </div>
   );
 }

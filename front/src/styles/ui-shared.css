@@ -1,16 +1,18 @@
 .list-toolbar {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.75rem;
   align-items: stretch;
-  justify-content: space-between;
   margin-bottom: 1.5rem;
   padding: 0.75rem;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .list-toolbar__search {
   position: relative;
   width: 100%;
+  min-width: 0;
 }
 
 .list-toolbar__search-icon {
@@ -26,10 +28,19 @@
 
 .list-toolbar__input {
   padding-left: 2.5rem !important;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .list-toolbar__select {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding-right: 2rem;
   cursor: pointer;
+  text-overflow: ellipsis;
 }
 
 .page-loader {
@@ -274,18 +285,19 @@
 
 @media (min-width: 640px) {
   .list-toolbar {
-    flex-direction: row;
+    grid-template-columns: minmax(0, 1fr) minmax(10.5rem, 13rem);
     align-items: center;
     padding: 1rem;
   }
 
   .list-toolbar__search {
-    max-width: 28rem;
+    max-width: none;
   }
 
   .list-toolbar__select {
-    width: auto;
-    min-width: 11rem;
+    width: 100%;
+    min-width: 0;
+    max-width: 13rem;
   }
 
   .loading-skeleton {
@@ -397,4 +409,32 @@
   width: 1.5rem;
   height: 1.5rem;
   flex-shrink: 0;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 6000;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  background: var(--color-brand-deep);
+  color: var(--color-on-deep);
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-card);
+  animation: toastIn 0.25s ease-out;
+  pointer-events: none;
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }

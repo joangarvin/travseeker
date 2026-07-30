@@ -356,7 +356,8 @@
 .dest-hero {
   position: relative;
   display: flex;
-  min-height: 58vh;
+  min-height: 52vh;
+  max-height: 72vh;
   width: 100%;
   flex-direction: column;
   justify-content: flex-end;
@@ -366,13 +367,13 @@
 
 @media (min-width: 640px) {
   .dest-hero {
-    min-height: 62vh;
+    min-height: 56vh;
   }
 }
 
 @media (min-width: 768px) {
   .dest-hero {
-    min-height: 68vh;
+    min-height: 60vh;
   }
 }
 
@@ -397,15 +398,16 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
+  /* Degradado solo en extremos: la foto se ve ~60–70% del área */
   background:
-    linear-gradient(to bottom, rgba(12, 20, 16, 0.55) 0%, rgba(12, 20, 16, 0.08) 32%, transparent 48%),
-    linear-gradient(to top, rgba(12, 20, 16, 0.92) 0%, rgba(12, 20, 16, 0.5) 42%, transparent 78%);
+    linear-gradient(to bottom, rgba(12, 20, 16, 0.42) 0%, rgba(12, 20, 16, 0.06) 22%, transparent 38%),
+    linear-gradient(to top, rgba(12, 20, 16, 0.88) 0%, rgba(12, 20, 16, 0.35) 38%, transparent 68%);
 }
 
 .dest-hero__grain {
   position: absolute;
   inset: 0;
-  opacity: 0.25;
+  opacity: 0.12;
   pointer-events: none;
 }
 
@@ -1045,6 +1047,41 @@
   }
 }
 
+.dest-detail__toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dest-detail__toc-link {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-muted);
+  text-decoration: none;
+  padding: 0.35rem 0;
+  transition: color 0.15s ease;
+}
+
+.dest-detail__toc-link:hover {
+  color: var(--color-primary);
+}
+
+@media (min-width: 1024px) {
+  .dest-detail__toc {
+    position: sticky;
+    top: calc(var(--header-height, 64px) + 0.5rem);
+    z-index: 20;
+    background: color-mix(in srgb, var(--color-secondary) 92%, transparent);
+    backdrop-filter: blur(8px);
+    margin-left: -0.25rem;
+    margin-right: -0.25rem;
+    padding: 0.75rem 0.25rem;
+  }
+}
+
 .dest-detail__layout {
   display: grid;
   grid-template-columns: 1fr;
@@ -1207,6 +1244,26 @@
   border-radius: 0.5rem;
   color: var(--color-muted);
   font-size: 0.875rem;
+}
+
+.dest-detail__muni-more {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0.5rem;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.dest-detail__muni-more:hover {
+  background: var(--color-surface-2);
+  border-color: var(--color-primary-light);
 }
 
 /* Related destinations */

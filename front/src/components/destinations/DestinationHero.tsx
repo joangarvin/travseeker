@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Share2, Heart, MapPin, Bookmark, GitCompare } from 'lucide-react';
 import { getImageUrl, getHeroSrcSet } from '../../utils/images';
 import ThemeToggle from '../ui/ThemeToggle';
+import Toast from '../ui/Toast';
 import AddToCollectionModal from '../collections/AddToCollectionModal';
 import { useAuth } from '../../context/AuthContext';
 import { useCompare } from '../../context/CompareContext';
@@ -32,6 +33,8 @@ export default function DestinationHero({
   const [heroLoaded, setHeroLoaded] = useState(false);
   const [toggling, setToggling] = useState(false);
   const [collectionOpen, setCollectionOpen] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+  const dismissToast = useCallback(() => setToast(null), []);
 
   const saved = isFavorite(destinoId);
   const inCompare = isInCompare(destinoId);
@@ -50,10 +53,21 @@ export default function DestinationHero({
   };
 
   const handleShare = async () => {
-    if (navigator.share) {
-      await navigator.share({ title: nombre, url: window.location.href });
-    } else {
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: nombre, url: window.location.href });
+        return;
+      }
       await navigator.clipboard.writeText(window.location.href);
+      setToast('Enlace copiado');
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') return;
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        setToast('Enlace copiado');
+      } catch {
+        setToast('No se pudo compartir');
+      }
     }
   };
 
@@ -84,7 +98,7 @@ export default function DestinationHero({
         fetchPriority="high"
       />
       <div className="dest-hero__overlay" />
-      <div className="dest-hero__grain grain" />
+      <div className="dest-hero__grain" aria-hidden />
 
       <div className="dest-hero__topbar safe-top">
         <Link to="/" className="dest-hero__back ink-chip touch-target">
@@ -156,6 +170,7 @@ export default function DestinationHero({
       {collectionOpen && (
         <AddToCollectionModal destinoId={destinoId} destinoNombre={nombre} onClose={() => setCollectionOpen(false)} />
       )}
+      <Toast message={toast} onDismiss={dismissToast} />
     </div>
   );
 }

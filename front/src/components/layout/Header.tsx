@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Globe, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import logo from '../../assets/logo.png';
 import ThemeToggle from '../ui/ThemeToggle';
 import UserMenu from '../auth/UserMenu';
@@ -71,13 +71,6 @@ export default function Header() {
             </nav>
 
             <div className="site-header__actions">
-              <button
-                type="button"
-                className="site-header__locale"
-              >
-                <Globe aria-hidden />
-                ES
-              </button>
               <ThemeToggle />
               <UserMenu />
             </div>
