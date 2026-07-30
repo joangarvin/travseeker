@@ -5,6 +5,7 @@ import type {
   CollectionForDestino,
   CollectionInput,
   PublicCollection,
+  CollectionMember,
 } from '../types/collection';
 
 export function getCollections(token: string, signal?: AbortSignal) {
@@ -62,10 +63,10 @@ export function addToCollection(collectionId: string, destinoId: string, token: 
   });
 }
 
-export function updateItemNotes(collectionId: string, destinoId: string, notas: string, token: string) {
-  return apiFetch<{ notas: string | null }>(`/api/colecciones/${collectionId}/items/${destinoId}`, {
+export function updateCollectionItem(collectionId: string, destinoId: string, data: { notas?: string; dayIndex?: number | null; status?: 'idea' | 'confirmed' | 'booked'; sortOrder?: number }, token: string) {
+  return apiFetch<{ id: string; destinoId: string; notas: string | null; dayIndex: number | null; status: 'idea' | 'confirmed' | 'booked'; sortOrder: number }>(`/api/colecciones/${collectionId}/items/${destinoId}`, {
     method: 'PATCH',
-    body: JSON.stringify({ notas }),
+    body: JSON.stringify(data),
     token,
   });
 }
@@ -75,4 +76,16 @@ export function removeFromCollection(collectionId: string, destinoId: string, to
     method: 'DELETE',
     token,
   });
+}
+
+export function addCollectionMember(collectionId: string, email: string, role: 'editor' | 'viewer', token: string) {
+  return apiFetch<CollectionMember>(`/api/colecciones/${collectionId}/members`, { method: 'POST', body: JSON.stringify({ email, role }), token });
+}
+
+export function updateCollectionMember(collectionId: string, memberId: string, role: 'editor' | 'viewer', token: string) {
+  return apiFetch<CollectionMember>(`/api/colecciones/${collectionId}/members/${memberId}`, { method: 'PATCH', body: JSON.stringify({ role }), token });
+}
+
+export function removeCollectionMember(collectionId: string, memberId: string, token: string) {
+  return apiFetch<{ removed: boolean }>(`/api/colecciones/${collectionId}/members/${memberId}`, { method: 'DELETE', token });
 }

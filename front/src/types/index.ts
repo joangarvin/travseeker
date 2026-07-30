@@ -17,6 +17,7 @@ export interface Municipio {
   conexiones: string | null;
   tipoTurismo: string | null;
 }
+export interface Place { id: string; nombre: string; categoria: string; descripcion: string | null; latitud: number; longitud: number; website: string | null; sortOrder: number }
 
 export interface ComparableDestino {
   id: string;
@@ -56,4 +57,5 @@ export interface DestinoDetail {
   longitud?: number | null;
   destinosItem?: string | null;
   municipios: Municipio[];
+  places: Place[];
 }

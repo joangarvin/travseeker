@@ -4,31 +4,40 @@ import { MapPin, Trash2, Check } from 'lucide-react';
 import { getImageUrl } from '../../utils/images';
 import { parseJsonSafe } from '../../utils/parseJson';
 import { useAuth } from '../../context/AuthContext';
-import { updateItemNotes, removeFromCollection } from '../../api/collections';
+import { updateCollectionItem, removeFromCollection } from '../../api/collections';
 import type { CollectionItem } from '../../types/collection';
 
 interface Props {
   collectionId: string;
   item: CollectionItem;
   onRemove: (destinoId: string) => void;
+  onUpdate?: (item: Pick<CollectionItem, 'destinoId' | 'notas' | 'dayIndex' | 'status' | 'sortOrder'>) => void;
+  canEdit?: boolean;
 }
 
-export default function CollectionItemCard({ collectionId, item, onRemove }: Props) {
+export default function CollectionItemCard({ collectionId, item, onRemove, onUpdate, canEdit = true }: Props) {
   const { token } = useAuth();
   const [notas, setNotas] = useState(item.notas ?? '');
   const [savedNotas, setSavedNotas] = useState(item.notas ?? '');
+  const [dayIndex, setDayIndex] = useState<number | ''>(item.dayIndex ?? '');
+  const [status, setStatus] = useState(item.status);
+  const [sortOrder, setSortOrder] = useState(item.sortOrder);
+  const [savedPlanning, setSavedPlanning] = useState(`${item.dayIndex ?? ''}|${item.status}|${item.sortOrder}`);
   const [saving, setSaving] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
   const [removing, setRemoving] = useState(false);
 
-  const dirty = notas !== savedNotas;
+  const planningKey = `${dayIndex}|${status}|${sortOrder}`;
+  const dirty = notas !== savedNotas || planningKey !== savedPlanning;
 
   const saveNotes = async () => {
     if (!token || !dirty || saving) return;
     setSaving(true);
     try {
-      await updateItemNotes(collectionId, item.destinoId, notas, token);
+      const updated = await updateCollectionItem(collectionId, item.destinoId, { notas, dayIndex: dayIndex === '' ? null : dayIndex, status, sortOrder }, token);
       setSavedNotas(notas);
+      setSavedPlanning(planningKey);
+      onUpdate?.(updated);
       setJustSaved(true);
       setTimeout(() => setJustSaved(false), 1600);
     } finally {
@@ -69,6 +78,11 @@ export default function CollectionItemCard({ collectionId, item, onRemove }: Pro
         </div>
 
         <div className="collection-item-card__notes">
+          <div className="collection-item-card__planning">
+            <label>Día<input type="number" min="1" max="365" value={dayIndex} onChange={(e) => setDayIndex(e.target.value ? Number(e.target.value) : '')} onBlur={saveNotes} readOnly={!canEdit} /></label>
+            <label>Estado<select value={status} onChange={(e) => setStatus(e.target.value as typeof status)} onBlur={saveNotes} disabled={!canEdit}><option value="idea">Idea</option><option value="confirmed">Confirmado</option><option value="booked">Reservado</option></select></label>
+            {canEdit && <label>Orden<input type="number" min="0" max="9999" value={sortOrder} onChange={(e) => setSortOrder(Number(e.target.value))} onBlur={saveNotes} /></label>}
+          </div>
           <textarea
             value={notas}
             onChange={(e) => setNotas(e.target.value)}
@@ -77,11 +91,12 @@ export default function CollectionItemCard({ collectionId, item, onRemove }: Pro
             maxLength={500}
             placeholder="Añade una nota (mejor en mayo, reservar hotel...)"
             className="collection-item-card__textarea"
+            readOnly={!canEdit}
           />
           <div className="collection-item-card__counter">{notas.length}/500</div>
         </div>
 
-        <div className="collection-item-card__footer">
+        {canEdit && <div className="collection-item-card__footer">
           <button
             type="button"
             onClick={remove}
@@ -99,7 +114,7 @@ export default function CollectionItemCard({ collectionId, item, onRemove }: Pro
               <Check className="icon-sm" /> Guardado
             </span>
           ) : null}
-        </div>
+        </div>}
       </div>
     </div>
   );

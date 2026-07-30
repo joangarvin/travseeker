@@ -1,12 +1,13 @@
 import { useCallback, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Share2, Heart, MapPin, Bookmark, GitCompare } from 'lucide-react';
+import { ArrowLeft, Share2, Heart, MapPin, Bookmark, GitCompare, Download, Check } from 'lucide-react';
 import { getImageUrl, getHeroSrcSet } from '../../utils/images';
 import ThemeToggle from '../ui/ThemeToggle';
 import Toast from '../ui/Toast';
 import AddToCollectionModal from '../collections/AddToCollectionModal';
 import { useAuth } from '../../context/AuthContext';
 import { useCompare } from '../../context/CompareContext';
+import { downloadDestination } from '../../utils/offline';
 
 interface Props {
   destinoId: string;
@@ -34,6 +35,7 @@ export default function DestinationHero({
   const [toggling, setToggling] = useState(false);
   const [collectionOpen, setCollectionOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [offlineSaved, setOfflineSaved] = useState(false);
   const dismissToast = useCallback(() => setToast(null), []);
 
   const saved = isFavorite(destinoId);
@@ -85,6 +87,12 @@ export default function DestinationHero({
     }
   };
 
+  const handleOffline = async () => {
+    const saved = await downloadDestination(destinoId, getImageUrl(imagen, 0, 'hero'));
+    setOfflineSaved(saved);
+    setToast(saved ? 'Destino guardado para verlo sin conexión' : 'La descarga offline estará disponible al instalar la app');
+  };
+
   return (
     <div className="dest-hero">
       <img
@@ -115,6 +123,9 @@ export default function DestinationHero({
             aria-label="Compartir"
           >
             <Share2 className="icon-sm" />
+          </button>
+          <button type="button" onClick={handleOffline} className={`dest-hero__icon-btn touch-target ${offlineSaved ? 'is-active' : 'ink-chip'}`} aria-label="Guardar sin conexión">
+            {offlineSaved ? <Check className="icon-sm" /> : <Download className="icon-sm" />}
           </button>
           <button
             type="button"

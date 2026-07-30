@@ -28,7 +28,7 @@ const addItem = asyncHandler(async (req, res) => {
 });
 
 const updateItem = asyncHandler(async (req, res) => {
-  res.json(await collectionService.updateItemNotes(req.user.id, req.params.id, req.params.destinoId, req.body.notas));
+  res.json(await collectionService.updateItem(req.user.id, req.params.id, req.params.destinoId, req.body));
 });
 
 const removeItem = asyncHandler(async (req, res) => {
@@ -51,4 +51,16 @@ const getPublic = asyncHandler(async (req, res) => {
   res.json(await collectionService.getPublicCollection(req.params.shareToken));
 });
 
-module.exports = { list, getOne, create, update, remove, addItem, updateItem, removeItem, forDestino, share, stopSharing, getPublic };
+const addMember = asyncHandler(async (req, res) => {
+  res.status(201).json(await collectionService.addMember(req.user.id, req.params.id, req.body));
+});
+
+const updateMember = asyncHandler(async (req, res) => {
+  res.json(await collectionService.updateMember(req.user.id, req.params.id, req.params.memberId, req.body.role));
+});
+
+const removeMember = asyncHandler(async (req, res) => {
+  res.json(await collectionService.removeMember(req.user.id, req.params.id, req.params.memberId));
+});
+
+module.exports = { list, getOne, create, update, remove, addItem, updateItem, removeItem, forDestino, share, stopSharing, getPublic, addMember, updateMember, removeMember };

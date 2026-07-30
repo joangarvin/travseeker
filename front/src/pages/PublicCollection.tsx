@@ -30,7 +30,8 @@ export default function PublicCollection() {
           <span className="field-label" style={{ color: colorHex(data.color) }}><FolderHeart className="icon-sm" /> Viaje compartido</span>
           <h1 className="page-hero__title">{data.nombre}</h1>
           {data.descripcion && <p className="page-hero__description">{data.descripcion}</p>}
-          {data.items.length ? <div className="colecciones-grid">{data.items.map((item, index) => <DestinationCard key={item.id} destino={item.destino} index={index} />)}</div> : <p>Aún no hay destinos en este viaje.</p>}
+          {(data.startDate || data.endDate) && <p className="public-trip__dates">{data.startDate ? new Date(data.startDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' }) : 'Sin inicio'} — {data.endDate ? new Date(data.endDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Sin fin'}</p>}
+          {data.items.length ? <div className="colecciones-grid">{data.items.map((item, index) => <div className="public-trip__item" key={item.id}>{(item.dayIndex || item.status !== 'idea') && <span className={`public-trip__status public-trip__status--${item.status}`}>{item.dayIndex ? `Día ${item.dayIndex}` : 'Sin día'} · {item.status === 'booked' ? 'Reservado' : item.status === 'confirmed' ? 'Confirmado' : 'Idea'}</span>}<DestinationCard destino={item.destino} index={index} /></div>)}</div> : <p>Aún no hay destinos en este viaje.</p>}
         </section>
       </main>
       <Footer />

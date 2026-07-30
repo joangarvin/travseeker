@@ -1,5 +1,11 @@
 const { prisma } = require('../config/database');
 
+function clean(value, max) {
+  if (typeof value !== 'string') return null;
+  const normalized = value.trim();
+  return normalized ? normalized.slice(0, max) : null;
+}
+
 function normalizePayload(data) {
   return {
     nombre: String(data.nombre || '').trim(),
@@ -210,6 +216,22 @@ async function unlinkMunicipio(destinoId, municipioId) {
   return { success: true };
 }
 
+function normalizePlace(payload) {
+  const nombre = clean(payload.nombre, 100);
+  const categoria = clean(payload.categoria, 40);
+  const latitud = Number(payload.latitud);
+  const longitud = Number(payload.longitud);
+  if (!nombre || !categoria || !Number.isFinite(latitud) || !Number.isFinite(longitud) || Math.abs(latitud) > 90 || Math.abs(longitud) > 180) {
+    const error = new Error('Nombre, categoría y coordenadas válidas son obligatorios'); error.status = 400; throw error;
+  }
+  return { nombre, categoria, latitud, longitud, descripcion: clean(payload.descripcion, 500), website: clean(payload.website, 300), sortOrder: Number.isInteger(Number(payload.sortOrder)) ? Number(payload.sortOrder) : 0, isActive: payload.isActive !== false };
+}
+
+async function listPlaces(destinoId) { return prisma.place.findMany({ where: { destinoId }, orderBy: [{ sortOrder: 'asc' }, { nombre: 'asc' }] }); }
+async function createPlace(destinoId, payload) { return prisma.place.create({ data: { destinoId, ...normalizePlace(payload) } }); }
+async function updatePlace(id, payload) { return prisma.place.update({ where: { id }, data: normalizePlace(payload) }); }
+async function deletePlace(id) { await prisma.place.delete({ where: { id } }); return { success: true }; }
+
 module.exports = {
   listDestinos,
   createDestino,
@@ -221,4 +243,8 @@ module.exports = {
   deleteMunicipio,
   linkMunicipio,
   unlinkMunicipio,
+  listPlaces,
+  createPlace,
+  updatePlace,
+  deletePlace,
 };

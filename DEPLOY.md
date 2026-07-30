@@ -92,7 +92,7 @@ En local (con la URL de Neon en `backend/.env`):
 
 ```bash
 cd backend
-npx prisma db push
+npx prisma migrate deploy
 node seed.js   # opcional: datos iniciales de destinos
 ```
 
@@ -200,7 +200,8 @@ CLOUDINARY_FOLDER=travseeker
 | `JWT_SECRET` | Sí | Firma JWT |
 | `APP_URL` | Sí | URL front (emails) |
 | `FRONTEND_URL` | Sí | CORS |
-| `SMTP_*` | No | Email real |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | Sí* | Envío de verificación, recuperación y alertas |
+| `MAIL_FROM` | Sí* | Remitente verificado del correo |
 | `CLOUDINARY_CLOUD_NAME` | No* | Cuenta Cloudinary |
 | `CLOUDINARY_API_KEY` | No* | API key (solo backend) |
 | `CLOUDINARY_API_SECRET` | No* | API secret (solo backend, nunca en el front) |
@@ -208,11 +209,48 @@ CLOUDINARY_FOLDER=travseeker
 
 \* Sin Cloudinary, las subidas desde el panel admin y el perfil no funcionan; las URLs externas y las ya guardadas siguen mostrándose.
 
+\* Para navegar sin correo pueden omitirse las variables SMTP, pero las alertas no se marcarán como enviadas y reintentará el worker.
+
 ### Frontend
 
 | Variable | Prod | Descripción |
 |----------|------|-------------|
 | `VITE_API_URL` | Sí | URL del backend |
+
+---
+
+## Worker programado de alertas
+
+Las suscripciones se crean desde la web, pero el envío es un proceso separado para que una petición HTTP no tenga que esperar al proveedor de correo.
+
+1. Configura las variables `SMTP_*`, `MAIL_FROM` y `APP_URL` en el servicio backend.
+2. Crea un cron job en Railway, Render o el proveedor elegido con la misma raíz y variables que el backend.
+3. Ejecuta cada 15–60 minutos:
+
+```bash
+npm run alerts:process
+```
+
+Antes de activarlo puedes comprobar coincidencias sin enviar ni modificar estados:
+
+```bash
+npm run alerts:dry-run
+```
+
+El worker guarda cada entrega mediante una huella única; una ejecución repetida no reenvía el mismo conjunto de destinos. Los fallos SMTP quedan como `failed` y se pueden reintentar.
+
+---
+
+## PWA y modo sin conexión
+
+El service worker solo se registra en builds de producción. Para comprobar “Guardar sin conexión”:
+
+- sirve el frontend por HTTPS (o `localhost` durante una prueba controlada);
+- despliega `manifest.webmanifest` y `sw.js` desde la raíz pública;
+- abre primero el destino online y pulsa **Guardar sin conexión**;
+- prueba después con la red desactivada en el mismo navegador.
+
+Tras cambiar `sw.js`, despliega el frontend completo para que el navegador instale la nueva versión.
 
 ---
 
@@ -238,7 +276,11 @@ En local no hace falta `VITE_API_URL`: Vite hace proxy de `/api` al backend.
 
 **404 al recargar rutas** → Falta `vercel.json` o `_redirects`.
 
-**DB vacía** → `npx prisma db push` + `node seed.js` en la DB de producción.
+**DB vacía o esquema antiguo** → `npx prisma migrate deploy` y, solo si necesitas datos iniciales, `node seed.js` en la DB de producción.
+
+**Las alertas existen pero no llegan** → comprueba SMTP, `MAIL_FROM`, `APP_URL` y que el cron ejecute `npm run alerts:process` desde `backend/`.
+
+**No aparece el modo offline** → debe ser un build de producción servido por HTTPS; en `npm run dev` no se registra el service worker.
 
 **No veo el panel admin** → El usuario debe tener `role = 'admin'` en la **misma base de datos** que usa el backend desplegado. En tu máquina, con el `DATABASE_URL` de producción en `backend/.env`:
 

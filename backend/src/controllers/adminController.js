@@ -43,6 +43,10 @@ const unlinkMunicipio = asyncHandler(async (req, res) => {
     await adminService.unlinkMunicipio(req.params.destinoId, req.params.municipioId),
   );
 });
+const listPlaces = asyncHandler(async (req, res) => res.json(await adminService.listPlaces(req.params.destinoId)));
+const createPlace = asyncHandler(async (req, res) => res.status(201).json(await adminService.createPlace(req.params.destinoId, req.body)));
+const updatePlace = asyncHandler(async (req, res) => res.json(await adminService.updatePlace(req.params.placeId, req.body)));
+const deletePlace = asyncHandler(async (req, res) => res.json(await adminService.deletePlace(req.params.placeId)));
 
 module.exports = {
   listDestinos,
@@ -55,4 +59,8 @@ module.exports = {
   deleteMunicipio,
   linkMunicipio,
   unlinkMunicipio,
+  listPlaces,
+  createPlace,
+  updatePlace,
+  deletePlace,
 };

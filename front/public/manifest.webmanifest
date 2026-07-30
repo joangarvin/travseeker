@@ -1,0 +1,13 @@
+{
+  "name": "TravSeeker — Viaja con intención",
+  "short_name": "TravSeeker",
+  "description": "Destinos de España por presupuesto, gente y temporada.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f5f1",
+  "theme_color": "#1d241f",
+  "lang": "es",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

@@ -19,6 +19,10 @@ router.delete('/municipios/:municipioId', adminController.deleteMunicipio);
 
 router.post('/destinos/:destinoId/municipios', adminController.linkMunicipio);
 router.delete('/destinos/:destinoId/municipios/:municipioId', adminController.unlinkMunicipio);
+router.get('/destinos/:destinoId/places', adminController.listPlaces);
+router.post('/destinos/:destinoId/places', adminController.createPlace);
+router.put('/places/:placeId', adminController.updatePlace);
+router.delete('/places/:placeId', adminController.deletePlace);
 
 router.get('/reviews', reviewController.listForAdmin);
 router.patch('/reviews/:reviewId', reviewController.moderate);

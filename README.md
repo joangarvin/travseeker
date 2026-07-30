@@ -116,9 +116,11 @@ Resumen rápido:
 - Registro, login y sesión con JWT
 - Guardar destinos en favoritos (`/favoritos`)
 - Colecciones / itinerarios de viaje (`/colecciones`)
+- Viajes colaborativos con fechas, orden, días y estados de reserva
 - Comparador de destinos (`/comparar`)
 - Recomendaciones personalizadas ("Para ti")
-- Mapa interactivo, reseñas y mejor época para viajar
+- Mapa interactivo, lugares cercanos, reseñas enriquecidas y mejor época para viajar
+- Alertas de decisión por email y destinos disponibles sin conexión (PWA)
 - Panel de administración (`/admin`) para CRUD de destinos y municipios
 
 ## Cuenta administrador

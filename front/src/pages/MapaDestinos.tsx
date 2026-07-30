@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -31,9 +31,8 @@ function inBounds(d: MapDestino, b: MapBounds | null): boolean {
 
 export default function MapaDestinos() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initial = useRef(mapFiltersFromParams(searchParams));
   const [destinos, setDestinos] = useState<MapDestino[]>([]);
-  const [filters, setFilters] = useState<SearchFilters>(initial.current);
+  const [filters, setFilters] = useState<SearchFilters>(() => mapFiltersFromParams(searchParams));
   const [loading, setLoading] = useState(true);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [listOpen, setListOpen] = useState(true);

@@ -2135,6 +2135,15 @@
   flex-wrap: wrap;
 }
 
+.coleccion-detail-edit__dates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.coleccion-detail-edit__dates label { display: grid; gap: .35rem; color: var(--color-text-muted); font-size: .78rem; font-weight: 650; }
+.coleccion-detail-head__dates { margin: .45rem 0 0; color: var(--color-text); font-size: .9rem; font-weight: 650; }
+.public-trip__dates { margin: .5rem 0 1.5rem; color: var(--color-primary); font-weight: 650; }
+.public-trip__item { position: relative; }
+.public-trip__status { position: absolute; z-index: 2; top: .7rem; left: .7rem; padding: .35rem .6rem; border-radius: var(--radius-pill); background: color-mix(in srgb, var(--color-surface) 90%, transparent); color: var(--color-primary); box-shadow: var(--shadow-soft); font-size: .7rem; font-weight: 750; }
+.public-trip__status--confirmed { background: #e6eee9; color: #173d2d; }
+.public-trip__status--booked { background: #e8edf5; color: #203b64; }
+
 .coleccion-detail-head {
   display: flex;
   flex-wrap: wrap;
@@ -2190,6 +2199,19 @@
   padding: 0 1.5rem 5rem;
   margin-top: -1rem;
 }
+
+.collection-collab { margin-bottom: 1.25rem; padding: 1rem; }
+.collection-collab__head { display: flex; align-items: flex-start; gap: .75rem; }
+.collection-collab__head h2 { font-family: var(--font-display); font-size: 1.125rem; color: var(--color-primary); }
+.collection-collab__head p { margin-top: .2rem; color: var(--color-muted); font-size: .875rem; }
+.collection-collab__invite { display: grid; grid-template-columns: minmax(12rem, 1fr) 10rem auto; gap: .6rem; margin-top: 1rem; }
+.collection-collab__members { display: grid; gap: .5rem; margin-top: 1rem; }
+.collection-collab__member { display: flex; align-items: center; gap: .6rem; padding: .65rem .75rem; border-radius: var(--radius-control); background: var(--color-surface-2); }
+.collection-collab__member > span { display: grid; flex: 1; min-width: 0; }
+.collection-collab__member small { color: var(--color-muted); overflow: hidden; text-overflow: ellipsis; }
+.collection-collab__member select, .collection-collab__member button { border: 1px solid var(--color-border); border-radius: .45rem; background: var(--color-surface); color: var(--color-primary); padding: .4rem; }
+.collection-collab__error { margin-top: .6rem; color: var(--color-danger); font-size: .875rem; }
+@media (max-width: 640px) { .collection-collab__invite { grid-template-columns: 1fr; } }
 
 @media (min-width: 768px) {
   .coleccion-detail-section {
@@ -2629,6 +2651,12 @@
   padding-top: 0.625rem;
   border-top: 1px solid var(--color-border);
 }
+
+.collection-item-card__planning { display: grid; grid-template-columns: .7fr 1.5fr .8fr; gap: .5rem; }
+.collection-item-card__planning label { display: grid; gap: .25rem; color: var(--color-text-muted); font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.collection-item-card__planning input,
+.collection-item-card__planning select { width: 100%; min-height: 2.25rem; border: 1px solid var(--color-border); border-radius: .55rem; background: var(--color-surface); color: var(--color-text); padding: .4rem .5rem; font: inherit; text-transform: none; letter-spacing: 0; }
+@media (max-width: 560px) { .coleccion-detail-edit__dates { grid-template-columns: 1fr; } .collection-item-card__planning { grid-template-columns: .7fr 1.5fr .8fr; } }
 
 .collection-item-card__textarea {
   width: 100%;

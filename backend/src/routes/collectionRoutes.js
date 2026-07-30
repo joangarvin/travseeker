@@ -19,5 +19,8 @@ router.patch('/:id/items/:destinoId', collectionController.updateItem);
 router.delete('/:id/items/:destinoId', collectionController.removeItem);
 router.post('/:id/share', collectionController.share);
 router.delete('/:id/share', collectionController.stopSharing);
+router.post('/:id/members', collectionController.addMember);
+router.patch('/:id/members/:memberId', collectionController.updateMember);
+router.delete('/:id/members/:memberId', collectionController.removeMember);
 
 module.exports = router;

@@ -23,11 +23,32 @@ model Destino {
   imagen                String
   latitud               Float?
   longitud              Float?
+  updatedAt             DateTime    @updatedAt
 
   municipioLinks        DestinoMunicipio[]
   favoritos             Favorito[]
   reviews               Review[]
   collectionItems       CollectionItem[]
+  places                Place[]
+}
+
+model Place {
+  id          String   @id @default(uuid())
+  destinoId   String
+  nombre      String
+  categoria   String
+  descripcion String?
+  latitud     Float
+  longitud    Float
+  website     String?
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  destino Destino @relation(fields: [destinoId], references: [id], onDelete: Cascade)
+
+  @@index([destinoId, isActive, sortOrder])
 }
 
 model Municipio {
@@ -74,6 +95,7 @@ model User {
   tokens        VerificationToken[]
   collections   Collection[]
   alerts        AlertSubscription[]
+  collectionMemberships CollectionMember[]
 }
 
 model AlertSubscription {
@@ -86,10 +108,29 @@ model AlertSubscription {
   isActive      Boolean  @default(true)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  lastCheckedAt DateTime?
+  lastNotifiedAt DateTime?
 
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deliveries    AlertDelivery[]
 
   @@index([userId, isActive])
+}
+
+model AlertDelivery {
+  id        String   @id @default(uuid())
+  alertId   String
+  fingerprint String
+  status    String   @default("pending")
+  error     String?
+  sentAt    DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  alert AlertSubscription @relation(fields: [alertId], references: [id], onDelete: Cascade)
+
+  @@unique([alertId, fingerprint])
+  @@index([status, createdAt])
 }
 
 model Collection {
@@ -100,13 +141,36 @@ model Collection {
   color       String   @default("emerald")
   visibility  String   @default("private")
   shareToken  String?  @unique
+  startDate   DateTime? @db.Date
+  endDate     DateTime? @db.Date
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   items       CollectionItem[]
+  members     CollectionMember[]
 
   @@index([userId])
+}
+
+model CollectionMember {
+  id           String         @id @default(uuid())
+  collectionId String
+  userId       String
+  role         CollectionRole @default(viewer)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, userId])
+  @@index([userId])
+}
+
+enum CollectionRole {
+  editor
+  viewer
 }
 
 model CollectionItem {
@@ -114,6 +178,9 @@ model CollectionItem {
   collectionId String
   destinoId    String
   notas        String?
+  dayIndex     Int?
+  status       String   @default("idea")
+  sortOrder    Int      @default(0)
   createdAt    DateTime @default(now())
 
   collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
