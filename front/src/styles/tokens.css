@@ -1,0 +1,87 @@
+:root {
+  color-scheme: light;
+  --canvas: #f3f5fa;
+  --surface: #ffffff;
+  --surface-muted: #e7eaf1;
+  --surface-strong: #111217;
+  --ink: #111217;
+  --ink-inverse: #f8f9fc;
+  --muted: #5f6470;
+  --line: #c6cad4;
+  --line-strong: #747987;
+  --brand: #3047f2;
+  --brand-solid: #3047f2;
+  --brand-hover: #2035d7;
+  --brand-soft: #dfe3ff;
+  --sun: #ffd51f;
+  --sun-ink: #171200;
+  --signal: #f05237;
+  --success: #087a55;
+  --warning: #946000;
+  --danger: #b92525;
+  --tourism-cultural: #3047f2;
+  --tourism-nature: #00786c;
+  --tourism-beach: #cf432c;
+  --tourism-rural: #8a5800;
+  --tourism-mountain: #6845cf;
+  --tourism-heritage: #ad285f;
+  --tourism-cultural-solid: #3047f2;
+  --tourism-nature-solid: #006d63;
+  --tourism-beach-solid: #c83d27;
+  --tourism-rural-solid: #805000;
+  --tourism-mountain-solid: #6240c5;
+  --tourism-heritage-solid: #a62458;
+  --tourism-other-solid: #5f6470;
+  --focus: #3047f2;
+  --overlay: rgb(5 7 14 / 72%);
+  --shadow-1: 0 1px 2px rgb(10 14 28 / 8%), 0 12px 32px rgb(10 14 28 / 8%);
+  --shadow-2: 0 24px 64px rgb(10 14 28 / 22%);
+  --r-1: 4px;
+  --r-2: 8px;
+  --r-3: 12px;
+  --r-4: 20px;
+  --r-pill: 999px;
+  --control: 48px;
+  --max: 1440px;
+  --reading: 720px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --canvas: #0b0c10;
+  --surface: #16181e;
+  --surface-muted: #242730;
+  --surface-strong: #f2f4f9;
+  --ink: #f2f4f9;
+  --ink-inverse: #101116;
+  --muted: #b2b7c2;
+  --line: #414550;
+  --line-strong: #7b818e;
+  --brand: #8794ff;
+  --brand-hover: #a5afff;
+  --brand-soft: #282e58;
+  --sun: #ffd51f;
+  --sun-ink: #171200;
+  --signal: #ff765d;
+  --success: #55d7a3;
+  --warning: #ffc968;
+  --danger: #ff8383;
+  --tourism-cultural: #8794ff;
+  --tourism-nature: #53d5c2;
+  --tourism-beach: #ff8b74;
+  --tourism-rural: #f1bd5a;
+  --tourism-mountain: #bdabff;
+  --tourism-heritage: #ff94bf;
+  --focus: #ffd51f;
+  --overlay: rgb(0 0 0 / 82%);
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 20%), 0 16px 36px rgb(0 0 0 / 22%);
+  --shadow-2: 0 28px 72px rgb(0 0 0 / 45%);
+}
+
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
