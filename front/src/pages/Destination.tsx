@@ -76,7 +76,7 @@ export default function DestinationPage() {
     </div>
 
     <article className="destination-story">
-      <aside className="destination-story__summary"><p className="kicker">La decisión rápida</p><dl><div><dt>Presupuesto</dt><dd>{plain(destino.presupuesto)}</dd></div><div><dt>Afluencia</dt><dd>{plain(destino.masificacion)}</dd></div><div><dt>Carácter</dt><dd>{plain(destino.tipoTurismoPrincipal)}</dd></div><div><dt>Municipios</dt><dd>{destino.municipios?.length || 0}</dd></div></dl></aside>
+      <aside className="destination-story__summary"><p className="kicker">La decisión rápida</p><dl><div><dt>Presupuesto</dt><dd>{plain(destino.presupuesto)}</dd></div><div><dt>Afluencia</dt><dd>{plain(destino.masificacion)}</dd></div><div><dt>Carácter</dt><dd><TourismMark value={destino.tipoTurismoPrincipal} compact /></dd></div><div><dt>Municipios</dt><dd>{destino.municipios?.length || 0}</dd></div></dl></aside>
       <div className="destination-story__body"><p className="kicker">Por qué ir</p><div className="prose" dangerouslySetInnerHTML={{ __html: safeHtml(destino.descripcion) }} /></div>
     </article>
 

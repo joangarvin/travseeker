@@ -37,5 +37,8 @@ export function tourismDefinition(value?: string | null): TourismDefinition {
 
 export function TourismMark({ value, compact = false }: { value?: string | null; compact?: boolean }) {
   const type = tourismDefinition(value);
-  return <span className={`tourism-mark tourism--${type.key} ${compact ? 'tourism-mark--compact' : ''}`}><type.Icon aria-hidden /><span>{type.label}</span></span>;
+  return <span className={`tourism-mark tourism--${type.key} ${compact ? 'tourism-mark--compact' : ''}`}>
+    <span className="tourism-mark__symbol" aria-hidden><type.Icon /></span>
+    <span className="tourism-mark__label">{type.label}</span>
+  </span>;
 }

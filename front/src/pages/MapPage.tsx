@@ -57,7 +57,7 @@ export default function MapPage() {
         {!tilesReady && !tilesFailed && <div className="map-state" role="status"><span /><b>Cargando cartografía</b></div>}
         {tilesFailed && !tilesReady && <div className="map-state map-state--error" role="alert"><MapIcon /><span><b>No se pudo cargar la cartografía</b><small>Los resultados siguen disponibles en la lista.</small></span></div>}
         {active && <article className="map-selected"><MediaImage src={imageUrl(active.imagen)} alt="" /><div><TourismMark value={active.tipoTurismoPrincipal} compact /><span>{plain(active.ubicacion)}</span><h2>{active.nombre.trim()}</h2><p>{plain(active.presupuesto)} · {plain(active.masificacion)}</p><Link to={`/destino/${active.id}`}>Ver destino <MapPin /></Link></div><button onClick={() => setSelected(null)} aria-label="Cerrar"><X /></button></article>}
-        <div className="map-legend" aria-label="Leyenda de tipos de turismo">{tourismTypes.map((type) => <span className={`tourism--${type.key}`} key={type.key}><i /><type.Icon /><b>{type.label}</b></span>)}</div>
+        <div className="map-legend" aria-label="Leyenda de tipos de turismo">{tourismTypes.map((type) => <span className={`tourism--${type.key}`} key={type.key}><span className="map-legend__symbol"><type.Icon aria-hidden /></span><b>{type.label}</b></span>)}</div>
         <div className="map-watermark"><LocateFixed /> Mueve el mapa o elige un resultado</div>
       </div>
     </div>
