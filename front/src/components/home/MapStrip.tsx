@@ -57,10 +57,10 @@ function TopographicMap() {
           <circle r="4" fill="var(--color-teja)" />
         </g>
 
-        <text x="20" y="30" fill="var(--color-muted)" fontSize="10" fontFamily="monospace" opacity="0.6">
+        <text x="20" y="30" fill="var(--color-muted)" fontSize="10" fontFamily="Inter, Arial, sans-serif" opacity="0.8">
           N 42° 30' 59" / W 0° 33' 6"
         </text>
-        <text x="20" y="44" fill="var(--color-muted)" fontSize="9" fontFamily="monospace" opacity="0.4">
+        <text x="20" y="44" fill="var(--color-muted)" fontSize="9" fontFamily="Inter, Arial, sans-serif" opacity="0.8">
           ELEV. 1.842m — M. PERDIDO
         </text>
       </svg>

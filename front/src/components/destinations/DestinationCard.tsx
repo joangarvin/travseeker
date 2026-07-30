@@ -1,5 +1,4 @@
 import { memo, useMemo, useState } from 'react';
-import type { CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Bookmark, GitCompare, MapPin } from 'lucide-react';
 import type { Destino } from '../../types';
@@ -16,8 +15,6 @@ interface Props {
   enableCompare?: boolean;
   featured?: boolean;
 }
-
-const TILTS = ['-0.8deg', '0.7deg', '-0.5deg', '0.9deg', '-0.6deg', '0.5deg'];
 
 function aforoLevel(masificacion: string): number {
   const m = masificacion.toLowerCase();
@@ -79,8 +76,8 @@ function DestinationCard({
   return (
     <Link to={`/destino/${destino.id}`} className="dest-card-link">
       <div
-        className="dest-card ficha-tilt"
-        style={{ '--tilt': TILTS[index % TILTS.length], boxShadow: 'var(--shadow-card)' } as CSSProperties}
+        className="dest-card"
+        style={{ boxShadow: 'var(--shadow-card)' }}
       >
         <div className={`dest-card__media ${featured ? 'dest-card__media--featured' : ''}`}>
           <img
@@ -92,7 +89,7 @@ function DestinationCard({
           />
           <div className="dest-card__gradient" />
 
-          <div className="dest-card__open ink-chip card-actions-touch">
+          <div className="dest-card__open card-actions-touch" aria-hidden>
             <ArrowUpRight className="icon-sm" />
           </div>
 

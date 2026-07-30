@@ -1,31 +1,42 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, Popup, ZoomControl } from 'react-leaflet';
-import L from 'leaflet';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapPin, X } from 'lucide-react';
 import Header from '../components/layout/Header';
+import MapClusters, { type MapBounds } from '../components/map/MapClusters';
 import { destinosApi, type MapDestino, type SearchFilters } from '../api/destinos';
 import { SEARCH_FILTERS } from '../constants/filters';
 import { parseJsonSafe } from '../utils/parseJson';
 import { getImageUrl } from '../utils/images';
+import { filtersToParams } from '../hooks/useSearchFilters';
 
 const SPAIN_CENTER: [number, number] = [40.0, -3.5];
-
-const markerIcon = L.divIcon({
-  className: 'ts-map-marker',
-  html: `<span style="display:block;width:18px;height:18px;border-radius:50% 50% 50% 0;background:#2f5d3f;border:2px solid #f5f0e6;transform:rotate(-45deg);box-shadow:0 2px 6px rgba(0,0,0,0.35);"></span>`,
-  iconSize: [18, 18],
-  iconAnchor: [9, 18],
-  popupAnchor: [0, -18],
-});
-
 const MAP_FILTER_KEYS = ['tipoTurismo', 'presupuesto', 'masificacion', 'ubicacion'] as const;
 
+function mapFiltersFromParams(params: URLSearchParams): SearchFilters {
+  const out: SearchFilters = {};
+  for (const key of MAP_FILTER_KEYS) {
+    const value = params.get(key);
+    if (value) out[key] = value;
+  }
+  return out;
+}
+
+function inBounds(d: MapDestino, b: MapBounds | null): boolean {
+  if (!b) return true;
+  return d.latitud <= b.north && d.latitud >= b.south && d.longitud <= b.east && d.longitud >= b.west;
+}
+
 export default function MapaDestinos() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initial = useRef(mapFiltersFromParams(searchParams));
   const [destinos, setDestinos] = useState<MapDestino[]>([]);
-  const [filters, setFilters] = useState<SearchFilters>({});
+  const [filters, setFilters] = useState<SearchFilters>(initial.current);
   const [loading, setLoading] = useState(true);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [listOpen, setListOpen] = useState(true);
+  const [bounds, setBounds] = useState<MapBounds | null>(null);
 
   const mapFilters = useMemo(
     () => SEARCH_FILTERS.filter((f) => (MAP_FILTER_KEYS as readonly string[]).includes(f.key)),
@@ -33,19 +44,49 @@ export default function MapaDestinos() {
   );
 
   useEffect(() => {
+    const next = filtersToParams(filters);
+    const current = searchParams.toString();
+    const upcoming = next.toString();
+    if (current !== upcoming) {
+      setSearchParams(next, { replace: true });
+    }
+  }, [filters, searchParams, setSearchParams]);
+
+  useEffect(() => {
     const controller = new AbortController();
     setLoading(true);
     destinosApi.getMapa(filters, controller.signal)
-      .then((data) => setDestinos(data))
+      .then((data) => {
+        setDestinos(data);
+        setActiveId(null);
+      })
       .catch(() => { /* abort o error */ })
       .finally(() => setLoading(false));
     return () => controller.abort();
   }, [filters]);
 
   const activeCount = Object.values(filters).filter(Boolean).length;
-
   const updateFilter = (key: string, value: string) =>
     setFilters((prev) => ({ ...prev, [key]: value }));
+
+  const onSelect = useCallback((id: string) => {
+    setActiveId(id);
+    setListOpen(true);
+  }, []);
+
+  const onBoundsChange = useCallback((next: MapBounds) => {
+    setBounds(next);
+  }, []);
+
+  const visibleInView = useMemo(
+    () => destinos.filter((d) => inBounds(d, bounds)),
+    [destinos, bounds],
+  );
+
+  const sorted = useMemo(
+    () => [...visibleInView].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')),
+    [visibleInView],
+  );
 
   return (
     <div className="map-page">
@@ -59,9 +100,22 @@ export default function MapaDestinos() {
                 <MapPin className="map-page__title-icon" />
                 El mapa
                 <span className="map-page__subtitle">
-                  {loading ? 'cargando…' : `toda la España tranquila · ${destinos.length} destinos`}
+                  {loading
+                    ? 'cargando…'
+                    : bounds
+                      ? `${sorted.length} en vista · ${destinos.length} total`
+                      : `${destinos.length} destino${destinos.length === 1 ? '' : 's'}`}
                 </span>
               </div>
+
+              <button
+                type="button"
+                className="map-page__list-toggle"
+                onClick={() => setListOpen((v) => !v)}
+                aria-pressed={listOpen}
+              >
+                {listOpen ? 'Ocultar lista' : 'Ver lista'}
+              </button>
 
               {activeCount > 0 && (
                 <button
@@ -81,6 +135,7 @@ export default function MapaDestinos() {
                   value={(filters[f.key as keyof SearchFilters] as string) || ''}
                   onChange={(e) => updateFilter(f.key, e.target.value)}
                   className="map-page__select"
+                  aria-label={f.label}
                 >
                   {f.options.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -93,41 +148,70 @@ export default function MapaDestinos() {
           </div>
         </div>
 
-        <div className="map-page__canvas">
-          <MapContainer
-            center={SPAIN_CENTER}
-            zoom={6}
-            zoomControl={false}
-            scrollWheelZoom
-            style={{ height: '100%', width: '100%' }}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <ZoomControl position="bottomright" />
-            {destinos.map((d) => (
-              <Marker key={d.id} position={[d.latitud, d.longitud]} icon={markerIcon}>
-                <Popup>
-                  <div className="map-popup">
-                    <img
-                      src={getImageUrl(d.imagen, 0, 'map')}
-                      alt={d.nombre}
-                      className="map-popup__img"
-                      loading="lazy"
-                    />
-                    <h3 className="map-popup__title">{d.nombre.trim()}</h3>
-                    <p className="map-popup__meta">
-                      {parseJsonSafe(d.ubicacion)} · {parseJsonSafe(d.presupuesto)}
-                    </p>
-                    <Link to={`/destino/${d.id}`} className="map-popup__link">
-                      Ver destino →
-                    </Link>
-                  </div>
-                </Popup>
-              </Marker>
-            ))}
-          </MapContainer>
+        <div className="map-page__split">
+          {listOpen && (
+            <aside className="map-page__list" aria-label="Lista de destinos">
+              {loading ? (
+                <p className="map-page__list-empty">Cargando destinos…</p>
+              ) : sorted.length === 0 ? (
+                <p className="map-page__list-empty">
+                  {destinos.length === 0
+                    ? 'Nada con estos filtros.'
+                    : 'Nada en esta zona del mapa. Aleja el zoom o mueve el mapa.'}
+                </p>
+              ) : (
+                <ul className="map-page__list-items">
+                  {sorted.map((d) => (
+                    <li key={d.id}>
+                      <button
+                        type="button"
+                        className={`map-page__list-item${activeId === d.id ? ' is-active' : ''}`}
+                        onClick={() => onSelect(d.id)}
+                      >
+                        <img
+                          src={getImageUrl(d.imagen, 0, 'thumb')}
+                          alt=""
+                          className="map-page__list-thumb"
+                          loading="lazy"
+                        />
+                        <span className="map-page__list-text">
+                          <span className="map-page__list-name">{d.nombre.trim()}</span>
+                          <span className="map-page__list-meta">
+                            {parseJsonSafe(d.ubicacion)} · {parseJsonSafe(d.presupuesto)}
+                          </span>
+                        </span>
+                      </button>
+                      <Link to={`/destino/${d.id}`} className="map-page__list-link">
+                        Abrir
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </aside>
+          )}
+
+          <div className="map-page__canvas">
+            <MapContainer
+              center={SPAIN_CENTER}
+              zoom={6}
+              zoomControl={false}
+              scrollWheelZoom
+              style={{ height: '100%', width: '100%' }}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <ZoomControl position="bottomright" />
+              <MapClusters
+                destinos={destinos}
+                activeId={activeId}
+                onSelect={onSelect}
+                onBoundsChange={onBoundsChange}
+              />
+            </MapContainer>
+          </div>
         </div>
       </div>
     </div>

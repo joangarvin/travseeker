@@ -1,6 +1,15 @@
 /*
- * Tipografías del rediseño «Cuaderno de campo»:
- * - Fraunces (titulares) e IBM Plex Mono (datos/etiquetas) se cargan desde
- *   Google Fonts en index.html junto a Inter.
- * - Clash Grotesk se retiró: estaba cargada pero sin uso en el theme.
+ * Familias globales de Travseeker:
+ * - Clash Grotesk: titulares y nombres de destino.
+ * - Inter: lectura, interfaz, datos y etiquetas.
+ *
+ * El archivo variable permite servir los pesos 400–700 sin depender de las
+ * fuentes instaladas en el dispositivo de cada visitante.
  */
+@font-face {
+  font-family: "Clash Grotesk";
+  src: url("/fonts/ClashGrotesk-Variable.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}

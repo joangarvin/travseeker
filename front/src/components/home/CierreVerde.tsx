@@ -25,14 +25,18 @@ export default function CierreVerde() {
         <p className="cierre-verde__stats field-label">
           <span>{total} destinos revisados a mano</span>
           <span aria-hidden>·</span>
-          <span>{reviews} reseñas de viajeros</span>
+          <span>
+            {reviews > 0
+              ? `${reviews} reseñas de viajeros`
+              : 'Fichas editoriales, sin algoritmo de reseñas'}
+          </span>
           <span aria-hidden>·</span>
           <span>0 puestos patrocinados</span>
         </p>
       </ScrollReveal>
 
       <ScrollReveal delay={1}>
-        <div className="cierre-verde__banner grain">
+        <div className="cierre-verde__banner">
           <div aria-hidden className="cierre-verde__fold cierre-verde__fold--light" />
           <div aria-hidden className="cierre-verde__fold cierre-verde__fold--dark" />
 

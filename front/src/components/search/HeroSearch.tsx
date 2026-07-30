@@ -6,9 +6,10 @@ import FilterPanel from './FilterPanel';
 interface Props {
   onSearch: (filters: SearchFilters) => void;
   activeFilterCount?: number;
+  initialFilters?: SearchFilters;
 }
 
-export default function HeroSearch({ onSearch, activeFilterCount = 0 }: Props) {
+export default function HeroSearch({ onSearch, activeFilterCount = 0, initialFilters }: Props) {
   const {
     q,
     setQ,
@@ -19,7 +20,7 @@ export default function HeroSearch({ onSearch, activeFilterCount = 0 }: Props) {
     resetFilters,
     buildPayload,
     localActiveCount,
-  } = useSearchFilters();
+  } = useSearchFilters(initialFilters);
 
   const handleApply = () => {
     onSearch(buildPayload());
@@ -35,8 +36,7 @@ export default function HeroSearch({ onSearch, activeFilterCount = 0 }: Props) {
   const badgeCount = localActiveCount || activeFilterCount;
 
   return (
-    <section id="buscar" className="hero-search grain">
-      {/* Línea de mapa decorativa de fondo */}
+    <section id="buscar" className="hero-search">
       <svg
         aria-hidden
         className="hero-search__mapline"

@@ -64,7 +64,15 @@ export default function ReviewSection({ destinoId }: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) return;
+    if (!user?.emailVerified) {
+      setError('Verifica tu email antes de firmar');
+      return;
+    }
     if (rating < 1) { setError('Elige cuántas estrellas'); return; }
+    if (comment.trim().length < 20) {
+      setError('Escribe al menos 20 caracteres (sin florituras, pero con sustancia)');
+      return;
+    }
     setSubmitting(true);
     setError('');
     try {
@@ -101,18 +109,38 @@ export default function ReviewSection({ destinoId }: Props) {
             </h2>
           </div>
           <div className="reviews-section__score-wrap">
-            <p className="reviews-section__score">
-              {stats.count > 0 ? stats.average.toFixed(1) : '—'}
-            </p>
-            <StarRating value={stats.average} readOnly size={14} className="reviews-section__stars" />
-            <p className="reviews-section__count field-label">
-              {stats.count} {stats.count === 1 ? 'firma' : 'firmas'}
-            </p>
+            {stats.count > 0 ? (
+              <>
+                <p className="reviews-section__score">
+                  {stats.average.toFixed(1)}
+                </p>
+                <StarRating value={stats.average} readOnly size={14} className="reviews-section__stars" />
+                <p className="reviews-section__count field-label">
+                  {stats.count} {stats.count === 1 ? 'firma' : 'firmas'}
+                </p>
+              </>
+            ) : (
+              <p className="reviews-section__count field-label">
+                Ficha editorial · sin firmas aún
+              </p>
+            )}
           </div>
         </div>
 
         <div className="ui-card reviews-form-card">
-          {user ? (
+          {user && !user.emailVerified ? (
+            <div className="reviews-guest">
+              <div>
+                <h3 className="reviews-form__title">Verifica tu email</h3>
+                <p className="reviews-guest__text">
+                  Para firmar el libro de visitas, confirma tu correo desde el perfil.
+                </p>
+              </div>
+              <Link to="/perfil" className="btn-cta">
+                Ir al perfil
+              </Link>
+            </div>
+          ) : user ? (
             <form onSubmit={handleSubmit} className="reviews-form">
               <h3 className="reviews-form__title">
                 {ownReview ? 'Tu firma' : 'Firma el libro'}
@@ -126,7 +154,8 @@ export default function ReviewSection({ destinoId }: Props) {
                 onChange={(e) => setComment(e.target.value)}
                 rows={3}
                 maxLength={1000}
-                placeholder="Qué tal estuvo, sin florituras…"
+                placeholder="Qué tal estuvo (mín. 20 caracteres)…"
+                minLength={20}
                 className="ui-input reviews-form__textarea"
               />
               {error && <p className="reviews-form__error">{error}</p>}

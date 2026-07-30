@@ -48,7 +48,22 @@ async function upsertReview(userId, destinoId, rating, comment) {
     throw error;
   }
 
-  const cleanComment = typeof comment === 'string' ? comment.trim().slice(0, 1000) || null : null;
+  const cleanComment = typeof comment === 'string' ? comment.trim().slice(0, 1000) : '';
+  if (cleanComment.length < 20) {
+    const error = new Error('El comentario debe tener al menos 20 caracteres');
+    error.status = 400;
+    throw error;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { emailVerified: true },
+  });
+  if (!user?.emailVerified) {
+    const error = new Error('Verifica tu email antes de firmar el libro de visitas');
+    error.status = 403;
+    throw error;
+  }
 
   const review = await prisma.review.upsert({
     where: { userId_destinoId: { userId, destinoId } },

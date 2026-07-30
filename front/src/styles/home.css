@@ -93,7 +93,7 @@
   text-align: left;
   gap: 0.5rem;
   padding: 1rem 1.25rem;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-card);
   border: 1px solid var(--color-border-strong);
   background: var(--color-surface);
   color: var(--color-primary);
@@ -137,7 +137,7 @@
 }
 
 .home-style-btn.is-active .home-style-btn__desc {
-  color: color-mix(in srgb, var(--color-on-brand) 75%, transparent);
+  color: var(--color-on-brand);
 }
 
 /* How it works */
@@ -637,6 +637,36 @@
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   animation: pulse 1.5s ease-in-out infinite;
+}
+
+.home-recs__empty {
+  margin-top: 1.5rem;
+  padding: 1.75rem 1.5rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  max-width: 28rem;
+}
+
+.home-recs__empty-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--color-brand);
+  margin-bottom: 0.75rem;
+}
+
+.home-recs__empty-title {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: var(--color-primary);
+}
+
+.home-recs__empty-text {
+  margin: 0 0 1rem;
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+  line-height: 1.5;
 }
 
 @keyframes pulse {

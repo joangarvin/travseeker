@@ -27,15 +27,18 @@ function CoverCollage({ covers, color }: { covers: string[]; color: string }) {
   }
   return (
     <div className="coleccion-cover__grid">
-      {covers.slice(0, 4).map((src, i) => (
-        <img
-          key={i}
-          src={getImageUrl(src, i, 'thumb')}
-          alt=""
-          className={`${covers.length === 1 ? 'span-all' : ''} ${covers.length === 3 && i === 0 ? 'span-rows' : ''}`}
-          loading="lazy"
-        />
-      ))}
+      {covers.slice(0, 4).map((src, i) => {
+        const isLarge = covers.length === 1 || (covers.length === 3 && i === 0);
+        return (
+          <img
+            key={i}
+            src={getImageUrl(src, i, isLarge ? 'card' : 'collage')}
+            alt=""
+            className={`${covers.length === 1 ? 'span-all' : ''} ${covers.length === 3 && i === 0 ? 'span-rows' : ''}`}
+            loading="lazy"
+          />
+        );
+      })}
     </div>
   );
 }
@@ -53,8 +56,10 @@ export default function Colecciones() {
   const [desc, setDesc] = useState('');
   const [color, setColor] = useState('emerald');
   const [creating, setCreating] = useState(false);
+  const [createError, setCreateError] = useState('');
   const [query, setQuery] = useState('');
   const [sortBy, setSortBy] = useState<'recent' | 'name' | 'items'>('recent');
+  const canCreate = !!user?.emailVerified;
 
   const visibleCollections = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -72,7 +77,12 @@ export default function Colecciones() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token || !name.trim() || creating) return;
+    if (!user?.emailVerified) {
+      setCreateError('Verifica tu email antes de crear una lista.');
+      return;
+    }
     setCreating(true);
+    setCreateError('');
     try {
       const created = await createCollection({ nombre: name, descripcion: desc, color }, token);
       setCollections((prev) => [created, ...(prev ?? [])]);
@@ -80,6 +90,8 @@ export default function Colecciones() {
       setDesc('');
       setColor('emerald');
       setShowForm(false);
+    } catch (err) {
+      setCreateError(err instanceof Error ? err.message : 'No se pudo crear la lista');
     } finally {
       setCreating(false);
     }
@@ -132,10 +144,17 @@ export default function Colecciones() {
         title="Tus listas de viaje"
         description="«Puente de mayo», «Norte con perro», «Escapadas de un día». Cada plan, su lista."
         action={(
-          <button type="button" onClick={() => setShowForm((v) => !v)} className="btn-cta btn-cta--lg">
-            {showForm ? <X className="icon-sm" /> : <Plus className="icon-sm" />}
-            {showForm ? 'Cancelar' : 'Nueva lista'}
-          </button>
+          canCreate ? (
+            <button type="button" onClick={() => setShowForm((v) => !v)} className="btn-cta btn-cta--lg">
+              {showForm ? <X className="icon-sm" /> : <Plus className="icon-sm" />}
+              {showForm ? 'Cancelar' : 'Nueva lista'}
+            </button>
+          ) : (
+            <p className="colecciones-verify-hint">
+              Verifica tu email para crear listas.{' '}
+              <Link to="/perfil">Ir al perfil</Link>
+            </p>
+          )
         )}
       />
 
@@ -156,7 +175,7 @@ export default function Colecciones() {
             />
           )}
 
-          {showForm && (
+          {showForm && canCreate && (
             <form onSubmit={handleCreate} className="ui-card colecciones-form animate-fade-up">
               <div className="colecciones-form__grid">
                 <input
@@ -175,6 +194,7 @@ export default function Colecciones() {
                   className="ui-input"
                 />
               </div>
+              {createError && <p className="colecciones-form__error">{createError}</p>}
               <div className="colecciones-form__footer">
                 <div className="colecciones-form__colors">
                   {COLLECTION_COLORS.map((col) => (
@@ -239,10 +259,15 @@ export default function Colecciones() {
                     ? 'Ninguna lista coincide con esa búsqueda.'
                     : 'Una colección es una lista con intención. Crea la primera y ponle nombre de plan: «Puente de mayo», «Ruta del cochinillo».'}
                 </p>
-                {collections.length === 0 && (
+                {collections.length === 0 && canCreate && (
                   <button type="button" onClick={() => setShowForm(true)} className="btn-cta btn-cta--lg">
                     Crear mi primera lista
                   </button>
+                )}
+                {collections.length === 0 && !canCreate && (
+                  <Link to="/perfil" className="btn-cta btn-cta--lg">
+                    Verificar email en el perfil
+                  </Link>
                 )}
               </div>
             )

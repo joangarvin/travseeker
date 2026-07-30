@@ -1,56 +1,73 @@
-/* TravSeeker — Cuaderno de campo */
+/* TravSeeker — Cuaderno de campo
+ *
+ * Tokens de diseño (no inventar colores sueltos en componentes):
+ * - Tipografía: --font-display (titulares), --font-sans (UI y etiquetas)
+ * - Papel: --color-secondary (fondo), --color-surface / --surface-2 (tarjetas)
+ * - Tinta: --color-primary (texto), --color-muted (secundario)
+ * - Marca: --color-brand / --brand-deep / --on-brand
+ * - Acentos: --color-teja, --color-mostaza, --color-mapa
+ * - Bordes: --color-border (suave), --color-border-strong (enfoque / dark)
+ * - Radios: --radius-control|card|feature|pill
+ */
 
 :root,
 [data-theme="light"] {
   color-scheme: light;
 
   /* Tipografía */
-  --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+  --font-display: "Clash Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  /* Alias temporales: conservan los componentes existentes dentro del sistema de dos familias. */
+  --font-serif: var(--font-display);
+  --font-mono: var(--font-sans);
 
   /* Tinta y papel */
-  --color-primary: #23281f;
-  --color-secondary: #f3efe4;
-  --color-surface: #f3efe4;
-  --color-surface-2: #ebe6d8;
-  --color-muted: #6b7266;
+  --color-primary: #1d241f;
+  --color-secondary: #f7f5ef;
+  --color-surface: #ffffff;
+  --color-surface-2: #edefea;
+  --color-muted: #59645c;
 
   /* Verde botella — dosificado */
-  --color-brand: #1f4d38;
-  --color-brand-deep: #163828;
-  --color-brand-dark: #163828;
-  --color-accent-hover: #163828;
-  --color-on-brand: #f3efe4;
-  --color-on-deep: #ede7d8;
+  --color-brand: #20583f;
+  --color-brand-deep: #123426;
+  --color-brand-dark: #20583f;
+  --color-accent-hover: #17432f;
+  --color-on-brand: #ffffff;
+  --color-on-deep: #f7f5ef;
 
   /* Acentos */
-  --color-teja: #c46a4a;
-  --color-mostaza: #d4a84b;
+  --color-teja: #a9472d;
+  --color-mostaza: #d49a2a;
   --color-mapa: #2f6fed;
 
   /* UI */
-  --color-nav: #4a5248;
-  --color-primary-light: #6b7266;
-  --color-border: rgba(35, 40, 31, 0.12);
-  --color-border-strong: rgba(35, 40, 31, 0.22);
-  --color-ring: rgba(31, 77, 56, 0.35);
+  --color-nav: #445048;
+  --color-primary-light: #59645c;
+  --color-border: rgba(29, 36, 31, 0.16);
+  --color-border-strong: rgba(29, 36, 31, 0.28);
+  --color-ring: rgba(32, 88, 63, 0.35);
   --color-overlay: rgba(15, 28, 19, 0.45);
   --shadow-soft: 0 1px 0 rgba(35, 40, 31, 0.04);
   --shadow-card: 3px 3px 0 rgba(35, 40, 31, 0.08);
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 6px;
-  --radius-xl: 8px;
+  --radius-control: 0.5rem;
+  --radius-card: 0.75rem;
+  --radius-feature: 1rem;
+  --radius-pill: 9999px;
+  --radius-sm: var(--radius-control);
+  --radius-md: var(--radius-card);
+  --radius-lg: var(--radius-card);
+  --radius-xl: var(--radius-feature);
 
   /* Compat */
   --color-accent: var(--color-brand);
   --color-bg: var(--color-secondary);
   --color-fg: var(--color-primary);
   --color-card: var(--color-surface);
-  --color-success: #2f6b4f;
+  --color-success: #20583f;
   --color-warning: var(--color-mostaza);
-  --color-danger: #b42318;
+  --color-warning-text: #8a3d00;
+  --color-danger: #b3261e;
   --color-info: var(--color-mapa);
 }
 
@@ -58,29 +75,29 @@
   color-scheme: dark;
 
   /* Papel carbón verdoso — no flat black */
-  --color-primary: #f3efe4;
-  --color-secondary: #101411;
-  --color-surface: #222b22;
-  --color-surface-2: #2e382e;
-  --color-muted: #b4bcae;
+  --color-primary: #f7f5ef;
+  --color-secondary: #111512;
+  --color-surface: #1c241e;
+  --color-surface-2: #273129;
+  --color-muted: #c5cdc1;
 
   /* Botella sólida (CTAs) + verde claro solo para texto/iconos */
-  --color-brand: #3f6d52;
-  --color-brand-deep: #0c1610;
-  --color-brand-dark: #b0d0b6;
-  --color-accent-hover: #335a44;
-  --color-on-brand: #f3efe4;
-  --color-on-deep: #f0ebe0;
+  --color-brand: #4f8a68;
+  --color-brand-deep: #08110b;
+  --color-brand-dark: #b9e5c3;
+  --color-accent-hover: #5e9b77;
+  --color-on-brand: #08110b;
+  --color-on-deep: #f7f5ef;
 
-  --color-teja: #d99478;
-  --color-mostaza: #e8bc68;
+  --color-teja: #ffb08f;
+  --color-mostaza: #ffd27a;
   --color-mapa: #6b9cff;
 
-  --color-nav: #d6dacf;
-  --color-primary-light: #c4cabd;
-  --color-border: rgba(243, 239, 228, 0.18);
-  --color-border-strong: rgba(243, 239, 228, 0.34);
-  --color-ring: rgba(63, 109, 82, 0.45);
+  --color-nav: #d8ded3;
+  --color-primary-light: #c5cdc1;
+  --color-border: rgba(247, 245, 239, 0.2);
+  --color-border-strong: rgba(247, 245, 239, 0.34);
+  --color-ring: rgba(79, 138, 104, 0.48);
   --color-overlay: rgba(6, 10, 8, 0.55);
   --shadow-soft: 0 1px 0 rgba(243, 239, 228, 0.06);
   --shadow-card: 3px 3px 0 rgba(243, 239, 228, 0.1);
@@ -89,8 +106,9 @@
   --color-bg: var(--color-secondary);
   --color-fg: var(--color-primary);
   --color-card: var(--color-surface);
-  --color-success: #7eb08c;
+  --color-success: #8fcfa2;
   --color-warning: var(--color-mostaza);
-  --color-danger: #f97066;
+  --color-warning-text: #ffd27a;
+  --color-danger: #ff8a80;
   --color-info: var(--color-mapa);
 }

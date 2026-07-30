@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, GitCompare } from 'lucide-react';
 import { useDestinoDetail } from '../hooks/useDestinoDetail';
@@ -8,17 +8,31 @@ import MunicipioCard from '../components/destinations/MunicipioCard';
 import Imprescindibles from '../components/destinations/Imprescindibles';
 import ReviewSection from '../components/destinations/ReviewSection';
 import RelatedDestinations from '../components/destinations/RelatedDestinations';
+import DestinationQuickFacts from '../components/destinations/DestinationQuickFacts';
 import Footer from '../components/layout/Footer';
 import ScrollReveal from '../components/ui/ScrollReveal';
 import PageLoader from '../components/ui/PageLoader';
 import { parseJsonSafe } from '../utils/parseJson';
 
+const MUNI_PREVIEW = 6;
+
+const TOC = [
+  { href: '#resumen', label: 'Resumen' },
+  { href: '#notas', label: 'Notas' },
+  { href: '#imprescindibles', label: 'Imprescindibles' },
+  { href: '#cuando-ir', label: 'Cuándo ir' },
+  { href: '#dormir', label: 'Dónde dormir' },
+  { href: '#resenas', label: 'Firmas' },
+] as const;
+
 export default function DestinationDetail() {
   const { id } = useParams();
   const { destino, loading, error } = useDestinoDetail(id);
+  const [showAllMunis, setShowAllMunis] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setShowAllMunis(false);
   }, [id]);
 
   const facts = useMemo(() => {
@@ -46,6 +60,8 @@ export default function DestinationDetail() {
   }
 
   const municipios = destino.municipios ?? [];
+  const visibleMunis = showAllMunis ? municipios : municipios.slice(0, MUNI_PREVIEW);
+  const hasMoreMunis = municipios.length > MUNI_PREVIEW;
 
   return (
     <div className="dest-detail">
@@ -60,10 +76,18 @@ export default function DestinationDetail() {
       />
 
       <div className="dest-detail__body">
+        <nav className="dest-detail__toc" aria-label="En esta ficha">
+          {TOC.map((item) => (
+            <a key={item.href} href={item.href} className="dest-detail__toc-link">
+              {item.label}
+            </a>
+          ))}
+        </nav>
+
         <div className="dest-detail__layout">
           <div className="dest-detail__main">
             <ScrollReveal>
-              <article>
+              <article id="notas">
                 <span className="dest-detail__section-eyebrow field-label">Notas de campo</span>
                 <div
                   className="dest-detail__prose prose-premium"
@@ -73,7 +97,7 @@ export default function DestinationDetail() {
             </ScrollReveal>
 
             <ScrollReveal delay={1}>
-              <section>
+              <section id="imprescindibles">
                 <span className="dest-detail__block-eyebrow field-label">Apuntes</span>
                 <h2 className="dest-detail__block-title">
                   Imprescindibles
@@ -87,12 +111,27 @@ export default function DestinationDetail() {
           </div>
 
           <aside className="dest-detail__aside">
-            <ScrollReveal delay={1}>
-              <SeasonNotebook
+            <ScrollReveal>
+              <DestinationQuickFacts
+                presupuesto={facts.presupuesto}
+                masificacion={facts.masificacion}
+                tipoTurismo={facts.tipoTurismo}
+                ubicacion={facts.ubicacion}
                 julioAgosto={destino.mesesJulioAgosto}
                 mayJunSeptOct={destino.mesesMayJunSeptOct}
                 novAbril={destino.mesesNovAbril}
+                municipioCount={municipios.length}
               />
+            </ScrollReveal>
+
+            <ScrollReveal delay={1}>
+              <div id="cuando-ir">
+                <SeasonNotebook
+                  julioAgosto={destino.mesesJulioAgosto}
+                  mayJunSeptOct={destino.mesesMayJunSeptOct}
+                  novAbril={destino.mesesNovAbril}
+                />
+              </div>
             </ScrollReveal>
 
             <ScrollReveal delay={2}>
@@ -105,7 +144,7 @@ export default function DestinationDetail() {
         </div>
 
         <ScrollReveal>
-          <section className="dest-detail__divider-section">
+          <section id="dormir" className="dest-detail__divider-section">
             <div className="dest-detail__section-head">
               <div>
                 <span className="dest-detail__section-head-eyebrow field-label">Alojamiento</span>
@@ -124,11 +163,24 @@ export default function DestinationDetail() {
             </div>
 
             {municipios.length > 0 ? (
-              <div className="dest-detail__muni-grid">
-                {municipios.map((mun, i) => (
-                  <MunicipioCard key={mun.id} municipio={mun} index={i} />
-                ))}
-              </div>
+              <>
+                <div className="dest-detail__muni-grid">
+                  {visibleMunis.map((mun, i) => (
+                    <MunicipioCard key={mun.id} municipio={mun} index={i} />
+                  ))}
+                </div>
+                {hasMoreMunis && (
+                  <button
+                    type="button"
+                    className="dest-detail__muni-more"
+                    onClick={() => setShowAllMunis((v) => !v)}
+                  >
+                    {showAllMunis
+                      ? 'Ver menos'
+                      : `Mostrar ${municipios.length - MUNI_PREVIEW} más`}
+                  </button>
+                )}
+              </>
             ) : (
               <div className="dest-detail__muni-empty">
                 Aún no hay municipios apuntados en esta ficha.

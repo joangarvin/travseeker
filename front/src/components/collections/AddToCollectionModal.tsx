@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { Link } from 'react-router-dom';
 import { X, Plus, Check, Loader2, Bookmark } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -18,7 +19,7 @@ interface Props {
 }
 
 export default function AddToCollectionModal({ destinoId, destinoNombre, onClose }: Props) {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const [collections, setCollections] = useState<CollectionForDestino[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -26,6 +27,8 @@ export default function AddToCollectionModal({ destinoId, destinoNombre, onClose
   const [newName, setNewName] = useState('');
   const [newColor, setNewColor] = useState('emerald');
   const [creating, setCreating] = useState(false);
+  const [formError, setFormError] = useState('');
+  const canCreate = !!user?.emailVerified;
 
   useEffect(() => {
     if (!token) return;
@@ -58,7 +61,12 @@ export default function AddToCollectionModal({ destinoId, destinoNombre, onClose
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token || !newName.trim() || creating) return;
+    if (!user?.emailVerified) {
+      setFormError('Verifica tu email antes de crear una colección.');
+      return;
+    }
     setCreating(true);
+    setFormError('');
     try {
       const created = await createCollection({ nombre: newName, color: newColor }, token);
       await addToCollection(created.id, destinoId, token);
@@ -68,6 +76,8 @@ export default function AddToCollectionModal({ destinoId, destinoNombre, onClose
       ]);
       setNewName('');
       setShowForm(false);
+    } catch (err) {
+      setFormError(err instanceof Error ? err.message : 'No se pudo crear');
     } finally {
       setCreating(false);
     }
@@ -128,7 +138,7 @@ export default function AddToCollectionModal({ destinoId, destinoNombre, onClose
         </div>
 
         <div className="collection-modal__footer">
-          {showForm ? (
+          {showForm && canCreate ? (
             <form onSubmit={handleCreate} className="collection-modal__form">
               <input
                 autoFocus
@@ -138,6 +148,7 @@ export default function AddToCollectionModal({ destinoId, destinoNombre, onClose
                 placeholder="Nombre (p. ej. Verano 2026)"
                 className="ui-input"
               />
+              {formError && <p className="collection-modal__error">{formError}</p>}
               <div className="colecciones-form__colors">
                 {COLLECTION_COLORS.map((col) => (
                   <button
@@ -159,7 +170,7 @@ export default function AddToCollectionModal({ destinoId, destinoNombre, onClose
                 </button>
               </div>
             </form>
-          ) : (
+          ) : canCreate ? (
             <button
               type="button"
               onClick={() => setShowForm(true)}
@@ -167,6 +178,11 @@ export default function AddToCollectionModal({ destinoId, destinoNombre, onClose
             >
               <Plus className="icon-sm" /> Nueva colección
             </button>
+          ) : (
+            <p className="collection-modal__verify">
+              Verifica tu email para crear listas.{' '}
+              <Link to="/perfil">Ir al perfil</Link>
+            </p>
           )}
         </div>
       </div>

@@ -81,6 +81,8 @@
 .filter-panel__select,
 .map-page__select,
 .map-page__clear,
+.map-page__list-toggle,
+.map-page__list-item,
 .list-toolbar__select,
 .touch-target:is(a, button),
 .admin-dest-card__trigger,
