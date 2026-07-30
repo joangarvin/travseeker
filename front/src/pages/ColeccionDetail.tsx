@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Check, Compass, Link2, Pencil, Search, Trash2, UserPlus, Users, X } from 'lucide-react';
 import Header from '../components/layout/Header';
@@ -8,7 +8,7 @@ import ScrollReveal from '../components/ui/ScrollReveal';
 import CollectionItemCard from '../components/collections/CollectionItemCard';
 import { useAuth } from '../context/AuthContext';
 import { useAbortableFetch } from '../hooks/useAbortableFetch';
-import { addCollectionMember, getCollection, removeCollectionMember, updateCollection, updateCollectionMember, deleteCollection, shareCollection, stopSharingCollection } from '../api/collections';
+import { addCollectionMember, getCollection, removeCollectionMember, reorderCollectionItems, updateCollection, updateCollectionMember, deleteCollection, shareCollection, stopSharingCollection } from '../api/collections';
 import { COLLECTION_COLORS, colorHex } from '../constants/collectionColors';
 import type { CollectionDetail } from '../types/collection';
 
@@ -34,6 +34,13 @@ export default function ColeccionDetail() {
   const [memberEmail, setMemberEmail] = useState('');
   const [memberRole, setMemberRole] = useState<'editor' | 'viewer'>('editor');
   const [memberError, setMemberError] = useState('');
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [touchDragPosition, setTouchDragPosition] = useState<{ x: number; y: number } | null>(null);
+  const [orderError, setOrderError] = useState('');
+  const dragIdRef = useRef<string | null>(null);
+  const armedDragRef = useRef<string | null>(null);
+  const orderRef = useRef<string[]>([]);
+  const originalOrderRef = useRef<string[]>([]);
 
   useEffect(() => {
     if (collection) {
@@ -70,6 +77,84 @@ export default function ColeccionDetail() {
 
   const handleUpdateItem = (updated: Pick<CollectionDetail['items'][number], 'destinoId' | 'notas' | 'dayIndex' | 'status' | 'sortOrder'>) => {
     setCollection((prev) => prev ? { ...prev, items: prev.items.map((item) => item.destinoId === updated.destinoId ? { ...item, ...updated } : item).sort((a, b) => a.sortOrder - b.sortOrder || a.createdAt.localeCompare(b.createdAt)) } : prev);
+  };
+
+  const handleDragStart = (event: React.DragEvent<HTMLDivElement>, destinoId: string) => {
+    if (armedDragRef.current !== destinoId) { event.preventDefault(); return; }
+    dragIdRef.current = destinoId; setDraggingId(destinoId); setOrderError('');
+    orderRef.current = collection?.items.map((item) => item.destinoId) ?? [];
+    originalOrderRef.current = [...orderRef.current];
+    event.dataTransfer.effectAllowed = 'move'; event.dataTransfer.setData('text/plain', destinoId);
+  };
+
+  const moveItem = (activeId: string, overId: string) => {
+    if (activeId === overId) return;
+    setCollection((prev) => {
+      if (!prev) return prev;
+      const items = [...prev.items];
+      const from = items.findIndex((item) => item.destinoId === activeId);
+      const to = items.findIndex((item) => item.destinoId === overId);
+      if (from < 0 || to < 0) return prev;
+      const [moved] = items.splice(from, 1); items.splice(to, 0, moved);
+      const ordered = items.map((item, index) => ({ ...item, sortOrder: index * 10 }));
+      orderRef.current = ordered.map((item) => item.destinoId);
+      return { ...prev, items: ordered };
+    });
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>, overId: string) => {
+    const activeId = dragIdRef.current;
+    if (!activeId || activeId === overId) return;
+    event.preventDefault(); event.dataTransfer.dropEffect = 'move';
+    moveItem(activeId, overId);
+  };
+
+  const persistOrder = async () => {
+    const ordered = orderRef.current;
+    dragIdRef.current = null; armedDragRef.current = null; setDraggingId(null); setTouchDragPosition(null);
+    if (!token || !id || !ordered.length) return;
+    try { await reorderCollectionItems(id, ordered, token); originalOrderRef.current = [...ordered]; }
+    catch (err) {
+      const original = originalOrderRef.current;
+      setCollection((prev) => prev ? { ...prev, items: [...prev.items].sort((a, b) => original.indexOf(a.destinoId) - original.indexOf(b.destinoId)) } : prev);
+      setOrderError(err instanceof Error ? err.message : 'No se pudo guardar el orden');
+    }
+  };
+
+  const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    await persistOrder();
+  };
+
+  const handleDragEnd = () => {
+    if (dragIdRef.current && originalOrderRef.current.length) {
+      const original = originalOrderRef.current;
+      setCollection((prev) => prev ? { ...prev, items: [...prev.items].sort((a, b) => original.indexOf(a.destinoId) - original.indexOf(b.destinoId)) } : prev);
+    }
+    dragIdRef.current = null; armedDragRef.current = null; setDraggingId(null); setTouchDragPosition(null);
+  };
+
+  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>, destinoId: string) => {
+    if (!(event.target as HTMLElement).closest('[data-drag-handle]')) return;
+    armedDragRef.current = destinoId;
+    if (event.pointerType === 'mouse') return;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    dragIdRef.current = destinoId; setDraggingId(destinoId); setOrderError('');
+    setTouchDragPosition({ x: event.clientX, y: event.clientY });
+    orderRef.current = collection?.items.map((item) => item.destinoId) ?? [];
+    originalOrderRef.current = [...orderRef.current];
+  };
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === 'mouse' || !dragIdRef.current) return;
+    event.preventDefault(); setTouchDragPosition({ x: event.clientX, y: event.clientY });
+    const target = document.elementFromPoint(event.clientX, event.clientY)?.closest<HTMLElement>('[data-destino-id]');
+    const overId = target?.dataset.destinoId;
+    if (overId) moveItem(dragIdRef.current, overId);
+  };
+
+  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType !== 'mouse' && dragIdRef.current) void persistOrder();
   };
 
   const handleShare = async () => {
@@ -260,13 +345,16 @@ export default function ColeccionDetail() {
             </div>
           </div>
         )}
+        {canEdit && collection.items.length > 1 && <p className="coleccion-detail-order-hint">Arrastra las fichas desde el asa para ordenar el viaje.{query && ' Quita la búsqueda para cambiar el orden.'}</p>}
+        {orderError && <p className="collection-order-error">{orderError}</p>}
+        {touchDragPosition && draggingId && (() => { const dragged = collection.items.find((item) => item.destinoId === draggingId); return dragged ? <div className="collection-touch-preview" style={{ left: touchDragPosition.x, top: touchDragPosition.y }}><img src={dragged.destino.imagen} alt="" /><strong>{dragged.destino.nombre}</strong></div> : null; })()}
 
         {visibleItems.length > 0 ? (
-          <div className="colecciones-grid">
+          <div className="coleccion-itinerary-grid">
             {visibleItems.map((item, index) => (
-              <ScrollReveal key={item.id} delay={(index % 3) as 0 | 1 | 2}>
-                <CollectionItemCard collectionId={collection.id} item={item} onRemove={handleRemoveItem} onUpdate={handleUpdateItem} canEdit={canEdit} />
-              </ScrollReveal>
+              <div key={item.id} data-destino-id={item.destinoId} className={`collection-sort-item ${draggingId === item.destinoId ? 'is-dragging' : ''}`} draggable={canEdit && !query.trim()} onPointerDown={(event) => handlePointerDown(event, item.destinoId)} onPointerMove={handlePointerMove} onPointerUp={handlePointerUp} onPointerCancel={handleDragEnd} onDragStart={(event) => handleDragStart(event, item.destinoId)} onDragOver={(event) => handleDragOver(event, item.destinoId)} onDrop={handleDrop} onDragEnd={handleDragEnd}>
+                <ScrollReveal delay={(index % 3) as 0 | 1 | 2}><CollectionItemCard collectionId={collection.id} item={item} onRemove={handleRemoveItem} onUpdate={handleUpdateItem} canEdit={canEdit} canDrag={canEdit && !query.trim()} /></ScrollReveal>
+              </div>
             ))}
           </div>
         ) : (

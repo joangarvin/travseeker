@@ -1,17 +1,19 @@
-import { Link } from 'react-router-dom';
-import { Compass } from 'lucide-react';
+import { AlertTriangle, Compass, RotateCcw } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useAbortableFetch } from '../../hooks/useAbortableFetch';
 import { getRecommendations } from '../../api/recommendations';
 import DestinationCard from '../destinations/DestinationCard';
 import ScrollReveal from '../ui/ScrollReveal';
 import type { Recommendation } from '../../types';
+import TravelerProfileEditor from './TravelerProfileEditor';
 
 export default function RecommendedForYou() {
-  const { user, token } = useAuth();
-  const { data, loading } = useAbortableFetch<Recommendation[]>(
+  const { user, token, favoriteIds } = useAuth();
+  const preferenceKey = JSON.stringify(user?.preferences?.travel ?? {});
+  const favoriteKey = [...favoriteIds].sort().join(',');
+  const { data, loading, error, reload } = useAbortableFetch<Recommendation[]>(
     (signal) => getRecommendations(token as string, signal),
-    [token],
+    [token, preferenceKey, favoriteKey],
     { enabled: !!user && !!token, initialData: [] },
   );
 
@@ -30,7 +32,9 @@ export default function RecommendedForYou() {
         </p>
       </ScrollReveal>
 
-      {loading ? (
+      <TravelerProfileEditor onSaved={reload} />
+
+      {error ? <div className="home-recs__error"><AlertTriangle className="icon-sm" /><span><strong>No hemos podido preparar tus destinos.</strong><small>{error}</small></span><button type="button" onClick={reload}><RotateCcw className="icon-sm" /> Reintentar</button></div> : loading ? (
         <div className="home-recs__grid">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="home-recs__skeleton" />
@@ -57,9 +61,6 @@ export default function RecommendedForYou() {
             <p className="home-recs__empty-text">
               Guarda favoritos o marca estilos en tu perfil y aquí aparecerán destinos que te cuadran.
             </p>
-            <Link to="/perfil" className="btn-cta">
-              Completar perfil
-            </Link>
           </div>
         </ScrollReveal>
       )}

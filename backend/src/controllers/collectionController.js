@@ -31,6 +31,10 @@ const updateItem = asyncHandler(async (req, res) => {
   res.json(await collectionService.updateItem(req.user.id, req.params.id, req.params.destinoId, req.body));
 });
 
+const reorderItems = asyncHandler(async (req, res) => {
+  res.json(await collectionService.reorderItems(req.user.id, req.params.id, req.body.orderedDestinoIds));
+});
+
 const removeItem = asyncHandler(async (req, res) => {
   res.json(await collectionService.removeItem(req.user.id, req.params.id, req.params.destinoId));
 });
@@ -63,4 +67,4 @@ const removeMember = asyncHandler(async (req, res) => {
   res.json(await collectionService.removeMember(req.user.id, req.params.id, req.params.memberId));
 });
 
-module.exports = { list, getOne, create, update, remove, addItem, updateItem, removeItem, forDestino, share, stopSharing, getPublic, addMember, updateMember, removeMember };
+module.exports = { list, getOne, create, update, remove, addItem, updateItem, reorderItems, removeItem, forDestino, share, stopSharing, getPublic, addMember, updateMember, removeMember };

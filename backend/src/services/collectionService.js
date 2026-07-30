@@ -2,6 +2,7 @@ const { prisma } = require('../config/database');
 const { randomBytes } = require('crypto');
 const { LIST_SELECT } = require('../constants/selects');
 const { canAccess } = require('../domain/collectionAccess');
+const { buildCollectionOrder } = require('../domain/collectionOrder');
 
 function clean(str, max) {
   if (typeof str !== 'string') return null;
@@ -260,6 +261,20 @@ async function updateItem(userId, collectionId, destinoId, payload) {
   return item;
 }
 
+async function reorderItems(userId, collectionId, orderedDestinoIds) {
+  await getAccess(userId, collectionId, 'editor');
+  const current = await prisma.collectionItem.findMany({ where: { collectionId }, select: { destinoId: true } });
+  const order = buildCollectionOrder(current.map((item) => item.destinoId), orderedDestinoIds);
+  await prisma.$transaction([
+    ...order.map(({ destinoId, sortOrder }) => prisma.collectionItem.update({
+      where: { collectionId_destinoId: { collectionId, destinoId } },
+      data: { sortOrder },
+    })),
+    prisma.collection.update({ where: { id: collectionId }, data: { updatedAt: new Date() } }),
+  ]);
+  return { order: orderedDestinoIds };
+}
+
 async function removeItem(userId, collectionId, destinoId) {
   await getAccess(userId, collectionId, 'editor');
   await prisma.collectionItem.deleteMany({ where: { collectionId, destinoId } });
@@ -319,6 +334,7 @@ module.exports = {
   deleteCollection,
   addItem,
   updateItem,
+  reorderItems,
   removeItem,
   getCollectionsForDestino,
   shareCollection,
