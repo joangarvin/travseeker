@@ -14,6 +14,7 @@ const Auth = lazy(() => import('./pages/Auth'));
 const Favoritos = lazy(() => import('./pages/Favoritos'));
 const Colecciones = lazy(() => import('./pages/Colecciones'));
 const ColeccionDetail = lazy(() => import('./pages/ColeccionDetail'));
+const PublicCollection = lazy(() => import('./pages/PublicCollection'));
 const Comparador = lazy(() => import('./pages/Comparador'));
 const Profile = lazy(() => import('./pages/Profile'));
 const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
@@ -39,6 +40,7 @@ function App() {
                   <Route path="/favoritos" element={<Favoritos />} />
                   <Route path="/colecciones" element={<Colecciones />} />
                   <Route path="/colecciones/:id" element={<ColeccionDetail />} />
+                  <Route path="/viaje/:shareToken" element={<PublicCollection />} />
                   <Route path="/comparar" element={<Comparador />} />
                   <Route path="/perfil" element={<Profile />} />
                   <Route path="/verificar-email" element={<VerifyEmail />} />
