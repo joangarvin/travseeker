@@ -13,6 +13,7 @@ import Footer from '../components/layout/Footer';
 import ScrollReveal from '../components/ui/ScrollReveal';
 import PageLoader from '../components/ui/PageLoader';
 import { parseJsonSafe } from '../utils/parseJson';
+import NearbyPlaces from '../components/destinations/NearbyPlaces';
 
 const MUNI_PREVIEW = 6;
 
@@ -22,6 +23,7 @@ const TOC = [
   { href: '#imprescindibles', label: 'Imprescindibles' },
   { href: '#cuando-ir', label: 'Cuándo ir' },
   { href: '#dormir', label: 'Dónde dormir' },
+  { href: '#cerca', label: 'Cerca' },
   { href: '#resenas', label: 'Firmas' },
 ] as const;
 
@@ -188,6 +190,8 @@ export default function DestinationDetail() {
             )}
           </section>
         </ScrollReveal>
+
+        <ScrollReveal><NearbyPlaces places={destino.places ?? []} center={destino.latitud != null && destino.longitud != null ? [destino.latitud, destino.longitud] : undefined} /></ScrollReveal>
 
         <div className="dest-detail__divider-section">
           <ReviewSection destinoId={destino.id} />

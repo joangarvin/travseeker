@@ -150,6 +150,9 @@
 .admin-reviews__item { display: grid; gap: .75rem; margin-top: 1rem; padding: 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-surface); }
 .admin-reviews__item p { margin: .5rem 0 0; color: var(--color-muted); }
 .admin-reviews__actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+.admin-places__form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; margin-top: 1rem; }
+.admin-places__form textarea { grid-column: 1 / -1; }
+@media (max-width: 640px) { .admin-places__form { grid-template-columns: 1fr; } .admin-places__form textarea { grid-column: auto; } }
 
 /* —— Mobile back bar —— */
 

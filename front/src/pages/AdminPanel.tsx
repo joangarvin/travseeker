@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Building2, MapPinned, MessageSquare, ShieldCheck } from 'lucide-react';
+import { Building2, MapPin, MapPinned, MessageSquare, ShieldCheck } from 'lucide-react';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import PageHero from '../components/layout/PageHero';
@@ -9,6 +9,7 @@ import { useAdminPanel } from '../hooks/useAdminPanel';
 import { useAdminMunicipios } from '../hooks/useAdminMunicipios';
 import type { AdminTab } from '../types/admin';
 import AdminReviews from '../components/admin/AdminReviews';
+import AdminPlaces from '../components/admin/AdminPlaces';
 
 export default function AdminPanel() {
   const [tab, setTab] = useState<AdminTab>('destinos');
@@ -59,6 +60,7 @@ export default function AdminPanel() {
             Destinos
           </button>
           <button type="button" role="tab" aria-selected={tab === 'reviews'} onClick={() => handleTabChange('reviews')} className={`admin-tabs__tab${tab === 'reviews' ? ' admin-tabs__tab--active' : ''}`}><MessageSquare className="icon-sm" /> Reseñas</button>
+          <button type="button" role="tab" aria-selected={tab === 'places'} onClick={() => handleTabChange('places')} className={`admin-tabs__tab${tab === 'places' ? ' admin-tabs__tab--active' : ''}`}><MapPin className="icon-sm" /> Lugares</button>
           <button
             type="button"
             role="tab"
@@ -73,7 +75,7 @@ export default function AdminPanel() {
       </div>
 
       <div className="admin-page__workspace">
-        {tab === 'reviews' ? <AdminReviews /> : <AdminWorkspace
+        {tab === 'reviews' ? <AdminReviews /> : tab === 'places' ? <AdminPlaces destinos={destinos.filtered} /> : <AdminWorkspace
           tab={tab}
           onTabChange={handleTabChange}
           destinos={destinos}

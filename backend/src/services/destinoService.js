@@ -19,6 +19,7 @@ async function getDestinoById(id) {
       municipioLinks: {
         include: { municipio: true },
       },
+      places: { where: { isActive: true }, orderBy: [{ sortOrder: 'asc' }, { nombre: 'asc' }] },
     },
   });
   if (!destino) return null;

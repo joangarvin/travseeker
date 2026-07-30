@@ -29,6 +29,26 @@ model Destino {
   favoritos             Favorito[]
   reviews               Review[]
   collectionItems       CollectionItem[]
+  places                Place[]
+}
+
+model Place {
+  id          String   @id @default(uuid())
+  destinoId   String
+  nombre      String
+  categoria   String
+  descripcion String?
+  latitud     Float
+  longitud    Float
+  website     String?
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  destino Destino @relation(fields: [destinoId], references: [id], onDelete: Cascade)
+
+  @@index([destinoId, isActive, sortOrder])
 }
 
 model Municipio {

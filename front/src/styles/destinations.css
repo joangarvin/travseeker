@@ -1425,6 +1425,15 @@
   margin-top: 2rem;
 }
 
+.nearby-places__layout { display: grid; gap: 1rem; }
+.nearby-places__map { min-height: 22rem; overflow: hidden; border: 1px solid var(--color-border); border-radius: var(--radius-card); }
+.nearby-places__list { display: grid; gap: .75rem; }
+.nearby-place { display: flex; gap: .75rem; padding: 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-surface); }
+.nearby-place h3 { margin-top: .2rem; font-family: var(--font-display); color: var(--color-primary); }
+.nearby-place p { margin-top: .35rem; color: var(--color-muted); font-size: .875rem; }
+.nearby-place a { display: inline-flex; align-items: center; gap: .3rem; margin-top: .5rem; color: var(--color-brand-dark); font-size: .8rem; font-weight: 600; }
+@media (min-width: 900px) { .nearby-places__layout { grid-template-columns: 1.35fr .85fr; } }
+
 .related-dest__eyebrow {
   margin-bottom: 0.75rem;
   display: block;
