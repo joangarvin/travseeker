@@ -71,6 +71,12 @@ export function updateCollectionItem(collectionId: string, destinoId: string, da
   });
 }
 
+export function reorderCollectionItems(collectionId: string, orderedDestinoIds: string[], token: string) {
+  return apiFetch<{ order: string[] }>(`/api/colecciones/${collectionId}/items/reorder`, {
+    method: 'PATCH', body: JSON.stringify({ orderedDestinoIds }), token,
+  });
+}
+
 export function removeFromCollection(collectionId: string, destinoId: string, token: string) {
   return apiFetch<{ removed: boolean }>(`/api/colecciones/${collectionId}/items/${destinoId}`, {
     method: 'DELETE',

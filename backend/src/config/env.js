@@ -1,4 +1,7 @@
-// Centralized environment configuration for deployment and local dev.
+// Centralized environment configuration for deployment, scripts and local dev.
+// Loading here prevents direct service/worker executions from silently using fallbacks.
+require('dotenv').config({ quiet: true });
+
 const isProd = process.env.NODE_ENV === 'production';
 
 function required(name) {

@@ -37,7 +37,7 @@ function avgIndex(values, order) {
 async function getRecommendations(userId, limit = 8) {
   const [favs, colItems, user] = await Promise.all([
     prisma.favorito.findMany({ where: { userId }, select: { destinoId: true } }),
-    prisma.collectionItem.findMany({ where: { collection: { userId } }, select: { destinoId: true } }),
+    prisma.collectionItem.findMany({ where: { collection: { OR: [{ userId }, { members: { some: { userId } } }] } }, select: { destinoId: true } }),
     prisma.user.findUnique({ where: { id: userId }, select: { preferences: true } }),
   ]);
 

@@ -599,6 +599,36 @@
   max-width: 36rem;
 }
 
+.traveler-profile { position: relative; margin: 0 0 1.75rem; border: 1px solid var(--color-border-strong); border-radius: var(--radius-card); background: var(--color-surface); box-shadow: var(--shadow-soft); }
+.traveler-profile__head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .85rem; padding: 1rem 1.1rem; }
+.traveler-profile__icon { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: color-mix(in srgb, var(--color-brand) 12%, var(--color-surface)); color: var(--color-brand-dark); }
+.traveler-profile__head h3 { margin: 0; font-family: var(--font-display); font-size: 1rem; color: var(--color-primary); }
+.traveler-profile__head p { margin: .15rem 0 0; color: var(--color-muted); font-size: .82rem; }
+.traveler-profile__edit { display: inline-flex; align-items: center; gap: .35rem; padding: .5rem .65rem; border: 1px solid var(--color-border); border-radius: var(--radius-pill); background: transparent; color: var(--color-primary); font-weight: 650; cursor: pointer; }
+.traveler-profile__form { display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(11rem, .8fr); gap: 1rem 1.25rem; padding: 1rem 1.1rem 1.1rem; border-top: 1px solid var(--color-border); }
+.traveler-profile__form fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.traveler-profile__form legend,
+.traveler-profile__budget { color: var(--color-primary); font-size: .78rem; font-weight: 700; }
+.traveler-profile__chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .55rem; }
+.traveler-profile__chips button { padding: .48rem .7rem; border: 1px solid var(--color-border-strong); border-radius: var(--radius-pill); background: var(--color-surface); color: var(--color-primary); cursor: pointer; font-size: .78rem; }
+.traveler-profile__chips button.is-active { border-color: var(--color-brand); background: var(--color-brand); color: var(--color-on-brand); }
+.traveler-profile__budget { display: grid; align-content: start; gap: .55rem; }
+.traveler-profile__crowds { display: flex; align-items: center; gap: .65rem; grid-column: 1 / -1; padding: .75rem; border: 1px solid var(--color-border); border-radius: var(--radius-control); background: var(--color-surface-2); color: var(--color-primary); text-align: left; cursor: pointer; }
+.traveler-profile__crowds span { display: grid; flex: 1; }
+.traveler-profile__crowds small { margin-top: .15rem; color: var(--color-muted); }
+.traveler-profile__crowds i { width: 2.25rem; height: 1.25rem; padding: .15rem; border-radius: var(--radius-pill); background: var(--color-border-strong); }
+.traveler-profile__crowds i::after { content: ''; display: block; width: .95rem; height: .95rem; border-radius: 50%; background: var(--color-surface); transition: transform .2s ease; }
+.traveler-profile__crowds.is-active i { background: var(--color-brand); }
+.traveler-profile__crowds.is-active i::after { transform: translateX(1rem); }
+.traveler-profile__save { justify-self: start; }
+.traveler-profile__error { grid-column: 1 / -1; color: var(--color-danger); font-size: .8rem; }
+.traveler-profile__saved { position: absolute; right: 1rem; bottom: -.75rem; display: inline-flex; gap: .3rem; padding: .35rem .6rem; border-radius: var(--radius-pill); background: var(--color-brand); color: var(--color-on-brand); font-size: .72rem; font-weight: 700; }
+.home-recs__error { display: flex; align-items: center; gap: .75rem; padding: 1rem; border: 1px solid color-mix(in srgb, var(--color-danger) 30%, var(--color-border)); border-radius: var(--radius-card); background: var(--color-surface); color: var(--color-danger); }
+.home-recs__error span { display: grid; flex: 1; }
+.home-recs__error small { color: var(--color-muted); }
+.home-recs__error button { display: inline-flex; align-items: center; gap: .35rem; border: 0; background: none; color: var(--color-primary); font-weight: 700; cursor: pointer; }
+@media (max-width: 680px) { .traveler-profile__head { grid-template-columns: auto minmax(0, 1fr); } .traveler-profile__edit { grid-column: 1 / -1; justify-content: center; } .traveler-profile__form { grid-template-columns: 1fr; } .traveler-profile__crowds { grid-column: auto; } }
+
 @media (min-width: 640px) {
   .home-recs__copy {
     margin-bottom: 2rem;

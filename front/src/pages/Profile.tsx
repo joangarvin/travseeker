@@ -30,6 +30,7 @@ import ImageUploadField from '../components/ui/ImageUploadField';
 import { getDisplayName } from '../utils/user';
 import type { UserPreferences } from '../types/user';
 import { createAlert, deleteAlert, getAlerts, type DecisionAlert } from '../api/alerts';
+import { TRAVEL_BUDGETS, TRAVEL_TYPES } from '../constants/travelProfile';
 
 type Tab = 'perfil' | 'preferencias' | 'seguridad';
 
@@ -45,8 +46,6 @@ const LOCALES = [
   { value: 'ca', label: 'Català' },
 ];
 
-const TRAVEL_TIPOS = ['Cultural', 'Naturaleza', 'Sol y playa', 'Rural', 'Montaña', 'Patrimonial'];
-const TRAVEL_PRESUPUESTOS = ['Bajo', 'Medio-Bajo', 'Medio', 'Medio-Alto', 'Alto'];
 const MONTHS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
 function Toggle({ checked, onChange, label, description, icon: Icon }: {
@@ -434,7 +433,7 @@ export default function Profile() {
 
                 <p className="form-label">Tipos de turismo favoritos</p>
                 <div className="profile-chips">
-                  {TRAVEL_TIPOS.map((t) => {
+                  {TRAVEL_TYPES.map((t) => {
                     const active = travelTipos.includes(t);
                     return (
                       <button
@@ -453,7 +452,7 @@ export default function Profile() {
                   <label htmlFor="travelPresupuesto" className="form-label">Presupuesto preferido</label>
                   <select id="travelPresupuesto" value={travelPresupuesto} onChange={(e) => setTravelPresupuesto(e.target.value)} className="ui-input">
                     <option value="">Sin preferencia</option>
-                    {TRAVEL_PRESUPUESTOS.map((p) => (
+                    {TRAVEL_BUDGETS.map((p) => (
                       <option key={p} value={p}>{p}</option>
                     ))}
                   </select>
