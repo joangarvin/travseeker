@@ -25,26 +25,8 @@ function aforoLevel(masificacion: string): number {
   return 0;
 }
 
-function AforoBar({ level }: { level: number }) {
-  if (!level) return null;
-  const color = level >= 4 ? 'var(--color-teja)' : 'var(--color-mostaza)';
-  return (
-    <span className="aforo-bar" aria-hidden>
-      {[1, 2, 3, 4].map((n) => (
-        <span
-          key={n}
-          className="aforo-bar__tick"
-          style={{ background: n <= level ? color : 'var(--color-surface-2)' }}
-        />
-      ))}
-    </span>
-  );
-}
-
-function SeasonCrowdRing({ value }: { value: number }) {
+function SeasonCrowdRing({ value, month }: { value: number; month: string }) {
   const safeValue = Math.max(0, Math.min(100, Math.round(value)));
-  const radius = 18;
-  const circumference = 2 * Math.PI * radius;
   const color = safeValue <= 25
     ? 'var(--color-brand)'
     : safeValue <= 50
@@ -52,18 +34,10 @@ function SeasonCrowdRing({ value }: { value: number }) {
       : safeValue <= 75
         ? 'var(--color-teja)'
         : 'var(--color-danger)';
-  const label = safeValue <= 25 ? 'Muy tranquilo' : safeValue <= 50 ? 'Afluencia moderada' : safeValue <= 75 ? 'Bastante concurrido' : 'Muy concurrido';
-
-  return (
-    <span className="season-crowd-ring" role="img" aria-label={`${label}: ${safeValue}% de afluencia estimada`}>
-      <svg viewBox="0 0 48 48" aria-hidden="true">
-        <circle className="season-crowd-ring__track" cx="24" cy="24" r={radius} />
-        <circle className="season-crowd-ring__value" cx="24" cy="24" r={radius} style={{ stroke: color, strokeDasharray: circumference, strokeDashoffset: circumference * (1 - safeValue / 100) }} />
-      </svg>
-      <span className="season-crowd-ring__number">{safeValue}<small>%</small></span>
-      <span className="season-crowd-ring__label">Afluencia</span>
-    </span>
-  );
+  return <span className="season-crowd-badge" style={{ '--season-color': color } as React.CSSProperties} role="img" aria-label={`${month}: ${safeValue}% de afluencia estimada`}>
+    <span className="season-crowd-badge__eyebrow">{month}</span>
+    <span className="season-crowd-badge__number">{safeValue}<small>%</small></span>
+  </span>;
 }
 
 function DestinationCard({
@@ -84,6 +58,12 @@ function DestinationCard({
     presupuesto: parseJsonSafe(destino.presupuesto),
     masificacion: parseJsonSafe(destino.masificacion),
   }), [destino.ubicacion, destino.presupuesto, destino.masificacion]);
+  const crowdLevel = aforoLevel(masificacion);
+  const generalCrowd = [15, 35, 60, 85][Math.max(0, crowdLevel - 1)] ?? 50;
+  const generalTone = ['#e6eee9', '#edf0e8', '#f2ece3', '#f1e8e8'][Math.max(0, crowdLevel - 1)] ?? 'var(--color-surface)';
+  const seasonTone = typeof destino.seasonCrowd === 'number'
+    ? destino.seasonCrowd <= 25 ? '#e6eee9' : destino.seasonCrowd <= 50 ? '#edf0e8' : destino.seasonCrowd <= 75 ? '#f2ece3' : '#f1e8e8'
+    : generalTone;
 
   const openCollection = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -102,7 +82,7 @@ function DestinationCard({
     <Link to={`/destino/${destino.id}`} className="dest-card-link">
       <div
         className="dest-card"
-        style={{ boxShadow: 'var(--shadow-card)' }}
+        style={{ boxShadow: 'var(--shadow-card)', '--season-tone': seasonTone } as React.CSSProperties}
       >
         <div className={`dest-card__media ${featured ? 'dest-card__media--featured' : ''}`}>
           <img
@@ -151,18 +131,12 @@ function DestinationCard({
               {destino.nombre}
             </h3>
           </div>
+          <div className="dest-card__season-badge"><SeasonCrowdRing value={destino.seasonCrowd ?? generalCrowd} month={destino.seasonCrowd != null ? (destino.matchReason?.split(':')[0] || 'Este mes') : 'Afluencia'} /></div>
           <div className="dest-card__footer">
             <span className="dest-card__stats field-label">
               {presupuesto} · {masificacion}
             </span>
-            <AforoBar level={aforoLevel(masificacion)} />
           </div>
-          {destino.matchReason && (
-            <div className="dest-card__season-insight">
-              <p className="dest-card__season-reason">{destino.matchReason}</p>
-              {typeof destino.seasonCrowd === 'number' && <SeasonCrowdRing value={destino.seasonCrowd} />}
-            </div>
-          )}
         </div>
 
         {collectionOpen && (
