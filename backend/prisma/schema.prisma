@@ -23,6 +23,7 @@ model Destino {
   imagen                String
   latitud               Float?
   longitud              Float?
+  updatedAt             DateTime    @updatedAt
 
   municipioLinks        DestinoMunicipio[]
   favoritos             Favorito[]
@@ -87,10 +88,29 @@ model AlertSubscription {
   isActive      Boolean  @default(true)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  lastCheckedAt DateTime?
+  lastNotifiedAt DateTime?
 
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deliveries    AlertDelivery[]
 
   @@index([userId, isActive])
+}
+
+model AlertDelivery {
+  id        String   @id @default(uuid())
+  alertId   String
+  fingerprint String
+  status    String   @default("pending")
+  error     String?
+  sentAt    DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  alert AlertSubscription @relation(fields: [alertId], references: [id], onDelete: Cascade)
+
+  @@unique([alertId, fingerprint])
+  @@index([status, createdAt])
 }
 
 model Collection {
