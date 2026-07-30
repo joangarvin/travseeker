@@ -1,0 +1,175 @@
+.page-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 32px;
+  max-width: var(--max);
+  margin: auto;
+  padding: clamp(64px, 8vw, 120px) clamp(16px, 4vw, 64px) 48px;
+  border-bottom: 1px solid var(--line);
+}
+.page-heading h1 {
+  margin: 0;
+  font-size: clamp(2.6rem, 6vw, 6rem);
+}
+.page-heading__intro {
+  max-width: 600px;
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: 1.04rem;
+}
+.page-heading__intro p:last-child {
+  margin-bottom: 0;
+}
+.page-heading:has(+ .admin-layout) {
+  padding-top: 40px;
+}
+.page-heading:has(+ .admin-layout) h1 {
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
+}
+.heading-actions {
+  display: flex;
+  gap: 8px;
+}
+.library-toolbar {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 24px clamp(16px, 4vw, 64px);
+}
+.library-toolbar > div,
+.admin-search {
+  display: flex;
+  align-items: center;
+  max-width: 560px;
+  border-bottom: 1px solid var(--line-strong);
+}
+.library-toolbar input,
+.admin-search input {
+  border: 0;
+  background: transparent;
+}
+.library-content,
+.collections-grid {
+  max-width: var(--max);
+  min-height: 42vh;
+  margin: auto;
+  padding: 32px clamp(16px, 4vw, 64px) 100px;
+}
+.collections-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.collection-card {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) 1.2fr;
+  min-height: 260px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  text-decoration: none;
+}
+.collection-card__images {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  min-height: 260px;
+  background: var(--surface-muted);
+}
+.collection-card__images img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.collection-card__images img:first-child {
+  grid-row: span 2;
+}
+.collection-card__images > svg {
+  align-self: center;
+  justify-self: center;
+  width: 48px;
+  height: 48px;
+}
+.collection-card > div:last-child {
+  align-self: center;
+  padding: 28px;
+}
+.collection-card span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--brand);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.collection-card span svg {
+  width: 14px;
+  height: 14px;
+}
+.collection-card h2 {
+  margin: 14px 0;
+  font-size: clamp(1.6rem, 3vw, 2.8rem);
+}
+.collection-card p,
+.collection-card small {
+  color: var(--muted);
+}
+.trip-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  max-width: var(--max);
+  margin: auto;
+  padding: 24px clamp(16px, 4vw, 64px);
+  border-bottom: 1px solid var(--line);
+}
+.trip-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.82rem;
+}
+.itinerary {
+  max-width: 1100px;
+  margin: 64px auto 120px;
+  padding: 0 16px;
+}
+.itinerary article {
+  display: grid;
+  grid-template-columns: 56px 180px 1fr auto;
+  gap: 24px;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+.itinerary article > img {
+  width: 180px;
+  height: 124px;
+  object-fit: cover;
+}
+.itinerary__number {
+  color: var(--brand);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+.itinerary h2 {
+  margin: 8px 0;
+  font-size: 1.8rem;
+}
+.itinerary h2 a {
+  text-decoration: none;
+}
+.itinerary small,
+.itinerary p {
+  color: var(--muted);
+}
+.itinerary article > button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--danger);
+}

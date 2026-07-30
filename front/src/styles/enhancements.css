@@ -1,0 +1,647 @@
+/* Tourism taxonomy: color is always paired with an icon and a label. */
+.tourism--cultural {
+  --tourism-color: var(--tourism-cultural);
+  --tourism-solid: var(--tourism-cultural-solid);
+}
+.tourism--naturaleza {
+  --tourism-color: var(--tourism-nature);
+  --tourism-solid: var(--tourism-nature-solid);
+}
+.tourism--playa {
+  --tourism-color: var(--tourism-beach);
+  --tourism-solid: var(--tourism-beach-solid);
+}
+.tourism--rural {
+  --tourism-color: var(--tourism-rural);
+  --tourism-solid: var(--tourism-rural-solid);
+}
+.tourism--montana {
+  --tourism-color: var(--tourism-mountain);
+  --tourism-solid: var(--tourism-mountain-solid);
+}
+.tourism--patrimonial {
+  --tourism-color: var(--tourism-heritage);
+  --tourism-solid: var(--tourism-heritage-solid);
+}
+.tourism--otro {
+  --tourism-color: var(--line-strong);
+  --tourism-solid: var(--tourism-other-solid);
+}
+.tourism-mark {
+  --tourism-mark-size: 30px;
+  display: inline-grid;
+  grid-template-columns: var(--tourism-mark-size) auto;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.tourism-mark__symbol {
+  display: grid;
+  place-items: center;
+  width: var(--tourism-mark-size);
+  height: var(--tourism-mark-size);
+  background: var(--tourism-solid);
+  color: white;
+}
+.tourism-mark__symbol svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2.2;
+}
+.tourism-mark__label {
+  padding-block: 3px;
+  border-bottom: 2px solid var(--tourism-solid);
+  font:
+    800 0.68rem/1.1 Manrope,
+    sans-serif;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+}
+.tourism-mark--compact {
+  --tourism-mark-size: 24px;
+  gap: 6px;
+}
+.tourism-mark--compact .tourism-mark__symbol svg {
+  width: 12px;
+  height: 12px;
+}
+.tourism-mark--compact .tourism-mark__label {
+  padding-block: 2px;
+  border-bottom-width: 1px;
+  font-size: 0.6rem;
+  letter-spacing: 0.065em;
+}
+.tourism--naturaleza :is(.tourism-mark__symbol, .trip-moods__icon, .map-legend__symbol) {
+  border-radius: 50% 50% 50% 4px;
+}
+.tourism--playa :is(.tourism-mark__symbol, .trip-moods__icon, .map-legend__symbol) {
+  border-radius: 50% 50% 5px 5px;
+}
+.tourism--rural :is(.tourism-mark__symbol, .trip-moods__icon, .map-legend__symbol) {
+  border-radius: 12px 12px 3px 3px;
+}
+.tourism--montana :is(.tourism-mark__symbol, .trip-moods__icon, .map-legend__symbol) {
+  border-radius: 4px 4px 12px 12px;
+}
+.tourism--patrimonial :is(.tourism-mark__symbol, .trip-moods__icon, .map-legend__symbol) {
+  border-radius: var(--r-1);
+}
+.destination-card__eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.destination-card__eyebrow .destination-card__location {
+  margin: 0;
+}
+.destination-card__eyebrow .tourism-mark {
+  flex: none;
+}
+.trip-moods__list button {
+  grid-template-columns: 56px 1fr auto;
+  min-height: 92px;
+}
+.trip-moods__list button::before {
+  content: '';
+  position: absolute;
+  inset: auto auto 0 56px;
+  width: 0;
+  height: 3px;
+  background: var(--tourism-solid);
+  transition: width 180ms var(--ease);
+}
+.trip-moods__list button {
+  position: relative;
+}
+.trip-moods__list button:hover::before,
+.trip-moods__list button:focus-visible::before {
+  width: calc(100% - 56px);
+}
+.trip-moods__icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  background: var(--tourism-solid);
+  color: white !important;
+  border-radius: 50%;
+}
+.trip-moods__icon svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2;
+}
+.trip-moods__copy {
+  display: grid;
+  gap: 3px;
+  color: var(--ink) !important;
+}
+.trip-moods__copy b {
+  font-family: 'Bricolage Grotesque';
+  font-size: clamp(1.2rem, 2vw, 2rem);
+}
+.trip-moods__copy small {
+  color: var(--muted);
+  font: 500 0.75rem Manrope;
+  letter-spacing: 0;
+}
+
+/* Rich map */
+.map-toolbar {
+  display: grid;
+  grid-template-columns: auto minmax(240px, 440px) auto;
+}
+.map-toolbar__title {
+  min-width: 220px;
+}
+.map-toolbar__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.map-toolbar__actions .button b {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  background: var(--brand);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.66rem;
+}
+.map-search {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  align-items: center;
+  border-bottom: 1px solid var(--line-strong);
+}
+.map-search svg {
+  justify-self: center;
+}
+.map-search input {
+  height: 48px;
+  border: 0;
+  background: transparent;
+}
+.map-search input:focus {
+  outline: 0;
+}
+.map-list > button {
+  min-height: 136px;
+}
+.map-list > button > span {
+  gap: 2px;
+}
+.map-list .tourism-mark {
+  margin-top: 5px;
+}
+.map-marker.tourism--cultural {
+  fill: var(--tourism-cultural-solid);
+}
+.map-marker.tourism--naturaleza {
+  fill: var(--tourism-nature-solid);
+}
+.map-marker.tourism--playa {
+  fill: var(--tourism-beach-solid);
+}
+.map-marker.tourism--rural {
+  fill: var(--tourism-rural-solid);
+}
+.map-marker.tourism--montana {
+  fill: var(--tourism-mountain-solid);
+}
+.map-marker.tourism--patrimonial {
+  fill: var(--tourism-heritage-solid);
+}
+.map-marker.is-selected {
+  fill: var(--sun);
+  stroke-width: 4;
+}
+.map-legend {
+  position: absolute;
+  z-index: 400;
+  right: 68px;
+  bottom: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 5px 14px;
+  padding: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-1);
+}
+.map-legend > span {
+  display: grid;
+  grid-template-columns: 22px auto;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.62rem;
+}
+.map-legend__symbol {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  background: var(--tourism-solid);
+  color: white;
+}
+.map-legend__symbol svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2.2;
+}
+.map-legend b {
+  font-weight: 700;
+}
+.map-watermark {
+  top: 16px;
+  bottom: auto;
+}
+.map-selected {
+  bottom: 112px;
+}
+
+/* Upload controls */
+.image-uploader {
+  display: grid;
+  grid-template-columns: minmax(180px, 280px) 1fr;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 28px;
+  padding: 20px;
+  border: 1px dashed var(--line-strong);
+  background: var(--surface-muted);
+  transition:
+    border-color 160ms var(--ease),
+    background-color 160ms var(--ease);
+}
+.image-uploader.is-dragging {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+}
+.image-uploader__preview {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--surface);
+  color: var(--muted);
+}
+.image-uploader__preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.image-uploader__preview > svg {
+  width: 40px;
+  height: 40px;
+}
+.image-uploader strong {
+  display: block;
+  margin-bottom: 8px;
+}
+.image-uploader p {
+  margin-bottom: 16px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+.image-uploader input {
+  display: none;
+}
+.image-uploader__error {
+  display: block;
+  margin-top: 8px;
+  color: var(--danger);
+}
+.image-uploader--circular {
+  grid-template-columns: 120px 1fr;
+}
+.image-uploader--circular .image-uploader__preview {
+  width: 120px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+/* Coordinate picker */
+.coordinate-picker {
+  margin-bottom: 28px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.coordinate-picker__hint {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.coordinate-picker__hint > span {
+  display: grid;
+}
+.coordinate-picker__hint small {
+  color: var(--muted);
+}
+.coordinate-picker__map {
+  width: 100%;
+  height: 360px;
+  background: var(--surface-muted);
+}
+.coordinate-picker--compact .coordinate-picker__map {
+  height: 260px;
+}
+.coordinate-picker__marker {
+  stroke: var(--ink);
+  fill: var(--sun);
+}
+.coordinate-picker__readout {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+/* Administration for non-technical editors */
+.admin-workspace > .notice {
+  margin-bottom: 20px;
+}
+.admin-workspace__head > div:first-child {
+  min-width: min(100%, 520px);
+}
+.admin-workspace__head small {
+  color: var(--muted);
+}
+.admin-result-hint {
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  border-left: 3px solid var(--brand);
+  background: var(--brand-soft);
+  color: var(--ink);
+  font-size: 0.75rem;
+}
+.admin-list__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.admin-list__meta small {
+  color: var(--muted);
+}
+.admin-list article a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  color: var(--brand);
+  font-size: 0.72rem;
+}
+.admin-place-context {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.admin-place-context > div > label {
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+.admin-place-context .field {
+  margin: 0;
+}
+.modal--editor {
+  width: min(100%, 1180px);
+  height: min(92dvh, 900px);
+  padding: 0;
+  overflow: hidden;
+}
+.modal--editor > .modal__heading {
+  padding: 24px 72px 20px 28px;
+  border-bottom: 1px solid var(--line);
+}
+.modal__heading h2 {
+  margin: 0 0 8px;
+  padding: 0;
+  font-size: 1.75rem;
+}
+.modal__heading p {
+  margin: 0;
+  color: var(--muted);
+}
+.admin-editor {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: 1fr auto;
+  height: calc(100% - 98px);
+}
+.admin-editor__nav {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding: 20px 16px;
+  overflow-y: auto;
+  border-right: 1px solid var(--line);
+  background: var(--surface-muted);
+}
+.admin-editor__nav button {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 12px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 800;
+  text-align: left;
+}
+.admin-editor__nav button:hover,
+.admin-editor__nav button.is-active {
+  background: var(--surface);
+  color: var(--ink);
+}
+.admin-editor__nav button.is-active {
+  box-shadow: inset 3px 0 var(--brand);
+}
+.admin-editor__nav button b {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  background: var(--brand);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.62rem;
+}
+.admin-editor__content {
+  min-width: 0;
+  overflow-y: auto;
+  padding: 28px clamp(24px, 5vw, 64px) 64px;
+}
+.admin-editor__content > .notice {
+  margin-bottom: 24px;
+}
+.editor-section > header {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 16px;
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+.editor-section > header > span {
+  color: var(--brand);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+.editor-section > header h3 {
+  margin: 0 0 12px;
+  font-size: 1.5rem;
+}
+.editor-section > header p {
+  margin: 0;
+  color: var(--muted);
+}
+.editor-textarea {
+  min-height: 220px;
+}
+.season-editor {
+  display: grid;
+  gap: 32px;
+}
+.season-editor label {
+  display: grid;
+  gap: 12px;
+}
+.season-editor label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.season-editor output {
+  color: var(--brand);
+  font-weight: 800;
+}
+.season-editor input[type='range'] {
+  height: 12px;
+  padding: 0;
+  border: 0;
+  accent-color: var(--brand);
+}
+.municipality-manager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.municipality-manager h4 {
+  margin: 0 0 16px;
+  font-size: 0.9rem;
+}
+.municipality-manager__associated,
+.municipality-manager__catalog {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+.municipality-manager__associated > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 48px;
+  border-bottom: 1px solid var(--line);
+}
+.municipality-manager__associated > div > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.municipality-manager__associated button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--danger);
+}
+.municipality-manager__catalog .admin-search {
+  margin-bottom: 12px;
+}
+.municipality-manager__catalog > div {
+  max-height: 360px;
+  overflow-y: auto;
+}
+.municipality-manager__catalog > div > button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  padding: 8px 4px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  text-align: left;
+}
+.municipality-manager__catalog > div > button span {
+  display: grid;
+}
+.municipality-manager__catalog small {
+  color: var(--muted);
+}
+.admin-editor__footer {
+  grid-column: 1 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-height: 72px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+.admin-editor__footer > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: auto;
+  color: var(--success);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+.place-editor {
+  padding-top: 16px;
+}
+.verification-callout {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding: 16px;
+  border: 1px solid var(--warning);
+  background: color-mix(in srgb, var(--warning) 8%, var(--surface));
+}
+.verification-callout > svg {
+  color: var(--warning);
+}
+.verification-callout p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 0.76rem;
+}

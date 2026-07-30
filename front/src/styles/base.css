@@ -1,0 +1,135 @@
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--canvas);
+  color: var(--ink);
+  font:
+    500 16px/1.55 Manrope,
+    system-ui,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+body.menu-open {
+  overflow: hidden;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  color: inherit;
+}
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+img {
+  display: block;
+  max-width: 100%;
+}
+.media-image {
+  background-color: var(--surface-muted);
+  background-image: linear-gradient(
+    110deg,
+    transparent 28%,
+    color-mix(in srgb, var(--surface) 72%, transparent) 46%,
+    transparent 64%
+  );
+  background-size: 220% 100%;
+}
+.media-image--loading {
+  animation: image-loading 1.2s linear infinite;
+}
+.media-image--loaded,
+.media-image--error {
+  background-image: none;
+}
+@keyframes image-loading {
+  to {
+    background-position-x: -220%;
+  }
+}
+svg:not(.leaflet-zoom-animated) {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  stroke-width: 1.8;
+}
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+h1,
+h2,
+h3 {
+  font-family: 'Bricolage Grotesque', Manrope, sans-serif;
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+h1 {
+  font-size: clamp(2.5rem, 6vw, 6rem);
+}
+h2 {
+  font-size: clamp(2rem, 4vw, 4.5rem);
+}
+h3 {
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+::selection {
+  background: var(--sun);
+  color: var(--sun-ink);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip {
+  position: fixed;
+  z-index: 1000;
+  top: 8px;
+  left: 8px;
+  translate: 0 -150%;
+  padding: 12px 16px;
+  background: var(--sun);
+  color: var(--sun-ink);
+  font-weight: 800;
+}
+.skip:focus {
+  translate: 0;
+}
+.kicker {
+  margin: 0 0 16px;
+  color: var(--brand);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
