@@ -41,6 +41,31 @@ function AforoBar({ level }: { level: number }) {
   );
 }
 
+function SeasonCrowdRing({ value }: { value: number }) {
+  const safeValue = Math.max(0, Math.min(100, Math.round(value)));
+  const radius = 18;
+  const circumference = 2 * Math.PI * radius;
+  const color = safeValue <= 25
+    ? 'var(--color-brand)'
+    : safeValue <= 50
+      ? 'var(--color-mostaza)'
+      : safeValue <= 75
+        ? 'var(--color-teja)'
+        : 'var(--color-danger)';
+  const label = safeValue <= 25 ? 'Muy tranquilo' : safeValue <= 50 ? 'Afluencia moderada' : safeValue <= 75 ? 'Bastante concurrido' : 'Muy concurrido';
+
+  return (
+    <span className="season-crowd-ring" role="img" aria-label={`${label}: ${safeValue}% de afluencia estimada`}>
+      <svg viewBox="0 0 48 48" aria-hidden="true">
+        <circle className="season-crowd-ring__track" cx="24" cy="24" r={radius} />
+        <circle className="season-crowd-ring__value" cx="24" cy="24" r={radius} style={{ stroke: color, strokeDasharray: circumference, strokeDashoffset: circumference * (1 - safeValue / 100) }} />
+      </svg>
+      <span className="season-crowd-ring__number">{safeValue}<small>%</small></span>
+      <span className="season-crowd-ring__label">Afluencia</span>
+    </span>
+  );
+}
+
 function DestinationCard({
   destino,
   index = 0,
@@ -133,7 +158,10 @@ function DestinationCard({
             <AforoBar level={aforoLevel(masificacion)} />
           </div>
           {destino.matchReason && (
-            <p className="dest-card__season-reason">{destino.matchReason}</p>
+            <div className="dest-card__season-insight">
+              <p className="dest-card__season-reason">{destino.matchReason}</p>
+              {typeof destino.seasonCrowd === 'number' && <SeasonCrowdRing value={destino.seasonCrowd} />}
+            </div>
           )}
         </div>
 
