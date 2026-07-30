@@ -5,6 +5,7 @@ export interface CollectionSummary {
   nombre: string;
   descripcion: string | null;
   color: string;
+  visibility?: 'private' | 'shared';
   createdAt: string;
   updatedAt: string;
   count: number;
@@ -26,7 +27,16 @@ export interface CollectionDetail {
   color: string;
   createdAt: string;
   updatedAt: string;
+  visibility?: 'private' | 'shared';
+  shareToken?: string | null;
   items: CollectionItem[];
+}
+
+export interface PublicCollection {
+  nombre: string;
+  descripcion: string | null;
+  color: string;
+  items: Array<Pick<CollectionItem, 'id' | 'destino'>>;
 }
 
 export interface CollectionForDestino {

@@ -8,6 +8,8 @@ export interface SearchFilters {
   ubicacion?: string;
   tipoTurismo?: string;
   actividades?: string;
+  month?: string;
+  avoidCrowds?: string;
 }
 
 function toQueryString(filters: SearchFilters): string {
@@ -52,4 +54,6 @@ export interface MapDestino {
   masificacion: string;
   ubicacion: string;
   tipoTurismoPrincipal: string;
+  seasonCrowd?: number | null;
+  matchReason?: string | null;
 }

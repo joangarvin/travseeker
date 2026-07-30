@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Check, Compass, Pencil, Search, Trash2, X } from 'lucide-react';
+import { ArrowLeft, Check, Compass, Link2, Pencil, Search, Trash2, X } from 'lucide-react';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import PageLoader from '../components/ui/PageLoader';
@@ -8,7 +8,7 @@ import ScrollReveal from '../components/ui/ScrollReveal';
 import CollectionItemCard from '../components/collections/CollectionItemCard';
 import { useAuth } from '../context/AuthContext';
 import { useAbortableFetch } from '../hooks/useAbortableFetch';
-import { getCollection, updateCollection, deleteCollection } from '../api/collections';
+import { getCollection, updateCollection, deleteCollection, shareCollection, stopSharingCollection } from '../api/collections';
 import { COLLECTION_COLORS, colorHex } from '../constants/collectionColors';
 import type { CollectionDetail } from '../types/collection';
 
@@ -28,6 +28,7 @@ export default function ColeccionDetail() {
   const [color, setColor] = useState('emerald');
   const [saving, setSaving] = useState(false);
   const [query, setQuery] = useState('');
+  const [sharing, setSharing] = useState(false);
 
   useEffect(() => {
     if (collection) {
@@ -58,6 +59,32 @@ export default function ColeccionDetail() {
 
   const handleRemoveItem = (destinoId: string) => {
     setCollection((prev) => (prev ? { ...prev, items: prev.items.filter((i) => i.destinoId !== destinoId) } : prev));
+  };
+
+  const handleShare = async () => {
+    const currentCollection = collection;
+    if (!token || !id || sharing || !currentCollection) return;
+    setSharing(true);
+    try {
+      const shared = currentCollection.shareToken
+        ? { shareToken: currentCollection.shareToken }
+        : await shareCollection(id, token);
+      const url = `${window.location.origin}/viaje/${shared.shareToken}`;
+      await navigator.clipboard.writeText(url);
+      setCollection((prev) => prev ? { ...prev, visibility: 'shared', shareToken: shared.shareToken } : prev);
+      window.alert('Enlace del viaje copiado');
+    } catch {
+      window.alert('No se pudo crear el enlace compartido');
+    } finally {
+      setSharing(false);
+    }
+  };
+
+  const handleStopSharing = async () => {
+    const currentCollection = collection;
+    if (!token || !id || !currentCollection?.shareToken) return;
+    await stopSharingCollection(id, token);
+    setCollection((prev) => prev ? { ...prev, visibility: 'private', shareToken: null } : prev);
   };
 
   const visibleItems = (collection?.items ?? []).filter((item) => {
@@ -148,6 +175,14 @@ export default function ColeccionDetail() {
                 </p>
               </div>
               <div className="coleccion-detail-head__actions">
+                <button type="button" onClick={handleShare} disabled={sharing} className="btn-pill">
+                  <Link2 className="icon-sm" /> {sharing ? 'Creando…' : 'Compartir'}
+                </button>
+                {collection.shareToken && (
+                  <button type="button" onClick={handleStopSharing} className="btn-pill">
+                    Dejar de compartir
+                  </button>
+                )}
                 <button type="button" onClick={() => setEditing(true)} className="btn-pill">
                   <Pencil className="icon-sm" /> Editar
                 </button>

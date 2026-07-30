@@ -39,4 +39,16 @@ const forDestino = asyncHandler(async (req, res) => {
   res.json(await collectionService.getCollectionsForDestino(req.user.id, req.params.destinoId));
 });
 
-module.exports = { list, getOne, create, update, remove, addItem, updateItem, removeItem, forDestino };
+const share = asyncHandler(async (req, res) => {
+  res.json(await collectionService.shareCollection(req.user.id, req.params.id));
+});
+
+const stopSharing = asyncHandler(async (req, res) => {
+  res.json(await collectionService.stopSharingCollection(req.user.id, req.params.id));
+});
+
+const getPublic = asyncHandler(async (req, res) => {
+  res.json(await collectionService.getPublicCollection(req.params.shareToken));
+});
+
+module.exports = { list, getOne, create, update, remove, addItem, updateItem, removeItem, forDestino, share, stopSharing, getPublic };

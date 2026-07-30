@@ -73,6 +73,23 @@ model User {
   reviews       Review[]
   tokens        VerificationToken[]
   collections   Collection[]
+  alerts        AlertSubscription[]
+}
+
+model AlertSubscription {
+  id            String   @id @default(uuid())
+  userId        String
+  month         Int?
+  tipos         Json?
+  presupuesto   String?
+  avoidCrowds   Boolean  @default(true)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isActive])
 }
 
 model Collection {
@@ -81,6 +98,8 @@ model Collection {
   nombre      String
   descripcion String?
   color       String   @default("emerald")
+  visibility  String   @default("private")
+  shareToken  String?  @unique
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -106,19 +125,32 @@ model CollectionItem {
 }
 
 model Review {
-  id        String   @id @default(uuid())
-  userId    String
-  destinoId String
-  rating    Int
-  comment   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String       @id @default(uuid())
+  userId       String
+  destinoId    String
+  rating       Int
+  comment      String?
+  visitMonth   Int?
+  travelParty  String?
+  crowdRating  Int?
+  valueRating  Int?
+  accessRating Int?
+  status       ReviewStatus @default(published)
+  adminResponse String?
+  respondedAt  DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   destino   Destino  @relation(fields: [destinoId], references: [id], onDelete: Cascade)
 
   @@unique([userId, destinoId])
   @@index([destinoId])
+}
+
+enum ReviewStatus {
+  published
+  hidden
 }
 
 model VerificationToken {

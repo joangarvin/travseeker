@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Building2, MapPinned, ShieldCheck } from 'lucide-react';
+import { Building2, MapPinned, MessageSquare, ShieldCheck } from 'lucide-react';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import PageHero from '../components/layout/PageHero';
@@ -8,6 +8,7 @@ import AdminWorkspace from '../components/admin/AdminWorkspace';
 import { useAdminPanel } from '../hooks/useAdminPanel';
 import { useAdminMunicipios } from '../hooks/useAdminMunicipios';
 import type { AdminTab } from '../types/admin';
+import AdminReviews from '../components/admin/AdminReviews';
 
 export default function AdminPanel() {
   const [tab, setTab] = useState<AdminTab>('destinos');
@@ -19,7 +20,7 @@ export default function AdminPanel() {
 
   const handleBack = () => {
     if (tab === 'destinos') destinos.cancelForm();
-    else municipios.cancelForm();
+    else if (tab === 'municipios') municipios.cancelForm();
   };
 
   const handleTabChange = (next: AdminTab) => {
@@ -57,6 +58,7 @@ export default function AdminPanel() {
             <MapPinned className="icon-sm" />
             Destinos
           </button>
+          <button type="button" role="tab" aria-selected={tab === 'reviews'} onClick={() => handleTabChange('reviews')} className={`admin-tabs__tab${tab === 'reviews' ? ' admin-tabs__tab--active' : ''}`}><MessageSquare className="icon-sm" /> Reseñas</button>
           <button
             type="button"
             role="tab"
@@ -71,13 +73,13 @@ export default function AdminPanel() {
       </div>
 
       <div className="admin-page__workspace">
-        <AdminWorkspace
+        {tab === 'reviews' ? <AdminReviews /> : <AdminWorkspace
           tab={tab}
           onTabChange={handleTabChange}
           destinos={destinos}
           municipios={municipios}
           catalog={municipios.rows}
-        />
+        />}
       </div>
 
       <div className={`admin-page__footer${showForm ? ' admin-page__footer--hidden' : ''}`}>

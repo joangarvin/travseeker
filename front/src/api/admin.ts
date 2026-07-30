@@ -5,6 +5,7 @@ import type {
   AdminMunicipio,
   AdminMunicipioPayload,
 } from '../types/admin';
+import type { Review } from '../types/review';
 
 export type {
   AdminDestinoPayload,
@@ -65,4 +66,8 @@ export const adminApi = {
       method: 'DELETE',
       token,
     }),
+
+  listReviews: (token: string) => apiFetch<Review[]>('/api/admin/reviews', { token }),
+  moderateReview: (id: string, data: { status: 'published' | 'hidden'; adminResponse?: string }, token: string) =>
+    apiFetch<Review>(`/api/admin/reviews/${id}`, { method: 'PATCH', body: JSON.stringify(data), token }),
 };

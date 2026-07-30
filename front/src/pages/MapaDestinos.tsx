@@ -12,7 +12,7 @@ import { getImageUrl } from '../utils/images';
 import { filtersToParams } from '../hooks/useSearchFilters';
 
 const SPAIN_CENTER: [number, number] = [40.0, -3.5];
-const MAP_FILTER_KEYS = ['tipoTurismo', 'presupuesto', 'masificacion', 'ubicacion'] as const;
+const MAP_FILTER_KEYS = ['month', 'tipoTurismo', 'presupuesto', 'masificacion', 'ubicacion'] as const;
 
 function mapFiltersFromParams(params: URLSearchParams): SearchFilters {
   const out: SearchFilters = {};
@@ -20,6 +20,7 @@ function mapFiltersFromParams(params: URLSearchParams): SearchFilters {
     const value = params.get(key);
     if (value) out[key] = value;
   }
+  if (params.get('avoidCrowds') === 'true') out.avoidCrowds = 'true';
   return out;
 }
 
@@ -144,6 +145,14 @@ export default function MapaDestinos() {
                   ))}
                 </select>
               ))}
+              <label className="map-page__crowd-toggle">
+                <input
+                  type="checkbox"
+                  checked={filters.avoidCrowds === 'true'}
+                  onChange={(e) => updateFilter('avoidCrowds', e.target.checked ? 'true' : '')}
+                />
+                Evitar aglomeraciones
+              </label>
             </div>
           </div>
         </div>

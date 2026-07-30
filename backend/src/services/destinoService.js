@@ -1,12 +1,15 @@
 const { prisma } = require('../config/database');
 const { buildWhereClause } = require('../utils/buildWhereClause');
 const { LIST_SELECT, MAP_SELECT, COMPARE_SELECT } = require('../constants/selects');
+const { normalizeMonth, rankForSeason } = require('../domain/season');
 
 async function searchDestinos(query) {
-  return prisma.destino.findMany({
+  const month = normalizeMonth(query.month);
+  const destinos = await prisma.destino.findMany({
     where: buildWhereClause(query),
     select: LIST_SELECT,
   });
+  return rankForSeason(destinos, { month, avoidCrowds: query.avoidCrowds === 'true' });
 }
 
 async function getDestinoById(id) {
@@ -66,7 +69,8 @@ async function getRelacionados(id) {
 }
 
 async function getMapaDestinos(query) {
-  return prisma.destino.findMany({
+  const month = normalizeMonth(query.month);
+  const destinos = await prisma.destino.findMany({
     where: {
       ...buildWhereClause(query),
       latitud: { not: null },
@@ -74,6 +78,7 @@ async function getMapaDestinos(query) {
     },
     select: MAP_SELECT,
   });
+  return rankForSeason(destinos, { month, avoidCrowds: query.avoidCrowds === 'true' });
 }
 
 async function compareDestinos(ids) {

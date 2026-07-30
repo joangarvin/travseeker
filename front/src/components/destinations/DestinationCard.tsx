@@ -132,6 +132,9 @@ function DestinationCard({
             </span>
             <AforoBar level={aforoLevel(masificacion)} />
           </div>
+          {destino.matchReason && (
+            <p className="dest-card__season-reason">{destino.matchReason}</p>
+          )}
         </div>
 
         {collectionOpen && (

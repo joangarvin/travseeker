@@ -32,6 +32,21 @@ export default function FilterPanel({ open, filters, onUpdateFilter, onReset, on
               </div>
             ))}
 
+            <div className="filter-panel__field">
+              <label className="filter-panel__label field-label" htmlFor="avoid-crowds">
+                Prioridad
+              </label>
+              <label className="filter-panel__checkbox" htmlFor="avoid-crowds">
+                <input
+                  id="avoid-crowds"
+                  type="checkbox"
+                  checked={filters.avoidCrowds === 'true'}
+                  onChange={(e) => onUpdateFilter('avoidCrowds', e.target.checked ? 'true' : '')}
+                />
+                Quiero evitar aglomeraciones
+              </label>
+            </div>
+
             <div className="filter-panel__actions-wrap">
               <span className="filter-panel__label field-label">
                 Acciones

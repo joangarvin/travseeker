@@ -30,7 +30,7 @@ export default function HeroSearch({ onSearch, activeFilterCount = 0, initialFil
 
   const handleReset = () => {
     resetFilters();
-    onSearch({ q: '', presupuesto: '', masificacion: '', ubicacion: '', tipoTurismo: '', actividades: '' });
+    onSearch({ q: '', month: '', presupuesto: '', masificacion: '', ubicacion: '', tipoTurismo: '', actividades: '', avoidCrowds: '' });
   };
 
   const badgeCount = localActiveCount || activeFilterCount;

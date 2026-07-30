@@ -7,11 +7,13 @@ export function useSearchFilters(initial?: SearchFilters) {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [filters, setFilters] = useState<Record<string, string>>(() => ({
     ...EMPTY_FILTERS,
+    month: initial?.month ?? '',
     presupuesto: initial?.presupuesto ?? '',
     masificacion: initial?.masificacion ?? '',
     ubicacion: initial?.ubicacion ?? '',
     tipoTurismo: initial?.tipoTurismo ?? '',
     actividades: initial?.actividades ?? '',
+    avoidCrowds: initial?.avoidCrowds ?? '',
   }));
 
   const updateFilter = useCallback((key: string, value: string) => {
@@ -45,7 +47,7 @@ export function useSearchFilters(initial?: SearchFilters) {
 }
 
 export function filtersFromParams(params: URLSearchParams): SearchFilters {
-  const keys = ['q', 'presupuesto', 'masificacion', 'ubicacion', 'tipoTurismo', 'actividades'] as const;
+  const keys = ['q', 'month', 'presupuesto', 'masificacion', 'ubicacion', 'tipoTurismo', 'actividades', 'avoidCrowds'] as const;
   const out: SearchFilters = {};
   for (const key of keys) {
     const value = params.get(key);
