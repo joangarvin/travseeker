@@ -629,7 +629,18 @@
 }
 
 .comparador-cell--header {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--color-surface);
+  box-shadow: 0 1px 0 var(--color-border);
+}
+
+.comparador-cell--corner {
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 15;
 }
 
 .comparador-cell__thumb {
@@ -726,14 +737,59 @@
   color: var(--color-primary);
 }
 
+.compare-tag--muted {
+  color: var(--color-muted);
+  background: transparent;
+}
+
+.comparador-cell__empty {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.comparador-cell__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 0.5rem;
+  background: var(--color-brand);
+  color: var(--color-on-brand);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.comparador-cell__cta:hover {
+  background: var(--color-accent-hover);
+}
+
 .comparador-season__label {
   font-weight: 600;
   color: var(--color-primary);
   font-size: 0.875rem;
 }
 
+.comparador-season__label.is-best {
+  color: var(--color-brand-dark);
+}
+
+.comparador-season__label--warn {
+  color: var(--color-teja);
+}
+
 .comparador-season__months {
   font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.comparador-season__pct {
+  margin-top: 0.35rem;
+  font-size: 0.6875rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
   color: var(--color-muted);
 }
 

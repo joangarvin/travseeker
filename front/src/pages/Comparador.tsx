@@ -14,6 +14,7 @@ import {
   presupuestoIndex,
   masificacionIndex,
   getBestSeason,
+  getWorstSeason,
   getSeasons,
 } from '../utils/scales';
 import { getMasificationColor } from '../utils/masification';
@@ -114,8 +115,11 @@ export default function Comparador() {
   const cols = items ?? [];
   const minPres = cols.length ? Math.min(...cols.map((d) => presupuestoIndex(d.presupuesto)).filter((i) => i >= 0)) : -1;
   const minMas = cols.length ? Math.min(...cols.map((d) => masificacionIndex(d.masificacion)).filter((i) => i >= 0)) : -1;
+  const minBestValue = cols.length
+    ? Math.min(...cols.map((d) => getBestSeason(d).value))
+    : null;
 
-  const gridStyle = { gridTemplateColumns: `132px repeat(${cols.length}, minmax(0, 1fr))` };
+  const gridStyle = { gridTemplateColumns: `7.5rem repeat(${cols.length}, minmax(10rem, 1fr))` };
 
   return (
     <div className="page-shell">
@@ -204,7 +208,7 @@ export default function Comparador() {
           ) : (
             <div className="comparador-table-wrap">
               <div className="comparador-table" style={gridStyle}>
-                <div className="comparador-cell comparador-cell--label" />
+                <div className="comparador-cell comparador-cell--label comparador-cell--corner" />
                 {cols.map((d) => (
                   <div key={d.id} className="comparador-cell comparador-cell--header">
                     <Link to={`/destino/${d.id}`}>
@@ -236,7 +240,7 @@ export default function Comparador() {
                   </div>
                 ))}
 
-                <div className="comparador-cell--label">Turismo</div>
+                <div className="comparador-cell--label">Turismo principal</div>
                 {cols.map((d) => (
                   <div key={d.id} className="comparador-cell">
                     <div className="compare-tags">
@@ -247,13 +251,45 @@ export default function Comparador() {
                   </div>
                 ))}
 
+                <div className="comparador-cell--label">También</div>
+                {cols.map((d) => {
+                  const secondary = parseTags(d.tipoTurismoSecundario);
+                  return (
+                    <div key={d.id} className="comparador-cell">
+                      {secondary.length > 0 ? (
+                        <div className="compare-tags">
+                          {secondary.map((t) => (
+                            <span key={t} className="compare-tag compare-tag--muted">{t}</span>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="comparador-cell__empty">—</span>
+                      )}
+                    </div>
+                  );
+                })}
+
                 <div className="comparador-cell--label">Mejor época</div>
                 {cols.map((d) => {
                   const best = getBestSeason(d);
+                  const isWinner = minBestValue !== null && best.value === minBestValue;
                   return (
                     <div key={d.id} className="comparador-cell">
-                      <p className="comparador-season__label">{best.label}</p>
+                      <p className={`comparador-season__label${isWinner ? ' is-best' : ''}`}>{best.label}</p>
                       <p className="comparador-season__months">{best.months}</p>
+                      <p className="comparador-season__pct">{best.value}% afluencia</p>
+                    </div>
+                  );
+                })}
+
+                <div className="comparador-cell--label">Evitar</div>
+                {cols.map((d) => {
+                  const worst = getWorstSeason(d);
+                  return (
+                    <div key={d.id} className="comparador-cell">
+                      <p className="comparador-season__label comparador-season__label--warn">{worst.label}</p>
+                      <p className="comparador-season__months">{worst.months}</p>
+                      <p className="comparador-season__pct">{worst.value}% afluencia</p>
                     </div>
                   );
                 })}
@@ -274,6 +310,15 @@ export default function Comparador() {
                         </div>
                       ))}
                     </div>
+                  </div>
+                ))}
+
+                <div className="comparador-cell--label">Ficha</div>
+                {cols.map((d) => (
+                  <div key={d.id} className="comparador-cell">
+                    <Link to={`/destino/${d.id}`} className="comparador-cell__cta">
+                      Ver destino
+                    </Link>
                   </div>
                 ))}
               </div>

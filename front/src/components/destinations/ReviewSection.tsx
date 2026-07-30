@@ -64,6 +64,10 @@ export default function ReviewSection({ destinoId }: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) return;
+    if (!user?.emailVerified) {
+      setError('Verifica tu email antes de firmar');
+      return;
+    }
     if (rating < 1) { setError('Elige cuántas estrellas'); return; }
     setSubmitting(true);
     setError('');
@@ -120,7 +124,19 @@ export default function ReviewSection({ destinoId }: Props) {
         </div>
 
         <div className="ui-card reviews-form-card">
-          {user ? (
+          {user && !user.emailVerified ? (
+            <div className="reviews-guest">
+              <div>
+                <h3 className="reviews-form__title">Verifica tu email</h3>
+                <p className="reviews-guest__text">
+                  Para firmar el libro de visitas, confirma tu correo desde el perfil.
+                </p>
+              </div>
+              <Link to="/perfil" className="btn-cta">
+                Ir al perfil
+              </Link>
+            </div>
+          ) : user ? (
             <form onSubmit={handleSubmit} className="reviews-form">
               <h3 className="reviews-form__title">
                 {ownReview ? 'Tu firma' : 'Firma el libro'}

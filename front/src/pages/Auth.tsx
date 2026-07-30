@@ -47,7 +47,7 @@ export default function Auth() {
     <div className="page-shell">
       <Header />
 
-      <section className="auth-section grain">
+      <section className="auth-section">
         <div className="auth-section__inner">
           <div className="ui-card auth-card">
             <div className="auth-tabs">

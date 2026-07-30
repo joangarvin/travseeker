@@ -6,6 +6,7 @@ import { CompareProvider } from './context/CompareContext';
 import CompareBar from './components/compare/CompareBar';
 import PageLoader from './components/ui/PageLoader';
 import AdminRoute from './components/auth/AdminRoute';
+import VerifyEmailBanner from './components/auth/VerifyEmailBanner';
 
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
@@ -28,6 +29,7 @@ function App() {
         <CompareProvider>
           <Router>
             <a href="#app-content" className="skip-link">Saltar al contenido</a>
+            <VerifyEmailBanner />
             <Suspense fallback={<PageLoader />}>
               <div id="app-content" tabIndex={-1}>
                 <Routes>

@@ -36,7 +36,7 @@ export default function HeroSearch({ onSearch, activeFilterCount = 0, initialFil
   const badgeCount = localActiveCount || activeFilterCount;
 
   return (
-    <section id="buscar" className="hero-search grain">
+    <section id="buscar" className="hero-search">
       <svg
         aria-hidden
         className="hero-search__mapline"
