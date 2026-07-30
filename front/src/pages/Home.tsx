@@ -3,9 +3,8 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowRight, CalendarDays, ChevronDown, Map, SlidersHorizontal, Sparkles, Users } from 'lucide-react';
 import { api, imageUrl, queryString } from '../lib/api';
 import type { Destino, SearchFilters } from '../types';
-import { DestinationCard, Loader, Notice, SearchBox, Shell } from '../components/ui';
-
-const travelModes = ['Cultural', 'Naturaleza', 'Sol y playa', 'Rural', 'Montaña', 'Patrimonial'];
+import { DestinationCard, Loader, MediaImage, Notice, SearchBox, Shell } from '../components/ui';
+import { tourismTypes } from '../lib/tourism';
 
 export default function Home() {
   const [params, setParams] = useSearchParams();
@@ -47,7 +46,7 @@ export default function Home() {
         <button className="filter-trigger" onClick={() => setFiltersOpen((value) => !value)} aria-expanded={filtersOpen}><SlidersHorizontal /> Afinar la búsqueda {activeCount > 0 && <b>{activeCount}</b>}<ChevronDown /></button>
       </div>
       <div className="image-wall" aria-label="Destinos destacados">
-        {featured.slice(0, 3).map((destino, index) => <Link key={destino.id} to={`/destino/${destino.id}`} className={`image-wall__panel image-wall__panel--${index + 1}`}><img src={imageUrl(destino.imagen)} alt={destino.nombre} /><span><b>{String(index + 1).padStart(2, '0')}</b>{destino.nombre}</span></Link>)}
+        {featured.slice(0, 3).map((destino, index) => <Link key={destino.id} to={`/destino/${destino.id}`} className={`image-wall__panel image-wall__panel--${index + 1}`}><MediaImage src={imageUrl(destino.imagen)} alt={destino.nombre} fetchPriority={index === 0 ? 'high' : 'auto'} /><span><b>{String(index + 1).padStart(2, '0')}</b>{destino.nombre}</span></Link>)}
         {featured.length === 0 && <div className="image-wall__fallback"><Sparkles /><span>Tu próxima historia empieza aquí</span></div>}
       </div>
     </section>
@@ -57,14 +56,14 @@ export default function Home() {
         <label>Mes<select value={filters.month || ''} onChange={(e) => update('month', e.target.value)}><option value="">Cualquier momento</option>{['1','2','3','4','5','6','7','8','9','10','11','12'].map((m) => <option key={m} value={m}>{new Date(2026, Number(m)-1).toLocaleString('es', { month: 'long' })}</option>)}</select></label>
         <label>Presupuesto<select value={filters.presupuesto || ''} onChange={(e) => update('presupuesto', e.target.value)}><option value="">Cualquiera</option><option>Bajo</option><option>Medio-Bajo</option><option>Medio</option><option>Medio-Alto</option><option>Alto</option></select></label>
         <label>Afluencia<select value={filters.masificacion || ''} onChange={(e) => update('masificacion', e.target.value)}><option value="">Cualquiera</option><option>Bajo</option><option>Medio-Bajo</option><option>Medio</option><option>Medio-Alto</option><option>Alto</option></select></label>
-        <label>Tipo de viaje<select value={filters.tipoTurismo || ''} onChange={(e) => update('tipoTurismo', e.target.value)}><option value="">Cualquiera</option>{travelModes.map((mode) => <option key={mode}>{mode}</option>)}</select></label>
+        <label>Tipo de viaje<select value={filters.tipoTurismo || ''} onChange={(e) => update('tipoTurismo', e.target.value)}><option value="">Cualquiera</option>{tourismTypes.map((mode) => <option key={mode.key}>{mode.label}</option>)}</select></label>
       </div>
       <div className="filter-drawer__actions"><label className="check"><input type="checkbox" checked={filters.avoidCrowds === 'true'} onChange={(e) => update('avoidCrowds', e.target.checked ? 'true' : '')} /> Evitar aglomeraciones</label><button className="button button--secondary" onClick={() => { setFilters({}); setParams({}); void search({}); }}>Limpiar</button><button className="button button--primary" onClick={() => { setFiltersOpen(false); void search(); }}>Ver resultados</button></div>
     </section>}
 
     <section className="trip-moods">
       <div><p className="kicker">Empieza por una sensación</p><h2>¿Qué quieres que pase?</h2></div>
-      <div className="trip-moods__list">{travelModes.map((mode, index) => <button key={mode} onClick={() => { const next = { ...filters, tipoTurismo: mode }; setFilters(next); void search(next); document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' }); }}><span>{String(index + 1).padStart(2, '0')}</span>{mode}<ArrowRight /></button>)}</div>
+      <div className="trip-moods__list">{tourismTypes.map((mode) => <button className={`tourism--${mode.key}`} key={mode.key} onClick={() => { const next = { ...filters, tipoTurismo: mode.label }; setFilters(next); void search(next); document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' }); }}><span className="trip-moods__icon"><mode.Icon /></span><span className="trip-moods__copy"><b>{mode.label}</b><small>{mode.description}</small></span><ArrowRight /></button>)}</div>
     </section>
 
     <section id="results" className="results-section">
@@ -73,6 +72,11 @@ export default function Home() {
       {loading ? <Loader label="Buscando lugares" /> : <div className="destination-list">{results.map((destino, index) => <DestinationCard key={destino.id} destino={destino} index={index} />)}</div>}
     </section>
 
-    <section className="decision-band"><div><CalendarDays /><span>Cuándo ir</span><b>Temporadas comparadas</b></div><div><Users /><span>Cuánta gente</span><b>Afluencia estimada</b></div><div><Sparkles /><span>Por qué merece la pena</span><b>Selección independiente</b></div></section>
+    <section className="decision-band" aria-labelledby="decision-band-title">
+      <header><p className="kicker">La brújula de TravSeeker</p><h2 id="decision-band-title">Tres señales antes de elegir</h2></header>
+      <div><CalendarDays /><span>Cuándo ir</span><b>Temporadas comparadas</b><p>Lectura mes a mes para encontrar el momento adecuado.</p></div>
+      <div><Users /><span>Cuánta gente</span><b>Afluencia estimada</b><p>Una escala comprensible para anticipar los periodos con más presión.</p></div>
+      <div><Sparkles /><span>Por qué merece la pena</span><b>Selección independiente</b><p>Los resultados no dependen de posiciones pagadas.</p></div>
+    </section>
   </Shell>;
 }

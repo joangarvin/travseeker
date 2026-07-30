@@ -4,7 +4,8 @@ import { ArrowLeft, BedDouble, BookmarkPlus, Check, ExternalLink, GitCompare, He
 import { api, imageUrl, plain, safeHtml } from '../lib/api';
 import { useAuth, useCompare } from '../lib/state';
 import type { CollectionSummary, Destino, Review } from '../types';
-import { Button, DestinationCard, Field, Loader, Notice, Shell } from '../components/ui';
+import { Button, DestinationCard, Field, Loader, MediaImage, Notice, Shell } from '../components/ui';
+import { TourismMark } from '../lib/tourism';
 
 export default function DestinationPage() {
   const { id = '' } = useParams();
@@ -62,10 +63,10 @@ export default function DestinationPage() {
 
   return <Shell>
     <section className="destination-hero">
-      <img src={imageUrl(destino.imagen)} alt={destino.nombre} />
+      <MediaImage src={imageUrl(destino.imagen)} alt={destino.nombre} fetchPriority="high" />
       <div className="destination-hero__shade" />
       <Link className="destination-hero__back" to="/"><ArrowLeft /> Volver a descubrir</Link>
-      <div className="destination-hero__content"><p>{plain(destino.ubicacion)}</p><h1>{destino.nombre.trim()}</h1><div><span>{plain(destino.presupuesto)}</span><span>{plain(destino.masificacion)}</span><span>{plain(destino.tipoTurismoPrincipal)}</span></div></div>
+      <div className="destination-hero__content"><p>{plain(destino.ubicacion)}</p><h1>{destino.nombre.trim()}</h1><div><span>{plain(destino.presupuesto)}</span><span>{plain(destino.masificacion)}</span><TourismMark value={destino.tipoTurismoPrincipal} /></div></div>
     </section>
 
     <div className="destination-actions">

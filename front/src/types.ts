@@ -12,8 +12,8 @@ export type User = {
   preferences?: Record<string, unknown> | null;
 };
 
-export type Municipio = { id: string; nombre: string; precios?: string; conexiones?: string; tipoTurismo?: string | null };
-export type Place = { id: string; nombre: string; categoria: string; descripcion?: string | null; latitud: number; longitud: number; website?: string | null };
+export type Municipio = { id: string; nombre: string; precios?: string; conexiones?: string; tipoTurismo?: string | null; destinosCount?: number };
+export type Place = { id: string; nombre: string; categoria: string; descripcion?: string | null; latitud: number; longitud: number; website?: string | null; sortOrder?: number; isActive?: boolean };
 
 export type Destino = {
   id: string;
@@ -25,6 +25,7 @@ export type Destino = {
   mesesJulioAgosto: number;
   mesesNovAbril: number;
   mesesMayJunSeptOct: number;
+  destinosItem?: string | null;
   ubicacion: string;
   descripcion?: string;
   imprescindibles?: string;
