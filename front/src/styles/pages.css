@@ -1253,6 +1253,25 @@
   border-color: var(--color-brand);
 }
 
+.map-page__crowd-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.875rem;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.map-page__crowd-toggle input {
+  accent-color: var(--color-brand);
+}
+
 .map-page__canvas {
   flex: 1;
   min-height: 0;

@@ -1,4 +1,5 @@
 const { prisma } = require('../config/database');
+const { randomBytes } = require('crypto');
 const { LIST_SELECT } = require('../constants/selects');
 
 function clean(str, max) {
@@ -38,6 +39,7 @@ async function listCollections(userId) {
     nombre: c.nombre,
     descripcion: c.descripcion,
     color: c.color,
+    visibility: c.visibility,
     createdAt: c.createdAt,
     updatedAt: c.updatedAt,
     count: c._count.items,
@@ -67,6 +69,8 @@ async function getCollection(userId, id) {
     nombre: collection.nombre,
     descripcion: collection.descripcion,
     color: collection.color,
+    visibility: collection.visibility,
+    shareToken: collection.shareToken,
     createdAt: collection.createdAt,
     updatedAt: collection.updatedAt,
     items: collection.items.map((i) => ({
@@ -125,6 +129,43 @@ async function updateCollection(userId, id, { nombre, descripcion, color }) {
   if (color !== undefined) data.color = color;
 
   return prisma.collection.update({ where: { id }, data });
+}
+
+async function shareCollection(userId, id) {
+  await assertOwned(userId, id);
+  const shareToken = randomBytes(24).toString('base64url');
+  return prisma.collection.update({
+    where: { id },
+    data: { visibility: 'shared', shareToken },
+    select: { id: true, shareToken: true, visibility: true },
+  });
+}
+
+async function stopSharingCollection(userId, id) {
+  await assertOwned(userId, id);
+  return prisma.collection.update({
+    where: { id },
+    data: { visibility: 'private', shareToken: null },
+    select: { id: true, visibility: true },
+  });
+}
+
+async function getPublicCollection(shareToken) {
+  const collection = await prisma.collection.findFirst({
+    where: { shareToken, visibility: 'shared' },
+    include: { items: { orderBy: { createdAt: 'asc' }, include: { destino: { select: LIST_SELECT } } } },
+  });
+  if (!collection) {
+    const error = new Error('Este enlace de viaje ya no está disponible');
+    error.status = 404;
+    throw error;
+  }
+  return {
+    nombre: collection.nombre,
+    descripcion: collection.descripcion,
+    color: collection.color,
+    items: collection.items.map((item) => ({ id: item.id, destino: item.destino })),
+  };
 }
 
 async function deleteCollection(userId, id) {
@@ -196,4 +237,7 @@ module.exports = {
   updateItemNotes,
   removeItem,
   getCollectionsForDestino,
+  shareCollection,
+  stopSharingCollection,
+  getPublicCollection,
 };

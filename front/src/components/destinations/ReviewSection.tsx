@@ -14,6 +14,8 @@ interface Props {
 }
 
 const EMPTY_STATS: ReviewStats = { average: 0, count: 0, distribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 } };
+const MONTHS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+const PARTIES = ['Solo', 'Pareja', 'Familia', 'Amistades', 'Otro'];
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' });
@@ -26,6 +28,11 @@ export default function ReviewSection({ destinoId }: Props) {
   const [loading, setLoading] = useState(true);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+  const [visitMonth, setVisitMonth] = useState('');
+  const [travelParty, setTravelParty] = useState('');
+  const [crowdRating, setCrowdRating] = useState(0);
+  const [valueRating, setValueRating] = useState(0);
+  const [accessRating, setAccessRating] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -55,9 +62,19 @@ export default function ReviewSection({ destinoId }: Props) {
     if (ownReview) {
       setRating(ownReview.rating);
       setComment(ownReview.comment ?? '');
+      setVisitMonth(ownReview.visitMonth ? String(ownReview.visitMonth) : '');
+      setTravelParty(ownReview.travelParty ?? '');
+      setCrowdRating(ownReview.crowdRating ?? 0);
+      setValueRating(ownReview.valueRating ?? 0);
+      setAccessRating(ownReview.accessRating ?? 0);
     } else {
       setRating(0);
       setComment('');
+      setVisitMonth('');
+      setTravelParty('');
+      setCrowdRating(0);
+      setValueRating(0);
+      setAccessRating(0);
     }
   }, [ownReview]);
 
@@ -76,7 +93,15 @@ export default function ReviewSection({ destinoId }: Props) {
     setSubmitting(true);
     setError('');
     try {
-      await upsertReview(destinoId, rating, comment, token);
+      await upsertReview(destinoId, {
+        rating,
+        comment,
+        visitMonth: visitMonth ? Number(visitMonth) : null,
+        travelParty: travelParty || null,
+        crowdRating: crowdRating || null,
+        valueRating: valueRating || null,
+        accessRating: accessRating || null,
+      }, token);
       await load();
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'No se pudo guardar la reseña');
@@ -158,6 +183,27 @@ export default function ReviewSection({ destinoId }: Props) {
                 minLength={20}
                 className="ui-input reviews-form__textarea"
               />
+              <div className="reviews-form__context">
+                <label>
+                  <span className="reviews-form__label field-label">Cuándo fuiste</span>
+                  <select value={visitMonth} onChange={(e) => setVisitMonth(e.target.value)} className="ui-input">
+                    <option value="">Prefiero no decirlo</option>
+                    {MONTHS.map((month, index) => <option key={month} value={index + 1}>{month}</option>)}
+                  </select>
+                </label>
+                <label>
+                  <span className="reviews-form__label field-label">Con quién</span>
+                  <select value={travelParty} onChange={(e) => setTravelParty(e.target.value)} className="ui-input">
+                    <option value="">Prefiero no decirlo</option>
+                    {PARTIES.map((party) => <option key={party} value={party}>{party}</option>)}
+                  </select>
+                </label>
+              </div>
+              <div className="reviews-form__details">
+                <div><p className="reviews-form__label field-label">Tranquilidad</p><StarRating value={crowdRating} onChange={setCrowdRating} size={20} /></div>
+                <div><p className="reviews-form__label field-label">Calidad-precio</p><StarRating value={valueRating} onChange={setValueRating} size={20} /></div>
+                <div><p className="reviews-form__label field-label">Cómo se llega</p><StarRating value={accessRating} onChange={setAccessRating} size={20} /></div>
+              </div>
               {error && <p className="reviews-form__error">{error}</p>}
               <div className="reviews-form__actions">
                 <button type="submit" disabled={submitting} className="btn-cta">
@@ -206,6 +252,19 @@ export default function ReviewSection({ destinoId }: Props) {
                   </div>
                   <StarRating value={r.rating} readOnly size={14} className="reviews-item__stars" />
                   {r.comment && <p className="reviews-item__comment">{r.comment}</p>}
+                  {(r.visitMonth || r.travelParty) && (
+                    <p className="reviews-item__context field-label">
+                      {[r.visitMonth ? MONTHS[r.visitMonth - 1] : null, r.travelParty].filter(Boolean).join(' · ')}
+                    </p>
+                  )}
+                  {(r.crowdRating || r.valueRating || r.accessRating) && (
+                    <p className="reviews-item__details field-label">
+                      {r.crowdRating ? `Tranquilidad ${r.crowdRating}/5` : ''}
+                      {r.valueRating ? `${r.crowdRating ? ' · ' : ''}Calidad-precio ${r.valueRating}/5` : ''}
+                      {r.accessRating ? `${r.crowdRating || r.valueRating ? ' · ' : ''}Acceso ${r.accessRating}/5` : ''}
+                    </p>
+                  )}
+                  {r.adminResponse && <p className="reviews-item__response"><strong>Respuesta editorial:</strong> {r.adminResponse}</p>}
                 </div>
               </div>
             ))}

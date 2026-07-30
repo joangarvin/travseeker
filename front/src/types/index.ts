@@ -6,6 +6,8 @@ export interface Destino {
   masificacion: string;
   ubicacion: string;
   tipoTurismoPrincipal?: string;
+  seasonCrowd?: number | null;
+  matchReason?: string | null;
 }
 
 export interface Municipio {

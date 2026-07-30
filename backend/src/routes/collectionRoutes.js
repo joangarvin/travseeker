@@ -4,6 +4,8 @@ const { requireAuth } = require('../middleware/auth');
 
 const router = Router();
 
+router.get('/public/:shareToken', collectionController.getPublic);
+
 router.use(requireAuth);
 
 router.get('/', collectionController.list);
@@ -15,5 +17,7 @@ router.delete('/:id', collectionController.remove);
 router.post('/:id/items', collectionController.addItem);
 router.patch('/:id/items/:destinoId', collectionController.updateItem);
 router.delete('/:id/items/:destinoId', collectionController.removeItem);
+router.post('/:id/share', collectionController.share);
+router.delete('/:id/share', collectionController.stopSharing);
 
 module.exports = router;

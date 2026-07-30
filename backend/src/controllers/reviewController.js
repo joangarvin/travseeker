@@ -12,9 +12,16 @@ const list = asyncHandler(async (req, res) => {
 
 const upsert = asyncHandler(async (req, res) => {
   const { destinoId } = req.params;
-  const { rating, comment } = req.body;
-  const review = await reviewService.upsertReview(req.user.id, destinoId, Number(rating), comment);
+  const review = await reviewService.upsertReview(req.user.id, destinoId, { ...req.body, rating: Number(req.body.rating) });
   res.status(201).json(review);
+});
+
+const listForAdmin = asyncHandler(async (_req, res) => {
+  res.json(await reviewService.listReviewsForAdmin());
+});
+
+const moderate = asyncHandler(async (req, res) => {
+  res.json(await reviewService.moderateReview(req.params.reviewId, req.body));
 });
 
 const remove = asyncHandler(async (req, res) => {
@@ -22,4 +29,4 @@ const remove = asyncHandler(async (req, res) => {
   res.json(result);
 });
 
-module.exports = { list, upsert, remove };
+module.exports = { list, upsert, remove, listForAdmin, moderate };

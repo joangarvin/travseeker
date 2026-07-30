@@ -4,10 +4,23 @@ import type {
   CollectionDetail,
   CollectionForDestino,
   CollectionInput,
+  PublicCollection,
 } from '../types/collection';
 
 export function getCollections(token: string, signal?: AbortSignal) {
   return apiFetch<CollectionSummary[]>('/api/colecciones', { token, signal });
+}
+
+export function shareCollection(id: string, token: string) {
+  return apiFetch<{ id: string; shareToken: string; visibility: 'shared' }>(`/api/colecciones/${id}/share`, { method: 'POST', token });
+}
+
+export function stopSharingCollection(id: string, token: string) {
+  return apiFetch<{ id: string; visibility: 'private' }>(`/api/colecciones/${id}/share`, { method: 'DELETE', token });
+}
+
+export function getPublicCollection(shareToken: string, signal?: AbortSignal) {
+  return apiFetch<PublicCollection>(`/api/colecciones/public/${shareToken}`, { signal });
 }
 
 export function getCollection(id: string, token: string, signal?: AbortSignal) {

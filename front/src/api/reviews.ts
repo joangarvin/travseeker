@@ -1,14 +1,14 @@
 import { apiFetch } from './client';
-import type { Review, ReviewsResponse } from '../types/review';
+import type { Review, ReviewInput, ReviewsResponse } from '../types/review';
 
 export function getReviews(destinoId: string, signal?: AbortSignal) {
   return apiFetch<ReviewsResponse>(`/api/destinos/${destinoId}/reviews`, { signal });
 }
 
-export function upsertReview(destinoId: string, rating: number, comment: string, token: string) {
+export function upsertReview(destinoId: string, payload: ReviewInput, token: string) {
   return apiFetch<Review>(`/api/destinos/${destinoId}/reviews`, {
     method: 'POST',
-    body: JSON.stringify({ rating, comment }),
+    body: JSON.stringify(payload),
     token,
   });
 }

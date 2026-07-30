@@ -357,6 +357,24 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand) 18%, transparent);
 }
 
+.filter-panel__checkbox {
+  min-height: 2.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  padding: 0.625rem 0.75rem;
+  color: var(--color-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.filter-panel__checkbox input {
+  accent-color: var(--color-brand);
+}
+
 .filter-panel__actions-wrap {
   display: flex;
   flex-direction: column;
