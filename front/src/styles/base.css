@@ -157,6 +157,36 @@ textarea:disabled,
   line-height: 1.7;
 }
 
+.prose-premium h2,
+.prose-premium h3 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--color-primary);
+  margin: 1.75rem 0 0.75rem;
+}
+
+.prose-premium a {
+  color: var(--color-brand-dark);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Leaflet panes must stay below app chrome (header z-2000) */
 .leaflet-container {
   z-index: 0;

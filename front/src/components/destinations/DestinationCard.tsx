@@ -89,7 +89,7 @@ function DestinationCard({
           />
           <div className="dest-card__gradient" />
 
-          <div className="dest-card__open ink-chip card-actions-touch">
+          <div className="dest-card__open card-actions-touch" aria-hidden>
             <ArrowUpRight className="icon-sm" />
           </div>
 

@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapPin, X } from 'lucide-react';
@@ -9,13 +9,25 @@ import { destinosApi, type MapDestino, type SearchFilters } from '../api/destino
 import { SEARCH_FILTERS } from '../constants/filters';
 import { parseJsonSafe } from '../utils/parseJson';
 import { getImageUrl } from '../utils/images';
+import { filtersToParams } from '../hooks/useSearchFilters';
 
 const SPAIN_CENTER: [number, number] = [40.0, -3.5];
 const MAP_FILTER_KEYS = ['tipoTurismo', 'presupuesto', 'masificacion', 'ubicacion'] as const;
 
+function mapFiltersFromParams(params: URLSearchParams): SearchFilters {
+  const out: SearchFilters = {};
+  for (const key of MAP_FILTER_KEYS) {
+    const value = params.get(key);
+    if (value) out[key] = value;
+  }
+  return out;
+}
+
 export default function MapaDestinos() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initial = useRef(mapFiltersFromParams(searchParams));
   const [destinos, setDestinos] = useState<MapDestino[]>([]);
-  const [filters, setFilters] = useState<SearchFilters>({});
+  const [filters, setFilters] = useState<SearchFilters>(initial.current);
   const [loading, setLoading] = useState(true);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [listOpen, setListOpen] = useState(true);
@@ -24,6 +36,15 @@ export default function MapaDestinos() {
     () => SEARCH_FILTERS.filter((f) => (MAP_FILTER_KEYS as readonly string[]).includes(f.key)),
     [],
   );
+
+  useEffect(() => {
+    const next = filtersToParams(filters);
+    const current = searchParams.toString();
+    const upcoming = next.toString();
+    if (current !== upcoming) {
+      setSearchParams(next, { replace: true });
+    }
+  }, [filters, searchParams, setSearchParams]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -95,6 +116,7 @@ export default function MapaDestinos() {
                   value={(filters[f.key as keyof SearchFilters] as string) || ''}
                   onChange={(e) => updateFilter(f.key, e.target.value)}
                   className="map-page__select"
+                  aria-label={f.label}
                 >
                   {f.options.map((opt) => (
                     <option key={opt.value} value={opt.value}>
