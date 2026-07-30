@@ -107,7 +107,7 @@
   display: flex;
   gap: 0.25rem;
   padding: 0.25rem;
-  border-radius: 1rem;
+  border-radius: var(--radius-card);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
@@ -120,7 +120,7 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
+  border-radius: var(--radius-control);
   border: none;
   background: transparent;
   font-size: 0.875rem;
@@ -543,7 +543,7 @@
 /* —— List cards —— */
 
 .admin-dest-card {
-  border-radius: 1rem;
+  border-radius: var(--radius-card);
   border: 1px solid var(--color-border);
   background: var(--color-surface);
   overflow: hidden;
@@ -686,12 +686,8 @@
 }
 
 .admin-badge--warn {
-  background: color-mix(in srgb, #f59e0b 15%, transparent);
-  color: #b45309;
-}
-
-[data-theme="dark"] .admin-badge--warn {
-  color: #fbbf24;
+  background: color-mix(in srgb, var(--color-warning) 15%, transparent);
+  color: var(--color-warning-text);
 }
 
 .admin-chip {
@@ -730,7 +726,7 @@
 /* —— Municipio row —— */
 
 .admin-muni-row {
-  border-radius: 1rem;
+  border-radius: var(--radius-card);
   border: 1px solid var(--color-border);
   background: var(--color-surface);
   padding: 1rem;
@@ -1025,7 +1021,7 @@
 /* —— Imprescindibles —— */
 
 .admin-imp-section {
-  border-radius: 1rem;
+  border-radius: var(--radius-card);
   border: 1px solid var(--color-border);
   background: var(--color-surface-2);
   padding: 1rem;
@@ -1220,7 +1216,7 @@
 
 .admin-map-field__coords {
   font-size: 0.75rem;
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-sans);
   color: var(--color-muted);
   background: var(--color-secondary);
   padding: 0.25rem 0.5rem;
@@ -1229,11 +1225,7 @@
 
 .admin-map-field__hint-warn {
   font-size: 0.75rem;
-  color: #d97706;
-}
-
-[data-theme="dark"] .admin-map-field__hint-warn {
-  color: #fbbf24;
+  color: var(--color-warning-text);
 }
 
 .admin-map-field__frame {
