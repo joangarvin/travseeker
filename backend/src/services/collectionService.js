@@ -1,6 +1,7 @@
 const { prisma } = require('../config/database');
 const { randomBytes } = require('crypto');
 const { LIST_SELECT } = require('../constants/selects');
+const { canAccess } = require('../domain/collectionAccess');
 
 function clean(str, max) {
   if (typeof str !== 'string') return null;
@@ -8,21 +9,23 @@ function clean(str, max) {
   return t ? t.slice(0, max) : null;
 }
 
-async function assertOwned(userId, collectionId) {
+async function getAccess(userId, collectionId, required = 'viewer') {
   const collection = await prisma.collection.findFirst({
-    where: { id: collectionId, userId },
-    select: { id: true },
+    where: { id: collectionId },
+    select: { id: true, userId: true, members: { where: { userId }, select: { role: true } } },
   });
-  if (!collection) {
+  const role = collection?.userId === userId ? 'owner' : collection?.members[0]?.role;
+  if (!collection || !canAccess(role, required)) {
     const error = new Error('Colección no encontrada');
     error.status = 404;
     throw error;
   }
+  return { role, ownerId: collection.userId };
 }
 
 async function listCollections(userId) {
   const collections = await prisma.collection.findMany({
-    where: { userId },
+    where: { OR: [{ userId }, { members: { some: { userId } } }] },
     orderBy: { updatedAt: 'desc' },
     include: {
       _count: { select: { items: true } },
@@ -31,6 +34,7 @@ async function listCollections(userId) {
         orderBy: { createdAt: 'desc' },
         include: { destino: { select: { imagen: true } } },
       },
+      members: { where: { userId }, select: { role: true } },
     },
   });
 
@@ -40,6 +44,7 @@ async function listCollections(userId) {
     descripcion: c.descripcion,
     color: c.color,
     visibility: c.visibility,
+    role: c.userId === userId ? 'owner' : c.members[0]?.role || 'viewer',
     createdAt: c.createdAt,
     updatedAt: c.updatedAt,
     count: c._count.items,
@@ -48,13 +53,15 @@ async function listCollections(userId) {
 }
 
 async function getCollection(userId, id) {
+  const access = await getAccess(userId, id);
   const collection = await prisma.collection.findFirst({
-    where: { id, userId },
+    where: { id },
     include: {
       items: {
         orderBy: { createdAt: 'desc' },
         include: { destino: { select: LIST_SELECT } },
       },
+      members: { include: { user: { select: { id: true, email: true, nombre: true, avatarUrl: true } } }, orderBy: { createdAt: 'asc' } },
     },
   });
 
@@ -71,6 +78,8 @@ async function getCollection(userId, id) {
     color: collection.color,
     visibility: collection.visibility,
     shareToken: collection.shareToken,
+    role: access.role,
+    members: collection.members.map((member) => ({ id: member.id, role: member.role, user: member.user })),
     createdAt: collection.createdAt,
     updatedAt: collection.updatedAt,
     items: collection.items.map((i) => ({
@@ -113,7 +122,7 @@ async function createCollection(userId, { nombre, descripcion, color }) {
 }
 
 async function updateCollection(userId, id, { nombre, descripcion, color }) {
-  await assertOwned(userId, id);
+  await getAccess(userId, id, 'editor');
 
   const data = {};
   if (nombre !== undefined) {
@@ -132,7 +141,7 @@ async function updateCollection(userId, id, { nombre, descripcion, color }) {
 }
 
 async function shareCollection(userId, id) {
-  await assertOwned(userId, id);
+  await getAccess(userId, id, 'owner');
   const shareToken = randomBytes(24).toString('base64url');
   return prisma.collection.update({
     where: { id },
@@ -142,7 +151,7 @@ async function shareCollection(userId, id) {
 }
 
 async function stopSharingCollection(userId, id) {
-  await assertOwned(userId, id);
+  await getAccess(userId, id, 'owner');
   return prisma.collection.update({
     where: { id },
     data: { visibility: 'private', shareToken: null },
@@ -169,13 +178,13 @@ async function getPublicCollection(shareToken) {
 }
 
 async function deleteCollection(userId, id) {
-  await assertOwned(userId, id);
+  await getAccess(userId, id, 'owner');
   await prisma.collection.delete({ where: { id } });
   return { removed: true };
 }
 
 async function addItem(userId, collectionId, destinoId, notas) {
-  await assertOwned(userId, collectionId);
+  await getAccess(userId, collectionId, 'editor');
 
   const destino = await prisma.destino.findUnique({ where: { id: destinoId }, select: { id: true } });
   if (!destino) {
@@ -196,7 +205,7 @@ async function addItem(userId, collectionId, destinoId, notas) {
 }
 
 async function updateItemNotes(userId, collectionId, destinoId, notas) {
-  await assertOwned(userId, collectionId);
+  await getAccess(userId, collectionId, 'editor');
   const cleanNotes = clean(notas, 500);
   await prisma.collectionItem.update({
     where: { collectionId_destinoId: { collectionId, destinoId } },
@@ -206,7 +215,7 @@ async function updateItemNotes(userId, collectionId, destinoId, notas) {
 }
 
 async function removeItem(userId, collectionId, destinoId) {
-  await assertOwned(userId, collectionId);
+  await getAccess(userId, collectionId, 'editor');
   await prisma.collectionItem.deleteMany({ where: { collectionId, destinoId } });
   await prisma.collection.update({ where: { id: collectionId }, data: { updatedAt: new Date() } });
   return { removed: true };
@@ -214,7 +223,7 @@ async function removeItem(userId, collectionId, destinoId) {
 
 async function getCollectionsForDestino(userId, destinoId) {
   const collections = await prisma.collection.findMany({
-    where: { userId },
+    where: { OR: [{ userId }, { members: { some: { userId, role: 'editor' } } }] },
     orderBy: { updatedAt: 'desc' },
     include: { items: { where: { destinoId }, select: { id: true } } },
   });
@@ -225,6 +234,35 @@ async function getCollectionsForDestino(userId, destinoId) {
     color: c.color,
     contains: c.items.length > 0,
   }));
+}
+
+async function addMember(userId, collectionId, { email, role }) {
+  await getAccess(userId, collectionId, 'owner');
+  if (!['editor', 'viewer'].includes(role)) {
+    const error = new Error('El permiso debe ser editor o lector'); error.status = 400; throw error;
+  }
+  const cleanEmail = String(email || '').trim().toLowerCase();
+  const invited = await prisma.user.findUnique({ where: { email: cleanEmail }, select: { id: true, email: true, nombre: true, avatarUrl: true } });
+  if (!invited) { const error = new Error('No existe una cuenta con ese email'); error.status = 404; throw error; }
+  const collection = await prisma.collection.findUnique({ where: { id: collectionId }, select: { userId: true } });
+  if (invited.id === collection.userId) { const error = new Error('El propietario ya forma parte del viaje'); error.status = 400; throw error; }
+  const member = await prisma.collectionMember.upsert({
+    where: { collectionId_userId: { collectionId, userId: invited.id } },
+    update: { role }, create: { collectionId, userId: invited.id, role },
+  });
+  return { id: member.id, role: member.role, user: invited };
+}
+
+async function updateMember(userId, collectionId, memberId, role) {
+  await getAccess(userId, collectionId, 'owner');
+  if (!['editor', 'viewer'].includes(role)) { const error = new Error('Permiso no válido'); error.status = 400; throw error; }
+  return prisma.collectionMember.update({ where: { id: memberId, collectionId }, data: { role }, include: { user: { select: { id: true, email: true, nombre: true, avatarUrl: true } } } });
+}
+
+async function removeMember(userId, collectionId, memberId) {
+  await getAccess(userId, collectionId, 'owner');
+  await prisma.collectionMember.deleteMany({ where: { id: memberId, collectionId } });
+  return { removed: true };
 }
 
 module.exports = {
@@ -240,4 +278,7 @@ module.exports = {
   shareCollection,
   stopSharingCollection,
   getPublicCollection,
+  addMember,
+  updateMember,
+  removeMember,
 };

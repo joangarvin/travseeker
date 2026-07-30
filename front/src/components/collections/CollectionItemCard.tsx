@@ -11,9 +11,10 @@ interface Props {
   collectionId: string;
   item: CollectionItem;
   onRemove: (destinoId: string) => void;
+  canEdit?: boolean;
 }
 
-export default function CollectionItemCard({ collectionId, item, onRemove }: Props) {
+export default function CollectionItemCard({ collectionId, item, onRemove, canEdit = true }: Props) {
   const { token } = useAuth();
   const [notas, setNotas] = useState(item.notas ?? '');
   const [savedNotas, setSavedNotas] = useState(item.notas ?? '');
@@ -77,11 +78,12 @@ export default function CollectionItemCard({ collectionId, item, onRemove }: Pro
             maxLength={500}
             placeholder="Añade una nota (mejor en mayo, reservar hotel...)"
             className="collection-item-card__textarea"
+            readOnly={!canEdit}
           />
           <div className="collection-item-card__counter">{notas.length}/500</div>
         </div>
 
-        <div className="collection-item-card__footer">
+        {canEdit && <div className="collection-item-card__footer">
           <button
             type="button"
             onClick={remove}
@@ -99,7 +101,7 @@ export default function CollectionItemCard({ collectionId, item, onRemove }: Pro
               <Check className="icon-sm" /> Guardado
             </span>
           ) : null}
-        </div>
+        </div>}
       </div>
     </div>
   );

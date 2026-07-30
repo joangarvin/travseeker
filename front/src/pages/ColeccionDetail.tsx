@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Check, Compass, Link2, Pencil, Search, Trash2, X } from 'lucide-react';
+import { ArrowLeft, Check, Compass, Link2, Pencil, Search, Trash2, UserPlus, Users, X } from 'lucide-react';
 import Header from '../components/layout/Header';
 import Footer from '../components/layout/Footer';
 import PageLoader from '../components/ui/PageLoader';
@@ -8,7 +8,7 @@ import ScrollReveal from '../components/ui/ScrollReveal';
 import CollectionItemCard from '../components/collections/CollectionItemCard';
 import { useAuth } from '../context/AuthContext';
 import { useAbortableFetch } from '../hooks/useAbortableFetch';
-import { getCollection, updateCollection, deleteCollection, shareCollection, stopSharingCollection } from '../api/collections';
+import { addCollectionMember, getCollection, removeCollectionMember, updateCollection, updateCollectionMember, deleteCollection, shareCollection, stopSharingCollection } from '../api/collections';
 import { COLLECTION_COLORS, colorHex } from '../constants/collectionColors';
 import type { CollectionDetail } from '../types/collection';
 
@@ -29,6 +29,9 @@ export default function ColeccionDetail() {
   const [saving, setSaving] = useState(false);
   const [query, setQuery] = useState('');
   const [sharing, setSharing] = useState(false);
+  const [memberEmail, setMemberEmail] = useState('');
+  const [memberRole, setMemberRole] = useState<'editor' | 'viewer'>('editor');
+  const [memberError, setMemberError] = useState('');
 
   useEffect(() => {
     if (collection) {
@@ -87,6 +90,29 @@ export default function ColeccionDetail() {
     setCollection((prev) => prev ? { ...prev, visibility: 'private', shareToken: null } : prev);
   };
 
+  const handleAddMember = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!token || !id || !memberEmail.trim()) return;
+    setMemberError('');
+    try {
+      const member = await addCollectionMember(id, memberEmail, memberRole, token);
+      setCollection((prev) => prev ? { ...prev, members: [...prev.members.filter((item) => item.id !== member.id), member] } : prev);
+      setMemberEmail('');
+    } catch (err) { setMemberError(err instanceof Error ? err.message : 'No se pudo añadir'); }
+  };
+
+  const handleMemberRole = async (memberId: string, role: 'editor' | 'viewer') => {
+    if (!token || !id) return;
+    const member = await updateCollectionMember(id, memberId, role, token);
+    setCollection((prev) => prev ? { ...prev, members: prev.members.map((item) => item.id === member.id ? member : item) } : prev);
+  };
+
+  const handleRemoveMember = async (memberId: string) => {
+    if (!token || !id) return;
+    await removeCollectionMember(id, memberId, token);
+    setCollection((prev) => prev ? { ...prev, members: prev.members.filter((item) => item.id !== memberId) } : prev);
+  };
+
   const visibleItems = (collection?.items ?? []).filter((item) => {
     const q = query.trim().toLowerCase();
     if (!q) return true;
@@ -114,6 +140,8 @@ export default function ColeccionDetail() {
       </div>
     );
   }
+  const isOwner = collection.role === 'owner';
+  const canEdit = collection.role === 'owner' || collection.role === 'editor';
 
   return (
     <div className="page-shell">
@@ -175,20 +203,20 @@ export default function ColeccionDetail() {
                 </p>
               </div>
               <div className="coleccion-detail-head__actions">
-                <button type="button" onClick={handleShare} disabled={sharing} className="btn-pill">
+                {isOwner && <button type="button" onClick={handleShare} disabled={sharing} className="btn-pill">
                   <Link2 className="icon-sm" /> {sharing ? 'Creando…' : 'Compartir'}
-                </button>
-                {collection.shareToken && (
+                </button>}
+                {isOwner && collection.shareToken && (
                   <button type="button" onClick={handleStopSharing} className="btn-pill">
                     Dejar de compartir
                   </button>
                 )}
-                <button type="button" onClick={() => setEditing(true)} className="btn-pill">
+                {canEdit && <button type="button" onClick={() => setEditing(true)} className="btn-pill">
                   <Pencil className="icon-sm" /> Editar
-                </button>
-                <button type="button" onClick={handleDelete} className="btn-pill btn-pill--danger">
+                </button>}
+                {isOwner && <button type="button" onClick={handleDelete} className="btn-pill btn-pill--danger">
                   <Trash2 className="icon-sm" /> Eliminar
-                </button>
+                </button>}
               </div>
             </div>
           )}
@@ -196,6 +224,12 @@ export default function ColeccionDetail() {
       </section>
 
       <section className="coleccion-detail-section">
+        <div className="ui-card collection-collab">
+          <div className="collection-collab__head"><Users className="icon-md" /><div><h2>Personas del viaje</h2><p>{isOwner ? 'Invita a alguien con cuenta en TravSeeker.' : `Tu permiso: ${collection.role === 'editor' ? 'editor' : 'lector'}.`}</p></div></div>
+          {isOwner && <form className="collection-collab__invite" onSubmit={handleAddMember}><input type="email" className="ui-input" value={memberEmail} onChange={(event) => setMemberEmail(event.target.value)} placeholder="email@ejemplo.com" required /><select className="ui-input" value={memberRole} onChange={(event) => setMemberRole(event.target.value as 'editor' | 'viewer')}><option value="editor">Puede editar</option><option value="viewer">Solo lectura</option></select><button className="btn-cta" type="submit"><UserPlus className="icon-sm" /> Añadir</button></form>}
+          {memberError && <p className="collection-collab__error">{memberError}</p>}
+          {collection.members.length > 0 && <div className="collection-collab__members">{collection.members.map((member) => <div key={member.id} className="collection-collab__member"><span><strong>{member.user.nombre || member.user.email}</strong><small>{member.user.email}</small></span>{isOwner ? <><select value={member.role} onChange={(event) => handleMemberRole(member.id, event.target.value as 'editor' | 'viewer')}><option value="editor">Editor</option><option value="viewer">Lector</option></select><button type="button" onClick={() => handleRemoveMember(member.id)} aria-label="Quitar colaborador"><X className="icon-sm" /></button></> : <em>{member.role === 'editor' ? 'Editor' : 'Lector'}</em>}</div>)}</div>}
+        </div>
         {collection.items.length > 0 && (
           <div className="ui-card coleccion-detail-search">
             <div className="coleccion-detail-search__wrap">
@@ -214,7 +248,7 @@ export default function ColeccionDetail() {
           <div className="colecciones-grid">
             {visibleItems.map((item, index) => (
               <ScrollReveal key={item.id} delay={(index % 3) as 0 | 1 | 2}>
-                <CollectionItemCard collectionId={collection.id} item={item} onRemove={handleRemoveItem} />
+                <CollectionItemCard collectionId={collection.id} item={item} onRemove={handleRemoveItem} canEdit={canEdit} />
               </ScrollReveal>
             ))}
           </div>

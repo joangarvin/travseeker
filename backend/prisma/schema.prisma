@@ -74,6 +74,7 @@ model User {
   tokens        VerificationToken[]
   collections   Collection[]
   alerts        AlertSubscription[]
+  collectionMemberships CollectionMember[]
 }
 
 model AlertSubscription {
@@ -105,8 +106,29 @@ model Collection {
 
   user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   items       CollectionItem[]
+  members     CollectionMember[]
 
   @@index([userId])
+}
+
+model CollectionMember {
+  id           String         @id @default(uuid())
+  collectionId String
+  userId       String
+  role         CollectionRole @default(viewer)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, userId])
+  @@index([userId])
+}
+
+enum CollectionRole {
+  editor
+  viewer
 }
 
 model CollectionItem {

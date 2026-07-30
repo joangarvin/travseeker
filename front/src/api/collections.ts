@@ -5,6 +5,7 @@ import type {
   CollectionForDestino,
   CollectionInput,
   PublicCollection,
+  CollectionMember,
 } from '../types/collection';
 
 export function getCollections(token: string, signal?: AbortSignal) {
@@ -75,4 +76,16 @@ export function removeFromCollection(collectionId: string, destinoId: string, to
     method: 'DELETE',
     token,
   });
+}
+
+export function addCollectionMember(collectionId: string, email: string, role: 'editor' | 'viewer', token: string) {
+  return apiFetch<CollectionMember>(`/api/colecciones/${collectionId}/members`, { method: 'POST', body: JSON.stringify({ email, role }), token });
+}
+
+export function updateCollectionMember(collectionId: string, memberId: string, role: 'editor' | 'viewer', token: string) {
+  return apiFetch<CollectionMember>(`/api/colecciones/${collectionId}/members/${memberId}`, { method: 'PATCH', body: JSON.stringify({ role }), token });
+}
+
+export function removeCollectionMember(collectionId: string, memberId: string, token: string) {
+  return apiFetch<{ removed: boolean }>(`/api/colecciones/${collectionId}/members/${memberId}`, { method: 'DELETE', token });
 }

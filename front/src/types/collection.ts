@@ -10,7 +10,11 @@ export interface CollectionSummary {
   updatedAt: string;
   count: number;
   covers: string[];
+  role?: CollectionAccessRole;
 }
+
+export type CollectionAccessRole = 'owner' | 'editor' | 'viewer';
+export interface CollectionMember { id: string; role: 'editor' | 'viewer'; user: { id: string; email: string; nombre: string | null; avatarUrl: string | null } }
 
 export interface CollectionItem {
   id: string;
@@ -30,6 +34,8 @@ export interface CollectionDetail {
   visibility?: 'private' | 'shared';
   shareToken?: string | null;
   items: CollectionItem[];
+  role: CollectionAccessRole;
+  members: CollectionMember[];
 }
 
 export interface PublicCollection {
