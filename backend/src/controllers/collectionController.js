@@ -28,7 +28,7 @@ const addItem = asyncHandler(async (req, res) => {
 });
 
 const updateItem = asyncHandler(async (req, res) => {
-  res.json(await collectionService.updateItemNotes(req.user.id, req.params.id, req.params.destinoId, req.body.notas));
+  res.json(await collectionService.updateItem(req.user.id, req.params.id, req.params.destinoId, req.body));
 });
 
 const removeItem = asyncHandler(async (req, res) => {

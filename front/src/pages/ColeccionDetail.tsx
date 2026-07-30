@@ -26,6 +26,8 @@ export default function ColeccionDetail() {
   const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
   const [color, setColor] = useState('emerald');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [saving, setSaving] = useState(false);
   const [query, setQuery] = useState('');
   const [sharing, setSharing] = useState(false);
@@ -38,6 +40,8 @@ export default function ColeccionDetail() {
       setName(collection.nombre);
       setDesc(collection.descripcion ?? '');
       setColor(collection.color);
+      setStartDate(collection.startDate?.slice(0, 10) ?? '');
+      setEndDate(collection.endDate?.slice(0, 10) ?? '');
     }
   }, [collection]);
 
@@ -45,8 +49,8 @@ export default function ColeccionDetail() {
     if (!token || !id || !name.trim()) return;
     setSaving(true);
     try {
-      const updated = await updateCollection(id, { nombre: name, descripcion: desc, color }, token);
-      setCollection((prev) => (prev ? { ...prev, nombre: updated.nombre, descripcion: updated.descripcion, color: updated.color } : prev));
+      const updated = await updateCollection(id, { nombre: name, descripcion: desc, color, startDate: startDate || null, endDate: endDate || null }, token);
+      setCollection((prev) => (prev ? { ...prev, nombre: updated.nombre, descripcion: updated.descripcion, color: updated.color, startDate: updated.startDate ?? null, endDate: updated.endDate ?? null } : prev));
       setEditing(false);
     } finally {
       setSaving(false);
@@ -62,6 +66,10 @@ export default function ColeccionDetail() {
 
   const handleRemoveItem = (destinoId: string) => {
     setCollection((prev) => (prev ? { ...prev, items: prev.items.filter((i) => i.destinoId !== destinoId) } : prev));
+  };
+
+  const handleUpdateItem = (updated: Pick<CollectionDetail['items'][number], 'destinoId' | 'notas' | 'dayIndex' | 'status' | 'sortOrder'>) => {
+    setCollection((prev) => prev ? { ...prev, items: prev.items.map((item) => item.destinoId === updated.destinoId ? { ...item, ...updated } : item).sort((a, b) => a.sortOrder - b.sortOrder || a.createdAt.localeCompare(b.createdAt)) } : prev);
   };
 
   const handleShare = async () => {
@@ -169,6 +177,10 @@ export default function ColeccionDetail() {
                 className="ui-input"
                 placeholder="Descripción"
               />
+              <div className="coleccion-detail-edit__dates">
+                <label>Inicio<input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="ui-input" /></label>
+                <label>Fin<input type="date" value={endDate} min={startDate || undefined} onChange={(e) => setEndDate(e.target.value)} className="ui-input" /></label>
+              </div>
               <div className="colecciones-form__colors">
                 {COLLECTION_COLORS.map((col) => (
                   <button
@@ -201,6 +213,11 @@ export default function ColeccionDetail() {
                 <p className="coleccion-detail-head__count">
                   {collection.items.length} {collection.items.length === 1 ? 'destino' : 'destinos'}
                 </p>
+                {(collection.startDate || collection.endDate) && <p className="coleccion-detail-head__dates">
+                  {collection.startDate ? new Date(collection.startDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }) : 'Sin inicio'}
+                  {' — '}
+                  {collection.endDate ? new Date(collection.endDate).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Sin fin'}
+                </p>}
               </div>
               <div className="coleccion-detail-head__actions">
                 {isOwner && <button type="button" onClick={handleShare} disabled={sharing} className="btn-pill">
@@ -248,7 +265,7 @@ export default function ColeccionDetail() {
           <div className="colecciones-grid">
             {visibleItems.map((item, index) => (
               <ScrollReveal key={item.id} delay={(index % 3) as 0 | 1 | 2}>
-                <CollectionItemCard collectionId={collection.id} item={item} onRemove={handleRemoveItem} canEdit={canEdit} />
+                <CollectionItemCard collectionId={collection.id} item={item} onRemove={handleRemoveItem} onUpdate={handleUpdateItem} canEdit={canEdit} />
               </ScrollReveal>
             ))}
           </div>

@@ -63,10 +63,10 @@ export function addToCollection(collectionId: string, destinoId: string, token: 
   });
 }
 
-export function updateItemNotes(collectionId: string, destinoId: string, notas: string, token: string) {
-  return apiFetch<{ notas: string | null }>(`/api/colecciones/${collectionId}/items/${destinoId}`, {
+export function updateCollectionItem(collectionId: string, destinoId: string, data: { notas?: string; dayIndex?: number | null; status?: 'idea' | 'confirmed' | 'booked'; sortOrder?: number }, token: string) {
+  return apiFetch<{ id: string; destinoId: string; notas: string | null; dayIndex: number | null; status: 'idea' | 'confirmed' | 'booked'; sortOrder: number }>(`/api/colecciones/${collectionId}/items/${destinoId}`, {
     method: 'PATCH',
-    body: JSON.stringify({ notas }),
+    body: JSON.stringify(data),
     token,
   });
 }

@@ -141,6 +141,8 @@ model Collection {
   color       String   @default("emerald")
   visibility  String   @default("private")
   shareToken  String?  @unique
+  startDate   DateTime? @db.Date
+  endDate     DateTime? @db.Date
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -176,6 +178,9 @@ model CollectionItem {
   collectionId String
   destinoId    String
   notas        String?
+  dayIndex     Int?
+  status       String   @default("idea")
+  sortOrder    Int      @default(0)
   createdAt    DateTime @default(now())
 
   collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)

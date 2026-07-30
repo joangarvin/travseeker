@@ -9,6 +9,17 @@ function clean(str, max) {
   return t ? t.slice(0, max) : null;
 }
 
+function optionalDate(value, field) {
+  if (value === undefined) return undefined;
+  if (value === null || value === '') return null;
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    const error = new Error(`${field} debe tener formato AAAA-MM-DD`); error.status = 400; throw error;
+  }
+  const parsed = new Date(`${value}T00:00:00.000Z`);
+  if (Number.isNaN(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== value) { const error = new Error(`${field} no es válida`); error.status = 400; throw error; }
+  return parsed;
+}
+
 async function getAccess(userId, collectionId, required = 'viewer') {
   const collection = await prisma.collection.findFirst({
     where: { id: collectionId },
@@ -44,6 +55,8 @@ async function listCollections(userId) {
     descripcion: c.descripcion,
     color: c.color,
     visibility: c.visibility,
+    startDate: c.startDate,
+    endDate: c.endDate,
     role: c.userId === userId ? 'owner' : c.members[0]?.role || 'viewer',
     createdAt: c.createdAt,
     updatedAt: c.updatedAt,
@@ -58,7 +71,7 @@ async function getCollection(userId, id) {
     where: { id },
     include: {
       items: {
-        orderBy: { createdAt: 'desc' },
+        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
         include: { destino: { select: LIST_SELECT } },
       },
       members: { include: { user: { select: { id: true, email: true, nombre: true, avatarUrl: true } } }, orderBy: { createdAt: 'asc' } },
@@ -78,6 +91,8 @@ async function getCollection(userId, id) {
     color: collection.color,
     visibility: collection.visibility,
     shareToken: collection.shareToken,
+    startDate: collection.startDate,
+    endDate: collection.endDate,
     role: access.role,
     members: collection.members.map((member) => ({ id: member.id, role: member.role, user: member.user })),
     createdAt: collection.createdAt,
@@ -86,6 +101,9 @@ async function getCollection(userId, id) {
       id: i.id,
       destinoId: i.destinoId,
       notas: i.notas,
+      dayIndex: i.dayIndex,
+      status: i.status,
+      sortOrder: i.sortOrder,
       createdAt: i.createdAt,
       destino: i.destino,
     })),
@@ -121,7 +139,7 @@ async function createCollection(userId, { nombre, descripcion, color }) {
   return { ...collection, count: 0, covers: [] };
 }
 
-async function updateCollection(userId, id, { nombre, descripcion, color }) {
+async function updateCollection(userId, id, { nombre, descripcion, color, startDate, endDate }) {
   await getAccess(userId, id, 'editor');
 
   const data = {};
@@ -136,6 +154,16 @@ async function updateCollection(userId, id, { nombre, descripcion, color }) {
   }
   if (descripcion !== undefined) data.descripcion = clean(descripcion, 280);
   if (color !== undefined) data.color = color;
+  const parsedStart = optionalDate(startDate, 'La fecha de inicio');
+  const parsedEnd = optionalDate(endDate, 'La fecha de fin');
+  if (parsedStart !== undefined) data.startDate = parsedStart;
+  if (parsedEnd !== undefined) data.endDate = parsedEnd;
+  const current = await prisma.collection.findUnique({ where: { id }, select: { startDate: true, endDate: true } });
+  const effectiveStart = parsedStart === undefined ? current.startDate : parsedStart;
+  const effectiveEnd = parsedEnd === undefined ? current.endDate : parsedEnd;
+  if (effectiveStart && effectiveEnd && effectiveEnd < effectiveStart) {
+    const error = new Error('La fecha de fin no puede ser anterior al inicio'); error.status = 400; throw error;
+  }
 
   return prisma.collection.update({ where: { id }, data });
 }
@@ -162,7 +190,7 @@ async function stopSharingCollection(userId, id) {
 async function getPublicCollection(shareToken) {
   const collection = await prisma.collection.findFirst({
     where: { shareToken, visibility: 'shared' },
-    include: { items: { orderBy: { createdAt: 'asc' }, include: { destino: { select: LIST_SELECT } } } },
+    include: { items: { orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }], include: { destino: { select: LIST_SELECT } } } },
   });
   if (!collection) {
     const error = new Error('Este enlace de viaje ya no está disponible');
@@ -173,7 +201,9 @@ async function getPublicCollection(shareToken) {
     nombre: collection.nombre,
     descripcion: collection.descripcion,
     color: collection.color,
-    items: collection.items.map((item) => ({ id: item.id, destino: item.destino })),
+    startDate: collection.startDate,
+    endDate: collection.endDate,
+    items: collection.items.map((item) => ({ id: item.id, dayIndex: item.dayIndex, status: item.status, sortOrder: item.sortOrder, destino: item.destino })),
   };
 }
 
@@ -204,14 +234,30 @@ async function addItem(userId, collectionId, destinoId, notas) {
   return item;
 }
 
-async function updateItemNotes(userId, collectionId, destinoId, notas) {
+async function updateItem(userId, collectionId, destinoId, payload) {
   await getAccess(userId, collectionId, 'editor');
-  const cleanNotes = clean(notas, 500);
-  await prisma.collectionItem.update({
+  const data = {};
+  if (payload.notas !== undefined) data.notas = clean(payload.notas, 500);
+  if (payload.dayIndex !== undefined) {
+    const day = payload.dayIndex === null || payload.dayIndex === '' ? null : Number(payload.dayIndex);
+    if (day !== null && (!Number.isInteger(day) || day < 1 || day > 365)) { const error = new Error('El día debe estar entre 1 y 365'); error.status = 400; throw error; }
+    data.dayIndex = day;
+  }
+  if (payload.status !== undefined) {
+    if (!['idea', 'confirmed', 'booked'].includes(payload.status)) { const error = new Error('Estado no válido'); error.status = 400; throw error; }
+    data.status = payload.status;
+  }
+  if (payload.sortOrder !== undefined) {
+    const order = Number(payload.sortOrder);
+    if (!Number.isInteger(order) || order < 0 || order > 9999) { const error = new Error('Posición no válida'); error.status = 400; throw error; }
+    data.sortOrder = order;
+  }
+  const item = await prisma.collectionItem.update({
     where: { collectionId_destinoId: { collectionId, destinoId } },
-    data: { notas: cleanNotes },
+    data,
   });
-  return { notas: cleanNotes };
+  await prisma.collection.update({ where: { id: collectionId }, data: { updatedAt: new Date() } });
+  return item;
 }
 
 async function removeItem(userId, collectionId, destinoId) {
@@ -272,7 +318,7 @@ module.exports = {
   updateCollection,
   deleteCollection,
   addItem,
-  updateItemNotes,
+  updateItem,
   removeItem,
   getCollectionsForDestino,
   shareCollection,
