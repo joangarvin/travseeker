@@ -146,6 +146,11 @@
   background: var(--color-brand);
 }
 
+.admin-reviews { width: 100%; max-width: 80rem; margin: 0 auto; padding: 0 1rem 4rem; }
+.admin-reviews__item { display: grid; gap: .75rem; margin-top: 1rem; padding: 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-surface); }
+.admin-reviews__item p { margin: .5rem 0 0; color: var(--color-muted); }
+.admin-reviews__actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+
 /* —— Mobile back bar —— */
 
 .admin-back-bar {

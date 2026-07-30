@@ -75,4 +75,4 @@ export interface DestinoFormState {
 
 export type AdminMobileView = 'list' | 'form';
 
-export type AdminTab = 'destinos' | 'municipios';
+export type AdminTab = 'destinos' | 'municipios' | 'reviews';
