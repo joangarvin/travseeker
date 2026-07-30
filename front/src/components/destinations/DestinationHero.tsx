@@ -98,7 +98,6 @@ export default function DestinationHero({
         fetchPriority="high"
       />
       <div className="dest-hero__overlay" />
-      <div className="dest-hero__grain" aria-hidden />
 
       <div className="dest-hero__topbar safe-top">
         <Link to="/" className="dest-hero__back ink-chip touch-target">

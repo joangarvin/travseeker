@@ -80,6 +80,16 @@ async function getCollection(userId, id) {
 }
 
 async function createCollection(userId, { nombre, descripcion, color }) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { emailVerified: true },
+  });
+  if (!user?.emailVerified) {
+    const error = new Error('Verifica tu email antes de crear colecciones');
+    error.status = 403;
+    throw error;
+  }
+
   const cleanName = clean(nombre, 80);
   if (!cleanName) {
     const error = new Error('El nombre de la colección es obligatorio');

@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+import { Compass } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useAbortableFetch } from '../../hooks/useAbortableFetch';
 import { getRecommendations } from '../../api/recommendations';
@@ -15,7 +17,6 @@ export default function RecommendedForYou() {
 
   if (!user) return null;
   const recs = (data ?? []).slice(0, 4);
-  if (!loading && recs.length === 0) return null;
 
   return (
     <section className="home-recs">
@@ -35,7 +36,7 @@ export default function RecommendedForYou() {
             <div key={i} className="home-recs__skeleton" />
           ))}
         </div>
-      ) : (
+      ) : recs.length > 0 ? (
         <div className="home-recs__grid">
           {recs.map((rec, i) => (
             <ScrollReveal key={rec.destino.id} delay={(i % 4) as 0 | 1 | 2 | 3}>
@@ -48,6 +49,19 @@ export default function RecommendedForYou() {
             </ScrollReveal>
           ))}
         </div>
+      ) : (
+        <ScrollReveal>
+          <div className="home-recs__empty">
+            <Compass className="home-recs__empty-icon" aria-hidden />
+            <p className="home-recs__empty-title">Aún no hay pistas para ti</p>
+            <p className="home-recs__empty-text">
+              Guarda favoritos o marca estilos en tu perfil y aquí aparecerán destinos que te cuadran.
+            </p>
+            <Link to="/perfil" className="btn-cta">
+              Completar perfil
+            </Link>
+          </div>
+        </ScrollReveal>
       )}
     </section>
   );

@@ -1,4 +1,14 @@
-/* TravSeeker — Cuaderno de campo */
+/* TravSeeker — Cuaderno de campo
+ *
+ * Tokens de diseño (no inventar colores sueltos en componentes):
+ * - Tipografía: --font-serif (titulares), --font-sans (UI), --font-mono (etiquetas)
+ * - Papel: --color-secondary (fondo), --color-surface / --surface-2 (tarjetas)
+ * - Tinta: --color-primary (texto), --color-muted (secundario)
+ * - Marca: --color-brand / --brand-deep / --on-brand
+ * - Acentos: --color-teja, --color-mostaza, --color-mapa
+ * - Bordes: --color-border (suave), --color-border-strong (enfoque / dark)
+ * - Radios: --radius-sm|md|lg|xl (pequeños a propósito)
+ */
 
 :root,
 [data-theme="light"] {
@@ -32,8 +42,8 @@
   /* UI */
   --color-nav: #4a5248;
   --color-primary-light: #6b7266;
-  --color-border: rgba(35, 40, 31, 0.12);
-  --color-border-strong: rgba(35, 40, 31, 0.22);
+  --color-border: rgba(35, 40, 31, 0.14);
+  --color-border-strong: rgba(35, 40, 31, 0.28);
   --color-ring: rgba(31, 77, 56, 0.35);
   --color-overlay: rgba(15, 28, 19, 0.45);
   --shadow-soft: 0 1px 0 rgba(35, 40, 31, 0.04);
@@ -78,8 +88,8 @@
 
   --color-nav: #d6dacf;
   --color-primary-light: #c4cabd;
-  --color-border: rgba(243, 239, 228, 0.18);
-  --color-border-strong: rgba(243, 239, 228, 0.34);
+  --color-border: rgba(243, 239, 228, 0.22);
+  --color-border-strong: rgba(243, 239, 228, 0.4);
   --color-ring: rgba(63, 109, 82, 0.45);
   --color-overlay: rgba(6, 10, 8, 0.55);
   --shadow-soft: 0 1px 0 rgba(243, 239, 228, 0.06);

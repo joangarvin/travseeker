@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MapPin, X } from 'lucide-react';
 import Header from '../components/layout/Header';
-import MapClusters from '../components/map/MapClusters';
+import MapClusters, { type MapBounds } from '../components/map/MapClusters';
 import { destinosApi, type MapDestino, type SearchFilters } from '../api/destinos';
 import { SEARCH_FILTERS } from '../constants/filters';
 import { parseJsonSafe } from '../utils/parseJson';
@@ -23,6 +23,11 @@ function mapFiltersFromParams(params: URLSearchParams): SearchFilters {
   return out;
 }
 
+function inBounds(d: MapDestino, b: MapBounds | null): boolean {
+  if (!b) return true;
+  return d.latitud <= b.north && d.latitud >= b.south && d.longitud <= b.east && d.longitud >= b.west;
+}
+
 export default function MapaDestinos() {
   const [searchParams, setSearchParams] = useSearchParams();
   const initial = useRef(mapFiltersFromParams(searchParams));
@@ -31,6 +36,7 @@ export default function MapaDestinos() {
   const [loading, setLoading] = useState(true);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [listOpen, setListOpen] = useState(true);
+  const [bounds, setBounds] = useState<MapBounds | null>(null);
 
   const mapFilters = useMemo(
     () => SEARCH_FILTERS.filter((f) => (MAP_FILTER_KEYS as readonly string[]).includes(f.key)),
@@ -68,9 +74,18 @@ export default function MapaDestinos() {
     setListOpen(true);
   }, []);
 
+  const onBoundsChange = useCallback((next: MapBounds) => {
+    setBounds(next);
+  }, []);
+
+  const visibleInView = useMemo(
+    () => destinos.filter((d) => inBounds(d, bounds)),
+    [destinos, bounds],
+  );
+
   const sorted = useMemo(
-    () => [...destinos].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')),
-    [destinos],
+    () => [...visibleInView].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')),
+    [visibleInView],
   );
 
   return (
@@ -85,7 +100,11 @@ export default function MapaDestinos() {
                 <MapPin className="map-page__title-icon" />
                 El mapa
                 <span className="map-page__subtitle">
-                  {loading ? 'cargando…' : `${destinos.length} destino${destinos.length === 1 ? '' : 's'}`}
+                  {loading
+                    ? 'cargando…'
+                    : bounds
+                      ? `${sorted.length} en vista · ${destinos.length} total`
+                      : `${destinos.length} destino${destinos.length === 1 ? '' : 's'}`}
                 </span>
               </div>
 
@@ -135,7 +154,11 @@ export default function MapaDestinos() {
               {loading ? (
                 <p className="map-page__list-empty">Cargando destinos…</p>
               ) : sorted.length === 0 ? (
-                <p className="map-page__list-empty">Nada con estos filtros.</p>
+                <p className="map-page__list-empty">
+                  {destinos.length === 0
+                    ? 'Nada con estos filtros.'
+                    : 'Nada en esta zona del mapa. Aleja el zoom o mueve el mapa.'}
+                </p>
               ) : (
                 <ul className="map-page__list-items">
                   {sorted.map((d) => (
@@ -181,7 +204,12 @@ export default function MapaDestinos() {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
               <ZoomControl position="bottomright" />
-              <MapClusters destinos={destinos} activeId={activeId} onSelect={onSelect} />
+              <MapClusters
+                destinos={destinos}
+                activeId={activeId}
+                onSelect={onSelect}
+                onBoundsChange={onBoundsChange}
+              />
             </MapContainer>
           </div>
         </div>

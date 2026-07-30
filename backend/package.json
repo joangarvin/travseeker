@@ -9,6 +9,7 @@
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "node seed.js",
+    "db:seed-reviews": "node scripts/seed-editorial-reviews.js",
     "db:coords": "node scripts/coords.js",
     "db:promote-admin": "node scripts/promote-admin.js",
     "db:migrate-municipios": "node scripts/migrate-municipios-m2m.js"

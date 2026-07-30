@@ -8,6 +8,7 @@ import MunicipioCard from '../components/destinations/MunicipioCard';
 import Imprescindibles from '../components/destinations/Imprescindibles';
 import ReviewSection from '../components/destinations/ReviewSection';
 import RelatedDestinations from '../components/destinations/RelatedDestinations';
+import DestinationQuickFacts from '../components/destinations/DestinationQuickFacts';
 import Footer from '../components/layout/Footer';
 import ScrollReveal from '../components/ui/ScrollReveal';
 import PageLoader from '../components/ui/PageLoader';
@@ -16,6 +17,7 @@ import { parseJsonSafe } from '../utils/parseJson';
 const MUNI_PREVIEW = 6;
 
 const TOC = [
+  { href: '#resumen', label: 'Resumen' },
   { href: '#notas', label: 'Notas' },
   { href: '#imprescindibles', label: 'Imprescindibles' },
   { href: '#cuando-ir', label: 'Cuándo ir' },
@@ -109,6 +111,19 @@ export default function DestinationDetail() {
           </div>
 
           <aside className="dest-detail__aside">
+            <ScrollReveal>
+              <DestinationQuickFacts
+                presupuesto={facts.presupuesto}
+                masificacion={facts.masificacion}
+                tipoTurismo={facts.tipoTurismo}
+                ubicacion={facts.ubicacion}
+                julioAgosto={destino.mesesJulioAgosto}
+                mayJunSeptOct={destino.mesesMayJunSeptOct}
+                novAbril={destino.mesesNovAbril}
+                municipioCount={municipios.length}
+              />
+            </ScrollReveal>
+
             <ScrollReveal delay={1}>
               <div id="cuando-ir">
                 <SeasonNotebook

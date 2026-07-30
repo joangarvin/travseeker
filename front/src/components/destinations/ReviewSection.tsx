@@ -69,6 +69,10 @@ export default function ReviewSection({ destinoId }: Props) {
       return;
     }
     if (rating < 1) { setError('Elige cuántas estrellas'); return; }
+    if (comment.trim().length < 20) {
+      setError('Escribe al menos 20 caracteres (sin florituras, pero con sustancia)');
+      return;
+    }
     setSubmitting(true);
     setError('');
     try {
@@ -150,7 +154,8 @@ export default function ReviewSection({ destinoId }: Props) {
                 onChange={(e) => setComment(e.target.value)}
                 rows={3}
                 maxLength={1000}
-                placeholder="Qué tal estuvo, sin florituras…"
+                placeholder="Qué tal estuvo (mín. 20 caracteres)…"
+                minLength={20}
                 className="ui-input reviews-form__textarea"
               />
               {error && <p className="reviews-form__error">{error}</p>}

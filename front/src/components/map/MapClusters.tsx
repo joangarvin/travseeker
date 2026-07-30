@@ -16,13 +16,21 @@ const markerIcon = L.divIcon({
   popupAnchor: [0, -18],
 });
 
+export type MapBounds = {
+  north: number;
+  south: number;
+  east: number;
+  west: number;
+};
+
 interface Props {
   destinos: MapDestino[];
   activeId: string | null;
   onSelect: (id: string) => void;
+  onBoundsChange?: (bounds: MapBounds) => void;
 }
 
-export default function MapClusters({ destinos, activeId, onSelect }: Props) {
+export default function MapClusters({ destinos, activeId, onSelect, onBoundsChange }: Props) {
   const map = useMap();
 
   useEffect(() => {
@@ -56,6 +64,28 @@ export default function MapClusters({ destinos, activeId, onSelect }: Props) {
       cluster.clearLayers();
     };
   }, [map, destinos, onSelect]);
+
+  useEffect(() => {
+    if (!onBoundsChange) return;
+
+    const emit = () => {
+      const b = map.getBounds();
+      onBoundsChange({
+        north: b.getNorth(),
+        south: b.getSouth(),
+        east: b.getEast(),
+        west: b.getWest(),
+      });
+    };
+
+    emit();
+    map.on('moveend', emit);
+    map.on('zoomend', emit);
+    return () => {
+      map.off('moveend', emit);
+      map.off('zoomend', emit);
+    };
+  }, [map, onBoundsChange]);
 
   useEffect(() => {
     if (!activeId) return;
