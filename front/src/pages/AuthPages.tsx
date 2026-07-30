@@ -1,0 +1,31 @@
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, CheckCircle2, Eye, EyeOff, KeyRound, Mail } from 'lucide-react';
+import { api } from '../lib/api';
+import { useAuth } from '../lib/state';
+import { Button, Field, Notice, Shell } from '../components/ui';
+
+export function AuthPage() {
+  const { user, login, register } = useAuth();
+  const navigate = useNavigate();
+  const [mode, setMode] = useState<'login' | 'register'>('login');
+  const [nombre, setNombre] = useState(''); const [email, setEmail] = useState(''); const [password, setPassword] = useState('');
+  const [show, setShow] = useState(false); const [error, setError] = useState(''); const [loading, setLoading] = useState(false);
+  useEffect(() => { if (user) navigate('/favoritos', { replace: true }); }, [user, navigate]);
+  const submit = async (event: React.FormEvent) => { event.preventDefault(); setLoading(true); setError(''); try { if (mode === 'login') await login(email, password); else await register(email, password, nombre); navigate('/favoritos'); } catch (cause) { setError(cause instanceof Error ? cause.message : 'No se pudo continuar'); } finally { setLoading(false); } };
+  return <Shell><section className="auth-layout"><div className="auth-layout__visual"><span>Viaja con una idea.<br />Vuelve con una historia.</span></div><div className="auth-panel"><Link to="/" className="auth-panel__back"><ArrowLeft /> Volver</Link><div className="auth-tabs" role="tablist"><button role="tab" aria-selected={mode === 'login'} onClick={() => setMode('login')}>Entrar</button><button role="tab" aria-selected={mode === 'register'} onClick={() => setMode('register')}>Crear cuenta</button></div><h1>{mode === 'login' ? 'Qué bueno verte.' : 'Guarda el próximo viaje.'}</h1><p>{mode === 'login' ? 'Tus destinos y viajes siguen aquí.' : 'Una cuenta sirve para guardar, comparar y organizar. Nada más.'}</p><form onSubmit={submit}>{mode === 'register' && <Field label="Nombre" htmlFor="nombre"><input id="nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} autoComplete="name" /></Field>}<Field label="Email" htmlFor="email"><input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" /></Field><Field label="Contraseña" htmlFor="password" hint="Mínimo 8 caracteres"><div className="password-field"><input id="password" type={show ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} autoComplete={mode === 'login' ? 'current-password' : 'new-password'} /><button type="button" onClick={() => setShow((value) => !value)} aria-label={show ? 'Ocultar contraseña' : 'Mostrar contraseña'}>{show ? <EyeOff /> : <Eye />}</button></div></Field>{error && <Notice tone="error">{error}</Notice>}<Button type="submit" loading={loading}>{mode === 'login' ? 'Entrar' : 'Crear cuenta'}</Button></form>{mode === 'login' && <Link className="auth-panel__forgot" to="/recuperar">He olvidado mi contraseña</Link>}</div></section></Shell>;
+}
+
+export function RecoveryPage() {
+  const [params] = useSearchParams(); const token = params.get('token');
+  const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [message, setMessage] = useState(''); const [error, setError] = useState(''); const [loading, setLoading] = useState(false);
+  const submit = async (event: React.FormEvent) => { event.preventDefault(); setLoading(true); setError(''); try { if (token) { await api('/auth/password/reset', { method: 'POST', body: JSON.stringify({ token, newPassword: password }) }); setMessage('Contraseña actualizada. Ya puedes entrar.'); } else { await api('/auth/password/forgot', { method: 'POST', body: JSON.stringify({ email }) }); setMessage('Si existe una cuenta con ese email, recibirás un enlace en unos minutos.'); } } catch (cause) { setError(cause instanceof Error ? cause.message : 'No se pudo completar la solicitud'); } finally { setLoading(false); } };
+  return <Shell><section className="status-form"><div className="status-form__icon">{token ? <KeyRound /> : <Mail />}</div><p className="kicker">Acceso a tu cuenta</p><h1>{token ? 'Crea una contraseña nueva' : 'Recupera tu contraseña'}</h1><p>{token ? 'Elige una contraseña que no uses en otros servicios.' : 'Te enviaremos un enlace de recuperación si el email está registrado.'}</p>{message ? <><Notice tone="success">{message}</Notice><Link className="button button--primary" to="/auth">Volver a entrar</Link></> : <form onSubmit={submit}><Field label={token ? 'Nueva contraseña' : 'Email'} htmlFor="recovery"><input id="recovery" type={token ? 'password' : 'email'} value={token ? password : email} onChange={(e) => token ? setPassword(e.target.value) : setEmail(e.target.value)} minLength={token ? 8 : undefined} required /></Field>{error && <Notice tone="error">{error}</Notice>}<Button type="submit" loading={loading}>{token ? 'Guardar contraseña' : 'Enviar enlace'}</Button></form>}</section></Shell>;
+}
+
+export function VerifyPage() {
+  const [params] = useSearchParams(); const token = params.get('token');
+  const [status, setStatus] = useState<'loading' | 'success' | 'error'>(token ? 'loading' : 'error'); const [message, setMessage] = useState(token ? 'Verificando tu dirección…' : 'Falta el token de verificación.');
+  useEffect(() => { if (!token) return; api('/auth/verify-email/confirm', { method: 'POST', body: JSON.stringify({ token }) }).then(() => { setStatus('success'); setMessage('Tu email ya está verificado.'); }).catch((cause) => { setStatus('error'); setMessage(cause instanceof Error ? cause.message : 'El enlace no es válido'); }); }, [token]);
+  return <Shell><section className="status-form"><div className="status-form__icon">{status === 'success' ? <CheckCircle2 /> : <Mail />}</div><p className="kicker">Verificación</p><h1>{status === 'loading' ? 'Un momento' : status === 'success' ? 'Todo listo' : 'No pudimos verificarte'}</h1><Notice tone={status === 'success' ? 'success' : status === 'error' ? 'error' : 'info'}>{message}</Notice>{status !== 'loading' && <Link className="button button--primary" to={status === 'success' ? '/perfil' : '/'}>{status === 'success' ? 'Ir a mi perfil' : 'Volver al inicio'}</Link>}</section></Shell>;
+}
