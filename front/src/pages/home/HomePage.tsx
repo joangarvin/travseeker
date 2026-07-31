@@ -1,14 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import {
-  ArrowRight,
-  CalendarDays,
-  ChevronDown,
-  Map,
-  SlidersHorizontal,
-  Sparkles,
-  Users,
-} from 'lucide-react';
+import { ArrowRight, CalendarDays, Map, Sparkles, Users } from 'lucide-react';
 import { api } from '../../services/api';
 import { imageUrl, queryString } from '../../utils';
 import type { Destino, SearchFilters } from '../../types';
@@ -16,6 +8,7 @@ import { Loader, MediaImage, Notice } from '../../components/ui';
 import { Shell } from '../../components/layout';
 import { DestinationCard } from '../../features/destinations/components/DestinationCard';
 import { SearchBox } from '../../features/search/SearchBox';
+import { HomeFilterPanel } from '../../features/search/HomeFilterPanel';
 import { tourismTypes } from '../../features/tourism/tourism';
 
 export default function Home() {
@@ -83,14 +76,22 @@ export default function Home() {
             onChange={(value) => update('q', value)}
             onSubmit={() => void search()}
           />
-          <button
-            className="filter-trigger"
-            onClick={() => setFiltersOpen((value) => !value)}
-            aria-expanded={filtersOpen}
-          >
-            <SlidersHorizontal /> Afinar la búsqueda {activeCount > 0 && <b>{activeCount}</b>}
-            <ChevronDown />
-          </button>
+          <HomeFilterPanel
+            filters={filters}
+            isOpen={filtersOpen}
+            activeCount={activeCount}
+            onToggle={() => setFiltersOpen((currentValue) => !currentValue)}
+            onUpdate={update}
+            onClear={() => {
+              setFilters({});
+              setParams({});
+              void search({});
+            }}
+            onApply={() => {
+              setFiltersOpen(false);
+              void search();
+            }}
+          />
         </div>
         <div className="image-wall" aria-label="Destinos destacados">
           {featured.slice(0, 3).map((destino, index) => (
@@ -118,93 +119,6 @@ export default function Home() {
           )}
         </div>
       </section>
-
-      {filtersOpen && (
-        <section className="filter-drawer" aria-label="Filtros de búsqueda">
-          <div className="filter-drawer__grid">
-            <label>
-              Mes
-              <select value={filters.month || ''} onChange={(e) => update('month', e.target.value)}>
-                <option value="">Cualquier momento</option>
-                {['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'].map((m) => (
-                  <option key={m} value={m}>
-                    {new Date(2026, Number(m) - 1).toLocaleString('es', { month: 'long' })}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Presupuesto
-              <select
-                value={filters.presupuesto || ''}
-                onChange={(e) => update('presupuesto', e.target.value)}
-              >
-                <option value="">Cualquiera</option>
-                <option>Bajo</option>
-                <option>Medio-Bajo</option>
-                <option>Medio</option>
-                <option>Medio-Alto</option>
-                <option>Alto</option>
-              </select>
-            </label>
-            <label>
-              Afluencia
-              <select
-                value={filters.masificacion || ''}
-                onChange={(e) => update('masificacion', e.target.value)}
-              >
-                <option value="">Cualquiera</option>
-                <option>Bajo</option>
-                <option>Medio-Bajo</option>
-                <option>Medio</option>
-                <option>Medio-Alto</option>
-                <option>Alto</option>
-              </select>
-            </label>
-            <label>
-              Tipo de viaje
-              <select
-                value={filters.tipoTurismo || ''}
-                onChange={(e) => update('tipoTurismo', e.target.value)}
-              >
-                <option value="">Cualquiera</option>
-                {tourismTypes.map((mode) => (
-                  <option key={mode.key}>{mode.label}</option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <div className="filter-drawer__actions">
-            <label className="check">
-              <input
-                type="checkbox"
-                checked={filters.avoidCrowds === 'true'}
-                onChange={(e) => update('avoidCrowds', e.target.checked ? 'true' : '')}
-              />{' '}
-              Evitar aglomeraciones
-            </label>
-            <button
-              className="button button--secondary"
-              onClick={() => {
-                setFilters({});
-                setParams({});
-                void search({});
-              }}
-            >
-              Limpiar
-            </button>
-            <button
-              className="button button--primary"
-              onClick={() => {
-                setFiltersOpen(false);
-                void search();
-              }}
-            >
-              Ver resultados
-            </button>
-          </div>
-        </section>
-      )}
 
       <section className="trip-moods">
         <div>

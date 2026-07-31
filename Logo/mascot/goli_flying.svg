@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 180" width="100%" height="100%">
+  <g id="goli-mascot-flying">
+    <!-- Motion Wind Lines -->
+    <path d="M 10 70 Q 30 65 40 70" stroke="#CBD5E1" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <path d="M 5 95 Q 25 90 35 95" stroke="#CBD5E1" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+    <!-- Tail (Forked Swallow Tail Horizontal) -->
+    <path d="M 65 100 L 15 125 L 50 110 L 15 90 L 60 95 Z" fill="#1E293B" stroke="#0F172A" stroke-width="4" stroke-linejoin="round"/>
+
+    <!-- Main Oval Body Horizontal -->
+    <path d="M 55 90 C 50 55 80 35 125 40 C 175 45 195 75 190 105 C 185 130 150 145 110 140 C 75 135 55 115 55 90 Z" fill="#1E3A8A" stroke="#0F172A" stroke-width="4"/>
+
+    <!-- Wings Spreading Back/Up -->
+    <path d="M 90 55 C 80 25 100 10 130 20 C 150 30 135 60 115 65 Z" fill="#2563EB" stroke="#0F172A" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M 130 115 C 140 145 160 160 180 145 C 190 135 170 120 150 115 Z" fill="#2563EB" stroke="#0F172A" stroke-width="4" stroke-linejoin="round"/>
+
+    <!-- Chest (Warm Orange) -->
+    <path d="M 115 48 C 155 52 185 75 180 110 C 175 135 145 140 120 135 C 95 130 105 105 105 80 C 105 60 110 48 115 48 Z" fill="#FB923C" stroke="#0F172A" stroke-width="4"/>
+
+    <!-- White Belly Accent -->
+    <path d="M 130 75 C 160 80 175 95 170 118 C 165 132 140 135 125 132 C 110 128 118 100 125 85 Z" fill="#FFFFFF" stroke="#0F172A" stroke-width="3"/>
+
+    <!-- Cheeks -->
+    <ellipse cx="140" cy="98" rx="8" ry="6" fill="#F472B6" opacity="0.6"/>
+
+    <!-- Eyes (Happy Flying wink/smile & big eye) -->
+    <g id="eyes">
+      <ellipse cx="152" cy="78" rx="11" ry="15" fill="#FFFFFF" stroke="#0F172A" stroke-width="3.5"/>
+      <ellipse cx="154" cy="78" rx="6.5" ry="9" fill="#0F172A"/>
+      <circle cx="157" cy="74" r="3" fill="#FFFFFF"/>
+    </g>
+
+    <!-- Beak Open Flying -->
+    <path d="M 168 82 L 184 85 L 172 96 Z" fill="#FBBF24" stroke="#0F172A" stroke-width="3.5" stroke-linejoin="round"/>
+
+    <!-- Red Passport item held by foot/wing -->
+    <g id="passport" transform="translate(145, 105) rotate(12)">
+      <rect x="0" y="0" width="28" height="36" rx="4" fill="#EF4444" stroke="#0F172A" stroke-width="3"/>
+      <circle cx="14" cy="16" r="7" fill="none" stroke="#FBBF24" stroke-width="2"/>
+      <text x="14" y="30" font-family="sans-serif" font-size="5" font-weight="bold" fill="#FFFFFF" text-anchor="middle">PASSPORT</text>
+    </g>
+  </g>
+</svg>
