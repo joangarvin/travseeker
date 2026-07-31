@@ -32,9 +32,6 @@
   .destination-list {
     grid-template-columns: repeat(2, 1fr);
   }
-  .filter-drawer__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
   .nearby > div,
   .reviews__grid {
     grid-template-columns: repeat(2, 1fr);
@@ -103,19 +100,17 @@
     left: 14px;
     bottom: 14px;
   }
-  .filter-drawer {
-    margin: 0;
-    border-inline: 0;
-  }
-  .filter-drawer__grid {
+  .home-filter-panel__grid {
     grid-template-columns: 1fr;
   }
-  .filter-drawer__actions {
+  .home-filter-panel__heading,
+  .home-filter-panel__actions {
     align-items: stretch;
     flex-direction: column;
   }
-  .filter-drawer__actions .check {
-    margin: 0;
+  .home-filter-panel__actions > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
   .trip-moods {
     gap: 24px;
@@ -427,6 +422,15 @@
   }
   .home-hero h1 {
     font-size: 3.5rem;
+  }
+  .home-filter-panel {
+    padding: 18px 16px;
+  }
+  .home-filter-panel::before {
+    left: 16px;
+  }
+  .home-filter-panel__actions > div {
+    grid-template-columns: 1fr;
   }
   .destination-actions .button {
     padding-inline: 14px;

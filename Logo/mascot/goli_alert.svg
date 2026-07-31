@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <g id="goli-mascot-alert">
+    <!-- Tail (Forked) -->
+    <path d="M 60 145 L 20 175 L 55 130 L 25 115 L 65 110 Z" fill="#1E293B" stroke="#0F172A" stroke-width="4" stroke-linejoin="round"/>
+
+    <!-- Main Body Back -->
+    <path d="M 45 105 C 30 75 35 40 75 35 C 130 30 155 70 150 110 C 145 145 115 165 80 165 C 55 165 45 140 45 105 Z" fill="#1E3A8A" stroke="#0F172A" stroke-width="4"/>
+
+    <!-- Left Wing Holding Sign -->
+    <path d="M 120 105 C 135 110 145 100 140 85 C 130 75 115 90 120 105 Z" fill="#2563EB" stroke="#0F172A" stroke-width="3.5" stroke-linejoin="round"/>
+
+    <!-- Chest (Warm Orange) -->
+    <path d="M 68 68 C 95 68 135 85 130 125 C 125 155 95 165 75 165 C 60 165 52 145 55 120 C 55 95 60 68 68 68 Z" fill="#FB923C" stroke="#0F172A" stroke-width="4"/>
+
+    <!-- Belly Accent -->
+    <path d="M 75 98 C 95 98 125 108 120 138 C 115 160 90 165 75 165 C 65 165 60 150 60 130 C 60 115 65 98 75 98 Z" fill="#FFFFFF" stroke="#0F172A" stroke-width="3"/>
+
+    <!-- Sweat Drop (Worried Expression) -->
+    <path d="M 52 60 C 48 60 45 64 45 68 C 45 72 52 78 52 78 C 52 78 59 72 59 68 C 59 64 56 60 52 60 Z" fill="#38BDF8" stroke="#0F172A" stroke-width="2"/>
+
+    <!-- Worried Eyebrows & Big Eyes -->
+    <g id="worried-eyes">
+      <!-- Eyebrows slant -->
+      <path d="M 64 56 L 82 64" stroke="#0F172A" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M 122 56 L 104 64" stroke="#0F172A" stroke-width="3.5" stroke-linecap="round"/>
+
+      <!-- Left Eye -->
+      <ellipse cx="76" cy="76" rx="13" ry="16" fill="#FFFFFF" stroke="#0F172A" stroke-width="3.5"/>
+      <ellipse cx="76" cy="78" rx="7.5" ry="9.5" fill="#0F172A"/>
+      <circle cx="79" cy="74" r="3" fill="#FFFFFF"/>
+
+      <!-- Right Eye -->
+      <ellipse cx="112" cy="76" rx="13" ry="16" fill="#FFFFFF" stroke="#0F172A" stroke-width="3.5"/>
+      <ellipse cx="112" cy="78" rx="7.5" ry="9.5" fill="#0F172A"/>
+      <circle cx="115" cy="74" r="3" fill="#FFFFFF"/>
+    </g>
+
+    <!-- Beak Open Worried -->
+    <path d="M 88 90 C 94 98 100 98 106 90 Z" fill="#FBBF24" stroke="#0F172A" stroke-width="3.5" stroke-linejoin="round"/>
+
+    <!-- Warning Sign (Triangular Caution Sign) -->
+    <g id="warning-sign" transform="translate(130, 45)">
+      <!-- Sign pole -->
+      <line x1="25" y1="50" x2="25" y2="110" stroke="#0F172A" stroke-width="5" stroke-linecap="round"/>
+      <!-- Sign board -->
+      <polygon points="25,5 55,55 5,55" fill="#FACC15" stroke="#0F172A" stroke-width="4" stroke-linejoin="round"/>
+      <!-- Exclamation mark -->
+      <line x1="25" y1="20" x2="25" y2="38" stroke="#0F172A" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="25" cy="46" r="2.5" fill="#0F172A"/>
+    </g>
+
+    <!-- Feet -->
+    <path d="M 75 165 L 70 178 M 75 165 L 75 180 M 75 165 L 80 178" stroke="#0F172A" stroke-width="4" stroke-linecap="round"/>
+    <path d="M 105 163 L 100 176 M 105 163 L 105 178 M 105 163 L 110 176" stroke="#0F172A" stroke-width="4" stroke-linecap="round"/>
+  </g>
+</svg>

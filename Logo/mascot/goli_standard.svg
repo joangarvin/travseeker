@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <g id="goli-mascot-standard">
+    <!-- Tail (Forked Swallow Tail) -->
+    <path d="M 60 145 L 20 175 L 55 130 L 25 115 L 65 110 Z" fill="#1E293B" stroke="#0F172A" stroke-width="4" stroke-linejoin="round"/>
+
+    <!-- Main Body Back -->
+    <path d="M 45 105 C 30 75 35 40 75 35 C 130 30 155 70 150 110 C 145 145 115 165 80 165 C 55 165 45 140 45 105 Z" fill="#1E3A8A" stroke="#0F172A" stroke-width="4"/>
+
+    <!-- Left Wing -->
+    <path d="M 50 110 C 30 120 20 100 30 85 C 40 75 52 90 50 110 Z" fill="#2563EB" stroke="#0F172A" stroke-width="3.5" stroke-linejoin="round"/>
+
+    <!-- Right Wing (Waving) -->
+    <path d="M 130 95 C 152 80 178 55 188 40 C 182 62 170 85 145 110 C 138 115 132 105 130 95 Z" fill="#2563EB" stroke="#0F172A" stroke-width="4" stroke-linejoin="round"/>
+
+    <!-- Chest (Warm Orange) -->
+    <path d="M 68 68 C 95 68 135 85 130 125 C 125 155 95 165 75 165 C 60 165 52 145 55 120 C 55 95 60 68 68 68 Z" fill="#FB923C" stroke="#0F172A" stroke-width="4"/>
+
+    <!-- Belly Accent (Soft Cream/White) -->
+    <path d="M 75 98 C 95 98 125 108 120 138 C 115 160 90 165 75 165 C 65 165 60 150 60 130 C 60 115 65 98 75 98 Z" fill="#FFFFFF" stroke="#0F172A" stroke-width="3"/>
+
+    <!-- Cute Blush Cheeks -->
+    <ellipse cx="63" cy="92" rx="9" ry="6" fill="#F472B6" opacity="0.6"/>
+    <ellipse cx="122" cy="92" rx="9" ry="6" fill="#F472B6" opacity="0.6"/>
+
+    <!-- Big Expressive Eyes -->
+    <g id="eyes">
+      <!-- Left Eye -->
+      <ellipse cx="76" cy="74" rx="13" ry="17" fill="#FFFFFF" stroke="#0F172A" stroke-width="3.5"/>
+      <ellipse cx="78" cy="74" rx="7.5" ry="10.5" fill="#0F172A"/>
+      <circle cx="81" cy="69" r="3.5" fill="#FFFFFF"/>
+      <circle cx="76" cy="79" r="1.5" fill="#FFFFFF"/>
+
+      <!-- Right Eye -->
+      <ellipse cx="112" cy="74" rx="13" ry="17" fill="#FFFFFF" stroke="#0F172A" stroke-width="3.5"/>
+      <ellipse cx="110" cy="74" rx="7.5" ry="10.5" fill="#0F172A"/>
+      <circle cx="113" cy="69" r="3.5" fill="#FFFFFF"/>
+      <circle cx="108" cy="79" r="1.5" fill="#FFFFFF"/>
+    </g>
+
+    <!-- Beak -->
+    <path d="M 86 85 L 102 85 L 94 101 Z" fill="#FBBF24" stroke="#0F172A" stroke-width="3.5" stroke-linejoin="round"/>
+
+    <!-- Feet -->
+    <path d="M 75 165 L 70 178 M 75 165 L 75 180 M 75 165 L 80 178" stroke="#0F172A" stroke-width="4" stroke-linecap="round"/>
+    <path d="M 105 163 L 100 176 M 105 163 L 105 178 M 105 163 L 110 176" stroke="#0F172A" stroke-width="4" stroke-linecap="round"/>
+  </g>
+</svg>
