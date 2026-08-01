@@ -63,10 +63,10 @@ export default function Home() {
         <div className="home-hero__copy">
           <p className="kicker">Destinos españoles elegidos con criterio</p>
           <h1>
-            TravSeeker,
+            <span className="home-hero__accent">TravSeeker, </span>
             <br />
             <em>
-              Donde empieza <span className="home-hero__accent">tu viaje.</span>
+              Donde empieza tu viaje.
             </em>
           </h1>
           <p className="home-hero__lead">
