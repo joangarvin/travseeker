@@ -107,3 +107,8 @@ export type SearchFilters = {
   actividades?: string;
   avoidCrowds?: string;
 };
+
+export type FilterOptions = {
+  locations: string[];
+  activities: string[];
+};

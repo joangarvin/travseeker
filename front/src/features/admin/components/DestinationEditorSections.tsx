@@ -3,7 +3,10 @@ import { CoordinatePicker } from '../../../components/admin/CoordinatePicker';
 import { Field, ImageUploader, Notice } from '../../../components/ui';
 import type { Destino, Municipio } from '../../../types';
 import { plain } from '../../../utils';
-import { tourismTypes } from '../../tourism/tourism';
+import { TourismMultiSelect } from '../../tourism/TourismMultiSelect';
+import { serializeTourismValues } from '../../tourism/tourism';
+import { ActivityMultiSelect } from '../../activities/ActivityMultiSelect';
+import { serializeActivityValues } from '../../activities/activities';
 
 export type DestinationUpdater = <Key extends keyof Destino>(key: Key, value: Destino[Key]) => void;
 
@@ -43,17 +46,21 @@ export function DestinationIdentitySection({ form, update }: DestinationSectionP
             placeholder="Navarra · Interior"
           />
         </Field>
-        <TourismTypeField
+        <TourismMultiSelect
           id="admin-type"
-          label="Tipo principal"
+          label="Tipos de viaje"
           value={form.tipoTurismoPrincipal}
-          onChange={(value) => update('tipoTurismoPrincipal', value)}
+          hint="Selecciona una o varias formas de viaje que definan el destino."
+          required
+          onChange={(values) => update('tipoTurismoPrincipal', serializeTourismValues(values))}
         />
-        <TourismTypeField
-          id="admin-secondary"
-          label="Tipo secundario"
+        <ActivityMultiSelect
+          id="admin-activities"
+          label="Actividades"
           value={form.tipoTurismoSecundario}
-          onChange={(value) => update('tipoTurismoSecundario', value)}
+          hint="Opcional. Selecciona actividades existentes o escribe una nueva."
+          allowCustom
+          onChange={(values) => update('tipoTurismoSecundario', serializeActivityValues(values))}
         />
         <SelectField
           id="admin-budget"
@@ -364,24 +371,6 @@ function SelectField({ id, label, value, options, onChange }: SelectFieldProps) 
       >
         {options.map((option) => (
           <option key={option}>{option}</option>
-        ))}
-      </select>
-    </Field>
-  );
-}
-
-function TourismTypeField({ id, label, value, onChange }: Omit<SelectFieldProps, 'options'>) {
-  return (
-    <Field label={label} htmlFor={id}>
-      <select
-        id={id}
-        value={plain(value)}
-        onChange={(event) => onChange(event.target.value)}
-        required
-      >
-        <option value="">Elige un tipo</option>
-        {tourismTypes.map((tourismType) => (
-          <option key={tourismType.key}>{tourismType.label}</option>
         ))}
       </select>
     </Field>

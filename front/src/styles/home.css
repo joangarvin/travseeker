@@ -39,7 +39,7 @@
   box-shadow: 8px 8px 0 var(--sun);
 }
 
-.search-box>svg {
+.search-box > svg {
   justify-self: end;
 }
 
@@ -176,6 +176,10 @@
   gap: 14px 16px;
   margin-top: 20px;
 }
+.home-filter-panel__tourism,
+.home-filter-panel__activities {
+  grid-column: 1 / -1;
+}
 
 .home-filter-panel label {
   display: grid;
@@ -202,7 +206,7 @@
   min-height: 44px;
 }
 
-.home-filter-panel__actions>div {
+.home-filter-panel__actions > div {
   display: flex;
   gap: 8px;
 }
@@ -317,9 +321,9 @@
 }
 
 .section-head,
-.related>header,
-.municipalities>header,
-.nearby>header {
+.related > header,
+.municipalities > header,
+.nearby > header {
   display: flex;
   align-items: end;
   justify-content: space-between;
@@ -331,7 +335,7 @@
   margin-bottom: 0;
 }
 
-.section-head>a {
+.section-head > a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -372,7 +376,7 @@
   scale: 1.025;
 }
 
-.destination-card__image>span {
+.destination-card__image > span {
   position: absolute;
   top: 12px;
   left: 12px;
@@ -419,7 +423,7 @@
   font-size: 0.78rem;
 }
 
-.destination-card__facts span+span::before {
+.destination-card__facts span + span::before {
   content: '·';
   margin-right: 14px;
 }
@@ -458,7 +462,7 @@
   background: var(--surface);
 }
 
-.decision-band>header {
+.decision-band > header {
   display: grid;
   align-content: center;
   min-height: 196px;
@@ -467,18 +471,18 @@
   color: white;
 }
 
-.decision-band>header .kicker {
+.decision-band > header .kicker {
   margin-bottom: 12px;
   color: var(--sun);
 }
 
-.decision-band>header h2 {
+.decision-band > header h2 {
   max-width: 330px;
   margin: 0;
   font-size: clamp(1.8rem, 2.6vw, 2.8rem);
 }
 
-.decision-band>div {
+.decision-band > div {
   position: relative;
   display: grid;
   grid-template-columns: 48px 1fr;
@@ -489,11 +493,11 @@
   border-right: 1px solid var(--line);
 }
 
-.decision-band>div:last-child {
+.decision-band > div:last-child {
   border: 0;
 }
 
-.decision-band>div>svg {
+.decision-band > div > svg {
   grid-row: 1 / 4;
   display: grid;
   place-self: start center;
@@ -511,7 +515,7 @@
   font-size: 1rem;
 }
 
-.decision-band>div p {
+.decision-band > div p {
   grid-column: 2;
   max-width: 300px;
   margin: 8px 0 0;

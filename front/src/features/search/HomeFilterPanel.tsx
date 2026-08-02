@@ -1,11 +1,16 @@
 import { ChevronDown, SlidersHorizontal } from 'lucide-react';
 import type { SearchFilters } from '../../types';
-import { tourismTypes } from '../tourism/tourism';
+import { TourismMultiSelect } from '../tourism/TourismMultiSelect';
+import { tourismQueryValue, tourismValues } from '../tourism/tourism';
+import { ActivityMultiSelect } from '../activities/ActivityMultiSelect';
+import { activityQueryValue, activityValues } from '../activities/activities';
 
 type HomeFilterPanelProps = {
   filters: SearchFilters;
   isOpen: boolean;
   activeCount: number;
+  locations: string[];
+  activities: string[];
   onToggle: () => void;
   onUpdate: (key: keyof SearchFilters, value: string) => void;
   onClear: () => void;
@@ -20,6 +25,8 @@ export function HomeFilterPanel({
   filters,
   isOpen,
   activeCount,
+  locations,
+  activities,
   onToggle,
   onUpdate,
   onClear,
@@ -92,7 +99,7 @@ export function HomeFilterPanel({
             </label>
 
             <label>
-              Afluencia
+              Masificación
               <select
                 value={filters.masificacion || ''}
                 onChange={(event) => onUpdate('masificacion', event.target.value)}
@@ -105,17 +112,40 @@ export function HomeFilterPanel({
             </label>
 
             <label>
-              Tipo de viaje
+              Ubicación
               <select
-                value={filters.tipoTurismo || ''}
-                onChange={(event) => onUpdate('tipoTurismo', event.target.value)}
+                value={filters.ubicacion || ''}
+                onChange={(event) => onUpdate('ubicacion', event.target.value)}
               >
                 <option value="">Cualquiera</option>
-                {tourismTypes.map((tourismType) => (
-                  <option key={tourismType.key}>{tourismType.label}</option>
+                {locations.map((location) => (
+                  <option key={location}>{location}</option>
                 ))}
               </select>
             </label>
+
+            <div className="home-filter-panel__tourism">
+              <TourismMultiSelect
+                id="home-tourism-types"
+                label="Tipos de viaje"
+                value={tourismValues(filters.tipoTurismo)}
+                hint="Puedes combinar varias opciones. Mostraremos destinos que coincidan con cualquiera."
+                compact
+                onChange={(values) => onUpdate('tipoTurismo', tourismQueryValue(values))}
+              />
+            </div>
+
+            <div className="home-filter-panel__activities">
+              <ActivityMultiSelect
+                id="home-activities"
+                label="Actividades"
+                value={activityValues(filters.actividades)}
+                suggestions={activities}
+                hint="Elige qué quieres hacer. Los resultados pueden coincidir con cualquiera de las seleccionadas."
+                compact
+                onChange={(values) => onUpdate('actividades', activityQueryValue(values))}
+              />
+            </div>
           </div>
 
           <div className="home-filter-panel__actions">

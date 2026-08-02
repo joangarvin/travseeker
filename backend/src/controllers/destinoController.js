@@ -1,5 +1,5 @@
-const destinoService = require('../services/destinoService');
-const { asyncHandler } = require('../utils/asyncHandler');
+const destinoService = require("../services/destinoService");
+const { asyncHandler } = require("../utils/asyncHandler");
 
 const search = asyncHandler(async (req, res) => {
   const destinos = await destinoService.searchDestinos(req.query);
@@ -8,13 +8,14 @@ const search = asyncHandler(async (req, res) => {
 
 const getById = asyncHandler(async (req, res) => {
   const destino = await destinoService.getDestinoById(req.params.id);
-  if (!destino) return res.status(404).json({ error: 'Destino no encontrado' });
+  if (!destino) return res.status(404).json({ error: "Destino no encontrado" });
   res.json(destino);
 });
 
 const getRelacionados = asyncHandler(async (req, res) => {
   const relacionados = await destinoService.getRelacionados(req.params.id);
-  if (relacionados === null) return res.status(404).json({ error: 'Destino no encontrado' });
+  if (relacionados === null)
+    return res.status(404).json({ error: "Destino no encontrado" });
   res.json(relacionados);
 });
 
@@ -30,8 +31,8 @@ const getMapa = asyncHandler(async (req, res) => {
 });
 
 const compare = asyncHandler(async (req, res) => {
-  const ids = String(req.query.ids || '')
-    .split(',')
+  const ids = String(req.query.ids || "")
+    .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
   const destinos = await destinoService.compareDestinos(ids);
@@ -43,6 +44,10 @@ const getStats = asyncHandler(async (req, res) => {
   res.json(stats);
 });
 
+const getFilterOptions = asyncHandler(async (_req, res) => {
+  res.json(await destinoService.getFilterOptions());
+});
+
 module.exports = {
   search,
   getById,
@@ -51,4 +56,5 @@ module.exports = {
   getMapa,
   compare,
   getStats,
+  getFilterOptions,
 };
