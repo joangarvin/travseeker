@@ -7,13 +7,14 @@ import { imageUrl, plain } from '../../utils';
 import type { Destino } from '../../types';
 import { Empty, Loader, MediaImage } from '../../components/ui';
 import { PageHeading, Shell } from '../../components/layout';
-import { TourismMark } from '../../features/tourism/tourism';
+import { TourismMarks } from '../../features/tourism/tourism';
+import { ActivityMarks } from '../../features/activities/activities';
 
 const rows: Array<[string, keyof Destino]> = [
   ['Presupuesto', 'presupuesto'],
   ['Afluencia', 'masificacion'],
-  ['Tipo principal', 'tipoTurismoPrincipal'],
-  ['También encontrarás', 'tipoTurismoSecundario'],
+  ['Tipos de viaje', 'tipoTurismoPrincipal'],
+  ['Actividades', 'tipoTurismoSecundario'],
   ['Julio y agosto', 'mesesJulioAgosto'],
   ['Entretiempo', 'mesesMayJunSeptOct'],
   ['Noviembre a abril', 'mesesNovAbril'],
@@ -139,15 +140,17 @@ export default function ComparePage() {
                 <strong>{label}</strong>
                 {items.map((item) => {
                   const value = item[key];
-                  const isTourism =
-                    key === 'tipoTurismoPrincipal' || key === 'tipoTurismoSecundario';
+                  const isTourism = key === 'tipoTurismoPrincipal';
+                  const isActivity = key === 'tipoTurismoSecundario';
                   const crowd = key.toString().startsWith('meses')
                     ? `${value}%`
                     : plain(String(value || '—'));
                   return (
                     <div key={item.id}>
                       {isTourism ? (
-                        <TourismMark value={String(value || '')} compact />
+                        <TourismMarks value={String(value || '')} compact />
+                      ) : isActivity ? (
+                        <ActivityMarks value={String(value || '')} />
                       ) : (
                         <>
                           {key.toString().startsWith('meses') && Number(value) <= 40 && <Check />}

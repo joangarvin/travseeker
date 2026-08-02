@@ -15,6 +15,8 @@ import { DestinationEditor } from '../../features/admin/components/DestinationEd
 import { api } from '../../services/api';
 import type { Destino, Municipio, Place, Review } from '../../types';
 import { plain } from '../../utils';
+import { tourismValues } from '../../features/tourism/tourism';
+import { activityValues } from '../../features/activities/activities';
 
 const EMPTY_DESTINATION: Partial<Destino> = {
   nombre: '',
@@ -22,7 +24,7 @@ const EMPTY_DESTINATION: Partial<Destino> = {
   presupuesto: 'Medio',
   masificacion: 'Medio',
   tipoTurismoPrincipal: 'Cultural',
-  tipoTurismoSecundario: 'Patrimonial',
+  tipoTurismoSecundario: '',
   descripcion: '',
   imprescindibles: '',
   imagen: '',
@@ -125,7 +127,7 @@ export default function AdminPage() {
   const filteredDestinations = useMemo(
     () =>
       destinations.filter((destination) =>
-        `${destination.nombre} ${plain(destination.ubicacion)} ${plain(destination.tipoTurismoPrincipal)}`
+        `${destination.nombre} ${plain(destination.ubicacion)} ${tourismValues(destination.tipoTurismoPrincipal).join(' ')} ${activityValues(destination.tipoTurismoSecundario).join(' ')}`
           .toLowerCase()
           .includes(destinationQuery.toLowerCase()),
       ),

@@ -3,13 +3,19 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowRight, CalendarDays, Map, Sparkles, Users } from 'lucide-react';
 import { api } from '../../services/api';
 import { imageUrl, queryString } from '../../utils';
-import type { Destino, SearchFilters } from '../../types';
+import type { Destino, FilterOptions, SearchFilters } from '../../types';
 import { Loader, MediaImage, Notice } from '../../components/ui';
 import { Shell } from '../../components/layout';
 import { DestinationCard } from '../../features/destinations/components/DestinationCard';
 import { SearchBox } from '../../features/search/SearchBox';
 import { HomeFilterPanel } from '../../features/search/HomeFilterPanel';
 import { tourismTypes } from '../../features/tourism/tourism';
+import { activityTypes } from '../../features/activities/activities';
+
+const defaultFilterOptions: FilterOptions = {
+  locations: ['Costa', 'Interior', 'Isla', 'Montaña'],
+  activities: activityTypes.map((activity) => activity.label),
+};
 
 export default function Home() {
   const [params, setParams] = useSearchParams();
@@ -18,6 +24,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [filterOptions, setFilterOptions] = useState<FilterOptions>(defaultFilterOptions);
   const [filters, setFilters] = useState<SearchFilters>(() => Object.fromEntries(params.entries()));
 
   const search = async (next = filters) => {
@@ -42,10 +49,12 @@ export default function Home() {
     Promise.all([
       api<Destino[]>('/destacados?limit=5'),
       api<Destino[]>(`/destinos${queryString(Object.fromEntries(params.entries()))}`),
+      api<FilterOptions>('/destinos/filter-options').catch(() => defaultFilterOptions),
     ])
-      .then(([hero, list]) => {
+      .then(([hero, list, options]) => {
         setFeatured(hero);
         setResults(list);
+        setFilterOptions(options);
       })
       .catch((cause) =>
         setError(cause instanceof Error ? cause.message : 'No se pudieron cargar los destinos'),
@@ -61,7 +70,7 @@ export default function Home() {
     <Shell>
       <section className="home-hero">
         <div className="home-hero__copy">
-          <p className="kicker">Destinos españoles elegidos con criterio</p>
+          <p className="kicker">Guía de viajeros</p>
           <h1>
             TravSeeker,
             <br />
@@ -82,6 +91,8 @@ export default function Home() {
             filters={filters}
             isOpen={filtersOpen}
             activeCount={activeCount}
+            locations={filterOptions.locations}
+            activities={filterOptions.activities}
             onToggle={() => setFiltersOpen((currentValue) => !currentValue)}
             onUpdate={update}
             onClear={() => {
@@ -159,7 +170,7 @@ export default function Home() {
               {activeCount ? `${results.length} lugares encajan` : 'Sitios que merecen el viaje'}
             </h2>
           </div>
-          <Link to="/mapa">
+          <Link to={`/mapa${queryString(filters)}`}>
             Abrir en el mapa <Map />
           </Link>
         </header>

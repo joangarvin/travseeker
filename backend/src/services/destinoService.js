@@ -1,7 +1,17 @@
-const { prisma } = require('../config/database');
-const { buildWhereClause } = require('../utils/buildWhereClause');
-const { LIST_SELECT, MAP_SELECT, COMPARE_SELECT } = require('../constants/selects');
-const { normalizeMonth, rankForSeason } = require('../domain/season');
+const { prisma } = require("../config/database");
+const { buildWhereClause } = require("../utils/buildWhereClause");
+const {
+  LIST_SELECT,
+  MAP_SELECT,
+  COMPARE_SELECT,
+} = require("../constants/selects");
+const { normalizeMonth, rankForSeason } = require("../domain/season");
+const {
+  ACTIVITY_TYPES,
+  parseTags,
+  isTourismType,
+  normalizeActivity,
+} = require("../constants/scales");
 
 async function searchDestinos(query) {
   const month = normalizeMonth(query.month);
@@ -9,7 +19,10 @@ async function searchDestinos(query) {
     where: buildWhereClause(query),
     select: LIST_SELECT,
   });
-  return rankForSeason(destinos, { month, avoidCrowds: query.avoidCrowds === 'true' });
+  return rankForSeason(destinos, {
+    month,
+    avoidCrowds: query.avoidCrowds === "true",
+  });
 }
 
 async function getDestinoById(id) {
@@ -19,14 +32,17 @@ async function getDestinoById(id) {
       municipioLinks: {
         include: { municipio: true },
       },
-      places: { where: { isActive: true }, orderBy: [{ sortOrder: 'asc' }, { nombre: 'asc' }] },
+      places: {
+        where: { isActive: true },
+        orderBy: [{ sortOrder: "asc" }, { nombre: "asc" }],
+      },
     },
   });
   if (!destino) return null;
   const municipios = (destino.municipioLinks || [])
     .map((link) => link.municipio)
     .filter(Boolean)
-    .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+    .sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
   const { municipioLinks, ...rest } = destino;
   return { ...rest, municipios };
 }
@@ -55,12 +71,18 @@ async function getRelacionados(id) {
 
   if (!destino) return null;
 
+  const tourismMatches = parseTags(destino.tipoTurismoPrincipal).map(
+    (type) => ({
+      tipoTurismoPrincipal: { contains: type, mode: "insensitive" },
+    }),
+  );
+
   return prisma.destino.findMany({
     where: {
       id: { not: id },
       OR: [
         { ubicacion: { contains: destino.ubicacion } },
-        { tipoTurismoPrincipal: { contains: destino.tipoTurismoPrincipal } },
+        ...tourismMatches,
         { presupuesto: { contains: destino.presupuesto } },
       ],
     },
@@ -79,17 +101,20 @@ async function getMapaDestinos(query) {
     },
     select: MAP_SELECT,
   });
-  return rankForSeason(destinos, { month, avoidCrowds: query.avoidCrowds === 'true' });
+  return rankForSeason(destinos, {
+    month,
+    avoidCrowds: query.avoidCrowds === "true",
+  });
 }
 
 async function compareDestinos(ids) {
   if (!Array.isArray(ids) || ids.length < 2) {
-    const error = new Error('Selecciona al menos dos destinos para comparar');
+    const error = new Error("Selecciona al menos dos destinos para comparar");
     error.status = 400;
     throw error;
   }
   if (ids.length > 4) {
-    const error = new Error('Puedes comparar un máximo de 4 destinos');
+    const error = new Error("Puedes comparar un máximo de 4 destinos");
     error.status = 400;
     throw error;
   }
@@ -106,13 +131,40 @@ async function compareDestinos(ids) {
 async function getStats() {
   const [total, reviewAgg] = await Promise.all([
     prisma.destino.count(),
-    prisma.review.aggregate({ _avg: { rating: true }, _count: { rating: true } }),
+    prisma.review.aggregate({
+      _avg: { rating: true },
+      _count: { rating: true },
+    }),
   ]);
   return {
     total,
     totalReviews: reviewAgg._count.rating || 0,
-    avgRating: reviewAgg._avg.rating ? Number(reviewAgg._avg.rating.toFixed(1)) : null,
+    avgRating: reviewAgg._avg.rating
+      ? Number(reviewAgg._avg.rating.toFixed(1))
+      : null,
   };
+}
+
+async function getFilterOptions() {
+  const destinations = await prisma.destino.findMany({
+    select: { ubicacion: true, tipoTurismoSecundario: true },
+  });
+  const locations = [
+    ...new Set(
+      destinations.flatMap((destination) => parseTags(destination.ubicacion)),
+    ),
+  ].sort((first, second) => first.localeCompare(second, "es"));
+  const activities = [
+    ...new Set([
+      ...ACTIVITY_TYPES,
+      ...destinations.flatMap((destination) =>
+        parseTags(destination.tipoTurismoSecundario)
+          .filter((value) => !isTourismType(value))
+          .map(normalizeActivity),
+      ),
+    ]),
+  ].sort((first, second) => first.localeCompare(second, "es"));
+  return { locations, activities };
 }
 
 module.exports = {
@@ -123,4 +175,5 @@ module.exports = {
   getMapaDestinos,
   compareDestinos,
   getStats,
+  getFilterOptions,
 };

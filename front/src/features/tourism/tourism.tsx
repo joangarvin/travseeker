@@ -1,5 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 import { Castle, Compass, Landmark, Leaf, Mountain, Waves, Wheat } from 'lucide-react';
+import { parseTagValues, serializeTagValues, tagQueryValue } from '../../utils/tags';
 
 export type TourismKind =
   'cultural' | 'naturaleza' | 'playa' | 'rural' | 'montana' | 'patrimonial' | 'otro';
@@ -40,34 +41,38 @@ export const tourismTypes: TourismDefinition[] = [
   },
 ];
 
-function clean(value?: string | null) {
-  if (!value) return '';
-  try {
-    const parsed = JSON.parse(value);
-    if (Array.isArray(parsed)) return String(parsed[0] || '');
-    if (typeof parsed === 'string') return parsed;
-  } catch {
-    /* plain value */
-  }
-  return value;
+function normalizedTourismKey(value: string) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+    .toLocaleLowerCase('es');
+}
+
+export function isTourismValue(value: string) {
+  const key = normalizedTourismKey(value);
+  return tourismTypes.some((tourismType) => normalizedTourismKey(tourismType.label) === key);
+}
+
+export function tourismValues(value?: string | string[] | null): string[] {
+  return parseTagValues(value);
+}
+
+export function serializeTourismValues(values: string[]) {
+  return serializeTagValues(values);
+}
+
+export function tourismQueryValue(values: string[]) {
+  return tagQueryValue(values);
 }
 
 export function tourismDefinition(value?: string | null): TourismDefinition {
-  const normalized = clean(value)
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase();
+  const firstValue = tourismValues(value)[0] || '';
+  const normalized = normalizedTourismKey(firstValue);
   return (
-    tourismTypes.find((item) =>
-      normalized.includes(
-        item.label
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .toLowerCase(),
-      ),
-    ) || {
+    tourismTypes.find((item) => normalized.includes(normalizedTourismKey(item.label))) || {
       key: 'otro',
-      label: clean(value) || 'Otros viajes',
+      label: firstValue || 'Otros viajes',
       description: 'Una forma distinta de descubrir',
       Icon: Compass,
     }
@@ -82,12 +87,32 @@ export function TourismMark({
   compact?: boolean;
 }) {
   const type = tourismDefinition(value);
+  const extraCount = Math.max(0, tourismValues(value).length - 1);
   return (
     <span className={`tourism-mark tourism--${type.key} ${compact ? 'tourism-mark--compact' : ''}`}>
       <span className="tourism-mark__symbol" aria-hidden>
         <type.Icon />
       </span>
       <span className="tourism-mark__label">{type.label}</span>
+      {extraCount > 0 && <span className="tourism-mark__more">+{extraCount}</span>}
+    </span>
+  );
+}
+
+export function TourismMarks({
+  value,
+  compact = false,
+}: {
+  value?: string | null;
+  compact?: boolean;
+}) {
+  const values = tourismValues(value);
+  if (!values.length) return <span>—</span>;
+  return (
+    <span className="tourism-marks">
+      {values.map((item) => (
+        <TourismMark key={item} value={item} compact={compact} />
+      ))}
     </span>
   );
 }

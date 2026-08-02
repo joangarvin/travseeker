@@ -18,7 +18,8 @@ import type { CollectionSummary, Destino, Review } from '../../types';
 import { Button, Field, Loader, MediaImage, Notice } from '../../components/ui';
 import { Shell } from '../../components/layout';
 import { DestinationCard } from '../../features/destinations/components/DestinationCard';
-import { TourismMark } from '../../features/tourism/tourism';
+import { TourismMark, TourismMarks } from '../../features/tourism/tourism';
+import { ActivityMarks, activityValues } from '../../features/activities/activities';
 
 export default function DestinationPage() {
   const { id = '' } = useParams();
@@ -74,10 +75,10 @@ export default function DestinationPage() {
     () =>
       destino
         ? ([
-          ['Noviembre — abril', destino.mesesNovAbril],
-          ['Mayo — junio / septiembre — octubre', destino.mesesMayJunSeptOct],
-          ['Julio — agosto', destino.mesesJulioAgosto],
-        ] as const)
+            ['Noviembre — abril', destino.mesesNovAbril],
+            ['Mayo — junio / septiembre — octubre', destino.mesesMayJunSeptOct],
+            ['Julio — agosto', destino.mesesJulioAgosto],
+          ] as const)
         : [],
     [destino],
   );
@@ -187,11 +188,19 @@ export default function DestinationPage() {
               <dd>{plain(destino.masificacion)}</dd>
             </div>
             <div>
-              <dt>Carácter</dt>
+              <dt>Tipos de viaje</dt>
               <dd>
-                <TourismMark value={destino.tipoTurismoPrincipal} compact />
+                <TourismMarks value={destino.tipoTurismoPrincipal} compact />
               </dd>
             </div>
+            {activityValues(destino.tipoTurismoSecundario).length > 0 && (
+              <div>
+                <dt>Actividades</dt>
+                <dd>
+                  <ActivityMarks value={destino.tipoTurismoSecundario} />
+                </dd>
+              </div>
+            )}
             <div>
               <dt>Municipios</dt>
               <dd>{destino.municipios?.length || 0}</dd>

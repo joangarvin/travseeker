@@ -73,6 +73,244 @@
   font-size: 0.6rem;
   letter-spacing: 0.065em;
 }
+.tourism-mark__more {
+  align-self: center;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.tourism-marks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+.tourism-multi-select {
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+.tourism-multi-select legend {
+  padding: 0;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+.tourism-multi-select > p {
+  margin: 4px 0 10px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+.tourism-multi-select__options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.tourism-multi-select__option {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 6px 10px 6px 6px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.15;
+  cursor: pointer;
+  transition:
+    border-color 160ms var(--ease),
+    background 160ms var(--ease),
+    color 160ms var(--ease);
+}
+.tourism-multi-select__option:hover {
+  border-color: var(--ink);
+}
+.tourism-multi-select__option:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+.tourism-multi-select__option:has(input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.tourism-multi-select__symbol {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  background: var(--surface-muted);
+  color: var(--ink);
+}
+.tourism-multi-select__symbol svg,
+.tourism-multi-select__check {
+  width: 17px;
+  height: 17px;
+}
+.tourism-multi-select__check {
+  justify-self: end;
+}
+.tourism-multi-select__option.is-selected {
+  color: white;
+}
+.tourism-multi-select__option.is-selected .tourism-multi-select__symbol {
+  background: rgb(255 255 255 / 18%);
+  color: white;
+}
+.tourism-multi-select__option.tourism--cultural.is-selected {
+  border-color: var(--tourism-cultural-solid);
+  background: var(--tourism-cultural-solid);
+}
+.tourism-multi-select__option.tourism--naturaleza.is-selected {
+  border-color: var(--tourism-nature-solid);
+  background: var(--tourism-nature-solid);
+}
+.tourism-multi-select__option.tourism--playa.is-selected {
+  border-color: var(--tourism-beach-solid);
+  background: var(--tourism-beach-solid);
+}
+.tourism-multi-select__option.tourism--rural.is-selected {
+  border-color: var(--tourism-rural-solid);
+  background: var(--tourism-rural-solid);
+}
+.tourism-multi-select__option.tourism--montana.is-selected {
+  border-color: var(--tourism-mountain-solid);
+  background: var(--tourism-mountain-solid);
+}
+.tourism-multi-select__option.tourism--patrimonial.is-selected {
+  border-color: var(--tourism-heritage-solid);
+  background: var(--tourism-heritage-solid);
+}
+.tourism-multi-select--compact .tourism-multi-select__options {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.tourism-multi-select--compact .tourism-multi-select__option {
+  min-height: 44px;
+}
+.activity-marks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.activity-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 4px 10px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  font-size: 0.75rem;
+  font-weight: 750;
+}
+.activity-mark svg {
+  width: 16px;
+  height: 16px;
+  color: var(--brand);
+}
+.activity-multi-select {
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+.activity-multi-select legend {
+  padding: 0;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+.activity-multi-select > p {
+  margin: 4px 0 10px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+.activity-multi-select__search {
+  position: relative;
+  display: block;
+  margin-bottom: 8px;
+}
+.activity-multi-select__search > svg {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 12px;
+  width: 18px;
+  height: 18px;
+  color: var(--muted);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.activity-multi-select__search input {
+  height: 44px;
+  padding-left: 42px;
+  background: var(--surface);
+}
+.activity-multi-select__options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  max-height: 208px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.activity-multi-select__option {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 7px 10px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  font-size: 0.76rem;
+  font-weight: 750;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.activity-multi-select__option:hover {
+  border-color: var(--ink);
+}
+.activity-multi-select__option:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+.activity-multi-select__option.is-selected {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+}
+.activity-multi-select__option > svg {
+  width: 17px;
+  height: 17px;
+  color: var(--brand);
+}
+.activity-multi-select__option > svg:last-child {
+  justify-self: end;
+}
+.activity-multi-select__add {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px dashed var(--brand);
+  background: var(--brand-soft);
+  color: var(--ink);
+  font-weight: 800;
+}
+.activity-multi-select__empty {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 12px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
 .tourism--naturaleza :is(.tourism-mark__symbol, .trip-moods__icon, .map-legend__symbol) {
   border-radius: 50% 50% 50% 4px;
 }

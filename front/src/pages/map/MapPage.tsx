@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import {
   CircleMarker,
   MapContainer,
@@ -22,18 +22,38 @@ import {
 } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import { api } from '../../services/api';
-import { TourismMark, tourismDefinition, tourismTypes } from '../../features/tourism/tourism';
+import { TourismMultiSelect } from '../../features/tourism/TourismMultiSelect';
+import { ActivityMultiSelect } from '../../features/activities/ActivityMultiSelect';
+import {
+  activityQueryValue,
+  activityTypes,
+  activityValues,
+} from '../../features/activities/activities';
+import {
+  TourismMark,
+  tourismDefinition,
+  tourismQueryValue,
+  tourismTypes,
+  tourismValues,
+} from '../../features/tourism/tourism';
 import { imageUrl, plain, queryString } from '../../utils';
-import type { Destino, SearchFilters } from '../../types';
+import type { Destino, FilterOptions, SearchFilters } from '../../types';
 import { Empty, Loader, MediaImage } from '../../components/ui';
 import { Shell } from '../../components/layout';
 import { useTheme } from '../../contexts';
 
 export default function MapPage() {
   const { theme } = useTheme();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [destinos, setDestinos] = useState<Destino[]>([]);
-  const [filters, setFilters] = useState<SearchFilters>({});
-  const [query, setQuery] = useState('');
+  const [filters, setFilters] = useState<SearchFilters>(() =>
+    Object.fromEntries(searchParams.entries()),
+  );
+  const [filterOptions, setFilterOptions] = useState<FilterOptions>({
+    locations: ['Costa', 'Interior', 'Isla', 'Montaña'],
+    activities: activityTypes.map((activity) => activity.label),
+  });
+  const [query, setQuery] = useState(() => searchParams.get('q') || '');
   const [selected, setSelected] = useState<string | null>(null);
   const [listOpen, setListOpen] = useState(
     () => typeof window === 'undefined' || !window.matchMedia('(max-width: 760px)').matches,
@@ -45,19 +65,29 @@ export default function MapPage() {
   const [tilesFailed, setTilesFailed] = useState(false);
 
   useEffect(() => {
+    api<FilterOptions>('/destinos/filter-options')
+      .then(setFilterOptions)
+      .catch(() => undefined);
+  }, []);
+  useEffect(() => {
     const timer = window.setTimeout(() => setFilters((current) => ({ ...current, q: query })), 250);
     return () => window.clearTimeout(timer);
   }, [query]);
   useEffect(() => {
     setLoading(true);
     setError('');
+    const nextParams = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) nextParams.set(key, value);
+    });
+    setSearchParams(nextParams, { replace: true });
     api<Destino[]>(`/mapa${queryString(filters)}`)
       .then(setDestinos)
       .catch((cause) =>
         setError(cause instanceof Error ? cause.message : 'No se pudo cargar el mapa'),
       )
       .finally(() => setLoading(false));
-  }, [filters]);
+  }, [filters, setSearchParams]);
 
   const active = useMemo(() => destinos.find((item) => item.id === selected), [destinos, selected]);
   const update = (key: keyof SearchFilters, value: string) =>
@@ -119,13 +149,13 @@ export default function MapPage() {
               ))}
             </select>
             <select
-              value={filters.tipoTurismo || ''}
-              onChange={(event) => update('tipoTurismo', event.target.value)}
-              aria-label="Tipo de turismo"
+              value={filters.ubicacion || ''}
+              onChange={(event) => update('ubicacion', event.target.value)}
+              aria-label="Ubicación"
             >
-              <option value="">Cualquier tipo</option>
-              {tourismTypes.map((type) => (
-                <option key={type.key}>{type.label}</option>
+              <option value="">Cualquier ubicación</option>
+              {filterOptions.locations.map((location) => (
+                <option key={location}>{location}</option>
               ))}
             </select>
             <select
@@ -143,7 +173,7 @@ export default function MapPage() {
             <select
               value={filters.masificacion || ''}
               onChange={(event) => update('masificacion', event.target.value)}
-              aria-label="Afluencia"
+              aria-label="Masificación"
             >
               <option value="">Cualquier afluencia</option>
               <option>Bajo</option>
@@ -152,6 +182,25 @@ export default function MapPage() {
               <option>Medio-Alto</option>
               <option>Alto</option>
             </select>
+            <div className="map-filters__tourism">
+              <TourismMultiSelect
+                id="map-tourism-types"
+                label="Tipos de viaje"
+                value={tourismValues(filters.tipoTurismo)}
+                compact
+                onChange={(values) => update('tipoTurismo', tourismQueryValue(values))}
+              />
+            </div>
+            <div className="map-filters__activities">
+              <ActivityMultiSelect
+                id="map-activities"
+                label="Actividades"
+                value={activityValues(filters.actividades)}
+                suggestions={filterOptions.activities}
+                compact
+                onChange={(values) => update('actividades', activityQueryValue(values))}
+              />
+            </div>
             <label className="check">
               <input
                 type="checkbox"

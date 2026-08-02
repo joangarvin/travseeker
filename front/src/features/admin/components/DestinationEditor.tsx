@@ -12,7 +12,9 @@ import { AdminModal } from '../../../components/admin/AdminModal';
 import { Button, Notice } from '../../../components/ui';
 import { api } from '../../../services/api';
 import type { Destino, Municipio } from '../../../types';
-import { plain } from '../../../utils';
+import { parseTagValues, plain } from '../../../utils';
+import { isTourismValue, serializeTourismValues, tourismValues } from '../../tourism/tourism';
+import { activityValues, serializeActivityValues } from '../../activities/activities';
 import {
   DestinationContentSection,
   DestinationIdentitySection,
@@ -47,11 +49,15 @@ const editorSections = [
 ] as const;
 
 function normalizeDestination(destination: Partial<Destino>): Partial<Destino> {
+  const secondaryValues = parseTagValues(destination.tipoTurismoSecundario);
   return {
     ...destination,
     ubicacion: plain(destination.ubicacion),
-    tipoTurismoPrincipal: plain(destination.tipoTurismoPrincipal),
-    tipoTurismoSecundario: plain(destination.tipoTurismoSecundario),
+    tipoTurismoPrincipal: serializeTourismValues([
+      ...tourismValues(destination.tipoTurismoPrincipal),
+      ...secondaryValues.filter(isTourismValue),
+    ]),
+    tipoTurismoSecundario: serializeActivityValues(activityValues(secondaryValues)),
     presupuesto: plain(destination.presupuesto),
     masificacion: plain(destination.masificacion),
   };
@@ -89,6 +95,11 @@ export function DestinationEditor({
 
   const saveDestination = async (event?: FormEvent) => {
     event?.preventDefault();
+    if (!tourismValues(form.tipoTurismoPrincipal).length) {
+      setActiveSection('identity');
+      setMessage({ tone: 'error', text: 'Selecciona al menos un tipo principal.' });
+      return;
+    }
     setIsSaving(true);
     setMessage(null);
 
