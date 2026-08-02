@@ -74,10 +74,10 @@ export default function DestinationPage() {
     () =>
       destino
         ? ([
-            ['Noviembre — abril', destino.mesesNovAbril],
-            ['Mayo — junio / septiembre — octubre', destino.mesesMayJunSeptOct],
-            ['Julio — agosto', destino.mesesJulioAgosto],
-          ] as const)
+          ['Noviembre — abril', destino.mesesNovAbril],
+          ['Mayo — junio / septiembre — octubre', destino.mesesMayJunSeptOct],
+          ['Julio — agosto', destino.mesesJulioAgosto],
+        ] as const)
         : [],
     [destino],
   );
@@ -289,7 +289,6 @@ export default function DestinationPage() {
       <section className="reviews">
         <header>
           <div>
-            <p className="kicker">Experiencia compartida</p>
             <h2>Lo que cuentan quienes fueron</h2>
           </div>
           <div className="reviews__score">

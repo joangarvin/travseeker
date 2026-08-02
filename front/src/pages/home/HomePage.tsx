@@ -63,9 +63,11 @@ export default function Home() {
         <div className="home-hero__copy">
           <p className="kicker">Destinos españoles elegidos con criterio</p>
           <h1>
-            Sal de aquí.
+            TravSeeker,
             <br />
-            <em>Pero elige bien.</em>
+            <em>
+              <span className="home-hero__accent">Donde empieza tu viaje. </span>
+            </em>
           </h1>
           <p className="home-hero__lead">
             Compara afluencia, presupuesto y mejor momento. El viaje empieza tomando una buena
@@ -122,7 +124,6 @@ export default function Home() {
 
       <section className="trip-moods">
         <div>
-          <p className="kicker">Empieza por una sensación</p>
           <h2>¿Qué quieres que pase?</h2>
         </div>
         <div className="trip-moods__list">

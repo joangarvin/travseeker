@@ -19,18 +19,18 @@
   --success: #087a55;
   --warning: #946000;
   --danger: #b92525;
-  --tourism-cultural: #3047f2;
-  --tourism-nature: #00786c;
-  --tourism-beach: #cf432c;
-  --tourism-rural: #8a5800;
-  --tourism-mountain: #6845cf;
-  --tourism-heritage: #ad285f;
-  --tourism-cultural-solid: #3047f2;
-  --tourism-nature-solid: #006d63;
-  --tourism-beach-solid: #c83d27;
-  --tourism-rural-solid: #805000;
-  --tourism-mountain-solid: #6240c5;
-  --tourism-heritage-solid: #a62458;
+  --tourism-cultural: #C89B1D;
+  --tourism-nature: #2E7D32;
+  --tourism-beach: #26A69A;
+  --tourism-rural: #8D6E63;
+  --tourism-mountain: #5E60CE;
+  --tourism-heritage: #AD1457;
+  --tourism-cultural-solid: #C89B1D;
+  --tourism-nature-solid: #2E7D32;
+  --tourism-beach-solid: #26A69A;
+  --tourism-rural-solid: #8D6E63;
+  --tourism-mountain-solid: #5E60CE;
+  --tourism-heritage-solid: #AD1457;
   --tourism-other-solid: #5f6470;
   --focus: #3047f2;
   --overlay: rgb(5 7 14 / 72%);
@@ -82,6 +82,7 @@
 * {
   box-sizing: border-box;
 }
+
 html {
   scroll-behavior: smooth;
 }
