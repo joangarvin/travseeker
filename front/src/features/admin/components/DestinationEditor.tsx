@@ -10,8 +10,9 @@ import {
 } from 'lucide-react';
 import { AdminModal } from '../../../components/admin/AdminModal';
 import { Button, Notice } from '../../../components/ui';
+import { useActivities } from '../../../contexts';
 import { api } from '../../../services/api';
-import type { Destino, Municipio } from '../../../types';
+import type { Activity, Destino, Municipio } from '../../../types';
 import { parseTagValues, plain } from '../../../utils';
 import { isTourismValue, serializeTourismValues, tourismValues } from '../../tourism/tourism';
 import { activityValues, serializeActivityValues } from '../../activities/activities';
@@ -23,6 +24,7 @@ import {
   DestinationMunicipalitiesSection,
   DestinationSeasonSection,
 } from './DestinationEditorSections';
+import { ActivityEditorModal } from './ActivityEditorModal';
 
 type EditorSection = 'identity' | 'content' | 'season' | 'image' | 'location' | 'municipalities';
 
@@ -36,6 +38,7 @@ type DestinationEditorProps = {
   municipalities: Municipio[];
   token: string;
   onChange: (destination: Destino) => void;
+  onActivityCreated?: (activity: Activity) => void;
   onClose: () => void;
 };
 
@@ -68,13 +71,17 @@ export function DestinationEditor({
   municipalities,
   token,
   onChange,
+  onActivityCreated,
   onClose,
 }: DestinationEditorProps) {
+  const { refreshActivities } = useActivities();
   const [form, setForm] = useState<Partial<Destino>>(() => normalizeDestination(initial));
   const [activeSection, setActiveSection] = useState<EditorSection>('identity');
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<EditorMessage | null>(null);
   const [municipalityQuery, setMunicipalityQuery] = useState('');
+  const [activityDraft, setActivityDraft] = useState<Partial<Activity> | null>(null);
+  const [isActivitySaving, setIsActivitySaving] = useState(false);
   const associatedMunicipalities = form.municipios || [];
 
   const municipalityCandidates = useMemo(
@@ -180,78 +187,125 @@ export function DestinationEditor({
     }
   };
 
+  const createActivity = async (activity: Partial<Activity>) => {
+    setIsActivitySaving(true);
+    setMessage(null);
+    try {
+      const created = await api<Activity>(
+        '/admin/activities',
+        { method: 'POST', body: JSON.stringify(activity) },
+        token,
+      );
+      const selectedActivities = activityValues(form.tipoTurismoSecundario);
+      updateField(
+        'tipoTurismoSecundario',
+        serializeActivityValues([...selectedActivities, created.name]),
+      );
+      onActivityCreated?.(created);
+      await refreshActivities();
+      setActivityDraft(null);
+      setMessage({
+        tone: 'success',
+        text: `${created.name} se ha creado y seleccionado. Guarda el destino para aplicar el cambio.`,
+      });
+    } catch (cause) {
+      setMessage({
+        tone: 'error',
+        text: cause instanceof Error ? cause.message : 'No se pudo crear la actividad',
+      });
+    } finally {
+      setIsActivitySaving(false);
+    }
+  };
+
   return (
-    <AdminModal
-      wide
-      title={form.id ? `Editar ${form.nombre}` : 'Crear un destino'}
-      subtitle="Completa cada apartado. Puedes guardar y continuar cuando quieras."
-      onClose={onClose}
-    >
-      <form className="admin-editor" onSubmit={saveDestination}>
-        <nav className="admin-editor__nav" aria-label="Apartados del destino" role="tablist">
-          {editorSections.map(({ id, label, Icon }) => (
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeSection === id}
-              className={activeSection === id ? 'is-active' : ''}
-              onClick={() => setActiveSection(id)}
-              key={id}
-            >
-              <Icon />
-              <span>{label}</span>
-              {id === 'municipalities' && <b>{associatedMunicipalities.length}</b>}
-            </button>
-          ))}
-        </nav>
+    <>
+      <AdminModal
+        wide
+        title={form.id ? `Editar ${form.nombre}` : 'Crear un destino'}
+        subtitle="Completa cada apartado. Puedes guardar y continuar cuando quieras."
+        onClose={onClose}
+      >
+        <form className="admin-editor" onSubmit={saveDestination}>
+          <nav className="admin-editor__nav" aria-label="Apartados del destino" role="tablist">
+            {editorSections.map(({ id, label, Icon }) => (
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeSection === id}
+                className={activeSection === id ? 'is-active' : ''}
+                onClick={() => setActiveSection(id)}
+                key={id}
+              >
+                <Icon />
+                <span>{label}</span>
+                {id === 'municipalities' && <b>{associatedMunicipalities.length}</b>}
+              </button>
+            ))}
+          </nav>
 
-        <div className="admin-editor__content">
-          {message && <Notice tone={message.tone}>{message.text}</Notice>}
-          {activeSection === 'identity' && (
-            <DestinationIdentitySection form={form} update={updateField} />
-          )}
-          {activeSection === 'content' && (
-            <DestinationContentSection form={form} update={updateField} />
-          )}
-          {activeSection === 'season' && (
-            <DestinationSeasonSection form={form} update={updateField} />
-          )}
-          {activeSection === 'image' && (
-            <DestinationImageSection form={form} update={updateField} token={token} />
-          )}
-          {activeSection === 'location' && (
-            <DestinationLocationSection form={form} update={updateField} />
-          )}
-          {activeSection === 'municipalities' && (
-            <DestinationMunicipalitiesSection
-              destinationId={form.id}
-              associated={associatedMunicipalities}
-              candidates={municipalityCandidates}
-              municipalityCount={municipalities.length}
-              query={municipalityQuery}
-              onQueryChange={setMunicipalityQuery}
-              onLink={(municipality) => void linkMunicipality(municipality)}
-              onUnlink={(municipality) => void unlinkMunicipality(municipality)}
-            />
-          )}
-        </div>
-
-        <footer className="admin-editor__footer">
-          <span aria-live="polite">
-            {message?.tone === 'success' && (
-              <>
-                <CheckCircle2 /> {message.text}
-              </>
+          <div className="admin-editor__content">
+            {message && <Notice tone={message.tone}>{message.text}</Notice>}
+            {activeSection === 'identity' && (
+              <DestinationIdentitySection
+                form={form}
+                update={updateField}
+                onRequestCreateActivity={(name) =>
+                  setActivityDraft({ name, icon: 'Compass', sortOrder: 0, isActive: true })
+                }
+              />
             )}
-          </span>
-          <Button type="button" variant="quiet" onClick={onClose}>
-            Cerrar
-          </Button>
-          <Button type="submit" loading={isSaving}>
-            Guardar cambios
-          </Button>
-        </footer>
-      </form>
-    </AdminModal>
+            {activeSection === 'content' && (
+              <DestinationContentSection form={form} update={updateField} />
+            )}
+            {activeSection === 'season' && (
+              <DestinationSeasonSection form={form} update={updateField} />
+            )}
+            {activeSection === 'image' && (
+              <DestinationImageSection form={form} update={updateField} token={token} />
+            )}
+            {activeSection === 'location' && (
+              <DestinationLocationSection form={form} update={updateField} />
+            )}
+            {activeSection === 'municipalities' && (
+              <DestinationMunicipalitiesSection
+                destinationId={form.id}
+                associated={associatedMunicipalities}
+                candidates={municipalityCandidates}
+                municipalityCount={municipalities.length}
+                query={municipalityQuery}
+                onQueryChange={setMunicipalityQuery}
+                onLink={(municipality) => void linkMunicipality(municipality)}
+                onUnlink={(municipality) => void unlinkMunicipality(municipality)}
+              />
+            )}
+          </div>
+
+          <footer className="admin-editor__footer">
+            <span aria-live="polite">
+              {message?.tone === 'success' && (
+                <>
+                  <CheckCircle2 /> {message.text}
+                </>
+              )}
+            </span>
+            <Button type="button" variant="quiet" onClick={onClose}>
+              Cerrar
+            </Button>
+            <Button type="submit" loading={isSaving}>
+              Guardar cambios
+            </Button>
+          </footer>
+        </form>
+      </AdminModal>
+      {activityDraft && (
+        <ActivityEditorModal
+          initial={activityDraft}
+          isSaving={isActivitySaving}
+          onSave={createActivity}
+          onClose={() => setActivityDraft(null)}
+        />
+      )}
+    </>
   );
 }

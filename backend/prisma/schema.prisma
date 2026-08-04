@@ -7,7 +7,7 @@ generator client {
 }
 
 model Destino {
-  id                    String      @id @default(uuid())
+  id                    String   @id @default(uuid())
   nombre                String
   tipoTurismoPrincipal  String
   tipoTurismoSecundario String
@@ -23,13 +23,40 @@ model Destino {
   imagen                String
   latitud               Float?
   longitud              Float?
-  updatedAt             DateTime    @updatedAt
+  updatedAt             DateTime @updatedAt
 
-  municipioLinks        DestinoMunicipio[]
-  favoritos             Favorito[]
-  reviews               Review[]
-  collectionItems       CollectionItem[]
-  places                Place[]
+  municipioLinks  DestinoMunicipio[]
+  favoritos       Favorito[]
+  reviews         Review[]
+  collectionItems CollectionItem[]
+  places          Place[]
+  activityLinks   DestinoActivity[]
+}
+
+model Activity {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  slug      String   @unique
+  icon      String   @default("Compass")
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  destinationLinks DestinoActivity[]
+
+  @@index([isActive, sortOrder, name])
+}
+
+model DestinoActivity {
+  destinoId  String
+  activityId String
+
+  destino  Destino  @relation(fields: [destinoId], references: [id], onDelete: Cascade)
+  activity Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+
+  @@id([destinoId, activityId])
+  @@index([activityId])
 }
 
 model Place {
@@ -52,21 +79,21 @@ model Place {
 }
 
 model Municipio {
-  id              String  @id @default(uuid())
-  nombre          String
-  precios         String
-  conexiones      String
-  tipoTurismo     String?
+  id          String  @id @default(uuid())
+  nombre      String
+  precios     String
+  conexiones  String
+  tipoTurismo String?
 
-  destinoLinks    DestinoMunicipio[]
+  destinoLinks DestinoMunicipio[]
 }
 
 model DestinoMunicipio {
   destinoId   String
   municipioId String
 
-  destino     Destino   @relation(fields: [destinoId], references: [id], onDelete: Cascade)
-  municipio   Municipio @relation(fields: [municipioId], references: [id], onDelete: Cascade)
+  destino   Destino   @relation(fields: [destinoId], references: [id], onDelete: Cascade)
+  municipio Municipio @relation(fields: [municipioId], references: [id], onDelete: Cascade)
 
   @@id([destinoId, municipioId])
   @@index([municipioId])
@@ -90,42 +117,42 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  favoritos     Favorito[]
-  reviews       Review[]
-  tokens        VerificationToken[]
-  collections   Collection[]
-  alerts        AlertSubscription[]
+  favoritos             Favorito[]
+  reviews               Review[]
+  tokens                VerificationToken[]
+  collections           Collection[]
+  alerts                AlertSubscription[]
   collectionMemberships CollectionMember[]
 }
 
 model AlertSubscription {
-  id            String   @id @default(uuid())
-  userId        String
-  month         Int?
-  tipos         Json?
-  presupuesto   String?
-  avoidCrowds   Boolean  @default(true)
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  lastCheckedAt DateTime?
+  id             String    @id @default(uuid())
+  userId         String
+  month          Int?
+  tipos          Json?
+  presupuesto    String?
+  avoidCrowds    Boolean   @default(true)
+  isActive       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  lastCheckedAt  DateTime?
   lastNotifiedAt DateTime?
 
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  deliveries    AlertDelivery[]
+  user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deliveries AlertDelivery[]
 
   @@index([userId, isActive])
 }
 
 model AlertDelivery {
-  id        String   @id @default(uuid())
-  alertId   String
+  id          String    @id @default(uuid())
+  alertId     String
   fingerprint String
-  status    String   @default("pending")
-  error     String?
-  sentAt    DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  status      String    @default("pending")
+  error       String?
+  sentAt      DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   alert AlertSubscription @relation(fields: [alertId], references: [id], onDelete: Cascade)
 
@@ -134,21 +161,21 @@ model AlertDelivery {
 }
 
 model Collection {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   userId      String
   nombre      String
   descripcion String?
-  color       String   @default("emerald")
-  visibility  String   @default("private")
-  shareToken  String?  @unique
+  color       String    @default("emerald")
+  visibility  String    @default("private")
+  shareToken  String?   @unique
   startDate   DateTime? @db.Date
   endDate     DateTime? @db.Date
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items       CollectionItem[]
-  members     CollectionMember[]
+  user    User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items   CollectionItem[]
+  members CollectionMember[]
 
   @@index([userId])
 }
@@ -183,8 +210,8 @@ model CollectionItem {
   sortOrder    Int      @default(0)
   createdAt    DateTime @default(now())
 
-  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
-  destino      Destino    @relation(fields: [destinoId], references: [id], onDelete: Cascade)
+  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  destino    Destino    @relation(fields: [destinoId], references: [id], onDelete: Cascade)
 
   @@unique([collectionId, destinoId])
   @@index([collectionId])
@@ -192,24 +219,24 @@ model CollectionItem {
 }
 
 model Review {
-  id           String       @id @default(uuid())
-  userId       String
-  destinoId    String
-  rating       Int
-  comment      String?
-  visitMonth   Int?
-  travelParty  String?
-  crowdRating  Int?
-  valueRating  Int?
-  accessRating Int?
-  status       ReviewStatus @default(published)
+  id            String       @id @default(uuid())
+  userId        String
+  destinoId     String
+  rating        Int
+  comment       String?
+  visitMonth    Int?
+  travelParty   String?
+  crowdRating   Int?
+  valueRating   Int?
+  accessRating  Int?
+  status        ReviewStatus @default(published)
   adminResponse String?
-  respondedAt  DateTime?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  respondedAt   DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  destino   Destino  @relation(fields: [destinoId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  destino Destino @relation(fields: [destinoId], references: [id], onDelete: Cascade)
 
   @@unique([userId, destinoId])
   @@index([destinoId])
@@ -221,15 +248,15 @@ enum ReviewStatus {
 }
 
 model VerificationToken {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   userId    String
   type      String
-  token     String   @unique
+  token     String    @unique
   expiresAt DateTime
   usedAt    DateTime?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
@@ -241,8 +268,8 @@ model Favorito {
   notas     String?
   createdAt DateTime @default(now())
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  destino   Destino  @relation(fields: [destinoId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  destino Destino @relation(fields: [destinoId], references: [id], onDelete: Cascade)
 
   @@unique([userId, destinoId])
   @@index([userId])

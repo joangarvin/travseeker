@@ -1,8 +1,12 @@
-const adminService = require('../services/adminService');
-const { asyncHandler } = require('../utils/asyncHandler');
+const adminService = require("../services/adminService");
+const { asyncHandler } = require("../utils/asyncHandler");
 
 const listDestinos = asyncHandler(async (_req, res) => {
   res.json(await adminService.listDestinos());
+});
+
+const getDestino = asyncHandler(async (req, res) => {
+  res.json(await adminService.getDestino(req.params.destinoId));
 });
 
 const createDestino = asyncHandler(async (req, res) => {
@@ -26,7 +30,9 @@ const createMunicipio = asyncHandler(async (req, res) => {
 });
 
 const updateMunicipio = asyncHandler(async (req, res) => {
-  res.json(await adminService.updateMunicipio(req.params.municipioId, req.body));
+  res.json(
+    await adminService.updateMunicipio(req.params.municipioId, req.body),
+  );
 });
 
 const deleteMunicipio = asyncHandler(async (req, res) => {
@@ -35,21 +41,37 @@ const deleteMunicipio = asyncHandler(async (req, res) => {
 
 const linkMunicipio = asyncHandler(async (req, res) => {
   const municipioId = req.body.municipioId;
-  res.status(201).json(await adminService.linkMunicipio(req.params.destinoId, municipioId));
+  res
+    .status(201)
+    .json(await adminService.linkMunicipio(req.params.destinoId, municipioId));
 });
 
 const unlinkMunicipio = asyncHandler(async (req, res) => {
   res.json(
-    await adminService.unlinkMunicipio(req.params.destinoId, req.params.municipioId),
+    await adminService.unlinkMunicipio(
+      req.params.destinoId,
+      req.params.municipioId,
+    ),
   );
 });
-const listPlaces = asyncHandler(async (req, res) => res.json(await adminService.listPlaces(req.params.destinoId)));
-const createPlace = asyncHandler(async (req, res) => res.status(201).json(await adminService.createPlace(req.params.destinoId, req.body)));
-const updatePlace = asyncHandler(async (req, res) => res.json(await adminService.updatePlace(req.params.placeId, req.body)));
-const deletePlace = asyncHandler(async (req, res) => res.json(await adminService.deletePlace(req.params.placeId)));
+const listPlaces = asyncHandler(async (req, res) =>
+  res.json(await adminService.listPlaces(req.params.destinoId)),
+);
+const createPlace = asyncHandler(async (req, res) =>
+  res
+    .status(201)
+    .json(await adminService.createPlace(req.params.destinoId, req.body)),
+);
+const updatePlace = asyncHandler(async (req, res) =>
+  res.json(await adminService.updatePlace(req.params.placeId, req.body)),
+);
+const deletePlace = asyncHandler(async (req, res) =>
+  res.json(await adminService.deletePlace(req.params.placeId)),
+);
 
 module.exports = {
   listDestinos,
+  getDestino,
   createDestino,
   updateDestino,
   deleteDestino,

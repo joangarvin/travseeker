@@ -23,13 +23,15 @@ export function AccessibilityEffects() {
     let returnFocus: HTMLElement | null = null;
 
     const inspectOverlays = () => {
-      const nextOverlay = document.querySelector<HTMLElement>(OVERLAY_SELECTOR);
+      const overlays = document.querySelectorAll<HTMLElement>(OVERLAY_SELECTOR);
+      const nextOverlay = overlays[overlays.length - 1] || null;
 
       if (nextOverlay && nextOverlay !== activeOverlay) {
         returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
         activeOverlay = nextOverlay;
         queueMicrotask(() => {
-          getVisibleFocusableElements(nextOverlay)[0]?.focus();
+          const requestedFocus = nextOverlay.querySelector<HTMLElement>('[data-autofocus]');
+          (requestedFocus || getVisibleFocusableElements(nextOverlay)[0])?.focus();
         });
         return;
       }

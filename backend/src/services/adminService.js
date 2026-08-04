@@ -97,9 +97,70 @@ function mapDestinoMunicipios(destino) {
     .map((link) => link.municipio)
     .filter(Boolean)
     .sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
-  const { municipioLinks, ...rest } = destino;
-  return { ...rest, municipios };
+  const activities = (destino.activityLinks || [])
+    .map((link) => link.activity)
+    .filter(Boolean)
+    .sort((a, b) => a.name.localeCompare(b.name, "es"));
+  const { municipioLinks, activityLinks, ...rest } = destino;
+  return {
+    ...rest,
+    tipoTurismoSecundario: activities.length
+      ? serializeTags(activities.map((activity) => activity.name))
+      : rest.tipoTurismoSecundario,
+    municipios,
+    activities,
+    activityIds: activities.map((activity) => activity.id),
+  };
 }
+
+async function syncDestinationActivities(
+  transaction,
+  destinoId,
+  serializedNames,
+) {
+  const names = parseTags(serializedNames);
+  const activities = names.length
+    ? await transaction.activity.findMany({
+        where: {
+          OR: names.map((name) => ({
+            name: { equals: name, mode: "insensitive" },
+          })),
+        },
+      })
+    : [];
+
+  const missingNames = names.filter(
+    (name) =>
+      !activities.some(
+        (activity) =>
+          activity.name.toLocaleLowerCase("es") ===
+          name.toLocaleLowerCase("es"),
+      ),
+  );
+  if (missingNames.length) {
+    const error = new Error(
+      `Crea primero estas actividades en el catálogo: ${missingNames.join(", ")}`,
+    );
+    error.status = 400;
+    throw error;
+  }
+
+  await transaction.destinoActivity.deleteMany({ where: { destinoId } });
+  if (activities.length) {
+    await transaction.destinoActivity.createMany({
+      data: activities.map((activity) => ({
+        destinoId,
+        activityId: activity.id,
+      })),
+      skipDuplicates: true,
+    });
+  }
+}
+
+const destinationRelations = {
+  municipioLinks: { include: { municipio: true } },
+  activityLinks: { include: { activity: true } },
+};
 
 async function listDestinos() {
   const rows = await prisma.destino.findMany({
@@ -120,19 +181,39 @@ async function listDestinos() {
           municipio: { select: { id: true, nombre: true } },
         },
       },
+      activityLinks: { include: { activity: true } },
     },
   });
   return rows.map(mapDestinoMunicipios);
 }
 
+async function getDestino(id) {
+  const destination = await prisma.destino.findUnique({
+    where: { id },
+    include: destinationRelations,
+  });
+  if (!destination) {
+    const error = new Error("Destino no encontrado");
+    error.status = 404;
+    throw error;
+  }
+  return mapDestinoMunicipios(destination);
+}
+
 async function createDestino(payload) {
   const data = normalizePayload(payload);
   validateDestino(data);
-  const created = await prisma.destino.create({
-    data,
-    include: {
-      municipioLinks: { include: { municipio: true } },
-    },
+  const created = await prisma.$transaction(async (transaction) => {
+    const destination = await transaction.destino.create({ data });
+    await syncDestinationActivities(
+      transaction,
+      destination.id,
+      data.tipoTurismoSecundario,
+    );
+    return transaction.destino.findUnique({
+      where: { id: destination.id },
+      include: destinationRelations,
+    });
   });
   return mapDestinoMunicipios(created);
 }
@@ -140,12 +221,17 @@ async function createDestino(payload) {
 async function updateDestino(id, payload) {
   const data = normalizePayload(payload);
   validateDestino(data);
-  const updated = await prisma.destino.update({
-    where: { id },
-    data,
-    include: {
-      municipioLinks: { include: { municipio: true } },
-    },
+  const updated = await prisma.$transaction(async (transaction) => {
+    await transaction.destino.update({ where: { id }, data });
+    await syncDestinationActivities(
+      transaction,
+      id,
+      data.tipoTurismoSecundario,
+    );
+    return transaction.destino.findUnique({
+      where: { id },
+      include: destinationRelations,
+    });
   });
   return mapDestinoMunicipios(updated);
 }
@@ -304,6 +390,7 @@ async function deletePlace(id) {
 
 module.exports = {
   listDestinos,
+  getDestino,
   createDestino,
   updateDestino,
   deleteDestino,
@@ -317,4 +404,5 @@ module.exports = {
   createPlace,
   updatePlace,
   deletePlace,
+  syncDestinationActivities,
 };

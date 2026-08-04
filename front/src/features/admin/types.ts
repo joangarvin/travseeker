@@ -1,4 +1,4 @@
-export type AdminTab = 'destinos' | 'municipios' | 'reviews' | 'places';
+export type AdminTab = 'destinos' | 'actividades' | 'municipios' | 'reviews' | 'places';
 
 export type AdminResource = Exclude<AdminTab, 'reviews'>;
 

@@ -6,12 +6,24 @@ const {
   COMPARE_SELECT,
 } = require("../constants/selects");
 const { normalizeMonth, rankForSeason } = require("../domain/season");
-const {
-  ACTIVITY_TYPES,
-  parseTags,
-  isTourismType,
-  normalizeActivity,
-} = require("../constants/scales");
+const { parseTags, serializeTags } = require("../constants/scales");
+
+function mapActivities(destino) {
+  if (!destino) return destino;
+  const activities = (destino.activityLinks || [])
+    .map((link) => link.activity)
+    .filter(Boolean)
+    .sort((first, second) => first.name.localeCompare(second.name, "es"));
+  const { activityLinks, ...rest } = destino;
+  return {
+    ...rest,
+    tipoTurismoSecundario: serializeTags(
+      activities.map((activity) => activity.name),
+    ),
+    activities,
+    activityIds: activities.map((activity) => activity.id),
+  };
+}
 
 async function searchDestinos(query) {
   const month = normalizeMonth(query.month);
@@ -36,6 +48,10 @@ async function getDestinoById(id) {
         where: { isActive: true },
         orderBy: [{ sortOrder: "asc" }, { nombre: "asc" }],
       },
+      activityLinks: {
+        where: { activity: { isActive: true } },
+        include: { activity: true },
+      },
     },
   });
   if (!destino) return null;
@@ -44,7 +60,7 @@ async function getDestinoById(id) {
     .filter(Boolean)
     .sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
   const { municipioLinks, ...rest } = destino;
-  return { ...rest, municipios };
+  return { ...mapActivities(rest), municipios };
 }
 
 async function getDestacados(limit = 6) {
@@ -125,7 +141,9 @@ async function compareDestinos(ids) {
   });
 
   const order = new Map(ids.map((id, i) => [id, i]));
-  return destinos.sort((a, b) => order.get(a.id) - order.get(b.id));
+  return destinos
+    .map(mapActivities)
+    .sort((a, b) => order.get(a.id) - order.get(b.id));
 }
 
 async function getStats() {
@@ -146,24 +164,20 @@ async function getStats() {
 }
 
 async function getFilterOptions() {
-  const destinations = await prisma.destino.findMany({
-    select: { ubicacion: true, tipoTurismoSecundario: true },
-  });
+  const [destinations, activityCatalog] = await Promise.all([
+    prisma.destino.findMany({ select: { ubicacion: true } }),
+    prisma.activity.findMany({
+      where: { isActive: true },
+      orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+      select: { name: true },
+    }),
+  ]);
   const locations = [
     ...new Set(
       destinations.flatMap((destination) => parseTags(destination.ubicacion)),
     ),
   ].sort((first, second) => first.localeCompare(second, "es"));
-  const activities = [
-    ...new Set([
-      ...ACTIVITY_TYPES,
-      ...destinations.flatMap((destination) =>
-        parseTags(destination.tipoTurismoSecundario)
-          .filter((value) => !isTourismType(value))
-          .map(normalizeActivity),
-      ),
-    ]),
-  ].sort((first, second) => first.localeCompare(second, "es"));
+  const activities = activityCatalog.map((activity) => activity.name);
   return { locations, activities };
 }
 

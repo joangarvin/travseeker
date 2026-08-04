@@ -15,10 +15,18 @@ type DestinationSectionProps = {
   update: DestinationUpdater;
 };
 
+type DestinationIdentitySectionProps = DestinationSectionProps & {
+  onRequestCreateActivity?: (name: string) => void;
+};
+
 const BUDGET_OPTIONS = ['Bajo', 'Medio-Bajo', 'Medio', 'Medio-Alto', 'Alto'];
 const CROWD_OPTIONS = ['Leve', 'Bajo', 'Medio-Bajo', 'Medio', 'Medio-Alto', 'Alto'];
 
-export function DestinationIdentitySection({ form, update }: DestinationSectionProps) {
+export function DestinationIdentitySection({
+  form,
+  update,
+  onRequestCreateActivity,
+}: DestinationIdentitySectionProps) {
   return (
     <section className="editor-section" aria-labelledby="editor-identity">
       <SectionHeading
@@ -58,8 +66,8 @@ export function DestinationIdentitySection({ form, update }: DestinationSectionP
           id="admin-activities"
           label="Actividades"
           value={form.tipoTurismoSecundario}
-          hint="Opcional. Selecciona actividades existentes o escribe una nueva."
-          allowCustom
+          hint="Opcional. Selecciona actividades del catálogo. Si falta una, créala con su icono."
+          onRequestCreate={onRequestCreateActivity}
           onChange={(values) => update('tipoTurismoSecundario', serializeActivityValues(values))}
         />
         <SelectField

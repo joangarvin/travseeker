@@ -1,4 +1,4 @@
-import { Building2, MapPin, MessageSquare } from 'lucide-react';
+import { Building2, Compass, MapPin, MessageSquare } from 'lucide-react';
 import type { AdminTab } from '../types';
 
 type AdminNavigationProps = {
@@ -9,6 +9,7 @@ type AdminNavigationProps = {
 
 const tabs = [
   { id: 'destinos', label: 'Destinos', Icon: MapPin },
+  { id: 'actividades', label: 'Actividades', Icon: Compass },
   { id: 'municipios', label: 'Municipios', Icon: Building2 },
   { id: 'reviews', label: 'Reseñas', Icon: MessageSquare },
   { id: 'places', label: 'Lugares', Icon: MapPin },

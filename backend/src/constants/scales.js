@@ -20,6 +20,32 @@ const ACTIVITY_TYPES = [
   "Ocio",
   "Relax y bienestar",
 ];
+const ACTIVITY_ICONS = [
+  "Compass",
+  "Binoculars",
+  "Telescope",
+  "Waves",
+  "Utensils",
+  "Footprints",
+  "PartyPopper",
+  "HeartPulse",
+  "Bike",
+  "Camera",
+  "Sailboat",
+  "MountainSnow",
+  "Trees",
+  "Bird",
+  "Fish",
+  "Dumbbell",
+  "Music",
+  "Landmark",
+  "TentTree",
+  "Snowflake",
+  "Sun",
+  "Wine",
+  "ShipWheel",
+  "Route",
+];
 
 const SEASONS = [
   {
@@ -141,6 +167,7 @@ module.exports = {
   MASIFICACION_ORDER,
   TOURISM_TYPES,
   ACTIVITY_TYPES,
+  ACTIVITY_ICONS,
   SEASONS,
   parseTags,
   serializeTags,

@@ -311,6 +311,147 @@
   color: var(--muted);
   font-size: 0.78rem;
 }
+
+/* Activity catalogue */
+.activity-admin-list article {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+}
+.activity-admin-list__icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--line-strong);
+  background: var(--brand-soft);
+  color: var(--brand) !important;
+}
+.activity-admin-list__icon svg {
+  width: 22px;
+  height: 22px;
+}
+.activity-status {
+  display: inline-flex;
+  width: fit-content;
+  padding: 3px 7px;
+  border: 1px solid var(--line-strong);
+  color: var(--muted) !important;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.activity-status.is-active {
+  border-color: var(--success);
+  background: var(--success);
+  color: var(--success-ink) !important;
+}
+.activity-editor {
+  display: grid;
+  gap: 24px;
+}
+.activity-icon-picker {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+}
+.activity-icon-picker legend {
+  padding: 0;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+.activity-icon-picker > p {
+  margin: 4px 0 12px;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+.activity-icon-picker > div {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  max-height: 292px;
+  padding: 3px;
+  overflow-y: auto;
+}
+.activity-icon-picker label {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 7px;
+  min-height: 48px;
+  padding: 7px 9px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  font-size: 0.7rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+.activity-icon-picker label:hover {
+  border-color: var(--ink);
+}
+.activity-icon-picker label:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.activity-icon-picker label.is-selected {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: white;
+}
+.activity-icon-picker label svg {
+  width: 18px;
+  height: 18px;
+}
+.activity-icon-picker label svg:last-child {
+  justify-self: end;
+}
+.activity-editor__status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: var(--control);
+  margin-top: 23px;
+  padding: 10px 14px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+}
+.activity-editor__status input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--brand);
+}
+.activity-editor__status span {
+  display: grid;
+  gap: 2px;
+}
+.activity-editor__status small {
+  color: var(--muted);
+}
+.activity-delete-dialog {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 16px;
+  padding: 16px;
+  border-left: 4px solid var(--danger);
+  background: var(--surface-muted);
+}
+.activity-delete-dialog > svg {
+  width: 28px;
+  height: 28px;
+  color: var(--danger);
+}
+.activity-delete-dialog p {
+  margin: 0 0 8px;
+}
+.activity-delete-dialog p:last-child {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 24px;
+}
 .tourism--naturaleza :is(.tourism-mark__symbol, .trip-moods__icon, .map-legend__symbol) {
   border-radius: 50% 50% 50% 4px;
 }

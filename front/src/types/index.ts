@@ -32,6 +32,18 @@ export type Place = {
   isActive?: boolean;
 };
 
+export type Activity = {
+  id: string;
+  name: string;
+  slug: string;
+  icon: string;
+  sortOrder: number;
+  isActive: boolean;
+  destinationsCount?: number;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
 export type Destino = {
   id: string;
   nombre: string;
@@ -53,6 +65,8 @@ export type Destino = {
   matchReason?: string;
   municipios?: Municipio[];
   places?: Place[];
+  activities?: Activity[];
+  activityIds?: string[];
 };
 
 export type Review = {

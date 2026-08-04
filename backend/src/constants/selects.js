@@ -38,6 +38,10 @@ const COMPARE_SELECT = {
   mesesJulioAgosto: true,
   mesesMayJunSeptOct: true,
   mesesNovAbril: true,
+  activityLinks: {
+    where: { activity: { isActive: true } },
+    include: { activity: true },
+  },
 };
 
 const USER_PUBLIC_SELECT = {
@@ -54,4 +58,9 @@ const USER_PUBLIC_SELECT = {
   createdAt: true,
 };
 
-module.exports = { LIST_SELECT, MAP_SELECT, COMPARE_SELECT, USER_PUBLIC_SELECT };
+module.exports = {
+  LIST_SELECT,
+  MAP_SELECT,
+  COMPARE_SELECT,
+  USER_PUBLIC_SELECT,
+};
