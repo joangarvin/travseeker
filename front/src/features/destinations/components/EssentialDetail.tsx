@@ -11,13 +11,21 @@ type EssentialDetailProps = {
   item: EssentialItem;
   groupIcon: string;
   headingId: string;
+  showHeading?: boolean;
+  expanded?: boolean;
 };
 
 function openStreetMapUrl(latitude: number, longitude: number) {
   return `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=16/${latitude}/${longitude}`;
 }
 
-export function EssentialDetail({ item, groupIcon, headingId }: EssentialDetailProps) {
+export function EssentialDetail({
+  item,
+  groupIcon,
+  headingId,
+  showHeading = true,
+  expanded = true,
+}: EssentialDetailProps) {
   const [imageFailed, setImageFailed] = useState(false);
   const presentation = essentialPresentation(item);
   const officialUrl = item.officialUrl || item.place?.website;
@@ -45,15 +53,17 @@ export function EssentialDetail({ item, groupIcon, headingId }: EssentialDetailP
       )}
 
       <div className="essential-detail__content">
-        <header>
-          <span className="essential-detail__symbol" aria-hidden>
-            <EssentialIconGlyph name={item.icon || groupIcon} />
-          </span>
-          <div>
-            <p>Selección esencial</p>
-            <h4 id={headingId}>{presentation.title}</h4>
-          </div>
-        </header>
+        {showHeading && (
+          <header>
+            <span className="essential-detail__symbol" aria-hidden>
+              <EssentialIconGlyph name={item.icon || groupIcon} />
+            </span>
+            <div>
+              <p>Selección esencial</p>
+              <h4 id={headingId}>{presentation.title}</h4>
+            </div>
+          </header>
+        )}
 
         {presentation.description && (
           <p className="essential-detail__description">{presentation.description}</p>
@@ -96,15 +106,17 @@ export function EssentialDetail({ item, groupIcon, headingId }: EssentialDetailP
                 </p>
               </div>
             </header>
-            <Suspense
-              fallback={<div className="essential-detail__map-loading">Cargando mapa…</div>}
-            >
-              <EssentialMiniMap
-                latitude={item.place.latitud}
-                longitude={item.place.longitud}
-                label={item.place.nombre}
-              />
-            </Suspense>
+            {expanded && (
+              <Suspense
+                fallback={<div className="essential-detail__map-loading">Cargando mapa…</div>}
+              >
+                <EssentialMiniMap
+                  latitude={item.place.latitud}
+                  longitude={item.place.longitud}
+                  label={item.place.nombre}
+                />
+              </Suspense>
+            )}
             <a
               className="essential-detail__map-link"
               href={openStreetMapUrl(item.place.latitud, item.place.longitud)}
