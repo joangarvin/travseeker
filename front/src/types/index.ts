@@ -32,6 +32,22 @@ export type Place = {
   isActive?: boolean;
 };
 
+export type EssentialItem = {
+  id: string;
+  title: string;
+  description?: string | null;
+  placeId?: string | null;
+  place?: Place | null;
+  sortOrder: number;
+};
+
+export type EssentialGroup = {
+  id: string;
+  title: string;
+  sortOrder: number;
+  items: EssentialItem[];
+};
+
 export type Activity = {
   id: string;
   name: string;
@@ -84,6 +100,7 @@ export type Destino = {
   };
   municipios?: Municipio[];
   places?: Place[];
+  essentialGroups?: EssentialGroup[];
   activities?: Activity[];
   activityIds?: string[];
   tourismTypes?: TourismType[];

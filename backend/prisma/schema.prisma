@@ -30,6 +30,7 @@ model Destino {
   reviews          Review[]
   collectionItems  CollectionItem[]
   places           Place[]
+  essentialGroups  EssentialGroup[]
   activityLinks    DestinoActivity[]
   tourismTypeLinks DestinoTourismType[]
 }
@@ -103,9 +104,41 @@ model Place {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  destino Destino @relation(fields: [destinoId], references: [id], onDelete: Cascade)
+  destino        Destino         @relation(fields: [destinoId], references: [id], onDelete: Cascade)
+  essentialItems EssentialItem[]
 
   @@index([destinoId, isActive, sortOrder])
+}
+
+model EssentialGroup {
+  id        String   @id @default(uuid())
+  destinoId String
+  title     String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  destino Destino         @relation(fields: [destinoId], references: [id], onDelete: Cascade)
+  items   EssentialItem[]
+
+  @@index([destinoId, sortOrder])
+}
+
+model EssentialItem {
+  id          String   @id @default(uuid())
+  groupId     String
+  placeId     String?
+  title       String
+  description String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  group EssentialGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  place Place?         @relation(fields: [placeId], references: [id], onDelete: SetNull)
+
+  @@index([groupId, sortOrder])
+  @@index([placeId])
 }
 
 model Municipio {

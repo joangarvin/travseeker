@@ -5,6 +5,11 @@ const {
   isTourismType,
   normalizeActivity,
 } = require("../constants/scales");
+const {
+  normalizeEssentialGroups,
+  plainHtml,
+  serializeEssentialGroups,
+} = require("../domain/essentials");
 
 function clean(value, max) {
   if (typeof value !== "string") return null;
@@ -12,7 +17,7 @@ function clean(value, max) {
   return normalized ? normalized.slice(0, max) : null;
 }
 
-function normalizePayload(data) {
+function normalizePayload(data, essentialGroups = null) {
   const secondaryValues = parseTags(data.tipoTurismoSecundario);
   const primaryTypes = [
     ...new Set([
@@ -39,7 +44,10 @@ function normalizePayload(data) {
     destinosItem: data.destinosItem ? String(data.destinosItem).trim() : null,
     ubicacion: String(data.ubicacion || "").trim(),
     descripcion: String(data.descripcion || "").trim(),
-    imprescindibles: String(data.imprescindibles || "").trim(),
+    imprescindibles:
+      essentialGroups?.length > 0
+        ? serializeEssentialGroups(essentialGroups)
+        : String(data.imprescindibles || "").trim(),
     imagen: String(data.imagen || "").trim(),
     latitud:
       data.latitud === "" || data.latitud == null ? null : Number(data.latitud),
@@ -50,7 +58,7 @@ function normalizePayload(data) {
   };
 }
 
-function validateDestino(data) {
+function validateDestino(data, essentialGroups = null) {
   if (!parseTags(data.tipoTurismoPrincipal).length) {
     const err = new Error("Falta completar: Tipo de turismo principal");
     err.status = 400;
@@ -62,7 +70,6 @@ function validateDestino(data) {
     masificacion: "Masificación",
     ubicacion: "Zona o región",
     descripcion: "Descripción",
-    imprescindibles: "Imprescindibles",
     imagen: "Imagen de portada",
   };
   for (const [key, label] of Object.entries(labels)) {
@@ -71,6 +78,11 @@ function validateDestino(data) {
       err.status = 400;
       throw err;
     }
+  }
+  if (!plainHtml(data.imprescindibles) && !essentialGroups?.length) {
+    const error = new Error("Añade al menos un imprescindible");
+    error.status = 400;
+    throw error;
   }
 }
 
@@ -210,7 +222,59 @@ const destinationRelations = {
   municipioLinks: { include: { municipio: true } },
   activityLinks: { include: { activity: true } },
   tourismTypeLinks: { include: { tourismType: true } },
+  places: { orderBy: [{ sortOrder: "asc" }, { nombre: "asc" }] },
+  essentialGroups: {
+    orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
+    include: {
+      items: {
+        orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
+        include: { place: true },
+      },
+    },
+  },
 };
+
+async function syncDestinationEssentials(
+  transaction,
+  destinoId,
+  essentialGroups,
+) {
+  if (!Array.isArray(essentialGroups)) return;
+  const placeIds = [
+    ...new Set(
+      essentialGroups.flatMap((group) =>
+        group.items.map((item) => item.placeId).filter(Boolean),
+      ),
+    ),
+  ];
+  if (placeIds.length) {
+    const places = await transaction.place.findMany({
+      where: { destinoId, id: { in: placeIds } },
+      select: { id: true },
+    });
+    const validIds = new Set(places.map((place) => place.id));
+    const invalidId = placeIds.find((id) => !validIds.has(id));
+    if (invalidId) {
+      const error = new Error(
+        "Uno de los lugares asociados no pertenece a este destino",
+      );
+      error.status = 400;
+      throw error;
+    }
+  }
+
+  await transaction.essentialGroup.deleteMany({ where: { destinoId } });
+  for (const group of essentialGroups) {
+    await transaction.essentialGroup.create({
+      data: {
+        destinoId,
+        title: group.title,
+        sortOrder: group.sortOrder,
+        items: { create: group.items },
+      },
+    });
+  }
+}
 
 async function listDestinos() {
   const rows = await prisma.destino.findMany({
@@ -252,8 +316,9 @@ async function getDestino(id) {
 }
 
 async function createDestino(payload) {
-  const data = normalizePayload(payload);
-  validateDestino(data);
+  const essentialGroups = normalizeEssentialGroups(payload.essentialGroups);
+  const data = normalizePayload(payload, essentialGroups);
+  validateDestino(data, essentialGroups);
   const created = await prisma.$transaction(async (transaction) => {
     const destination = await transaction.destino.create({ data });
     await syncDestinationActivities(
@@ -266,6 +331,11 @@ async function createDestino(payload) {
       destination.id,
       data.tipoTurismoPrincipal,
     );
+    await syncDestinationEssentials(
+      transaction,
+      destination.id,
+      essentialGroups,
+    );
     return transaction.destino.findUnique({
       where: { id: destination.id },
       include: destinationRelations,
@@ -275,8 +345,9 @@ async function createDestino(payload) {
 }
 
 async function updateDestino(id, payload) {
-  const data = normalizePayload(payload);
-  validateDestino(data);
+  const essentialGroups = normalizeEssentialGroups(payload.essentialGroups);
+  const data = normalizePayload(payload, essentialGroups);
+  validateDestino(data, essentialGroups);
   const updated = await prisma.$transaction(async (transaction) => {
     await transaction.destino.update({ where: { id }, data });
     await syncDestinationActivities(
@@ -289,6 +360,7 @@ async function updateDestino(id, payload) {
       id,
       data.tipoTurismoPrincipal,
     );
+    await syncDestinationEssentials(transaction, id, essentialGroups);
     return transaction.destino.findUnique({
       where: { id },
       include: destinationRelations,

@@ -126,19 +126,6 @@ export function DestinationContentSection({ form, update }: DestinationSectionPr
           required
         />
       </Field>
-      <Field
-        label="Imprescindibles"
-        htmlFor="admin-essentials"
-        hint="Incluye lugares, experiencias y advertencias prácticas."
-      >
-        <textarea
-          id="admin-essentials"
-          className="editor-textarea"
-          value={form.imprescindibles || ''}
-          onChange={(event) => update('imprescindibles', event.target.value)}
-          required
-        />
-      </Field>
     </section>
   );
 }
@@ -153,7 +140,7 @@ export function DestinationSeasonSection({ form, update }: DestinationSectionPro
   return (
     <section className="editor-section" aria-labelledby="editor-season">
       <SectionHeading
-        number="03"
+        number="04"
         id="editor-season"
         title="Afluencia por temporada"
         description="0 significa muy tranquilo; 100, máxima ocupación."
@@ -188,7 +175,7 @@ export function DestinationImageSection({ form, update, token }: DestinationImag
   return (
     <section className="editor-section" aria-labelledby="editor-image">
       <SectionHeading
-        number="04"
+        number="05"
         id="editor-image"
         title="Imagen de portada"
         description="Sube el archivo directamente o pega una URL existente."
@@ -223,7 +210,7 @@ export function DestinationLocationSection({ form, update }: DestinationSectionP
   return (
     <section className="editor-section" aria-labelledby="editor-map">
       <SectionHeading
-        number="05"
+        number="06"
         id="editor-map"
         title="Punto en el mapa"
         description="Haz clic en la localización aproximada y ajusta las coordenadas si hace falta."
@@ -282,7 +269,7 @@ export function DestinationMunicipalitiesSection({
   return (
     <section className="editor-section" aria-labelledby="editor-municipalities">
       <SectionHeading
-        number="06"
+        number="07"
         id="editor-municipalities"
         title="Municipios asociados"
         description="Estos municipios aparecerán en la ficha pública del destino."
@@ -351,7 +338,7 @@ type SectionHeadingProps = {
   description: string;
 };
 
-function SectionHeading({ number, id, title, description }: SectionHeadingProps) {
+export function SectionHeading({ number, id, title, description }: SectionHeadingProps) {
   return (
     <header>
       <span>{number}</span>

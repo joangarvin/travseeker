@@ -33,6 +33,8 @@ const EMPTY_DESTINATION: Partial<Destino> = {
   tipoTurismoSecundario: '',
   descripcion: '',
   imprescindibles: '',
+  essentialGroups: [],
+  places: [],
   imagen: '',
   destinosItem: '',
   latitud: null,

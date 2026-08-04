@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   Image as ImageIcon,
   Link2,
+  ListChecks,
   MapPinned,
   Tag,
 } from 'lucide-react';
@@ -27,8 +28,10 @@ import {
 } from './DestinationEditorSections';
 import { ActivityEditorModal } from './ActivityEditorModal';
 import { TourismTypeEditorModal } from './TourismTypeEditorModal';
+import { DestinationEssentialsSection } from './DestinationEssentialsSection';
 
-type EditorSection = 'identity' | 'content' | 'season' | 'image' | 'location' | 'municipalities';
+type EditorSection =
+  'identity' | 'content' | 'essentials' | 'season' | 'image' | 'location' | 'municipalities';
 
 type EditorMessage = {
   tone: 'error' | 'success';
@@ -48,6 +51,7 @@ type DestinationEditorProps = {
 const editorSections = [
   { id: 'identity', label: 'Identidad', Icon: Tag },
   { id: 'content', label: 'Contenido', Icon: BookOpen },
+  { id: 'essentials', label: 'Imprescindibles', Icon: ListChecks },
   { id: 'season', label: 'Temporadas', Icon: CalendarRange },
   { id: 'image', label: 'Portada', Icon: ImageIcon },
   { id: 'location', label: 'Localización', Icon: MapPinned },
@@ -112,6 +116,11 @@ export function DestinationEditor({
     if (!tourismValues(form.tipoTurismoPrincipal).length) {
       setActiveSection('identity');
       setMessage({ tone: 'error', text: 'Selecciona al menos un tipo principal.' });
+      return;
+    }
+    if (!plain(form.imprescindibles) && !form.essentialGroups?.length) {
+      setActiveSection('essentials');
+      setMessage({ tone: 'error', text: 'Añade al menos un imprescindible.' });
       return;
     }
     setIsSaving(true);
@@ -302,6 +311,13 @@ export function DestinationEditor({
             )}
             {activeSection === 'content' && (
               <DestinationContentSection form={form} update={updateField} />
+            )}
+            {activeSection === 'essentials' && (
+              <DestinationEssentialsSection
+                groups={form.essentialGroups || []}
+                places={form.places || []}
+                update={updateField}
+              />
             )}
             {activeSection === 'season' && (
               <DestinationSeasonSection form={form} update={updateField} />

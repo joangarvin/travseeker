@@ -74,8 +74,14 @@ function prepareSearchResults(destinations, query) {
     );
   }
   return seasonal.map(
-    ({ _searchScore, descripcion, imprescindibles, places, ...destination }) =>
-      destination,
+    ({
+      _searchScore,
+      descripcion,
+      imprescindibles,
+      places,
+      essentialGroups,
+      ...destination
+    }) => destination,
   );
 }
 
@@ -102,6 +108,15 @@ async function getDestinoById(id) {
       places: {
         where: { isActive: true },
         orderBy: [{ sortOrder: "asc" }, { nombre: "asc" }],
+      },
+      essentialGroups: {
+        orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
+        include: {
+          items: {
+            orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
+            include: { place: true },
+          },
+        },
       },
       activityLinks: {
         where: { activity: { isActive: true } },

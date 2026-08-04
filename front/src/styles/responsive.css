@@ -191,8 +191,7 @@
     top: 72px;
     border-radius: var(--r-2);
   }
-  .destination-story,
-  .essentials {
+  .destination-story {
     grid-template-columns: 1fr;
     gap: 40px;
   }

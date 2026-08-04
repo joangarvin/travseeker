@@ -83,6 +83,32 @@ test("permite omitir preposiciones dentro de un imprescindible", () => {
   );
 });
 
+test("prioriza títulos y elementos estructurados tras la migración", () => {
+  const destination = {
+    ...destinations[0],
+    imprescindibles: "Contenido heredado sin esta parada",
+    essentialGroups: [
+      {
+        title: "Miradores y castros",
+        items: [
+          {
+            title: "Subir al Monte do Castro para ver la ría.",
+            description: "Conviene llegar antes del atardecer.",
+          },
+        ],
+      },
+    ],
+  };
+  assert.equal(
+    destinationSearchMatch(destination, "Monte Castro").kind,
+    "essential-item",
+  );
+  assert.equal(
+    destinationSearchMatch(destination, "miradores y castros").kind,
+    "essential-group",
+  );
+});
+
 test("tolera una errata pequeña en el nombre", () => {
   const ranked = rankDestinationSearch(destinations, "Gran Canria");
   assert.equal(ranked[0].id, "canarias");

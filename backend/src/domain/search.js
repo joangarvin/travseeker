@@ -57,8 +57,38 @@ const FIELD_DEFINITIONS = [
     label: (value) => `Tipo de viaje · ${value}`,
   },
   {
+    kind: "essential-group",
+    weight: 78,
+    fuzzyThreshold: 0.82,
+    values: (destination) =>
+      (destination.essentialGroups || []).map((group) => group.title),
+    label: (value) => `Recorrido · ${value}`,
+  },
+  {
+    kind: "essential-item",
+    weight: 76,
+    fuzzyThreshold: 0.86,
+    allowDistributedTokens: false,
+    values: (destination) =>
+      (destination.essentialGroups || []).flatMap((group) =>
+        (group.items || []).map((item) => item.title),
+      ),
+    label: (value) => `Imprescindible · ${value}`,
+  },
+  {
+    kind: "essential-description",
+    weight: 70,
+    fuzzyThreshold: 0.88,
+    allowDistributedTokens: false,
+    values: (destination) =>
+      (destination.essentialGroups || []).flatMap((group) =>
+        (group.items || []).map((item) => item.description),
+      ),
+    label: () => "En un imprescindible",
+  },
+  {
     kind: "essential",
-    weight: 72,
+    weight: 68,
     fuzzyThreshold: 0.88,
     allowDistributedTokens: false,
     values: (destination) => [destination.imprescindibles],
@@ -232,7 +262,12 @@ function crossFieldMatch(query, fields) {
   const tokens = searchTokens(query);
   if (tokens.length < 2) return null;
   const normalizedValues = fields
-    .filter((field) => !["description", "essential"].includes(field.kind))
+    .filter(
+      (field) =>
+        !["description", "essential-description", "essential"].includes(
+          field.kind,
+        ),
+    )
     .flatMap((field) =>
       field.values.map((value) => normalizeSearchText(value)).filter(Boolean),
     );

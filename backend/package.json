@@ -14,6 +14,7 @@
     "db:promote-admin": "node scripts/promote-admin.js",
     "db:migrate-municipios": "node scripts/migrate-municipios-m2m.js",
     "db:migrate-tourism": "node scripts/migrate-tourism-taxonomy.js",
+    "db:migrate-essentials": "node scripts/migrate-structured-essentials.js",
     "test": "node --test",
     "alerts:process": "node scripts/process-alerts.js",
     "alerts:dry-run": "node scripts/process-alerts.js --dry-run"

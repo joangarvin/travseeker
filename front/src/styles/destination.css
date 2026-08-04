@@ -197,19 +197,6 @@
   background: var(--sun);
 }
 
-.essentials {
-  display: grid;
-  grid-template-columns: 0.7fr 1.3fr;
-  gap: 60px;
-  padding: clamp(72px, 10vw, 140px) clamp(16px, 8vw, 140px);
-  background: var(--sun);
-  color: var(--sun-ink);
-}
-
-.essentials .kicker {
-  color: var(--sun-ink);
-}
-
 .municipalities,
 .nearby,
 .reviews,

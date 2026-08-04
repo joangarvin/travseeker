@@ -48,6 +48,14 @@ const SEARCH_RELATIONS = {
     where: { isActive: true },
     select: { nombre: true },
   },
+  essentialGroups: {
+    select: {
+      title: true,
+      items: {
+        select: { title: true, description: true },
+      },
+    },
+  },
 };
 
 const SEARCH_LIST_SELECT = {
