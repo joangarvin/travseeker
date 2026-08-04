@@ -17,13 +17,10 @@ function activityConditions(values) {
 }
 
 function buildWhereClause(query) {
-  const { q, presupuesto, masificacion, ubicacion, tipoTurismo, actividades } =
+  const { presupuesto, masificacion, ubicacion, tipoTurismo, actividades } =
     query;
   const where = {};
 
-  if (q) {
-    where.nombre = { contains: q, mode: "insensitive" };
-  }
   if (presupuesto) {
     where.presupuesto = { contains: presupuesto };
   }

@@ -78,6 +78,10 @@ export type Destino = {
   longitud?: number | null;
   seasonCrowd?: number;
   matchReason?: string;
+  searchMatch?: {
+    kind: string;
+    label: string;
+  };
   municipios?: Municipio[];
   places?: Place[];
   activities?: Activity[];

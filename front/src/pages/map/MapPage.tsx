@@ -113,7 +113,7 @@ export default function MapPage() {
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Buscar destino o zona"
+              placeholder="Destino, municipio o actividad"
             />
           </label>
           <div className="map-toolbar__actions">
@@ -240,6 +240,9 @@ export default function MapPage() {
                         {String(index + 1).padStart(2, '0')} · {plain(destino.ubicacion)}
                       </small>
                       <b>{destino.nombre.trim()}</b>
+                      {destino.searchMatch && (
+                        <small className="map-list__match">{destino.searchMatch.label}</small>
+                      )}
                       <em>
                         {plain(destino.presupuesto)} · {plain(destino.masificacion)}
                       </em>

@@ -696,6 +696,12 @@
 .map-search input:focus {
   outline: 0;
 }
+.map-list__match {
+  color: var(--brand) !important;
+  font-weight: 800;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
 .map-list > button {
   min-height: 136px;
 }

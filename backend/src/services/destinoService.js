@@ -3,9 +3,12 @@ const { buildWhereClause } = require("../utils/buildWhereClause");
 const {
   LIST_SELECT,
   MAP_SELECT,
+  SEARCH_LIST_SELECT,
+  SEARCH_MAP_SELECT,
   COMPARE_SELECT,
 } = require("../constants/selects");
 const { normalizeMonth, rankForSeason } = require("../domain/season");
+const { rankDestinationSearch } = require("../domain/search");
 const { parseTags, serializeTags } = require("../constants/scales");
 
 function mapActivities(destino) {
@@ -44,14 +47,47 @@ function mapTourismTypes(destino) {
   };
 }
 
+function mapMunicipalities(destino) {
+  if (!destino) return destino;
+  const municipios = (destino.municipioLinks || [])
+    .map((link) => link.municipio)
+    .filter(Boolean)
+    .sort((first, second) => first.nombre.localeCompare(second.nombre, "es"));
+  const { municipioLinks, ...rest } = destino;
+  return { ...rest, municipios };
+}
+
+function prepareSearchResults(destinations, query) {
+  const searched = rankDestinationSearch(destinations, query.q);
+  const prepared = searched.map((destination) =>
+    mapTourismTypes(mapActivities(mapMunicipalities(destination))),
+  );
+  const seasonal = rankForSeason(prepared, {
+    month: normalizeMonth(query.month),
+    avoidCrowds: query.avoidCrowds === "true",
+  });
+  if (query.q) {
+    seasonal.sort(
+      (first, second) =>
+        second._searchScore - first._searchScore ||
+        first.nombre.localeCompare(second.nombre, "es"),
+    );
+  }
+  return seasonal.map(
+    ({ _searchScore, descripcion, imprescindibles, places, ...destination }) =>
+      destination,
+  );
+}
+
 async function searchDestinos(query) {
-  const month = normalizeMonth(query.month);
+  const hasQuery = Boolean(String(query.q || "").trim());
   const destinos = await prisma.destino.findMany({
     where: buildWhereClause(query),
-    select: LIST_SELECT,
+    select: hasQuery ? SEARCH_LIST_SELECT : LIST_SELECT,
   });
+  if (hasQuery) return prepareSearchResults(destinos, query);
   return rankForSeason(destinos.map(mapTourismTypes), {
-    month,
+    month: normalizeMonth(query.month),
     avoidCrowds: query.avoidCrowds === "true",
   });
 }
@@ -134,17 +170,18 @@ async function getRelacionados(id) {
 }
 
 async function getMapaDestinos(query) {
-  const month = normalizeMonth(query.month);
+  const hasQuery = Boolean(String(query.q || "").trim());
   const destinos = await prisma.destino.findMany({
     where: {
       ...buildWhereClause(query),
       latitud: { not: null },
       longitud: { not: null },
     },
-    select: MAP_SELECT,
+    select: hasQuery ? SEARCH_MAP_SELECT : MAP_SELECT,
   });
+  if (hasQuery) return prepareSearchResults(destinos, query);
   return rankForSeason(destinos.map(mapTourismTypes), {
-    month,
+    month: normalizeMonth(query.month),
     avoidCrowds: query.avoidCrowds === "true",
   });
 }

@@ -34,6 +34,32 @@ const MAP_SELECT = {
   },
 };
 
+const SEARCH_RELATIONS = {
+  descripcion: true,
+  imprescindibles: true,
+  municipioLinks: {
+    select: { municipio: { select: { id: true, nombre: true } } },
+  },
+  activityLinks: {
+    where: { activity: { isActive: true } },
+    include: { activity: true },
+  },
+  places: {
+    where: { isActive: true },
+    select: { nombre: true },
+  },
+};
+
+const SEARCH_LIST_SELECT = {
+  ...LIST_SELECT,
+  ...SEARCH_RELATIONS,
+};
+
+const SEARCH_MAP_SELECT = {
+  ...MAP_SELECT,
+  ...SEARCH_RELATIONS,
+};
+
 const COMPARE_SELECT = {
   id: true,
   nombre: true,
@@ -73,6 +99,8 @@ const USER_PUBLIC_SELECT = {
 module.exports = {
   LIST_SELECT,
   MAP_SELECT,
+  SEARCH_LIST_SELECT,
+  SEARCH_MAP_SELECT,
   COMPARE_SELECT,
   USER_PUBLIC_SELECT,
 };
