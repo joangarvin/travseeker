@@ -121,6 +121,9 @@
   background: var(--surface-muted);
   border-radius: 50%;
 }
+.modal:not(.modal--editor) > .modal__heading {
+  padding-right: 52px;
+}
 .modal__list {
   display: grid;
   margin-top: 28px;

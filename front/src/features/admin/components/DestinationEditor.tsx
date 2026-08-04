@@ -5,13 +5,16 @@ import {
   CheckCircle2,
   Image as ImageIcon,
   Link2,
+  ListChecks,
   MapPinned,
   Tag,
 } from 'lucide-react';
 import { AdminModal } from '../../../components/admin/AdminModal';
 import { Button, Notice } from '../../../components/ui';
+import { useActivities, useTourismTypes } from '../../../contexts';
 import { api } from '../../../services/api';
-import type { Destino, Municipio } from '../../../types';
+import type { Activity, Destino, Municipio, Place } from '../../../types';
+import type { TourismType } from '../../../types';
 import { parseTagValues, plain } from '../../../utils';
 import { isTourismValue, serializeTourismValues, tourismValues } from '../../tourism/tourism';
 import { activityValues, serializeActivityValues } from '../../activities/activities';
@@ -23,8 +26,13 @@ import {
   DestinationMunicipalitiesSection,
   DestinationSeasonSection,
 } from './DestinationEditorSections';
+import { ActivityEditorModal } from './ActivityEditorModal';
+import { TourismTypeEditorModal } from './TourismTypeEditorModal';
+import { DestinationEssentialsSection } from './DestinationEssentialsSection';
+import { PlaceEditorModal } from './PlaceEditorModal';
 
-type EditorSection = 'identity' | 'content' | 'season' | 'image' | 'location' | 'municipalities';
+type EditorSection =
+  'identity' | 'content' | 'essentials' | 'season' | 'image' | 'location' | 'municipalities';
 
 type EditorMessage = {
   tone: 'error' | 'success';
@@ -36,12 +44,15 @@ type DestinationEditorProps = {
   municipalities: Municipio[];
   token: string;
   onChange: (destination: Destino) => void;
+  onActivityCreated?: (activity: Activity) => void;
+  onTourismTypeCreated?: (type: TourismType) => void;
   onClose: () => void;
 };
 
 const editorSections = [
   { id: 'identity', label: 'Identidad', Icon: Tag },
   { id: 'content', label: 'Contenido', Icon: BookOpen },
+  { id: 'essentials', label: 'Imprescindibles', Icon: ListChecks },
   { id: 'season', label: 'Temporadas', Icon: CalendarRange },
   { id: 'image', label: 'Portada', Icon: ImageIcon },
   { id: 'location', label: 'Localización', Icon: MapPinned },
@@ -68,13 +79,24 @@ export function DestinationEditor({
   municipalities,
   token,
   onChange,
+  onActivityCreated,
+  onTourismTypeCreated,
   onClose,
 }: DestinationEditorProps) {
+  const { refreshActivities } = useActivities();
+  const { refreshTourismTypes } = useTourismTypes();
   const [form, setForm] = useState<Partial<Destino>>(() => normalizeDestination(initial));
   const [activeSection, setActiveSection] = useState<EditorSection>('identity');
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<EditorMessage | null>(null);
   const [municipalityQuery, setMunicipalityQuery] = useState('');
+  const [activityDraft, setActivityDraft] = useState<Partial<Activity> | null>(null);
+  const [isActivitySaving, setIsActivitySaving] = useState(false);
+  const [tourismTypeDraft, setTourismTypeDraft] = useState<Partial<TourismType> | null>(null);
+  const [isTourismTypeSaving, setIsTourismTypeSaving] = useState(false);
+  const [placeDraft, setPlaceDraft] = useState<Partial<Place> | null>(null);
+  const [placeTarget, setPlaceTarget] = useState<{ groupId: string; itemId: string } | null>(null);
+  const [isPlaceSaving, setIsPlaceSaving] = useState(false);
   const associatedMunicipalities = form.municipios || [];
 
   const municipalityCandidates = useMemo(
@@ -98,6 +120,11 @@ export function DestinationEditor({
     if (!tourismValues(form.tipoTurismoPrincipal).length) {
       setActiveSection('identity');
       setMessage({ tone: 'error', text: 'Selecciona al menos un tipo principal.' });
+      return;
+    }
+    if (!plain(form.imprescindibles) && !form.essentialGroups?.length) {
+      setActiveSection('essentials');
+      setMessage({ tone: 'error', text: 'Añade al menos un imprescindible.' });
       return;
     }
     setIsSaving(true);
@@ -180,78 +207,266 @@ export function DestinationEditor({
     }
   };
 
+  const createActivity = async (activity: Partial<Activity>) => {
+    setIsActivitySaving(true);
+    setMessage(null);
+    try {
+      const created = await api<Activity>(
+        '/admin/activities',
+        { method: 'POST', body: JSON.stringify(activity) },
+        token,
+      );
+      const selectedActivities = activityValues(form.tipoTurismoSecundario);
+      updateField(
+        'tipoTurismoSecundario',
+        serializeActivityValues([...selectedActivities, created.name]),
+      );
+      onActivityCreated?.(created);
+      await refreshActivities();
+      setActivityDraft(null);
+      setMessage({
+        tone: 'success',
+        text: `${created.name} se ha creado y seleccionado. Guarda el destino para aplicar el cambio.`,
+      });
+    } catch (cause) {
+      setMessage({
+        tone: 'error',
+        text: cause instanceof Error ? cause.message : 'No se pudo crear la actividad',
+      });
+    } finally {
+      setIsActivitySaving(false);
+    }
+  };
+
+  const createTourismType = async (type: Partial<TourismType>) => {
+    setIsTourismTypeSaving(true);
+    setMessage(null);
+    try {
+      const created = await api<TourismType>(
+        '/admin/tourism-types',
+        { method: 'POST', body: JSON.stringify(type) },
+        token,
+      );
+      updateField(
+        'tipoTurismoPrincipal',
+        serializeTourismValues([...tourismValues(form.tipoTurismoPrincipal), created.name]),
+      );
+      onTourismTypeCreated?.(created);
+      await refreshTourismTypes();
+      setTourismTypeDraft(null);
+      setMessage({ tone: 'success', text: `${created.name} se ha creado y seleccionado.` });
+    } catch (cause) {
+      setMessage({
+        tone: 'error',
+        text: cause instanceof Error ? cause.message : 'No se pudo crear el tipo de viaje',
+      });
+    } finally {
+      setIsTourismTypeSaving(false);
+    }
+  };
+
+  const requestEssentialPlace = ({
+    groupId,
+    itemId,
+    place,
+  }: {
+    groupId: string;
+    itemId: string;
+    place?: Place;
+  }) => {
+    if (!form.id) {
+      setMessage({ tone: 'error', text: 'Guarda primero el destino para situar el punto.' });
+      return;
+    }
+    setPlaceTarget({ groupId, itemId });
+    setPlaceDraft(
+      place || {
+        nombre: '',
+        categoria: '',
+        descripcion: '',
+        website: '',
+        sortOrder: form.places?.length || 0,
+        isActive: true,
+      },
+    );
+  };
+
+  const saveEssentialPlace = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!form.id || !placeDraft || !placeTarget) return;
+    setIsPlaceSaving(true);
+    setMessage(null);
+    try {
+      const saved = await api<Place>(
+        placeDraft.id ? `/admin/places/${placeDraft.id}` : `/admin/destinos/${form.id}/places`,
+        {
+          method: placeDraft.id ? 'PUT' : 'POST',
+          body: JSON.stringify(placeDraft),
+        },
+        token,
+      );
+      setForm((current) => {
+        const currentPlaces = current.places || [];
+        const places = currentPlaces.some((place) => place.id === saved.id)
+          ? currentPlaces.map((place) => (place.id === saved.id ? saved : place))
+          : [...currentPlaces, saved];
+        const essentialGroups = (current.essentialGroups || []).map((group) => ({
+          ...group,
+          items: group.items.map((item) => {
+            if (item.placeId === saved.id) return { ...item, place: saved };
+            if (group.id === placeTarget.groupId && item.id === placeTarget.itemId) {
+              return { ...item, placeId: saved.id, place: saved };
+            }
+            return item;
+          }),
+        }));
+        return { ...current, places, essentialGroups };
+      });
+      setPlaceDraft(null);
+      setPlaceTarget(null);
+      setMessage({
+        tone: 'success',
+        text: `${saved.nombre} se ha guardado y vinculado al imprescindible.`,
+      });
+    } catch (cause) {
+      setMessage({
+        tone: 'error',
+        text: cause instanceof Error ? cause.message : 'No se pudo guardar la ubicación',
+      });
+    } finally {
+      setIsPlaceSaving(false);
+    }
+  };
+
   return (
-    <AdminModal
-      wide
-      title={form.id ? `Editar ${form.nombre}` : 'Crear un destino'}
-      subtitle="Completa cada apartado. Puedes guardar y continuar cuando quieras."
-      onClose={onClose}
-    >
-      <form className="admin-editor" onSubmit={saveDestination}>
-        <nav className="admin-editor__nav" aria-label="Apartados del destino" role="tablist">
-          {editorSections.map(({ id, label, Icon }) => (
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeSection === id}
-              className={activeSection === id ? 'is-active' : ''}
-              onClick={() => setActiveSection(id)}
-              key={id}
-            >
-              <Icon />
-              <span>{label}</span>
-              {id === 'municipalities' && <b>{associatedMunicipalities.length}</b>}
-            </button>
-          ))}
-        </nav>
+    <>
+      <AdminModal
+        wide
+        title={form.id ? `Editar ${form.nombre}` : 'Crear un destino'}
+        subtitle="Completa cada apartado. Puedes guardar y continuar cuando quieras."
+        onClose={onClose}
+      >
+        <form className="admin-editor" onSubmit={saveDestination}>
+          <nav className="admin-editor__nav" aria-label="Apartados del destino" role="tablist">
+            {editorSections.map(({ id, label, Icon }) => (
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeSection === id}
+                className={activeSection === id ? 'is-active' : ''}
+                onClick={() => setActiveSection(id)}
+                key={id}
+              >
+                <Icon />
+                <span>{label}</span>
+                {id === 'municipalities' && <b>{associatedMunicipalities.length}</b>}
+              </button>
+            ))}
+          </nav>
 
-        <div className="admin-editor__content">
-          {message && <Notice tone={message.tone}>{message.text}</Notice>}
-          {activeSection === 'identity' && (
-            <DestinationIdentitySection form={form} update={updateField} />
-          )}
-          {activeSection === 'content' && (
-            <DestinationContentSection form={form} update={updateField} />
-          )}
-          {activeSection === 'season' && (
-            <DestinationSeasonSection form={form} update={updateField} />
-          )}
-          {activeSection === 'image' && (
-            <DestinationImageSection form={form} update={updateField} token={token} />
-          )}
-          {activeSection === 'location' && (
-            <DestinationLocationSection form={form} update={updateField} />
-          )}
-          {activeSection === 'municipalities' && (
-            <DestinationMunicipalitiesSection
-              destinationId={form.id}
-              associated={associatedMunicipalities}
-              candidates={municipalityCandidates}
-              municipalityCount={municipalities.length}
-              query={municipalityQuery}
-              onQueryChange={setMunicipalityQuery}
-              onLink={(municipality) => void linkMunicipality(municipality)}
-              onUnlink={(municipality) => void unlinkMunicipality(municipality)}
-            />
-          )}
-        </div>
-
-        <footer className="admin-editor__footer">
-          <span aria-live="polite">
-            {message?.tone === 'success' && (
-              <>
-                <CheckCircle2 /> {message.text}
-              </>
+          <div className="admin-editor__content">
+            {message && <Notice tone={message.tone}>{message.text}</Notice>}
+            {activeSection === 'identity' && (
+              <DestinationIdentitySection
+                form={form}
+                update={updateField}
+                onRequestCreateActivity={(name) =>
+                  setActivityDraft({ name, icon: 'Compass', sortOrder: 0, isActive: true })
+                }
+                onRequestCreateTourismType={() =>
+                  setTourismTypeDraft({
+                    name: '',
+                    description: '',
+                    icon: 'Compass',
+                    colorKey: 'otro',
+                    colorValue: '#5f6470',
+                    sortOrder: 100,
+                    isActive: true,
+                  })
+                }
+              />
             )}
-          </span>
-          <Button type="button" variant="quiet" onClick={onClose}>
-            Cerrar
-          </Button>
-          <Button type="submit" loading={isSaving}>
-            Guardar cambios
-          </Button>
-        </footer>
-      </form>
-    </AdminModal>
+            {activeSection === 'content' && (
+              <DestinationContentSection form={form} update={updateField} />
+            )}
+            {activeSection === 'essentials' && (
+              <DestinationEssentialsSection
+                groups={form.essentialGroups || []}
+                places={form.places || []}
+                destinationId={form.id}
+                token={token}
+                update={updateField}
+                onRequestPlace={requestEssentialPlace}
+              />
+            )}
+            {activeSection === 'season' && (
+              <DestinationSeasonSection form={form} update={updateField} />
+            )}
+            {activeSection === 'image' && (
+              <DestinationImageSection form={form} update={updateField} token={token} />
+            )}
+            {activeSection === 'location' && (
+              <DestinationLocationSection form={form} update={updateField} />
+            )}
+            {activeSection === 'municipalities' && (
+              <DestinationMunicipalitiesSection
+                destinationId={form.id}
+                associated={associatedMunicipalities}
+                candidates={municipalityCandidates}
+                municipalityCount={municipalities.length}
+                query={municipalityQuery}
+                onQueryChange={setMunicipalityQuery}
+                onLink={(municipality) => void linkMunicipality(municipality)}
+                onUnlink={(municipality) => void unlinkMunicipality(municipality)}
+              />
+            )}
+          </div>
+
+          <footer className="admin-editor__footer">
+            <span aria-live="polite">
+              {message?.tone === 'success' && (
+                <>
+                  <CheckCircle2 /> {message.text}
+                </>
+              )}
+            </span>
+            <Button type="button" variant="quiet" onClick={onClose}>
+              Cerrar
+            </Button>
+            <Button type="submit" loading={isSaving}>
+              Guardar cambios
+            </Button>
+          </footer>
+        </form>
+      </AdminModal>
+      {activityDraft && (
+        <ActivityEditorModal
+          initial={activityDraft}
+          isSaving={isActivitySaving}
+          onSave={createActivity}
+          onClose={() => setActivityDraft(null)}
+        />
+      )}
+      {tourismTypeDraft && (
+        <TourismTypeEditorModal
+          initial={tourismTypeDraft}
+          isSaving={isTourismTypeSaving}
+          onSave={createTourismType}
+          onClose={() => setTourismTypeDraft(null)}
+        />
+      )}
+      {placeDraft && (
+        <PlaceEditorModal
+          form={placeDraft}
+          isSaving={isPlaceSaving}
+          onChange={setPlaceDraft}
+          onSubmit={saveEssentialPlace}
+          onClose={() => {
+            setPlaceDraft(null);
+            setPlaceTarget(null);
+          }}
+        />
+      )}
+    </>
   );
 }

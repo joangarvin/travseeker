@@ -1,6 +1,7 @@
-import { useState, type KeyboardEvent } from 'react';
+import { useState } from 'react';
 import { Check, Plus, Search } from 'lucide-react';
-import { activityDefinition, activityTypes, activityValues, normalizeActivity } from './activities';
+import { useActivities } from '../../contexts';
+import { activityDefinition, activityTypes, activityValues } from './activities';
 
 type ActivityMultiSelectProps = {
   id: string;
@@ -8,9 +9,9 @@ type ActivityMultiSelectProps = {
   value?: string | string[] | null;
   suggestions?: string[];
   hint?: string;
-  allowCustom?: boolean;
   compact?: boolean;
   onChange: (values: string[]) => void;
+  onRequestCreate?: (name: string) => void;
 };
 
 export function ActivityMultiSelect({
@@ -19,29 +20,30 @@ export function ActivityMultiSelect({
   value,
   suggestions = [],
   hint,
-  allowCustom = false,
   compact = false,
   onChange,
+  onRequestCreate,
 }: ActivityMultiSelectProps) {
+  const { activities } = useActivities();
   const [query, setQuery] = useState('');
   const selectedValues = activityValues(value);
   const hintId = hint ? `${id}-hint` : undefined;
   const normalizedQuery = query.trim().toLocaleLowerCase('es');
 
   const options = activityValues([
-    ...activityTypes.map((activity) => activity.label),
+    ...activities.filter((activity) => activity.isActive).map((activity) => activity.name),
+    ...(activities.length ? [] : activityTypes.map((activity) => activity.label)),
     ...suggestions,
     ...selectedValues,
   ]);
   const visibleOptions = normalizedQuery
     ? options.filter((option) => option.toLocaleLowerCase('es').includes(normalizedQuery))
     : options;
-  const customValue = normalizeActivity(query);
-  const canAddCustom =
-    allowCustom &&
-    Boolean(customValue) &&
+  const canRequestCreate =
+    Boolean(onRequestCreate) &&
+    Boolean(query.trim()) &&
     !options.some(
-      (option) => option.toLocaleLowerCase('es') === customValue.toLocaleLowerCase('es'),
+      (option) => option.toLocaleLowerCase('es') === query.trim().toLocaleLowerCase('es'),
     );
 
   const toggle = (option: string) => {
@@ -49,19 +51,6 @@ export function ActivityMultiSelect({
       ? selectedValues.filter((current) => current !== option)
       : [...selectedValues, option];
     onChange(nextValues);
-  };
-
-  const addCustom = () => {
-    if (!canAddCustom) return;
-    onChange([...selectedValues, customValue]);
-    setQuery('');
-  };
-
-  const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && canAddCustom) {
-      event.preventDefault();
-      addCustom();
-    }
   };
 
   return (
@@ -79,12 +68,11 @@ export function ActivityMultiSelect({
           value={query}
           placeholder="Buscar una actividad"
           onChange={(event) => setQuery(event.target.value)}
-          onKeyDown={handleSearchKeyDown}
         />
       </label>
       <div className="activity-multi-select__options">
         {visibleOptions.map((option) => {
-          const activity = activityDefinition(option);
+          const activity = activityDefinition(option, activities);
           const isSelected = selectedValues.includes(option);
           return (
             <label
@@ -105,12 +93,16 @@ export function ActivityMultiSelect({
             </label>
           );
         })}
-        {canAddCustom && (
-          <button className="activity-multi-select__add" type="button" onClick={addCustom}>
-            <Plus aria-hidden /> Añadir “{customValue}”
+        {canRequestCreate && (
+          <button
+            className="activity-multi-select__add"
+            type="button"
+            onClick={() => onRequestCreate?.(query.trim())}
+          >
+            <Plus aria-hidden /> Crear “{query.trim()}” con icono
           </button>
         )}
-        {!visibleOptions.length && !canAddCustom && (
+        {!visibleOptions.length && !canRequestCreate && (
           <p className="activity-multi-select__empty">No hay actividades con ese nombre.</p>
         )}
       </div>

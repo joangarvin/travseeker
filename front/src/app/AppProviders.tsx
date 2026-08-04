@@ -1,14 +1,24 @@
 import type { ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider, CompareProvider, ThemeProvider } from '../contexts';
+import {
+  ActivityProvider,
+  AuthProvider,
+  CompareProvider,
+  ThemeProvider,
+  TourismTypeProvider,
+} from '../contexts';
 
 export function AppProviders({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <CompareProvider>
-          <BrowserRouter>{children}</BrowserRouter>
-        </CompareProvider>
+        <ActivityProvider>
+          <TourismTypeProvider>
+            <CompareProvider>
+              <BrowserRouter>{children}</BrowserRouter>
+            </CompareProvider>
+          </TourismTypeProvider>
+        </ActivityProvider>
       </AuthProvider>
     </ThemeProvider>
   );

@@ -32,6 +32,57 @@ export type Place = {
   isActive?: boolean;
 };
 
+export type EssentialItem = {
+  id: string;
+  title: string;
+  description?: string | null;
+  icon?: string | null;
+  imageUrl?: string | null;
+  imageAlt?: string | null;
+  duration?: string | null;
+  bestTime?: string | null;
+  reservationRequired?: boolean | null;
+  officialUrl?: string | null;
+  placeId?: string | null;
+  place?: Place | null;
+  sortOrder: number;
+};
+
+export type EssentialGroup = {
+  id: string;
+  title: string;
+  icon: string;
+  sortOrder: number;
+  items: EssentialItem[];
+};
+
+export type Activity = {
+  id: string;
+  name: string;
+  slug: string;
+  icon: string;
+  sortOrder: number;
+  isActive: boolean;
+  destinationsCount?: number;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type TourismType = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  icon: string;
+  colorKey: string;
+  colorValue: string;
+  sortOrder: number;
+  isActive: boolean;
+  destinationsCount?: number;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
 export type Destino = {
   id: string;
   nombre: string;
@@ -51,8 +102,17 @@ export type Destino = {
   longitud?: number | null;
   seasonCrowd?: number;
   matchReason?: string;
+  searchMatch?: {
+    kind: string;
+    label: string;
+  };
   municipios?: Municipio[];
   places?: Place[];
+  essentialGroups?: EssentialGroup[];
+  activities?: Activity[];
+  activityIds?: string[];
+  tourismTypes?: TourismType[];
+  tourismTypeIds?: string[];
 };
 
 export type Review = {

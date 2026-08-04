@@ -31,8 +31,31 @@ const uploadDestinoCover = asyncHandler(async (req, res) => {
   res.json(result);
 });
 
+const uploadEssentialImage = asyncHandler(async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'Debes enviar una imagen' });
+  }
+  const destinoId = String(req.body.destinoId || '').trim();
+  if (!destinoId) {
+    return res.status(400).json({ error: 'Guarda primero el destino' });
+  }
+  const destination = await prisma.destino.findUnique({
+    where: { id: destinoId },
+    select: { id: true },
+  });
+  if (!destination) {
+    return res.status(404).json({ error: 'Destino no encontrado' });
+  }
+  res.json(await uploadService.uploadEssentialImage(destinoId, req.file.buffer));
+});
+
 const uploadStatus = (_req, res) => {
   res.json({ configured: uploadService.isConfigured });
 };
 
-module.exports = { uploadAvatar, uploadDestinoCover, uploadStatus };
+module.exports = {
+  uploadAvatar,
+  uploadDestinoCover,
+  uploadEssentialImage,
+  uploadStatus,
+};

@@ -35,9 +35,12 @@
   background: var(--surface-muted);
   color: var(--ink);
 }
-.admin-nav button span {
+.admin-nav button .admin-nav__count {
   margin-left: auto;
   font-size: 0.68rem;
+}
+.admin-nav__label-short {
+  display: none;
 }
 .profile-panel,
 .admin-workspace {

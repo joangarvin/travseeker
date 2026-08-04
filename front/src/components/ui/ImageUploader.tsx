@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent, type DragEvent } from 'react';
-import { Image as ImageIcon, UploadCloud } from 'lucide-react';
+import { Image as ImageIcon, Trash2, UploadCloud } from 'lucide-react';
 import { api } from '../../services/api';
 import { imageUrl } from '../../utils';
 import { MediaImage } from './MediaImage';
@@ -16,6 +16,10 @@ type ImageUploaderProps = {
   onChange: (url: string) => void;
   extraData?: Record<string, string>;
   circular?: boolean;
+  acceptedTypes?: string[];
+  acceptedLabel?: string;
+  previewAlt?: string;
+  onRemove?: () => void;
 };
 
 export function ImageUploader({
@@ -27,6 +31,10 @@ export function ImageUploader({
   onChange,
   extraData,
   circular = false,
+  acceptedTypes = ACCEPTED_IMAGE_TYPES,
+  acceptedLabel = 'JPG, PNG, WebP o GIF',
+  previewAlt = 'Vista previa',
+  onRemove,
 }: ImageUploaderProps) {
   const [uploading, setUploading] = useState(false);
   const [dragging, setDragging] = useState(false);
@@ -35,8 +43,8 @@ export function ImageUploader({
   const uploadFile = async (file?: File) => {
     if (!file) return;
 
-    if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-      setError('Elige una imagen JPG, PNG, WebP o GIF.');
+    if (!acceptedTypes.includes(file.type)) {
+      setError(`Elige una imagen ${acceptedLabel}.`);
       return;
     }
 
@@ -89,24 +97,27 @@ export function ImageUploader({
       onDrop={handleDrop}
     >
       <div className="image-uploader__preview">
-        {value ? (
-          <MediaImage src={imageUrl(value)} alt="Vista previa" />
-        ) : (
-          <ImageIcon aria-hidden />
-        )}
+        {value ? <MediaImage src={imageUrl(value)} alt={previewAlt} /> : <ImageIcon aria-hidden />}
       </div>
 
       <div>
         <strong>{label}</strong>
-        <p>Arrastra una imagen aquí o selecciónala. JPG, PNG, WebP o GIF · máximo 10 MB.</p>
-        <label className="button button--secondary" htmlFor={id}>
-          <UploadCloud /> {uploading ? 'Subiendo…' : value ? 'Cambiar imagen' : 'Elegir imagen'}
-        </label>
+        <p>Arrastra una imagen aquí o selecciónala. {acceptedLabel} · máximo 10 MB.</p>
+        <div className="image-uploader__actions">
+          <label className="button button--secondary" htmlFor={id}>
+            <UploadCloud /> {uploading ? 'Subiendo…' : value ? 'Cambiar imagen' : 'Elegir imagen'}
+          </label>
+          {value && onRemove && (
+            <button className="button button--quiet" type="button" onClick={onRemove}>
+              <Trash2 /> Quitar imagen
+            </button>
+          )}
+        </div>
         <input
           className="sr-only"
           id={id}
           type="file"
-          accept={ACCEPTED_IMAGE_TYPES.join(',')}
+          accept={acceptedTypes.join(',')}
           onChange={handleInputChange}
           disabled={uploading}
         />

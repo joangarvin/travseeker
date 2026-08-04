@@ -39,6 +39,18 @@
   box-shadow: 8px 8px 0 var(--sun);
 }
 
+.search-box-group {
+  display: grid;
+  gap: 10px;
+}
+
+.search-box__help {
+  margin: 0 0 0 2px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
 .search-box > svg {
   justify-self: end;
 }
@@ -393,6 +405,27 @@
 
 .destination-card__body {
   min-width: 0;
+}
+
+.destination-card__match {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
+  margin: 0 0 10px;
+  padding-left: 8px;
+  border-left: 3px solid var(--brand);
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.destination-card__match svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--brand);
 }
 
 .destination-card__location {

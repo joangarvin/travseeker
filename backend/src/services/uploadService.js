@@ -1,5 +1,6 @@
 const { cloudinary, isConfigured } = require('../config/cloudinary');
 const { env } = require('../config/env');
+const { randomUUID } = require('node:crypto');
 
 function assertConfigured() {
   if (!isConfigured) {
@@ -101,8 +102,38 @@ async function uploadDestinoCover(buffer, destinoId) {
   };
 }
 
+async function uploadEssentialImage(destinoId, buffer) {
+  const folder = `${env.cloudinary.folder}/destinos/${destinoId}/imprescindibles`;
+  const result = await uploadBuffer(buffer, {
+    folder,
+    publicId: randomUUID(),
+  });
+
+  return {
+    url: result.secure_url,
+    publicId: result.public_id,
+    width: result.width,
+    height: result.height,
+  };
+}
+
+function isEssentialImage(url) {
+  const publicId = extractPublicId(url);
+  const prefix = `${env.cloudinary.folder}/destinos/`;
+  return Boolean(
+    publicId && publicId.startsWith(prefix) && publicId.includes('/imprescindibles/'),
+  );
+}
+
+async function deleteEssentialImages(urls) {
+  const safeUrls = [...new Set(urls || [])].filter(isEssentialImage);
+  await Promise.all(safeUrls.map(deleteByUrl));
+}
+
 module.exports = {
   uploadAvatar,
   uploadDestinoCover,
+  uploadEssentialImage,
+  deleteEssentialImages,
   isConfigured,
 };

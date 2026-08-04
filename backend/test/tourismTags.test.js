@@ -47,6 +47,15 @@ test("combina tipos generales y actividades sin perder condiciones", () => {
   assert.equal(where.AND[1].OR.length, 2);
 });
 
+test("la búsqueda libre se resuelve fuera de los filtros estructurados", () => {
+  assert.deepEqual(
+    buildWhereClause({ q: "Cangas de Onís", presupuesto: "Medio" }),
+    {
+      presupuesto: { contains: "Medio" },
+    },
+  );
+});
+
 test("normaliza actividades antiguas y conserva términos para buscarlas", () => {
   assert.equal(normalizeActivity("Animales"), "Observación de fauna");
   assert.equal(normalizeActivity("Deportes Aquáticos"), "Deportes acuáticos");

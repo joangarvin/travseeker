@@ -5,6 +5,12 @@ const {
   isTourismType,
   normalizeActivity,
 } = require("../constants/scales");
+const {
+  normalizeEssentialGroups,
+  plainHtml,
+  serializeEssentialGroups,
+} = require("../domain/essentials");
+const uploadService = require("./uploadService");
 
 function clean(value, max) {
   if (typeof value !== "string") return null;
@@ -12,7 +18,7 @@ function clean(value, max) {
   return normalized ? normalized.slice(0, max) : null;
 }
 
-function normalizePayload(data) {
+function normalizePayload(data, essentialGroups = null) {
   const secondaryValues = parseTags(data.tipoTurismoSecundario);
   const primaryTypes = [
     ...new Set([
@@ -39,7 +45,10 @@ function normalizePayload(data) {
     destinosItem: data.destinosItem ? String(data.destinosItem).trim() : null,
     ubicacion: String(data.ubicacion || "").trim(),
     descripcion: String(data.descripcion || "").trim(),
-    imprescindibles: String(data.imprescindibles || "").trim(),
+    imprescindibles:
+      essentialGroups?.length > 0
+        ? serializeEssentialGroups(essentialGroups)
+        : String(data.imprescindibles || "").trim(),
     imagen: String(data.imagen || "").trim(),
     latitud:
       data.latitud === "" || data.latitud == null ? null : Number(data.latitud),
@@ -50,7 +59,7 @@ function normalizePayload(data) {
   };
 }
 
-function validateDestino(data) {
+function validateDestino(data, essentialGroups = null) {
   if (!parseTags(data.tipoTurismoPrincipal).length) {
     const err = new Error("Falta completar: Tipo de turismo principal");
     err.status = 400;
@@ -62,7 +71,6 @@ function validateDestino(data) {
     masificacion: "Masificación",
     ubicacion: "Zona o región",
     descripcion: "Descripción",
-    imprescindibles: "Imprescindibles",
     imagen: "Imagen de portada",
   };
   for (const [key, label] of Object.entries(labels)) {
@@ -71,6 +79,11 @@ function validateDestino(data) {
       err.status = 400;
       throw err;
     }
+  }
+  if (!plainHtml(data.imprescindibles) && !essentialGroups?.length) {
+    const error = new Error("Añade al menos un imprescindible");
+    error.status = 400;
+    throw error;
   }
 }
 
@@ -97,8 +110,171 @@ function mapDestinoMunicipios(destino) {
     .map((link) => link.municipio)
     .filter(Boolean)
     .sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
-  const { municipioLinks, ...rest } = destino;
-  return { ...rest, municipios };
+  const activities = (destino.activityLinks || [])
+    .map((link) => link.activity)
+    .filter(Boolean)
+    .sort((a, b) => a.name.localeCompare(b.name, "es"));
+  const tourismTypes = (destino.tourismTypeLinks || [])
+    .map((link) => link.tourismType)
+    .filter(Boolean)
+    .sort(
+      (a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name, "es"),
+    );
+  const { municipioLinks, activityLinks, tourismTypeLinks, ...rest } = destino;
+  return {
+    ...rest,
+    tipoTurismoPrincipal: tourismTypes.length
+      ? serializeTags(tourismTypes.map((type) => type.name))
+      : rest.tipoTurismoPrincipal,
+    tipoTurismoSecundario: activities.length
+      ? serializeTags(activities.map((activity) => activity.name))
+      : rest.tipoTurismoSecundario,
+    municipios,
+    activities,
+    activityIds: activities.map((activity) => activity.id),
+    tourismTypes,
+    tourismTypeIds: tourismTypes.map((type) => type.id),
+  };
+}
+
+async function syncDestinationTourismTypes(
+  transaction,
+  destinoId,
+  serializedNames,
+) {
+  const names = parseTags(serializedNames);
+  const types = names.length
+    ? await transaction.tourismType.findMany({
+        where: {
+          OR: names.map((name) => ({
+            name: { equals: name, mode: "insensitive" },
+          })),
+        },
+      })
+    : [];
+  const missing = names.filter(
+    (name) =>
+      !types.some(
+        (type) =>
+          type.name.toLocaleLowerCase("es") === name.toLocaleLowerCase("es"),
+      ),
+  );
+  if (missing.length) {
+    const error = new Error(
+      `Crea primero estos tipos de viaje en el catálogo: ${missing.join(", ")}`,
+    );
+    error.status = 400;
+    throw error;
+  }
+  await transaction.destinoTourismType.deleteMany({ where: { destinoId } });
+  if (types.length) {
+    await transaction.destinoTourismType.createMany({
+      data: types.map((type) => ({ destinoId, tourismTypeId: type.id })),
+      skipDuplicates: true,
+    });
+  }
+}
+
+async function syncDestinationActivities(
+  transaction,
+  destinoId,
+  serializedNames,
+) {
+  const names = parseTags(serializedNames);
+  const activities = names.length
+    ? await transaction.activity.findMany({
+        where: {
+          OR: names.map((name) => ({
+            name: { equals: name, mode: "insensitive" },
+          })),
+        },
+      })
+    : [];
+
+  const missingNames = names.filter(
+    (name) =>
+      !activities.some(
+        (activity) =>
+          activity.name.toLocaleLowerCase("es") ===
+          name.toLocaleLowerCase("es"),
+      ),
+  );
+  if (missingNames.length) {
+    const error = new Error(
+      `Crea primero estas actividades en el catálogo: ${missingNames.join(", ")}`,
+    );
+    error.status = 400;
+    throw error;
+  }
+
+  await transaction.destinoActivity.deleteMany({ where: { destinoId } });
+  if (activities.length) {
+    await transaction.destinoActivity.createMany({
+      data: activities.map((activity) => ({
+        destinoId,
+        activityId: activity.id,
+      })),
+      skipDuplicates: true,
+    });
+  }
+}
+
+const destinationRelations = {
+  municipioLinks: { include: { municipio: true } },
+  activityLinks: { include: { activity: true } },
+  tourismTypeLinks: { include: { tourismType: true } },
+  places: { orderBy: [{ sortOrder: "asc" }, { nombre: "asc" }] },
+  essentialGroups: {
+    orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
+    include: {
+      items: {
+        orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
+        include: { place: true },
+      },
+    },
+  },
+};
+
+async function syncDestinationEssentials(
+  transaction,
+  destinoId,
+  essentialGroups,
+) {
+  if (!Array.isArray(essentialGroups)) return;
+  const placeIds = [
+    ...new Set(
+      essentialGroups.flatMap((group) =>
+        group.items.map((item) => item.placeId).filter(Boolean),
+      ),
+    ),
+  ];
+  if (placeIds.length) {
+    const places = await transaction.place.findMany({
+      where: { destinoId, id: { in: placeIds } },
+      select: { id: true },
+    });
+    const validIds = new Set(places.map((place) => place.id));
+    const invalidId = placeIds.find((id) => !validIds.has(id));
+    if (invalidId) {
+      const error = new Error(
+        "Uno de los lugares asociados no pertenece a este destino",
+      );
+      error.status = 400;
+      throw error;
+    }
+  }
+
+  await transaction.essentialGroup.deleteMany({ where: { destinoId } });
+  for (const group of essentialGroups) {
+    await transaction.essentialGroup.create({
+      data: {
+        destinoId,
+        title: group.title,
+        sortOrder: group.sortOrder,
+        items: { create: group.items },
+      },
+    });
+  }
 }
 
 async function listDestinos() {
@@ -120,38 +296,99 @@ async function listDestinos() {
           municipio: { select: { id: true, nombre: true } },
         },
       },
+      activityLinks: { include: { activity: true } },
+      tourismTypeLinks: { include: { tourismType: true } },
     },
   });
   return rows.map(mapDestinoMunicipios);
 }
 
+async function getDestino(id) {
+  const destination = await prisma.destino.findUnique({
+    where: { id },
+    include: destinationRelations,
+  });
+  if (!destination) {
+    const error = new Error("Destino no encontrado");
+    error.status = 404;
+    throw error;
+  }
+  return mapDestinoMunicipios(destination);
+}
+
 async function createDestino(payload) {
-  const data = normalizePayload(payload);
-  validateDestino(data);
-  const created = await prisma.destino.create({
-    data,
-    include: {
-      municipioLinks: { include: { municipio: true } },
-    },
+  const essentialGroups = normalizeEssentialGroups(payload.essentialGroups);
+  const data = normalizePayload(payload, essentialGroups);
+  validateDestino(data, essentialGroups);
+  const created = await prisma.$transaction(async (transaction) => {
+    const destination = await transaction.destino.create({ data });
+    await syncDestinationActivities(
+      transaction,
+      destination.id,
+      data.tipoTurismoSecundario,
+    );
+    await syncDestinationTourismTypes(
+      transaction,
+      destination.id,
+      data.tipoTurismoPrincipal,
+    );
+    await syncDestinationEssentials(
+      transaction,
+      destination.id,
+      essentialGroups,
+    );
+    return transaction.destino.findUnique({
+      where: { id: destination.id },
+      include: destinationRelations,
+    });
   });
   return mapDestinoMunicipios(created);
 }
 
 async function updateDestino(id, payload) {
-  const data = normalizePayload(payload);
-  validateDestino(data);
-  const updated = await prisma.destino.update({
-    where: { id },
-    data,
-    include: {
-      municipioLinks: { include: { municipio: true } },
-    },
+  const essentialGroups = normalizeEssentialGroups(payload.essentialGroups);
+  const data = normalizePayload(payload, essentialGroups);
+  validateDestino(data, essentialGroups);
+  const previousImages = await prisma.essentialItem.findMany({
+    where: { group: { destinoId: id }, imageUrl: { not: null } },
+    select: { imageUrl: true },
   });
+  const updated = await prisma.$transaction(async (transaction) => {
+    await transaction.destino.update({ where: { id }, data });
+    await syncDestinationActivities(
+      transaction,
+      id,
+      data.tipoTurismoSecundario,
+    );
+    await syncDestinationTourismTypes(
+      transaction,
+      id,
+      data.tipoTurismoPrincipal,
+    );
+    await syncDestinationEssentials(transaction, id, essentialGroups);
+    return transaction.destino.findUnique({
+      where: { id },
+      include: destinationRelations,
+    });
+  });
+  const retainedImages = new Set(
+    (essentialGroups || []).flatMap((group) =>
+      group.items.map((item) => item.imageUrl).filter(Boolean),
+    ),
+  );
+  await uploadService.deleteEssentialImages(
+    previousImages.map((item) => item.imageUrl).filter((url) => !retainedImages.has(url)),
+  );
   return mapDestinoMunicipios(updated);
 }
 
 async function deleteDestino(id) {
+  const images = await prisma.essentialItem.findMany({
+    where: { group: { destinoId: id }, imageUrl: { not: null } },
+    select: { imageUrl: true },
+  });
   await prisma.destino.delete({ where: { id } });
+  await uploadService.deleteEssentialImages(images.map((item) => item.imageUrl));
   return { success: true };
 }
 
@@ -304,6 +541,7 @@ async function deletePlace(id) {
 
 module.exports = {
   listDestinos,
+  getDestino,
   createDestino,
   updateDestino,
   deleteDestino,
@@ -317,4 +555,6 @@ module.exports = {
   createPlace,
   updatePlace,
   deletePlace,
+  syncDestinationActivities,
+  syncDestinationTourismTypes,
 };

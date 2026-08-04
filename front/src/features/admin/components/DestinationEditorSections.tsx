@@ -15,10 +15,20 @@ type DestinationSectionProps = {
   update: DestinationUpdater;
 };
 
+type DestinationIdentitySectionProps = DestinationSectionProps & {
+  onRequestCreateActivity?: (name: string) => void;
+  onRequestCreateTourismType?: () => void;
+};
+
 const BUDGET_OPTIONS = ['Bajo', 'Medio-Bajo', 'Medio', 'Medio-Alto', 'Alto'];
 const CROWD_OPTIONS = ['Leve', 'Bajo', 'Medio-Bajo', 'Medio', 'Medio-Alto', 'Alto'];
 
-export function DestinationIdentitySection({ form, update }: DestinationSectionProps) {
+export function DestinationIdentitySection({
+  form,
+  update,
+  onRequestCreateActivity,
+  onRequestCreateTourismType,
+}: DestinationIdentitySectionProps) {
   return (
     <section className="editor-section" aria-labelledby="editor-identity">
       <SectionHeading
@@ -52,14 +62,15 @@ export function DestinationIdentitySection({ form, update }: DestinationSectionP
           value={form.tipoTurismoPrincipal}
           hint="Selecciona una o varias formas de viaje que definan el destino."
           required
+          onRequestCreate={onRequestCreateTourismType}
           onChange={(values) => update('tipoTurismoPrincipal', serializeTourismValues(values))}
         />
         <ActivityMultiSelect
           id="admin-activities"
           label="Actividades"
           value={form.tipoTurismoSecundario}
-          hint="Opcional. Selecciona actividades existentes o escribe una nueva."
-          allowCustom
+          hint="Opcional. Selecciona actividades del catálogo. Si falta una, créala con su icono."
+          onRequestCreate={onRequestCreateActivity}
           onChange={(values) => update('tipoTurismoSecundario', serializeActivityValues(values))}
         />
         <SelectField
@@ -115,19 +126,6 @@ export function DestinationContentSection({ form, update }: DestinationSectionPr
           required
         />
       </Field>
-      <Field
-        label="Imprescindibles"
-        htmlFor="admin-essentials"
-        hint="Incluye lugares, experiencias y advertencias prácticas."
-      >
-        <textarea
-          id="admin-essentials"
-          className="editor-textarea"
-          value={form.imprescindibles || ''}
-          onChange={(event) => update('imprescindibles', event.target.value)}
-          required
-        />
-      </Field>
     </section>
   );
 }
@@ -142,7 +140,7 @@ export function DestinationSeasonSection({ form, update }: DestinationSectionPro
   return (
     <section className="editor-section" aria-labelledby="editor-season">
       <SectionHeading
-        number="03"
+        number="04"
         id="editor-season"
         title="Afluencia por temporada"
         description="0 significa muy tranquilo; 100, máxima ocupación."
@@ -177,7 +175,7 @@ export function DestinationImageSection({ form, update, token }: DestinationImag
   return (
     <section className="editor-section" aria-labelledby="editor-image">
       <SectionHeading
-        number="04"
+        number="05"
         id="editor-image"
         title="Imagen de portada"
         description="Sube el archivo directamente o pega una URL existente."
@@ -212,7 +210,7 @@ export function DestinationLocationSection({ form, update }: DestinationSectionP
   return (
     <section className="editor-section" aria-labelledby="editor-map">
       <SectionHeading
-        number="05"
+        number="06"
         id="editor-map"
         title="Punto en el mapa"
         description="Haz clic en la localización aproximada y ajusta las coordenadas si hace falta."
@@ -271,7 +269,7 @@ export function DestinationMunicipalitiesSection({
   return (
     <section className="editor-section" aria-labelledby="editor-municipalities">
       <SectionHeading
-        number="06"
+        number="07"
         id="editor-municipalities"
         title="Municipios asociados"
         description="Estos municipios aparecerán en la ficha pública del destino."
@@ -340,7 +338,7 @@ type SectionHeadingProps = {
   description: string;
 };
 
-function SectionHeading({ number, id, title, description }: SectionHeadingProps) {
+export function SectionHeading({ number, id, title, description }: SectionHeadingProps) {
   return (
     <header>
       <span>{number}</span>

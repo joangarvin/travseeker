@@ -51,6 +51,15 @@
 }
 
 @media (max-width: 760px) {
+  .activity-icon-picker > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .activity-admin-list article {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+  .activity-admin-list article > div:last-child {
+    grid-column: 2;
+  }
   :root {
     --control: 48px;
   }
@@ -182,8 +191,7 @@
     top: 72px;
     border-radius: var(--r-2);
   }
-  .destination-story,
-  .essentials {
+  .destination-story {
     grid-template-columns: 1fr;
     gap: 40px;
   }
@@ -350,6 +358,18 @@
     border-right: 0;
     border-bottom: 1px solid var(--line);
   }
+  .admin-nav__label-long {
+    display: none;
+  }
+  .admin-nav__label-short {
+    display: inline;
+  }
+  .admin-nav {
+    grid-auto-flow: row;
+    grid-auto-columns: unset;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+  }
   .profile-panel,
   .admin-workspace {
     padding: 28px 0 0;
@@ -371,6 +391,16 @@
   }
   .modal--editor > .modal__heading {
     padding: 20px 64px 16px 16px;
+  }
+  .tourism-color-picker__custom {
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+  .tourism-color-picker__well {
+    width: 56px;
+  }
+  .tourism-color-picker__preview {
+    grid-column: 1 / -1;
+    justify-content: center;
   }
   .admin-editor {
     grid-template-columns: 1fr;
@@ -449,6 +479,20 @@
 }
 
 @media (max-width: 390px) {
+  .modal:not(.modal--editor) > .modal__heading h2 {
+    font-size: 1.45rem;
+    line-height: 1.12;
+  }
+  .tourism-color-picker__presets {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .activity-icon-picker > div {
+    grid-template-columns: 1fr;
+  }
+  .modal-actions {
+    display: grid;
+  }
   .brand > span:last-child {
     display: none;
   }

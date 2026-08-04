@@ -18,6 +18,7 @@ import type { CollectionSummary, Destino, Review } from '../../types';
 import { Button, Field, Loader, MediaImage, Notice } from '../../components/ui';
 import { Shell } from '../../components/layout';
 import { DestinationCard } from '../../features/destinations/components/DestinationCard';
+import { EssentialRoute } from '../../features/destinations/components/EssentialRoute';
 import { TourismMark, TourismMarks } from '../../features/tourism/tourism';
 import { ActivityMarks, activityValues } from '../../features/activities/activities';
 
@@ -234,18 +235,7 @@ export default function DestinationPage() {
         </div>
       </section>
 
-      {destino.imprescindibles && (
-        <section className="essentials">
-          <div>
-            <p className="kicker">No te lo pierdas</p>
-            <h2>Lo imprescindible</h2>
-          </div>
-          <div
-            className="prose"
-            dangerouslySetInnerHTML={{ __html: safeHtml(destino.imprescindibles) }}
-          />
-        </section>
-      )}
+      <EssentialRoute groups={destino.essentialGroups} legacyHtml={destino.imprescindibles} />
 
       {!!destino.municipios?.length && (
         <section className="municipalities">
@@ -280,7 +270,7 @@ export default function DestinationPage() {
           </header>
           <div>
             {destino.places.map((place) => (
-              <article key={place.id}>
+              <article id={`place-${place.id}`} key={place.id}>
                 <span>{place.categoria}</span>
                 <h3>{place.nombre}</h3>
                 {place.descripcion && <p>{place.descripcion}</p>}

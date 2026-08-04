@@ -5,7 +5,7 @@
   color: white;
 }
 
-.destination-hero>img {
+.destination-hero > img {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -39,7 +39,7 @@
   left: clamp(16px, 5vw, 80px);
 }
 
-.destination-hero__content>p {
+.destination-hero__content > p {
   margin-bottom: 12px;
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -52,13 +52,13 @@
   font-size: clamp(4rem, 11vw, 10rem);
 }
 
-.destination-hero__content>div {
+.destination-hero__content > div {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.destination-hero__content>div>span:not(.tourism-mark) {
+.destination-hero__content > div > span:not(.tourism-mark) {
   padding: 8px 12px;
   border: 1px solid rgb(255 255 255 / 60%);
   font-size: 0.78rem;
@@ -112,7 +112,7 @@
   border-top: 1px solid var(--line);
 }
 
-.destination-story__summary dl>div {
+.destination-story__summary dl > div {
   display: flex;
   justify-content: space-between;
   gap: 16px;
@@ -150,7 +150,7 @@
   color: var(--ink-inverse);
 }
 
-.season-section>header {
+.season-section > header {
   max-width: 800px;
   margin-bottom: 56px;
 }
@@ -165,7 +165,7 @@
   max-width: 1100px;
 }
 
-.season-bars>div>div {
+.season-bars > div > div {
   display: flex;
   justify-content: space-between;
   gap: 24px;
@@ -197,19 +197,6 @@
   background: var(--sun);
 }
 
-.essentials {
-  display: grid;
-  grid-template-columns: 0.7fr 1.3fr;
-  gap: 60px;
-  padding: clamp(72px, 10vw, 140px) clamp(16px, 8vw, 140px);
-  background: var(--sun);
-  color: var(--sun-ink);
-}
-
-.essentials .kicker {
-  color: var(--sun-ink);
-}
-
 .municipalities,
 .nearby,
 .reviews,
@@ -219,7 +206,7 @@
   padding: clamp(72px, 9vw, 128px) clamp(16px, 4vw, 64px);
 }
 
-.municipalities>div {
+.municipalities > div {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   border-top: 1px solid var(--line);
@@ -241,7 +228,7 @@
   padding-left: 24px;
 }
 
-.municipalities article>span {
+.municipalities article > span {
   color: var(--brand);
   font-size: 0.72rem;
   font-weight: 800;
@@ -261,7 +248,7 @@
   border-top: 1px solid var(--line);
 }
 
-.nearby>div {
+.nearby > div {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1px;
@@ -275,7 +262,7 @@
   background: var(--surface);
 }
 
-.nearby article>span {
+.nearby article > span {
   color: var(--signal);
   font-size: 0.72rem;
   font-weight: 800;
@@ -302,7 +289,7 @@
   border-top: 1px solid var(--line);
 }
 
-.reviews>header {
+.reviews > header {
   display: flex;
   justify-content: space-between;
   gap: 32px;

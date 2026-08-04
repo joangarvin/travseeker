@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { GitCompare } from 'lucide-react';
+import { GitCompare, Search } from 'lucide-react';
 import { MediaImage } from '../../../components/ui';
 import { useCompare } from '../../../contexts';
 import type { Destino } from '../../../types';
@@ -23,6 +23,12 @@ export function DestinationCard({ destino, index = 0 }: DestinationCardProps) {
       </Link>
 
       <div className="destination-card__body">
+        {destino.searchMatch && (
+          <p className="destination-card__match">
+            <Search aria-hidden />
+            {destino.searchMatch.label}
+          </p>
+        )}
         <div className="destination-card__eyebrow">
           <p className="destination-card__location">{plain(destino.ubicacion)}</p>
           <TourismMark value={destino.tipoTurismoPrincipal} compact />

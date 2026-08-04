@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowRight, CalendarDays, Map, Sparkles, Users } from 'lucide-react';
+import { ArrowRight, CalendarDays, Map, SearchX, Sparkles, Users } from 'lucide-react';
 import { api } from '../../services/api';
 import { imageUrl, queryString } from '../../utils';
 import type { Destino, FilterOptions, SearchFilters } from '../../types';
-import { Loader, MediaImage, Notice } from '../../components/ui';
+import { Empty, Loader, MediaImage, Notice } from '../../components/ui';
 import { Shell } from '../../components/layout';
 import { DestinationCard } from '../../features/destinations/components/DestinationCard';
 import { SearchBox } from '../../features/search/SearchBox';
@@ -65,6 +65,12 @@ export default function Home() {
   const activeCount = useMemo(() => Object.values(filters).filter(Boolean).length, [filters]);
   const update = (key: keyof SearchFilters, value: string) =>
     setFilters((current) => ({ ...current, [key]: value }));
+  const submitMainSearch = async () => {
+    await search();
+    document.getElementById('results')?.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+    });
+  };
 
   return (
     <Shell>
@@ -85,7 +91,7 @@ export default function Home() {
           <SearchBox
             value={filters.q || ''}
             onChange={(value) => update('q', value)}
-            onSubmit={() => void search()}
+            onSubmit={() => void submitMainSearch()}
           />
           <HomeFilterPanel
             filters={filters}
@@ -165,9 +171,15 @@ export default function Home() {
       <section id="results" className="results-section">
         <header className="section-head">
           <div>
-            <p className="kicker">{activeCount ? 'Tu búsqueda' : 'La selección completa'}</p>
+            <p className="kicker" role="status" aria-live="polite">
+              {activeCount ? 'Tu búsqueda' : 'La selección completa'}
+            </p>
             <h2>
-              {activeCount ? `${results.length} lugares encajan` : 'Sitios que merecen el viaje'}
+              {activeCount
+                ? results.length === 1
+                  ? '1 lugar encaja'
+                  : `${results.length} lugares encajan`
+                : 'Sitios que merecen el viaje'}
             </h2>
           </div>
           <Link to={`/mapa${queryString(filters)}`}>
@@ -178,11 +190,19 @@ export default function Home() {
         {loading ? (
           <Loader label="Buscando lugares" />
         ) : (
-          <div className="destination-list">
-            {results.map((destino, index) => (
-              <DestinationCard key={destino.id} destino={destino} index={index} />
-            ))}
-          </div>
+          <>
+            {results.length ? (
+              <div className="destination-list">
+                {results.map((destino, index) => (
+                  <DestinationCard key={destino.id} destino={destino} index={index} />
+                ))}
+              </div>
+            ) : (
+              <Empty icon={<SearchX />} title="No encontramos ese viaje">
+                Prueba con otro municipio, una actividad más general o revisa los filtros activos.
+              </Empty>
+            )}
+          </>
         )}
       </section>
 
