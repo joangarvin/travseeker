@@ -432,7 +432,6 @@ export function EssentialRoute({ groups = [], legacyHtml = '' }: EssentialRouteP
                                 groupIcon={activeGroup.icon}
                                 headingId={headingId}
                                 showHeading={false}
-                                expanded={open}
                               />
                             </div>
                           </div>
