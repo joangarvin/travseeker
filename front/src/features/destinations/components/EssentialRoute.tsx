@@ -1,110 +1,233 @@
-import { ExternalLink, MapPinned, Route } from 'lucide-react';
-import type { EssentialGroup } from '../../../types';
+import { useEffect, useState } from 'react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
+import type { EssentialGroup, EssentialItem } from '../../../types';
+import { EssentialIconGlyph } from '../../essentials/essentialIcons';
 import { plain, safeHtml } from '../../../utils';
+import { EssentialDetail } from './EssentialDetail';
+import { essentialPresentation } from '../../essentials/essentialPresentation';
 
 type EssentialRouteProps = {
   groups?: EssentialGroup[];
   legacyHtml?: string;
 };
 
-function groupAnchor(group: EssentialGroup, index: number) {
-  return `imprescindible-${group.id || index + 1}`;
+function groupKey(group: EssentialGroup, index: number) {
+  return group.id || `essential-group-${index}`;
 }
 
-function openStreetMapUrl(latitude: number, longitude: number) {
-  return `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=16/${latitude}/${longitude}`;
+function itemKey(item: EssentialItem, index: number) {
+  return item.id || `essential-item-${index}`;
+}
+
+function useMobileGuide() {
+  const [mobile, setMobile] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 760px)').matches,
+  );
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 760px)');
+    const onChange = (event: MediaQueryListEvent) => setMobile(event.matches);
+    setMobile(query.matches);
+    query.addEventListener('change', onChange);
+    return () => query.removeEventListener('change', onChange);
+  }, []);
+
+  return mobile;
 }
 
 export function EssentialRoute({ groups = [], legacyHtml = '' }: EssentialRouteProps) {
   const populatedGroups = groups.filter((group) => group.items?.length);
-  const totalItems = populatedGroups.reduce((total, group) => total + group.items.length, 0);
+  const initialGroupKey = populatedGroups[0] ? groupKey(populatedGroups[0], 0) : '';
+  const [activeGroupKey, setActiveGroupKey] = useState(initialGroupKey);
+  const [selectedItemKey, setSelectedItemKey] = useState('');
+  const [openMobileItemKey, setOpenMobileItemKey] = useState('');
+  const mobile = useMobileGuide();
+
   if (!populatedGroups.length && !plain(legacyHtml)) return null;
 
+  const resolvedGroupKey = populatedGroups.some(
+    (group, index) => groupKey(group, index) === activeGroupKey,
+  )
+    ? activeGroupKey
+    : initialGroupKey;
+  const activeGroupIndex = Math.max(
+    0,
+    populatedGroups.findIndex((group, index) => groupKey(group, index) === resolvedGroupKey),
+  );
+  const activeGroup = populatedGroups[activeGroupIndex];
+  const initialItemKey = activeGroup?.items[0] ? itemKey(activeGroup.items[0], 0) : '';
+  const resolvedItemKey = activeGroup?.items.some(
+    (item, index) => itemKey(item, index) === selectedItemKey,
+  )
+    ? selectedItemKey
+    : initialItemKey;
+  const selectedItem = activeGroup?.items.find(
+    (item, index) => itemKey(item, index) === resolvedItemKey,
+  );
+  const totalItems = populatedGroups.reduce((total, group) => total + group.items.length, 0);
+
+  const selectGroup = (key: string) => {
+    const nextGroup = populatedGroups.find((group, index) => groupKey(group, index) === key);
+    setActiveGroupKey(key);
+    setSelectedItemKey(nextGroup?.items[0] ? itemKey(nextGroup.items[0], 0) : '');
+    setOpenMobileItemKey('');
+  };
+
   return (
-    <section className="essential-route" aria-labelledby="essential-route-title">
-      <header className="essential-route__intro">
+    <section className="essential-guide" aria-labelledby="essential-guide-title">
+      <header className="essential-guide__intro">
         <div>
-          <p className="kicker">Cuaderno de ruta</p>
-          <h2 id="essential-route-title">Lo que da sentido al viaje</h2>
+          <p className="kicker">Guía de campo</p>
+          <h2 id="essential-guide-title">Lo que merece un lugar en tu viaje</h2>
         </div>
         <p>
-          Una selección ordenada para entender qué merece tiempo, cómo encaja cada parada y qué
-          conviene preparar antes de ir.
+          Una selección concreta para entender qué ver, cuánto tiempo reservar y cómo llegar sin
+          convertir la visita en una lista de tareas.
         </p>
-        {!!totalItems && (
-          <div className="essential-route__count" aria-label={`${totalItems} imprescindibles`}>
-            <Route aria-hidden="true" />
-            <strong>{String(totalItems).padStart(2, '0')}</strong>
-            <span>paradas esenciales</span>
+        <dl className="essential-guide__stats" aria-label="Resumen de la guía">
+          <div>
+            <dt>Temas</dt>
+            <dd>{populatedGroups.length}</dd>
           </div>
-        )}
+          <div>
+            <dt>Selecciones</dt>
+            <dd>{totalItems}</dd>
+          </div>
+        </dl>
       </header>
 
-      {populatedGroups.length > 1 && (
-        <nav className="essential-route__nav" aria-label="Secciones de imprescindibles">
-          <span>Ir a</span>
-          {populatedGroups.map((group, index) => (
-            <a href={`#${groupAnchor(group, index)}`} key={group.id || group.title}>
-              {String(index + 1).padStart(2, '0')} {group.title}
-            </a>
-          ))}
-        </nav>
-      )}
-
       {populatedGroups.length ? (
-        <div className="essential-route__groups">
-          {populatedGroups.map((group, groupIndex) => (
+        <div className="essential-guide__workspace">
+          <label className="essential-guide__mobile-select">
+            <span>Explorar por tema</span>
+            <select value={resolvedGroupKey} onChange={(event) => selectGroup(event.target.value)}>
+              {populatedGroups.map((group, index) => (
+                <option key={groupKey(group, index)} value={groupKey(group, index)}>
+                  {group.title} · {group.items.length}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <nav className="essential-guide__themes" aria-label="Temas imprescindibles">
+            {populatedGroups.map((group, index) => {
+              const key = groupKey(group, index);
+              const active = key === resolvedGroupKey;
+              return (
+                <button
+                  type="button"
+                  className={active ? 'is-active' : ''}
+                  aria-pressed={active}
+                  onClick={() => selectGroup(key)}
+                  key={key}
+                >
+                  <span aria-hidden>
+                    <EssentialIconGlyph name={group.icon} />
+                  </span>
+                  <strong>{group.title}</strong>
+                  <small>{group.items.length}</small>
+                </button>
+              );
+            })}
+          </nav>
+
+          {activeGroup && !mobile && selectedItem && (
+            <div className="essential-guide__master-detail">
+              <section className="essential-guide__list" aria-labelledby="essential-active-theme">
+                <header>
+                  <p>Tema seleccionado</p>
+                  <h3 id="essential-active-theme">{activeGroup.title}</h3>
+                  <span>{activeGroup.items.length} lugares y experiencias</span>
+                </header>
+                <ul>
+                  {activeGroup.items.map((item, index) => {
+                    const key = itemKey(item, index);
+                    const presentation = essentialPresentation(item);
+                    const selected = key === resolvedItemKey;
+                    return (
+                      <li key={key}>
+                        <button
+                          type="button"
+                          className={selected ? 'is-active' : ''}
+                          aria-current={selected ? 'true' : undefined}
+                          aria-controls="essential-selected-detail"
+                          onClick={() => setSelectedItemKey(key)}
+                        >
+                          <span className="essential-guide__item-symbol" aria-hidden>
+                            <EssentialIconGlyph name={item.icon || activeGroup.icon} />
+                          </span>
+                          <span>{presentation.title}</span>
+                          <ChevronRight aria-hidden />
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+
+              <article
+                className="essential-guide__selected-detail"
+                id="essential-selected-detail"
+                aria-labelledby={`essential-detail-${selectedItem.id}`}
+                aria-live="polite"
+              >
+                <EssentialDetail
+                  item={selectedItem}
+                  groupIcon={activeGroup.icon}
+                  headingId={`essential-detail-${selectedItem.id}`}
+                />
+              </article>
+            </div>
+          )}
+
+          {activeGroup && mobile && (
             <section
-              className="essential-route__group"
-              id={groupAnchor(group, groupIndex)}
-              key={group.id || group.title}
-              aria-labelledby={`${groupAnchor(group, groupIndex)}-title`}
+              className="essential-guide__mobile-list"
+              aria-labelledby="essential-mobile-theme"
             >
               <header>
-                <span>{String(groupIndex + 1).padStart(2, '0')}</span>
-                <div>
-                  <p>Tramo {groupIndex + 1}</p>
-                  <h3 id={`${groupAnchor(group, groupIndex)}-title`}>{group.title}</h3>
-                </div>
+                <p>Tema seleccionado</p>
+                <h3 id="essential-mobile-theme">{activeGroup.title}</h3>
               </header>
-              <ol>
-                {group.items.map((item, itemIndex) => {
-                  const previousItemCount = populatedGroups
-                    .slice(0, groupIndex)
-                    .reduce((total, previousGroup) => total + previousGroup.items.length, 0);
-                  const number = previousItemCount + itemIndex + 1;
+              <div>
+                {activeGroup.items.map((item, index) => {
+                  const key = itemKey(item, index);
+                  const presentation = essentialPresentation(item);
+                  const open = openMobileItemKey === key;
+                  const panelId = `essential-mobile-panel-${key}`;
                   return (
-                    <li key={item.id || `${group.id}-${number}`}>
-                      <span className="essential-route__number" aria-hidden="true">
-                        {String(number).padStart(2, '0')}
-                      </span>
-                      <div>
-                        <h4>{item.title}</h4>
-                        {item.description && <p>{item.description}</p>}
-                      </div>
-                      {item.place && (
-                        <a
-                          className="essential-route__map-link"
-                          href={openStreetMapUrl(item.place.latitud, item.place.longitud)}
-                          target="_blank"
-                          rel="noreferrer"
-                          aria-label={`Abrir ${item.place.nombre} en OpenStreetMap`}
-                        >
-                          <MapPinned aria-hidden="true" />
-                          <span>Abrir mapa</span>
-                          <ExternalLink aria-hidden="true" />
-                        </a>
+                    <article className={open ? 'is-open' : ''} key={key}>
+                      <button
+                        type="button"
+                        aria-expanded={open}
+                        aria-controls={panelId}
+                        onClick={() => setOpenMobileItemKey(open ? '' : key)}
+                      >
+                        <span className="essential-guide__item-symbol" aria-hidden>
+                          <EssentialIconGlyph name={item.icon || activeGroup.icon} />
+                        </span>
+                        <span>{presentation.title}</span>
+                        <ChevronDown aria-hidden />
+                      </button>
+                      {open && (
+                        <div id={panelId}>
+                          <EssentialDetail
+                            item={item}
+                            groupIcon={activeGroup.icon}
+                            headingId={`${panelId}-title`}
+                          />
+                        </div>
                       )}
-                    </li>
+                    </article>
                   );
                 })}
-              </ol>
+              </div>
             </section>
-          ))}
+          )}
         </div>
       ) : (
         <div
-          className="essential-route__legacy prose"
+          className="essential-guide__legacy prose"
           dangerouslySetInnerHTML={{ __html: safeHtml(legacyHtml) }}
         />
       )}

@@ -1,6 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const {
+  inferEssentialIcon,
   normalizeEssentialGroups,
   parseLegacyEssentials,
   serializeEssentialGroups,
@@ -33,8 +34,52 @@ test("normalizes, validates and safely serializes editor data", () => {
     },
   ]);
   assert.equal(groups[0].title, "Patrimonio");
+  assert.equal(groups[0].icon, "Landmark");
   assert.match(serializeEssentialGroups(groups), /Casa &lt;Batlló&gt;/);
   assert.match(serializeEssentialGroups(groups), /Reserva &amp; acceso/);
+});
+
+test("normalizes practical details, image and reservation state", () => {
+  const [group] = normalizeEssentialGroups([
+    {
+      title: "Costa",
+      icon: "Waves",
+      items: [
+        {
+          title: "Visitar el faro",
+          icon: "Landmark",
+          imageUrl: "https://res.cloudinary.com/demo/image/upload/faro.jpg",
+          imageAlt: "Faro sobre el acantilado",
+          duration: "45 min",
+          bestTime: "Al final de la tarde",
+          reservationRequired: false,
+          officialUrl: "https://example.com/faro",
+        },
+      ],
+    },
+  ]);
+  assert.equal(group.icon, "Waves");
+  assert.equal(group.items[0].duration, "45 min");
+  assert.equal(group.items[0].reservationRequired, false);
+});
+
+test("requires alternative text for essential images", () => {
+  assert.throws(
+    () =>
+      normalizeEssentialGroups([
+        {
+          title: "Costa",
+          items: [{ title: "Faro", imageUrl: "https://example.com/faro.jpg" }],
+        },
+      ]),
+    /Describe la imagen/,
+  );
+});
+
+test("infers useful icons without changing the title", () => {
+  assert.equal(inferEssentialIcon("Historia y patrimonio"), "Landmark");
+  assert.equal(inferEssentialIcon("Playas y costa"), "Waves");
+  assert.equal(inferEssentialIcon("Sabores locales"), "Utensils");
 });
 
 test("rejects empty groups with an actionable message", () => {

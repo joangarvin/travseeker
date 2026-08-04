@@ -36,6 +36,13 @@ export type EssentialItem = {
   id: string;
   title: string;
   description?: string | null;
+  icon?: string | null;
+  imageUrl?: string | null;
+  imageAlt?: string | null;
+  duration?: string | null;
+  bestTime?: string | null;
+  reservationRequired?: boolean | null;
+  officialUrl?: string | null;
   placeId?: string | null;
   place?: Place | null;
   sortOrder: number;
@@ -44,6 +51,7 @@ export type EssentialItem = {
 export type EssentialGroup = {
   id: string;
   title: string;
+  icon: string;
   sortOrder: number;
   items: EssentialItem[];
 };

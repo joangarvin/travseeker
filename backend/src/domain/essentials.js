@@ -7,6 +7,72 @@ const ENTITY_MAP = {
   quot: '"',
 };
 
+const ESSENTIAL_ICONS = new Set([
+  "Compass",
+  "Landmark",
+  "Trees",
+  "Waves",
+  "Footprints",
+  "Utensils",
+  "Mountain",
+  "Palette",
+  "Building2",
+  "Camera",
+  "Castle",
+  "MapPin",
+  "Binoculars",
+  "Bike",
+  "Sailboat",
+  "Music",
+  "Wine",
+  "Sun",
+  "TreePine",
+]);
+
+function normalizedKey(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("es");
+}
+
+function inferEssentialIcon(value) {
+  const title = normalizedKey(value);
+  if (/(cultur|histor|patrimon)/.test(title)) return "Landmark";
+  if (/(natur|parque|bosque)/.test(title)) return "Trees";
+  if (/(mar|playa|costa)/.test(title)) return "Waves";
+  if (/(sender|ruta|camino)/.test(title)) return "Footprints";
+  if (/(gastronom|comer|sabor)/.test(title)) return "Utensils";
+  if (/(montan|mirador|cumbre)/.test(title)) return "Mountain";
+  if (/(arte|museo)/.test(title)) return "Palette";
+  return "Compass";
+}
+
+function normalizeIcon(value, fallback = null) {
+  const icon = cleanPlainText(value, 40) || fallback;
+  if (!icon) return null;
+  if (!ESSENTIAL_ICONS.has(icon)) {
+    const error = new Error("El icono del imprescindible no es válido");
+    error.status = 400;
+    throw error;
+  }
+  return icon;
+}
+
+function normalizeUrl(value, label, maximum = 500) {
+  const normalized = cleanPlainText(value, maximum);
+  if (!normalized) return null;
+  try {
+    const url = new URL(normalized);
+    if (!["http:", "https:"].includes(url.protocol)) throw new Error();
+  } catch {
+    const error = new Error(`${label} debe empezar por http:// o https://`);
+    error.status = 400;
+    throw error;
+  }
+  return normalized;
+}
+
 function decodeEntities(value) {
   return String(value || "")
     .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
@@ -133,6 +199,7 @@ function normalizeEssentialGroups(value) {
 
     return {
       title,
+      icon: normalizeIcon(group?.icon, inferEssentialIcon(title)),
       sortOrder: groupIndex,
       items: items.map((item, itemIndex) => {
         const itemTitle = cleanPlainText(item?.title, 320);
@@ -143,9 +210,38 @@ function normalizeEssentialGroups(value) {
           error.status = 400;
           throw error;
         }
+        const imageUrl = normalizeUrl(item?.imageUrl, "La imagen", 800);
+        const imageAlt = cleanPlainText(item?.imageAlt, 180) || null;
+        if (imageUrl && !imageAlt) {
+          const error = new Error(
+            `Describe la imagen del elemento ${itemIndex + 1} de “${title}”`,
+          );
+          error.status = 400;
+          throw error;
+        }
+        let reservationRequired = null;
+        if (
+          item?.reservationRequired !== null &&
+          item?.reservationRequired !== undefined &&
+          item?.reservationRequired !== ""
+        ) {
+          if (typeof item.reservationRequired !== "boolean") {
+            const error = new Error("El estado de reserva no es válido");
+            error.status = 400;
+            throw error;
+          }
+          reservationRequired = item.reservationRequired;
+        }
         return {
           title: itemTitle,
           description: cleanPlainText(item?.description, 700) || null,
+          icon: normalizeIcon(item?.icon),
+          imageUrl,
+          imageAlt: imageUrl ? imageAlt : null,
+          duration: cleanPlainText(item?.duration, 80) || null,
+          bestTime: cleanPlainText(item?.bestTime, 120) || null,
+          reservationRequired,
+          officialUrl: normalizeUrl(item?.officialUrl, "La web oficial"),
           placeId: cleanPlainText(item?.placeId, 80) || null,
           sortOrder: itemIndex,
         };
@@ -180,6 +276,8 @@ function serializeEssentialGroups(groups) {
 }
 
 module.exports = {
+  ESSENTIAL_ICONS,
+  inferEssentialIcon,
   normalizeEssentialGroups,
   parseLegacyEssentials,
   plainHtml,

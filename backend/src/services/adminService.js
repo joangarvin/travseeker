@@ -10,6 +10,7 @@ const {
   plainHtml,
   serializeEssentialGroups,
 } = require("../domain/essentials");
+const uploadService = require("./uploadService");
 
 function clean(value, max) {
   if (typeof value !== "string") return null;
@@ -348,6 +349,10 @@ async function updateDestino(id, payload) {
   const essentialGroups = normalizeEssentialGroups(payload.essentialGroups);
   const data = normalizePayload(payload, essentialGroups);
   validateDestino(data, essentialGroups);
+  const previousImages = await prisma.essentialItem.findMany({
+    where: { group: { destinoId: id }, imageUrl: { not: null } },
+    select: { imageUrl: true },
+  });
   const updated = await prisma.$transaction(async (transaction) => {
     await transaction.destino.update({ where: { id }, data });
     await syncDestinationActivities(
@@ -366,11 +371,24 @@ async function updateDestino(id, payload) {
       include: destinationRelations,
     });
   });
+  const retainedImages = new Set(
+    (essentialGroups || []).flatMap((group) =>
+      group.items.map((item) => item.imageUrl).filter(Boolean),
+    ),
+  );
+  await uploadService.deleteEssentialImages(
+    previousImages.map((item) => item.imageUrl).filter((url) => !retainedImages.has(url)),
+  );
   return mapDestinoMunicipios(updated);
 }
 
 async function deleteDestino(id) {
+  const images = await prisma.essentialItem.findMany({
+    where: { group: { destinoId: id }, imageUrl: { not: null } },
+    select: { imageUrl: true },
+  });
   await prisma.destino.delete({ where: { id } });
+  await uploadService.deleteEssentialImages(images.map((item) => item.imageUrl));
   return { success: true };
 }
 

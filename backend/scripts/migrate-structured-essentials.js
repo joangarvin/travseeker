@@ -1,5 +1,8 @@
 const { prisma, pool } = require("../src/config/database");
-const { parseLegacyEssentials } = require("../src/domain/essentials");
+const {
+  inferEssentialIcon,
+  parseLegacyEssentials,
+} = require("../src/domain/essentials");
 
 const dryRun = process.argv.includes("--dry-run");
 const repair = process.argv.includes("--repair");
@@ -57,6 +60,7 @@ async function run() {
           data: {
             destinoId: destination.id,
             title: group.title,
+            icon: inferEssentialIcon(group.title),
             sortOrder: group.sortOrder,
             items: { create: group.items },
           },

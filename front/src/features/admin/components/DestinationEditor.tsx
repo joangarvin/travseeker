@@ -13,7 +13,7 @@ import { AdminModal } from '../../../components/admin/AdminModal';
 import { Button, Notice } from '../../../components/ui';
 import { useActivities, useTourismTypes } from '../../../contexts';
 import { api } from '../../../services/api';
-import type { Activity, Destino, Municipio } from '../../../types';
+import type { Activity, Destino, Municipio, Place } from '../../../types';
 import type { TourismType } from '../../../types';
 import { parseTagValues, plain } from '../../../utils';
 import { isTourismValue, serializeTourismValues, tourismValues } from '../../tourism/tourism';
@@ -29,6 +29,7 @@ import {
 import { ActivityEditorModal } from './ActivityEditorModal';
 import { TourismTypeEditorModal } from './TourismTypeEditorModal';
 import { DestinationEssentialsSection } from './DestinationEssentialsSection';
+import { PlaceEditorModal } from './PlaceEditorModal';
 
 type EditorSection =
   'identity' | 'content' | 'essentials' | 'season' | 'image' | 'location' | 'municipalities';
@@ -93,6 +94,9 @@ export function DestinationEditor({
   const [isActivitySaving, setIsActivitySaving] = useState(false);
   const [tourismTypeDraft, setTourismTypeDraft] = useState<Partial<TourismType> | null>(null);
   const [isTourismTypeSaving, setIsTourismTypeSaving] = useState(false);
+  const [placeDraft, setPlaceDraft] = useState<Partial<Place> | null>(null);
+  const [placeTarget, setPlaceTarget] = useState<{ groupId: string; itemId: string } | null>(null);
+  const [isPlaceSaving, setIsPlaceSaving] = useState(false);
   const associatedMunicipalities = form.municipios || [];
 
   const municipalityCandidates = useMemo(
@@ -261,6 +265,79 @@ export function DestinationEditor({
     }
   };
 
+  const requestEssentialPlace = ({
+    groupId,
+    itemId,
+    place,
+  }: {
+    groupId: string;
+    itemId: string;
+    place?: Place;
+  }) => {
+    if (!form.id) {
+      setMessage({ tone: 'error', text: 'Guarda primero el destino para situar el punto.' });
+      return;
+    }
+    setPlaceTarget({ groupId, itemId });
+    setPlaceDraft(
+      place || {
+        nombre: '',
+        categoria: '',
+        descripcion: '',
+        website: '',
+        sortOrder: form.places?.length || 0,
+        isActive: true,
+      },
+    );
+  };
+
+  const saveEssentialPlace = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!form.id || !placeDraft || !placeTarget) return;
+    setIsPlaceSaving(true);
+    setMessage(null);
+    try {
+      const saved = await api<Place>(
+        placeDraft.id ? `/admin/places/${placeDraft.id}` : `/admin/destinos/${form.id}/places`,
+        {
+          method: placeDraft.id ? 'PUT' : 'POST',
+          body: JSON.stringify(placeDraft),
+        },
+        token,
+      );
+      setForm((current) => {
+        const currentPlaces = current.places || [];
+        const places = currentPlaces.some((place) => place.id === saved.id)
+          ? currentPlaces.map((place) => (place.id === saved.id ? saved : place))
+          : [...currentPlaces, saved];
+        const essentialGroups = (current.essentialGroups || []).map((group) => ({
+          ...group,
+          items: group.items.map((item) => {
+            if (item.placeId === saved.id) return { ...item, place: saved };
+            if (group.id === placeTarget.groupId && item.id === placeTarget.itemId) {
+              return { ...item, placeId: saved.id, place: saved };
+            }
+            return item;
+          }),
+        }));
+        return { ...current, places, essentialGroups };
+      });
+      setPlaceDraft(null);
+      setPlaceTarget(null);
+      setMessage({
+        tone: 'success',
+        text: `${saved.nombre} se ha guardado y vinculado al imprescindible.`,
+      });
+    } catch (cause) {
+      setMessage({
+        tone: 'error',
+        text: cause instanceof Error ? cause.message : 'No se pudo guardar la ubicación',
+      });
+    } finally {
+      setIsPlaceSaving(false);
+    }
+  };
+
   return (
     <>
       <AdminModal
@@ -316,7 +393,10 @@ export function DestinationEditor({
               <DestinationEssentialsSection
                 groups={form.essentialGroups || []}
                 places={form.places || []}
+                destinationId={form.id}
+                token={token}
                 update={updateField}
+                onRequestPlace={requestEssentialPlace}
               />
             )}
             {activeSection === 'season' && (
@@ -373,6 +453,18 @@ export function DestinationEditor({
           isSaving={isTourismTypeSaving}
           onSave={createTourismType}
           onClose={() => setTourismTypeDraft(null)}
+        />
+      )}
+      {placeDraft && (
+        <PlaceEditorModal
+          form={placeDraft}
+          isSaving={isPlaceSaving}
+          onChange={setPlaceDraft}
+          onSubmit={saveEssentialPlace}
+          onClose={() => {
+            setPlaceDraft(null);
+            setPlaceTarget(null);
+          }}
         />
       )}
     </>
