@@ -25,12 +25,13 @@ model Destino {
   longitud              Float?
   updatedAt             DateTime @updatedAt
 
-  municipioLinks  DestinoMunicipio[]
-  favoritos       Favorito[]
-  reviews         Review[]
-  collectionItems CollectionItem[]
-  places          Place[]
-  activityLinks   DestinoActivity[]
+  municipioLinks   DestinoMunicipio[]
+  favoritos        Favorito[]
+  reviews          Review[]
+  collectionItems  CollectionItem[]
+  places           Place[]
+  activityLinks    DestinoActivity[]
+  tourismTypeLinks DestinoTourismType[]
 }
 
 model Activity {
@@ -57,6 +58,35 @@ model DestinoActivity {
 
   @@id([destinoId, activityId])
   @@index([activityId])
+}
+
+model TourismType {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String   @default("")
+  icon        String   @default("Compass")
+  colorKey    String   @default("otro")
+  colorValue  String   @default("#5f6470")
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  destinationLinks DestinoTourismType[]
+
+  @@index([isActive, sortOrder, name])
+}
+
+model DestinoTourismType {
+  destinoId     String
+  tourismTypeId String
+
+  destino     Destino     @relation(fields: [destinoId], references: [id], onDelete: Cascade)
+  tourismType TourismType @relation(fields: [tourismTypeId], references: [id], onDelete: Cascade)
+
+  @@id([destinoId, tourismTypeId])
+  @@index([tourismTypeId])
 }
 
 model Place {

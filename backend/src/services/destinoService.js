@@ -25,13 +25,32 @@ function mapActivities(destino) {
   };
 }
 
+function mapTourismTypes(destino) {
+  if (!destino) return destino;
+  const tourismTypes = (destino.tourismTypeLinks || [])
+    .map((link) => link.tourismType)
+    .filter(Boolean)
+    .sort(
+      (first, second) =>
+        first.sortOrder - second.sortOrder ||
+        first.name.localeCompare(second.name, "es"),
+    );
+  const { tourismTypeLinks, ...rest } = destino;
+  return {
+    ...rest,
+    tipoTurismoPrincipal: serializeTags(tourismTypes.map((type) => type.name)),
+    tourismTypes,
+    tourismTypeIds: tourismTypes.map((type) => type.id),
+  };
+}
+
 async function searchDestinos(query) {
   const month = normalizeMonth(query.month);
   const destinos = await prisma.destino.findMany({
     where: buildWhereClause(query),
     select: LIST_SELECT,
   });
-  return rankForSeason(destinos, {
+  return rankForSeason(destinos.map(mapTourismTypes), {
     month,
     avoidCrowds: query.avoidCrowds === "true",
   });
@@ -52,6 +71,10 @@ async function getDestinoById(id) {
         where: { activity: { isActive: true } },
         include: { activity: true },
       },
+      tourismTypeLinks: {
+        where: { tourismType: { isActive: true } },
+        include: { tourismType: true },
+      },
     },
   });
   if (!destino) return null;
@@ -60,7 +83,7 @@ async function getDestinoById(id) {
     .filter(Boolean)
     .sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
   const { municipioLinks, ...rest } = destino;
-  return { ...mapActivities(rest), municipios };
+  return { ...mapTourismTypes(mapActivities(rest)), municipios };
 }
 
 async function getDestacados(limit = 6) {
@@ -76,7 +99,9 @@ async function getDestacados(limit = 6) {
   });
 
   const order = new Map(ids.map((id, i) => [id, i]));
-  return destinos.sort((a, b) => order.get(a.id) - order.get(b.id));
+  return destinos
+    .map(mapTourismTypes)
+    .sort((a, b) => order.get(a.id) - order.get(b.id));
 }
 
 async function getRelacionados(id) {
@@ -93,7 +118,7 @@ async function getRelacionados(id) {
     }),
   );
 
-  return prisma.destino.findMany({
+  const related = await prisma.destino.findMany({
     where: {
       id: { not: id },
       OR: [
@@ -105,6 +130,7 @@ async function getRelacionados(id) {
     take: 3,
     select: LIST_SELECT,
   });
+  return related.map(mapTourismTypes);
 }
 
 async function getMapaDestinos(query) {
@@ -117,7 +143,7 @@ async function getMapaDestinos(query) {
     },
     select: MAP_SELECT,
   });
-  return rankForSeason(destinos, {
+  return rankForSeason(destinos.map(mapTourismTypes), {
     month,
     avoidCrowds: query.avoidCrowds === "true",
   });
@@ -142,7 +168,7 @@ async function compareDestinos(ids) {
 
   const order = new Map(ids.map((id, i) => [id, i]));
   return destinos
-    .map(mapActivities)
+    .map((destination) => mapTourismTypes(mapActivities(destination)))
     .sort((a, b) => order.get(a.id) - order.get(b.id));
 }
 

@@ -40,7 +40,7 @@ import { imageUrl, plain, queryString } from '../../utils';
 import type { Destino, FilterOptions, SearchFilters } from '../../types';
 import { Empty, Loader, MediaImage } from '../../components/ui';
 import { Shell } from '../../components/layout';
-import { useTheme } from '../../contexts';
+import { useTheme, useTourismTypes } from '../../contexts';
 
 export default function MapPage() {
   const { theme } = useTheme();
@@ -391,6 +391,7 @@ function MapPoints({
   onSelect: (id: string) => void;
 }) {
   const map = useMap();
+  const { tourismTypes: tourismCatalog } = useTourismTypes();
   const [zoom, setZoom] = useState(map.getZoom());
   useMapEvents({ zoomend: () => setZoom(map.getZoom()) });
   const groups = useMemo(() => {
@@ -442,7 +443,7 @@ function MapPoints({
             />
           );
         const destination = group.items[0];
-        const type = tourismDefinition(destination.tipoTurismoPrincipal);
+        const type = tourismDefinition(destination.tipoTurismoPrincipal, tourismCatalog);
         const active = selectedId === destination.id;
         return (
           <CircleMarker
@@ -450,7 +451,9 @@ function MapPoints({
             center={[destination.latitud!, destination.longitud!]}
             radius={active ? 13 : 9}
             pathOptions={{
-              className: `map-marker tourism--${type.key} ${active ? 'is-selected' : ''}`,
+              className: `map-marker ${active ? 'is-selected' : ''}`,
+              color: type.colorValue,
+              fillColor: type.colorValue,
               weight: active ? 4 : 3,
               fillOpacity: 1,
             }}

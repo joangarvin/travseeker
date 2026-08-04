@@ -44,6 +44,21 @@ export type Activity = {
   updatedAt?: string;
 };
 
+export type TourismType = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  icon: string;
+  colorKey: string;
+  colorValue: string;
+  sortOrder: number;
+  isActive: boolean;
+  destinationsCount?: number;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
 export type Destino = {
   id: string;
   nombre: string;
@@ -67,6 +82,8 @@ export type Destino = {
   places?: Place[];
   activities?: Activity[];
   activityIds?: string[];
+  tourismTypes?: TourismType[];
+  tourismTypeIds?: string[];
 };
 
 export type Review = {

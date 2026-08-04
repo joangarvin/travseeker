@@ -2,6 +2,7 @@ const { Router } = require("express");
 const adminController = require("../controllers/adminController");
 const reviewController = require("../controllers/reviewController");
 const activityController = require("../controllers/activityController");
+const tourismTypeController = require("../controllers/tourismTypeController");
 const { requireAuth, requireAdmin } = require("../middleware/auth");
 
 const router = Router();
@@ -18,6 +19,11 @@ router.get("/activities", activityController.listAdmin);
 router.post("/activities", activityController.create);
 router.put("/activities/:activityId", activityController.update);
 router.delete("/activities/:activityId", activityController.remove);
+
+router.get("/tourism-types", tourismTypeController.listAdmin);
+router.post("/tourism-types", tourismTypeController.create);
+router.put("/tourism-types/:tourismTypeId", tourismTypeController.update);
+router.delete("/tourism-types/:tourismTypeId", tourismTypeController.remove);
 
 router.get("/municipios", adminController.listMunicipios);
 router.post("/municipios", adminController.createMunicipio);

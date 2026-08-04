@@ -359,6 +359,12 @@
     border-right: 0;
     border-bottom: 1px solid var(--line);
   }
+  .admin-nav__label-long {
+    display: none;
+  }
+  .admin-nav__label-short {
+    display: inline;
+  }
   .admin-nav {
     grid-auto-flow: row;
     grid-auto-columns: unset;
@@ -386,6 +392,16 @@
   }
   .modal--editor > .modal__heading {
     padding: 20px 64px 16px 16px;
+  }
+  .tourism-color-picker__custom {
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+  .tourism-color-picker__well {
+    width: 56px;
+  }
+  .tourism-color-picker__preview {
+    grid-column: 1 / -1;
+    justify-content: center;
   }
   .admin-editor {
     grid-template-columns: 1fr;
@@ -464,6 +480,14 @@
 }
 
 @media (max-width: 390px) {
+  .modal:not(.modal--editor) > .modal__heading h2 {
+    font-size: 1.45rem;
+    line-height: 1.12;
+  }
+  .tourism-color-picker__presets {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
   .activity-icon-picker > div {
     grid-template-columns: 1fr;
   }

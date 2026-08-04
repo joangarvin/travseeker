@@ -9,6 +9,10 @@ const LIST_SELECT = {
   mesesJulioAgosto: true,
   mesesMayJunSeptOct: true,
   mesesNovAbril: true,
+  tourismTypeLinks: {
+    where: { tourismType: { isActive: true } },
+    include: { tourismType: true },
+  },
 };
 
 const MAP_SELECT = {
@@ -24,6 +28,10 @@ const MAP_SELECT = {
   mesesJulioAgosto: true,
   mesesMayJunSeptOct: true,
   mesesNovAbril: true,
+  tourismTypeLinks: {
+    where: { tourismType: { isActive: true } },
+    include: { tourismType: true },
+  },
 };
 
 const COMPARE_SELECT = {
@@ -41,6 +49,10 @@ const COMPARE_SELECT = {
   activityLinks: {
     where: { activity: { isActive: true } },
     include: { activity: true },
+  },
+  tourismTypeLinks: {
+    where: { tourismType: { isActive: true } },
+    include: { tourismType: true },
   },
 };
 

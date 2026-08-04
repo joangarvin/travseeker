@@ -11,6 +11,7 @@ const adminRoutes = require("./routes/adminRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 const alertRoutes = require("./routes/alertRoutes");
 const activityRoutes = require("./routes/activityRoutes");
+const tourismTypeRoutes = require("./routes/tourismTypeRoutes");
 const destinoController = require("./controllers/destinoController");
 const { errorHandler } = require("./middleware/errorHandler");
 
@@ -38,6 +39,7 @@ app.use("/api/recomendaciones", recommendationRoutes);
 app.use("/api/destinos/:destinoId/reviews", reviewRoutes);
 app.use("/api/destinos", destinoRoutes);
 app.use("/api/activities", activityRoutes);
+app.use("/api/tourism-types", tourismTypeRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/alertas", alertRoutes);

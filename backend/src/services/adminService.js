@@ -101,16 +101,65 @@ function mapDestinoMunicipios(destino) {
     .map((link) => link.activity)
     .filter(Boolean)
     .sort((a, b) => a.name.localeCompare(b.name, "es"));
-  const { municipioLinks, activityLinks, ...rest } = destino;
+  const tourismTypes = (destino.tourismTypeLinks || [])
+    .map((link) => link.tourismType)
+    .filter(Boolean)
+    .sort(
+      (a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name, "es"),
+    );
+  const { municipioLinks, activityLinks, tourismTypeLinks, ...rest } = destino;
   return {
     ...rest,
+    tipoTurismoPrincipal: tourismTypes.length
+      ? serializeTags(tourismTypes.map((type) => type.name))
+      : rest.tipoTurismoPrincipal,
     tipoTurismoSecundario: activities.length
       ? serializeTags(activities.map((activity) => activity.name))
       : rest.tipoTurismoSecundario,
     municipios,
     activities,
     activityIds: activities.map((activity) => activity.id),
+    tourismTypes,
+    tourismTypeIds: tourismTypes.map((type) => type.id),
   };
+}
+
+async function syncDestinationTourismTypes(
+  transaction,
+  destinoId,
+  serializedNames,
+) {
+  const names = parseTags(serializedNames);
+  const types = names.length
+    ? await transaction.tourismType.findMany({
+        where: {
+          OR: names.map((name) => ({
+            name: { equals: name, mode: "insensitive" },
+          })),
+        },
+      })
+    : [];
+  const missing = names.filter(
+    (name) =>
+      !types.some(
+        (type) =>
+          type.name.toLocaleLowerCase("es") === name.toLocaleLowerCase("es"),
+      ),
+  );
+  if (missing.length) {
+    const error = new Error(
+      `Crea primero estos tipos de viaje en el catálogo: ${missing.join(", ")}`,
+    );
+    error.status = 400;
+    throw error;
+  }
+  await transaction.destinoTourismType.deleteMany({ where: { destinoId } });
+  if (types.length) {
+    await transaction.destinoTourismType.createMany({
+      data: types.map((type) => ({ destinoId, tourismTypeId: type.id })),
+      skipDuplicates: true,
+    });
+  }
 }
 
 async function syncDestinationActivities(
@@ -160,6 +209,7 @@ async function syncDestinationActivities(
 const destinationRelations = {
   municipioLinks: { include: { municipio: true } },
   activityLinks: { include: { activity: true } },
+  tourismTypeLinks: { include: { tourismType: true } },
 };
 
 async function listDestinos() {
@@ -182,6 +232,7 @@ async function listDestinos() {
         },
       },
       activityLinks: { include: { activity: true } },
+      tourismTypeLinks: { include: { tourismType: true } },
     },
   });
   return rows.map(mapDestinoMunicipios);
@@ -210,6 +261,11 @@ async function createDestino(payload) {
       destination.id,
       data.tipoTurismoSecundario,
     );
+    await syncDestinationTourismTypes(
+      transaction,
+      destination.id,
+      data.tipoTurismoPrincipal,
+    );
     return transaction.destino.findUnique({
       where: { id: destination.id },
       include: destinationRelations,
@@ -227,6 +283,11 @@ async function updateDestino(id, payload) {
       transaction,
       id,
       data.tipoTurismoSecundario,
+    );
+    await syncDestinationTourismTypes(
+      transaction,
+      id,
+      data.tipoTurismoPrincipal,
     );
     return transaction.destino.findUnique({
       where: { id },
@@ -405,4 +466,5 @@ module.exports = {
   updatePlace,
   deletePlace,
   syncDestinationActivities,
+  syncDestinationTourismTypes,
 };

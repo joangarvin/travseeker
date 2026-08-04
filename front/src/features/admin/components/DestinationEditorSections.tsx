@@ -17,6 +17,7 @@ type DestinationSectionProps = {
 
 type DestinationIdentitySectionProps = DestinationSectionProps & {
   onRequestCreateActivity?: (name: string) => void;
+  onRequestCreateTourismType?: () => void;
 };
 
 const BUDGET_OPTIONS = ['Bajo', 'Medio-Bajo', 'Medio', 'Medio-Alto', 'Alto'];
@@ -26,6 +27,7 @@ export function DestinationIdentitySection({
   form,
   update,
   onRequestCreateActivity,
+  onRequestCreateTourismType,
 }: DestinationIdentitySectionProps) {
   return (
     <section className="editor-section" aria-labelledby="editor-identity">
@@ -60,6 +62,7 @@ export function DestinationIdentitySection({
           value={form.tipoTurismoPrincipal}
           hint="Selecciona una o varias formas de viaje que definan el destino."
           required
+          onRequestCreate={onRequestCreateTourismType}
           onChange={(values) => update('tipoTurismoPrincipal', serializeTourismValues(values))}
         />
         <ActivityMultiSelect

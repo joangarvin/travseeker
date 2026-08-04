@@ -1,5 +1,6 @@
 import { Check } from 'lucide-react';
-import { tourismTypes, tourismValues } from './tourism';
+import { useTourismTypes } from '../../contexts';
+import { tourismColorStyle, tourismDefinition, tourismTypes, tourismValues } from './tourism';
 
 type TourismMultiSelectProps = {
   id: string;
@@ -10,6 +11,7 @@ type TourismMultiSelectProps = {
   required?: boolean;
   compact?: boolean;
   onChange: (values: string[]) => void;
+  onRequestCreate?: () => void;
 };
 
 export function TourismMultiSelect({
@@ -21,9 +23,14 @@ export function TourismMultiSelect({
   required = false,
   compact = false,
   onChange,
+  onRequestCreate,
 }: TourismMultiSelectProps) {
+  const { tourismTypes: catalog } = useTourismTypes();
   const selectedValues = tourismValues(value);
   const hintId = hint ? `${id}-hint` : undefined;
+  const options = catalog.length
+    ? catalog.filter((type) => type.isActive).map((type) => tourismDefinition(type.name, catalog))
+    : tourismTypes;
 
   const toggle = (option: string) => {
     const nextValues = selectedValues.includes(option)
@@ -43,12 +50,13 @@ export function TourismMultiSelect({
       </legend>
       {hint && <p id={hintId}>{hint}</p>}
       <div className="tourism-multi-select__options">
-        {tourismTypes.map((tourismType) => {
+        {options.map((tourismType) => {
           const isSelected = selectedValues.includes(tourismType.label);
           const isExcluded = !isSelected && excludedValues.includes(tourismType.label);
           return (
             <label
               className={`tourism-multi-select__option tourism--${tourismType.key} ${isSelected ? 'is-selected' : ''}`}
+              style={tourismColorStyle(tourismType.colorValue)}
               key={tourismType.key}
             >
               <input
@@ -68,6 +76,11 @@ export function TourismMultiSelect({
             </label>
           );
         })}
+        {onRequestCreate && (
+          <button className="tourism-multi-select__create" type="button" onClick={onRequestCreate}>
+            Crear tipo de viaje
+          </button>
+        )}
       </div>
     </fieldset>
   );

@@ -46,6 +46,29 @@ const ACTIVITY_ICONS = [
   "ShipWheel",
   "Route",
 ];
+const TOURISM_ICONS = [
+  "Compass",
+  "Landmark",
+  "Leaf",
+  "Waves",
+  "Wheat",
+  "Mountain",
+  "Castle",
+  "TreePine",
+  "Building2",
+  "Umbrella",
+  "ShipWheel",
+  "Route",
+];
+const TOURISM_COLORS = [
+  "cultural",
+  "naturaleza",
+  "playa",
+  "rural",
+  "montana",
+  "patrimonial",
+  "otro",
+];
 
 const SEASONS = [
   {
@@ -168,6 +191,8 @@ module.exports = {
   TOURISM_TYPES,
   ACTIVITY_TYPES,
   ACTIVITY_ICONS,
+  TOURISM_ICONS,
+  TOURISM_COLORS,
   SEASONS,
   parseTags,
   serializeTags,

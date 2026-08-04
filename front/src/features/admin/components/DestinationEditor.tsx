@@ -10,9 +10,10 @@ import {
 } from 'lucide-react';
 import { AdminModal } from '../../../components/admin/AdminModal';
 import { Button, Notice } from '../../../components/ui';
-import { useActivities } from '../../../contexts';
+import { useActivities, useTourismTypes } from '../../../contexts';
 import { api } from '../../../services/api';
 import type { Activity, Destino, Municipio } from '../../../types';
+import type { TourismType } from '../../../types';
 import { parseTagValues, plain } from '../../../utils';
 import { isTourismValue, serializeTourismValues, tourismValues } from '../../tourism/tourism';
 import { activityValues, serializeActivityValues } from '../../activities/activities';
@@ -25,6 +26,7 @@ import {
   DestinationSeasonSection,
 } from './DestinationEditorSections';
 import { ActivityEditorModal } from './ActivityEditorModal';
+import { TourismTypeEditorModal } from './TourismTypeEditorModal';
 
 type EditorSection = 'identity' | 'content' | 'season' | 'image' | 'location' | 'municipalities';
 
@@ -39,6 +41,7 @@ type DestinationEditorProps = {
   token: string;
   onChange: (destination: Destino) => void;
   onActivityCreated?: (activity: Activity) => void;
+  onTourismTypeCreated?: (type: TourismType) => void;
   onClose: () => void;
 };
 
@@ -72,9 +75,11 @@ export function DestinationEditor({
   token,
   onChange,
   onActivityCreated,
+  onTourismTypeCreated,
   onClose,
 }: DestinationEditorProps) {
   const { refreshActivities } = useActivities();
+  const { refreshTourismTypes } = useTourismTypes();
   const [form, setForm] = useState<Partial<Destino>>(() => normalizeDestination(initial));
   const [activeSection, setActiveSection] = useState<EditorSection>('identity');
   const [isSaving, setIsSaving] = useState(false);
@@ -82,6 +87,8 @@ export function DestinationEditor({
   const [municipalityQuery, setMunicipalityQuery] = useState('');
   const [activityDraft, setActivityDraft] = useState<Partial<Activity> | null>(null);
   const [isActivitySaving, setIsActivitySaving] = useState(false);
+  const [tourismTypeDraft, setTourismTypeDraft] = useState<Partial<TourismType> | null>(null);
+  const [isTourismTypeSaving, setIsTourismTypeSaving] = useState(false);
   const associatedMunicipalities = form.municipios || [];
 
   const municipalityCandidates = useMemo(
@@ -218,6 +225,33 @@ export function DestinationEditor({
     }
   };
 
+  const createTourismType = async (type: Partial<TourismType>) => {
+    setIsTourismTypeSaving(true);
+    setMessage(null);
+    try {
+      const created = await api<TourismType>(
+        '/admin/tourism-types',
+        { method: 'POST', body: JSON.stringify(type) },
+        token,
+      );
+      updateField(
+        'tipoTurismoPrincipal',
+        serializeTourismValues([...tourismValues(form.tipoTurismoPrincipal), created.name]),
+      );
+      onTourismTypeCreated?.(created);
+      await refreshTourismTypes();
+      setTourismTypeDraft(null);
+      setMessage({ tone: 'success', text: `${created.name} se ha creado y seleccionado.` });
+    } catch (cause) {
+      setMessage({
+        tone: 'error',
+        text: cause instanceof Error ? cause.message : 'No se pudo crear el tipo de viaje',
+      });
+    } finally {
+      setIsTourismTypeSaving(false);
+    }
+  };
+
   return (
     <>
       <AdminModal
@@ -252,6 +286,17 @@ export function DestinationEditor({
                 update={updateField}
                 onRequestCreateActivity={(name) =>
                   setActivityDraft({ name, icon: 'Compass', sortOrder: 0, isActive: true })
+                }
+                onRequestCreateTourismType={() =>
+                  setTourismTypeDraft({
+                    name: '',
+                    description: '',
+                    icon: 'Compass',
+                    colorKey: 'otro',
+                    colorValue: '#5f6470',
+                    sortOrder: 100,
+                    isActive: true,
+                  })
                 }
               />
             )}
@@ -304,6 +349,14 @@ export function DestinationEditor({
           isSaving={isActivitySaving}
           onSave={createActivity}
           onClose={() => setActivityDraft(null)}
+        />
+      )}
+      {tourismTypeDraft && (
+        <TourismTypeEditorModal
+          initial={tourismTypeDraft}
+          isSaving={isTourismTypeSaving}
+          onSave={createTourismType}
+          onClose={() => setTourismTypeDraft(null)}
         />
       )}
     </>
