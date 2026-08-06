@@ -82,9 +82,8 @@
 }
 
 .destination-actions {
-  position: sticky;
+  position: relative;
   z-index: 30;
-  top: 84px;
   display: flex;
   justify-content: center;
   gap: 8px;

@@ -188,7 +188,6 @@
   }
   .destination-actions {
     justify-content: flex-start;
-    top: 72px;
     border-radius: var(--r-2);
   }
   .destination-story {
