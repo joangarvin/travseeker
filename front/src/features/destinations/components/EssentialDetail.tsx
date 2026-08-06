@@ -1,7 +1,17 @@
-import { useState } from 'react';
-import { Clock3, ExternalLink, MapPin, Sunrise, TicketCheck } from 'lucide-react';
+import {
+  Bookmark,
+  Check,
+  Clock3,
+  ExternalLink,
+  MapPin,
+  Route,
+  Sunrise,
+  TicketCheck,
+  X,
+} from 'lucide-react';
 import type { EssentialItem } from '../../../types';
 import { imageUrl } from '../../../utils';
+import { MediaImage } from '../../../components/ui';
 import { EssentialIconGlyph } from '../../essentials/essentialIcons';
 import { essentialPresentation } from '../../essentials/essentialPresentation';
 
@@ -9,7 +19,12 @@ type EssentialDetailProps = {
   item: EssentialItem;
   groupIcon: string;
   headingId: string;
-  showHeading?: boolean;
+  priority: string;
+  saved: boolean;
+  inRoute: boolean;
+  onToggleSaved: () => void;
+  onToggleRoute: () => void;
+  onClose?: () => void;
 };
 
 type PracticalFact = {
@@ -22,73 +37,20 @@ function openStreetMapUrl(latitude: number, longitude: number) {
   return `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=16/${latitude}/${longitude}`;
 }
 
-function PracticalFacts({ facts, inMedia = false }: { facts: PracticalFact[]; inMedia?: boolean }) {
-  if (!facts.length) return null;
-
-  return (
-    <dl className={`essential-detail__facts ${inMedia ? 'essential-detail__facts--media' : ''}`}>
-      {facts.map(({ Icon: FactIcon, label, value }) => (
-        <div key={label}>
-          <FactIcon aria-hidden />
-          <dt>{label}</dt>
-          <dd>{value}</dd>
-        </div>
-      ))}
-    </dl>
-  );
-}
-
-function EssentialActions({
-  officialUrl,
-  mapUrl,
-  inMedia = false,
-}: {
-  officialUrl?: string | null;
-  mapUrl?: string | null;
-  inMedia?: boolean;
-}) {
-  if (!officialUrl && !mapUrl) return null;
-
-  return (
-    <div className={`essential-detail__actions ${inMedia ? 'essential-detail__actions--media' : ''}`}>
-      {officialUrl && (
-        <a
-          className="essential-detail__action essential-detail__action--primary"
-          href={officialUrl}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <span>Web oficial</span>
-          <ExternalLink aria-hidden />
-        </a>
-      )}
-      {mapUrl && (
-        <a
-          className="essential-detail__action essential-detail__action--secondary"
-          href={mapUrl}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <span>Abrir en el mapa</span>
-          <ExternalLink aria-hidden />
-        </a>
-      )}
-    </div>
-  );
-}
-
 export function EssentialDetail({
   item,
   groupIcon,
   headingId,
-  showHeading = true,
+  priority,
+  saved,
+  inRoute,
+  onToggleSaved,
+  onToggleRoute,
+  onClose,
 }: EssentialDetailProps) {
-  const [imageFailed, setImageFailed] = useState(false);
   const presentation = essentialPresentation(item);
   const officialUrl = item.officialUrl || item.place?.website;
-  const mapUrl = item.place
-    ? openStreetMapUrl(item.place.latitud, item.place.longitud)
-    : null;
+  const mapUrl = item.place ? openStreetMapUrl(item.place.latitud, item.place.longitud) : null;
   const practicalFacts = [
     item.duration && { Icon: Clock3, label: 'Duración', value: item.duration },
     item.bestTime && { Icon: Sunrise, label: 'Mejor momento', value: item.bestTime },
@@ -98,80 +60,101 @@ export function EssentialDetail({
       value: item.reservationRequired ? 'Necesaria' : 'No necesaria',
     },
   ].filter(Boolean) as PracticalFact[];
-  const hasPhoto = Boolean(item.imageUrl && !imageFailed);
-  const hasMediaLegend = Boolean(
-    item.place || practicalFacts.length || officialUrl || mapUrl,
-  );
 
   return (
-    <div className={`essential-detail ${hasPhoto ? 'essential-detail--with-photo' : ''}`}>
-      {hasPhoto && (
-        <figure className="essential-detail__media">
-          <img
-            src={imageUrl(item.imageUrl || '')}
-            alt={item.imageAlt || ''}
+    <article className="essential-sheet" aria-labelledby={headingId}>
+      <div className="essential-sheet__media">
+        {item.imageUrl ? (
+          <MediaImage
+            src={imageUrl(item.imageUrl)}
+            alt={item.imageAlt || presentation.title}
             loading="lazy"
-            onError={() => setImageFailed(true)}
           />
-
-          {hasMediaLegend && (
-            <figcaption className="essential-detail__legend">
-              {item.place && (
-                <div className="essential-detail__place">
-                  <MapPin aria-hidden />
-                  <div>
-                    <strong>{item.place.nombre}</strong>
-                    <span>
-                      {item.place.categoria} · {item.place.latitud.toFixed(5)},{' '}
-                      {item.place.longitud.toFixed(5)}
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              <PracticalFacts facts={practicalFacts} inMedia />
-              <EssentialActions officialUrl={officialUrl} mapUrl={mapUrl} inMedia />
-            </figcaption>
-          )}
-        </figure>
-      )}
-
-      <div className="essential-detail__content">
-        {showHeading && (
-          <header>
-            <span className="essential-detail__symbol" aria-hidden>
-              <EssentialIconGlyph name={item.icon || groupIcon} />
-            </span>
-            <div>
-              <p>Selección esencial</p>
-              <h4 id={headingId}>{presentation.title}</h4>
-            </div>
-          </header>
+        ) : (
+          <div className="essential-sheet__media-fallback">
+            <EssentialIconGlyph name={item.icon || groupIcon} />
+            <span>Imagen no disponible</span>
+          </div>
         )}
-
-        {presentation.description && (
-          <p className="essential-detail__description">{presentation.description}</p>
-        )}
-
-        {!hasPhoto && (
-          <>
-            {item.place && (
-              <div className="essential-detail__place essential-detail__place--fallback">
-                <MapPin aria-hidden />
-                <div>
-                  <strong>{item.place.nombre}</strong>
-                  <span>
-                    {item.place.categoria} · {item.place.latitud.toFixed(5)},{' '}
-                    {item.place.longitud.toFixed(5)}
-                  </span>
-                </div>
-              </div>
-            )}
-            <PracticalFacts facts={practicalFacts} />
-            <EssentialActions officialUrl={officialUrl} mapUrl={mapUrl} />
-          </>
+        <span className="essential-sheet__priority">{priority}</span>
+        {onClose && (
+          <button type="button" className="essential-sheet__close" onClick={onClose}>
+            <X aria-hidden /> <span>Cerrar detalle</span>
+          </button>
         )}
       </div>
-    </div>
+
+      <div className="essential-sheet__body">
+        <header>
+          <span className="essential-sheet__symbol" aria-hidden>
+            <EssentialIconGlyph name={item.icon || groupIcon} />
+          </span>
+          <div>
+            <p>Por qué merece la pena</p>
+            <h4 id={headingId}>{presentation.title}</h4>
+          </div>
+        </header>
+
+        <p className="essential-sheet__description">
+          {presentation.description ||
+            'La guía todavía no dispone de una explicación ampliada para esta experiencia.'}
+        </p>
+
+        {!!practicalFacts.length && (
+          <dl className="essential-sheet__facts">
+            {practicalFacts.map(({ Icon, label, value }) => (
+              <div key={label}>
+                <Icon aria-hidden />
+                <dt>{label}</dt>
+                <dd>{value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+
+        {item.place && (
+          <div className="essential-sheet__place">
+            <MapPin aria-hidden />
+            <div>
+              <span>Dónde está</span>
+              <strong>{item.place.nombre}</strong>
+              <small>{item.place.categoria}</small>
+            </div>
+            {mapUrl && (
+              <a href={mapUrl} target="_blank" rel="noreferrer">
+                Ver mapa <ExternalLink aria-hidden />
+              </a>
+            )}
+          </div>
+        )}
+
+        <div className="essential-sheet__planning" aria-label="Planificar esta experiencia">
+          <button type="button" aria-pressed={saved} onClick={onToggleSaved}>
+            {saved ? <Check aria-hidden /> : <Bookmark aria-hidden />}
+            {saved ? 'Guardada' : 'Guardar'}
+          </button>
+          <button
+            type="button"
+            className="is-primary"
+            aria-pressed={inRoute}
+            onClick={onToggleRoute}
+          >
+            {inRoute ? <Check aria-hidden /> : <Route aria-hidden />}
+            {inRoute ? 'En mi ruta' : 'Añadir a mi ruta'}
+          </button>
+        </div>
+
+        {officialUrl && (
+          <a
+            className="essential-sheet__official"
+            href={officialUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Consultar la web oficial <ExternalLink aria-hidden />
+          </a>
+        )}
+      </div>
+    </article>
   );
 }

@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { flushSync } from 'react-dom';
-import { ChevronDown } from 'lucide-react';
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { Bookmark, Check, ChevronDown, ChevronRight, Route } from 'lucide-react';
 import type { EssentialGroup, EssentialItem } from '../../../types';
-import { plain, safeHtml } from '../../../utils';
+import { imageUrl, plain, safeHtml } from '../../../utils';
+import { MediaImage } from '../../../components/ui';
 import { EssentialIconGlyph } from '../../essentials/essentialIcons';
 import { essentialPresentation } from '../../essentials/essentialPresentation';
 import { EssentialDetail } from './EssentialDetail';
@@ -12,6 +12,9 @@ type EssentialRouteProps = {
   legacyHtml?: string;
 };
 
+const SAVED_STORAGE_KEY = 'travseeker:saved-essentials';
+const ROUTE_STORAGE_KEY = 'travseeker:route-essentials';
+
 function groupKey(group: EssentialGroup, index: number) {
   return group.id || `essential-group-${index}`;
 }
@@ -20,17 +23,36 @@ function itemKey(item: EssentialItem, index: number) {
   return item.id || `essential-item-${index}`;
 }
 
-function hasDetail(item: EssentialItem) {
-  const presentation = essentialPresentation(item);
-  return Boolean(
-    presentation.description ||
-      item.imageUrl ||
-      item.duration ||
-      item.bestTime ||
-      item.reservationRequired != null ||
-      item.officialUrl ||
-      item.place,
-  );
+function priorityLabel(index: number, total: number) {
+  if (index === 0) return 'Primera elección';
+  if (index < Math.min(3, total)) return 'Recomendada';
+  return 'Alternativa';
+}
+
+function useStoredKeys(storageKey: string) {
+  const [keys, setKeys] = useState<Set<string>>(() => {
+    if (typeof window === 'undefined') return new Set();
+    try {
+      const stored = JSON.parse(window.localStorage.getItem(storageKey) || '[]');
+      return new Set(
+        Array.isArray(stored) ? stored.filter((value) => typeof value === 'string') : [],
+      );
+    } catch {
+      return new Set();
+    }
+  });
+
+  const toggle = (key: string) => {
+    setKeys((current) => {
+      const next = new Set(current);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      window.localStorage.setItem(storageKey, JSON.stringify([...next]));
+      return next;
+    });
+  };
+
+  return { keys, toggle };
 }
 
 function useMobileGuide() {
@@ -54,14 +76,12 @@ export function EssentialRoute({ groups = [], legacyHtml = '' }: EssentialRouteP
   const initialGroupKey = populatedGroups[0] ? groupKey(populatedGroups[0], 0) : '';
   const [activeGroupKey, setActiveGroupKey] = useState(initialGroupKey);
   const [selectedItemKey, setSelectedItemKey] = useState('');
-  const [activeMobileItemKey, setActiveMobileItemKey] = useState('');
-  const [openMobileItemKeys, setOpenMobileItemKeys] = useState<Set<string>>(new Set());
-  const [pinnedMobileItemKey, setPinnedMobileItemKey] = useState('');
-  const itemNodes = useRef(new Map<string, HTMLLIElement>());
-  const activeMobileItemRef = useRef('');
-  const pinnedMobileItemRef = useRef('');
-  const focusWithinRouteRef = useRef(false);
-  const pendingGroupFocusRef = useRef(false);
+  const [expandedMobileKey, setExpandedMobileKey] = useState('');
+  const [announcement, setAnnouncement] = useState('');
+  const tabRefs = useRef(new Map<string, HTMLButtonElement>());
+  const itemRefs = useRef(new Map<string, HTMLButtonElement>());
+  const saved = useStoredKeys(SAVED_STORAGE_KEY);
+  const route = useStoredKeys(ROUTE_STORAGE_KEY);
   const mobile = useMobileGuide();
 
   const resolvedGroupKey = populatedGroups.some(
@@ -80,242 +100,91 @@ export function EssentialRoute({ groups = [], legacyHtml = '' }: EssentialRouteP
   )
     ? selectedItemKey
     : initialItemKey;
-  const resolvedMobileItemKey = activeGroup?.items.some(
-    (item, index) => itemKey(item, index) === activeMobileItemKey,
-  )
-    ? activeMobileItemKey
-    : initialItemKey;
+  const selectedItemIndex = Math.max(
+    0,
+    activeGroup?.items.findIndex((item, index) => itemKey(item, index) === resolvedItemKey) ?? 0,
+  );
+  const selectedItem = activeGroup?.items[selectedItemIndex];
 
   useEffect(() => {
-    activeMobileItemRef.current = resolvedMobileItemKey;
-  }, [resolvedMobileItemKey]);
-
-  useEffect(() => {
-    pinnedMobileItemRef.current = pinnedMobileItemKey;
-  }, [pinnedMobileItemKey]);
-
-  useEffect(() => {
-    if (!activeGroup || !initialItemKey) return;
-
     setSelectedItemKey(initialItemKey);
-    setActiveMobileItemKey(initialItemKey);
-    setOpenMobileItemKeys(new Set([initialItemKey]));
-    setPinnedMobileItemKey('');
-
-    if (!pendingGroupFocusRef.current) return;
-    pendingGroupFocusRef.current = false;
-    window.requestAnimationFrame(() => {
-      const firstStop = itemNodes.current.get(initialItemKey);
-      const trigger = firstStop?.querySelector<HTMLElement>('[data-essential-trigger]');
-      firstStop?.scrollIntoView({ block: 'start' });
-      trigger?.focus({ preventScroll: true });
-    });
-  }, [activeGroup, initialItemKey, resolvedGroupKey]);
-
-  useEffect(() => {
-    if (!mobile || !activeGroup) return;
-
-    const stops = activeGroup.items
-      .map((item, index) => itemNodes.current.get(itemKey(item, index)))
-      .filter(Boolean) as HTMLLIElement[];
-    if (!stops.length) return;
-
-    const root = document.documentElement;
-    const body = document.body;
-    const previousOverflowAnchor = root.style.overflowAnchor;
-    const previousBodyOverflowAnchor = body.style.overflowAnchor;
-    root.style.overflowAnchor = 'none';
-    body.style.overflowAnchor = 'none';
-
-    const pendingClosures = new Map<string, number>();
-    const cancelClosure = (key: string) => {
-      const timer = pendingClosures.get(key);
-      if (timer) window.clearTimeout(timer);
-      pendingClosures.delete(key);
-    };
-    const scheduleClosure = (key: string, departingStop: HTMLLIElement) => {
-      cancelClosure(key);
-      const timer = window.setTimeout(() => {
-        pendingClosures.delete(key);
-        if (key === activeMobileItemRef.current || departingStop.matches(':focus-within')) {
-          return;
-        }
-
-        const bounds = departingStop.getBoundingClientRect();
-        if (bounds.bottom > 0 && bounds.top < window.innerHeight) {
-          scheduleClosure(key, departingStop);
-          return;
-        }
-
-        const leavingAbove = bounds.bottom <= 0;
-        const readingAnchor = itemNodes.current.get(activeMobileItemRef.current);
-        const anchorTopBefore = readingAnchor?.getBoundingClientRect().top;
-        const previousScrollBehavior = root.style.getPropertyValue('scroll-behavior');
-        const previousScrollBehaviorPriority = root.style.getPropertyPriority('scroll-behavior');
-        const panel = departingStop.querySelector<HTMLElement>('.essential-guide__stop-panel');
-        const previousPanelTransition = panel?.style.getPropertyValue('transition') || '';
-
-        root.style.setProperty('scroll-behavior', 'auto', 'important');
-        panel?.style.setProperty('transition', 'none', 'important');
-        if (panel) void panel.offsetHeight;
-        flushSync(() => {
-          if (key === pinnedMobileItemRef.current) {
-            pinnedMobileItemRef.current = '';
-            setPinnedMobileItemKey('');
-          }
-          setOpenMobileItemKeys((current) => {
-            if (!current.has(key)) return current;
-            const next = new Set(current);
-            next.delete(key);
-            return next;
-          });
-        });
-
-        let stabilizationFrame = 0;
-        const stabilizeReadingPosition = () => {
-          if (leavingAbove && readingAnchor && anchorTopBefore != null) {
-            const anchorTopAfter = readingAnchor.getBoundingClientRect().top;
-            window.scrollBy({ top: anchorTopAfter - anchorTopBefore, behavior: 'auto' });
-          }
-
-          stabilizationFrame += 1;
-          if (stabilizationFrame < 3) {
-            window.requestAnimationFrame(stabilizeReadingPosition);
-            return;
-          }
-
-          if (panel) {
-            if (previousPanelTransition) {
-              panel.style.setProperty('transition', previousPanelTransition);
-            } else {
-              panel.style.removeProperty('transition');
-            }
-          }
-          if (previousScrollBehavior) {
-            root.style.setProperty(
-              'scroll-behavior',
-              previousScrollBehavior,
-              previousScrollBehaviorPriority,
-            );
-          } else {
-            root.style.removeProperty('scroll-behavior');
-          }
-        };
-        window.requestAnimationFrame(stabilizeReadingPosition);
-      }, 650);
-      pendingClosures.set(key, timer);
-    };
-
-    const activationObserver = new IntersectionObserver(
-      (entries) => {
-        if (focusWithinRouteRef.current || pinnedMobileItemRef.current) return;
-        const entering = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort(
-            (first, second) =>
-              Math.abs(first.boundingClientRect.top - window.innerHeight * 0.42) -
-              Math.abs(second.boundingClientRect.top - window.innerHeight * 0.42),
-          )[0];
-        if (!entering) return;
-
-        const key =
-          (entering.target as HTMLElement).closest<HTMLElement>('[data-essential-key]')?.dataset
-            .essentialKey || '';
-        if (!key) return;
-        const previousKey = activeMobileItemRef.current;
-        cancelClosure(key);
-        activeMobileItemRef.current = key;
-        setActiveMobileItemKey(key);
-
-        if (previousKey && previousKey !== key) {
-          const previousStop = itemNodes.current.get(previousKey);
-          if (previousStop) scheduleClosure(previousKey, previousStop);
-        }
-
-        const item = activeGroup.items.find(
-          (candidate, index) => itemKey(candidate, index) === key,
-        );
-        if (!item || !hasDetail(item)) return;
-        setOpenMobileItemKeys((current) => new Set(current).add(key));
-      },
-      { rootMargin: '-30% 0px -48% 0px', threshold: 0 },
-    );
-
-    const visibilityObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const key = (entry.target as HTMLElement).dataset.essentialKey || '';
-          if (entry.isIntersecting) {
-            cancelClosure(key);
-            return;
-          }
-          if (!key || key === activeMobileItemRef.current) return;
-          scheduleClosure(key, entry.target as HTMLLIElement);
-        });
-      },
-      { threshold: 0 },
-    );
-
-    stops.forEach((stop) => {
-      const trigger = stop.querySelector('[data-essential-trigger]');
-      if (trigger) activationObserver.observe(trigger);
-      visibilityObserver.observe(stop);
-    });
-
-    return () => {
-      activationObserver.disconnect();
-      visibilityObserver.disconnect();
-      pendingClosures.forEach((timer) => window.clearTimeout(timer));
-      root.style.overflowAnchor = previousOverflowAnchor;
-      body.style.overflowAnchor = previousBodyOverflowAnchor;
-    };
-  }, [activeGroup, mobile, resolvedGroupKey]);
+    setExpandedMobileKey('');
+  }, [initialItemKey, resolvedGroupKey]);
 
   if (!populatedGroups.length && !plain(legacyHtml)) return null;
 
   const selectGroup = (key: string) => {
-    if (key === resolvedGroupKey) return;
-    pendingGroupFocusRef.current = true;
-    itemNodes.current.clear();
     setActiveGroupKey(key);
   };
 
-  const toggleMobileItem = (key: string, open: boolean) => {
-    activeMobileItemRef.current = key;
-    setActiveMobileItemKey(key);
-    if (open) {
-      pinnedMobileItemRef.current = '';
-      setPinnedMobileItemKey('');
-      setOpenMobileItemKeys((current) => {
-        const next = new Set(current);
-        next.delete(key);
-        return next;
-      });
-      return;
-    }
+  const handleTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    const lastIndex = populatedGroups.length - 1;
+    let nextIndex = index;
+    if (event.key === 'ArrowRight') nextIndex = index === lastIndex ? 0 : index + 1;
+    else if (event.key === 'ArrowLeft') nextIndex = index === 0 ? lastIndex : index - 1;
+    else if (event.key === 'Home') nextIndex = 0;
+    else if (event.key === 'End') nextIndex = lastIndex;
+    else return;
 
-    pinnedMobileItemRef.current = key;
-    setPinnedMobileItemKey(key);
-    setOpenMobileItemKeys((current) => new Set(current).add(key));
+    event.preventDefault();
+    const nextKey = groupKey(populatedGroups[nextIndex], nextIndex);
+    selectGroup(nextKey);
+    tabRefs.current.get(nextKey)?.focus();
+  };
+
+  const selectItem = (key: string) => {
+    setSelectedItemKey(key);
+    if (mobile) setExpandedMobileKey((current) => (current === key ? '' : key));
+  };
+
+  const closeMobileDetail = (key: string) => {
+    setExpandedMobileKey('');
+    window.requestAnimationFrame(() => itemRefs.current.get(key)?.focus());
+  };
+
+  const toggleSaved = (key: string, title: string) => {
+    const willSave = !saved.keys.has(key);
+    saved.toggle(key);
+    setAnnouncement(
+      willSave ? `${title} se ha guardado en esta guía.` : `${title} ya no está guardada.`,
+    );
+  };
+
+  const toggleRoute = (key: string, title: string) => {
+    const willAdd = !route.keys.has(key);
+    route.toggle(key);
+    setAnnouncement(
+      willAdd
+        ? `${title} se ha añadido a tu ruta local.`
+        : `${title} se ha quitado de tu ruta local.`,
+    );
   };
 
   return (
-    <section className="essential-guide" aria-labelledby="essential-guide-title">
-      <header className="essential-guide__intro">
+    <section className="essential-discovery" aria-labelledby="essential-discovery-title">
+      <header className="essential-discovery__intro">
         <div>
-          <p className="kicker">Guía de campo</p>
-          <h2 id="essential-guide-title">Lo imprescindible</h2>
+          <p className="kicker">Selección sobre el terreno</p>
+          <h2 id="essential-discovery-title">Lo imprescindible</h2>
+          <p className="essential-discovery__lede">
+            Una selección editorial para entender qué merece tu tiempo y encajarlo en el viaje sin
+            perder el contexto.
+          </p>
         </div>
-        <p>
-          Lugares y experiencias que ayudan a entender el destino, con la información práctica
-          necesaria para decidir cómo encajarlos en el viaje.
-        </p>
+        <div className="essential-discovery__summary" aria-label="Resumen de tu selección local">
+          <span>
+            <Bookmark aria-hidden /> {saved.keys.size} guardadas
+          </span>
+          <span>
+            <Route aria-hidden /> {route.keys.size} en tu ruta
+          </span>
+        </div>
       </header>
 
       {populatedGroups.length ? (
-        <div className="essential-guide__workspace">
-          <label className="essential-guide__mobile-select">
-            <span>Explorar por tema</span>
+        <div className="essential-discovery__workspace">
+          <label className="essential-discovery__mobile-select">
+            <span>Tipo de experiencia</span>
             <select value={resolvedGroupKey} onChange={(event) => selectGroup(event.target.value)}>
               {populatedGroups.map((group, index) => (
                 <option key={groupKey(group, index)} value={groupKey(group, index)}>
@@ -325,16 +194,28 @@ export function EssentialRoute({ groups = [], legacyHtml = '' }: EssentialRouteP
             </select>
           </label>
 
-          <nav className="essential-guide__themes" aria-label="Temas imprescindibles">
+          <div
+            className="essential-discovery__tabs"
+            role="tablist"
+            aria-label="Tipos de experiencia imprescindible"
+          >
             {populatedGroups.map((group, index) => {
               const key = groupKey(group, index);
               const active = key === resolvedGroupKey;
               return (
                 <button
                   type="button"
-                  className={active ? 'is-active' : ''}
-                  aria-pressed={active}
+                  role="tab"
+                  id={`essential-tab-${key}`}
+                  aria-selected={active}
+                  aria-controls={`essential-tabpanel-${key}`}
+                  tabIndex={active ? 0 : -1}
                   onClick={() => selectGroup(key)}
+                  onKeyDown={(event) => handleTabKeyDown(event, index)}
+                  ref={(node) => {
+                    if (node) tabRefs.current.set(key, node);
+                    else tabRefs.current.delete(key);
+                  }}
                   key={key}
                 >
                   <span aria-hidden>
@@ -345,111 +226,130 @@ export function EssentialRoute({ groups = [], legacyHtml = '' }: EssentialRouteP
                 </button>
               );
             })}
-          </nav>
+          </div>
 
           {activeGroup && (
-            <section className="essential-guide__route" aria-labelledby="essential-active-theme">
-              <header className="essential-guide__route-heading">
-                <span className="essential-guide__theme-symbol" aria-hidden>
-                  <EssentialIconGlyph name={activeGroup.icon} />
-                </span>
-                <div>
-                  <p>Tema seleccionado</p>
-                  <h3 id="essential-active-theme">{activeGroup.title}</h3>
-                  <span>{activeGroup.items.length} lugares y experiencias</span>
-                </div>
-              </header>
+            <section
+              className="essential-discovery__panel"
+              role="tabpanel"
+              id={`essential-tabpanel-${resolvedGroupKey}`}
+              aria-labelledby={`essential-tab-${resolvedGroupKey}`}
+              tabIndex={0}
+            >
+              <div className="essential-discovery__catalogue">
+                <header>
+                  <div>
+                    <p className="kicker">Orden editorial</p>
+                    <h3>{activeGroup.title}</h3>
+                  </div>
+                  <span>{activeGroup.items.length} opciones</span>
+                </header>
 
-              <ul className="essential-guide__route-list">
-                {activeGroup.items.map((item, index) => {
-                  const key = itemKey(item, index);
-                  const presentation = essentialPresentation(item);
-                  const detailed = hasDetail(item);
-                  const open = mobile
-                    ? openMobileItemKeys.has(key) ||
-                      (!openMobileItemKeys.size && key === initialItemKey)
-                    : key === resolvedItemKey;
-                  const active = mobile ? key === resolvedMobileItemKey : open;
-                  const panelId = `essential-panel-${key}`;
-                  const headingId = `essential-title-${key}`;
+                <ol className="essential-discovery__list">
+                  {activeGroup.items.map((item, index) => {
+                    const key = itemKey(item, index);
+                    const presentation = essentialPresentation(item);
+                    const active = key === resolvedItemKey;
+                    const expanded = key === expandedMobileKey;
+                    const priority = priorityLabel(index, activeGroup.items.length);
+                    return (
+                      <li className={active ? 'is-selected' : ''} key={key}>
+                        <button
+                          type="button"
+                          className="essential-discovery__choice"
+                          aria-pressed={active}
+                          aria-expanded={mobile ? expanded : undefined}
+                          aria-controls={mobile ? `essential-mobile-detail-${key}` : undefined}
+                          onClick={() => selectItem(key)}
+                          ref={(node) => {
+                            if (node) itemRefs.current.set(key, node);
+                            else itemRefs.current.delete(key);
+                          }}
+                        >
+                          <span className="essential-discovery__thumb" aria-hidden>
+                            {item.imageUrl ? (
+                              <MediaImage src={imageUrl(item.imageUrl)} alt="" loading="lazy" />
+                            ) : (
+                              <EssentialIconGlyph name={item.icon || activeGroup.icon} />
+                            )}
+                          </span>
+                          <span className="essential-discovery__choice-copy">
+                            <small>{priority}</small>
+                            <strong>{presentation.title}</strong>
+                            <span>
+                              {[item.duration, item.place?.nombre].filter(Boolean).join(' · ') ||
+                                'Ver criterio editorial'}
+                            </span>
+                          </span>
+                          <span className="essential-discovery__choice-state" aria-hidden>
+                            {active ? <Check /> : mobile ? <ChevronDown /> : <ChevronRight />}
+                          </span>
+                        </button>
 
-                  return (
-                    <li
-                      className={`${active ? 'is-active' : ''} ${open ? 'is-open' : ''}`}
-                      data-essential-key={key}
-                      key={key}
-                      ref={(node) => {
-                        if (node) itemNodes.current.set(key, node);
-                        else itemNodes.current.delete(key);
-                      }}
-                      onFocusCapture={() => {
-                        focusWithinRouteRef.current = true;
-                      }}
-                      onBlurCapture={(event) => {
-                        const stop = event.currentTarget;
-                        window.requestAnimationFrame(() => {
-                          focusWithinRouteRef.current = stop.contains(document.activeElement);
-                        });
-                      }}
-                    >
-                      <span className="essential-guide__route-marker" aria-hidden>
-                        <EssentialIconGlyph name={item.icon || activeGroup.icon} />
-                      </span>
-
-                      <article className="essential-guide__stop">
-                        {detailed ? (
-                          <h4 id={headingId}>
-                            <button
-                              type="button"
-                              data-essential-trigger
-                              aria-expanded={open}
-                              aria-controls={panelId}
-                              onClick={() => {
-                                if (mobile) toggleMobileItem(key, open);
-                                else setSelectedItemKey(key);
-                              }}
-                            >
-                              <span>{presentation.title}</span>
-                              <ChevronDown aria-hidden />
-                            </button>
-                          </h4>
-                        ) : (
-                          <h4 id={headingId} className="essential-guide__stop-title">
-                            {presentation.title}
-                          </h4>
-                        )}
-
-                        {detailed && (
+                        {mobile && expanded && (
                           <div
-                            className="essential-guide__stop-panel"
-                            id={panelId}
-                            aria-hidden={!open}
-                            inert={!open}
+                            className="essential-discovery__mobile-detail"
+                            id={`essential-mobile-detail-${key}`}
                           >
-                            <div className="essential-guide__stop-panel-inner">
-                              <EssentialDetail
-                                item={item}
-                                groupIcon={activeGroup.icon}
-                                headingId={headingId}
-                                showHeading={false}
-                              />
-                            </div>
+                            <EssentialDetail
+                              item={item}
+                              groupIcon={activeGroup.icon}
+                              headingId={`essential-mobile-title-${key}`}
+                              priority={priority}
+                              saved={saved.keys.has(key)}
+                              inRoute={route.keys.has(key)}
+                              onToggleSaved={() => toggleSaved(key, presentation.title)}
+                              onToggleRoute={() => toggleRoute(key, presentation.title)}
+                              onClose={() => closeMobileDetail(key)}
+                            />
                           </div>
                         )}
-                      </article>
-                    </li>
-                  );
-                })}
-              </ul>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </div>
+
+              {!mobile && selectedItem && (
+                <aside
+                  className="essential-discovery__detail"
+                  aria-label="Experiencia seleccionada"
+                >
+                  <EssentialDetail
+                    item={selectedItem}
+                    groupIcon={activeGroup.icon}
+                    headingId={`essential-detail-title-${resolvedItemKey}`}
+                    priority={priorityLabel(selectedItemIndex, activeGroup.items.length)}
+                    saved={saved.keys.has(resolvedItemKey)}
+                    inRoute={route.keys.has(resolvedItemKey)}
+                    onToggleSaved={() =>
+                      toggleSaved(resolvedItemKey, essentialPresentation(selectedItem).title)
+                    }
+                    onToggleRoute={() =>
+                      toggleRoute(resolvedItemKey, essentialPresentation(selectedItem).title)
+                    }
+                  />
+                </aside>
+              )}
             </section>
           )}
         </div>
       ) : (
-        <div
-          className="essential-guide__legacy prose"
-          dangerouslySetInnerHTML={{ __html: safeHtml(legacyHtml) }}
-        />
+        <div className="essential-discovery__legacy">
+          <p className="essential-discovery__legacy-note">
+            Esta guía conserva el contenido editorial original; todavía no dispone de imágenes ni
+            datos prácticos estructurados.
+          </p>
+          <div className="prose" dangerouslySetInnerHTML={{ __html: safeHtml(legacyHtml) }} />
+        </div>
       )}
+
+      <p className="sr-only" aria-live="polite" aria-atomic="true">
+        {announcement}
+      </p>
+      <p className="essential-discovery__storage-note">
+        Tus selecciones de esta guía se guardan en este dispositivo.
+      </p>
     </section>
   );
 }
