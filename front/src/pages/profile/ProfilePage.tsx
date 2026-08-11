@@ -43,6 +43,7 @@ export default function ProfilePage() {
     null,
   );
   const [saving, setSaving] = useState(false);
+  const [alertActionPending, setAlertActionPending] = useState(false);
   useEffect(() => {
     if (!user) return;
     setName(user.nombre || '');
@@ -53,7 +54,16 @@ export default function ProfilePage() {
     setNotifications(prefs.notifications ?? true);
     setAvoidCrowds(prefs.travel?.evitarMasificacion ?? false);
     setBudget(prefs.travel?.presupuesto || '');
-    if (token) api<Alert[]>('/alertas', {}, token).then(setAlerts);
+    if (token) {
+      api<Alert[]>('/alertas', {}, token)
+        .then(setAlerts)
+        .catch((cause) =>
+          setFeedback({
+            tone: 'error',
+            text: cause instanceof Error ? cause.message : 'No se pudieron cargar las alertas',
+          }),
+        );
+    }
   }, [user, token]);
   if (auth.loading)
     return (
@@ -105,24 +115,40 @@ export default function ProfilePage() {
   };
   const createAlert = async () => {
     if (!token) return;
-    const item = await api<Alert>(
-      '/alertas',
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          month: month ? Number(month) : null,
-          presupuesto: budget || null,
-          avoidCrowds,
-        }),
-      },
-      token,
-    );
-    setAlerts((current) => [item, ...current]);
+    setAlertActionPending(true);
+    try {
+      const item = await api<Alert>(
+        '/alertas',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            month: month ? Number(month) : null,
+            presupuesto: budget || null,
+            avoidCrowds,
+          }),
+        },
+        token,
+      );
+      setAlerts((current) => [item, ...current]);
+      setFeedback({ tone: 'success', text: 'Alerta creada' });
+    } catch (cause) {
+      setFeedback({ tone: 'error', text: cause instanceof Error ? cause.message : 'No se pudo crear la alerta' });
+    } finally {
+      setAlertActionPending(false);
+    }
   };
   const deleteAlert = async (id: string) => {
     if (!token) return;
-    await api(`/alertas/${id}`, { method: 'DELETE' }, token);
-    setAlerts((current) => current.filter((item) => item.id !== id));
+    setAlertActionPending(true);
+    try {
+      await api(`/alertas/${id}`, { method: 'DELETE' }, token);
+      setAlerts((current) => current.filter((item) => item.id !== id));
+      setFeedback({ tone: 'success', text: 'Alerta eliminada' });
+    } catch (cause) {
+      setFeedback({ tone: 'error', text: cause instanceof Error ? cause.message : 'No se pudo eliminar la alerta' });
+    } finally {
+      setAlertActionPending(false);
+    }
   };
   const requestVerification = async () => {
     if (!token) return;
@@ -135,6 +161,18 @@ export default function ProfilePage() {
         text: cause instanceof Error ? cause.message : 'No se pudo enviar el enlace',
       });
     }
+  };
+  const moveProfileTab = (event: React.KeyboardEvent<HTMLButtonElement>, current: string) => {
+    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+    event.preventDefault();
+    const ids = ['profile', 'preferences', 'security'];
+    const currentIndex = ids.indexOf(current);
+    const nextIndex = event.key === 'ArrowRight'
+      ? (currentIndex + 1) % ids.length
+      : (currentIndex - 1 + ids.length) % ids.length;
+    const next = ids[nextIndex] as typeof tab;
+    setTab(next);
+    requestAnimationFrame(() => document.getElementById(`profile-tab-${next}`)?.focus());
   };
   return (
     <Shell>
@@ -150,18 +188,29 @@ export default function ProfilePage() {
         <p>Configura cómo quieres descubrir y guardar viajes.</p>
       </PageHeading>
       <div className="profile-layout">
-        <nav className="profile-nav" aria-label="Secciones del perfil">
+        <nav className="profile-nav" aria-label="Secciones del perfil" role="tablist">
           {[
             ['profile', 'Perfil', UserRound],
             ['preferences', 'Preferencias', Settings],
             ['security', 'Seguridad', Shield],
           ].map(([id, label, Icon]: any) => (
-            <button key={id} className={tab === id ? 'is-active' : ''} onClick={() => setTab(id)}>
+            <button
+              key={id}
+              id={`profile-tab-${id}`}
+              className={tab === id ? 'is-active' : ''}
+              role="tab"
+              aria-selected={tab === id}
+              aria-controls="profile-panel"
+              tabIndex={tab === id ? 0 : -1}
+              type="button"
+              onKeyDown={(event) => moveProfileTab(event, id)}
+              onClick={() => setTab(id)}
+            >
               <Icon /> {label}
             </button>
           ))}
         </nav>
-        <section className="profile-panel">
+        <section id="profile-panel" className="profile-panel" role="tabpanel" aria-labelledby={`profile-tab-${tab}`}>
           {!user.emailVerified && (
             <div className="verification-callout">
               <MailCheck />
@@ -243,6 +292,8 @@ export default function ProfilePage() {
                 </div>
                 <button
                   role="switch"
+                  type="button"
+                  aria-label="Activar notificaciones"
                   aria-checked={notifications}
                   className={`switch ${notifications ? 'is-on' : ''}`}
                   onClick={() => setNotifications((value) => !value)}
@@ -260,6 +311,8 @@ export default function ProfilePage() {
                 </div>
                 <button
                   role="switch"
+                  type="button"
+                  aria-label="Evitar aglomeraciones"
                   aria-checked={avoidCrowds}
                   className={`switch ${avoidCrowds ? 'is-on' : ''}`}
                   onClick={() => setAvoidCrowds((value) => !value)}
@@ -309,7 +362,7 @@ export default function ProfilePage() {
                       </option>
                     ))}
                   </select>
-                  <Button variant="secondary" onClick={() => void createAlert()}>
+                  <Button variant="secondary" loading={alertActionPending} onClick={() => void createAlert()}>
                     Crear alerta
                   </Button>
                 </div>
@@ -322,7 +375,7 @@ export default function ProfilePage() {
                         : 'Cualquier mes'}{' '}
                       · {alert.presupuesto || 'Cualquier presupuesto'}
                     </span>
-                    <button onClick={() => void deleteAlert(alert.id)} aria-label="Eliminar alerta">
+                    <button type="button" disabled={alertActionPending} onClick={() => void deleteAlert(alert.id)} aria-label="Eliminar alerta">
                       <Trash2 />
                     </button>
                   </article>
@@ -340,6 +393,7 @@ export default function ProfilePage() {
                   type="password"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
+                  autoComplete="current-password"
                   required
                 />
               </Field>
@@ -349,6 +403,7 @@ export default function ProfilePage() {
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
+                  autoComplete="new-password"
                   minLength={8}
                   required
                 />

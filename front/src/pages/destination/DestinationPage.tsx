@@ -16,11 +16,25 @@ import { useAuth, useCompare } from '../../contexts';
 import { imageUrl, plain, safeHtml } from '../../utils';
 import type { CollectionSummary, Destino, Review } from '../../types';
 import { Button, Field, Loader, MediaImage, Notice } from '../../components/ui';
-import { Shell } from '../../components/layout';
+import { PageMeta, Shell } from '../../components/layout';
 import { DestinationCard } from '../../features/destinations/components/DestinationCard';
 import { EssentialRoute } from '../../features/destinations/components/EssentialRoute';
 import { TourismMark, TourismMarks } from '../../features/tourism/tourism';
 import { ActivityMarks, activityValues } from '../../features/activities/activities';
+
+function DestinationSchema({ destino }: { destino: Destino }) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'TouristDestination',
+    name: destino.nombre.trim(),
+    description: plain(destino.descripcion),
+    image: destino.imagen ? imageUrl(destino.imagen) : undefined,
+    geo: destino.latitud != null && destino.longitud != null
+      ? { '@type': 'GeoCoordinates', latitude: destino.latitud, longitude: destino.longitud }
+      : undefined,
+  };
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
+}
 
 export default function DestinationPage() {
   const { id = '' } = useParams();
@@ -37,6 +51,8 @@ export default function DestinationPage() {
   const [error, setError] = useState('');
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
+  const [actionPending, setActionPending] = useState(false);
+  const [actionError, setActionError] = useState('');
 
   const load = async () => {
     setLoading(true);
@@ -86,28 +102,52 @@ export default function DestinationPage() {
 
   const toggleFavorite = async () => {
     if (!token) return;
-    await api(`/favoritos/${id}`, { method: favorite ? 'DELETE' : 'POST' }, token);
-    setFavorite((value) => !value);
+    setActionPending(true);
+    setActionError('');
+    try {
+      await api(`/favoritos/${id}`, { method: favorite ? 'DELETE' : 'POST' }, token);
+      setFavorite((value) => !value);
+    } catch (cause) {
+      setActionError(cause instanceof Error ? cause.message : 'No se pudo actualizar el guardado');
+    } finally {
+      setActionPending(false);
+    }
   };
   const addToCollection = async (collectionId: string) => {
     if (!token) return;
-    await api(
-      `/colecciones/${collectionId}/items`,
-      { method: 'POST', body: JSON.stringify({ destinoId: id }) },
-      token,
-    );
-    setCollectionOpen(false);
+    setActionPending(true);
+    setActionError('');
+    try {
+      await api(
+        `/colecciones/${collectionId}/items`,
+        { method: 'POST', body: JSON.stringify({ destinoId: id }) },
+        token,
+      );
+      setCollectionOpen(false);
+    } catch (cause) {
+      setActionError(cause instanceof Error ? cause.message : 'No se pudo añadir al viaje');
+    } finally {
+      setActionPending(false);
+    }
   };
   const submitReview = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!token) return;
-    await api(
-      `/destinos/${id}/reviews`,
-      { method: 'POST', body: JSON.stringify({ rating, comment }) },
-      token,
-    );
-    setComment('');
-    await load();
+    setActionPending(true);
+    setActionError('');
+    try {
+      await api(
+        `/destinos/${id}/reviews`,
+        { method: 'POST', body: JSON.stringify({ rating, comment }) },
+        token,
+      );
+      setComment('');
+      await load();
+    } catch (cause) {
+      setActionError(cause instanceof Error ? cause.message : 'No se pudo publicar la reseña');
+    } finally {
+      setActionPending(false);
+    }
   };
 
   if (loading)
@@ -133,6 +173,11 @@ export default function DestinationPage() {
 
   return (
     <Shell>
+      <DestinationSchema destino={destino} />
+      <PageMeta
+        title={`${destino.nombre.trim()} — TravSeeker`}
+        description={plain(destino.descripcion) || `Descubre ${destino.nombre.trim()} con información práctica para decidir tu viaje.`}
+      />
       <section className="destination-hero">
         <MediaImage src={imageUrl(destino.imagen)} alt={destino.nombre} fetchPriority="high" />
         <div className="destination-hero__shade" />
@@ -154,6 +199,7 @@ export default function DestinationPage() {
         {user ? (
           <Button
             variant={favorite ? 'primary' : 'secondary'}
+            loading={actionPending}
             onClick={() => void toggleFavorite()}
           >
             {favorite ? <Check /> : <Heart />} {favorite ? 'Guardado' : 'Guardar'}
@@ -165,16 +211,19 @@ export default function DestinationPage() {
         )}
         <Button
           variant={compare.ids.includes(id) ? 'primary' : 'secondary'}
-          onClick={() => compare.toggle(id)}
+          onClick={() => {
+            if (!compare.toggle(id)) setActionError('Puedes comparar un máximo de cuatro destinos');
+          }}
         >
           <GitCompare /> {compare.ids.includes(id) ? 'En comparación' : 'Comparar'}
         </Button>
         {user && (
-          <Button variant="secondary" onClick={() => setCollectionOpen(true)}>
+          <Button variant="secondary" disabled={actionPending} onClick={() => setCollectionOpen(true)}>
             <BookmarkPlus /> Añadir a un viaje
           </Button>
         )}
       </div>
+      {actionError && <div className="destination-action-feedback"><Notice tone="error">{actionError}</Notice></div>}
 
       <article className="destination-story">
         <aside className="destination-story__summary">
@@ -333,7 +382,7 @@ export default function DestinationPage() {
                 maxLength={1000}
               />
             </Field>
-            <Button type="submit">Publicar reseña</Button>
+            <Button type="submit" loading={actionPending}>Publicar reseña</Button>
           </form>
         ) : (
           <p className="reviews__login">

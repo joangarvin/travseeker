@@ -76,17 +76,23 @@ export default function MapPage() {
   useEffect(() => {
     setLoading(true);
     setError('');
+    const controller = new AbortController();
     const nextParams = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {
       if (value) nextParams.set(key, value);
     });
     setSearchParams(nextParams, { replace: true });
-    api<Destino[]>(`/mapa${queryString(filters)}`)
+    api<Destino[]>(`/mapa${queryString(filters)}`, { signal: controller.signal })
       .then(setDestinos)
       .catch((cause) =>
-        setError(cause instanceof Error ? cause.message : 'No se pudo cargar el mapa'),
+        controller.signal.aborted
+          ? undefined
+          : setError(cause instanceof Error ? cause.message : 'No se pudo cargar el mapa'),
       )
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
+    return () => controller.abort();
   }, [filters, setSearchParams]);
 
   const active = useMemo(() => destinos.find((item) => item.id === selected), [destinos, selected]);
@@ -121,6 +127,7 @@ export default function MapPage() {
               className="button button--secondary"
               onClick={() => setFiltersOpen((value) => !value)}
               aria-expanded={filtersOpen}
+              aria-controls="map-filters"
             >
               <SlidersHorizontal /> Filtros {filterCount > 0 && <b>{filterCount}</b>}
             </button>
@@ -135,7 +142,7 @@ export default function MapPage() {
           </div>
         </header>
         {filtersOpen && (
-          <div className="map-filters">
+          <div className="map-filters" id="map-filters" role="region" aria-label="Filtros del mapa">
             <select
               value={filters.month || ''}
               onChange={(event) => update('month', event.target.value)}

@@ -44,6 +44,14 @@ export default function AuthPage() {
   };
 
   const isLogin = mode === 'login';
+  const moveTab = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+      event.preventDefault();
+      const nextMode = event.key === 'ArrowRight' ? (isLogin ? 'register' : 'login') : isLogin ? 'register' : 'login';
+      setMode(nextMode);
+      requestAnimationFrame(() => document.getElementById(`auth-tab-${nextMode}`)?.focus());
+    }
+  };
 
   return (
     <Shell>
@@ -61,23 +69,42 @@ export default function AuthPage() {
             <ArrowLeft /> Volver
           </Link>
 
-          <div className="auth-tabs" role="tablist">
-            <button role="tab" aria-selected={isLogin} onClick={() => setMode('login')}>
+          <div className="auth-tabs" role="tablist" aria-label="Acceso y registro">
+            <button
+              id="auth-tab-login"
+              role="tab"
+              aria-selected={isLogin}
+              aria-controls="auth-panel"
+              tabIndex={isLogin ? 0 : -1}
+              type="button"
+              onKeyDown={moveTab}
+              onClick={() => setMode('login')}
+            >
               Entrar
             </button>
-            <button role="tab" aria-selected={!isLogin} onClick={() => setMode('register')}>
+            <button
+              id="auth-tab-register"
+              role="tab"
+              aria-selected={!isLogin}
+              aria-controls="auth-panel"
+              tabIndex={isLogin ? -1 : 0}
+              type="button"
+              onKeyDown={moveTab}
+              onClick={() => setMode('register')}
+            >
               Crear cuenta
             </button>
           </div>
 
-          <h1>{isLogin ? 'Qué bueno verte.' : 'Guarda el próximo viaje.'}</h1>
-          <p>
-            {isLogin
-              ? 'Tus destinos y viajes siguen aquí.'
-              : 'Una cuenta sirve para guardar, comparar y organizar. Nada más.'}
-          </p>
+          <section id="auth-panel" role="tabpanel" aria-labelledby={isLogin ? 'auth-tab-login' : 'auth-tab-register'}>
+            <h1>{isLogin ? 'Qué bueno verte.' : 'Guarda el próximo viaje.'}</h1>
+            <p>
+              {isLogin
+                ? 'Tus destinos y viajes siguen aquí.'
+                : 'Una cuenta sirve para guardar, comparar y organizar. Nada más.'}
+            </p>
 
-          <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
             {!isLogin && (
               <Field label="Nombre" htmlFor="nombre">
                 <input
@@ -109,6 +136,7 @@ export default function AuthPage() {
                   onChange={(event) => setPassword(event.target.value)}
                   required
                   minLength={8}
+                  aria-describedby="password-hint"
                   autoComplete={isLogin ? 'current-password' : 'new-password'}
                 />
                 <button
@@ -125,13 +153,14 @@ export default function AuthPage() {
             <Button type="submit" loading={isSubmitting}>
               {isLogin ? 'Entrar' : 'Crear cuenta'}
             </Button>
-          </form>
+            </form>
 
-          {isLogin && (
-            <Link className="auth-panel__forgot" to="/recuperar">
-              He olvidado mi contraseña
-            </Link>
-          )}
+            {isLogin && (
+              <Link className="auth-panel__forgot" to="/recuperar">
+                He olvidado mi contraseña
+              </Link>
+            )}
+          </section>
         </div>
       </section>
     </Shell>

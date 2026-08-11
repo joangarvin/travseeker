@@ -241,16 +241,12 @@ El worker guarda cada entrega mediante una huella única; una ejecución repetid
 
 ---
 
-## PWA y modo sin conexión
+## Modo sin conexión
 
-El service worker solo se registra en builds de producción. Para comprobar “Guardar sin conexión”:
-
-- sirve el frontend por HTTPS (o `localhost` durante una prueba controlada);
-- despliega `manifest.webmanifest` y `sw.js` desde la raíz pública;
-- abre primero el destino online y pulsa **Guardar sin conexión**;
-- prueba después con la red desactivada en el mismo navegador.
-
-Tras cambiar `sw.js`, despliega el frontend completo para que el navegador instale la nueva versión.
+La aplicación web actual no publica todavía una experiencia offline ni un service worker. No se debe
+presentar como PWA hasta definir qué destinos se pueden guardar, cuánto espacio ocupan y cómo se
+sincronizan los cambios. Si se retoma esta línea, habrá que diseñar primero el flujo de “Guardar sin
+conexión” y validarlo en móvil antes de desplegar un manifest y un service worker.
 
 ---
 
@@ -279,8 +275,6 @@ En local no hace falta `VITE_API_URL`: Vite hace proxy de `/api` al backend.
 **DB vacía o esquema antiguo** → `npx prisma migrate deploy` y, solo si necesitas datos iniciales, `node seed.js` en la DB de producción.
 
 **Las alertas existen pero no llegan** → comprueba SMTP, `MAIL_FROM`, `APP_URL` y que el cron ejecute `npm run alerts:process` desde `backend/`.
-
-**No aparece el modo offline** → debe ser un build de producción servido por HTTPS; en `npm run dev` no se registra el service worker.
 
 **No veo el panel admin** → El usuario debe tener `role = 'admin'` en la **misma base de datos** que usa el backend desplegado. En tu máquina, con el `DATABASE_URL` de producción en `backend/.env`:
 

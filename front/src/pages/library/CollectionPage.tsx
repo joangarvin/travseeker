@@ -19,11 +19,16 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
   const [collection, setCollection] = useState<CollectionDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [actionPending, setActionPending] = useState(false);
   const endpoint = publicView ? `/colecciones/public/${shareToken}` : `/colecciones/${id}`;
 
   const loadCollection = async () => {
     try {
+      setError('');
       setCollection(await api<CollectionDetail>(endpoint, {}, publicView ? null : token));
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'No se pudo abrir el viaje');
     } finally {
       setIsLoading(false);
     }
@@ -35,30 +40,48 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
 
   const removeDestination = async (destinationId: string) => {
     if (!token || !id) return;
-
-    await api(`/colecciones/${id}/items/${destinationId}`, { method: 'DELETE' }, token);
-    await loadCollection();
+    setActionPending(true);
+    try {
+      await api(`/colecciones/${id}/items/${destinationId}`, { method: 'DELETE' }, token);
+      await loadCollection();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'No se pudo quitar el destino');
+    } finally {
+      setActionPending(false);
+    }
   };
 
   const shareCollection = async () => {
     if (!token || !id) return;
-
-    const result = await api<{ shareToken: string }>(
-      `/colecciones/${id}/share`,
-      { method: 'POST' },
-      token,
-    );
-    await navigator.clipboard.writeText(`${location.origin}/viaje/${result.shareToken}`);
-    setMessage('Enlace copiado');
-    await loadCollection();
+    setActionPending(true);
+    try {
+      const result = await api<{ shareToken: string }>(
+        `/colecciones/${id}/share`,
+        { method: 'POST' },
+        token,
+      );
+      await navigator.clipboard.writeText(`${location.origin}/viaje/${result.shareToken}`);
+      setMessage('Enlace copiado');
+      await loadCollection();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'No se pudo compartir el viaje');
+    } finally {
+      setActionPending(false);
+    }
   };
 
   const removeCollection = async () => {
     const confirmed = confirm('¿Eliminar este viaje? Esta acción no se puede deshacer.');
     if (!token || !id || !confirmed) return;
 
-    await api(`/colecciones/${id}`, { method: 'DELETE' }, token);
-    navigate('/colecciones');
+    setActionPending(true);
+    try {
+      await api(`/colecciones/${id}`, { method: 'DELETE' }, token);
+      navigate('/colecciones');
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'No se pudo eliminar el viaje');
+      setActionPending(false);
+    }
   };
 
   if (isLoading) {
@@ -75,7 +98,7 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
         <section className="status-page">
           <div>
             <h1>Viaje no disponible</h1>
-            <Notice tone="error">Este viaje no está disponible.</Notice>
+            <Notice tone="error">{error || 'Este viaje no está disponible.'}</Notice>
           </div>
         </section>
       </Shell>
@@ -98,10 +121,10 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
         action={
           isOwner ? (
             <div className="heading-actions">
-              <Button variant="secondary" onClick={() => void shareCollection()}>
+              <Button variant="secondary" loading={actionPending} onClick={() => void shareCollection()}>
                 <Share2 /> Compartir
               </Button>
-              <Button variant="danger" onClick={() => void removeCollection()}>
+              <Button variant="danger" disabled={actionPending} onClick={() => void removeCollection()}>
                 <Trash2 /> Eliminar
               </Button>
             </div>
@@ -109,6 +132,7 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
         }
       >
         <p>{collection.descripcion || 'Un viaje en construcción.'}</p>
+        {error && <Notice tone="error">{error}</Notice>}
         {message && <Notice tone="success">{message}</Notice>}
       </PageHeading>
 
@@ -142,6 +166,8 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
               </div>
               {canEdit && (
                 <button
+                  type="button"
+                  disabled={actionPending}
                   onClick={() => void removeDestination(item.destino.id)}
                   aria-label={`Quitar ${item.destino.nombre}`}
                 >

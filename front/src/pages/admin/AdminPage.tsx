@@ -564,7 +564,7 @@ export default function AdminPage() {
       <div className="admin-layout">
         <AdminNavigation activeTab={activeTab} counts={resourceCounts} onChange={setActiveTab} />
 
-        <section className="admin-workspace" aria-live="polite">
+        <section className="admin-workspace" id="admin-panel" role="tabpanel" aria-labelledby={`admin-tab-${activeTab}`}>
           {feedback && <Notice tone={feedback.tone}>{feedback.text}</Notice>}
           {isLoading ? (
             <Loader />

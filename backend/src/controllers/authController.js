@@ -1,5 +1,11 @@
 const authService = require('../services/authService');
 const { asyncHandler } = require('../utils/asyncHandler');
+const { clearSessionCookie, setSessionCookie } = require('../utils/sessionCookie');
+
+function sendAuthenticated(res, result, status = 200) {
+  setSessionCookie(res, result.token);
+  return res.status(status).json({ user: result.user });
+}
 
 const register = asyncHandler(async (req, res) => {
   const { email, password, nombre } = req.body;
@@ -10,7 +16,7 @@ const register = asyncHandler(async (req, res) => {
     return res.status(400).json({ error: 'La contraseña debe tener al menos 8 caracteres' });
   }
   const result = await authService.register({ email, password, nombre });
-  res.status(201).json(result);
+  return sendAuthenticated(res, result, 201);
 });
 
 const login = asyncHandler(async (req, res) => {
@@ -19,7 +25,12 @@ const login = asyncHandler(async (req, res) => {
     return res.status(400).json({ error: 'Email y contraseña son obligatorios' });
   }
   const result = await authService.login({ email, password });
-  res.json(result);
+  return sendAuthenticated(res, result);
+});
+
+const logout = asyncHandler(async (_req, res) => {
+  clearSessionCookie(res);
+  res.json({ success: true });
 });
 
 const me = asyncHandler(async (req, res) => {
@@ -88,4 +99,5 @@ module.exports = {
   confirmVerification,
   forgotPassword,
   resetPassword,
+  logout,
 };

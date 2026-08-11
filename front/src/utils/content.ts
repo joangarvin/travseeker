@@ -55,7 +55,7 @@ export function sanitizeHtml(value?: string | null) {
     if (node.tagName === 'A') {
       const href = node.getAttribute('href') || '';
 
-      if (!/^(https?:|mailto:|\/)/.test(href)) {
+      if (!/^(https?:|mailto:|\/(?!\/))/.test(href)) {
         node.removeAttribute('href');
       }
 

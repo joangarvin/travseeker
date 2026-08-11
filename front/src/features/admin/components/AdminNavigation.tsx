@@ -17,14 +17,33 @@ const tabs = [
 ] as const;
 
 export function AdminNavigation({ activeTab, counts, onChange }: AdminNavigationProps) {
+  const moveTab = (event: React.KeyboardEvent<HTMLButtonElement>, current: AdminTab) => {
+    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+    event.preventDefault();
+    const ids = tabs.map((tab) => tab.id);
+    const currentIndex = ids.indexOf(current);
+    const nextIndex = event.key === 'ArrowRight'
+      ? (currentIndex + 1) % ids.length
+      : (currentIndex - 1 + ids.length) % ids.length;
+    const next = ids[nextIndex] as AdminTab;
+    onChange(next);
+    requestAnimationFrame(() => document.getElementById(`admin-tab-${next}`)?.focus());
+  };
+
   return (
-    <nav className="admin-nav" aria-label="Administración">
+    <nav className="admin-nav" aria-label="Administración" role="tablist">
       {tabs.map(({ id, label, Icon, ...tab }) => (
         <button
           key={id}
           className={activeTab === id ? 'is-active' : ''}
+          id={`admin-tab-${id}`}
+          type="button"
+          role="tab"
           onClick={() => onChange(id)}
-          aria-current={activeTab === id ? 'page' : undefined}
+          aria-selected={activeTab === id}
+          aria-controls="admin-panel"
+          tabIndex={activeTab === id ? 0 : -1}
+          onKeyDown={(event) => moveTab(event, id)}
           aria-label={label}
         >
           <Icon />

@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { api } from '../services/api';
+import { api, COOKIE_SESSION_MARKER } from '../services/api';
 import type { User } from '../types';
 
 type AuthContextValue = {
@@ -20,25 +20,20 @@ type AuthContextValue = {
   refresh: () => Promise<void>;
 };
 
-const TOKEN_STORAGE_KEY = 'trav_token';
+const LEGACY_TOKEN_STORAGE_KEY = 'trav_token';
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem(TOKEN_STORAGE_KEY));
+  const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(Boolean(token));
+  const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    if (!token) {
-      setUser(null);
-      setLoading(false);
-      return;
-    }
-
+    setLoading(true);
     try {
       setUser(await api<User>('/auth/me', {}, token));
+      setToken(COOKIE_SESSION_MARKER);
     } catch {
-      localStorage.removeItem(TOKEN_STORAGE_KEY);
       setToken(null);
       setUser(null);
     } finally {
@@ -47,17 +42,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [token]);
 
   useEffect(() => {
+    localStorage.removeItem(LEGACY_TOKEN_STORAGE_KEY);
+  }, []);
+
+  useEffect(() => {
     void refresh();
   }, [refresh]);
 
   const authenticate = async (path: string, payload: Record<string, string>) => {
-    const result = await api<{ user: User; token: string }>(path, {
+    const result = await api<{ user: User }>(path, {
       method: 'POST',
       body: JSON.stringify(payload),
     });
 
-    localStorage.setItem(TOKEN_STORAGE_KEY, result.token);
-    setToken(result.token);
+    setToken(COOKIE_SESSION_MARKER);
     setUser(result.user);
   };
 
@@ -70,9 +68,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       register: (email, password, nombre) =>
         authenticate('/auth/register', { email, password, nombre }),
       logout: () => {
-        localStorage.removeItem(TOKEN_STORAGE_KEY);
-        setToken(null);
         setUser(null);
+        void api('/auth/logout', { method: 'POST' }).finally(() => setToken(null));
       },
       refresh,
     }),

@@ -20,7 +20,7 @@ export function AppShell({ children, footer = true }: AppShellProps) {
         Saltar al contenido
       </a>
       <SiteHeader />
-      <main id="main">{children}</main>
+      <main id="main" tabIndex={-1}>{children}</main>
       {shouldShowFooter && <SiteFooter />}
     </>
   );

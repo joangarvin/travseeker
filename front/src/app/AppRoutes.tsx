@@ -1,8 +1,9 @@
 import { lazy, Suspense } from 'react';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import { Compass } from 'lucide-react';
 import { Shell } from '../components/layout';
 import { Empty, Loader } from '../components/ui';
+import { PageMeta } from '../components/layout/PageMeta';
 
 const HomePage = lazy(() => import('../pages/home/HomePage'));
 const DestinationPage = lazy(() => import('../pages/destination/DestinationPage'));
@@ -40,14 +41,42 @@ function NotFoundPage() {
 }
 
 export function AppRoutes() {
+  const location = useLocation();
+  const isDestinationRoute = location.pathname.startsWith('/destino/');
+  const canonical = typeof window === 'undefined'
+    ? undefined
+    : `${window.location.origin}${location.pathname}`;
+  const routeMeta = location.pathname.startsWith('/mapa')
+    ? ['El mapa', 'Explora destinos de TravSeeker sobre el mapa.']
+    : location.pathname.startsWith('/comparar')
+      ? ['Comparar destinos', 'Compara presupuesto, afluencia y mejor momento para viajar.']
+      : location.pathname.startsWith('/sobre-nosotros')
+        ? ['Sobre TravSeeker', 'Una guía independiente para decidir mejor tus viajes.']
+      : location.pathname.startsWith('/auth')
+          ? ['Entrar en TravSeeker', 'Guarda destinos, compara opciones y organiza tus viajes.']
+          : location.pathname.startsWith('/recuperar')
+            ? ['Recuperar contraseña — TravSeeker', 'Recupera el acceso a tu cuenta de TravSeeker.']
+            : location.pathname.startsWith('/verificar-email')
+              ? ['Verificar email — TravSeeker', 'Confirma tu email para activar todas las funciones.']
+          : location.pathname.startsWith('/favoritos')
+            ? ['Destinos guardados', 'Tus destinos favoritos en un solo lugar.']
+            : location.pathname.startsWith('/colecciones') || location.pathname.startsWith('/viaje/')
+              ? ['Tus viajes', 'Organiza y comparte tus ideas de viaje.']
+              : location.pathname.startsWith('/perfil')
+                ? ['Tu perfil', 'Configura tus preferencias de viaje.']
+                : location.pathname.startsWith('/admin')
+                  ? ['Administración', 'Gestiona el contenido de TravSeeker.']
+                  : ['TravSeeker — encuentra tu próximo lugar', 'Descubre destinos españoles por presupuesto, temporada y afluencia.'];
   return (
-    <Suspense
+    <>
+      {!isDestinationRoute && <PageMeta title={routeMeta[0]} description={routeMeta[1]} canonical={canonical} />}
+      <Suspense
       fallback={
         <div className="app-loader">
           <Loader label="Preparando TravSeeker" />
         </div>
       }
-    >
+      >
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/destino/:id" element={<DestinationPage />} />
@@ -65,6 +94,7 @@ export function AppRoutes() {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </Suspense>
+      </Suspense>
+    </>
   );
 }

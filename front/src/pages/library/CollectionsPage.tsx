@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FolderHeart, Plus } from 'lucide-react';
 import { PageHeading, Shell } from '../../components/layout';
-import { Button, Empty, Loader } from '../../components/ui';
+import { Button, Empty, Loader, Notice } from '../../components/ui';
 import { useAuth } from '../../contexts';
 import { GuestGate } from '../../features/auth/components/GuestGate';
 import { CollectionCover } from '../../features/collections/components/CollectionCover';
@@ -14,12 +14,16 @@ export default function CollectionsPage() {
   const [collections, setCollections] = useState<CollectionSummary[]>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const loadCollections = async () => {
     if (!token) return;
 
     try {
+      setError('');
       setCollections(await api<CollectionSummary[]>('/colecciones', {}, token));
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'No se pudieron cargar tus viajes');
     } finally {
       setIsLoading(false);
     }
@@ -32,15 +36,20 @@ export default function CollectionsPage() {
   const createCollection = async (name: string, description: string) => {
     if (!token) return;
 
-    await api(
-      '/colecciones',
-      {
-        method: 'POST',
-        body: JSON.stringify({ nombre: name, descripcion: description, color: 'cobalt' }),
-      },
-      token,
-    );
-    await loadCollections();
+    try {
+      await api(
+        '/colecciones',
+        {
+          method: 'POST',
+          body: JSON.stringify({ nombre: name, descripcion: description, color: 'cobalt' }),
+        },
+        token,
+      );
+      await loadCollections();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'No se pudo crear el viaje');
+      throw cause;
+    }
   };
 
   if (isAuthLoading) {
@@ -65,7 +74,7 @@ export default function CollectionsPage() {
         kicker="Planificación"
         title="Tus viajes"
         action={
-          <Button onClick={() => setIsCreateModalOpen(true)}>
+          <Button disabled={!user.emailVerified} onClick={() => setIsCreateModalOpen(true)}>
             <Plus /> Nuevo viaje
           </Button>
         }
@@ -73,7 +82,11 @@ export default function CollectionsPage() {
         <p>De una primera idea a un itinerario que puedes compartir.</p>
       </PageHeading>
 
+      {!user.emailVerified && (
+        <Notice tone="info">Verifica tu email desde el perfil para crear y compartir viajes.</Notice>
+      )}
       <section className="collections-grid">
+        {error && <Notice tone="error">{error}. Puedes reintentar la acción.</Notice>}
         {isLoading ? (
           <Loader />
         ) : collections.length ? (

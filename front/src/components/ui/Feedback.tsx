@@ -12,12 +12,14 @@ export function Loader({ label = 'Cargando' }: { label?: string }) {
 type NoticeProps = {
   tone?: 'info' | 'error' | 'success';
   children: ReactNode;
+  action?: ReactNode;
 };
 
-export function Notice({ tone = 'info', children }: NoticeProps) {
+export function Notice({ tone = 'info', children, action }: NoticeProps) {
   return (
     <div className={`notice notice--${tone}`} role={tone === 'error' ? 'alert' : 'status'}>
-      {children}
+      <span className="notice__message">{children}</span>
+      {action}
     </div>
   );
 }
