@@ -1053,69 +1053,199 @@
   border: 0;
   accent-color: var(--brand);
 }
-.municipality-manager {
+.municipio-combobox {
+  position: relative;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: 20px;
+  max-width: 820px;
 }
-.municipality-manager h4 {
-  margin: 0 0 16px;
-  font-size: 0.9rem;
-}
-.municipality-manager__associated,
-.municipality-manager__catalog {
-  min-width: 0;
+.municipio-combobox__selected {
   padding: 20px;
   border: 1px solid var(--line);
-  background: var(--surface);
+  background: var(--surface-muted);
 }
-.municipality-manager__associated > div {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  min-height: 48px;
-  border-bottom: 1px solid var(--line);
-}
-.municipality-manager__associated > div > span {
+.municipio-combobox__selected > div:first-child {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-bottom: 14px;
 }
-.municipality-manager__associated button {
+.municipio-combobox__selected > div:first-child > span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
+  border-radius: var(--r-pill);
+  background: var(--brand);
+  color: var(--ink-inverse);
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+.municipio-combobox__selected > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+.municipio-combobox__selected ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.municipio-combobox__selected li {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-left: 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+.municipio-combobox__selected li > svg {
+  width: 15px;
+  margin-right: 7px;
+  color: var(--brand);
+}
+.municipio-combobox__selected li button {
   display: grid;
   place-items: center;
   width: 44px;
   height: 44px;
+  margin-left: 4px;
   border: 0;
+  border-radius: 50%;
   background: transparent;
+  color: var(--muted);
+}
+.municipio-combobox__selected li button:hover {
+  background: var(--surface-muted);
   color: var(--danger);
 }
-.municipality-manager__catalog .admin-search {
-  margin-bottom: 12px;
+.municipio-combobox__selected li button svg {
+  width: 16px;
 }
-.municipality-manager__catalog > div {
+.municipio-combobox__search {
+  display: grid;
+  gap: 8px;
+}
+.municipio-combobox__search > label {
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+.municipio-combobox__search > div {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px;
+}
+.municipio-combobox__search > div > svg {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 16px;
+  width: 18px;
+  color: var(--muted);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.municipio-combobox__search input {
+  min-width: 0;
+  min-height: 48px;
+  padding-left: 46px;
+  border-right: 0;
+}
+.municipio-combobox__search button {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+}
+.municipio-combobox__search button svg {
+  width: 18px;
+}
+.municipio-combobox__search button[aria-expanded='true'] svg {
+  transform: rotate(180deg);
+}
+.municipio-combobox__popover {
+  margin-top: -12px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+}
+.municipio-combobox__popover ul {
   max-height: 360px;
+  margin: 0;
+  padding: 4px;
   overflow-y: auto;
+  list-style: none;
 }
-.municipality-manager__catalog > div > button {
+.municipio-combobox__popover li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  width: 100%;
+  gap: 16px;
   min-height: 52px;
-  padding: 8px 4px;
-  border: 0;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--line);
-  background: transparent;
-  text-align: left;
+  cursor: pointer;
 }
-.municipality-manager__catalog > div > button span {
+.municipio-combobox__popover li:last-child {
+  border-bottom: 0;
+}
+.municipio-combobox__popover li.is-active {
+  background: var(--brand-soft);
+  box-shadow: inset 3px 0 var(--brand);
+}
+.municipio-combobox__popover li[aria-selected='true'] {
+  font-weight: 800;
+}
+.municipio-combobox__popover li > span:first-child {
   display: grid;
+  min-width: 0;
 }
-.municipality-manager__catalog small {
+.municipio-combobox__popover small {
+  overflow: hidden;
   color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.municipio-combobox__status {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 5px;
+  color: var(--brand);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+.municipio-combobox__status svg {
+  width: 15px;
+}
+.municipio-combobox__popover > p {
+  margin: 0;
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+.municipio-combobox.is-busy {
+  cursor: progress;
+}
+.municipio-combobox.is-busy .municipio-combobox__popover {
+  opacity: 0.72;
+}
+.municipio-combobox :focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 2px;
 }
 .admin-editor__footer {
   grid-column: 1 / 3;

@@ -1,5 +1,5 @@
-import { Check, Link2, Search, Trash2 } from 'lucide-react';
 import { CoordinatePicker } from '../../../components/admin/CoordinatePicker';
+import { MunicipioCombobox } from '../../../components/admin/MunicipioCombobox';
 import { Field, ImageUploader, Notice } from '../../../components/ui';
 import type { Destino, Municipio } from '../../../types';
 import { plain } from '../../../utils';
@@ -247,24 +247,16 @@ export function DestinationLocationSection({ form, update }: DestinationSectionP
 
 type DestinationMunicipalitiesSectionProps = {
   destinationId?: string;
-  associated: Municipio[];
-  candidates: Municipio[];
-  municipalityCount: number;
-  query: string;
-  onQueryChange: (value: string) => void;
-  onLink: (municipality: Municipio) => void;
-  onUnlink: (municipality: Municipio) => void;
+  allMunicipios: Municipio[];
+  selectedIds: string[];
+  onChange: (selectedIds: string[]) => void | Promise<void>;
 };
 
 export function DestinationMunicipalitiesSection({
   destinationId,
-  associated,
-  candidates,
-  municipalityCount,
-  query,
-  onQueryChange,
-  onLink,
-  onUnlink,
+  allMunicipios,
+  selectedIds,
+  onChange,
 }: DestinationMunicipalitiesSectionProps) {
   return (
     <section className="editor-section" aria-labelledby="editor-municipalities">
@@ -278,54 +270,11 @@ export function DestinationMunicipalitiesSection({
       {!destinationId ? (
         <Notice>Guarda primero el destino para poder asociar municipios.</Notice>
       ) : (
-        <div className="municipality-manager">
-          <div className="municipality-manager__associated">
-            <h4>Asociados · {associated.length}</h4>
-            {associated.length ? (
-              associated.map((municipality) => (
-                <div key={municipality.id}>
-                  <span>
-                    <Check />
-                    {municipality.nombre}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => onUnlink(municipality)}
-                    aria-label={`Retirar ${municipality.nombre}`}
-                  >
-                    <Trash2 />
-                  </button>
-                </div>
-              ))
-            ) : (
-              <p>Aún no has asociado municipios.</p>
-            )}
-          </div>
-
-          <div className="municipality-manager__catalog">
-            <h4>Buscar en el catálogo</h4>
-            <label className="admin-search">
-              <Search />
-              <span className="sr-only">Buscar municipio</span>
-              <input
-                value={query}
-                onChange={(event) => onQueryChange(event.target.value)}
-                placeholder={`Buscar entre ${municipalityCount} municipios`}
-              />
-            </label>
-            <div>
-              {candidates.map((municipality) => (
-                <button type="button" key={municipality.id} onClick={() => onLink(municipality)}>
-                  <span>
-                    {municipality.nombre}
-                    <small>{plain(municipality.tipoTurismo) || 'Sin categoría'}</small>
-                  </span>
-                  <Link2 />
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
+        <MunicipioCombobox
+          allMunicipios={allMunicipios}
+          selectedIds={selectedIds}
+          onChange={onChange}
+        />
       )}
     </section>
   );

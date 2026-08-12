@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import {
   BookOpen,
   CalendarRange,
@@ -89,7 +89,6 @@ export function DestinationEditor({
   const [activeSection, setActiveSection] = useState<EditorSection>('identity');
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<EditorMessage | null>(null);
-  const [municipalityQuery, setMunicipalityQuery] = useState('');
   const [activityDraft, setActivityDraft] = useState<Partial<Activity> | null>(null);
   const [isActivitySaving, setIsActivitySaving] = useState(false);
   const [tourismTypeDraft, setTourismTypeDraft] = useState<Partial<TourismType> | null>(null);
@@ -98,18 +97,6 @@ export function DestinationEditor({
   const [placeTarget, setPlaceTarget] = useState<{ groupId: string; itemId: string } | null>(null);
   const [isPlaceSaving, setIsPlaceSaving] = useState(false);
   const associatedMunicipalities = form.municipios || [];
-
-  const municipalityCandidates = useMemo(
-    () =>
-      municipalities
-        .filter(
-          (municipality) =>
-            !associatedMunicipalities.some((current) => current.id === municipality.id) &&
-            municipality.nombre.toLowerCase().includes(municipalityQuery.toLowerCase()),
-        )
-        .slice(0, 30),
-    [associatedMunicipalities, municipalities, municipalityQuery],
-  );
 
   const updateField = <Key extends keyof Destino>(key: Key, value: Destino[Key]) => {
     setForm((currentForm) => ({ ...currentForm, [key]: value }));
@@ -205,6 +192,22 @@ export function DestinationEditor({
         text: cause instanceof Error ? cause.message : 'No se pudo retirar el municipio',
       });
     }
+  };
+
+  const changeMunicipalities = async (selectedIds: string[]) => {
+    const currentIds = new Set(associatedMunicipalities.map((municipality) => municipality.id));
+    const nextIds = new Set(selectedIds);
+    const added = municipalities.find(
+      (municipality) => nextIds.has(municipality.id) && !currentIds.has(municipality.id),
+    );
+    if (added) {
+      await linkMunicipality(added);
+      return;
+    }
+    const removed = associatedMunicipalities.find(
+      (municipality) => !nextIds.has(municipality.id),
+    );
+    if (removed) await unlinkMunicipality(removed);
   };
 
   const createActivity = async (activity: Partial<Activity>) => {
@@ -411,13 +414,9 @@ export function DestinationEditor({
             {activeSection === 'municipalities' && (
               <DestinationMunicipalitiesSection
                 destinationId={form.id}
-                associated={associatedMunicipalities}
-                candidates={municipalityCandidates}
-                municipalityCount={municipalities.length}
-                query={municipalityQuery}
-                onQueryChange={setMunicipalityQuery}
-                onLink={(municipality) => void linkMunicipality(municipality)}
-                onUnlink={(municipality) => void unlinkMunicipality(municipality)}
+                allMunicipios={municipalities}
+                selectedIds={associatedMunicipalities.map((municipality) => municipality.id)}
+                onChange={changeMunicipalities}
               />
             )}
           </div>

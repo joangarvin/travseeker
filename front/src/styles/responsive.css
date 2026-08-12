@@ -433,8 +433,8 @@
   .admin-editor__footer > span {
     display: none;
   }
-  .municipality-manager {
-    grid-template-columns: 1fr;
+  .municipio-combobox__selected {
+    padding: 16px;
   }
   .image-uploader,
   .image-uploader--circular {
