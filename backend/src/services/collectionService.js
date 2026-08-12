@@ -3,18 +3,26 @@ const { randomBytes } = require('crypto');
 const { LIST_SELECT } = require('../constants/selects');
 const { canAccess } = require('../domain/collectionAccess');
 const { buildCollectionOrder } = require('../domain/collectionOrder');
+const { normalizeItinerary } = require('../domain/itinerary');
 
 const COLLECTION_DESTINATION_SELECT = {
   ...LIST_SELECT,
+  latitud: true,
+  longitud: true,
   municipioLinks: {
-    select: { municipio: { select: { id: true, nombre: true, precios: true, conexiones: true, tipoTurismo: true } } },
+    select: { municipio: { select: { id: true, nombre: true, precios: true, conexiones: true, tipoTurismo: true, latitud: true, longitud: true } } },
+  },
+  activityLinks: {
+    where: { activity: { isActive: true } },
+    include: { activity: true },
   },
 };
 
 function mapCollectionDestination(destino) {
   const municipios = (destino.municipioLinks || []).map((link) => link.municipio).filter(Boolean);
-  const { municipioLinks, ...rest } = destino;
-  return { ...rest, municipios };
+  const activities = (destino.activityLinks || []).map((link) => link.activity).filter(Boolean);
+  const { municipioLinks, activityLinks, ...rest } = destino;
+  return { ...rest, municipios, activities, activityIds: activities.map((activity) => activity.id) };
 }
 
 function clean(str, max) {
@@ -107,6 +115,7 @@ async function getCollection(userId, id) {
     shareToken: collection.shareToken,
     startDate: collection.startDate,
     endDate: collection.endDate,
+    itinerary: Array.isArray(collection.itinerary) ? collection.itinerary : [],
     role: access.role,
     members: collection.members.map((member) => ({ id: member.id, role: member.role, user: member.user })),
     createdAt: collection.createdAt,
@@ -153,7 +162,7 @@ async function createCollection(userId, { nombre, descripcion, color }) {
   return { ...collection, count: 0, covers: [] };
 }
 
-async function updateCollection(userId, id, { nombre, descripcion, color, startDate, endDate }) {
+async function updateCollection(userId, id, { nombre, descripcion, color, startDate, endDate, itinerary }) {
   await getAccess(userId, id, 'editor');
 
   const data = {};
@@ -177,6 +186,23 @@ async function updateCollection(userId, id, { nombre, descripcion, color, startD
   const effectiveEnd = parsedEnd === undefined ? current.endDate : parsedEnd;
   if (effectiveStart && effectiveEnd && effectiveEnd < effectiveStart) {
     const error = new Error('La fecha de fin no puede ser anterior al inicio'); error.status = 400; throw error;
+  }
+
+  if (itinerary !== undefined) {
+    const items = await prisma.collectionItem.findMany({
+      where: { collectionId: id },
+      select: {
+        destinoId: true,
+        destino: { select: { municipioLinks: { select: { municipioId: true } } } },
+      },
+    });
+    data.itinerary = normalizeItinerary(itinerary, {
+      destinationIds: new Set(items.map((item) => item.destinoId)),
+      municipalityIdsByDestination: new Map(items.map((item) => [
+        item.destinoId,
+        new Set(item.destino.municipioLinks.map((link) => link.municipioId)),
+      ])),
+    });
   }
 
   return prisma.collection.update({ where: { id }, data });
@@ -217,6 +243,7 @@ async function getPublicCollection(shareToken) {
     color: collection.color,
     startDate: collection.startDate,
     endDate: collection.endDate,
+    itinerary: Array.isArray(collection.itinerary) ? collection.itinerary : [],
     items: collection.items.map((item) => ({ id: item.id, dayIndex: item.dayIndex, status: item.status, sortOrder: item.sortOrder, destino: mapCollectionDestination(item.destino) })),
   };
 }
@@ -290,8 +317,17 @@ async function reorderItems(userId, collectionId, orderedDestinoIds) {
 
 async function removeItem(userId, collectionId, destinoId) {
   await getAccess(userId, collectionId, 'editor');
-  await prisma.collectionItem.deleteMany({ where: { collectionId, destinoId } });
-  await prisma.collection.update({ where: { id: collectionId }, data: { updatedAt: new Date() } });
+  const collection = await prisma.collection.findUnique({
+    where: { id: collectionId },
+    select: { itinerary: true },
+  });
+  const itinerary = (Array.isArray(collection?.itinerary) ? collection.itinerary : [])
+    .filter((day) => day.destinationId !== destinoId)
+    .map((day, index) => ({ ...day, dayNumber: index + 1 }));
+  await prisma.$transaction([
+    prisma.collectionItem.deleteMany({ where: { collectionId, destinoId } }),
+    prisma.collection.update({ where: { id: collectionId }, data: { itinerary, updatedAt: new Date() } }),
+  ]);
   return { removed: true };
 }
 

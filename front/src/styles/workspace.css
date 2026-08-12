@@ -165,3 +165,14 @@
 .admin-list article > div:last-child > button:last-child:not(.button) {
   color: var(--danger);
 }
+.admin-form-grid--two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+@media (max-width: 560px) {
+  .admin-form-grid--two {
+    grid-template-columns: 1fr;
+  }
+}
