@@ -4,6 +4,19 @@ const { LIST_SELECT } = require('../constants/selects');
 const { canAccess } = require('../domain/collectionAccess');
 const { buildCollectionOrder } = require('../domain/collectionOrder');
 
+const COLLECTION_DESTINATION_SELECT = {
+  ...LIST_SELECT,
+  municipioLinks: {
+    select: { municipio: { select: { id: true, nombre: true, precios: true, conexiones: true, tipoTurismo: true } } },
+  },
+};
+
+function mapCollectionDestination(destino) {
+  const municipios = (destino.municipioLinks || []).map((link) => link.municipio).filter(Boolean);
+  const { municipioLinks, ...rest } = destino;
+  return { ...rest, municipios };
+}
+
 function clean(str, max) {
   if (typeof str !== 'string') return null;
   const t = str.trim();
@@ -73,7 +86,7 @@ async function getCollection(userId, id) {
     include: {
       items: {
         orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
-        include: { destino: { select: LIST_SELECT } },
+        include: { destino: { select: COLLECTION_DESTINATION_SELECT } },
       },
       members: { include: { user: { select: { id: true, email: true, nombre: true, avatarUrl: true } } }, orderBy: { createdAt: 'asc' } },
     },
@@ -106,7 +119,7 @@ async function getCollection(userId, id) {
       status: i.status,
       sortOrder: i.sortOrder,
       createdAt: i.createdAt,
-      destino: i.destino,
+      destino: mapCollectionDestination(i.destino),
     })),
   };
 }
@@ -191,7 +204,7 @@ async function stopSharingCollection(userId, id) {
 async function getPublicCollection(shareToken) {
   const collection = await prisma.collection.findFirst({
     where: { shareToken, visibility: 'shared' },
-    include: { items: { orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }], include: { destino: { select: LIST_SELECT } } } },
+    include: { items: { orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }], include: { destino: { select: COLLECTION_DESTINATION_SELECT } } } },
   });
   if (!collection) {
     const error = new Error('Este enlace de viaje ya no está disponible');
@@ -204,7 +217,7 @@ async function getPublicCollection(shareToken) {
     color: collection.color,
     startDate: collection.startDate,
     endDate: collection.endDate,
-    items: collection.items.map((item) => ({ id: item.id, dayIndex: item.dayIndex, status: item.status, sortOrder: item.sortOrder, destino: item.destino })),
+    items: collection.items.map((item) => ({ id: item.id, dayIndex: item.dayIndex, status: item.status, sortOrder: item.sortOrder, destino: mapCollectionDestination(item.destino) })),
   };
 }
 

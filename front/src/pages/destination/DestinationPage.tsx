@@ -16,6 +16,7 @@ import { useAuth, useCompare } from '../../contexts';
 import { imageUrl, plain, safeHtml } from '../../utils';
 import type { CollectionSummary, Destino, Review } from '../../types';
 import { Button, Field, Loader, MediaImage, Notice } from '../../components/ui';
+import { BudgetEstimator } from '../../components/BudgetEstimator';
 import { PageMeta, Shell } from '../../components/layout';
 import { DestinationCard } from '../../features/destinations/components/DestinationCard';
 import { EssentialRoute } from '../../features/destinations/components/EssentialRoute';
@@ -308,6 +309,7 @@ export default function DestinationPage() {
               </article>
             ))}
           </div>
+          <BudgetEstimator municipios={destino.municipios} />
         </section>
       )}
 

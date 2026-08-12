@@ -7,6 +7,7 @@ import { useAuth } from '../../contexts';
 import { api } from '../../services/api';
 import type { CollectionDetail } from '../../types';
 import { imageUrl } from '../../utils';
+import { CollectionBudgetSummary } from '../../components/BudgetEstimator';
 
 type CollectionPageProps = {
   publicView?: boolean;
@@ -148,6 +149,8 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
         </span>
         <span>{collection.items.length} destinos</span>
       </section>
+
+      <CollectionBudgetSummary destinations={collection.items.map((item) => item.destino)} />
 
       <section className="itinerary">
         {collection.items.length ? (
