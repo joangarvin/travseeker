@@ -1,3 +1,4 @@
+import { CheckCircle2, CircleAlert, X } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 export function Loader({ label = 'Cargando' }: { label?: string }) {
@@ -20,6 +21,25 @@ export function Notice({ tone = 'info', children, action }: NoticeProps) {
     <div className={`notice notice--${tone}`} role={tone === 'error' ? 'alert' : 'status'}>
       <span className="notice__message">{children}</span>
       {action}
+    </div>
+  );
+}
+
+type ToastProps = {
+  tone?: 'error' | 'success';
+  children: ReactNode;
+  onDismiss: () => void;
+};
+
+export function Toast({ tone = 'success', children, onDismiss }: ToastProps) {
+  const Icon = tone === 'success' ? CheckCircle2 : CircleAlert;
+  return (
+    <div className={`toast toast--${tone}`} role={tone === 'error' ? 'alert' : 'status'}>
+      <Icon aria-hidden="true" />
+      <span>{children}</span>
+      <button type="button" aria-label="Cerrar notificación" onClick={onDismiss}>
+        <X />
+      </button>
     </div>
   );
 }

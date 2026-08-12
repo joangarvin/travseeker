@@ -1140,21 +1140,97 @@
 .place-editor {
   padding-top: 16px;
 }
-.verification-callout {
+.email-verification-banner {
+  position: sticky;
+  z-index: 90;
+  top: 72px;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
   gap: 16px;
-  margin-bottom: 28px;
-  padding: 16px;
-  border: 1px solid var(--warning);
-  background: color-mix(in srgb, var(--warning) 8%, var(--surface));
+  padding: 12px clamp(16px, 3vw, 48px);
+  border-bottom: 1px solid color-mix(in srgb, var(--warning) 42%, var(--line));
+  background: color-mix(in srgb, var(--warning) 12%, var(--surface));
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--ink) 8%, transparent);
 }
-.verification-callout > svg {
+.email-verification-banner > svg {
   color: var(--warning);
 }
-.verification-callout p {
+.email-verification-banner strong {
+  display: block;
+  font-size: 0.88rem;
+}
+.email-verification-banner p {
   margin: 2px 0 0;
   color: var(--muted);
   font-size: 0.76rem;
+}
+.email-verification-banner__dismiss,
+.toast button {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 50%;
+  transition:
+    background 140ms var(--ease),
+    transform 100ms var(--ease);
+}
+.email-verification-banner__dismiss:hover,
+.toast button:hover {
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+}
+.email-verification-banner .button:active:not(:disabled),
+.email-verification-banner__dismiss:active,
+.toast button:active {
+  transform: scale(0.97);
+}
+.toast {
+  position: fixed;
+  z-index: 1200;
+  right: clamp(16px, 3vw, 48px);
+  bottom: 24px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: min(420px, calc(100vw - 32px));
+  padding: 12px 12px 12px 16px;
+  border: 1px solid var(--line-strong);
+  background: var(--ink);
+  color: var(--canvas);
+  box-shadow: 0 18px 50px color-mix(in srgb, #000 28%, transparent);
+  animation: toast-enter 180ms var(--ease) both;
+}
+.toast--success > svg {
+  color: var(--success);
+}
+.toast--error > svg {
+  color: var(--danger);
+}
+.toast span {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.toast button {
+  color: inherit;
+}
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
+  .email-verification-banner .button,
+  .email-verification-banner__dismiss,
+  .toast button {
+    transition: none;
+  }
 }

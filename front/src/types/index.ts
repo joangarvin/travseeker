@@ -18,6 +18,8 @@ export type Municipio = {
   precios?: string;
   conexiones?: string;
   tipoTurismo?: string | null;
+  latitud?: number | null;
+  longitud?: number | null;
   destinosCount?: number;
 };
 export type Place = {
@@ -142,6 +144,7 @@ export type CollectionSummary = {
 
 export type CollectionDetail = CollectionSummary & {
   shareToken?: string | null;
+  itinerary: ItineraryDay[];
   items: Array<{
     id: string;
     destinoId: string;
@@ -156,6 +159,15 @@ export type CollectionDetail = CollectionSummary & {
     user: Pick<User, 'id' | 'email' | 'nombre' | 'avatarUrl'>;
   }>;
 };
+
+export interface ItineraryDay {
+  dayNumber: number;
+  date?: string;
+  destinationId: string;
+  baseMunicipioId?: string;
+  notes?: string;
+  plannedActivities?: string[];
+}
 
 export type SearchFilters = {
   q?: string;

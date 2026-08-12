@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Calendar, FolderHeart, Share2, Trash2, Users } from 'lucide-react';
+import { Calendar, FolderHeart, LayoutGrid, Route, Share2, Trash2, Users } from 'lucide-react';
 import { PageHeading, Shell } from '../../components/layout';
 import { Button, Empty, Loader, MediaImage, Notice } from '../../components/ui';
 import { useAuth } from '../../contexts';
 import { api } from '../../services/api';
-import type { CollectionDetail } from '../../types';
+import type { CollectionDetail, ItineraryDay } from '../../types';
 import { imageUrl } from '../../utils';
 import { CollectionBudgetSummary } from '../../components/BudgetEstimator';
+import { ItineraryBuilder } from '../../components/ItineraryBuilder';
 
 type CollectionPageProps = {
   publicView?: boolean;
@@ -22,6 +23,7 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [actionPending, setActionPending] = useState(false);
+  const [view, setView] = useState<'destinations' | 'itinerary'>('itinerary');
   const endpoint = publicView ? `/colecciones/public/${shareToken}` : `/colecciones/${id}`;
 
   const loadCollection = async () => {
@@ -85,6 +87,16 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
     }
   };
 
+  const saveItinerary = async (itinerary: ItineraryDay[]) => {
+    if (!token || !id) return;
+    await api(
+      `/colecciones/${id}`,
+      { method: 'PATCH', body: JSON.stringify({ itinerary }) },
+      token,
+    );
+    setCollection((current) => (current ? { ...current, itinerary } : current));
+  };
+
   if (isLoading) {
     return (
       <Shell>
@@ -122,10 +134,18 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
         action={
           isOwner ? (
             <div className="heading-actions">
-              <Button variant="secondary" loading={actionPending} onClick={() => void shareCollection()}>
+              <Button
+                variant="secondary"
+                loading={actionPending}
+                onClick={() => void shareCollection()}
+              >
                 <Share2 /> Compartir
               </Button>
-              <Button variant="danger" disabled={actionPending} onClick={() => void removeCollection()}>
+              <Button
+                variant="danger"
+                disabled={actionPending}
+                onClick={() => void removeCollection()}
+              >
                 <Trash2 /> Eliminar
               </Button>
             </div>
@@ -150,41 +170,67 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
         <span>{collection.items.length} destinos</span>
       </section>
 
-      <CollectionBudgetSummary destinations={collection.items.map((item) => item.destino)} />
+      <div className="collection-view-switch no-print" role="tablist" aria-label="Vista del viaje">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={view === 'destinations'}
+          onClick={() => setView('destinations')}
+        >
+          <LayoutGrid /> Fichas de destino
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={view === 'itinerary'}
+          onClick={() => setView('itinerary')}
+        >
+          <Route /> Itinerario día a día
+        </button>
+      </div>
 
-      <section className="itinerary">
-        {collection.items.length ? (
-          collection.items.map((item, index) => (
-            <article key={item.id}>
-              <span className="itinerary__number">{String(index + 1).padStart(2, '0')}</span>
-              <MediaImage src={imageUrl(item.destino.imagen)} alt="" loading="lazy" />
-              <div>
-                <small>
-                  {item.dayIndex ? `Día ${item.dayIndex}` : 'Sin día asignado'} · {item.status}
-                </small>
-                <h2>
-                  <Link to={`/destino/${item.destino.id}`}>{item.destino.nombre}</Link>
-                </h2>
-                <p>{item.notas || 'Sin notas todavía.'}</p>
-              </div>
-              {canEdit && (
-                <button
-                  type="button"
-                  disabled={actionPending}
-                  onClick={() => void removeDestination(item.destino.id)}
-                  aria-label={`Quitar ${item.destino.nombre}`}
-                >
-                  <Trash2 />
-                </button>
-              )}
-            </article>
-          ))
-        ) : (
-          <Empty icon={<FolderHeart />} title="El itinerario está vacío">
-            Añade destinos desde sus fichas para empezar a darle forma.
-          </Empty>
-        )}
-      </section>
+      {view === 'destinations' ? (
+        <>
+          <CollectionBudgetSummary destinations={collection.items.map((item) => item.destino)} />
+          <section className="itinerary collection-destination-list">
+            {collection.items.length ? (
+              collection.items.map((item, index) => (
+                <article key={item.id}>
+                  <span className="itinerary__number">{String(index + 1).padStart(2, '0')}</span>
+                  <MediaImage src={imageUrl(item.destino.imagen)} alt="" loading="lazy" />
+                  <div>
+                    <small>{item.status}</small>
+                    <h2>
+                      <Link to={`/destino/${item.destino.id}`}>{item.destino.nombre}</Link>
+                    </h2>
+                    <p>{item.notas || 'Sin notas todavía.'}</p>
+                  </div>
+                  {canEdit && (
+                    <button
+                      type="button"
+                      disabled={actionPending}
+                      onClick={() => void removeDestination(item.destino.id)}
+                      aria-label={`Quitar ${item.destino.nombre}`}
+                    >
+                      <Trash2 />
+                    </button>
+                  )}
+                </article>
+              ))
+            ) : (
+              <Empty icon={<FolderHeart />} title="El viaje está vacío">
+                Añade destinos desde sus fichas para empezar a darle forma.
+              </Empty>
+            )}
+          </section>
+        </>
+      ) : (
+        <ItineraryBuilder
+          collection={collection}
+          canEdit={canEdit}
+          onSave={canEdit ? saveItinerary : undefined}
+        />
+      )}
     </Shell>
   );
 }

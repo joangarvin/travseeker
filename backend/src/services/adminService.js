@@ -98,11 +98,24 @@ function normalizeMunicipioPayload(payload) {
     err.status = 400;
     throw err;
   }
+  const latitud = payload.latitud === "" || payload.latitud == null ? null : Number(payload.latitud);
+  const longitud = payload.longitud === "" || payload.longitud == null ? null : Number(payload.longitud);
+  if (
+    (latitud === null) !== (longitud === null) ||
+    (latitud !== null && (!Number.isFinite(latitud) || Math.abs(latitud) > 90)) ||
+    (longitud !== null && (!Number.isFinite(longitud) || Math.abs(longitud) > 180))
+  ) {
+    const err = new Error("Las coordenadas del municipio no son válidas");
+    err.status = 400;
+    throw err;
+  }
   return {
     nombre,
     precios: stripHtmlToText(payload.precios),
     conexiones: stripHtmlToText(payload.conexiones),
     tipoTurismo: stripHtmlToText(payload.tipoTurismo),
+    latitud,
+    longitud,
   };
 }
 
@@ -419,6 +432,8 @@ async function createMunicipio(payload) {
     precios: created.precios,
     conexiones: created.conexiones,
     tipoTurismo: created.tipoTurismo,
+    latitud: created.latitud,
+    longitud: created.longitud,
     destinosCount: created._count.destinoLinks,
   };
 }
@@ -436,6 +451,8 @@ async function updateMunicipio(id, payload) {
     precios: updated.precios,
     conexiones: updated.conexiones,
     tipoTurismo: updated.tipoTurismo,
+    latitud: updated.latitud,
+    longitud: updated.longitud,
     destinosCount: updated._count.destinoLinks,
   };
 }

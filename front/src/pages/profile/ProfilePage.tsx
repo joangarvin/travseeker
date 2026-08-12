@@ -4,7 +4,6 @@ import {
   Check,
   KeyRound,
   LogOut,
-  MailCheck,
   Settings,
   Shield,
   Trash2,
@@ -150,18 +149,6 @@ export default function ProfilePage() {
       setAlertActionPending(false);
     }
   };
-  const requestVerification = async () => {
-    if (!token) return;
-    try {
-      await api('/auth/verify-email/request', { method: 'POST' }, token);
-      setFeedback({ tone: 'success', text: 'Enlace de verificación enviado. Revisa tu correo.' });
-    } catch (cause) {
-      setFeedback({
-        tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo enviar el enlace',
-      });
-    }
-  };
   const moveProfileTab = (event: React.KeyboardEvent<HTMLButtonElement>, current: string) => {
     if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
     event.preventDefault();
@@ -211,18 +198,6 @@ export default function ProfilePage() {
           ))}
         </nav>
         <section id="profile-panel" className="profile-panel" role="tabpanel" aria-labelledby={`profile-tab-${tab}`}>
-          {!user.emailVerified && (
-            <div className="verification-callout">
-              <MailCheck />
-              <div>
-                <b>Falta verificar tu email</b>
-                <p>Verifica la dirección para crear y compartir viajes.</p>
-              </div>
-              <Button variant="secondary" onClick={() => void requestVerification()}>
-                Reenviar enlace
-              </Button>
-            </div>
-          )}
           {feedback && <Notice tone={feedback.tone}>{feedback.text}</Notice>}
           {tab === 'profile' && (
             <form

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { SiteFooter } from './SiteFooter';
 import { SiteHeader } from './SiteHeader';
+import { EmailVerificationBanner } from '../../features/auth/components/EmailVerificationBanner';
 
 const ROUTES_WITHOUT_FOOTER = ['/auth', '/recuperar', '/verificar-email', '/admin'];
 
@@ -20,6 +21,7 @@ export function AppShell({ children, footer = true }: AppShellProps) {
         Saltar al contenido
       </a>
       <SiteHeader />
+      <EmailVerificationBanner />
       <main id="main" tabIndex={-1}>{children}</main>
       {shouldShowFooter && <SiteFooter />}
     </>

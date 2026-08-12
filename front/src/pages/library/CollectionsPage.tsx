@@ -74,7 +74,11 @@ export default function CollectionsPage() {
         kicker="Planificación"
         title="Tus viajes"
         action={
-          <Button disabled={!user.emailVerified} onClick={() => setIsCreateModalOpen(true)}>
+          <Button
+            disabled={!user.emailVerified}
+            aria-describedby={!user.emailVerified ? 'new-trip-verification-requirement' : undefined}
+            onClick={() => setIsCreateModalOpen(true)}
+          >
             <Plus /> Nuevo viaje
           </Button>
         }
@@ -83,7 +87,9 @@ export default function CollectionsPage() {
       </PageHeading>
 
       {!user.emailVerified && (
-        <Notice tone="info">Verifica tu email desde el perfil para crear y compartir viajes.</Notice>
+        <span id="new-trip-verification-requirement" className="sr-only">
+          Debes verificar tu correo antes de crear un viaje.
+        </span>
       )}
       <section className="collections-grid">
         {error && <Notice tone="error">{error}. Puedes reintentar la acción.</Notice>}

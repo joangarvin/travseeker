@@ -446,12 +446,18 @@
   .coordinate-picker__map {
     height: 280px;
   }
-  .verification-callout {
-    grid-template-columns: auto 1fr;
+  .email-verification-banner {
+    top: 64px;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 10px;
   }
-  .verification-callout .button {
-    grid-column: 1 / 3;
+  .email-verification-banner .button {
+    grid-column: 1 / -1;
     width: 100%;
+  }
+  .email-verification-banner__dismiss {
+    grid-column: 3;
+    grid-row: 1;
   }
   .form-grid,
   .form-grid--3 {
