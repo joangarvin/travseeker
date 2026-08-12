@@ -1,15 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import {
-  BedDouble,
-  Bus,
-  CalendarDays,
-  Check,
-  Copy,
-  Save,
-  ShieldCheck,
-  Sparkles,
-  Utensils,
-} from 'lucide-react';
+import { BedDouble, Bus, Check, Copy, Save, Sparkles, Utensils } from 'lucide-react';
 import type { Destino, Municipio } from '../types';
 import {
   calculateBudget,
@@ -42,9 +32,6 @@ export type SavedBudget = Budget & {
   nights: number;
   style: TravelStyle;
   season: TravelSeason;
-  contingencyPercent: number;
-  recommendedTotal: number;
-  monthlySavings: number;
   municipio?: Municipio;
 };
 
@@ -98,8 +85,6 @@ export function BudgetEstimator({
   const [style, setStyle] = useState<TravelStyle>('moderate');
   const [season, setSeason] = useState<TravelSeason>('mid');
   const [selectedMunicipioId, setSelectedMunicipioId] = useState(initialMunicipioId);
-  const [contingencyPercent, setContingencyPercent] = useState(10);
-  const [savingMonths, setSavingMonths] = useState(6);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -115,17 +100,6 @@ export function BudgetEstimator({
   );
   const rooms = Math.ceil(travelers / 2);
   const days = nights + 1;
-  const recommendedTotal = budget.total * (1 + contingencyPercent / 100);
-  const monthlySavings = recommendedTotal / savingMonths;
-  const largestCategory = categories.reduce((largest, category) =>
-    budget[category.key] > budget[largest.key] ? category : largest,
-  );
-  const largestShare = Math.round((budget[largestCategory.key] / budget.total) * 100);
-  const planningInsight =
-    season === 'high'
-      ? `La temporada alta eleva alojamiento y comida. El margen del ${contingencyPercent}% te da más aire ante cambios de tarifa.`
-      : `${largestCategory.label} concentra el ${largestShare}% del cálculo. Es la partida donde una reserva o ajuste tendrá más impacto.`;
-
   const summary = [
     `Presupuesto de viaje — ${municipio?.nombre || 'Destino'}`,
     `${travelers} viajeros · ${nights} noches · estilo ${styleLabels[style].toLowerCase()} · temporada ${seasonLabels[season].toLowerCase()}`,
@@ -134,8 +108,6 @@ export function BudgetEstimator({
     `Transporte: ${euro.format(budget.transport)}`,
     `Actividades: ${euro.format(budget.activities)}`,
     `Total estimado: ${euro.format(budget.total)} (${euro.format(budget.perPerson)} por persona)`,
-    `Objetivo recomendado con ${contingencyPercent}% de margen: ${euro.format(recommendedTotal)}`,
-    `Plan de ahorro: ${euro.format(monthlySavings)} al mes durante ${savingMonths} meses`,
   ].join('\n');
 
   const copySummary = async () => {
@@ -247,88 +219,20 @@ export function BudgetEstimator({
             </li>
           ))}
         </ul>
-      </div>
-
-      <section className="budget-plan" aria-labelledby="budget-plan-title">
-        <header>
-          <span>
-            <ShieldCheck aria-hidden="true" /> Plan con margen
-          </span>
-          <h4 id="budget-plan-title">Viaja con el presupuesto cubierto</h4>
-        </header>
-        <div className="budget-plan__settings">
-          <fieldset>
-            <legend>Margen para imprevistos</legend>
-            <div className="budget-plan__segments">
-              {[0, 10, 15, 20].map((value) => (
-                <label key={value}>
-                  <input
-                    type="radio"
-                    name="budget-contingency"
-                    value={value}
-                    checked={contingencyPercent === value}
-                    onChange={() => setContingencyPercent(value)}
-                  />
-                  <span>{value}%</span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
-          <Field label="Tiempo para ahorrar" htmlFor="budget-saving-months">
-            <select
-              id="budget-saving-months"
-              value={savingMonths}
-              onChange={(event) => setSavingMonths(Number(event.target.value))}
-            >
-              {[3, 6, 9, 12, 18].map((value) => (
-                <option key={value} value={value}>
-                  {value} meses
-                </option>
-              ))}
-            </select>
-          </Field>
-        </div>
-        <div className="budget-plan__target" aria-live="polite">
-          <div>
-            <small>Objetivo recomendado</small>
-            <strong>{euro.format(recommendedTotal)}</strong>
-            <span>incluye {euro.format(recommendedTotal - budget.total)} de margen</span>
-          </div>
-          <div>
-            <CalendarDays aria-hidden="true" />
-            <small>Ahorro mensual</small>
-            <strong>{euro.format(monthlySavings)}</strong>
-            <span>{euro.format(monthlySavings / travelers)} por persona</span>
-          </div>
-        </div>
-        <p className="budget-plan__insight">
-          <Sparkles aria-hidden="true" /> {planningInsight}
-        </p>
-      </section>
-
-      <div className="budget-estimator__actions">
-        <Button variant="secondary" onClick={() => void copySummary()}>
-          {copied ? <Check /> : <Copy />} {copied ? 'Resumen copiado' : 'Copiar resumen'}
-        </Button>
-        {onSaveToCollection && (
-          <Button
-            onClick={() =>
-              onSaveToCollection({
-                ...budget,
-                travelers,
-                nights,
-                style,
-                season,
-                contingencyPercent,
-                recommendedTotal,
-                monthlySavings,
-                municipio,
-              })
-            }
-          >
-            <Save /> Guardar presupuesto
+        <div className="budget-estimator__actions">
+          <Button variant="secondary" onClick={() => void copySummary()}>
+            {copied ? <Check /> : <Copy />} {copied ? 'Resumen copiado' : 'Copiar resumen'}
           </Button>
-        )}
+          {onSaveToCollection && (
+            <Button
+              onClick={() =>
+                onSaveToCollection({ ...budget, travelers, nights, style, season, municipio })
+              }
+            >
+              <Save /> Guardar presupuesto
+            </Button>
+          )}
+        </div>
       </div>
     </section>
   );
@@ -337,7 +241,6 @@ export function BudgetEstimator({
 export function CollectionBudgetSummary({ destinations }: { destinations: Destino[] }) {
   const [travelers, setTravelers] = useState(2);
   const [nights, setNights] = useState(4);
-  const [includeMargin, setIncludeMargin] = useState(true);
   const totals = useMemo(
     () =>
       destinations.reduce(
@@ -361,8 +264,6 @@ export function CollectionBudgetSummary({ destinations }: { destinations: Destin
   );
 
   if (!destinations.length) return null;
-
-  const collectionTarget = totals.total * (includeMargin ? 1.1 : 1);
 
   return (
     <section className="collection-budget" aria-labelledby="collection-budget-title">
@@ -390,18 +291,8 @@ export function CollectionBudgetSummary({ destinations }: { destinations: Destin
           {destinations.length} {destinations.length === 1 ? 'destino' : 'destinos'} ·{' '}
           {nights * destinations.length} noches
         </small>
-        <strong>{euro.format(collectionTarget)}</strong>
-        <span>{euro.format(collectionTarget / travelers)} por persona</span>
-        <label className="collection-budget__margin">
-          <input
-            type="checkbox"
-            checked={includeMargin}
-            onChange={(event) => setIncludeMargin(event.target.checked)}
-          />
-          <span>
-            <ShieldCheck /> Incluir 10% para imprevistos
-          </span>
-        </label>
+        <strong>{euro.format(totals.total)}</strong>
+        <span>{euro.format(totals.total / travelers)} por persona</span>
       </div>
       <div className="collection-budget__legend">
         {categories.map(({ key, label }) => (
