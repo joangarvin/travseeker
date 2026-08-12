@@ -17,6 +17,7 @@ import { imageUrl, plain, safeHtml } from '../../utils';
 import type { CollectionSummary, Destino, Review } from '../../types';
 import { Button, Field, Loader, MediaImage, Notice } from '../../components/ui';
 import { BudgetEstimator } from '../../components/BudgetEstimator';
+import { FormattedContent } from '../../components/FormattedContent';
 import { PageMeta, Shell } from '../../components/layout';
 import { DestinationCard } from '../../features/destinations/components/DestinationCard';
 import { EssentialRoute } from '../../features/destinations/components/EssentialRoute';
@@ -300,10 +301,10 @@ export default function DestinationPage() {
                 <div>
                   <h3>{municipio.nombre}</h3>
                   <p>
-                    <BedDouble /> {plain(municipio.precios)}
+                    <BedDouble /> <FormattedContent content={municipio.precios} asPlaintext />
                   </p>
                   <p>
-                    <MapPin /> {plain(municipio.conexiones)}
+                    <MapPin /> <FormattedContent content={municipio.conexiones} asPlaintext />
                   </p>
                 </div>
               </article>

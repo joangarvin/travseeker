@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prestart": "prisma generate",
     "start": "node index.js",
     "dev": "node index.js",
     "postinstall": "prisma generate",
@@ -11,6 +12,7 @@
     "db:seed": "node seed.js",
     "db:seed-reviews": "node scripts/seed-editorial-reviews.js",
     "db:coords": "node scripts/coords.js",
+    "db:clean-municipios": "node scripts/cleanMunicipiosData.js",
     "db:promote-admin": "node scripts/promote-admin.js",
     "db:migrate-municipios": "node scripts/migrate-municipios-m2m.js",
     "db:migrate-tourism": "node scripts/migrate-tourism-taxonomy.js",

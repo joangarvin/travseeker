@@ -11,6 +11,10 @@ const {
   serializeEssentialGroups,
 } = require("../domain/essentials");
 const uploadService = require("./uploadService");
+const {
+  cleanMunicipalityFields,
+  stripHtmlToText,
+} = require("../utils/sanitizeContent");
 
 function clean(value, max) {
   if (typeof value !== "string") return null;
@@ -88,7 +92,7 @@ function validateDestino(data, essentialGroups = null) {
 }
 
 function normalizeMunicipioPayload(payload) {
-  const nombre = String(payload.nombre || "").trim();
+  const nombre = stripHtmlToText(payload.nombre);
   if (!nombre) {
     const err = new Error("El nombre del municipio es obligatorio");
     err.status = 400;
@@ -96,18 +100,16 @@ function normalizeMunicipioPayload(payload) {
   }
   return {
     nombre,
-    precios: payload.precios != null ? String(payload.precios).trim() : "",
-    conexiones:
-      payload.conexiones != null ? String(payload.conexiones).trim() : "",
-    tipoTurismo:
-      payload.tipoTurismo != null ? String(payload.tipoTurismo).trim() : "",
+    precios: stripHtmlToText(payload.precios),
+    conexiones: stripHtmlToText(payload.conexiones),
+    tipoTurismo: stripHtmlToText(payload.tipoTurismo),
   };
 }
 
 function mapDestinoMunicipios(destino) {
   if (!destino) return destino;
   const municipios = (destino.municipioLinks || [])
-    .map((link) => link.municipio)
+    .map((link) => cleanMunicipalityFields(link.municipio))
     .filter(Boolean)
     .sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
   const activities = (destino.activityLinks || [])
@@ -400,7 +402,7 @@ async function listMunicipios() {
     },
   });
   return rows.map(({ _count, ...m }) => ({
-    ...m,
+    ...cleanMunicipalityFields(m),
     destinosCount: _count.destinoLinks,
   }));
 }
@@ -477,7 +479,7 @@ async function linkMunicipio(destinoId, municipioId) {
     update: {},
   });
 
-  return municipio;
+  return cleanMunicipalityFields(municipio);
 }
 
 async function unlinkMunicipio(destinoId, municipioId) {

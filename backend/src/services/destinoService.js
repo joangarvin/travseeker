@@ -10,6 +10,7 @@ const {
 const { normalizeMonth, rankForSeason } = require("../domain/season");
 const { rankDestinationSearch } = require("../domain/search");
 const { parseTags, serializeTags } = require("../constants/scales");
+const { cleanMunicipalityFields } = require("../utils/sanitizeContent");
 
 function mapActivities(destino) {
   if (!destino) return destino;
@@ -50,7 +51,7 @@ function mapTourismTypes(destino) {
 function mapMunicipalities(destino) {
   if (!destino) return destino;
   const municipios = (destino.municipioLinks || [])
-    .map((link) => link.municipio)
+    .map((link) => cleanMunicipalityFields(link.municipio))
     .filter(Boolean)
     .sort((first, second) => first.nombre.localeCompare(second.nombre, "es"));
   const { municipioLinks, ...rest } = destino;
@@ -221,7 +222,7 @@ async function getDestinoById(id) {
   });
   if (!destino) return null;
   const municipios = (destino.municipioLinks || [])
-    .map((link) => link.municipio)
+    .map((link) => cleanMunicipalityFields(link.municipio))
     .filter(Boolean)
     .sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
   const { municipioLinks, ...rest } = destino;

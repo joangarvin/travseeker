@@ -3,6 +3,7 @@ const { randomBytes } = require('crypto');
 const { LIST_SELECT } = require('../constants/selects');
 const { canAccess } = require('../domain/collectionAccess');
 const { buildCollectionOrder } = require('../domain/collectionOrder');
+const { cleanMunicipalityFields } = require('../utils/sanitizeContent');
 
 const COLLECTION_DESTINATION_SELECT = {
   ...LIST_SELECT,
@@ -12,7 +13,9 @@ const COLLECTION_DESTINATION_SELECT = {
 };
 
 function mapCollectionDestination(destino) {
-  const municipios = (destino.municipioLinks || []).map((link) => link.municipio).filter(Boolean);
+  const municipios = (destino.municipioLinks || [])
+    .map((link) => cleanMunicipalityFields(link.municipio))
+    .filter(Boolean);
   const { municipioLinks, ...rest } = destino;
   return { ...rest, municipios };
 }

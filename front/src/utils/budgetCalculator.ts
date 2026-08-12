@@ -1,3 +1,5 @@
+import { stripHtmlToText } from './sanitizeContent';
+
 export type TravelStyle = 'economy' | 'moderate' | 'premium';
 export type TravelSeason = 'low' | 'mid' | 'high';
 
@@ -55,7 +57,7 @@ const dailyActivities: Record<TravelStyle, number> = {
 export function parsePriceRange(preciosString?: string): { min: number; max: number } {
   if (typeof preciosString !== 'string') return { ...FALLBACK_PRICE_RANGE };
 
-  const visibleText = preciosString.replace(/<[^>]*>/g, ' ');
+  const visibleText = stripHtmlToText(preciosString);
   const values = visibleText
     .match(/\d+(?:[.,]\d+)?/g)
     ?.slice(0, 2)
