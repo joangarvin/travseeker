@@ -132,6 +132,60 @@
     grid-template-columns: 1fr;
     gap: 40px;
   }
+  .smart-empty {
+    box-shadow: 5px 5px 0 var(--brand-soft);
+  }
+  .smart-empty::before {
+    left: 47px;
+  }
+  .smart-empty__intro,
+  .smart-empty__suggestion > header {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 16px;
+  }
+  .smart-empty__icon,
+  .smart-empty__suggestion > header > span {
+    width: 44px;
+    height: 44px;
+  }
+  .smart-empty__icon svg,
+  .smart-empty__suggestion > header > span svg {
+    width: 21px;
+    height: 21px;
+  }
+  .smart-empty__reset,
+  .smart-empty__suggestion > header .button {
+    grid-column: 2;
+    width: 100%;
+  }
+  .smart-empty__filters {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .smart-empty__filters > p {
+    margin-top: 0;
+  }
+  .smart-empty__filters > div {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .smart-empty__chip {
+    justify-content: space-between;
+    width: 100%;
+    text-align: left;
+  }
+  .smart-empty__searching {
+    padding-left: 86px;
+  }
+  .smart-empty__suggestion > header {
+    margin-bottom: 28px;
+  }
+  .smart-empty__destinations {
+    padding-left: 60px;
+  }
+  .smart-empty__no-filters {
+    padding-left: 86px;
+  }
   .decision-band {
     grid-template-columns: 1fr;
   }

@@ -1,17 +1,25 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowRight, CalendarDays, Map, SearchX, Sparkles, Users } from 'lucide-react';
+import { ArrowRight, CalendarDays, Map, Sparkles, Users } from 'lucide-react';
 import { api } from '../../services/api';
 import { imageUrl, queryString } from '../../utils';
 import type { Destino, FilterOptions, SearchFilters } from '../../types';
-import { Empty, Loader, MediaImage, Notice } from '../../components/ui';
+import { Loader, MediaImage, Notice } from '../../components/ui';
 import { Shell } from '../../components/layout';
 import { DestinationCard } from '../../features/destinations/components/DestinationCard';
 import { SearchBox } from '../../features/search/SearchBox';
 import { HomeFilterPanel } from '../../features/search/HomeFilterPanel';
+import { EmptyFilterState } from '../../features/search/EmptyFilterState';
 import { tourismDefinition, tourismTypes, tourismColorStyle } from '../../features/tourism/tourism';
 import { useTourismTypes } from '../../contexts';
 import { activityTypes } from '../../features/activities/activities';
+import {
+  buildRelaxationCandidates,
+  getActiveFilterChips,
+  removeActiveFilter,
+  type FallbackResult,
+  type SearchFilterKey,
+} from '../../utils/filterFallbackEngine';
 
 const defaultFilterOptions: FilterOptions = {
   locations: ['Costa', 'Interior', 'Isla', 'Montaña'],
@@ -43,25 +51,48 @@ export default function Home() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [filterOptions, setFilterOptions] = useState<FilterOptions>(defaultFilterOptions);
   const [filters, setFilters] = useState<SearchFilters>(() => Object.fromEntries(params.entries()));
+  const [appliedFilters, setAppliedFilters] = useState<SearchFilters>(() =>
+    Object.fromEntries(params.entries()),
+  );
+  const [fallbackResult, setFallbackResult] = useState<FallbackResult | null>(null);
+  const [fallbackLoading, setFallbackLoading] = useState(false);
+  const initialListAbort = useRef<AbortController | null>(null);
+  const mainSearchAbort = useRef<AbortController | null>(null);
+  const fallbackAbort = useRef<AbortController | null>(null);
 
   const search = async (next = filters) => {
+    mainSearchAbort.current?.abort();
+    initialListAbort.current?.abort();
+    fallbackAbort.current?.abort();
+    const controller = new AbortController();
+    mainSearchAbort.current = controller;
+    const nextParams = new URLSearchParams();
+    Object.entries(next).forEach(([key, value]) => {
+      if (value) nextParams.set(key, value);
+    });
+    setFilters(next);
+    setAppliedFilters(next);
+    setParams(nextParams, { replace: true });
     setLoading(true);
     setError('');
     setResults([]);
+    setResultsTotal(0);
+    setHasMore(false);
+    setFallbackResult(null);
+    setFallbackLoading(false);
     try {
-      const data = await api<DestinationPage>(`/destinos${pageQuery(next)}`);
-      const nextParams = new URLSearchParams();
-      Object.entries(next).forEach(([key, value]) => {
-        if (value) nextParams.set(key, value);
+      const data = await api<DestinationPage>(`/destinos${pageQuery(next)}`, {
+        signal: controller.signal,
       });
+      if (mainSearchAbort.current !== controller) return;
       setResults(data.items);
       setResultsTotal(data.total);
       setHasMore(data.hasMore);
-      setParams(nextParams, { replace: true });
     } catch (cause) {
+      if (controller.signal.aborted) return;
       setError(cause instanceof Error ? cause.message : 'No se pudieron cargar los destinos');
     } finally {
-      setLoading(false);
+      if (mainSearchAbort.current === controller) setLoading(false);
     }
   };
 
@@ -70,7 +101,9 @@ export default function Home() {
     setLoadingMore(true);
     setError('');
     try {
-      const data = await api<DestinationPage>(`/destinos${pageQuery(filters, results.length)}`);
+      const data = await api<DestinationPage>(
+        `/destinos${pageQuery(appliedFilters, results.length)}`,
+      );
       setResults((current) => {
         const known = new Set(current.map((destination) => destination.id));
         return [...current, ...data.items.filter((destination) => !known.has(destination.id))];
@@ -85,11 +118,15 @@ export default function Home() {
   };
 
   useEffect(() => {
+    const listController = new AbortController();
+    initialListAbort.current = listController;
     const initialFilters = Object.fromEntries(params.entries());
     const initialQuery = { ...initialFilters, limit: String(PAGE_SIZE), offset: '0', meta: '1' };
     Promise.allSettled([
       api<Destino[]>('/destacados?limit=5'),
-      api<DestinationPage>(`/destinos${queryString(initialQuery)}`),
+      api<DestinationPage>(`/destinos${queryString(initialQuery)}`, {
+        signal: listController.signal,
+      }),
       api<FilterOptions>('/destinos/filter-options'),
     ])
       .then(([hero, list, options]) => {
@@ -98,14 +135,25 @@ export default function Home() {
           setResults(list.value.items);
           setResultsTotal(list.value.total);
           setHasMore(list.value.hasMore);
+        } else if (!listController.signal.aborted) {
+          setError('No se pudieron cargar los destinos. Revisa la conexión e inténtalo de nuevo.');
         }
-        else setError('No se pudieron cargar los destinos. Revisa la conexión e inténtalo de nuevo.');
         if (options.status === 'fulfilled') setFilterOptions(options.value);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (!listController.signal.aborted) setLoading(false);
+      });
+
+    return () => {
+      listController.abort();
+      mainSearchAbort.current?.abort();
+      fallbackAbort.current?.abort();
+    };
   }, []);
 
-  const activeCount = useMemo(() => Object.values(filters).filter(Boolean).length, [filters]);
+  const draftActiveCount = useMemo(() => getActiveFilterChips(filters).length, [filters]);
+  const activeChips = useMemo(() => getActiveFilterChips(appliedFilters), [appliedFilters]);
+  const activeCount = activeChips.length;
   const visibleResults = results;
   const resultCount = resultsTotal || results.length;
   const moodOptions = catalog.length
@@ -113,6 +161,62 @@ export default function Home() {
     : tourismTypes;
   const update = (key: keyof SearchFilters, value: string) =>
     setFilters((current) => ({ ...current, [key]: value }));
+
+  useEffect(() => {
+    fallbackAbort.current?.abort();
+    setFallbackResult(null);
+
+    if (loading || error || resultCount > 0 || activeChips.length === 0) {
+      setFallbackLoading(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    fallbackAbort.current = controller;
+    setFallbackLoading(true);
+
+    void (async () => {
+      try {
+        for (const candidate of buildRelaxationCandidates(appliedFilters)) {
+          const data = await api<DestinationPage>(
+            `/destinos${queryString({
+              ...candidate.filters,
+              limit: '6',
+              offset: '0',
+              meta: '1',
+            })}`,
+            { signal: controller.signal },
+          );
+          if (controller.signal.aborted) return;
+          if (data.total > 0) {
+            setFallbackResult({
+              ...candidate,
+              total: data.total,
+              suggestedDestinations: data.items.slice(0, 6),
+            });
+            return;
+          }
+        }
+      } catch {
+        if (!controller.signal.aborted) setFallbackResult(null);
+      } finally {
+        if (fallbackAbort.current === controller) setFallbackLoading(false);
+      }
+    })();
+
+    return () => controller.abort();
+  }, [activeChips.length, appliedFilters, error, loading, resultCount]);
+
+  const removeFilter = (key: SearchFilterKey, value?: string) => {
+    const next = removeActiveFilter(appliedFilters, key, value);
+    void search(next);
+  };
+
+  const resetFilters = () => {
+    setFiltersOpen(false);
+    void search({});
+  };
+
   const submitMainSearch = async () => {
     await search();
     document.getElementById('results')?.scrollIntoView({
@@ -144,15 +248,13 @@ export default function Home() {
           <HomeFilterPanel
             filters={filters}
             isOpen={filtersOpen}
-            activeCount={activeCount}
+            activeCount={draftActiveCount}
             locations={filterOptions.locations}
             activities={filterOptions.activities}
             onToggle={() => setFiltersOpen((currentValue) => !currentValue)}
             onUpdate={update}
             onClear={() => {
-              setFilters({});
-              setParams({});
-              void search({});
+              resetFilters();
             }}
             onApply={() => {
               setFiltersOpen(false);
@@ -200,7 +302,6 @@ export default function Home() {
               key={mode.key}
               onClick={() => {
                 const next = { ...filters, tipoTurismo: mode.label };
-                setFilters(next);
                 void search(next);
                 document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' });
               }}
@@ -232,7 +333,7 @@ export default function Home() {
                 : 'Sitios que merecen el viaje'}
             </h2>
           </div>
-          <Link to={`/mapa${queryString(filters)}`}>
+          <Link to={`/mapa${queryString(appliedFilters)}`}>
             Abrir en el mapa <Map />
           </Link>
         </header>
@@ -263,9 +364,14 @@ export default function Home() {
                 ))}
               </div>
             ) : (
-              <Empty icon={<SearchX />} title="No encontramos ese viaje">
-                Prueba con otro municipio, una actividad más general o revisa los filtros activos.
-              </Empty>
+              <EmptyFilterState
+                activeChips={activeChips}
+                fallbackResult={fallbackResult}
+                fallbackLoading={fallbackLoading}
+                onRemoveFilter={removeFilter}
+                onResetAll={resetFilters}
+                onApplySuggestion={(suggestion) => void search(suggestion.filters)}
+              />
             )}
             {hasMore && (
               <button

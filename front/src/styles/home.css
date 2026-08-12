@@ -367,6 +367,201 @@
   gap: 32px 20px;
 }
 
+.smart-empty {
+  position: relative;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  box-shadow: 8px 8px 0 var(--brand-soft);
+}
+
+.smart-empty::before {
+  position: absolute;
+  z-index: 0;
+  top: 44px;
+  bottom: 44px;
+  left: clamp(39px, 5.4vw, 69px);
+  width: 2px;
+  background: var(--brand);
+  content: '';
+}
+
+.smart-empty__intro {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  gap: clamp(20px, 3vw, 36px);
+  align-items: center;
+  padding: clamp(28px, 4vw, 52px);
+}
+
+.smart-empty__icon,
+.smart-empty__suggestion > header > span {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border: 2px solid var(--brand);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--brand);
+}
+
+.smart-empty__icon svg,
+.smart-empty__suggestion > header > span svg {
+  width: 28px;
+  height: 28px;
+}
+
+.smart-empty__intro .kicker,
+.smart-empty__suggestion .kicker {
+  margin-bottom: 8px;
+}
+
+.smart-empty__intro h3,
+.smart-empty__suggestion h3 {
+  max-width: 760px;
+  margin-bottom: 12px;
+  font-size: clamp(1.65rem, 3vw, 2.8rem);
+  line-height: 1;
+}
+
+.smart-empty__intro p:last-child,
+.smart-empty__suggestion header p:last-child {
+  max-width: 680px;
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.smart-empty__reset {
+  white-space: nowrap;
+}
+
+.smart-empty__filters {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 148px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  padding: 20px clamp(28px, 4vw, 52px);
+  border-block: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface-muted) 62%, var(--surface));
+}
+
+.smart-empty__filters > p {
+  margin: 10px 0 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.smart-empty__filters > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.smart-empty__chip {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  min-height: 44px;
+  padding: 7px 8px 7px 15px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 750;
+  transition:
+    border-color 150ms var(--ease),
+    background 150ms var(--ease);
+}
+
+.smart-empty__chip:hover {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+}
+
+.smart-empty__chip svg {
+  width: 26px;
+  height: 26px;
+  padding: 5px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--surface);
+}
+
+.smart-empty__searching {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-height: 76px;
+  padding: 16px clamp(28px, 4vw, 52px) 16px clamp(112px, 10vw, 148px);
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.smart-empty__searching svg {
+  color: var(--brand);
+  animation: smart-empty-pulse 1.2s ease-in-out infinite alternate;
+}
+
+.smart-empty__suggestion {
+  position: relative;
+  z-index: 1;
+  padding: clamp(28px, 4vw, 52px);
+  background: var(--surface);
+}
+
+.smart-empty__suggestion > header {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  gap: clamp(20px, 3vw, 36px);
+  align-items: center;
+  margin-bottom: 36px;
+}
+
+.smart-empty__suggestion > header > span {
+  border-color: var(--ink);
+  background: var(--sun);
+  color: var(--sun-ink);
+}
+
+.smart-empty__suggestion > header .button {
+  white-space: nowrap;
+}
+
+.smart-empty__suggestion > header .button svg {
+  width: 18px;
+}
+
+.smart-empty__destinations {
+  padding-left: calc(64px + clamp(20px, 3vw, 36px));
+}
+
+.smart-empty__no-filters {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 0 clamp(28px, 4vw, 52px) clamp(28px, 4vw, 52px)
+    calc(64px + clamp(48px, 7vw, 88px));
+  color: var(--muted);
+}
+
+@keyframes smart-empty-pulse {
+  from {
+    opacity: 0.45;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .destination-card {
   position: relative;
   display: grid;
