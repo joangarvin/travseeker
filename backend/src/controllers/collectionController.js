@@ -44,7 +44,7 @@ const forDestino = asyncHandler(async (req, res) => {
 });
 
 const share = asyncHandler(async (req, res) => {
-  res.json(await collectionService.shareCollection(req.user.id, req.params.id));
+  res.json(await collectionService.shareCollection(req.user.id, req.params.id, req.body));
 });
 
 const stopSharing = asyncHandler(async (req, res) => {

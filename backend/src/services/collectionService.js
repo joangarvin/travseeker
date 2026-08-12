@@ -4,7 +4,7 @@ const { LIST_SELECT } = require('../constants/selects');
 const { canAccess } = require('../domain/collectionAccess');
 const { buildCollectionOrder } = require('../domain/collectionOrder');
 const { cleanMunicipalityFields } = require('../utils/sanitizeContent');
-const { normalizeItinerary } = require('../domain/itinerary');
+const { normalizeItinerary, reconcileItineraryDates } = require('../domain/itinerary');
 
 const COLLECTION_DESTINATION_SELECT = {
   ...LIST_SELECT,
@@ -45,6 +45,32 @@ function optionalDate(value, field) {
   return parsed;
 }
 
+function optionalTravelerCount(value) {
+  if (value === undefined) return undefined;
+  const count = Number(value);
+  if (!Number.isInteger(count) || count < 1 || count > 50) {
+    const error = new Error('El número de viajeros debe estar entre 1 y 50');
+    error.status = 400;
+    throw error;
+  }
+  return count;
+}
+
+function validateTripRange(startDate, endDate) {
+  if (!startDate || !endDate) return;
+  if (endDate < startDate) {
+    const error = new Error('La fecha de fin no puede ser anterior al inicio');
+    error.status = 400;
+    throw error;
+  }
+  const days = Math.floor((endDate.getTime() - startDate.getTime()) / 86400000) + 1;
+  if (days > 366) {
+    const error = new Error('El viaje no puede superar 366 días');
+    error.status = 400;
+    throw error;
+  }
+}
+
 async function getAccess(userId, collectionId, required = 'viewer') {
   const collection = await prisma.collection.findFirst({
     where: { id: collectionId },
@@ -64,13 +90,13 @@ async function listCollections(userId) {
     where: { OR: [{ userId }, { members: { some: { userId } } }] },
     orderBy: { updatedAt: 'desc' },
     include: {
-      _count: { select: { items: true } },
       items: {
         take: 4,
         orderBy: { createdAt: 'desc' },
         include: { destino: { select: { imagen: true } } },
       },
       members: { where: { userId }, select: { role: true } },
+      _count: { select: { items: true, members: true } },
     },
   });
 
@@ -82,6 +108,9 @@ async function listCollections(userId) {
     visibility: c.visibility,
     startDate: c.startDate,
     endDate: c.endDate,
+    travelerCount: c.travelerCount,
+    itineraryDays: Array.isArray(c.itinerary) ? c.itinerary.length : 0,
+    memberCount: c._count.members,
     role: c.userId === userId ? 'owner' : c.members[0]?.role || 'viewer',
     createdAt: c.createdAt,
     updatedAt: c.updatedAt,
@@ -95,6 +124,7 @@ async function getCollection(userId, id) {
   const collection = await prisma.collection.findFirst({
     where: { id },
     include: {
+      user: { select: { id: true, nombre: true, avatarUrl: true } },
       items: {
         orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
         include: { destino: { select: COLLECTION_DESTINATION_SELECT } },
@@ -118,8 +148,10 @@ async function getCollection(userId, id) {
     shareToken: collection.shareToken,
     startDate: collection.startDate,
     endDate: collection.endDate,
+    travelerCount: collection.travelerCount,
     itinerary: Array.isArray(collection.itinerary) ? collection.itinerary : [],
     role: access.role,
+    owner: collection.user,
     members: collection.members.map((member) => ({ id: member.id, role: member.role, user: member.user })),
     createdAt: collection.createdAt,
     updatedAt: collection.updatedAt,
@@ -136,7 +168,7 @@ async function getCollection(userId, id) {
   };
 }
 
-async function createCollection(userId, { nombre, descripcion, color }) {
+async function createCollection(userId, { nombre, descripcion, color, startDate, endDate, travelerCount }) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { emailVerified: true },
@@ -154,18 +186,25 @@ async function createCollection(userId, { nombre, descripcion, color }) {
     throw error;
   }
 
+  const parsedStart = optionalDate(startDate, 'La fecha de inicio');
+  const parsedEnd = optionalDate(endDate, 'La fecha de fin');
+  validateTripRange(parsedStart, parsedEnd);
+
   const collection = await prisma.collection.create({
     data: {
       userId,
       nombre: cleanName,
       descripcion: clean(descripcion, 280),
       color: color || 'emerald',
+      startDate: parsedStart ?? null,
+      endDate: parsedEnd ?? null,
+      travelerCount: optionalTravelerCount(travelerCount) ?? 2,
     },
   });
   return { ...collection, count: 0, covers: [] };
 }
 
-async function updateCollection(userId, id, { nombre, descripcion, color, startDate, endDate, itinerary }) {
+async function updateCollection(userId, id, { nombre, descripcion, color, startDate, endDate, travelerCount, itinerary }) {
   await getAccess(userId, id, 'editor');
 
   const data = {};
@@ -184,12 +223,12 @@ async function updateCollection(userId, id, { nombre, descripcion, color, startD
   const parsedEnd = optionalDate(endDate, 'La fecha de fin');
   if (parsedStart !== undefined) data.startDate = parsedStart;
   if (parsedEnd !== undefined) data.endDate = parsedEnd;
-  const current = await prisma.collection.findUnique({ where: { id }, select: { startDate: true, endDate: true } });
+  const parsedTravelerCount = optionalTravelerCount(travelerCount);
+  if (parsedTravelerCount !== undefined) data.travelerCount = parsedTravelerCount;
+  const current = await prisma.collection.findUnique({ where: { id }, select: { startDate: true, endDate: true, itinerary: true } });
   const effectiveStart = parsedStart === undefined ? current.startDate : parsedStart;
   const effectiveEnd = parsedEnd === undefined ? current.endDate : parsedEnd;
-  if (effectiveStart && effectiveEnd && effectiveEnd < effectiveStart) {
-    const error = new Error('La fecha de fin no puede ser anterior al inicio'); error.status = 400; throw error;
-  }
+  validateTripRange(effectiveStart, effectiveEnd);
 
   if (itinerary !== undefined) {
     const items = await prisma.collectionItem.findMany({
@@ -206,13 +245,26 @@ async function updateCollection(userId, id, { nombre, descripcion, color, startD
         new Set(item.destino.municipioLinks.map((link) => link.municipioId)),
       ])),
     });
+  } else if (startDate !== undefined || endDate !== undefined) {
+    data.itinerary = reconcileItineraryDates(
+      Array.isArray(current.itinerary) ? current.itinerary : [],
+      effectiveStart,
+      effectiveEnd,
+    );
   }
 
   return prisma.collection.update({ where: { id }, data });
 }
 
-async function shareCollection(userId, id) {
+async function shareCollection(userId, id, { regenerate = false } = {}) {
   await getAccess(userId, id, 'owner');
+  if (!regenerate) {
+    const current = await prisma.collection.findUnique({
+      where: { id },
+      select: { id: true, shareToken: true, visibility: true },
+    });
+    if (current?.shareToken && current.visibility === 'shared') return current;
+  }
   const shareToken = randomBytes(24).toString('base64url');
   return prisma.collection.update({
     where: { id },
@@ -233,7 +285,11 @@ async function stopSharingCollection(userId, id) {
 async function getPublicCollection(shareToken) {
   const collection = await prisma.collection.findFirst({
     where: { shareToken, visibility: 'shared' },
-    include: { items: { orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }], include: { destino: { select: COLLECTION_DESTINATION_SELECT } } } },
+    include: {
+      user: { select: { id: true, nombre: true, avatarUrl: true } },
+      members: { include: { user: { select: { id: true, nombre: true, avatarUrl: true } } }, orderBy: { createdAt: 'asc' } },
+      items: { orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }], include: { destino: { select: COLLECTION_DESTINATION_SELECT } } },
+    },
   });
   if (!collection) {
     const error = new Error('Este enlace de viaje ya no está disponible');
@@ -246,7 +302,10 @@ async function getPublicCollection(shareToken) {
     color: collection.color,
     startDate: collection.startDate,
     endDate: collection.endDate,
+    travelerCount: collection.travelerCount,
     itinerary: Array.isArray(collection.itinerary) ? collection.itinerary : [],
+    owner: collection.user,
+    members: collection.members.map((member) => ({ id: member.id, role: member.role, user: member.user })),
     items: collection.items.map((item) => ({ id: item.id, dayIndex: item.dayIndex, status: item.status, sortOrder: item.sortOrder, destino: mapCollectionDestination(item.destino) })),
   };
 }

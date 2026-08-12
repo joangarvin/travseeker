@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { BedDouble, Bus, Check, Copy, Save, Sparkles, Utensils } from 'lucide-react';
-import type { Destino, Municipio } from '../types';
+import type { CollectionDetail, Municipio } from '../types';
 import {
   calculateBudget,
+  calculateTripBudget,
   type Budget,
   type TravelSeason,
   type TravelStyle,
 } from '../utils/budgetCalculator';
+import { getTripDuration } from '../utils/tripDuration';
 import { Button, Field } from './ui';
 
 const euro = new Intl.NumberFormat('es-ES', {
@@ -238,30 +240,31 @@ export function BudgetEstimator({
   );
 }
 
-export function CollectionBudgetSummary({ destinations }: { destinations: Destino[] }) {
-  const [travelers, setTravelers] = useState(2);
-  const [nights, setNights] = useState(4);
-  const totals = useMemo(
-    () =>
-      destinations.reduce(
-        (sum, destination) => {
-          const budget = calculateBudget({
-            travelers,
-            nights,
-            preciosString: destination.municipios?.[0]?.precios,
-          });
-          return {
-            total: sum.total + budget.total,
-            accommodation: sum.accommodation + budget.accommodation,
-            food: sum.food + budget.food,
-            transport: sum.transport + budget.transport,
-            activities: sum.activities + budget.activities,
-          };
-        },
-        { total: 0, accommodation: 0, food: 0, transport: 0, activities: 0 },
-      ),
-    [destinations, nights, travelers],
-  );
+export function CollectionBudgetSummary({ collection }: { collection: CollectionDetail }) {
+  const [style, setStyle] = useState<TravelStyle>('moderate');
+  const [season, setSeason] = useState<TravelSeason>('mid');
+  const destinations = collection.items.map((item) => item.destino);
+  const travelers = collection.travelerCount || 2;
+  const duration = getTripDuration({
+    startDate: collection.startDate,
+    endDate: collection.endDate,
+    itineraryLength: collection.itinerary.length,
+    destinationCount: destinations.length,
+  });
+  const overnightPrices = Array.from({ length: duration.nights }, (_, index) => {
+    const day = collection.itinerary[index];
+    const destination = destinations.find((item) => item.id === day?.destinationId) || destinations[index % destinations.length];
+    const municipality = destination?.municipios?.find((item) => item.id === day?.baseMunicipioId)
+      || destination?.municipios?.[0];
+    return municipality?.precios;
+  });
+  const totals = calculateTripBudget({
+    travelers,
+    days: duration.days,
+    style,
+    season,
+    overnightPrices,
+  });
 
   if (!destinations.length) return null;
 
@@ -270,26 +273,15 @@ export function CollectionBudgetSummary({ destinations }: { destinations: Destin
       <div>
         <p className="kicker">Presupuesto conjunto</p>
         <h2 id="collection-budget-title">El viaje, en números</h2>
-        <p>Estimación moderada en temporada media para cada parada.</p>
+        <p>Calculado una sola vez para la duración real del viaje y sus noches planificadas.</p>
       </div>
       <div className="collection-budget__controls">
-        <NumberControl
-          id="collection-budget-travelers"
-          label="Viajeros"
-          value={travelers}
-          onChange={setTravelers}
-        />
-        <NumberControl
-          id="collection-budget-nights"
-          label="Noches por destino"
-          value={nights}
-          onChange={setNights}
-        />
+        <Field label="Estilo" htmlFor="collection-budget-style"><select id="collection-budget-style" value={style} onChange={(event) => setStyle(event.target.value as TravelStyle)}>{Object.entries(styleLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></Field>
+        <Field label="Temporada" htmlFor="collection-budget-season"><select id="collection-budget-season" value={season} onChange={(event) => setSeason(event.target.value as TravelSeason)}>{Object.entries(seasonLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></Field>
       </div>
       <div className="collection-budget__total" aria-live="polite">
         <small>
-          {destinations.length} {destinations.length === 1 ? 'destino' : 'destinos'} ·{' '}
-          {nights * destinations.length} noches
+          {travelers} viajeros · {duration.days} {duration.days === 1 ? 'día' : 'días'} · {duration.nights} {duration.nights === 1 ? 'noche' : 'noches'}
         </small>
         <strong>{euro.format(totals.total)}</strong>
         <span>{euro.format(totals.total / travelers)} por persona</span>
@@ -301,6 +293,9 @@ export function CollectionBudgetSummary({ destinations }: { destinations: Destin
           </span>
         ))}
       </div>
+      <p className="collection-budget__method">
+        Alojamiento por cada noche real; comida, transporte y actividades por persona y día. Las bases del itinerario determinan el precio de cada noche.
+      </p>
     </section>
   );
 }

@@ -140,11 +140,17 @@ export type CollectionSummary = {
   role: string;
   startDate?: string | null;
   endDate?: string | null;
+  travelerCount: number;
+  itineraryDays?: number;
+  memberCount?: number;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type CollectionDetail = CollectionSummary & {
   shareToken?: string | null;
   itinerary: ItineraryDay[];
+  owner?: Pick<User, 'id' | 'nombre' | 'avatarUrl'>;
   items: Array<{
     id: string;
     destinoId: string;
@@ -156,7 +162,7 @@ export type CollectionDetail = CollectionSummary & {
   members?: Array<{
     id: string;
     role: string;
-    user: Pick<User, 'id' | 'email' | 'nombre' | 'avatarUrl'>;
+    user: Pick<User, 'id' | 'nombre' | 'avatarUrl'> & { email?: string };
   }>;
 };
 

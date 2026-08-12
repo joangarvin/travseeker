@@ -13,6 +13,12 @@ export type RouteSegment = {
 
 const memoryCache = new Map<string, RouteSegment>();
 const CACHE_PREFIX = 'travseeker:route:';
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+
+type CachedRouteSegment = {
+  value: RouteSegment;
+  cachedAt: number;
+};
 
 type CoordinateCandidate = {
   latitud?: number | null;
@@ -61,10 +67,8 @@ export function haversineDistance(from: Coordinates, to: Coordinates): number {
 }
 
 function fallbackSegment(from: Coordinates, to: Coordinates): RouteSegment {
-  const distanceKm = haversineDistance(from, to);
   return {
-    distanceKm,
-    durationMinutes: Math.max(10, (distanceKm / 65) * 60),
+    distanceKm: haversineDistance(from, to),
     source: 'haversine',
   };
 }
@@ -81,9 +85,17 @@ function readCache(key: string): RouteSegment | undefined {
   try {
     const cached = localStorage.getItem(`${CACHE_PREFIX}${key}`);
     if (!cached) return undefined;
-    const value = JSON.parse(cached) as RouteSegment;
-    memoryCache.set(key, value);
-    return value;
+    const parsed = JSON.parse(cached) as CachedRouteSegment | RouteSegment;
+    if ('cachedAt' in parsed && 'value' in parsed) {
+      if (Date.now() - parsed.cachedAt > CACHE_TTL_MS) {
+        localStorage.removeItem(`${CACHE_PREFIX}${key}`);
+        return undefined;
+      }
+      memoryCache.set(key, parsed.value);
+      return parsed.value;
+    }
+    localStorage.removeItem(`${CACHE_PREFIX}${key}`);
+    return undefined;
   } catch {
     return undefined;
   }
@@ -92,7 +104,7 @@ function readCache(key: string): RouteSegment | undefined {
 function writeCache(key: string, value: RouteSegment): void {
   memoryCache.set(key, value);
   try {
-    localStorage.setItem(`${CACHE_PREFIX}${key}`, JSON.stringify(value));
+    localStorage.setItem(`${CACHE_PREFIX}${key}`, JSON.stringify({ value, cachedAt: Date.now() } satisfies CachedRouteSegment));
   } catch {
     // The in-memory cache still prevents duplicate requests for this session.
   }

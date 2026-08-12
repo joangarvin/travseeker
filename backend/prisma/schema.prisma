@@ -243,6 +243,7 @@ model Collection {
   shareToken  String?   @unique
   startDate   DateTime? @db.Date
   endDate     DateTime? @db.Date
+  travelerCount Int     @default(2)
   itinerary   Json      @default("[]")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

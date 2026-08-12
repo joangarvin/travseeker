@@ -53,4 +53,33 @@ function normalizeItinerary(value, { destinationIds = new Set(), municipalityIds
   });
 }
 
-module.exports = { normalizeItinerary };
+function addDays(date, amount) {
+  const next = new Date(date);
+  next.setUTCDate(next.getUTCDate() + amount);
+  return next.toISOString().slice(0, 10);
+}
+
+function reconcileItineraryDates(value, startDate, endDate) {
+  if (!Array.isArray(value) || value.length === 0) return Array.isArray(value) ? value : [];
+  let targetLength = value.length;
+  if (startDate && endDate) {
+    targetLength = Math.floor((endDate.getTime() - startDate.getTime()) / 86400000) + 1;
+  }
+  const aligned = value.slice(0, targetLength);
+  while (aligned.length < targetLength) {
+    const previous = aligned[aligned.length - 1];
+    aligned.push({
+      dayNumber: aligned.length + 1,
+      destinationId: previous.destinationId,
+      ...(previous.baseMunicipioId ? { baseMunicipioId: previous.baseMunicipioId } : {}),
+      plannedActivities: [],
+    });
+  }
+  return aligned.map((day, index) => ({
+    ...day,
+    dayNumber: index + 1,
+    ...(startDate ? { date: addDays(startDate, index) } : {}),
+  }));
+}
+
+module.exports = { normalizeItinerary, reconcileItineraryDates };

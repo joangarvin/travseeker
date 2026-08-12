@@ -11,6 +11,14 @@ export type BudgetInput = {
   preciosString?: string;
 };
 
+export type TripBudgetInput = {
+  travelers?: number;
+  days?: number;
+  style?: TravelStyle;
+  season?: TravelSeason;
+  overnightPrices?: Array<string | undefined>;
+};
+
 export type Budget = {
   accommodation: number;
   food: number;
@@ -104,5 +112,36 @@ export function calculateBudget(input: BudgetInput = {}): Budget {
     total,
     perPerson: total / travelers,
     nightlyHotelRate,
+  };
+}
+
+/** Calculates one whole trip: daily costs are counted once and lodging once per overnight. */
+export function calculateTripBudget(input: TripBudgetInput = {}): Budget {
+  const travelers = positiveInteger(input.travelers, 2);
+  const days = positiveInteger(input.days, 5);
+  const nights = Math.max(0, days - 1);
+  const style = input.style && input.style in tierFactors ? input.style : 'moderate';
+  const season = input.season && input.season in seasonMultipliers ? input.season : 'mid';
+  const rooms = Math.ceil(travelers / 2);
+  const seasonMultiplier = seasonMultipliers[season];
+  const prices = input.overnightPrices || [];
+  const nightlyRates = Array.from({ length: nights }, (_, index) => {
+    const { min, max } = parsePriceRange(prices[index]);
+    return (min + (max - min) * tierFactors[style]) * seasonMultiplier;
+  });
+  const accommodation = nightlyRates.reduce((sum, rate) => sum + rate * rooms, 0);
+  const food = dailyFood[style] * seasonMultiplier * travelers * days;
+  const transport = dailyTransport[style] * travelers * days;
+  const activities = dailyActivities[style] * travelers * days;
+  const total = accommodation + food + transport + activities;
+
+  return {
+    accommodation,
+    food,
+    transport,
+    activities,
+    total,
+    perPerson: total / travelers,
+    nightlyHotelRate: nightlyRates.length ? nightlyRates.reduce((sum, rate) => sum + rate, 0) / nightlyRates.length : 0,
   };
 }

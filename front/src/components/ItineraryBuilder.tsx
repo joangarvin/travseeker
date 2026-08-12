@@ -27,11 +27,12 @@ import {
 } from '../utils/itineraryExport';
 import { Button, Empty, Field, MediaImage, Notice } from './ui';
 import { imageUrl } from '../utils';
+import { addTripDays, getTripDuration } from '../utils/tripDuration';
 
 type ItineraryBuilderProps = {
   collection: CollectionDetail;
   canEdit?: boolean;
-  onSave?: (itinerary: ItineraryDay[]) => Promise<void>;
+  onSave?: (itinerary: ItineraryDay[], endDate?: string) => Promise<void>;
 };
 
 const EMPTY_ITINERARY: ItineraryDay[] = [];
@@ -40,40 +41,24 @@ function isoDate(value: string | null | undefined): string | undefined {
   return value?.slice(0, 10) || undefined;
 }
 
-function addDays(value: string, days: number): string {
-  const date = new Date(`${value}T00:00:00.000Z`);
-  date.setUTCDate(date.getUTCDate() + days);
-  return date.toISOString().slice(0, 10);
-}
-
-function dayCount(startDate?: string | null, endDate?: string | null): number | undefined {
-  const start = isoDate(startDate);
-  const end = isoDate(endDate);
-  if (!start || !end) return undefined;
-  const difference =
-    (new Date(`${end}T00:00:00.000Z`).getTime() - new Date(`${start}T00:00:00.000Z`).getTime()) /
-    86_400_000;
-  return Math.min(366, Math.max(1, Math.round(difference) + 1));
-}
-
 function normalizeDays(days: ItineraryDay[], startDate?: string | null): ItineraryDay[] {
   const start = isoDate(startDate);
   return days.map((day, index) => ({
     ...day,
     dayNumber: index + 1,
-    date: start ? addDays(start, index) : day.date,
+    date: start ? addTripDays(start, index) : day.date,
   }));
 }
 
 export function generateItinerary(collection: CollectionDetail): ItineraryDay[] {
   if (!collection.items.length) return [];
-  const count = dayCount(collection.startDate, collection.endDate) ?? collection.items.length;
+  const count = getTripDuration({ startDate: collection.startDate, endDate: collection.endDate, destinationCount: collection.items.length }).days;
   const start = isoDate(collection.startDate);
   return Array.from({ length: count }, (_, index) => {
     const destination = collection.items[index % collection.items.length].destino;
     return {
       dayNumber: index + 1,
-      date: start ? addDays(start, index) : undefined,
+      date: start ? addTripDays(start, index) : undefined,
       destinationId: destination.id,
       baseMunicipioId: destination.municipios?.[0]?.id,
       plannedActivities: [],
@@ -124,11 +109,14 @@ function SegmentBar({ segment, loading }: { segment?: RouteSegment; loading: boo
     );
   }
   return (
-    <div className="route-segment">
+    <div className={`route-segment route-segment--${segment.source}`}>
       <CarFront />
       <span>
-        {segment.source === 'osrm' ? 'En coche' : 'Distancia aproximada'} ·{' '}
-        <b>{Math.round(segment.distanceKm || 0)} km</b> · {formatDuration(segment.durationMinutes)}
+        {segment.source === 'osrm' ? (
+          <>En coche · <b>{Math.round(segment.distanceKm || 0)} km</b> · {formatDuration(segment.durationMinutes)}</>
+        ) : (
+          <>En línea recta · <b>≈{Math.round(segment.distanceKm || 0)} km</b> · tiempo no disponible</>
+        )}
       </span>
     </div>
   );
@@ -138,21 +126,26 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
   const savedItinerary = collection.itinerary ?? EMPTY_ITINERARY;
   const initialDays = savedItinerary.length
     ? normalizeDays(savedItinerary, collection.startDate)
-    : generateItinerary(collection);
+    : canEdit
+      ? generateItinerary(collection)
+      : [];
   const [days, setDays] = useState<ItineraryDay[]>(initialDays);
   const [segments, setSegments] = useState<RouteSegment[]>([]);
   const [routesLoading, setRoutesLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState('');
+  const [feedbackTone, setFeedbackTone] = useState<'info' | 'error' | 'success'>('info');
   const draggedIndex = useRef<number | null>(null);
 
   useEffect(() => {
     setDays(
       savedItinerary.length
         ? normalizeDays(savedItinerary, collection.startDate)
-        : generateItinerary(collection),
+        : canEdit
+          ? generateItinerary(collection)
+          : [],
     );
-  }, [savedItinerary, collection.items, collection.startDate, collection.endDate]);
+  }, [savedItinerary, collection.items, collection.startDate, collection.endDate, canEdit]);
 
   const routeSignature = days
     .map((day) => `${day.destinationId}:${day.baseMunicipioId || ''}`)
@@ -193,11 +186,23 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
     () => segments.reduce((total, segment) => total + (segment.durationMinutes || 0), 0),
     [segments],
   );
-  const savedDays = savedItinerary.length
-    ? normalizeDays(savedItinerary, collection.startDate)
-    : generateItinerary(collection);
+  const exactRouteCount = segments.filter((segment) => segment.source === 'osrm').length;
+  const fallbackRouteCount = segments.filter((segment) => segment.source === 'haversine').length;
+  const unavailableRouteCount = segments.filter((segment) => segment.source === 'unavailable').length;
+  const hasPartialRoute = fallbackRouteCount > 0 || unavailableRouteCount > 0;
+  const savedDays = savedItinerary.length ? normalizeDays(savedItinerary, collection.startDate) : [];
   const dirty = JSON.stringify(days) !== JSON.stringify(savedDays);
+  const suggestedDraft = canEdit && !savedItinerary.length && days.length > 0;
   const hasDates = days.some((day) => resolveItineraryDate(day, collection));
+
+  useEffect(() => {
+    if (!dirty) return;
+    const warnBeforeLeaving = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+    };
+    window.addEventListener('beforeunload', warnBeforeLeaving);
+    return () => window.removeEventListener('beforeunload', warnBeforeLeaving);
+  }, [dirty]);
 
   const updateDay = (index: number, patch: Partial<ItineraryDay>) => {
     setFeedback('');
@@ -260,10 +265,14 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
     setSaving(true);
     setFeedback('');
     try {
-      await onSave(days);
+      const start = isoDate(collection.startDate);
+      const alignedEndDate = start && days.length ? addTripDays(start, days.length - 1) : undefined;
+      await onSave(days, alignedEndDate);
       setFeedback('Itinerario guardado');
+      setFeedbackTone('success');
     } catch (cause) {
       setFeedback(cause instanceof Error ? cause.message : 'No se pudo guardar el itinerario');
+      setFeedbackTone('error');
     } finally {
       setSaving(false);
     }
@@ -272,6 +281,7 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
   const exportICal = () => {
     if (!downloadICalFile({ ...collection, itinerary: days })) {
       setFeedback('Añade una fecha de inicio para exportar el calendario');
+      setFeedbackTone('info');
     }
   };
 
@@ -279,6 +289,14 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
     return (
       <Empty icon={<Route />} title="La ruta necesita al menos un destino">
         Añade destinos al viaje y vuelve aquí para organizarlos por días.
+      </Empty>
+    );
+  }
+
+  if (!canEdit && !savedItinerary.length) {
+    return (
+      <Empty icon={<Route />} title="El itinerario aún no se ha publicado">
+        El viaje tiene destinos guardados, pero su organizador todavía no ha confirmado el plan día a día.
       </Empty>
     );
   }
@@ -307,6 +325,7 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
           <Button variant="secondary" onClick={() => window.print()}>
             <Printer /> Imprimir / PDF
           </Button>
+          {!hasDates && <small>Añade fechas para exportar a iCal.</small>}
         </div>
       </header>
 
@@ -315,12 +334,19 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
           <b>{days.length}</b> {days.length === 1 ? 'día' : 'días'}
         </span>
         <span>
-          <b>{routesLoading ? '…' : `${Math.round(totalDistance)} km`}</b> distancia estimada
+          <b>{routesLoading ? '…' : `${hasPartialRoute ? '≈' : ''}${Math.round(totalDistance)} km`}</b> {unavailableRouteCount ? 'distancia parcial' : 'distancia estimada'}
         </span>
         <span>
-          <b>{routesLoading ? '…' : formatDuration(totalDuration)}</b> en carretera
+          <b>{routesLoading ? '…' : totalDuration ? formatDuration(totalDuration) : 'Sin dato'}</b> {hasPartialRoute ? `${exactRouteCount}/${segments.length} tramos por carretera` : 'en carretera'}
         </span>
       </div>
+      {!routesLoading && hasPartialRoute && <p className="route-confidence"><Route aria-hidden="true" /> {fallbackRouteCount ? `${fallbackRouteCount} ${fallbackRouteCount === 1 ? 'tramo usa' : 'tramos usan'} distancia en línea recta.` : ''} {unavailableRouteCount ? `${unavailableRouteCount} sin coordenadas.` : ''} Los tiempos solo incluyen rutas verificadas.</p>}
+
+      {suggestedDraft && (
+        <Notice tone="info">
+          <strong>Propuesta sin guardar.</strong> Hemos repartido los destinos para darte un punto de partida. Revísalo y guarda cuando tenga sentido para tu viaje.
+        </Notice>
+      )}
 
       {canEdit && (
         <div className="itinerary-builder__toolbar no-print">
@@ -333,11 +359,11 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
           <Button loading={saving} disabled={!dirty} onClick={() => void save()}>
             <Save /> Guardar cambios
           </Button>
-          <span>{dirty ? 'Cambios sin guardar' : 'Todo guardado'}</span>
+          <span>{suggestedDraft ? 'Propuesta sin guardar' : dirty ? 'Cambios sin guardar' : 'Todo guardado'}</span>
         </div>
       )}
       {feedback && (
-        <Notice tone={feedback === 'Itinerario guardado' ? 'success' : 'info'}>{feedback}</Notice>
+        <Notice tone={feedbackTone}>{feedback}{feedbackTone === 'error' && <>. Revisa tu conexión y vuelve a intentarlo.</>}</Notice>
       )}
 
       <ol className="itinerary-timeline">
@@ -393,14 +419,8 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
                         </button>
                         <button
                           type="button"
-                          onClick={() =>
-                            setDays((current) =>
-                              normalizeDays(
-                                current.filter((_, dayIndex) => dayIndex !== index),
-                                collection.startDate,
-                              ),
-                            )
-                          }
+                          disabled={days.length === 1}
+                          onClick={() => setDays((current) => normalizeDays(current.filter((_, dayIndex) => dayIndex !== index), collection.startDate))}
                           aria-label={`Eliminar día ${day.dayNumber}`}
                         >
                           <Trash2 />
