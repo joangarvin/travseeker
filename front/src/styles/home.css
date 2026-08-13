@@ -368,110 +368,111 @@
 }
 
 .smart-empty {
-  position: relative;
   border: 1px solid var(--line-strong);
   background: var(--surface);
-  box-shadow: 8px 8px 0 var(--brand-soft);
-}
-
-.smart-empty::before {
-  position: absolute;
-  z-index: 0;
-  top: 44px;
-  bottom: 44px;
-  left: clamp(39px, 5.4vw, 69px);
-  width: 2px;
-  background: var(--brand);
-  content: '';
 }
 
 .smart-empty__intro {
-  position: relative;
-  z-index: 1;
   display: grid;
-  grid-template-columns: 64px minmax(0, 1fr) auto;
-  gap: clamp(20px, 3vw, 36px);
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  gap: clamp(16px, 2vw, 24px);
   align-items: center;
-  padding: clamp(28px, 4vw, 52px);
+  padding: clamp(24px, 3vw, 36px);
 }
 
-.smart-empty__icon,
-.smart-empty__suggestion > header > span {
+.smart-empty__icon {
   display: grid;
   place-items: center;
-  width: 64px;
-  height: 64px;
-  border: 2px solid var(--brand);
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--brand);
   border-radius: 50%;
-  background: var(--surface);
+  background: var(--brand-soft);
   color: var(--brand);
 }
 
-.smart-empty__icon svg,
-.smart-empty__suggestion > header > span svg {
-  width: 28px;
-  height: 28px;
+.smart-empty__icon svg {
+  width: 20px;
+  height: 20px;
 }
 
-.smart-empty__intro .kicker,
-.smart-empty__suggestion .kicker {
-  margin-bottom: 8px;
+.smart-empty__intro .kicker {
+  margin-bottom: 6px;
 }
 
-.smart-empty__intro h3,
-.smart-empty__suggestion h3 {
-  max-width: 760px;
-  margin-bottom: 12px;
-  font-size: clamp(1.65rem, 3vw, 2.8rem);
-  line-height: 1;
-}
-
-.smart-empty__intro p:last-child,
-.smart-empty__suggestion header p:last-child {
+.smart-empty__intro h3 {
   max-width: 680px;
+  margin-bottom: 12px;
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.smart-empty__intro-copy > p:last-child {
+  max-width: 620px;
   margin-bottom: 0;
   color: var(--muted);
 }
 
 .smart-empty__reset {
+  justify-self: end;
   white-space: nowrap;
 }
 
 .smart-empty__filters {
-  position: relative;
-  z-index: 1;
   display: grid;
-  grid-template-columns: 148px minmax(0, 1fr);
-  gap: 20px;
-  align-items: start;
-  padding: 20px clamp(28px, 4vw, 52px);
+  grid-template-columns: 144px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  padding: 12px clamp(24px, 3vw, 36px);
   border-block: 1px solid var(--line);
-  background: color-mix(in srgb, var(--surface-muted) 62%, var(--surface));
+  background: color-mix(in srgb, var(--surface-muted) 56%, var(--surface));
 }
 
-.smart-empty__filters > p {
-  margin: 10px 0 0;
+.smart-empty__filters-label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-height: 44px;
+  margin: 0;
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
-.smart-empty__filters > div {
+.smart-empty__filters-label strong {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--surface);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+}
+
+.smart-empty__chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
+  max-height: 104px;
+  margin: -4px;
+  padding: 4px;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 .smart-empty__chip {
   display: inline-flex;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
   min-height: 44px;
-  padding: 7px 8px 7px 15px;
+  padding: 6px 8px 6px 14px;
   border: 1px solid var(--line-strong);
   border-radius: var(--r-pill);
-  background: var(--surface);
+  background: color-mix(in srgb, var(--surface) 88%, var(--canvas));
   color: var(--ink);
   font-size: 0.78rem;
   font-weight: 750;
@@ -486,22 +487,21 @@
 }
 
 .smart-empty__chip svg {
-  width: 26px;
-  height: 26px;
-  padding: 5px;
+  width: 28px;
+  height: 28px;
+  padding: 6px;
   border-radius: 50%;
-  background: var(--ink);
-  color: var(--surface);
+  background: var(--surface-muted);
+  color: var(--ink);
 }
 
 .smart-empty__searching {
-  position: relative;
-  z-index: 1;
   display: flex;
   gap: 12px;
   align-items: center;
-  min-height: 76px;
-  padding: 16px clamp(28px, 4vw, 52px) 16px clamp(112px, 10vw, 148px);
+  min-height: 64px;
+  padding: 12px clamp(24px, 3vw, 36px);
+  background: var(--brand-soft);
   color: var(--muted);
   font-weight: 700;
 }
@@ -512,24 +512,49 @@
 }
 
 .smart-empty__suggestion {
-  position: relative;
-  z-index: 1;
-  padding: clamp(28px, 4vw, 52px);
   background: var(--surface);
 }
 
 .smart-empty__suggestion > header {
   display: grid;
-  grid-template-columns: 64px minmax(0, 1fr) auto;
-  gap: clamp(20px, 3vw, 36px);
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(20px, 3vw, 32px);
   align-items: center;
-  margin-bottom: 36px;
+  padding: clamp(24px, 3vw, 32px) clamp(24px, 3vw, 36px);
+  border-bottom: 1px solid var(--line);
+  background: var(--brand-soft);
 }
 
-.smart-empty__suggestion > header > span {
-  border-color: var(--ink);
-  background: var(--sun);
-  color: var(--sun-ink);
+.smart-empty__suggestion .kicker {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.smart-empty__suggestion .kicker::before {
+  width: 40px;
+  height: 2px;
+  background: var(--brand);
+  content: '';
+}
+
+.smart-empty__suggestion .kicker svg {
+  width: 16px;
+  height: 16px;
+}
+
+.smart-empty__suggestion h3 {
+  max-width: 880px;
+  margin-bottom: 12px;
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.smart-empty__suggestion-copy > p:last-child {
+  margin-bottom: 0;
+  color: var(--muted);
 }
 
 .smart-empty__suggestion > header .button {
@@ -541,15 +566,14 @@
 }
 
 .smart-empty__destinations {
-  padding-left: calc(64px + clamp(20px, 3vw, 36px));
+  gap: 24px 20px;
+  padding: clamp(20px, 2.5vw, 28px) clamp(24px, 3vw, 36px) clamp(28px, 3vw, 36px);
 }
 
 .smart-empty__no-filters {
-  position: relative;
-  z-index: 1;
   margin: 0;
-  padding: 0 clamp(28px, 4vw, 52px) clamp(28px, 4vw, 52px)
-    calc(64px + clamp(48px, 7vw, 88px));
+  padding: 0 clamp(24px, 3vw, 36px) clamp(24px, 3vw, 36px)
+    calc(44px + clamp(40px, 5vw, 60px));
   color: var(--muted);
 }
 

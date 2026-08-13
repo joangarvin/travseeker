@@ -132,59 +132,70 @@
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  .smart-empty {
-    box-shadow: 5px 5px 0 var(--brand-soft);
-  }
-  .smart-empty::before {
-    left: 47px;
-  }
-  .smart-empty__intro,
-  .smart-empty__suggestion > header {
-    grid-template-columns: 44px minmax(0, 1fr);
+  .smart-empty__intro {
+    grid-template-columns: 40px minmax(0, 1fr);
     gap: 16px;
+    padding: 20px 16px;
   }
-  .smart-empty__icon,
-  .smart-empty__suggestion > header > span {
-    width: 44px;
-    height: 44px;
+  .smart-empty__icon {
+    width: 40px;
+    height: 40px;
   }
-  .smart-empty__icon svg,
-  .smart-empty__suggestion > header > span svg {
-    width: 21px;
-    height: 21px;
+  .smart-empty__icon svg {
+    width: 19px;
+    height: 19px;
   }
-  .smart-empty__reset,
-  .smart-empty__suggestion > header .button {
-    grid-column: 2;
+  .smart-empty__reset {
+    grid-column: 1 / -1;
+    justify-self: stretch;
     width: 100%;
   }
   .smart-empty__filters {
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 8px;
+    padding: 12px 16px;
   }
-  .smart-empty__filters > p {
-    margin-top: 0;
+  .smart-empty__filters-label {
+    min-height: 36px;
   }
-  .smart-empty__filters > div {
-    display: grid;
-    grid-template-columns: 1fr;
+  .smart-empty__chips {
+    flex-wrap: nowrap;
+    max-height: none;
+    margin: 0 -4px -4px;
+    padding: 4px 4px 8px;
+    overflow-x: auto;
+    overflow-y: visible;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline proximity;
   }
   .smart-empty__chip {
-    justify-content: space-between;
-    width: 100%;
+    flex: none;
+    max-width: calc(100vw - 64px);
+    scroll-snap-align: start;
     text-align: left;
   }
+  .smart-empty__chip > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .smart-empty__searching {
-    padding-left: 86px;
+    padding: 12px 16px;
   }
   .smart-empty__suggestion > header {
-    margin-bottom: 28px;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 24px 16px;
+  }
+  .smart-empty__suggestion > header .button {
+    width: 100%;
   }
   .smart-empty__destinations {
-    padding-left: 60px;
+    gap: 32px;
+    padding: 20px 16px 28px;
   }
   .smart-empty__no-filters {
-    padding-left: 86px;
+    padding: 0 16px 24px 72px;
   }
   .decision-band {
     grid-template-columns: 1fr;

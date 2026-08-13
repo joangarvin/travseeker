@@ -31,17 +31,16 @@ export function EmptyFilterState({
         <span className="smart-empty__icon" aria-hidden>
           <SearchX />
         </span>
-        <div>
+        <div className="smart-empty__intro-copy">
           <p className="kicker">Ajustemos la ruta</p>
-          <h3 id="smart-empty-title">Ningún lugar reúne todo lo que has pedido</h3>
+          <h3 id="smart-empty-title">No hay una coincidencia exacta</h3>
           <p>
-            Quita una condición concreta o empieza de nuevo. Mantendremos el resto de tus
-            preferencias intactas.
+            Prueba quitando una condición. Conservaremos el resto de tus preferencias.
           </p>
         </div>
         {hasFilters && (
           <button
-            className="button button--primary smart-empty__reset"
+            className="button button--secondary smart-empty__reset"
             type="button"
             onClick={onResetAll}
           >
@@ -52,8 +51,11 @@ export function EmptyFilterState({
 
       {hasFilters && (
         <div className="smart-empty__filters" aria-label="Filtros activos">
-          <p>Tus condiciones</p>
-          <div>
+          <p className="smart-empty__filters-label">
+            <span>Filtros activos</span>
+            <strong>{activeChips.length}</strong>
+          </p>
+          <div className="smart-empty__chips">
             {activeChips.map((chip) => (
               <button
                 key={chip.id}
@@ -88,27 +90,27 @@ export function EmptyFilterState({
       {fallbackResult && (
         <section className="smart-empty__suggestion" aria-labelledby="fallback-title">
           <header>
-            <span aria-hidden>
-              <Sparkles />
-            </span>
-            <div>
-              <p className="kicker">Una coincidencia cercana</p>
+            <div className="smart-empty__suggestion-copy">
+              <p className="kicker">
+                <Sparkles aria-hidden />
+                Ruta alternativa
+              </p>
               <h3 id="fallback-title">
                 {fallbackResult.total === 1
-                  ? 'Hay 1 destino si flexibilizas una condición'
-                  : `Hay ${fallbackResult.total} destinos si flexibilizas una condición`}
+                  ? `1 destino encaja si quitamos ${fallbackResult.relaxedFilterLabel}`
+                  : `${fallbackResult.total} destinos encajan si quitamos ${fallbackResult.relaxedFilterLabel}`}
               </h3>
-              <p>
-                Conservamos el resto de la búsqueda y quitamos únicamente{' '}
-                <strong>{fallbackResult.relaxedFilterLabel}</strong>.
-              </p>
+              <p>El resto de tu búsqueda se mantiene intacto.</p>
             </div>
             <button
-              className="button button--secondary"
+              className="button button--primary"
               type="button"
               onClick={() => onApplySuggestion(fallbackResult)}
             >
-              Ver estos destinos <ArrowRight aria-hidden />
+              {fallbackResult.total === 1
+                ? 'Ver 1 destino'
+                : `Ver ${fallbackResult.total} destinos`}{' '}
+              <ArrowRight aria-hidden />
             </button>
           </header>
 
