@@ -9,16 +9,21 @@ import { TourismMark } from '../../tourism/tourism';
 type DestinationCardProps = {
   destino: Destino;
   index?: number;
+  imageLoading?: 'eager' | 'lazy';
 };
 
-export function DestinationCard({ destino, index = 0 }: DestinationCardProps) {
+export function DestinationCard({
+  destino,
+  index = 0,
+  imageLoading = 'lazy',
+}: DestinationCardProps) {
   const { ids, toggle } = useCompare();
   const isCompared = ids.includes(destino.id);
 
   return (
     <article className="destination-card">
       <Link to={`/destino/${destino.id}`} className="destination-card__image">
-        <MediaImage src={imageUrl(destino.imagen)} alt="" loading="lazy" />
+        <MediaImage src={imageUrl(destino.imagen)} alt="" loading={imageLoading} />
         <span>{String(index + 1).padStart(2, '0')}</span>
       </Link>
 

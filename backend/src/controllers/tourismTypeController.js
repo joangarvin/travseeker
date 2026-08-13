@@ -8,7 +8,7 @@ const listAdmin = asyncHandler(async (_req, res) =>
   res.json(await service.listAdmin()),
 );
 const create = asyncHandler(async (req, res) =>
-  res.status(201).json(await service.create(req.body)),
+  res.status(201).json(await service.create(req.body, req.user.id)),
 );
 const update = asyncHandler(async (req, res) =>
   res.json(await service.update(req.params.tourismTypeId, req.body)),

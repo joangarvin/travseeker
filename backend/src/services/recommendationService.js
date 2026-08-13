@@ -80,7 +80,7 @@ async function getRecommendations(userId, limit = 8) {
 
   const liked = likedIds.length
     ? await prisma.destino.findMany({
-        where: { id: { in: likedIds } },
+        where: { id: { in: likedIds }, editorialStatus: "published" },
         select: DISPLAY_SELECT,
       })
     : [];
@@ -109,7 +109,10 @@ async function getRecommendations(userId, limit = 8) {
     : -1;
 
   const candidates = await prisma.destino.findMany({
-    where: likedIds.length ? { id: { notIn: likedIds } } : {},
+    where: {
+      editorialStatus: "published",
+      ...(likedIds.length ? { id: { notIn: likedIds } } : {}),
+    },
     select: DISPLAY_SELECT,
   });
 

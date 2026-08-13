@@ -86,9 +86,17 @@ async function assertUnique(data, excludedId) {
 
 async function listPublic() {
   const rows = await prisma.tourismType.findMany({
-    where: { isActive: true },
+    where: { isActive: true, editorialStatus: "published" },
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
-    include: { _count: { select: { destinationLinks: true } } },
+    include: {
+      _count: {
+        select: {
+          destinationLinks: {
+            where: { destino: { editorialStatus: "published" } },
+          },
+        },
+      },
+    },
   });
   return rows.map(withCount);
 }
@@ -101,12 +109,17 @@ async function listAdmin() {
   return rows.map(withCount);
 }
 
-async function create(payload) {
+async function create(payload, createdById) {
   const data = validatePayload(payload);
   await assertUnique(data);
   return withCount(
     await prisma.tourismType.create({
-      data,
+      data: {
+        ...data,
+        isActive: false,
+        editorialStatus: "pending",
+        createdById,
+      },
       include: { _count: { select: { destinationLinks: true } } },
     }),
   );
@@ -130,6 +143,7 @@ async function update(id, payload) {
     error.status = 404;
     throw error;
   }
+  data.isActive = current.editorialStatus === "published";
   await prisma.$transaction(async (transaction) => {
     if (current.name !== data.name) {
       for (const link of current.destinationLinks) {

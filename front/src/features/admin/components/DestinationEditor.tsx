@@ -136,7 +136,9 @@ export function DestinationEditor({
       onChange(result);
       setMessage({
         tone: 'success',
-        text: form.id ? 'Destino actualizado' : 'Destino creado. Ya puedes asociar municipios.',
+        text: form.id
+          ? 'Destino actualizado'
+          : 'Destino creado y enviado a revisión. Ya puedes asociar municipios.',
       });
     } catch (cause) {
       setMessage({
@@ -204,9 +206,7 @@ export function DestinationEditor({
       await linkMunicipality(added);
       return;
     }
-    const removed = associatedMunicipalities.find(
-      (municipality) => !nextIds.has(municipality.id),
-    );
+    const removed = associatedMunicipalities.find((municipality) => !nextIds.has(municipality.id));
     if (removed) await unlinkMunicipality(removed);
   };
 
@@ -229,7 +229,7 @@ export function DestinationEditor({
       setActivityDraft(null);
       setMessage({
         tone: 'success',
-        text: `${created.name} se ha creado y seleccionado. Guarda el destino para aplicar el cambio.`,
+        text: `${created.name} se ha creado y enviado a revisión. Queda seleccionado para este destino.`,
       });
     } catch (cause) {
       setMessage({
@@ -257,7 +257,10 @@ export function DestinationEditor({
       onTourismTypeCreated?.(created);
       await refreshTourismTypes();
       setTourismTypeDraft(null);
-      setMessage({ tone: 'success', text: `${created.name} se ha creado y seleccionado.` });
+      setMessage({
+        tone: 'success',
+        text: `${created.name} se ha creado y enviado a revisión. Queda seleccionado.`,
+      });
     } catch (cause) {
       setMessage({
         tone: 'error',
@@ -329,7 +332,7 @@ export function DestinationEditor({
       setPlaceTarget(null);
       setMessage({
         tone: 'success',
-        text: `${saved.nombre} se ha guardado y vinculado al imprescindible.`,
+        text: `${saved.nombre} se ha creado, enviado a revisión y vinculado al imprescindible.`,
       });
     } catch (cause) {
       setMessage({

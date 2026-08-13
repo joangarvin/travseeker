@@ -241,44 +241,6 @@
   .itinerary article > button {
     grid-column: 3;
   }
-  .destination-hero {
-    min-height: 650px;
-  }
-  .destination-hero__content h1 {
-    font-size: clamp(4rem, 20vw, 7rem);
-  }
-  .destination-hero__content > div {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-  .destination-actions {
-    justify-content: flex-start;
-    border-radius: var(--r-2);
-  }
-  .destination-story {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  .season-bars > div > div {
-    align-items: start;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .municipalities > div {
-    grid-template-columns: 1fr;
-  }
-  .municipalities article:nth-child(n) {
-    padding-inline: 0;
-    border-right: 0;
-  }
-  .nearby > div,
-  .reviews__grid {
-    grid-template-columns: 1fr;
-  }
-  .reviews > header {
-    align-items: start;
-    flex-direction: column;
-  }
   .map-workspace {
     height: calc(100dvh - 64px);
   }

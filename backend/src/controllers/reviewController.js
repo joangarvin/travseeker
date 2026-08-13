@@ -24,9 +24,17 @@ const moderate = asyncHandler(async (req, res) => {
   res.json(await reviewService.moderateReview(req.params.reviewId, req.body));
 });
 
+const moderateBatch = asyncHandler(async (req, res) => {
+  res.json(await reviewService.moderateReviews(req.body.reviewIds, req.body.status));
+});
+
+const removeBatch = asyncHandler(async (req, res) => {
+  res.json(await reviewService.deleteReviews(req.body.reviewIds));
+});
+
 const remove = asyncHandler(async (req, res) => {
   const result = await reviewService.deleteReview(req.user.id, req.params.destinoId);
   res.json(result);
 });
 
-module.exports = { list, upsert, remove, listForAdmin, moderate };
+module.exports = { list, upsert, remove, listForAdmin, moderate, moderateBatch, removeBatch };

@@ -10,7 +10,7 @@ const LIST_SELECT = {
   mesesMayJunSeptOct: true,
   mesesNovAbril: true,
   tourismTypeLinks: {
-    where: { tourismType: { isActive: true } },
+    where: { tourismType: { isActive: true, editorialStatus: "published" } },
     include: { tourismType: true },
   },
 };
@@ -29,7 +29,7 @@ const MAP_SELECT = {
   mesesMayJunSeptOct: true,
   mesesNovAbril: true,
   tourismTypeLinks: {
-    where: { tourismType: { isActive: true } },
+    where: { tourismType: { isActive: true, editorialStatus: "published" } },
     include: { tourismType: true },
   },
 };
@@ -38,14 +38,15 @@ const SEARCH_RELATIONS = {
   descripcion: true,
   imprescindibles: true,
   municipioLinks: {
+    where: { municipio: { editorialStatus: "published" } },
     select: { municipio: { select: { id: true, nombre: true } } },
   },
   activityLinks: {
-    where: { activity: { isActive: true } },
+    where: { activity: { isActive: true, editorialStatus: "published" } },
     include: { activity: true },
   },
   places: {
-    where: { isActive: true },
+    where: { isActive: true, editorialStatus: "published" },
     select: { nombre: true },
   },
   essentialGroups: {
@@ -81,11 +82,11 @@ const COMPARE_SELECT = {
   mesesMayJunSeptOct: true,
   mesesNovAbril: true,
   activityLinks: {
-    where: { activity: { isActive: true } },
+    where: { activity: { isActive: true, editorialStatus: "published" } },
     include: { activity: true },
   },
   tourismTypeLinks: {
-    where: { tourismType: { isActive: true } },
+    where: { tourismType: { isActive: true, editorialStatus: "published" } },
     include: { tourismType: true },
   },
 };

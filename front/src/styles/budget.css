@@ -1,17 +1,17 @@
 .budget-estimator {
   display: grid;
-  grid-template-columns: minmax(220px, 0.65fr) minmax(0, 1.35fr);
-  gap: clamp(32px, 6vw, 88px);
-  margin-top: clamp(56px, 8vw, 96px);
-  padding: clamp(28px, 5vw, 64px);
-  border: 1px solid var(--line-strong);
-  background: var(--surface);
-  box-shadow: 8px 8px 0 var(--sun);
+  grid-template-columns: minmax(220px, 0.5fr) minmax(260px, 0.5fr);
+  gap: 24px 48px;
+  margin-top: 8px;
+  padding-top: 40px;
+  border-top: 1px solid var(--line-strong);
 }
 
 .budget-estimator__intro h3 {
   max-width: 360px;
-  font-size: clamp(2.2rem, 5vw, 4.8rem);
+  margin-bottom: 16px;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  line-height: 1;
 }
 
 .budget-estimator__intro > p {
@@ -28,40 +28,56 @@
 }
 
 .budget-estimator__controls {
+  grid-column: 1;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 16px;
-}
-
-.budget-estimator__controls .field:last-child {
-  grid-column: 1 / -1;
+  gap: 0 12px;
 }
 
 .budget-estimator__result {
-  grid-column: 2;
+  grid-column: 1 / -1;
 }
 
 .budget-estimator__total {
+  grid-column: 2;
+  grid-row: 1 / 3;
   display: grid;
-  padding: clamp(24px, 4vw, 44px);
+  align-content: center;
+  min-height: 208px;
+  padding: clamp(24px, 4vw, 40px);
   background: var(--brand-solid);
   color: var(--brand-on-solid);
 }
 
 .budget-estimator__total span,
 .budget-estimator__total small {
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
 .budget-estimator__total strong {
-  margin: 10px 0 2px;
+  margin: 12px 0 4px;
   font-family: 'Bricolage Grotesque', Manrope, sans-serif;
-  font-size: clamp(3.2rem, 8vw, 7.5rem);
-  line-height: 0.9;
-  letter-spacing: -0.07em;
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.budget-estimator__details {
+  margin-top: 0;
+  border-top: 1px solid var(--line);
+}
+
+.budget-estimator__details summary {
+  width: fit-content;
+  min-height: 44px;
+  padding-block: 14px;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
 }
 
 .budget-breakdown {
@@ -81,13 +97,13 @@
   background: var(--brand);
 }
 .budget-breakdown__food {
-  background: var(--sun);
+  background: var(--ink);
 }
 .budget-breakdown__transport {
-  background: var(--signal);
+  background: var(--muted);
 }
 .budget-breakdown__activities {
-  background: var(--success);
+  background: var(--line-strong);
 }
 
 .budget-estimator__items {
@@ -110,26 +126,27 @@
   display: block;
   margin-top: 2px;
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
 }
 
 .budget-estimator__items b > span {
   margin-left: 5px;
   color: var(--muted);
-  font-size: 0.68rem;
+  font-size: 0.875rem;
 }
 
 .budget-estimator__icon--accommodation {
   color: var(--brand);
 }
 .budget-estimator__icon--food {
-  color: var(--warning);
+  color: var(--ink);
 }
 .budget-estimator__icon--transport {
-  color: var(--signal);
+  color: var(--muted);
 }
 .budget-estimator__icon--activities {
-  color: var(--success);
+  color: var(--line-strong);
 }
 
 .budget-estimator__items > li > strong {
@@ -139,7 +156,7 @@
 .budget-estimator__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 16px;
   margin-top: 20px;
 }
 
@@ -202,7 +219,7 @@
   grid-template-columns: 10px 1fr;
   align-items: center;
   gap: 4px 8px;
-  font-size: 0.78rem;
+  font-size: 0.875rem;
 }
 
 .collection-budget__legend i {
@@ -220,7 +237,7 @@
   max-width: 760px;
   margin: 0;
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   line-height: 1.55;
 }
 
@@ -232,6 +249,13 @@
   .budget-estimator__result {
     grid-column: 1;
   }
+  .budget-estimator__total {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .budget-estimator__controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .collection-budget__legend {
     grid-column: 1;
   }
@@ -239,8 +263,7 @@
 
 @media (max-width: 560px) {
   .budget-estimator {
-    padding: 20px;
-    box-shadow: 5px 5px 0 var(--sun);
+    padding-top: 32px;
   }
   .budget-estimator__controls,
   .collection-budget__controls,

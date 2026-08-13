@@ -14,10 +14,13 @@ export function MediaImage({
 }: ImgHTMLAttributes<HTMLImageElement>) {
   const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>('loading');
   const resolvedSrc = src || FALLBACK_IMAGE;
-  const canTransform = resolvedSrc !== FALLBACK_IMAGE && String(resolvedSrc).includes('res.cloudinary.com');
+  const canTransform =
+    resolvedSrc !== FALLBACK_IMAGE && String(resolvedSrc).includes('res.cloudinary.com');
   const srcSet = !canTransform
     ? undefined
-    : [480, 800, 1200].map((width) => `${responsiveImageUrl(String(resolvedSrc), width)} ${width}w`).join(', ');
+    : [480, 800, 1200, 1600, 2000]
+        .map((width) => `${responsiveImageUrl(String(resolvedSrc), width)} ${width}w`)
+        .join(', ');
 
   useEffect(() => {
     setStatus('loading');

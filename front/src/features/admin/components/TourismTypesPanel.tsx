@@ -3,6 +3,7 @@ import { Button } from '../../../components/ui';
 import type { TourismType } from '../../../types';
 import { tourismColorStyle, tourismIconRegistry } from '../../tourism/tourism';
 import { AdminToolbar } from './AdminToolbar';
+import { EditorialStatusBadge, EditorialStatusFilter } from './EditorialStatusBadge';
 
 export function TourismTypesPanel({
   types,
@@ -19,20 +20,23 @@ export function TourismTypesPanel({
   onEdit: (type: TourismType) => void;
   onDelete: (type: TourismType) => void;
 }) {
+  const [status, setStatus] = useState<TourismType['editorialStatus'] | 'all'>('all');
+  const visible = types.filter((type) => status === 'all' || type.editorialStatus === status);
   return (
     <>
       <AdminToolbar
         query={query}
         onQueryChange={onQueryChange}
         placeholder="Buscar tipo de viaje"
-        resultCount={types.length}
+        resultCount={visible.length}
       >
         <Button onClick={onCreate}>
           <Plus /> Nuevo tipo
         </Button>
       </AdminToolbar>
+      <EditorialStatusFilter value={status} onChange={setStatus} />
       <div className="admin-list activity-admin-list">
-        {types.map((type) => {
+        {visible.map((type) => {
           const Icon = tourismIconRegistry[type.icon] || tourismIconRegistry.Compass;
           return (
             <article key={type.id}>
@@ -44,6 +48,7 @@ export function TourismTypesPanel({
                 <Icon />
               </span>
               <div>
+                <EditorialStatusBadge status={type.editorialStatus} />
                 <span className={`activity-status ${type.isActive ? 'is-active' : ''}`}>
                   {type.isActive ? 'Visible' : 'Oculto'}
                 </span>
@@ -67,3 +72,4 @@ export function TourismTypesPanel({
     </>
   );
 }
+import { useState } from 'react';

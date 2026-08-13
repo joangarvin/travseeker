@@ -77,9 +77,17 @@ async function assertUnique(data, excludedId) {
 
 async function listPublicActivities() {
   const activities = await prisma.activity.findMany({
-    where: { isActive: true },
+    where: { isActive: true, editorialStatus: "published" },
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
-    include: { _count: { select: { destinationLinks: true } } },
+    include: {
+      _count: {
+        select: {
+          destinationLinks: {
+            where: { destino: { editorialStatus: "published" } },
+          },
+        },
+      },
+    },
   });
   return activities.map(withCount);
 }
@@ -92,11 +100,16 @@ async function listAdminActivities() {
   return activities.map(withCount);
 }
 
-async function createActivity(payload) {
+async function createActivity(payload, createdById) {
   const data = validatePayload(payload);
   await assertUnique(data);
   const activity = await prisma.activity.create({
-    data,
+    data: {
+      ...data,
+      isActive: false,
+      editorialStatus: "pending",
+      createdById,
+    },
     include: { _count: { select: { destinationLinks: true } } },
   });
   return withCount(activity);
@@ -120,6 +133,7 @@ async function updateActivity(id, payload) {
     error.status = 404;
     throw error;
   }
+  data.isActive = current.editorialStatus === "published";
 
   await prisma.$transaction(async (transaction) => {
     if (current.name !== data.name) {

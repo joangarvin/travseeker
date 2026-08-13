@@ -1,4 +1,4 @@
-import { Building2, Compass, MapPin, MessageSquare, Signpost } from 'lucide-react';
+import { Building2, ClipboardCheck, Compass, MapPin, MessageSquare, Signpost } from 'lucide-react';
 import type { AdminTab } from '../types';
 
 type AdminNavigationProps = {
@@ -8,6 +8,7 @@ type AdminNavigationProps = {
 };
 
 const tabs = [
+  { id: 'editorial', label: 'Revisión editorial', mobileLabel: 'Revisión', Icon: ClipboardCheck },
   { id: 'destinos', label: 'Destinos', Icon: MapPin },
   { id: 'tipos-viaje', label: 'Tipos de viaje', mobileLabel: 'Tipos', Icon: Signpost },
   { id: 'actividades', label: 'Actividades', Icon: Compass },
@@ -18,13 +19,18 @@ const tabs = [
 
 export function AdminNavigation({ activeTab, counts, onChange }: AdminNavigationProps) {
   const moveTab = (event: React.KeyboardEvent<HTMLButtonElement>, current: AdminTab) => {
-    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+    if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) return;
     event.preventDefault();
     const ids = tabs.map((tab) => tab.id);
     const currentIndex = ids.indexOf(current);
-    const nextIndex = event.key === 'ArrowRight'
-      ? (currentIndex + 1) % ids.length
-      : (currentIndex - 1 + ids.length) % ids.length;
+    const nextIndex =
+      event.key === 'Home'
+        ? 0
+        : event.key === 'End'
+          ? ids.length - 1
+          : event.key === 'ArrowRight'
+            ? (currentIndex + 1) % ids.length
+            : (currentIndex - 1 + ids.length) % ids.length;
     const next = ids[nextIndex] as AdminTab;
     onChange(next);
     requestAnimationFrame(() => document.getElementById(`admin-tab-${next}`)?.focus());

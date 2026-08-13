@@ -10,7 +10,7 @@ const listAdmin = asyncHandler(async (_req, res) => {
 });
 
 const create = asyncHandler(async (req, res) => {
-  res.status(201).json(await activityService.createActivity(req.body));
+  res.status(201).json(await activityService.createActivity(req.body, req.user.id));
 });
 
 const update = asyncHandler(async (req, res) => {

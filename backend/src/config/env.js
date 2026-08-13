@@ -33,6 +33,15 @@ const env = {
     apiSecret: process.env.CLOUDINARY_API_SECRET || '',
     folder: process.env.CLOUDINARY_FOLDER || 'travseeker',
   },
+  climate: {
+    baseUrl: process.env.CLIMATE_BASE_URL || 'https://archive-api.open-meteo.com/v1/archive',
+    apiKey: process.env.CLIMATE_API_KEY || '',
+    provider: process.env.CLIMATE_PROVIDER || 'open-meteo',
+    model: process.env.CLIMATE_MODEL || 'era5',
+    years: Number(process.env.CLIMATE_YEARS) || 5,
+    ttlDays: Number(process.env.CLIMATE_CACHE_TTL_DAYS) || 180,
+    timeoutMs: Number(process.env.CLIMATE_TIMEOUT_MS) || 8000,
+  },
 };
 
 module.exports = { env };

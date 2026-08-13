@@ -10,7 +10,7 @@ import {
   X,
 } from 'lucide-react';
 import type { EssentialItem } from '../../../types';
-import { imageUrl } from '../../../utils';
+import { imageUrl, openStreetMapUrl, safeExternalUrl, validCoordinates } from '../../../utils';
 import { MediaImage } from '../../../components/ui';
 import { EssentialIconGlyph } from '../../essentials/essentialIcons';
 import { essentialPresentation } from '../../essentials/essentialPresentation';
@@ -24,6 +24,7 @@ type EssentialDetailProps = {
   inRoute: boolean;
   onToggleSaved: () => void;
   onToggleRoute: () => void;
+  authenticated?: boolean;
   onClose?: () => void;
 };
 
@@ -32,10 +33,6 @@ type PracticalFact = {
   label: string;
   value: string;
 };
-
-function openStreetMapUrl(latitude: number, longitude: number) {
-  return `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=16/${latitude}/${longitude}`;
-}
 
 export function EssentialDetail({
   item,
@@ -46,11 +43,15 @@ export function EssentialDetail({
   inRoute,
   onToggleSaved,
   onToggleRoute,
+  authenticated = false,
   onClose,
 }: EssentialDetailProps) {
   const presentation = essentialPresentation(item);
-  const officialUrl = item.officialUrl || item.place?.website;
-  const mapUrl = item.place ? openStreetMapUrl(item.place.latitud, item.place.longitud) : null;
+  const officialUrl = safeExternalUrl(item.officialUrl || item.place?.website);
+  const placeCoordinates = item.place
+    ? validCoordinates(item.place.latitud, item.place.longitud)
+    : null;
+  const mapUrl = placeCoordinates ? openStreetMapUrl(placeCoordinates, 16) : null;
   const practicalFacts = [
     item.duration && { Icon: Clock3, label: 'Duración', value: item.duration },
     item.bestTime && { Icon: Sunrise, label: 'Mejor momento', value: item.bestTime },
@@ -62,27 +63,25 @@ export function EssentialDetail({
   ].filter(Boolean) as PracticalFact[];
 
   return (
-    <article className="essential-sheet" aria-labelledby={headingId}>
-      <div className="essential-sheet__media">
-        {item.imageUrl ? (
+    <article
+      className={`essential-sheet${item.imageUrl ? ' essential-sheet--with-media' : ' essential-sheet--typographic'}`}
+      aria-labelledby={headingId}
+    >
+      {item.imageUrl && (
+        <div className="essential-sheet__media">
           <MediaImage
             src={imageUrl(item.imageUrl)}
             alt={item.imageAlt || presentation.title}
             loading="lazy"
           />
-        ) : (
-          <div className="essential-sheet__media-fallback">
-            <EssentialIconGlyph name={item.icon || groupIcon} />
-            <span>Imagen no disponible</span>
-          </div>
-        )}
-        <span className="essential-sheet__priority">{priority}</span>
-        {onClose && (
-          <button type="button" className="essential-sheet__close" onClick={onClose}>
-            <X aria-hidden /> <span>Cerrar detalle</span>
-          </button>
-        )}
-      </div>
+          <span className="essential-sheet__priority">{priority}</span>
+          {onClose && (
+            <button type="button" className="essential-sheet__close" onClick={onClose}>
+              <X aria-hidden /> <span>Cerrar detalle</span>
+            </button>
+          )}
+        </div>
+      )}
 
       <div className="essential-sheet__body">
         <header>
@@ -90,9 +89,14 @@ export function EssentialDetail({
             <EssentialIconGlyph name={item.icon || groupIcon} />
           </span>
           <div>
-            <p>Por qué merece la pena</p>
+            <p>{priority} · Por qué merece la pena</p>
             <h4 id={headingId}>{presentation.title}</h4>
           </div>
+          {!item.imageUrl && onClose && (
+            <button type="button" className="essential-sheet__close" onClick={onClose}>
+              <X aria-hidden /> <span>Cerrar detalle</span>
+            </button>
+          )}
         </header>
 
         <p className="essential-sheet__description">
@@ -131,17 +135,14 @@ export function EssentialDetail({
         <div className="essential-sheet__planning" aria-label="Planificar esta experiencia">
           <button type="button" aria-pressed={saved} onClick={onToggleSaved}>
             {saved ? <Check aria-hidden /> : <Bookmark aria-hidden />}
-            {saved ? 'Guardada' : 'Guardar'}
+            {saved ? 'Guardado en este dispositivo' : 'Guardar en este dispositivo'}
           </button>
-          <button
-            type="button"
-            className="is-primary"
-            aria-pressed={inRoute}
-            onClick={onToggleRoute}
-          >
-            {inRoute ? <Check aria-hidden /> : <Route aria-hidden />}
-            {inRoute ? 'En mi ruta' : 'Añadir a mi ruta'}
-          </button>
+          {authenticated && (
+            <button type="button" className="is-primary" onClick={onToggleRoute}>
+              {inRoute ? <Check aria-hidden /> : <Route aria-hidden />}
+              {inRoute ? 'Añadido al viaje' : 'Añadir a un viaje'}
+            </button>
+          )}
         </div>
 
         {officialUrl && (

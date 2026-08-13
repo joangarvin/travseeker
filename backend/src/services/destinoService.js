@@ -11,6 +11,10 @@ const { normalizeMonth, rankForSeason } = require("../domain/season");
 const { rankDestinationSearch } = require("../domain/search");
 const { parseTags, serializeTags } = require("../constants/scales");
 const { cleanMunicipalityFields } = require("../utils/sanitizeContent");
+const {
+  publicDestinationByIdWhere,
+  publicEditorialWhere,
+} = require("../domain/editorial");
 
 function mapActivities(destino) {
   if (!destino) return destino;
@@ -119,10 +123,42 @@ function textSearchWhere(query, structuredWhere) {
       { imprescindibles: contains },
       { tipoTurismoPrincipal: contains },
       { tipoTurismoSecundario: contains },
-      { municipioLinks: { some: { municipio: { nombre: contains } } } },
-      { activityLinks: { some: { activity: { name: contains } } } },
-      { tourismTypeLinks: { some: { tourismType: { name: contains } } } },
-      { places: { some: { nombre: contains } } },
+      {
+        municipioLinks: {
+          some: { municipio: { nombre: contains, editorialStatus: "published" } },
+        },
+      },
+      {
+        activityLinks: {
+          some: {
+            activity: {
+              name: contains,
+              isActive: true,
+              editorialStatus: "published",
+            },
+          },
+        },
+      },
+      {
+        tourismTypeLinks: {
+          some: {
+            tourismType: {
+              name: contains,
+              isActive: true,
+              editorialStatus: "published",
+            },
+          },
+        },
+      },
+      {
+        places: {
+          some: {
+            nombre: contains,
+            isActive: true,
+            editorialStatus: "published",
+          },
+        },
+      },
       {
         essentialGroups: {
           some: {
@@ -144,7 +180,7 @@ function textSearchWhere(query, structuredWhere) {
 
 async function searchDestinosPage(query) {
   const { hasQuery, limit, offset } = parsePagination(query);
-  const where = buildWhereClause(query);
+  const where = publicEditorialWhere(buildWhereClause(query));
 
   if (hasQuery) {
     // Fuzzy ranking needs the candidate set before it can score and sort it.
@@ -191,14 +227,15 @@ async function searchDestinos(query) {
 }
 
 async function getDestinoById(id) {
-  const destino = await prisma.destino.findUnique({
-    where: { id },
+  const destino = await prisma.destino.findFirst({
+    where: publicDestinationByIdWhere(id),
     include: {
       municipioLinks: {
+        where: { municipio: { editorialStatus: "published" } },
         include: { municipio: true },
       },
       places: {
-        where: { isActive: true },
+        where: { isActive: true, editorialStatus: "published" },
         orderBy: [{ sortOrder: "asc" }, { nombre: "asc" }],
       },
       essentialGroups: {
@@ -211,16 +248,24 @@ async function getDestinoById(id) {
         },
       },
       activityLinks: {
-        where: { activity: { isActive: true } },
+        where: { activity: { isActive: true, editorialStatus: "published" } },
         include: { activity: true },
       },
       tourismTypeLinks: {
-        where: { tourismType: { isActive: true } },
+        where: { tourismType: { isActive: true, editorialStatus: "published" } },
         include: { tourismType: true },
       },
     },
   });
   if (!destino) return null;
+  destino.essentialGroups?.forEach((group) => {
+    group.items?.forEach((item) => {
+      if (item.place?.editorialStatus !== "published" || item.place?.isActive !== true) {
+        item.place = null;
+        item.placeId = null;
+      }
+    });
+  });
   const municipios = (destino.municipioLinks || [])
     .map((link) => cleanMunicipalityFields(link.municipio))
     .filter(Boolean)
@@ -231,6 +276,7 @@ async function getDestinoById(id) {
 
 async function getDestacados(limit = 6) {
   const destinos = await prisma.destino.findMany({
+    where: { editorialStatus: "published" },
     orderBy: { updatedAt: "desc" },
     take: Math.min(Math.max(limit, 1), 12),
     select: LIST_SELECT,
@@ -239,8 +285,8 @@ async function getDestacados(limit = 6) {
 }
 
 async function getRelacionados(id) {
-  const destino = await prisma.destino.findUnique({
-    where: { id },
+  const destino = await prisma.destino.findFirst({
+    where: publicDestinationByIdWhere(id),
     select: { ubicacion: true, tipoTurismoPrincipal: true, presupuesto: true },
   });
 
@@ -255,6 +301,7 @@ async function getRelacionados(id) {
   const related = await prisma.destino.findMany({
     where: {
       id: { not: id },
+      editorialStatus: "published",
       OR: [
         { ubicacion: { contains: destino.ubicacion } },
         ...tourismMatches,
@@ -271,7 +318,7 @@ async function getMapaDestinos(query) {
   const hasQuery = Boolean(String(query.q || "").trim());
   const destinos = await prisma.destino.findMany({
     where: {
-      ...buildWhereClause(query),
+      ...publicEditorialWhere(buildWhereClause(query)),
       latitud: { not: null },
       longitud: { not: null },
     },
@@ -297,7 +344,7 @@ async function compareDestinos(ids) {
   }
 
   const destinos = await prisma.destino.findMany({
-    where: { id: { in: ids } },
+    where: { id: { in: ids }, editorialStatus: "published" },
     select: COMPARE_SELECT,
   });
 
@@ -309,8 +356,9 @@ async function compareDestinos(ids) {
 
 async function getStats() {
   const [total, reviewAgg] = await Promise.all([
-    prisma.destino.count(),
+    prisma.destino.count({ where: { editorialStatus: "published" } }),
     prisma.review.aggregate({
+      where: { status: 'published' },
       _avg: { rating: true },
       _count: { rating: true },
     }),
@@ -326,9 +374,12 @@ async function getStats() {
 
 async function getFilterOptions() {
   const [destinations, activityCatalog] = await Promise.all([
-    prisma.destino.findMany({ select: { ubicacion: true } }),
+    prisma.destino.findMany({
+      where: { editorialStatus: "published" },
+      select: { ubicacion: true },
+    }),
     prisma.activity.findMany({
-      where: { isActive: true },
+      where: { isActive: true, editorialStatus: "published" },
       orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
       select: { name: true },
     }),

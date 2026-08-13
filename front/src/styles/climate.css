@@ -1,0 +1,476 @@
+.climate-section {
+  min-width: 0;
+  max-width: 1280px;
+  margin-inline: auto;
+}
+
+.climate-section__heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.climate-section__heading h2 {
+  margin-bottom: 0;
+}
+
+.climate-unit {
+  display: flex;
+  gap: 8px;
+}
+
+.climate-unit button,
+.climate-state button {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.climate-unit button:hover,
+.climate-state button:hover {
+  background: var(--surface-muted);
+}
+
+.climate-unit button[aria-pressed='true'] {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+  color: var(--brand);
+  box-shadow: inset 0 -3px var(--brand);
+}
+
+.climate-unit button:focus-visible,
+.climate-alternatives button:focus-visible,
+.climate-months button:focus-visible,
+.climate-state button:focus-visible,
+.climate-details summary:focus-visible,
+.climate-method a:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+  transition: none;
+}
+
+.climate-warning,
+.climate-state {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 32px;
+  padding: 16px;
+  border-inline-start: 4px solid var(--sun);
+  background: color-mix(in srgb, var(--sun) 20%, var(--surface));
+}
+
+.climate-warning {
+  max-width: 65ch;
+}
+.climate-warning svg,
+.climate-state > svg {
+  width: 20px;
+  height: 20px;
+}
+.climate-state {
+  align-items: flex-start;
+}
+.climate-state > div {
+  flex: 1;
+  min-width: 0;
+}
+.climate-state strong {
+  display: block;
+  font-family: 'Bricolage Grotesque', Manrope, sans-serif;
+  font-size: 1.25rem;
+}
+.climate-state p {
+  max-width: 60ch;
+  margin: 8px 0 0;
+}
+
+.climate-decision {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.42fr) minmax(0, 0.58fr);
+  gap: 12px 64px;
+  align-items: end;
+  padding: clamp(24px, 4vw, 48px);
+  background: var(--canvas);
+}
+
+.climate-decision__eyebrow {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+
+.climate-decision__eyebrow--recommended {
+  width: fit-content;
+  padding: 7px 10px;
+  background: var(--sun);
+  color: var(--sun-ink);
+}
+
+.climate-decision__eyebrow svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+.climate-decision h3 {
+  margin: 8px 0 0;
+  font-size: clamp(2.75rem, 6vw, 5.75rem);
+  line-height: 0.94;
+  letter-spacing: -0.05em;
+}
+.climate-decision__summary {
+  max-width: 55ch;
+  margin: 0;
+  font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
+  line-height: 1.55;
+}
+
+.climate-essentials,
+.climate-secondary-data {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 24px 0 0;
+}
+
+.climate-essentials > div,
+.climate-secondary-data > div {
+  min-width: 0;
+  padding-block-start: 16px;
+  border-block-start: 1px solid var(--line-strong);
+}
+
+.climate-essentials dt,
+.climate-secondary-data dt {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.climate-essentials dd,
+.climate-secondary-data dd {
+  margin: 0;
+  font-family: 'Bricolage Grotesque', Manrope, sans-serif;
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.climate-alternatives {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-block: 32px 48px;
+}
+
+.climate-alternatives button {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-width: 0;
+  min-height: 128px;
+  padding: 20px 0;
+  border: 0;
+  border-block: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  text-align: start;
+}
+
+.climate-alternatives button:hover {
+  background: var(--surface-muted);
+}
+.climate-alternatives button[aria-pressed='true'] {
+  box-shadow: inset 0 -4px var(--brand);
+}
+.climate-alternatives__role {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+.climate-alternatives__role svg {
+  width: 17px;
+  height: 17px;
+  fill: var(--sun);
+  color: var(--sun-ink);
+}
+.climate-alternatives button strong {
+  font-family: 'Bricolage Grotesque', Manrope, sans-serif;
+  font-size: 1.25rem;
+}
+.climate-alternatives button > span:last-child {
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.climate-ribbon-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.climate-ribbon-heading p {
+  margin: 0;
+}
+.climate-ribbon-heading > p:last-child {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.climate-months {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(76px, 1fr));
+  gap: 4px;
+  padding: 4px 4px 12px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+}
+
+.climate-months button {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-width: 76px;
+  min-height: 104px;
+  padding: 14px 8px 10px;
+  border: 0;
+  border-block-start: 1px solid var(--line-strong);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  text-align: start;
+  scroll-snap-align: start;
+}
+
+.climate-months button:hover {
+  background: var(--surface-muted);
+}
+.climate-months button[aria-pressed='true'] {
+  background: var(--brand-soft);
+  box-shadow: inset 0 -4px var(--brand);
+}
+.climate-months__name {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.climate-months button > strong {
+  font-family: 'Bricolage Grotesque', Manrope, sans-serif;
+  font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+}
+.climate-months__recommendation {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--sun-ink);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+.climate-months__recommendation svg {
+  width: 14px;
+  height: 14px;
+  fill: var(--sun);
+}
+.climate-months button:has(.climate-months__recommendation) {
+  border-block-start-color: var(--sun-ink);
+}
+
+.climate-details {
+  margin-block-start: 32px;
+  border-block-start: 1px solid var(--line);
+}
+
+.climate-details summary {
+  width: fit-content;
+  min-height: 44px;
+  padding: 16px 0;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.climate-details__content {
+  display: grid;
+  gap: 48px;
+  padding-block: 24px 8px;
+}
+.climate-details__content section > h3 {
+  margin: 0 0 24px;
+  font-size: 1.25rem;
+}
+.climate-secondary-data {
+  margin-top: 0;
+}
+.climate-secondary-data dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.climate-secondary-data dt svg {
+  width: 18px;
+  height: 18px;
+}
+.climate-table {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.climate-table table {
+  width: 100%;
+  min-width: 880px;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.climate-table caption {
+  padding: 0 0 16px;
+  color: var(--muted);
+  text-align: start;
+}
+.climate-table th,
+.climate-table td {
+  padding: 12px;
+  border-block-end: 1px solid var(--line);
+  text-align: start;
+  white-space: nowrap;
+}
+.climate-table th {
+  font-weight: 800;
+}
+.climate-method {
+  max-width: 72ch;
+}
+.climate-method p {
+  margin: 0 0 16px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.climate-method a {
+  color: var(--brand);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.climate-skeleton {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.climate-skeleton span {
+  display: block;
+  min-height: 96px;
+  background: var(--surface-muted);
+  animation: climate-pulse 1.2s ease-in-out infinite alternate;
+}
+.climate-skeleton__lead,
+.climate-skeleton__ribbon {
+  grid-column: 1 / -1;
+}
+.climate-skeleton__lead {
+  min-height: 176px !important;
+}
+.climate-skeleton__ribbon {
+  min-height: 116px !important;
+}
+
+@keyframes climate-pulse {
+  to {
+    opacity: 0.45;
+  }
+}
+
+@media (max-width: 720px) {
+  .climate-section__heading {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 40px;
+  }
+  .climate-decision {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 24px 16px;
+  }
+  .climate-decision__eyebrow,
+  .climate-essentials {
+    grid-column: 1;
+  }
+  .climate-decision h3 {
+    font-size: clamp(3rem, 16vw, 4.5rem);
+  }
+  .climate-essentials,
+  .climate-secondary-data {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .climate-alternatives {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .climate-alternatives button {
+    min-height: 100px;
+  }
+  .climate-ribbon-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .climate-months {
+    display: flex;
+    margin-inline: -4px;
+    scroll-snap-type: inline mandatory;
+  }
+  .climate-months button {
+    flex: 0 0 88px;
+    min-width: 88px;
+  }
+  .climate-state {
+    flex-wrap: wrap;
+  }
+  .climate-state button {
+    margin-inline-start: 36px;
+  }
+  .climate-skeleton {
+    grid-template-columns: 1fr;
+  }
+  .climate-skeleton__lead,
+  .climate-skeleton__ribbon {
+    grid-column: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .climate-skeleton span {
+    animation: none;
+  }
+  .climate-unit button:active,
+  .climate-state button:active,
+  .climate-alternatives button:active,
+  .climate-months button:active {
+    translate: none;
+  }
+}

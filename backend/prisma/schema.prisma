@@ -7,7 +7,7 @@ generator client {
 }
 
 model Destino {
-  id                    String   @id @default(uuid())
+  id                    String          @id @default(uuid())
   nombre                String
   tipoTurismoPrincipal  String
   tipoTurismoSecundario String
@@ -23,7 +23,12 @@ model Destino {
   imagen                String
   latitud               Float?
   longitud              Float?
-  updatedAt             DateTime @updatedAt
+  updatedAt             DateTime        @updatedAt
+  editorialStatus       EditorialStatus @default(pending)
+  submittedAt           DateTime        @default(now())
+  reviewedAt            DateTime?
+  createdById           String?
+  reviewedById          String?
 
   municipioLinks   DestinoMunicipio[]
   favoritos        Favorito[]
@@ -33,21 +38,56 @@ model Destino {
   essentialGroups  EssentialGroup[]
   activityLinks    DestinoActivity[]
   tourismTypeLinks DestinoTourismType[]
+  climateCache     ClimateCache?
+  createdBy        User?                @relation("DestinoCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  reviewedBy       User?                @relation("DestinoReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@index([editorialStatus, updatedAt])
+  @@index([createdById])
+  @@index([reviewedById])
+}
+
+model ClimateCache {
+  id                    String   @id @default(uuid())
+  destinationId         String   @unique
+  coordinateFingerprint String
+  provider              String
+  model                 String
+  periodStart           DateTime @db.Date
+  periodEnd             DateTime @db.Date
+  monthlySummary        Json
+  fetchedAt             DateTime
+  expiresAt             DateTime
+  updatedAt             DateTime @updatedAt
+
+  destination Destino @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
 }
 
 model Activity {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  slug      String   @unique
-  icon      String   @default("Compass")
-  sortOrder Int      @default(0)
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String          @id @default(uuid())
+  name            String          @unique
+  slug            String          @unique
+  icon            String          @default("Compass")
+  sortOrder       Int             @default(0)
+  isActive        Boolean         @default(false)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  editorialStatus EditorialStatus @default(pending)
+  submittedAt     DateTime        @default(now())
+  reviewedAt      DateTime?
+  createdById     String?
+  reviewedById    String?
 
   destinationLinks DestinoActivity[]
+  createdBy        User?             @relation("ActivityCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  reviewedBy       User?             @relation("ActivityReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
 
   @@index([isActive, sortOrder, name])
+  @@index([editorialStatus, sortOrder, name])
+  @@index([createdById])
+  @@index([reviewedById])
 }
 
 model DestinoActivity {
@@ -62,21 +102,31 @@ model DestinoActivity {
 }
 
 model TourismType {
-  id          String   @id @default(uuid())
-  name        String   @unique
-  slug        String   @unique
-  description String   @default("")
-  icon        String   @default("Compass")
-  colorKey    String   @default("otro")
-  colorValue  String   @default("#5f6470")
-  sortOrder   Int      @default(0)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String          @id @default(uuid())
+  name            String          @unique
+  slug            String          @unique
+  description     String          @default("")
+  icon            String          @default("Compass")
+  colorKey        String          @default("otro")
+  colorValue      String          @default("#5f6470")
+  sortOrder       Int             @default(0)
+  isActive        Boolean         @default(false)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  editorialStatus EditorialStatus @default(pending)
+  submittedAt     DateTime        @default(now())
+  reviewedAt      DateTime?
+  createdById     String?
+  reviewedById    String?
 
   destinationLinks DestinoTourismType[]
+  createdBy        User?                @relation("TourismTypeCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  reviewedBy       User?                @relation("TourismTypeReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
 
   @@index([isActive, sortOrder, name])
+  @@index([editorialStatus, sortOrder, name])
+  @@index([createdById])
+  @@index([reviewedById])
 }
 
 model DestinoTourismType {
@@ -91,23 +141,33 @@ model DestinoTourismType {
 }
 
 model Place {
-  id          String   @id @default(uuid())
-  destinoId   String
-  nombre      String
-  categoria   String
-  descripcion String?
-  latitud     Float
-  longitud    Float
-  website     String?
-  sortOrder   Int      @default(0)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String          @id @default(uuid())
+  destinoId       String
+  nombre          String
+  categoria       String
+  descripcion     String?
+  latitud         Float
+  longitud        Float
+  website         String?
+  sortOrder       Int             @default(0)
+  isActive        Boolean         @default(false)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  editorialStatus EditorialStatus @default(pending)
+  submittedAt     DateTime        @default(now())
+  reviewedAt      DateTime?
+  createdById     String?
+  reviewedById    String?
 
   destino        Destino         @relation(fields: [destinoId], references: [id], onDelete: Cascade)
   essentialItems EssentialItem[]
+  createdBy      User?           @relation("PlaceCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  reviewedBy     User?           @relation("PlaceReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
 
   @@index([destinoId, isActive, sortOrder])
+  @@index([editorialStatus, destinoId, sortOrder])
+  @@index([createdById])
+  @@index([reviewedById])
 }
 
 model EssentialGroup {
@@ -150,15 +210,26 @@ model EssentialItem {
 }
 
 model Municipio {
-  id          String  @id @default(uuid())
-  nombre      String
-  precios     String
-  conexiones  String
-  tipoTurismo String?
-  latitud     Float?
-  longitud    Float?
+  id              String          @id @default(uuid())
+  nombre          String
+  precios         String
+  conexiones      String
+  tipoTurismo     String?
+  latitud         Float?
+  longitud        Float?
+  editorialStatus EditorialStatus @default(pending)
+  submittedAt     DateTime        @default(now())
+  reviewedAt      DateTime?
+  createdById     String?
+  reviewedById    String?
 
   destinoLinks DestinoMunicipio[]
+  createdBy    User?              @relation("MunicipioCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  reviewedBy   User?              @relation("MunicipioReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
+
+  @@index([editorialStatus, nombre])
+  @@index([createdById])
+  @@index([reviewedById])
 }
 
 model DestinoMunicipio {
@@ -196,6 +267,23 @@ model User {
   collections           Collection[]
   alerts                AlertSubscription[]
   collectionMemberships CollectionMember[]
+  destinosCreated       Destino[]           @relation("DestinoCreatedBy")
+  destinosReviewed      Destino[]           @relation("DestinoReviewedBy")
+  activitiesCreated     Activity[]          @relation("ActivityCreatedBy")
+  activitiesReviewed    Activity[]          @relation("ActivityReviewedBy")
+  tourismTypesCreated   TourismType[]       @relation("TourismTypeCreatedBy")
+  tourismTypesReviewed  TourismType[]       @relation("TourismTypeReviewedBy")
+  municipiosCreated     Municipio[]         @relation("MunicipioCreatedBy")
+  municipiosReviewed    Municipio[]         @relation("MunicipioReviewedBy")
+  placesCreated         Place[]             @relation("PlaceCreatedBy")
+  placesReviewed        Place[]             @relation("PlaceReviewedBy")
+}
+
+enum EditorialStatus {
+  draft
+  pending
+  published
+  archived
 }
 
 model AlertSubscription {
@@ -234,19 +322,19 @@ model AlertDelivery {
 }
 
 model Collection {
-  id          String    @id @default(uuid())
-  userId      String
-  nombre      String
-  descripcion String?
-  color       String    @default("emerald")
-  visibility  String    @default("private")
-  shareToken  String?   @unique
-  startDate   DateTime? @db.Date
-  endDate     DateTime? @db.Date
-  travelerCount Int     @default(2)
-  itinerary   Json      @default("[]")
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id            String    @id @default(uuid())
+  userId        String
+  nombre        String
+  descripcion   String?
+  color         String    @default("emerald")
+  visibility    String    @default("private")
+  shareToken    String?   @unique
+  startDate     DateTime? @db.Date
+  endDate       DateTime? @db.Date
+  travelerCount Int       @default(2)
+  itinerary     Json      @default("[]")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   user    User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   items   CollectionItem[]
@@ -304,7 +392,7 @@ model Review {
   crowdRating   Int?
   valueRating   Int?
   accessRating  Int?
-  status        ReviewStatus @default(published)
+  status        ReviewStatus @default(pending)
   adminResponse String?
   respondedAt   DateTime?
   createdAt     DateTime     @default(now())
@@ -318,8 +406,10 @@ model Review {
 }
 
 enum ReviewStatus {
+  pending
   published
-  hidden
+  rejected
+  flagged
 }
 
 model VerificationToken {

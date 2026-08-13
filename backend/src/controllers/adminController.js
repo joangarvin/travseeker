@@ -10,7 +10,7 @@ const getDestino = asyncHandler(async (req, res) => {
 });
 
 const createDestino = asyncHandler(async (req, res) => {
-  res.status(201).json(await adminService.createDestino(req.body));
+  res.status(201).json(await adminService.createDestino(req.body, req.user.id));
 });
 
 const updateDestino = asyncHandler(async (req, res) => {
@@ -26,7 +26,7 @@ const listMunicipios = asyncHandler(async (_req, res) => {
 });
 
 const createMunicipio = asyncHandler(async (req, res) => {
-  res.status(201).json(await adminService.createMunicipio(req.body));
+  res.status(201).json(await adminService.createMunicipio(req.body, req.user.id));
 });
 
 const updateMunicipio = asyncHandler(async (req, res) => {
@@ -60,7 +60,7 @@ const listPlaces = asyncHandler(async (req, res) =>
 const createPlace = asyncHandler(async (req, res) =>
   res
     .status(201)
-    .json(await adminService.createPlace(req.params.destinoId, req.body)),
+    .json(await adminService.createPlace(req.params.destinoId, req.body, req.user.id)),
 );
 const updatePlace = asyncHandler(async (req, res) =>
   res.json(await adminService.updatePlace(req.params.placeId, req.body)),

@@ -2,6 +2,7 @@ import { Edit3, ExternalLink, Plus, Search, Trash2 } from 'lucide-react';
 import { Button, Empty, Field } from '../../../components/ui';
 import type { Destino, Place } from '../../../types';
 import { AdminToolbar } from './AdminToolbar';
+import { EditorialStatusBadge, EditorialStatusFilter } from './EditorialStatusBadge';
 
 type PlacesPanelProps = {
   places: Place[];
@@ -30,6 +31,8 @@ export function PlacesPanel({
   onEdit,
   onDelete,
 }: PlacesPanelProps) {
+  const [status, setStatus] = useState<Place['editorialStatus'] | 'all'>('all');
+  const visible = places.filter((place) => status === 'all' || place.editorialStatus === status);
   return (
     <>
       <div className="admin-place-context">
@@ -64,18 +67,20 @@ export function PlacesPanel({
         query={placeQuery}
         onQueryChange={onPlaceQueryChange}
         placeholder="Buscar lugar o categoría"
-        resultCount={places.length}
+        resultCount={visible.length}
       >
         <Button onClick={onCreate}>
           <Plus /> Nuevo lugar
         </Button>
       </AdminToolbar>
+      <EditorialStatusFilter value={status} onChange={setStatus} />
 
       <div className="admin-list">
-        {places.length ? (
-          places.map((place) => (
+        {visible.length ? (
+          visible.map((place) => (
             <article key={place.id}>
               <div>
+                <EditorialStatusBadge status={place.editorialStatus} />
                 <span>
                   {place.categoria} · {place.isActive === false ? 'Oculto' : 'Visible'} · orden{' '}
                   {place.sortOrder || 0}
@@ -107,3 +112,4 @@ export function PlacesPanel({
     </>
   );
 }
+import { useState } from 'react';

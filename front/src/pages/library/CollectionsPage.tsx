@@ -1,17 +1,21 @@
 import { useEffect, useMemo, useState } from 'react';
 import { CalendarRange, Plus, Search } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { PageHeading, Shell } from '../../components/layout';
 import { Button, Empty, Loader, Notice } from '../../components/ui';
 import { useAuth } from '../../contexts';
 import { GuestGate } from '../../features/auth/components/GuestGate';
 import { CollectionCover } from '../../features/collections/components/CollectionCover';
-import { CreateCollectionModal, type NewCollectionInput } from '../../features/collections/components/CreateCollectionModal';
+import {
+  CreateCollectionModal,
+  type NewCollectionInput,
+} from '../../features/collections/components/CreateCollectionModal';
 import { api } from '../../services/api';
 import type { CollectionSummary } from '../../types';
 
 export default function CollectionsPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, token, loading: isAuthLoading } = useAuth();
   const [collections, setCollections] = useState<CollectionSummary[]>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -19,6 +23,13 @@ export default function CollectionsPage() {
   const [error, setError] = useState('');
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<'all' | 'upcoming' | 'open' | 'shared'>('all');
+
+  useEffect(() => {
+    if ((location.state as { openCreate?: boolean } | null)?.openCreate) {
+      setIsCreateModalOpen(true);
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  }, [location.pathname, location.state, navigate]);
 
   const loadCollections = async () => {
     if (!token) return;
@@ -37,7 +48,13 @@ export default function CollectionsPage() {
     void loadCollections();
   }, [token]);
 
-  const createCollection = async ({ name, description, startDate, endDate, travelerCount }: NewCollectionInput) => {
+  const createCollection = async ({
+    name,
+    description,
+    startDate,
+    endDate,
+    travelerCount,
+  }: NewCollectionInput) => {
     if (!token) return;
 
     try {
@@ -67,13 +84,18 @@ export default function CollectionsPage() {
     const normalizedQuery = query.trim().toLocaleLowerCase('es');
     const today = new Date().toISOString().slice(0, 10);
     return collections.filter((collection) => {
-      const matchesQuery = !normalizedQuery || `${collection.nombre} ${collection.descripcion || ''}`.toLocaleLowerCase('es').includes(normalizedQuery);
+      const matchesQuery =
+        !normalizedQuery ||
+        `${collection.nombre} ${collection.descripcion || ''}`
+          .toLocaleLowerCase('es')
+          .includes(normalizedQuery);
       const start = collection.startDate?.slice(0, 10);
       const matchesFilter =
         filter === 'all' ||
         (filter === 'upcoming' && Boolean(start && start >= today)) ||
         (filter === 'open' && !start) ||
-        (filter === 'shared' && (collection.visibility === 'shared' || collection.role !== 'owner'));
+        (filter === 'shared' &&
+          (collection.visibility === 'shared' || collection.role !== 'owner'));
       return matchesQuery && matchesFilter;
     });
   }, [collections, filter, query]);
@@ -123,22 +145,44 @@ export default function CollectionsPage() {
         <label className="trips-search" htmlFor="trip-search">
           <Search aria-hidden="true" />
           <span className="sr-only">Buscar viajes</span>
-          <input id="trip-search" type="search" placeholder="Buscar por nombre o descripción" value={query} onChange={(event) => setQuery(event.target.value)} />
+          <input
+            id="trip-search"
+            type="search"
+            placeholder="Buscar por nombre o descripción"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
         </label>
         <div className="trip-filters" aria-label="Filtrar viajes">
-          {([
-            ['all', 'Todos'],
-            ['upcoming', 'Próximos'],
-            ['open', 'Sin fechas'],
-            ['shared', 'Compartidos'],
-          ] as const).map(([value, label]) => (
-            <button key={value} type="button" aria-pressed={filter === value} onClick={() => setFilter(value)}>{label}</button>
+          {(
+            [
+              ['all', 'Todos'],
+              ['upcoming', 'Próximos'],
+              ['open', 'Sin fechas'],
+              ['shared', 'Compartidos'],
+            ] as const
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={filter === value}
+              onClick={() => setFilter(value)}
+            >
+              {label}
+            </button>
           ))}
         </div>
       </section>
 
       <section className="collections-grid" aria-live="polite">
-        {error && <Notice tone="error">{error}. <button type="button" onClick={() => void loadCollections()}>Reintentar</button></Notice>}
+        {error && (
+          <Notice tone="error">
+            {error}.{' '}
+            <button type="button" onClick={() => void loadCollections()}>
+              Reintentar
+            </button>
+          </Notice>
+        )}
         {isLoading ? (
           <Loader label="Preparando tus viajes" />
         ) : visibleCollections.length ? (
@@ -150,7 +194,17 @@ export default function CollectionsPage() {
             Prueba otra búsqueda o vuelve a ver todos los viajes.
           </Empty>
         ) : (
-          <Empty icon={<CalendarRange />} title="Tu próxima ruta empieza aquí" action={user.emailVerified ? <Button onClick={() => setIsCreateModalOpen(true)}><Plus /> Crear mi primer viaje</Button> : undefined}>
+          <Empty
+            icon={<CalendarRange />}
+            title="Tu próxima ruta empieza aquí"
+            action={
+              user.emailVerified ? (
+                <Button onClick={() => setIsCreateModalOpen(true)}>
+                  <Plus /> Crear mi primer viaje
+                </Button>
+              ) : undefined
+            }
+          >
             Elige unas fechas, guarda destinos y organízalos día a día.
           </Empty>
         )}

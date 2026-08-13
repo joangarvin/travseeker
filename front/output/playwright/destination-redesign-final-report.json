@@ -1,0 +1,458 @@
+{
+  "desktop": {
+    "viewport": 1440,
+    "scrollWidth": 1440,
+    "pageHeight": 7790,
+    "undersized": [
+      {
+        "label": "TravSeeker, inicio",
+        "width": 142,
+        "height": 32
+      },
+      {
+        "label": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "label": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "label": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "label": "Pinares de Soria y Burgos",
+        "width": 315,
+        "height": 34
+      },
+      {
+        "label": "Costa de la Luz",
+        "width": 183,
+        "height": 34
+      },
+      {
+        "label": "Cuenca de Pamplona",
+        "width": 262,
+        "height": 34
+      },
+      {
+        "label": "Destinos",
+        "width": 84,
+        "height": 25
+      },
+      {
+        "label": "Mapa",
+        "width": 84,
+        "height": 25
+      },
+      {
+        "label": "Comparar",
+        "width": 84,
+        "height": 25
+      },
+      {
+        "label": "El proyecto",
+        "width": 84,
+        "height": 25
+      }
+    ],
+    "headings": [
+      "H1:Valencia",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Mayo",
+      "H3:Más datos de Mayo",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Valencia ciudad (patrimonio, cultura y vida urbana)",
+      "H2:Elige una base práctica",
+      "H3:ALZIRA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "src": "https://res.cloudinary.com/dq5npqrdd/image/upload/f_auto,q_auto,c_limit,w_480/v1784379448/travseeker/destinos/018daea6-c567-4d64-9afc-fd3e7209568e.jpg",
+        "complete": true,
+        "naturalWidth": 475,
+        "naturalHeight": 264
+      },
+      {
+        "src": "https://res.cloudinary.com/dq5npqrdd/image/upload/f_auto,q_auto,c_limit,w_480/v1784293255/travseeker/destinos/048ea539-3bb2-43cb-b2fb-c0ddc67aeac0.jpg",
+        "complete": true,
+        "naturalWidth": 475,
+        "naturalHeight": 316
+      },
+      {
+        "src": "https://res.cloudinary.com/dq5npqrdd/image/upload/f_auto,q_auto,c_limit,w_480/v1784293660/travseeker/destinos/04cda3f6-a7f0-4e88-8174-2bb7347d49e4.jpg",
+        "complete": true,
+        "naturalWidth": 475,
+        "naturalHeight": 314
+      }
+    ],
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ],
+    "failedRequests": [
+      "GET http://127.0.0.1:5173/api/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f — net::ERR_ABORTED",
+      "GET http://127.0.0.1:5173/api/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f/relacionados — net::ERR_ABORTED",
+      "GET http://127.0.0.1:5173/api/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f/reviews — net::ERR_ABORTED",
+      "GET http://127.0.0.1:5173/api/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f/climate — net::ERR_ABORTED"
+    ]
+  },
+  "tablet": {
+    "viewport": 1024,
+    "scrollWidth": 1024,
+    "pageHeight": 7586,
+    "undersized": [
+      {
+        "label": "TravSeeker, inicio",
+        "width": 142,
+        "height": 32
+      },
+      {
+        "label": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "label": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "label": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "label": "Pinares de Soria y Burgos",
+        "width": 233,
+        "height": 25
+      },
+      {
+        "label": "Costa de la Luz",
+        "width": 135,
+        "height": 25
+      },
+      {
+        "label": "Cuenca de Pamplona",
+        "width": 194,
+        "height": 25
+      },
+      {
+        "label": "Destinos",
+        "width": 84,
+        "height": 25
+      },
+      {
+        "label": "Mapa",
+        "width": 84,
+        "height": 25
+      },
+      {
+        "label": "Comparar",
+        "width": 84,
+        "height": 25
+      },
+      {
+        "label": "El proyecto",
+        "width": 84,
+        "height": 25
+      }
+    ],
+    "headings": [
+      "H1:Valencia",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Mayo",
+      "H3:Más datos de Mayo",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Valencia ciudad (patrimonio, cultura y vida urbana)",
+      "H2:Elige una base práctica",
+      "H3:ALZIRA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "src": "https://res.cloudinary.com/dq5npqrdd/image/upload/f_auto,q_auto,c_limit,w_800/v1784379448/travseeker/destinos/018daea6-c567-4d64-9afc-fd3e7209568e.jpg",
+        "complete": true,
+        "naturalWidth": 512,
+        "naturalHeight": 285
+      },
+      {
+        "src": "https://res.cloudinary.com/dq5npqrdd/image/upload/f_auto,q_auto,c_limit,w_800/v1784293255/travseeker/destinos/048ea539-3bb2-43cb-b2fb-c0ddc67aeac0.jpg",
+        "complete": true,
+        "naturalWidth": 512,
+        "naturalHeight": 341
+      },
+      {
+        "src": "https://res.cloudinary.com/dq5npqrdd/image/upload/f_auto,q_auto,c_limit,w_800/v1784293660/travseeker/destinos/04cda3f6-a7f0-4e88-8174-2bb7347d49e4.jpg",
+        "complete": true,
+        "naturalWidth": 512,
+        "naturalHeight": 339
+      }
+    ],
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ],
+    "failedRequests": [
+      "GET http://127.0.0.1:5173/api/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f — net::ERR_ABORTED",
+      "GET http://127.0.0.1:5173/api/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f/relacionados — net::ERR_ABORTED",
+      "GET http://127.0.0.1:5173/api/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f/reviews — net::ERR_ABORTED",
+      "GET http://127.0.0.1:5173/api/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f/climate — net::ERR_ABORTED"
+    ]
+  },
+  "mobile": {
+    "viewport": 390,
+    "scrollWidth": 390,
+    "pageHeight": 10647,
+    "undersized": [
+      {
+        "label": "TravSeeker, inicio",
+        "width": 32,
+        "height": 32
+      },
+      {
+        "label": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "label": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "label": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "label": "Pinares de Soria y Burgos",
+        "width": 228,
+        "height": 24
+      },
+      {
+        "label": "Costa de la Luz",
+        "width": 132,
+        "height": 24
+      },
+      {
+        "label": "Cuenca de Pamplona",
+        "width": 189,
+        "height": 24
+      },
+      {
+        "label": "Destinos",
+        "width": 84,
+        "height": 25
+      },
+      {
+        "label": "Mapa",
+        "width": 84,
+        "height": 25
+      },
+      {
+        "label": "Comparar",
+        "width": 84,
+        "height": 25
+      },
+      {
+        "label": "El proyecto",
+        "width": 84,
+        "height": 25
+      }
+    ],
+    "headings": [
+      "H1:Valencia",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Mayo",
+      "H3:Más datos de Mayo",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Valencia ciudad (patrimonio, cultura y vida urbana)",
+      "H2:Elige una base práctica",
+      "H3:ALZIRA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "src": "https://res.cloudinary.com/dq5npqrdd/image/upload/f_auto,q_auto,c_limit,w_480/v1784379448/travseeker/destinos/018daea6-c567-4d64-9afc-fd3e7209568e.jpg",
+        "complete": true,
+        "naturalWidth": 389,
+        "naturalHeight": 216
+      },
+      {
+        "src": "https://res.cloudinary.com/dq5npqrdd/image/upload/f_auto,q_auto,c_limit,w_480/v1784293255/travseeker/destinos/048ea539-3bb2-43cb-b2fb-c0ddc67aeac0.jpg",
+        "complete": true,
+        "naturalWidth": 389,
+        "naturalHeight": 259
+      },
+      {
+        "src": "https://res.cloudinary.com/dq5npqrdd/image/upload/f_auto,q_auto,c_limit,w_480/v1784293660/travseeker/destinos/04cda3f6-a7f0-4e88-8174-2bb7347d49e4.jpg",
+        "complete": true,
+        "naturalWidth": 389,
+        "naturalHeight": 258
+      }
+    ],
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ],
+    "failedRequests": [
+      "GET http://127.0.0.1:5173/api/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f — net::ERR_ABORTED",
+      "GET http://127.0.0.1:5173/api/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f/relacionados — net::ERR_ABORTED",
+      "GET http://127.0.0.1:5173/api/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f/reviews — net::ERR_ABORTED",
+      "GET http://127.0.0.1:5173/api/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f/climate — net::ERR_ABORTED"
+    ]
+  },
+  "mobile-320": {
+    "viewport": 320,
+    "scrollWidth": 320,
+    "pageHeight": 10836,
+    "undersized": [
+      {
+        "label": "TravSeeker, inicio",
+        "width": 32,
+        "height": 32
+      },
+      {
+        "label": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "label": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "label": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "label": "Pinares de Soria y Burgos",
+        "width": 228,
+        "height": 24
+      },
+      {
+        "label": "Costa de la Luz",
+        "width": 132,
+        "height": 24
+      },
+      {
+        "label": "Cuenca de Pamplona",
+        "width": 189,
+        "height": 24
+      },
+      {
+        "label": "Destinos",
+        "width": 84,
+        "height": 25
+      },
+      {
+        "label": "Mapa",
+        "width": 84,
+        "height": 25
+      },
+      {
+        "label": "Comparar",
+        "width": 84,
+        "height": 25
+      },
+      {
+        "label": "El proyecto",
+        "width": 84,
+        "height": 25
+      }
+    ],
+    "headings": [
+      "H1:Valencia",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Mayo",
+      "H3:Más datos de Mayo",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Valencia ciudad (patrimonio, cultura y vida urbana)",
+      "H2:Elige una base práctica",
+      "H3:ALZIRA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "src": "https://res.cloudinary.com/dq5npqrdd/image/upload/f_auto,q_auto,c_limit,w_480/v1784379448/travseeker/destinos/018daea6-c567-4d64-9afc-fd3e7209568e.jpg",
+        "complete": true,
+        "naturalWidth": 320,
+        "naturalHeight": 178
+      },
+      {
+        "src": "https://res.cloudinary.com/dq5npqrdd/image/upload/f_auto,q_auto,c_limit,w_480/v1784293255/travseeker/destinos/048ea539-3bb2-43cb-b2fb-c0ddc67aeac0.jpg",
+        "complete": true,
+        "naturalWidth": 320,
+        "naturalHeight": 213
+      },
+      {
+        "src": "https://res.cloudinary.com/dq5npqrdd/image/upload/f_auto,q_auto,c_limit,w_480/v1784293660/travseeker/destinos/04cda3f6-a7f0-4e88-8174-2bb7347d49e4.jpg",
+        "complete": true,
+        "naturalWidth": 320,
+        "naturalHeight": 212
+      }
+    ],
+    "consoleErrors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ],
+    "failedRequests": [
+      "GET http://127.0.0.1:5173/api/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f — net::ERR_ABORTED",
+      "GET http://127.0.0.1:5173/api/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f/relacionados — net::ERR_ABORTED",
+      "GET http://127.0.0.1:5173/api/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f/reviews — net::ERR_ABORTED",
+      "GET http://127.0.0.1:5173/api/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f/climate — net::ERR_ABORTED"
+    ]
+  }
+}

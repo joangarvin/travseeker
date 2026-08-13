@@ -11,10 +11,11 @@ const COLLECTION_DESTINATION_SELECT = {
   latitud: true,
   longitud: true,
   municipioLinks: {
+    where: { municipio: { editorialStatus: 'published' } },
     select: { municipio: { select: { id: true, nombre: true, precios: true, conexiones: true, tipoTurismo: true, latitud: true, longitud: true } } },
   },
   activityLinks: {
-    where: { activity: { isActive: true } },
+    where: { activity: { isActive: true, editorialStatus: 'published' } },
     include: { activity: true },
   },
 };
@@ -91,6 +92,7 @@ async function listCollections(userId) {
     orderBy: { updatedAt: 'desc' },
     include: {
       items: {
+        where: { destino: { editorialStatus: 'published' } },
         take: 4,
         orderBy: { createdAt: 'desc' },
         include: { destino: { select: { imagen: true } } },
@@ -126,6 +128,7 @@ async function getCollection(userId, id) {
     include: {
       user: { select: { id: true, nombre: true, avatarUrl: true } },
       items: {
+        where: { destino: { editorialStatus: 'published' } },
         orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
         include: { destino: { select: COLLECTION_DESTINATION_SELECT } },
       },
@@ -288,7 +291,11 @@ async function getPublicCollection(shareToken) {
     include: {
       user: { select: { id: true, nombre: true, avatarUrl: true } },
       members: { include: { user: { select: { id: true, nombre: true, avatarUrl: true } } }, orderBy: { createdAt: 'asc' } },
-      items: { orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }], include: { destino: { select: COLLECTION_DESTINATION_SELECT } } },
+      items: {
+        where: { destino: { editorialStatus: 'published' } },
+        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+        include: { destino: { select: COLLECTION_DESTINATION_SELECT } },
+      },
     },
   });
   if (!collection) {
@@ -319,7 +326,10 @@ async function deleteCollection(userId, id) {
 async function addItem(userId, collectionId, destinoId, notas) {
   await getAccess(userId, collectionId, 'editor');
 
-  const destino = await prisma.destino.findUnique({ where: { id: destinoId }, select: { id: true } });
+  const destino = await prisma.destino.findFirst({
+    where: { id: destinoId, editorialStatus: 'published' },
+    select: { id: true },
+  });
   if (!destino) {
     const error = new Error('Destino no encontrado');
     error.status = 404;

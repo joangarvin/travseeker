@@ -19,7 +19,7 @@ async function processAlerts({ dryRun = false } = {}) {
     if (alert.user.preferences?.notifications === false) { report.skipped += 1; continue; }
     const since = alert.lastCheckedAt || alert.createdAt;
     const changed = await prisma.destino.findMany({
-      where: { updatedAt: { gt: since } },
+      where: { updatedAt: { gt: since }, editorialStatus: 'published' },
       select: { id: true, nombre: true, presupuesto: true, tipoTurismoPrincipal: true, tipoTurismoSecundario: true, mesesJulioAgosto: true, mesesMayJunSeptOct: true, mesesNovAbril: true, updatedAt: true },
     });
     const candidates = changed.filter((destino) => matchesAlert(alert, destino)).slice(0, 5);

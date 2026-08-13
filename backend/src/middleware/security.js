@@ -96,6 +96,12 @@ const metricsRateLimit = createRateLimiter({
   message: 'Demasiadas métricas. Espera unos minutos e inténtalo de nuevo.',
 });
 
+const climateRateLimit = createRateLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 90,
+  message: 'Demasiadas consultas climáticas. Espera unos minutos e inténtalo de nuevo.',
+});
+
 module.exports = {
   securityHeaders,
   csrfProtection,
@@ -103,4 +109,5 @@ module.exports = {
   authRateLimit,
   uploadRateLimit,
   metricsRateLimit,
+  climateRateLimit,
 };

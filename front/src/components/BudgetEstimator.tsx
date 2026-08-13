@@ -41,6 +41,7 @@ type BudgetEstimatorProps = {
   municipios: Municipio[];
   defaultMunicipioId?: string;
   onSaveToCollection?: (budget: SavedBudget) => void;
+  showMunicipioControl?: boolean;
 };
 
 type NumberControlProps = {
@@ -78,6 +79,7 @@ export function BudgetEstimator({
   municipios,
   defaultMunicipioId,
   onSaveToCollection,
+  showMunicipioControl = true,
 }: BudgetEstimatorProps) {
   const initialMunicipioId = municipios.some((item) => item.id === defaultMunicipioId)
     ? defaultMunicipioId!
@@ -90,10 +92,12 @@ export function BudgetEstimator({
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    if (!municipios.some((item) => item.id === selectedMunicipioId)) {
+    if (defaultMunicipioId && municipios.some((item) => item.id === defaultMunicipioId)) {
+      setSelectedMunicipioId(defaultMunicipioId);
+    } else if (!municipios.some((item) => item.id === selectedMunicipioId)) {
       setSelectedMunicipioId(initialMunicipioId);
     }
-  }, [initialMunicipioId, municipios, selectedMunicipioId]);
+  }, [defaultMunicipioId, initialMunicipioId, municipios]);
 
   const municipio = municipios.find((item) => item.id === selectedMunicipioId);
   const budget = useMemo(
@@ -134,7 +138,16 @@ export function BudgetEstimator({
       <div className="budget-estimator__intro">
         <p className="kicker">Ponle números al viaje</p>
         <h3 id="budget-estimator-title">Calcula tu presupuesto</h3>
-        <p>Una estimación orientativa que cambia al instante con tu forma de viajar.</p>
+        <p>
+          {municipio ? `Partiendo de ${municipio.nombre}. ` : ''}Ajusta el viaje y compara el total
+          al instante.
+        </p>
+      </div>
+
+      <div className="budget-estimator__total" aria-live="polite">
+        <span>Total estimado</span>
+        <strong>{euro.format(budget.total)}</strong>
+        <small>{euro.format(budget.perPerson)} por persona</small>
       </div>
 
       <div className="budget-estimator__controls">
@@ -171,56 +184,56 @@ export function BudgetEstimator({
             ))}
           </select>
         </Field>
-        <Field label="Municipio base" htmlFor="budget-municipio">
-          <select
-            id="budget-municipio"
-            value={selectedMunicipioId}
-            onChange={(event) => setSelectedMunicipioId(event.target.value)}
-          >
-            {municipios.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.nombre}
-              </option>
-            ))}
-          </select>
-        </Field>
+        {showMunicipioControl && (
+          <Field label="Municipio base" htmlFor="budget-municipio">
+            <select
+              id="budget-municipio"
+              value={selectedMunicipioId}
+              onChange={(event) => setSelectedMunicipioId(event.target.value)}
+            >
+              {municipios.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.nombre}
+                </option>
+              ))}
+            </select>
+          </Field>
+        )}
       </div>
 
-      <div className="budget-estimator__result" aria-live="polite">
-        <div className="budget-estimator__total">
-          <span>Total estimado</span>
-          <strong>{euro.format(budget.total)}</strong>
-          <small>{euro.format(budget.perPerson)} por persona</small>
-        </div>
-        <div className="budget-breakdown" aria-label="Distribución del presupuesto">
-          {categories.map(({ key, label }) => {
-            const percentage = budget.total ? (budget[key] / budget.total) * 100 : 0;
-            return (
-              <span
-                key={key}
-                role="img"
-                aria-label={`${label}: ${Math.round(percentage)}%`}
-                className={`budget-breakdown__${key}`}
-                style={{ width: `${percentage}%` }}
-                title={`${label}: ${Math.round(percentage)}%`}
-              />
-            );
-          })}
-        </div>
-        <ul className="budget-estimator__items">
-          {categories.map(({ key, label, icon: Icon }) => (
-            <li key={key}>
-              <Icon className={`budget-estimator__icon--${key}`} aria-hidden="true" />
-              <div>
-                <b>
-                  {label} <span>{Math.round((budget[key] / budget.total) * 100)}%</span>
-                </b>
-                <small>{formulas[key]}</small>
-              </div>
-              <strong>{euro.format(budget[key])}</strong>
-            </li>
-          ))}
-        </ul>
+      <div className="budget-estimator__result">
+        <details className="budget-estimator__details">
+          <summary>Ver desglose y cálculo</summary>
+          <div className="budget-breakdown" aria-label="Distribución del presupuesto">
+            {categories.map(({ key, label }) => {
+              const percentage = budget.total ? (budget[key] / budget.total) * 100 : 0;
+              return (
+                <span
+                  key={key}
+                  role="img"
+                  aria-label={`${label}: ${Math.round(percentage)}%`}
+                  className={`budget-breakdown__${key}`}
+                  style={{ width: `${percentage}%` }}
+                  title={`${label}: ${Math.round(percentage)}%`}
+                />
+              );
+            })}
+          </div>
+          <ul className="budget-estimator__items">
+            {categories.map(({ key, label, icon: Icon }) => (
+              <li key={key}>
+                <Icon className={`budget-estimator__icon--${key}`} aria-hidden="true" />
+                <div>
+                  <b>
+                    {label} <span>{Math.round((budget[key] / budget.total) * 100)}%</span>
+                  </b>
+                  <small>{formulas[key]}</small>
+                </div>
+                <strong>{euro.format(budget[key])}</strong>
+              </li>
+            ))}
+          </ul>
+        </details>
         <div className="budget-estimator__actions">
           <Button variant="secondary" onClick={() => void copySummary()}>
             {copied ? <Check /> : <Copy />} {copied ? 'Resumen copiado' : 'Copiar resumen'}
@@ -253,9 +266,12 @@ export function CollectionBudgetSummary({ collection }: { collection: Collection
   });
   const overnightPrices = Array.from({ length: duration.nights }, (_, index) => {
     const day = collection.itinerary[index];
-    const destination = destinations.find((item) => item.id === day?.destinationId) || destinations[index % destinations.length];
-    const municipality = destination?.municipios?.find((item) => item.id === day?.baseMunicipioId)
-      || destination?.municipios?.[0];
+    const destination =
+      destinations.find((item) => item.id === day?.destinationId) ||
+      destinations[index % destinations.length];
+    const municipality =
+      destination?.municipios?.find((item) => item.id === day?.baseMunicipioId) ||
+      destination?.municipios?.[0];
     return municipality?.precios;
   });
   const totals = calculateTripBudget({
@@ -276,12 +292,37 @@ export function CollectionBudgetSummary({ collection }: { collection: Collection
         <p>Calculado una sola vez para la duración real del viaje y sus noches planificadas.</p>
       </div>
       <div className="collection-budget__controls">
-        <Field label="Estilo" htmlFor="collection-budget-style"><select id="collection-budget-style" value={style} onChange={(event) => setStyle(event.target.value as TravelStyle)}>{Object.entries(styleLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></Field>
-        <Field label="Temporada" htmlFor="collection-budget-season"><select id="collection-budget-season" value={season} onChange={(event) => setSeason(event.target.value as TravelSeason)}>{Object.entries(seasonLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></Field>
+        <Field label="Estilo" htmlFor="collection-budget-style">
+          <select
+            id="collection-budget-style"
+            value={style}
+            onChange={(event) => setStyle(event.target.value as TravelStyle)}
+          >
+            {Object.entries(styleLabels).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field label="Temporada" htmlFor="collection-budget-season">
+          <select
+            id="collection-budget-season"
+            value={season}
+            onChange={(event) => setSeason(event.target.value as TravelSeason)}
+          >
+            {Object.entries(seasonLabels).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </Field>
       </div>
       <div className="collection-budget__total" aria-live="polite">
         <small>
-          {travelers} viajeros · {duration.days} {duration.days === 1 ? 'día' : 'días'} · {duration.nights} {duration.nights === 1 ? 'noche' : 'noches'}
+          {travelers} viajeros · {duration.days} {duration.days === 1 ? 'día' : 'días'} ·{' '}
+          {duration.nights} {duration.nights === 1 ? 'noche' : 'noches'}
         </small>
         <strong>{euro.format(totals.total)}</strong>
         <span>{euro.format(totals.total / travelers)} por persona</span>
@@ -294,7 +335,8 @@ export function CollectionBudgetSummary({ collection }: { collection: Collection
         ))}
       </div>
       <p className="collection-budget__method">
-        Alojamiento por cada noche real; comida, transporte y actividades por persona y día. Las bases del itinerario determinan el precio de cada noche.
+        Alojamiento por cada noche real; comida, transporte y actividades por persona y día. Las
+        bases del itinerario determinan el precio de cada noche.
       </p>
     </section>
   );
