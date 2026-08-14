@@ -49,6 +49,13 @@
   color: var(--brand-on-solid);
 }
 
+@media (min-width: 901px) {
+  .budget-estimator__total {
+    align-self: center;
+    min-height: 176px;
+  }
+}
+
 .budget-estimator__total span,
 .budget-estimator__total small {
   font-size: 0.875rem;
@@ -60,7 +67,7 @@
 .budget-estimator__total strong {
   margin: 12px 0 4px;
   font-family: 'Bricolage Grotesque', Manrope, sans-serif;
-  font-size: clamp(3rem, 6vw, 5rem);
+  font-size: clamp(2.75rem, 5vw, 4.25rem);
   line-height: 1;
   letter-spacing: -0.05em;
 }

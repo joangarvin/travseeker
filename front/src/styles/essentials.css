@@ -1,7 +1,8 @@
 .essential-discovery {
-  width: min(calc(100% - 32px), 1280px);
-  margin-inline: auto;
-  padding-block: 96px;
+  width: 100%;
+  padding-block: clamp(64px, 6vw, 88px);
+  padding-inline: clamp(16px, 4vw, 72px);
+  border-block-end: 1px solid var(--line);
 }
 
 .essential-discovery__intro {
@@ -113,9 +114,9 @@
 
 .essential-discovery__panel {
   display: grid;
-  grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
-  gap: clamp(32px, 5vw, 64px);
-  padding-top: 40px;
+  grid-template-columns: minmax(264px, 0.68fr) minmax(0, 1.32fr);
+  gap: clamp(32px, 4vw, 56px);
+  padding-top: 32px;
   outline: none;
 }
 
@@ -174,7 +175,7 @@
   gap: 16px;
   align-items: center;
   width: 100%;
-  min-height: 84px;
+  min-height: 76px;
   padding: 12px 8px 12px 0;
   border: 0;
   background: transparent;
@@ -300,13 +301,12 @@
 }
 
 .essential-sheet__body {
-  padding: clamp(24px, 4vw, 40px);
+  padding: clamp(24px, 3vw, 36px);
   border: 1px solid var(--line);
   border-top: 0;
 }
 .essential-sheet--typographic .essential-sheet__body {
   position: relative;
-  min-height: 100%;
   border-top: 4px solid var(--brand);
   background: linear-gradient(145deg, var(--brand-soft), var(--surface) 58%);
 }
@@ -494,10 +494,11 @@
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 1100px) {
   .essential-discovery {
     width: 100%;
-    padding: 72px 16px;
+    padding-block: clamp(56px, 6vw, 72px);
+    padding-inline: clamp(16px, 4vw, 72px);
   }
   .essential-discovery__intro {
     grid-template-columns: 1fr;
@@ -552,8 +553,7 @@
   }
   .essential-discovery__mobile-detail {
     display: block;
-    margin: 0 -16px;
-    padding: 0 16px 24px;
+    padding-block-end: 24px;
   }
   .essential-discovery__more {
     width: 100%;
@@ -589,6 +589,12 @@
   }
   .essential-sheet__planning button {
     width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .essential-discovery {
+    padding: 56px 20px;
   }
 }
 

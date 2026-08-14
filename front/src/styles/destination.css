@@ -1,28 +1,22 @@
 .destination-cover {
-  padding: 32px 16px 0;
+  width: 100%;
   background: var(--canvas);
 }
 
 .destination-cover__composition,
-.destination-nav > div,
-.destination-summary,
-.municipalities,
-.nearby,
-.reviews,
-.related {
-  width: min(100%, 1280px);
-  margin-inline: auto;
+.destination-nav > div {
+  width: 100%;
 }
 
 .destination-cover__composition {
   overflow: hidden;
   background: var(--surface);
-  box-shadow: 0 24px 64px rgb(17 18 23 / 10%);
 }
 
 .destination-cover__media {
   position: relative;
-  min-height: clamp(520px, 68vh, 720px);
+  width: 100%;
+  min-height: clamp(500px, 54vw, 680px);
   overflow: hidden;
   background: var(--surface-strong);
   color: #fff;
@@ -48,8 +42,8 @@
 .destination-cover__content {
   position: absolute;
   z-index: 1;
-  right: clamp(24px, 5vw, 64px);
-  left: clamp(24px, 5vw, 64px);
+  right: clamp(16px, 4vw, 72px);
+  left: clamp(16px, 4vw, 72px);
 }
 
 .destination-cover__topline {
@@ -106,11 +100,21 @@
 .destination-cover h1 {
   max-width: 16ch;
   margin: 0 0 24px;
-  font-size: clamp(3.75rem, 7.2vw, 7rem);
+  font-size: clamp(3.75rem, 6.4vw, 6.5rem);
   line-height: 0.94;
   letter-spacing: -0.055em;
   text-shadow: 0 2px 24px rgb(0 0 0 / 42%);
   text-wrap: balance;
+}
+
+.destination-cover__content--title-long h1 {
+  max-width: 18ch;
+  font-size: clamp(3.5rem, 5.6vw, 5.75rem);
+}
+
+.destination-cover__content--title-xl h1 {
+  max-width: 20ch;
+  font-size: clamp(3.25rem, 4.8vw, 5rem);
 }
 
 .destination-cover__lead {
@@ -143,9 +147,9 @@
 .departure-card {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 24px 40px;
+  gap: 24px clamp(24px, 3vw, 40px);
   align-items: center;
-  padding: 28px clamp(24px, 5vw, 64px);
+  padding: 28px clamp(16px, 4vw, 72px);
   border-top: 4px solid var(--brand);
   color: var(--ink);
 }
@@ -219,7 +223,7 @@
   position: sticky;
   z-index: 40;
   top: 72px;
-  margin-top: 32px;
+  margin-top: 0;
   border-block: 1px solid var(--line);
   background: color-mix(in srgb, var(--canvas) 96%, transparent);
   backdrop-filter: blur(16px);
@@ -229,6 +233,7 @@
   display: flex;
   gap: 32px;
   overflow-x: auto;
+  padding-inline: clamp(16px, 4vw, 72px);
   overscroll-behavior-inline: contain;
   scrollbar-width: thin;
 }
@@ -284,15 +289,17 @@
 .nearby,
 .reviews,
 .related {
-  padding-block: 96px;
+  width: 100%;
+  padding-block: clamp(64px, 6vw, 88px);
+  padding-inline: clamp(16px, 4vw, 72px);
 }
 
 .destination-summary__layout {
   display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(320px, 5fr);
-  gap: clamp(48px, 8vw, 104px);
+  grid-template-columns: minmax(0, 7fr) minmax(304px, 5fr);
+  gap: clamp(40px, 6vw, 80px);
   align-items: start;
-  margin-top: 48px;
+  margin-top: 40px;
 }
 
 .destination-summary__story h3 {
@@ -317,8 +324,14 @@
 }
 
 .destination-summary__decision {
-  padding: 8px 0 0 32px;
+  padding: 4px 0 0 28px;
   border-inline-start: 4px solid var(--brand);
+}
+
+.destination-summary__decision > h3 {
+  margin: 0 0 8px;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  line-height: 1;
 }
 
 .destination-summary__decision-title {
@@ -335,8 +348,26 @@
 }
 
 .destination-summary__decision dl > div {
-  padding-block: 16px;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 4px 12px;
+  padding-block: 14px;
   border-bottom: 1px solid var(--line);
+}
+
+.destination-summary__signal-icon {
+  grid-row: 1 / 3;
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+
+.destination-summary__signal-icon svg {
+  width: 17px;
+  height: 17px;
 }
 
 .destination-summary__decision dt {
@@ -371,7 +402,9 @@
 }
 
 .season-section {
-  padding: 96px max(16px, calc((100% - 1280px) / 2));
+  width: 100%;
+  padding-block: clamp(64px, 6vw, 88px);
+  padding-inline: clamp(16px, 4vw, 72px);
   border-block: 1px solid var(--line);
   background: var(--surface);
   color: var(--ink);
@@ -388,10 +421,9 @@
   display: grid;
   grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
   gap: 24px 48px;
-  margin-top: 48px;
-  padding: clamp(24px, 4vw, 48px);
-  background: var(--surface);
-  box-shadow: 0 20px 56px rgb(17 18 23 / 8%);
+  margin-top: 40px;
+  padding-block: clamp(28px, 3vw, 40px);
+  border-block: 1px solid var(--line-strong);
 }
 
 .municipalities__chooser {
@@ -422,7 +454,7 @@
 .municipalities__selected-base {
   display: grid;
   align-content: start;
-  gap: 32px;
+  gap: 24px;
   padding-inline-end: 24px;
   border-inline-end: 1px solid var(--line);
 }
@@ -543,7 +575,7 @@
 
 .nearby__list,
 .reviews__list {
-  margin-top: 48px;
+  margin-top: 40px;
   border-top: 1px solid var(--line-strong);
 }
 
@@ -665,7 +697,10 @@
   background: var(--surface-muted);
 }
 
-.reviews__distribution progress::-webkit-progress-value,
+.reviews__distribution progress::-webkit-progress-value {
+  background: var(--ink);
+}
+
 .reviews__distribution progress::-moz-progress-bar {
   background: var(--ink);
 }
@@ -770,7 +805,7 @@
 
 .reviews__empty {
   max-width: 65ch;
-  padding-block: 32px;
+  padding-block: 24px;
   border-block: 1px solid var(--line);
 }
 
@@ -788,8 +823,8 @@
   grid-template-columns: minmax(240px, 0.62fr) minmax(0, 1.38fr);
   gap: 24px 64px;
   max-width: 1040px;
-  margin-top: 56px;
-  padding-top: 40px;
+  margin-top: 48px;
+  padding-top: 32px;
   border-top: 1px solid var(--line-strong);
 }
 
@@ -875,7 +910,7 @@
   text-decoration: underline;
 }
 .related .destination-section-heading {
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 .related .destination-list {
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1013,19 +1048,19 @@
   color: var(--muted);
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 1240px) {
   .departure-card {
     grid-template-columns: 1fr;
   }
   .departure-card__planning {
     justify-content: space-between;
   }
-  .destination-summary__layout {
-    grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
-    gap: 48px;
-  }
+}
+
+@media (max-width: 1200px) {
   .planning-workbench {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(260px, 0.82fr) minmax(0, 1.18fr);
+    gap-inline: 32px;
   }
   .review-form {
     grid-template-columns: 1fr;
@@ -1035,7 +1070,7 @@
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 900px) {
   .destination-cover {
     padding: 0;
   }
@@ -1116,7 +1151,7 @@
   .nearby,
   .reviews,
   .related {
-    padding: 72px 16px;
+    padding: 56px 20px;
   }
   .destination-section-heading h2 {
     font-size: clamp(2.25rem, 12vw, 3.5rem);
@@ -1132,13 +1167,12 @@
     border-inline-start: 0;
   }
   .season-section {
-    padding: 72px 16px;
+    padding: 56px 20px;
   }
   .planning-workbench {
     grid-template-columns: 1fr;
     gap: 32px;
-    margin-inline: -16px;
-    padding: 32px 16px;
+    padding: 32px 0;
     box-shadow: none;
   }
   .municipalities__chooser {
@@ -1180,7 +1214,15 @@
     gap: 24px;
   }
   .related .destination-list {
-    grid-template-columns: 1fr;
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-block-end: 16px;
+    scroll-snap-type: inline mandatory;
+  }
+  .related .destination-list > * {
+    flex: 0 0 min(82vw, 360px);
+    scroll-snap-align: start;
   }
 }
 

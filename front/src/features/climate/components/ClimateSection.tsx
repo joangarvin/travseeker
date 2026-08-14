@@ -82,6 +82,9 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
   );
   const selected = orderedMonths.find((month) => month.month === selectedMonth) || orderedMonths[0];
   const recommendedMonth = alternatives[0]?.month.month;
+  const visibleAlternatives = alternatives.filter(
+    (alternative) => alternative.month.month !== selected?.month,
+  );
   const moveMonth = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
     let next = index;
     if (event.key === 'ArrowRight') next = (index + 1) % orderedMonths.length;
@@ -189,9 +192,9 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
             </dl>
           </article>
 
-          {alternatives.length > 0 && (
+          {visibleAlternatives.length > 0 && (
             <div className="climate-alternatives" aria-label="Alternativas recomendadas">
-              {alternatives.map((alternative) => {
+              {visibleAlternatives.map((alternative) => {
                 const isSelected = selected.month === alternative.month.month;
                 return (
                   <button

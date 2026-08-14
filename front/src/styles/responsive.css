@@ -528,6 +528,10 @@
   .brand > span:last-child {
     display: none;
   }
+  .brand {
+    justify-content: center;
+    min-width: 44px;
+  }
   .home-hero h1 {
     font-size: 3.5rem;
   }

@@ -1,0 +1,38 @@
+{
+  "anchor": {
+    "hash": "#cuando-ir",
+    "headingTop": 259,
+    "navBottom": 130,
+    "visible": true
+  },
+  "climateKeyboard": {
+    "focused": "Sep22°",
+    "selected": "Septiembre"
+  },
+  "planning": {
+    "selected": "BURELA",
+    "heading": "BURELA",
+    "budgetContext": "PONLE NÚMEROS AL VIAJE\n\nCalcula tu presupuesto\n\nPartiendo de BURELA. Ajusta el viaje y compara el total al instante.",
+    "totalBefore": "810 €",
+    "totalAfter": "1310 €"
+  },
+  "share": "Enlace copiado.",
+  "essential": {
+    "expanded": "true",
+    "detailVisible": true
+  },
+  "reflow": {
+    "viewport": 320,
+    "scrollWidth": 320,
+    "bodyWidth": 320,
+    "climateTableClientWidth": 280,
+    "climateTableScrollWidth": 910
+  },
+  "dark": {
+    "theme": "dark",
+    "viewport": 1920,
+    "scrollWidth": 1920,
+    "heroWidth": 1920,
+    "summaryWidth": 1920
+  }
+}

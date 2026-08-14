@@ -1,0 +1,3952 @@
+{
+  "1669x1063": {
+    "viewport": 1669,
+    "scrollWidth": 1669,
+    "pageHeight": 8767,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 939,
+      "width": 1669,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "header": {
+        "x": 0,
+        "y": 6,
+        "width": 1669,
+        "height": 72,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 1px",
+        "background": "color(srgb 0.952941 0.960784 0.980392 / 0.94)"
+      },
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 1669,
+        "height": 843,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 997,
+        "width": 1669,
+        "height": 845,
+        "paddingBlock": "88px / 88px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1842,
+        "width": 1669,
+        "height": 1054,
+        "paddingBlock": "88px / 88px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 0,
+        "y": 2897,
+        "width": 1669,
+        "height": 1582,
+        "paddingBlock": "88px / 88px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 4479,
+        "width": 1669,
+        "height": 1492,
+        "paddingBlock": "88px / 88px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "nearby": {
+        "x": 0,
+        "y": 5970,
+        "width": 1669,
+        "height": 794,
+        "paddingBlock": "88px / 88px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 6764,
+        "width": 1669,
+        "height": 696,
+        "paddingBlock": "88px / 88px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 7460,
+        "width": 1669,
+        "height": 839,
+        "paddingBlock": "88px / 88px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "footer": {
+        "x": 0,
+        "y": 8299,
+        "width": 1669,
+        "height": 468,
+        "paddingBlock": "112px / 24px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(17, 18, 23)"
+      }
+    },
+    "heroTitle": {
+      "x": 259,
+      "y": 438,
+      "width": 860,
+      "height": 98,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 801,
+      "y": 828,
+      "width": 609,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Experiencias y gastronomía2",
+        "rect": {
+          "left": 1532,
+          "right": 1784
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Experiencias y gastronomía",
+        "rect": {
+          "left": 1568,
+          "right": 1768
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "2",
+        "rect": {
+          "left": 1776,
+          "right": 1784
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 315,
+        "height": 34
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 183,
+        "height": 34
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 262,
+        "height": 34
+      }
+    ],
+    "headings": [
+      "H1:A Mariña Lucense",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H3:Buena elección si…",
+      "H2:Cuándo ir",
+      "H3:Agosto",
+      "H3:Más datos de Agosto",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Playas, acantilados y paisajes costeros",
+      "H2:Elige una base práctica",
+      "H3:BARREIROS",
+      "H3:Calcula tu presupuesto",
+      "H2:Lugares alrededor",
+      "H3:Praia das Catedrais",
+      "H3:Inicio PR-G 156 · Puerto de O Vicedo",
+      "H3:Faro de Punta Atalaia",
+      "H3:Mirador de Illa Pancha",
+      "H2:Opiniones de viajeros",
+      "H3:Equipo Travseeker",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 550,
+        "height": 307
+      },
+      {
+        "complete": true,
+        "width": 550,
+        "height": 366
+      },
+      {
+        "complete": true,
+        "width": 550,
+        "height": 364
+      }
+    ],
+    "typography": {
+      "body": "16px",
+      "paragraph": "19px",
+      "h1": "104px"
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "1515x1040": {
+    "viewport": 1515,
+    "scrollWidth": 1515,
+    "pageHeight": 8750,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 939,
+      "width": 1515,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "header": {
+        "x": 0,
+        "y": 10,
+        "width": 1515,
+        "height": 72,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 1px",
+        "background": "color(srgb 0.952941 0.960784 0.980392 / 0.94)"
+      },
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 1515,
+        "height": 843,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 997,
+        "width": 1515,
+        "height": 845,
+        "paddingBlock": "88px / 88px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1842,
+        "width": 1515,
+        "height": 1048,
+        "paddingBlock": "88px / 88px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 0,
+        "y": 2890,
+        "width": 1515,
+        "height": 1582,
+        "paddingBlock": "88px / 88px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 4472,
+        "width": 1515,
+        "height": 1492,
+        "paddingBlock": "88px / 88px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "nearby": {
+        "x": 0,
+        "y": 5964,
+        "width": 1515,
+        "height": 794,
+        "paddingBlock": "88px / 88px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 6758,
+        "width": 1515,
+        "height": 696,
+        "paddingBlock": "88px / 88px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 7453,
+        "width": 1515,
+        "height": 839,
+        "paddingBlock": "88px / 88px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "footer": {
+        "x": 0,
+        "y": 8292,
+        "width": 1515,
+        "height": 457,
+        "paddingBlock": "112px / 24px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(17, 18, 23)"
+      }
+    },
+    "heroTitle": {
+      "x": 182,
+      "y": 445,
+      "width": 860,
+      "height": 91,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 724,
+      "y": 828,
+      "width": 609,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Experiencias y gastronomía2",
+        "rect": {
+          "left": 1455,
+          "right": 1707
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Experiencias y gastronomía",
+        "rect": {
+          "left": 1491,
+          "right": 1691
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "2",
+        "rect": {
+          "left": 1699,
+          "right": 1707
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 315,
+        "height": 34
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 183,
+        "height": 34
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 262,
+        "height": 34
+      }
+    ],
+    "headings": [
+      "H1:A Mariña Lucense",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H3:Buena elección si…",
+      "H2:Cuándo ir",
+      "H3:Agosto",
+      "H3:Más datos de Agosto",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Playas, acantilados y paisajes costeros",
+      "H2:Elige una base práctica",
+      "H3:BARREIROS",
+      "H3:Calcula tu presupuesto",
+      "H2:Lugares alrededor",
+      "H3:Praia das Catedrais",
+      "H3:Inicio PR-G 156 · Puerto de O Vicedo",
+      "H3:Faro de Punta Atalaia",
+      "H3:Mirador de Illa Pancha",
+      "H2:Opiniones de viajeros",
+      "H3:Equipo Travseeker",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 499,
+        "height": 278
+      },
+      {
+        "complete": true,
+        "width": 499,
+        "height": 333
+      },
+      {
+        "complete": true,
+        "width": 499,
+        "height": 331
+      }
+    ],
+    "typography": {
+      "body": "16px",
+      "paragraph": "19px",
+      "h1": "96.96px"
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "1366x900": {
+    "viewport": 1366,
+    "scrollWidth": 1366,
+    "pageHeight": 8605,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 939,
+      "width": 1366,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "header": {
+        "x": 0,
+        "y": 8,
+        "width": 1366,
+        "height": 72,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 1px",
+        "background": "color(srgb 0.952941 0.960784 0.980392 / 0.94)"
+      },
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 1366,
+        "height": 843,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 997,
+        "width": 1366,
+        "height": 829,
+        "paddingBlock": "81.96px / 81.96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1827,
+        "width": 1366,
+        "height": 1023,
+        "paddingBlock": "81.96px / 81.96px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 0,
+        "y": 2850,
+        "width": 1366,
+        "height": 1566,
+        "paddingBlock": "81.96px / 81.96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 4416,
+        "width": 1366,
+        "height": 1476,
+        "paddingBlock": "81.96px / 81.96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "nearby": {
+        "x": 0,
+        "y": 5892,
+        "width": 1366,
+        "height": 778,
+        "paddingBlock": "81.96px / 81.96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 6670,
+        "width": 1366,
+        "height": 680,
+        "paddingBlock": "81.96px / 81.96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 7350,
+        "width": 1366,
+        "height": 819,
+        "paddingBlock": "81.96px / 81.96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "footer": {
+        "x": 0,
+        "y": 8168,
+        "width": 1366,
+        "height": 436,
+        "paddingBlock": "109.28px / 24px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(17, 18, 23)"
+      }
+    },
+    "heroTitle": {
+      "x": 107,
+      "y": 456,
+      "width": 841,
+      "height": 82,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 650,
+      "y": 828,
+      "width": 609,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Experiencias y gastronomía2",
+        "rect": {
+          "left": 1381,
+          "right": 1632
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1381,
+          "right": 1409
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1385,
+          "right": 1405
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1391,
+          "right": 1398
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1386,
+          "right": 1403
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Experiencias y gastronomía",
+        "rect": {
+          "left": 1417,
+          "right": 1616
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "2",
+        "rect": {
+          "left": 1624,
+          "right": 1632
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 308,
+        "height": 32
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 178,
+        "height": 32
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 256,
+        "height": 32
+      }
+    ],
+    "headings": [
+      "H1:A Mariña Lucense",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H3:Buena elección si…",
+      "H2:Cuándo ir",
+      "H3:Agosto",
+      "H3:Más datos de Agosto",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Playas, acantilados y paisajes costeros",
+      "H2:Elige una base práctica",
+      "H3:BARREIROS",
+      "H3:Calcula tu presupuesto",
+      "H2:Lugares alrededor",
+      "H3:Praia das Catedrais",
+      "H3:Inicio PR-G 156 · Puerto de O Vicedo",
+      "H3:Faro de Punta Atalaia",
+      "H3:Mirador de Illa Pancha",
+      "H2:Opiniones de viajeros",
+      "H3:Equipo Travseeker",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 450,
+        "height": 250
+      },
+      {
+        "complete": true,
+        "width": 450,
+        "height": 300
+      },
+      {
+        "complete": true,
+        "width": 450,
+        "height": 298
+      }
+    ],
+    "typography": {
+      "body": "16px",
+      "paragraph": "19px",
+      "h1": "87.424px"
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "1280x900": {
+    "viewport": 1280,
+    "scrollWidth": 1280,
+    "pageHeight": 8462,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 939,
+      "width": 1280,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "header": {
+        "x": 0,
+        "y": 12,
+        "width": 1280,
+        "height": 72,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 1px",
+        "background": "color(srgb 0.952941 0.960784 0.980392 / 0.94)"
+      },
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 1280,
+        "height": 843,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 997,
+        "width": 1280,
+        "height": 815,
+        "paddingBlock": "76.8px / 76.8px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1812,
+        "width": 1280,
+        "height": 1002,
+        "paddingBlock": "76.8px / 76.8px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 0,
+        "y": 2814,
+        "width": 1280,
+        "height": 1534,
+        "paddingBlock": "76.8px / 76.8px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 4348,
+        "width": 1280,
+        "height": 1480,
+        "paddingBlock": "76.8px / 76.8px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "nearby": {
+        "x": 0,
+        "y": 5829,
+        "width": 1280,
+        "height": 763,
+        "paddingBlock": "76.8px / 76.8px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 6592,
+        "width": 1280,
+        "height": 666,
+        "paddingBlock": "76.8px / 76.8px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 7257,
+        "width": 1280,
+        "height": 786,
+        "paddingBlock": "76.8px / 76.8px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "footer": {
+        "x": 0,
+        "y": 8044,
+        "width": 1280,
+        "height": 419,
+        "paddingBlock": "102.4px / 24px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(17, 18, 23)"
+      }
+    },
+    "heroTitle": {
+      "x": 80,
+      "y": 467,
+      "width": 795,
+      "height": 77,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 591,
+      "y": 828,
+      "width": 609,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Naturaleza interior y senderismo5",
+        "rect": {
+          "left": 1050,
+          "right": 1338
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Naturaleza interior y senderismo",
+        "rect": {
+          "left": 1086,
+          "right": 1322
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "5",
+        "rect": {
+          "left": 1330,
+          "right": 1338
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Experiencias y gastronomía2",
+        "rect": {
+          "left": 1362,
+          "right": 1613
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1362,
+          "right": 1390
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1366,
+          "right": 1386
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1372,
+          "right": 1379
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1367,
+          "right": 1384
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Experiencias y gastronomía",
+        "rect": {
+          "left": 1398,
+          "right": 1597
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "2",
+        "rect": {
+          "left": 1605,
+          "right": 1613
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 289,
+        "height": 31
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 167,
+        "height": 31
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 240,
+        "height": 31
+      }
+    ],
+    "headings": [
+      "H1:A Mariña Lucense",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H3:Buena elección si…",
+      "H2:Cuándo ir",
+      "H3:Agosto",
+      "H3:Más datos de Agosto",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Playas, acantilados y paisajes costeros",
+      "H2:Elige una base práctica",
+      "H3:BARREIROS",
+      "H3:Calcula tu presupuesto",
+      "H2:Lugares alrededor",
+      "H3:Praia das Catedrais",
+      "H3:Inicio PR-G 156 · Puerto de O Vicedo",
+      "H3:Faro de Punta Atalaia",
+      "H3:Mirador de Illa Pancha",
+      "H2:Opiniones de viajeros",
+      "H3:Equipo Travseeker",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 422,
+        "height": 234
+      },
+      {
+        "complete": true,
+        "width": 422,
+        "height": 281
+      },
+      {
+        "complete": true,
+        "width": 422,
+        "height": 279
+      }
+    ],
+    "typography": {
+      "body": "16px",
+      "paragraph": "17.92px",
+      "h1": "81.92px"
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "1184x913": {
+    "viewport": 1184,
+    "scrollWidth": 1184,
+    "pageHeight": 8276,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 949,
+      "width": 1184,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "header": {
+        "x": 0,
+        "y": 27,
+        "width": 1184,
+        "height": 72,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 1px",
+        "background": "color(srgb 0.952941 0.960784 0.980392 / 0.94)"
+      },
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 1184,
+        "height": 853,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 1007,
+        "width": 1184,
+        "height": 836,
+        "paddingBlock": "71.04px / 71.04px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1843,
+        "width": 1184,
+        "height": 976,
+        "paddingBlock": "71.04px / 71.04px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 0,
+        "y": 2819,
+        "width": 1184,
+        "height": 1484,
+        "paddingBlock": "71.04px / 71.04px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 4303,
+        "width": 1184,
+        "height": 1438,
+        "paddingBlock": "71.04px / 71.04px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "nearby": {
+        "x": 0,
+        "y": 5741,
+        "width": 1184,
+        "height": 747,
+        "paddingBlock": "71.04px / 71.04px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 6488,
+        "width": 1184,
+        "height": 649,
+        "paddingBlock": "71.04px / 71.04px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 7137,
+        "width": 1184,
+        "height": 739,
+        "paddingBlock": "71.04px / 71.04px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "footer": {
+        "x": 0,
+        "y": 7876,
+        "width": 1184,
+        "height": 399,
+        "paddingBlock": "94.72px / 24px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(17, 18, 23)"
+      }
+    },
+    "heroTitle": {
+      "x": 75,
+      "y": 438,
+      "width": 741,
+      "height": 71,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 75,
+      "y": 849,
+      "width": 1034,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Naturaleza interior y senderismo5",
+        "rect": {
+          "left": 1050,
+          "right": 1338
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Naturaleza interior y senderismo",
+        "rect": {
+          "left": 1086,
+          "right": 1322
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "5",
+        "rect": {
+          "left": 1330,
+          "right": 1338
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Experiencias y gastronomía2",
+        "rect": {
+          "left": 1362,
+          "right": 1613
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1362,
+          "right": 1390
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1366,
+          "right": 1386
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1372,
+          "right": 1379
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1367,
+          "right": 1384
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Experiencias y gastronomía",
+        "rect": {
+          "left": 1398,
+          "right": 1597
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "2",
+        "rect": {
+          "left": 1605,
+          "right": 1613
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 268,
+        "height": 28
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 155,
+        "height": 28
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 223,
+        "height": 28
+      }
+    ],
+    "headings": [
+      "H1:A Mariña Lucense",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H3:Buena elección si…",
+      "H2:Cuándo ir",
+      "H3:Agosto",
+      "H3:Más datos de Agosto",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Playas, acantilados y paisajes costeros",
+      "H2:Elige una base práctica",
+      "H3:BARREIROS",
+      "H3:Calcula tu presupuesto",
+      "H2:Lugares alrededor",
+      "H3:Praia das Catedrais",
+      "H3:Inicio PR-G 156 · Puerto de O Vicedo",
+      "H3:Faro de Punta Atalaia",
+      "H3:Mirador de Illa Pancha",
+      "H2:Opiniones de viajeros",
+      "H3:Equipo Travseeker",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 390,
+        "height": 217
+      },
+      {
+        "complete": true,
+        "width": 390,
+        "height": 260
+      },
+      {
+        "complete": true,
+        "width": 390,
+        "height": 258
+      }
+    ],
+    "typography": {
+      "body": "16px",
+      "paragraph": "17px",
+      "h1": "75.776px"
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "1081x850": {
+    "viewport": 1081,
+    "scrollWidth": 1081,
+    "pageHeight": 7704,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 894,
+      "width": 1081,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "header": {
+        "x": 0,
+        "y": 29,
+        "width": 1081,
+        "height": 72,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 1px",
+        "background": "color(srgb 0.952941 0.960784 0.980392 / 0.94)"
+      },
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 1081,
+        "height": 798,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 952,
+        "width": 1081,
+        "height": 816,
+        "paddingBlock": "64.86px / 64.86px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1768,
+        "width": 1081,
+        "height": 946,
+        "paddingBlock": "64.86px / 64.86px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 0,
+        "y": 2714,
+        "width": 1081,
+        "height": 1155,
+        "paddingBlock": "64.86px / 64.86px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 3868,
+        "width": 1081,
+        "height": 1407,
+        "paddingBlock": "64.86px / 64.86px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "nearby": {
+        "x": 0,
+        "y": 5276,
+        "width": 1081,
+        "height": 729,
+        "paddingBlock": "64.86px / 64.86px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 6005,
+        "width": 1081,
+        "height": 632,
+        "paddingBlock": "64.86px / 64.86px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 6637,
+        "width": 1081,
+        "height": 689,
+        "paddingBlock": "64.86px / 64.86px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "footer": {
+        "x": 0,
+        "y": 7326,
+        "width": 1081,
+        "height": 378,
+        "paddingBlock": "86.48px / 24px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(17, 18, 23)"
+      }
+    },
+    "heroTitle": {
+      "x": 70,
+      "y": 393,
+      "width": 683,
+      "height": 65,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 70,
+      "y": 794,
+      "width": 941,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [],
+    "undersized": [
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 246,
+        "height": 26
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 142,
+        "height": 26
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 204,
+        "height": 26
+      }
+    ],
+    "headings": [
+      "H1:A Mariña Lucense",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H3:Buena elección si…",
+      "H2:Cuándo ir",
+      "H3:Agosto",
+      "H3:Más datos de Agosto",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Playas, acantilados y paisajes costeros",
+      "H2:Elige una base práctica",
+      "H3:BARREIROS",
+      "H3:Calcula tu presupuesto",
+      "H2:Lugares alrededor",
+      "H3:Praia das Catedrais",
+      "H3:Inicio PR-G 156 · Puerto de O Vicedo",
+      "H3:Faro de Punta Atalaia",
+      "H3:Mirador de Illa Pancha",
+      "H2:Opiniones de viajeros",
+      "H3:Equipo Travseeker",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 540,
+        "height": 301
+      },
+      {
+        "complete": true,
+        "width": 540,
+        "height": 360
+      },
+      {
+        "complete": true,
+        "width": 540,
+        "height": 358
+      }
+    ],
+    "typography": {
+      "body": "16px",
+      "paragraph": "17px",
+      "h1": "69.184px"
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "1024x900": {
+    "viewport": 1024,
+    "scrollWidth": 1024,
+    "pageHeight": 7622,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 863,
+      "width": 1024,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "header": {
+        "x": 0,
+        "y": 21,
+        "width": 1024,
+        "height": 72,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 1px",
+        "background": "color(srgb 0.952941 0.960784 0.980392 / 0.94)"
+      },
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 1024,
+        "height": 767,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 921,
+        "width": 1024,
+        "height": 810,
+        "paddingBlock": "64px / 64px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1731,
+        "width": 1024,
+        "height": 935,
+        "paddingBlock": "64px / 64px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 0,
+        "y": 2666,
+        "width": 1024,
+        "height": 1148,
+        "paddingBlock": "61.44px / 61.44px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 3813,
+        "width": 1024,
+        "height": 1396,
+        "paddingBlock": "64px / 64px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "nearby": {
+        "x": 0,
+        "y": 5209,
+        "width": 1024,
+        "height": 750,
+        "paddingBlock": "64px / 64px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 5959,
+        "width": 1024,
+        "height": 627,
+        "paddingBlock": "64px / 64px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 6586,
+        "width": 1024,
+        "height": 666,
+        "paddingBlock": "64px / 64px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "footer": {
+        "x": 0,
+        "y": 7252,
+        "width": 1024,
+        "height": 370,
+        "paddingBlock": "81.92px / 24px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(17, 18, 23)"
+      }
+    },
+    "heroTitle": {
+      "x": 67,
+      "y": 369,
+      "width": 651,
+      "height": 62,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 67,
+      "y": 763,
+      "width": 890,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [],
+    "undersized": [
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 233,
+        "height": 25
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 135,
+        "height": 25
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 194,
+        "height": 25
+      }
+    ],
+    "headings": [
+      "H1:A Mariña Lucense",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H3:Buena elección si…",
+      "H2:Cuándo ir",
+      "H3:Agosto",
+      "H3:Más datos de Agosto",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Playas, acantilados y paisajes costeros",
+      "H2:Elige una base práctica",
+      "H3:BARREIROS",
+      "H3:Calcula tu presupuesto",
+      "H2:Lugares alrededor",
+      "H3:Praia das Catedrais",
+      "H3:Inicio PR-G 156 · Puerto de O Vicedo",
+      "H3:Faro de Punta Atalaia",
+      "H3:Mirador de Illa Pancha",
+      "H2:Opiniones de viajeros",
+      "H3:Equipo Travseeker",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 512,
+        "height": 285
+      },
+      {
+        "complete": true,
+        "width": 512,
+        "height": 341
+      },
+      {
+        "complete": true,
+        "width": 512,
+        "height": 339
+      }
+    ],
+    "typography": {
+      "body": "16px",
+      "paragraph": "17px",
+      "h1": "65.536px"
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "960x800": {
+    "viewport": 960,
+    "scrollWidth": 960,
+    "pageHeight": 7520,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 828,
+      "width": 960,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "header": {
+        "x": 0,
+        "y": 17,
+        "width": 960,
+        "height": 72,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 1px",
+        "background": "color(srgb 0.952941 0.960784 0.980392 / 0.94)"
+      },
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 960,
+        "height": 732,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 886,
+        "width": 960,
+        "height": 805,
+        "paddingBlock": "64px / 64px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1691,
+        "width": 960,
+        "height": 924,
+        "paddingBlock": "64px / 64px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 0,
+        "y": 2615,
+        "width": 960,
+        "height": 1140,
+        "paddingBlock": "57.6px / 57.6px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 3755,
+        "width": 960,
+        "height": 1409,
+        "paddingBlock": "64px / 64px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "nearby": {
+        "x": 0,
+        "y": 5165,
+        "width": 960,
+        "height": 771,
+        "paddingBlock": "64px / 64px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 5936,
+        "width": 960,
+        "height": 624,
+        "paddingBlock": "64px / 64px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 6560,
+        "width": 960,
+        "height": 595,
+        "paddingBlock": "64px / 64px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "footer": {
+        "x": 0,
+        "y": 7155,
+        "width": 960,
+        "height": 365,
+        "paddingBlock": "76.8px / 24px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(17, 18, 23)"
+      }
+    },
+    "heroTitle": {
+      "x": 64,
+      "y": 343,
+      "width": 614,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 64,
+      "y": 728,
+      "width": 832,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [],
+    "undersized": [
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 228,
+        "height": 24
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 132,
+        "height": 24
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 189,
+        "height": 24
+      }
+    ],
+    "headings": [
+      "H1:A Mariña Lucense",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H3:Buena elección si…",
+      "H2:Cuándo ir",
+      "H3:Agosto",
+      "H3:Más datos de Agosto",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Playas, acantilados y paisajes costeros",
+      "H2:Elige una base práctica",
+      "H3:BARREIROS",
+      "H3:Calcula tu presupuesto",
+      "H2:Lugares alrededor",
+      "H3:Praia das Catedrais",
+      "H3:Inicio PR-G 156 · Puerto de O Vicedo",
+      "H3:Faro de Punta Atalaia",
+      "H3:Mirador de Illa Pancha",
+      "H2:Opiniones de viajeros",
+      "H3:Equipo Travseeker",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 480,
+        "height": 267
+      },
+      {
+        "complete": true,
+        "width": 480,
+        "height": 320
+      },
+      {
+        "complete": true,
+        "width": 480,
+        "height": 318
+      }
+    ],
+    "typography": {
+      "body": "16px",
+      "paragraph": "17px",
+      "h1": "61.44px"
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "820x900": {
+    "viewport": 820,
+    "scrollWidth": 820,
+    "pageHeight": 9624,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 924,
+      "width": 820,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "header": {
+        "x": 0,
+        "y": 22,
+        "width": 820,
+        "height": 72,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 1px",
+        "background": "color(srgb 0.952941 0.960784 0.980392 / 0.94)"
+      },
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 820,
+        "height": 852,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 982,
+        "width": 820,
+        "height": 1052,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 2034,
+        "width": 820,
+        "height": 1372,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 0,
+        "y": 3406,
+        "width": 820,
+        "height": 1137,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 4543,
+        "width": 820,
+        "height": 1961,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "nearby": {
+        "x": 0,
+        "y": 6504,
+        "width": 820,
+        "height": 1287,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 7791,
+        "width": 820,
+        "height": 768,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 8559,
+        "width": 820,
+        "height": 711,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "footer": {
+        "x": 0,
+        "y": 9270,
+        "width": 820,
+        "height": 354,
+        "paddingBlock": "65.6px / 24px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(17, 18, 23)"
+      }
+    },
+    "heroTitle": {
+      "x": 41,
+      "y": 338,
+      "width": 738,
+      "height": 75,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 16,
+      "y": 784,
+      "width": 788,
+      "height": 108,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Sep22°",
+        "rect": {
+          "left": 752,
+          "right": 840
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Sep",
+        "rect": {
+          "left": 760,
+          "right": 832
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "22°",
+        "rect": {
+          "left": 760,
+          "right": 832
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Oct20.4°",
+        "rect": {
+          "left": 844,
+          "right": 932
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Oct",
+        "rect": {
+          "left": 852,
+          "right": 924
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "20.4°",
+        "rect": {
+          "left": 852,
+          "right": 924
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Nov16.1°",
+        "rect": {
+          "left": 936,
+          "right": 1024
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Nov",
+        "rect": {
+          "left": 944,
+          "right": 1016
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "16.1°",
+        "rect": {
+          "left": 944,
+          "right": 1016
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Dic14.1°",
+        "rect": {
+          "left": 1028,
+          "right": 1116
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Dic",
+        "rect": {
+          "left": 1036,
+          "right": 1108
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "14.1°",
+        "rect": {
+          "left": 1036,
+          "right": 1108
+        }
+      },
+      {
+        "tag": "SECTION",
+        "className": "",
+        "text": "Más datos de Agosto Sol12 h de sol/día Precipitaci",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "H3",
+        "className": "",
+        "text": "Más datos de Agosto",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DL",
+        "className": "climate-secondary-data",
+        "text": "Sol12 h de sol/día Precipitación41.4 mm al mesCobe",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "",
+        "text": "Sol12 h de sol/día",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DT",
+        "className": "",
+        "text": "Sol",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DD",
+        "className": "",
+        "text": "12 h de sol/día",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "",
+        "text": "Precipitación41.4 mm al mes",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DT",
+        "className": "",
+        "text": "Precipitación",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 228,
+        "height": 24
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 132,
+        "height": 24
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 189,
+        "height": 24
+      }
+    ],
+    "headings": [
+      "H1:A Mariña Lucense",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H3:Buena elección si…",
+      "H2:Cuándo ir",
+      "H3:Agosto",
+      "H3:Más datos de Agosto",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Playas, acantilados y paisajes costeros",
+      "H2:Elige una base práctica",
+      "H3:BARREIROS",
+      "H3:Calcula tu presupuesto",
+      "H2:Lugares alrededor",
+      "H3:Praia das Catedrais",
+      "H3:Inicio PR-G 156 · Puerto de O Vicedo",
+      "H3:Faro de Punta Atalaia",
+      "H3:Mirador de Illa Pancha",
+      "H2:Opiniones de viajeros",
+      "H3:Equipo Travseeker",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 410,
+        "height": 228
+      },
+      {
+        "complete": true,
+        "width": 410,
+        "height": 273
+      },
+      {
+        "complete": true,
+        "width": 410,
+        "height": 271
+      }
+    ],
+    "typography": {
+      "body": "16px",
+      "paragraph": "17px",
+      "h1": "80px"
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "761x900": {
+    "viewport": 761,
+    "scrollWidth": 761,
+    "pageHeight": 9683,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 924,
+      "width": 761,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "header": {
+        "x": 0,
+        "y": 15,
+        "width": 761,
+        "height": 72,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 1px",
+        "background": "color(srgb 0.952941 0.960784 0.980392 / 0.94)"
+      },
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 761,
+        "height": 852,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 982,
+        "width": 761,
+        "height": 1092,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 2074,
+        "width": 761,
+        "height": 1371,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 0,
+        "y": 3446,
+        "width": 761,
+        "height": 1158,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 4604,
+        "width": 761,
+        "height": 1961,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "nearby": {
+        "x": 0,
+        "y": 6565,
+        "width": 761,
+        "height": 1287,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 7852,
+        "width": 761,
+        "height": 768,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 8620,
+        "width": 761,
+        "height": 711,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "footer": {
+        "x": 0,
+        "y": 9331,
+        "width": 761,
+        "height": 352,
+        "paddingBlock": "64px / 24px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(17, 18, 23)"
+      }
+    },
+    "heroTitle": {
+      "x": 38,
+      "y": 338,
+      "width": 685,
+      "height": 75,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 16,
+      "y": 784,
+      "width": 729,
+      "height": 108,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Sep22°",
+        "rect": {
+          "left": 752,
+          "right": 840
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Sep",
+        "rect": {
+          "left": 760,
+          "right": 832
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "22°",
+        "rect": {
+          "left": 760,
+          "right": 832
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Oct20.4°",
+        "rect": {
+          "left": 844,
+          "right": 932
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Oct",
+        "rect": {
+          "left": 852,
+          "right": 924
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "20.4°",
+        "rect": {
+          "left": 852,
+          "right": 924
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Nov16.1°",
+        "rect": {
+          "left": 936,
+          "right": 1024
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Nov",
+        "rect": {
+          "left": 944,
+          "right": 1016
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "16.1°",
+        "rect": {
+          "left": 944,
+          "right": 1016
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Dic14.1°",
+        "rect": {
+          "left": 1028,
+          "right": 1116
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Dic",
+        "rect": {
+          "left": 1036,
+          "right": 1108
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "14.1°",
+        "rect": {
+          "left": 1036,
+          "right": 1108
+        }
+      },
+      {
+        "tag": "SECTION",
+        "className": "",
+        "text": "Más datos de Agosto Sol12 h de sol/día Precipitaci",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "H3",
+        "className": "",
+        "text": "Más datos de Agosto",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DL",
+        "className": "climate-secondary-data",
+        "text": "Sol12 h de sol/día Precipitación41.4 mm al mesCobe",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "",
+        "text": "Sol12 h de sol/día",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DT",
+        "className": "",
+        "text": "Sol",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DD",
+        "className": "",
+        "text": "12 h de sol/día",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "",
+        "text": "Precipitación41.4 mm al mes",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DT",
+        "className": "",
+        "text": "Precipitación",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 228,
+        "height": 24
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 132,
+        "height": 24
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 189,
+        "height": 24
+      }
+    ],
+    "headings": [
+      "H1:A Mariña Lucense",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H3:Buena elección si…",
+      "H2:Cuándo ir",
+      "H3:Agosto",
+      "H3:Más datos de Agosto",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Playas, acantilados y paisajes costeros",
+      "H2:Elige una base práctica",
+      "H3:BARREIROS",
+      "H3:Calcula tu presupuesto",
+      "H2:Lugares alrededor",
+      "H3:Praia das Catedrais",
+      "H3:Inicio PR-G 156 · Puerto de O Vicedo",
+      "H3:Faro de Punta Atalaia",
+      "H3:Mirador de Illa Pancha",
+      "H2:Opiniones de viajeros",
+      "H3:Equipo Travseeker",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 380,
+        "height": 211
+      },
+      {
+        "complete": true,
+        "width": 380,
+        "height": 253
+      },
+      {
+        "complete": true,
+        "width": 380,
+        "height": 252
+      }
+    ],
+    "typography": {
+      "body": "16px",
+      "paragraph": "17px",
+      "h1": "80px"
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "759x900": {
+    "viewport": 759,
+    "scrollWidth": 759,
+    "pageHeight": 9867,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 916,
+      "width": 759,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "header": {
+        "x": 0,
+        "y": 25,
+        "width": 759,
+        "height": 64,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 1px",
+        "background": "color(srgb 0.952941 0.960784 0.980392 / 0.94)"
+      },
+      "hero": {
+        "x": 0,
+        "y": 64,
+        "width": 759,
+        "height": 852,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 974,
+        "width": 759,
+        "height": 1092,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 2066,
+        "width": 759,
+        "height": 1371,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 0,
+        "y": 3438,
+        "width": 759,
+        "height": 1179,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 4617,
+        "width": 759,
+        "height": 1961,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "nearby": {
+        "x": 0,
+        "y": 6578,
+        "width": 759,
+        "height": 1287,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 7865,
+        "width": 759,
+        "height": 768,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 8633,
+        "width": 759,
+        "height": 711,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "footer": {
+        "x": 0,
+        "y": 9344,
+        "width": 759,
+        "height": 523,
+        "paddingBlock": "64px / 24px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(17, 18, 23)"
+      }
+    },
+    "heroTitle": {
+      "x": 38,
+      "y": 330,
+      "width": 683,
+      "height": 75,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 16,
+      "y": 776,
+      "width": 727,
+      "height": 108,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Sep22°",
+        "rect": {
+          "left": 752,
+          "right": 840
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Sep",
+        "rect": {
+          "left": 760,
+          "right": 832
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "22°",
+        "rect": {
+          "left": 760,
+          "right": 832
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Oct20.4°",
+        "rect": {
+          "left": 844,
+          "right": 932
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Oct",
+        "rect": {
+          "left": 852,
+          "right": 924
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "20.4°",
+        "rect": {
+          "left": 852,
+          "right": 924
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Nov16.1°",
+        "rect": {
+          "left": 936,
+          "right": 1024
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Nov",
+        "rect": {
+          "left": 944,
+          "right": 1016
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "16.1°",
+        "rect": {
+          "left": 944,
+          "right": 1016
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Dic14.1°",
+        "rect": {
+          "left": 1028,
+          "right": 1116
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Dic",
+        "rect": {
+          "left": 1036,
+          "right": 1108
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "14.1°",
+        "rect": {
+          "left": 1036,
+          "right": 1108
+        }
+      },
+      {
+        "tag": "SECTION",
+        "className": "",
+        "text": "Más datos de Agosto Sol12 h de sol/día Precipitaci",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "H3",
+        "className": "",
+        "text": "Más datos de Agosto",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DL",
+        "className": "climate-secondary-data",
+        "text": "Sol12 h de sol/día Precipitación41.4 mm al mesCobe",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "",
+        "text": "Sol12 h de sol/día",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DT",
+        "className": "",
+        "text": "Sol",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DD",
+        "className": "",
+        "text": "12 h de sol/día",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "",
+        "text": "Precipitación41.4 mm al mes",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      },
+      {
+        "tag": "DT",
+        "className": "",
+        "text": "Precipitación",
+        "rect": {
+          "left": 20,
+          "right": 930
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 228,
+        "height": 24
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 132,
+        "height": 24
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 189,
+        "height": 24
+      }
+    ],
+    "headings": [
+      "H1:A Mariña Lucense",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H3:Buena elección si…",
+      "H2:Cuándo ir",
+      "H3:Agosto",
+      "H3:Más datos de Agosto",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Playas, acantilados y paisajes costeros",
+      "H2:Elige una base práctica",
+      "H3:BARREIROS",
+      "H3:Calcula tu presupuesto",
+      "H2:Lugares alrededor",
+      "H3:Praia das Catedrais",
+      "H3:Inicio PR-G 156 · Puerto de O Vicedo",
+      "H3:Faro de Punta Atalaia",
+      "H3:Mirador de Illa Pancha",
+      "H2:Opiniones de viajeros",
+      "H3:Equipo Travseeker",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 758,
+        "height": 423
+      },
+      {
+        "complete": true,
+        "width": 758,
+        "height": 505
+      },
+      {
+        "complete": true,
+        "width": 758,
+        "height": 502
+      }
+    ],
+    "typography": {
+      "body": "16px",
+      "paragraph": "17px",
+      "h1": "80px"
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "390x844": {
+    "viewport": 390,
+    "scrollWidth": 390,
+    "pageHeight": 10894,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 952,
+      "width": 390,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "header": {
+        "x": 0,
+        "y": 47,
+        "width": 390,
+        "height": 64,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 1px",
+        "background": "color(srgb 0.952941 0.960784 0.980392 / 0.94)"
+      },
+      "hero": {
+        "x": 0,
+        "y": 64,
+        "width": 390,
+        "height": 888,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 1010,
+        "width": 390,
+        "height": 1297,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 2307,
+        "width": 390,
+        "height": 1388,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 0,
+        "y": 3695,
+        "width": 390,
+        "height": 1353,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 5048,
+        "width": 390,
+        "height": 2275,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "nearby": {
+        "x": 0,
+        "y": 7323,
+        "width": 390,
+        "height": 1447,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 8770,
+        "width": 390,
+        "height": 858,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 9628,
+        "width": 390,
+        "height": 709,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "footer": {
+        "x": 0,
+        "y": 10337,
+        "width": 390,
+        "height": 557,
+        "paddingBlock": "64px / 24px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(17, 18, 23)"
+      }
+    },
+    "heroTitle": {
+      "x": 24,
+      "y": 268,
+      "width": 342,
+      "height": 117,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 16,
+      "y": 756,
+      "width": 358,
+      "height": 164,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "A",
+        "className": "",
+        "text": "Opiniones",
+        "rect": {
+          "left": 390,
+          "right": 459
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "May18.3°",
+        "rect": {
+          "left": 384,
+          "right": 472
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "May",
+        "rect": {
+          "left": 392,
+          "right": 464
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "18.3°",
+        "rect": {
+          "left": 392,
+          "right": 464
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Jun21°",
+        "rect": {
+          "left": 476,
+          "right": 564
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Jun",
+        "rect": {
+          "left": 484,
+          "right": 556
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "21°",
+        "rect": {
+          "left": 484,
+          "right": 556
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Jul22.8°",
+        "rect": {
+          "left": 568,
+          "right": 656
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Jul",
+        "rect": {
+          "left": 576,
+          "right": 648
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "22.8°",
+        "rect": {
+          "left": 576,
+          "right": 648
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Ago23.7° Ideal",
+        "rect": {
+          "left": 660,
+          "right": 748
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Ago",
+        "rect": {
+          "left": 668,
+          "right": 740
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "23.7°",
+        "rect": {
+          "left": 668,
+          "right": 740
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__recommendation",
+        "text": "Ideal",
+        "rect": {
+          "left": 668,
+          "right": 740
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 668,
+          "right": 682
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 669,
+          "right": 681
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Sep22°",
+        "rect": {
+          "left": 752,
+          "right": 840
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Sep",
+        "rect": {
+          "left": 760,
+          "right": 832
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "22°",
+        "rect": {
+          "left": 760,
+          "right": 832
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Oct20.4°",
+        "rect": {
+          "left": 844,
+          "right": 932
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 228,
+        "height": 24
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 132,
+        "height": 24
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 189,
+        "height": 24
+      }
+    ],
+    "headings": [
+      "H1:A Mariña Lucense",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H3:Buena elección si…",
+      "H2:Cuándo ir",
+      "H3:Agosto",
+      "H3:Más datos de Agosto",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Playas, acantilados y paisajes costeros",
+      "H2:Elige una base práctica",
+      "H3:BARREIROS",
+      "H3:Calcula tu presupuesto",
+      "H2:Lugares alrededor",
+      "H3:Praia das Catedrais",
+      "H3:Inicio PR-G 156 · Puerto de O Vicedo",
+      "H3:Faro de Punta Atalaia",
+      "H3:Mirador de Illa Pancha",
+      "H2:Opiniones de viajeros",
+      "H3:Equipo Travseeker",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 389,
+        "height": 216
+      },
+      {
+        "complete": true,
+        "width": 389,
+        "height": 259
+      },
+      {
+        "complete": true,
+        "width": 389,
+        "height": 258
+      }
+    ],
+    "typography": {
+      "body": "16px",
+      "paragraph": "17px",
+      "h1": "62.4px"
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "320x800": {
+    "viewport": 320,
+    "scrollWidth": 320,
+    "pageHeight": 11347,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 973,
+      "width": 320,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "header": {
+        "x": 0,
+        "y": 51,
+        "width": 320,
+        "height": 64,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 1px",
+        "background": "color(srgb 0.952941 0.960784 0.980392 / 0.94)"
+      },
+      "hero": {
+        "x": 0,
+        "y": 64,
+        "width": 320,
+        "height": 909,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 1031,
+        "width": 320,
+        "height": 1467,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 2498,
+        "width": 320,
+        "height": 1426,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 0,
+        "y": 3924,
+        "width": 320,
+        "height": 1514,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 5438,
+        "width": 320,
+        "height": 2311,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "nearby": {
+        "x": 0,
+        "y": 7749,
+        "width": 320,
+        "height": 1431,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 9180,
+        "width": 320,
+        "height": 866,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 10046,
+        "width": 320,
+        "height": 661,
+        "paddingBlock": "56px / 56px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "footer": {
+        "x": 0,
+        "y": 10706,
+        "width": 320,
+        "height": 641,
+        "paddingBlock": "64px / 24px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(17, 18, 23)"
+      }
+    },
+    "heroTitle": {
+      "x": 24,
+      "y": 289,
+      "width": 272,
+      "height": 96,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 16,
+      "y": 777,
+      "width": 288,
+      "height": 164,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "A",
+        "className": "",
+        "text": "Bases",
+        "rect": {
+          "left": 325,
+          "right": 366
+        }
+      },
+      {
+        "tag": "A",
+        "className": "",
+        "text": "Opiniones",
+        "rect": {
+          "left": 390,
+          "right": 459
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Abr16.8°",
+        "rect": {
+          "left": 292,
+          "right": 380
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Abr",
+        "rect": {
+          "left": 300,
+          "right": 372
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "16.8°",
+        "rect": {
+          "left": 300,
+          "right": 372
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "May18.3°",
+        "rect": {
+          "left": 384,
+          "right": 472
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "May",
+        "rect": {
+          "left": 392,
+          "right": 464
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "18.3°",
+        "rect": {
+          "left": 392,
+          "right": 464
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Jun21°",
+        "rect": {
+          "left": 476,
+          "right": 564
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Jun",
+        "rect": {
+          "left": 484,
+          "right": 556
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "21°",
+        "rect": {
+          "left": 484,
+          "right": 556
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Jul22.8°",
+        "rect": {
+          "left": 568,
+          "right": 656
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Jul",
+        "rect": {
+          "left": 576,
+          "right": 648
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "22.8°",
+        "rect": {
+          "left": 576,
+          "right": 648
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Ago23.7° Ideal",
+        "rect": {
+          "left": 660,
+          "right": 748
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Ago",
+        "rect": {
+          "left": 668,
+          "right": 740
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "23.7°",
+        "rect": {
+          "left": 668,
+          "right": 740
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__recommendation",
+        "text": "Ideal",
+        "rect": {
+          "left": 668,
+          "right": 740
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 668,
+          "right": 682
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 669,
+          "right": 681
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 160,
+        "height": 44
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 132,
+        "height": 24
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 189,
+        "height": 24
+      }
+    ],
+    "headings": [
+      "H1:A Mariña Lucense",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H3:Buena elección si…",
+      "H2:Cuándo ir",
+      "H3:Agosto",
+      "H3:Más datos de Agosto",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Playas, acantilados y paisajes costeros",
+      "H2:Elige una base práctica",
+      "H3:BARREIROS",
+      "H3:Calcula tu presupuesto",
+      "H2:Lugares alrededor",
+      "H3:Praia das Catedrais",
+      "H3:Inicio PR-G 156 · Puerto de O Vicedo",
+      "H3:Faro de Punta Atalaia",
+      "H3:Mirador de Illa Pancha",
+      "H2:Opiniones de viajeros",
+      "H3:Equipo Travseeker",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 320,
+        "height": 178
+      },
+      {
+        "complete": true,
+        "width": 320,
+        "height": 213
+      },
+      {
+        "complete": true,
+        "width": 320,
+        "height": 212
+      }
+    ],
+    "typography": {
+      "body": "16px",
+      "paragraph": "17px",
+      "h1": "51.2px"
+    },
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  }
+}

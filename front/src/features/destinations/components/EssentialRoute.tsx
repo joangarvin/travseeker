@@ -58,11 +58,11 @@ function useStoredKeys(storageKey: string) {
 
 function useMobileGuide() {
   const [mobile, setMobile] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 760px)').matches,
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 1100px)').matches,
   );
 
   useEffect(() => {
-    const query = window.matchMedia('(max-width: 760px)');
+    const query = window.matchMedia('(max-width: 1100px)');
     const onChange = (event: MediaQueryListEvent) => setMobile(event.matches);
     setMobile(query.matches);
     query.addEventListener('change', onChange);

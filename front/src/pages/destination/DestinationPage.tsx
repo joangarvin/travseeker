@@ -5,13 +5,16 @@ import {
   BedDouble,
   BookmarkPlus,
   Check,
+  Compass,
   ExternalLink,
+  Gauge,
   GitCompare,
   Heart,
   Map,
   MapPin,
   Share2,
   Star,
+  WalletCards,
 } from 'lucide-react';
 import { api } from '../../services/api';
 import { useAuth, useCompare } from '../../contexts';
@@ -396,6 +399,13 @@ export default function DestinationPage() {
     (municipio) => municipio.id !== selectedBase?.id,
   );
   const visibleAlternativeBases = basesExpanded ? alternativeBases : alternativeBases?.slice(0, 3);
+  const destinationNameLength = destino.nombre.trim().length;
+  const titleSizeClass =
+    destinationNameLength > 34
+      ? 'destination-cover__content--title-xl'
+      : destinationNameLength > 20
+        ? 'destination-cover__content--title-long'
+        : '';
 
   return (
     <Shell>
@@ -425,7 +435,7 @@ export default function DestinationPage() {
                 <span aria-current="page">{destino.nombre.trim()}</span>
               </nav>
             </div>
-            <div className="destination-cover__content">
+            <div className={`destination-cover__content ${titleSizeClass}`.trim()}>
               <p className="destination-cover__location">
                 <MapPin aria-hidden="true" /> {plain(destino.ubicacion) || 'España'}
               </p>
@@ -544,14 +554,21 @@ export default function DestinationPage() {
             </div>
             <aside className="destination-summary__decision" aria-label="Señales para decidir">
               <p className="destination-summary__decision-title">Tu trip brief</p>
+              <h3>Buena elección si…</h3>
               <dl>
                 <div>
+                  <span className="destination-summary__signal-icon" aria-hidden="true">
+                    <Compass />
+                  </span>
                   <dt>Encaja si buscas</dt>
                   <dd>
                     <TourismMarks value={destino.tipoTurismoPrincipal} compact />
                   </dd>
                 </div>
                 <div>
+                  <span className="destination-summary__signal-icon" aria-hidden="true">
+                    <Map />
+                  </span>
                   <dt>El plan toma forma con</dt>
                   <dd>
                     {activityValues(destino.tipoTurismoSecundario).length ? (
@@ -562,12 +579,18 @@ export default function DestinationPage() {
                   </dd>
                 </div>
                 <div>
+                  <span className="destination-summary__signal-icon" aria-hidden="true">
+                    <Gauge />
+                  </span>
                   <dt>Ritmo y gasto</dt>
                   <dd>
                     {crowd} · {budget}
                   </dd>
                 </div>
                 <div>
+                  <span className="destination-summary__signal-icon" aria-hidden="true">
+                    <WalletCards />
+                  </span>
                   <dt>Cómo organizarlo</dt>
                   <dd>
                     {destino.municipios?.length
