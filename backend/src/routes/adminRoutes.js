@@ -3,11 +3,17 @@ const adminController = require("../controllers/adminController");
 const reviewController = require("../controllers/reviewController");
 const activityController = require("../controllers/activityController");
 const tourismTypeController = require("../controllers/tourismTypeController");
+const editorialController = require("../controllers/editorialController");
 const { requireAuth, requireAdmin } = require("../middleware/auth");
 
 const router = Router();
 
 router.use(requireAuth, requireAdmin);
+
+router.get("/editorial", editorialController.list);
+router.get("/editorial/counts", editorialController.counts);
+router.patch("/editorial/:resource/batch", editorialController.transitionBatch);
+router.patch("/editorial/:resource/:id", editorialController.transitionOne);
 
 router.get("/destinos", adminController.listDestinos);
 router.get("/destinos/:destinoId", adminController.getDestino);
@@ -41,6 +47,8 @@ router.put("/places/:placeId", adminController.updatePlace);
 router.delete("/places/:placeId", adminController.deletePlace);
 
 router.get("/reviews", reviewController.listForAdmin);
+router.patch("/reviews/batch", reviewController.moderateBatch);
+router.delete("/reviews/batch", reviewController.removeBatch);
 router.patch("/reviews/:reviewId", reviewController.moderate);
 
 module.exports = router;

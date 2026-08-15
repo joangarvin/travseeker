@@ -36,13 +36,14 @@ El servidor escucha en `http://localhost:3001` (configurable con `PORT` en `.env
 
 | Método | Ruta | Descripción |
 |--------|------|-------------|
-| `GET` | `/api/destinos` | Búsqueda y filtrado de destinos |
+| `GET` | `/api/destinos` | Búsqueda y filtrado paginado de destinos |
 | `GET` | `/api/destinos/:id` | Detalle de un destino |
 | `GET` | `/api/destinos/:id/relacionados` | Destinos relacionados |
-| `GET` | `/api/destacados` | Destinos aleatorios destacados |
+| `GET` | `/api/destacados` | Destinos destacados |
 | `GET` | `/api/stats` | Estadísticas generales |
 | `POST` | `/api/auth/register` | Registro de usuario |
 | `POST` | `/api/auth/login` | Inicio de sesión |
+| `POST` | `/api/auth/logout` | Cerrar sesión y limpiar la cookie HttpOnly |
 | `GET` | `/api/auth/me` | Perfil del usuario autenticado |
 | `GET` | `/api/favoritos` | Lista de favoritos del usuario |
 | `POST` | `/api/favoritos/:destinoId` | Añadir favorito |
@@ -54,6 +55,9 @@ El servidor escucha en `http://localhost:3001` (configurable con `PORT` en `.env
 | `POST` | `/api/admin/destinos/:id/municipios` | Crear municipio (solo admin) |
 | `PUT` | `/api/admin/municipios/:id` | Actualizar municipio (solo admin) |
 | `DELETE` | `/api/admin/municipios/:id` | Eliminar municipio (solo admin) |
+
+La búsqueda admite `limit` (1–100), `offset` y `meta=1`. Con `meta=1` devuelve
+`{ items, total, hasMore }`; sin ese parámetro conserva una lista compatible con clientes anteriores.
 
 ## Scripts útiles
 

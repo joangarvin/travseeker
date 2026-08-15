@@ -120,7 +120,7 @@ Resumen rápido:
 - Comparador de destinos (`/comparar`)
 - Recomendaciones personalizadas ("Para ti")
 - Mapa interactivo, lugares cercanos, reseñas enriquecidas y mejor época para viajar
-- Alertas de decisión por email y destinos disponibles sin conexión (PWA)
+- Alertas de decisión por email
 - Panel de administración (`/admin`) para CRUD de destinos y municipios
 
 ## Cuenta administrador

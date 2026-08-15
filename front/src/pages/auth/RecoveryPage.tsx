@@ -61,7 +61,11 @@ export default function RecoveryPage() {
           </>
         ) : (
           <form onSubmit={handleSubmit}>
-            <Field label={token ? 'Nueva contraseña' : 'Email'} htmlFor="recovery">
+            <Field
+              label={token ? 'Nueva contraseña' : 'Email'}
+              htmlFor="recovery"
+              hint={token ? 'Mínimo 8 caracteres' : undefined}
+            >
               <input
                 id="recovery"
                 type={token ? 'password' : 'email'}
@@ -71,6 +75,7 @@ export default function RecoveryPage() {
                 }
                 minLength={token ? 8 : undefined}
                 required
+                autoComplete={token ? 'new-password' : 'email'}
               />
             </Field>
             {error && <Notice tone="error">{error}</Notice>}

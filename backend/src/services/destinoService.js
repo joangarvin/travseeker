@@ -10,6 +10,11 @@ const {
 const { normalizeMonth, rankForSeason } = require("../domain/season");
 const { rankDestinationSearch } = require("../domain/search");
 const { parseTags, serializeTags } = require("../constants/scales");
+const { cleanMunicipalityFields } = require("../utils/sanitizeContent");
+const {
+  publicDestinationByIdWhere,
+  publicEditorialWhere,
+} = require("../domain/editorial");
 
 function mapActivities(destino) {
   if (!destino) return destino;
@@ -50,7 +55,7 @@ function mapTourismTypes(destino) {
 function mapMunicipalities(destino) {
   if (!destino) return destino;
   const municipios = (destino.municipioLinks || [])
-    .map((link) => link.municipio)
+    .map((link) => cleanMunicipalityFields(link.municipio))
     .filter(Boolean)
     .sort((first, second) => first.nombre.localeCompare(second.nombre, "es"));
   const { municipioLinks, ...rest } = destino;
@@ -85,28 +90,152 @@ function prepareSearchResults(destinations, query) {
   );
 }
 
-async function searchDestinos(query) {
+function parsePagination(query) {
   const hasQuery = Boolean(String(query.q || "").trim());
-  const destinos = await prisma.destino.findMany({
-    where: buildWhereClause(query),
-    select: hasQuery ? SEARCH_LIST_SELECT : LIST_SELECT,
+  const requestedLimit = Number.parseInt(query.limit, 10);
+  const requestedOffset = Number.parseInt(query.offset, 10);
+  return {
+    hasQuery,
+    limit: Number.isFinite(requestedLimit)
+      ? Math.min(Math.max(requestedLimit, 1), 100)
+      : 24,
+    offset: Number.isFinite(requestedOffset)
+      ? Math.min(Math.max(requestedOffset, 0), 100000)
+      : 0,
+  };
+}
+
+function textSearchWhere(query, structuredWhere) {
+  const terms = String(query.q || '')
+    .trim()
+    .slice(0, 120)
+    .split(/\s+/)
+    .filter((term) => term.length > 1)
+    .slice(0, 6);
+  if (!terms.length) return structuredWhere;
+
+  const searchConditions = terms.flatMap((term) => {
+    const contains = { contains: term, mode: 'insensitive' };
+    return [
+      { nombre: contains },
+      { ubicacion: contains },
+      { descripcion: contains },
+      { imprescindibles: contains },
+      { tipoTurismoPrincipal: contains },
+      { tipoTurismoSecundario: contains },
+      {
+        municipioLinks: {
+          some: { municipio: { nombre: contains, editorialStatus: "published" } },
+        },
+      },
+      {
+        activityLinks: {
+          some: {
+            activity: {
+              name: contains,
+              isActive: true,
+              editorialStatus: "published",
+            },
+          },
+        },
+      },
+      {
+        tourismTypeLinks: {
+          some: {
+            tourismType: {
+              name: contains,
+              isActive: true,
+              editorialStatus: "published",
+            },
+          },
+        },
+      },
+      {
+        places: {
+          some: {
+            nombre: contains,
+            isActive: true,
+            editorialStatus: "published",
+          },
+        },
+      },
+      {
+        essentialGroups: {
+          some: {
+            OR: [
+              { title: contains },
+              { items: { some: { OR: [{ title: contains }, { description: contains }] } } },
+            ],
+          },
+        },
+      },
+    ];
   });
-  if (hasQuery) return prepareSearchResults(destinos, query);
-  return rankForSeason(destinos.map(mapTourismTypes), {
+  const { OR, AND, ...rest } = structuredWhere;
+  const clauses = [{ OR: searchConditions }];
+  if (OR) clauses.unshift({ OR });
+  if (AND) clauses.unshift({ AND });
+  return { ...rest, AND: clauses };
+}
+
+async function searchDestinosPage(query) {
+  const { hasQuery, limit, offset } = parsePagination(query);
+  const where = publicEditorialWhere(buildWhereClause(query));
+
+  if (hasQuery) {
+    // Fuzzy ranking needs the candidate set before it can score and sort it.
+    // Pagination is still applied to the ranked result returned to the client.
+    const searchWhere = textSearchWhere(query, where);
+    let destinos = await prisma.destino.findMany({
+      where: searchWhere,
+      select: SEARCH_LIST_SELECT,
+      orderBy: [{ updatedAt: "desc" }, { id: "asc" }],
+    });
+    let ranked = prepareSearchResults(destinos, query);
+    // Preserve typo-tolerant search when the database pre-filter finds no candidates.
+    if (!ranked.length) {
+      destinos = await prisma.destino.findMany({
+        where,
+        select: SEARCH_LIST_SELECT,
+        orderBy: [{ updatedAt: "desc" }, { id: "asc" }],
+      });
+      ranked = prepareSearchResults(destinos, query);
+    }
+    const items = ranked.slice(offset, offset + limit);
+    return { items, total: ranked.length, hasMore: offset + items.length < ranked.length };
+  }
+
+  const [total, destinos] = await Promise.all([
+    prisma.destino.count({ where }),
+    prisma.destino.findMany({
+      where,
+      select: LIST_SELECT,
+      skip: offset,
+      take: limit,
+      orderBy: [{ updatedAt: "desc" }, { id: "asc" }],
+    }),
+  ]);
+  const items = rankForSeason(destinos.map(mapTourismTypes), {
     month: normalizeMonth(query.month),
     avoidCrowds: query.avoidCrowds === "true",
   });
+  return { items, total, hasMore: offset + items.length < total };
+}
+
+async function searchDestinos(query) {
+  return (await searchDestinosPage(query)).items;
 }
 
 async function getDestinoById(id) {
-  const destino = await prisma.destino.findUnique({
-    where: { id },
+  const destino = await prisma.destino.findFirst({
+    where: publicDestinationByIdWhere(id),
     include: {
       municipioLinks: {
+        where: { municipio: { editorialStatus: "published" } },
         include: { municipio: true },
       },
       places: {
-        where: { isActive: true },
+        where: { isActive: true, editorialStatus: "published" },
         orderBy: [{ sortOrder: "asc" }, { nombre: "asc" }],
       },
       essentialGroups: {
@@ -119,18 +248,26 @@ async function getDestinoById(id) {
         },
       },
       activityLinks: {
-        where: { activity: { isActive: true } },
+        where: { activity: { isActive: true, editorialStatus: "published" } },
         include: { activity: true },
       },
       tourismTypeLinks: {
-        where: { tourismType: { isActive: true } },
+        where: { tourismType: { isActive: true, editorialStatus: "published" } },
         include: { tourismType: true },
       },
     },
   });
   if (!destino) return null;
+  destino.essentialGroups?.forEach((group) => {
+    group.items?.forEach((item) => {
+      if (item.place?.editorialStatus !== "published" || item.place?.isActive !== true) {
+        item.place = null;
+        item.placeId = null;
+      }
+    });
+  });
   const municipios = (destino.municipioLinks || [])
-    .map((link) => link.municipio)
+    .map((link) => cleanMunicipalityFields(link.municipio))
     .filter(Boolean)
     .sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
   const { municipioLinks, ...rest } = destino;
@@ -138,26 +275,18 @@ async function getDestinoById(id) {
 }
 
 async function getDestacados(limit = 6) {
-  const rows = await prisma.$queryRaw`
-    SELECT id FROM "Destino" ORDER BY RANDOM() LIMIT ${limit}
-  `;
-  const ids = rows.map((r) => r.id);
-  if (ids.length === 0) return [];
-
   const destinos = await prisma.destino.findMany({
-    where: { id: { in: ids } },
+    where: { editorialStatus: "published" },
+    orderBy: { updatedAt: "desc" },
+    take: Math.min(Math.max(limit, 1), 12),
     select: LIST_SELECT,
   });
-
-  const order = new Map(ids.map((id, i) => [id, i]));
-  return destinos
-    .map(mapTourismTypes)
-    .sort((a, b) => order.get(a.id) - order.get(b.id));
+  return destinos.map(mapTourismTypes);
 }
 
 async function getRelacionados(id) {
-  const destino = await prisma.destino.findUnique({
-    where: { id },
+  const destino = await prisma.destino.findFirst({
+    where: publicDestinationByIdWhere(id),
     select: { ubicacion: true, tipoTurismoPrincipal: true, presupuesto: true },
   });
 
@@ -172,6 +301,7 @@ async function getRelacionados(id) {
   const related = await prisma.destino.findMany({
     where: {
       id: { not: id },
+      editorialStatus: "published",
       OR: [
         { ubicacion: { contains: destino.ubicacion } },
         ...tourismMatches,
@@ -188,7 +318,7 @@ async function getMapaDestinos(query) {
   const hasQuery = Boolean(String(query.q || "").trim());
   const destinos = await prisma.destino.findMany({
     where: {
-      ...buildWhereClause(query),
+      ...publicEditorialWhere(buildWhereClause(query)),
       latitud: { not: null },
       longitud: { not: null },
     },
@@ -214,7 +344,7 @@ async function compareDestinos(ids) {
   }
 
   const destinos = await prisma.destino.findMany({
-    where: { id: { in: ids } },
+    where: { id: { in: ids }, editorialStatus: "published" },
     select: COMPARE_SELECT,
   });
 
@@ -226,8 +356,9 @@ async function compareDestinos(ids) {
 
 async function getStats() {
   const [total, reviewAgg] = await Promise.all([
-    prisma.destino.count(),
+    prisma.destino.count({ where: { editorialStatus: "published" } }),
     prisma.review.aggregate({
+      where: { status: 'published' },
       _avg: { rating: true },
       _count: { rating: true },
     }),
@@ -243,9 +374,12 @@ async function getStats() {
 
 async function getFilterOptions() {
   const [destinations, activityCatalog] = await Promise.all([
-    prisma.destino.findMany({ select: { ubicacion: true } }),
+    prisma.destino.findMany({
+      where: { editorialStatus: "published" },
+      select: { ubicacion: true },
+    }),
     prisma.activity.findMany({
-      where: { isActive: true },
+      where: { isActive: true, editorialStatus: "published" },
       orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
       select: { name: true },
     }),
@@ -261,6 +395,7 @@ async function getFilterOptions() {
 
 module.exports = {
   searchDestinos,
+  searchDestinosPage,
   getDestinoById,
   getDestacados,
   getRelacionados,

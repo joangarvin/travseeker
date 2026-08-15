@@ -3,7 +3,7 @@ const { LIST_SELECT } = require('../constants/selects');
 
 async function listFavoritos(userId) {
   const favoritos = await prisma.favorito.findMany({
-    where: { userId },
+    where: { userId, destino: { editorialStatus: 'published' } },
     orderBy: { createdAt: 'desc' },
     include: { destino: { select: LIST_SELECT } },
   });
@@ -26,7 +26,10 @@ async function getFavoriteIds(userId) {
 }
 
 async function addFavorito(userId, destinoId) {
-  const destino = await prisma.destino.findUnique({ where: { id: destinoId }, select: { id: true } });
+  const destino = await prisma.destino.findFirst({
+    where: { id: destinoId, editorialStatus: 'published' },
+    select: { id: true },
+  });
   if (!destino) {
     const error = new Error('Destino no encontrado');
     error.status = 404;

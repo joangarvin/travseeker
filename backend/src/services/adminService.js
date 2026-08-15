@@ -11,6 +11,10 @@ const {
   serializeEssentialGroups,
 } = require("../domain/essentials");
 const uploadService = require("./uploadService");
+const {
+  cleanMunicipalityFields,
+  stripHtmlToText,
+} = require("../utils/sanitizeContent");
 
 function clean(value, max) {
   if (typeof value !== "string") return null;
@@ -88,26 +92,37 @@ function validateDestino(data, essentialGroups = null) {
 }
 
 function normalizeMunicipioPayload(payload) {
-  const nombre = String(payload.nombre || "").trim();
+  const nombre = stripHtmlToText(payload.nombre);
   if (!nombre) {
     const err = new Error("El nombre del municipio es obligatorio");
     err.status = 400;
     throw err;
   }
+  const latitud = payload.latitud === "" || payload.latitud == null ? null : Number(payload.latitud);
+  const longitud = payload.longitud === "" || payload.longitud == null ? null : Number(payload.longitud);
+  if (
+    (latitud === null) !== (longitud === null) ||
+    (latitud !== null && (!Number.isFinite(latitud) || Math.abs(latitud) > 90)) ||
+    (longitud !== null && (!Number.isFinite(longitud) || Math.abs(longitud) > 180))
+  ) {
+    const err = new Error("Las coordenadas del municipio no son válidas");
+    err.status = 400;
+    throw err;
+  }
   return {
     nombre,
-    precios: payload.precios != null ? String(payload.precios).trim() : "",
-    conexiones:
-      payload.conexiones != null ? String(payload.conexiones).trim() : "",
-    tipoTurismo:
-      payload.tipoTurismo != null ? String(payload.tipoTurismo).trim() : "",
+    precios: stripHtmlToText(payload.precios),
+    conexiones: stripHtmlToText(payload.conexiones),
+    tipoTurismo: stripHtmlToText(payload.tipoTurismo),
+    latitud,
+    longitud,
   };
 }
 
 function mapDestinoMunicipios(destino) {
   if (!destino) return destino;
   const municipios = (destino.municipioLinks || [])
-    .map((link) => link.municipio)
+    .map((link) => cleanMunicipalityFields(link.municipio))
     .filter(Boolean)
     .sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
   const activities = (destino.activityLinks || [])
@@ -233,6 +248,12 @@ const destinationRelations = {
       },
     },
   },
+  createdBy: {
+    select: { id: true, nombre: true, apellidos: true, avatarUrl: true, email: true },
+  },
+  reviewedBy: {
+    select: { id: true, nombre: true, apellidos: true, avatarUrl: true, email: true },
+  },
 };
 
 async function syncDestinationEssentials(
@@ -291,6 +312,11 @@ async function listDestinos() {
       masificacion: true,
       latitud: true,
       longitud: true,
+      editorialStatus: true,
+      submittedAt: true,
+      reviewedAt: true,
+      createdById: true,
+      reviewedById: true,
       municipioLinks: {
         select: {
           municipio: { select: { id: true, nombre: true } },
@@ -316,12 +342,14 @@ async function getDestino(id) {
   return mapDestinoMunicipios(destination);
 }
 
-async function createDestino(payload) {
+async function createDestino(payload, createdById) {
   const essentialGroups = normalizeEssentialGroups(payload.essentialGroups);
   const data = normalizePayload(payload, essentialGroups);
   validateDestino(data, essentialGroups);
   const created = await prisma.$transaction(async (transaction) => {
-    const destination = await transaction.destino.create({ data });
+    const destination = await transaction.destino.create({
+      data: { ...data, editorialStatus: "pending", createdById },
+    });
     await syncDestinationActivities(
       transaction,
       destination.id,
@@ -400,15 +428,15 @@ async function listMunicipios() {
     },
   });
   return rows.map(({ _count, ...m }) => ({
-    ...m,
+    ...cleanMunicipalityFields(m),
     destinosCount: _count.destinoLinks,
   }));
 }
 
-async function createMunicipio(payload) {
+async function createMunicipio(payload, createdById) {
   const data = normalizeMunicipioPayload(payload);
   const created = await prisma.municipio.create({
-    data,
+    data: { ...data, editorialStatus: "pending", createdById },
     include: { _count: { select: { destinoLinks: true } } },
   });
   return {
@@ -417,6 +445,8 @@ async function createMunicipio(payload) {
     precios: created.precios,
     conexiones: created.conexiones,
     tipoTurismo: created.tipoTurismo,
+    latitud: created.latitud,
+    longitud: created.longitud,
     destinosCount: created._count.destinoLinks,
   };
 }
@@ -434,6 +464,8 @@ async function updateMunicipio(id, payload) {
     precios: updated.precios,
     conexiones: updated.conexiones,
     tipoTurismo: updated.tipoTurismo,
+    latitud: updated.latitud,
+    longitud: updated.longitud,
     destinosCount: updated._count.destinoLinks,
   };
 }
@@ -477,7 +509,7 @@ async function linkMunicipio(destinoId, municipioId) {
     update: {},
   });
 
-  return municipio;
+  return cleanMunicipalityFields(municipio);
 }
 
 async function unlinkMunicipio(destinoId, municipioId) {
@@ -526,13 +558,34 @@ async function listPlaces(destinoId) {
     orderBy: [{ sortOrder: "asc" }, { nombre: "asc" }],
   });
 }
-async function createPlace(destinoId, payload) {
+async function createPlace(destinoId, payload, createdById) {
   return prisma.place.create({
-    data: { destinoId, ...normalizePlace(payload) },
+    data: {
+      destinoId,
+      ...normalizePlace(payload),
+      isActive: false,
+      editorialStatus: "pending",
+      createdById,
+    },
   });
 }
 async function updatePlace(id, payload) {
-  return prisma.place.update({ where: { id }, data: normalizePlace(payload) });
+  const current = await prisma.place.findUnique({
+    where: { id },
+    select: { editorialStatus: true },
+  });
+  if (!current) {
+    const error = new Error("Lugar no encontrado");
+    error.status = 404;
+    throw error;
+  }
+  return prisma.place.update({
+    where: { id },
+    data: {
+      ...normalizePlace(payload),
+      isActive: current.editorialStatus === "published",
+    },
+  });
 }
 async function deletePlace(id) {
   await prisma.place.delete({ where: { id } });

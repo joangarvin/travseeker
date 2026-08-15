@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { Edit3, Plus, Trash2 } from 'lucide-react';
 import { Button, Loader } from '../../../components/ui';
 import { TourismMark } from '../../tourism/tourism';
 import type { Destino } from '../../../types';
 import { plain } from '../../../utils';
 import { AdminToolbar } from './AdminToolbar';
+import { EditorialStatusBadge, EditorialStatusFilter } from './EditorialStatusBadge';
 
 type DestinationsPanelProps = {
   destinations: Destino[];
@@ -24,25 +26,31 @@ export function DestinationsPanel({
   onEdit,
   onDelete,
 }: DestinationsPanelProps) {
+  const [status, setStatus] = useState<Destino['editorialStatus'] | 'all'>('all');
+  const visible = destinations.filter(
+    (destination) => status === 'all' || destination.editorialStatus === status,
+  );
   return (
     <>
       <AdminToolbar
         query={query}
         onQueryChange={onQueryChange}
         placeholder="Buscar por nombre, zona o tipo"
-        resultCount={destinations.length}
+        resultCount={visible.length}
       >
         <Button onClick={onCreate}>
           <Plus /> Nuevo destino
         </Button>
       </AdminToolbar>
+      <EditorialStatusFilter value={status} onChange={setStatus} />
 
       {isEditorLoading && <Loader label="Abriendo todos los datos" />}
 
       <div className="admin-list">
-        {destinations.map((destination) => (
+        {visible.map((destination) => (
           <article key={destination.id}>
             <div>
+              <EditorialStatusBadge status={destination.editorialStatus} />
               <span>{plain(destination.ubicacion)}</span>
               <h2>{destination.nombre}</h2>
               <div className="admin-list__meta">

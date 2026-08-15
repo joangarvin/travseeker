@@ -10,10 +10,11 @@ import { EssentialDetail } from './EssentialDetail';
 type EssentialRouteProps = {
   groups?: EssentialGroup[];
   legacyHtml?: string;
+  authenticated?: boolean;
+  onAddToTrip?: (item: EssentialItem) => void;
 };
 
 const SAVED_STORAGE_KEY = 'travseeker:saved-essentials';
-const ROUTE_STORAGE_KEY = 'travseeker:route-essentials';
 
 function groupKey(group: EssentialGroup, index: number) {
   return group.id || `essential-group-${index}`;
@@ -57,11 +58,11 @@ function useStoredKeys(storageKey: string) {
 
 function useMobileGuide() {
   const [mobile, setMobile] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 760px)').matches,
+    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 1100px)').matches,
   );
 
   useEffect(() => {
-    const query = window.matchMedia('(max-width: 760px)');
+    const query = window.matchMedia('(max-width: 1100px)');
     const onChange = (event: MediaQueryListEvent) => setMobile(event.matches);
     setMobile(query.matches);
     query.addEventListener('change', onChange);
@@ -71,17 +72,22 @@ function useMobileGuide() {
   return mobile;
 }
 
-export function EssentialRoute({ groups = [], legacyHtml = '' }: EssentialRouteProps) {
+export function EssentialRoute({
+  groups = [],
+  legacyHtml = '',
+  authenticated = false,
+  onAddToTrip,
+}: EssentialRouteProps) {
   const populatedGroups = groups.filter((group) => group.items?.length);
   const initialGroupKey = populatedGroups[0] ? groupKey(populatedGroups[0], 0) : '';
   const [activeGroupKey, setActiveGroupKey] = useState(initialGroupKey);
   const [selectedItemKey, setSelectedItemKey] = useState('');
   const [expandedMobileKey, setExpandedMobileKey] = useState('');
+  const [itemsExpanded, setItemsExpanded] = useState(false);
   const [announcement, setAnnouncement] = useState('');
   const tabRefs = useRef(new Map<string, HTMLButtonElement>());
   const itemRefs = useRef(new Map<string, HTMLButtonElement>());
   const saved = useStoredKeys(SAVED_STORAGE_KEY);
-  const route = useStoredKeys(ROUTE_STORAGE_KEY);
   const mobile = useMobileGuide();
 
   const resolvedGroupKey = populatedGroups.some(
@@ -105,10 +111,12 @@ export function EssentialRoute({ groups = [], legacyHtml = '' }: EssentialRouteP
     activeGroup?.items.findIndex((item, index) => itemKey(item, index) === resolvedItemKey) ?? 0,
   );
   const selectedItem = activeGroup?.items[selectedItemIndex];
+  const visibleItems = itemsExpanded ? activeGroup?.items : activeGroup?.items.slice(0, 5);
 
   useEffect(() => {
     setSelectedItemKey(initialItemKey);
     setExpandedMobileKey('');
+    setItemsExpanded(false);
   }, [initialItemKey, resolvedGroupKey]);
 
   if (!populatedGroups.length && !plain(legacyHtml)) return null;
@@ -151,13 +159,12 @@ export function EssentialRoute({ groups = [], legacyHtml = '' }: EssentialRouteP
   };
 
   const toggleRoute = (key: string, title: string) => {
-    const willAdd = !route.keys.has(key);
-    route.toggle(key);
-    setAnnouncement(
-      willAdd
-        ? `${title} se ha añadido a tu ruta local.`
-        : `${title} se ha quitado de tu ruta local.`,
-    );
+    const item = activeGroup?.items.find((candidate, index) => itemKey(candidate, index) === key);
+    if (authenticated && item && onAddToTrip) {
+      onAddToTrip(item);
+      return;
+    }
+    setAnnouncement(`${title} solo puede añadirse a un viaje después de iniciar sesión.`);
   };
 
   return (
@@ -175,9 +182,11 @@ export function EssentialRoute({ groups = [], legacyHtml = '' }: EssentialRouteP
           <span>
             <Bookmark aria-hidden /> {saved.keys.size} guardadas
           </span>
-          <span>
-            <Route aria-hidden /> {route.keys.size} en tu ruta
-          </span>
+          {authenticated && (
+            <span>
+              <Route aria-hidden /> Itinerario conectado
+            </span>
+          )}
         </div>
       </header>
 
@@ -246,7 +255,7 @@ export function EssentialRoute({ groups = [], legacyHtml = '' }: EssentialRouteP
                 </header>
 
                 <ol className="essential-discovery__list">
-                  {activeGroup.items.map((item, index) => {
+                  {visibleItems?.map((item, index) => {
                     const key = itemKey(item, index);
                     const presentation = essentialPresentation(item);
                     const active = key === resolvedItemKey;
@@ -297,9 +306,10 @@ export function EssentialRoute({ groups = [], legacyHtml = '' }: EssentialRouteP
                               headingId={`essential-mobile-title-${key}`}
                               priority={priority}
                               saved={saved.keys.has(key)}
-                              inRoute={route.keys.has(key)}
+                              inRoute={false}
                               onToggleSaved={() => toggleSaved(key, presentation.title)}
                               onToggleRoute={() => toggleRoute(key, presentation.title)}
+                              authenticated={authenticated}
                               onClose={() => closeMobileDetail(key)}
                             />
                           </div>
@@ -308,6 +318,18 @@ export function EssentialRoute({ groups = [], legacyHtml = '' }: EssentialRouteP
                     );
                   })}
                 </ol>
+                {activeGroup.items.length > 5 && (
+                  <button
+                    type="button"
+                    className="essential-discovery__more"
+                    aria-expanded={itemsExpanded}
+                    onClick={() => setItemsExpanded((value) => !value)}
+                  >
+                    {itemsExpanded
+                      ? 'Ver selección breve'
+                      : `Ver las ${activeGroup.items.length} experiencias`}
+                  </button>
+                )}
               </div>
 
               {!mobile && selectedItem && (
@@ -321,13 +343,14 @@ export function EssentialRoute({ groups = [], legacyHtml = '' }: EssentialRouteP
                     headingId={`essential-detail-title-${resolvedItemKey}`}
                     priority={priorityLabel(selectedItemIndex, activeGroup.items.length)}
                     saved={saved.keys.has(resolvedItemKey)}
-                    inRoute={route.keys.has(resolvedItemKey)}
+                    inRoute={false}
                     onToggleSaved={() =>
                       toggleSaved(resolvedItemKey, essentialPresentation(selectedItem).title)
                     }
                     onToggleRoute={() =>
                       toggleRoute(resolvedItemKey, essentialPresentation(selectedItem).title)
                     }
+                    authenticated={authenticated}
                   />
                 </aside>
               )}
@@ -348,7 +371,9 @@ export function EssentialRoute({ groups = [], legacyHtml = '' }: EssentialRouteP
         {announcement}
       </p>
       <p className="essential-discovery__storage-note">
-        Tus selecciones de esta guía se guardan en este dispositivo.
+        {authenticated
+          ? 'Los guardados de la guía permanecen en este dispositivo; “Añadir a un viaje” actualiza tu itinerario real.'
+          : 'Estas selecciones se guardan únicamente en este dispositivo. Entra para añadirlas a un viaje real.'}
       </p>
     </section>
   );

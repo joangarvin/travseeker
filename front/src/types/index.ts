@@ -12,15 +12,31 @@ export type User = {
   preferences?: Record<string, unknown> | null;
 };
 
-export type Municipio = {
+export type EditorialStatus = 'draft' | 'pending' | 'published' | 'archived';
+
+export type EditorialActor = Pick<User, 'id' | 'email' | 'nombre' | 'apellidos' | 'avatarUrl'>;
+
+export type EditorialFields = {
+  editorialStatus: EditorialStatus;
+  submittedAt?: string;
+  reviewedAt?: string | null;
+  createdById?: string | null;
+  reviewedById?: string | null;
+  createdBy?: EditorialActor | null;
+  reviewedBy?: EditorialActor | null;
+};
+
+export type Municipio = EditorialFields & {
   id: string;
   nombre: string;
   precios?: string;
   conexiones?: string;
   tipoTurismo?: string | null;
+  latitud?: number | null;
+  longitud?: number | null;
   destinosCount?: number;
 };
-export type Place = {
+export type Place = EditorialFields & {
   id: string;
   nombre: string;
   categoria: string;
@@ -56,7 +72,7 @@ export type EssentialGroup = {
   items: EssentialItem[];
 };
 
-export type Activity = {
+export type Activity = EditorialFields & {
   id: string;
   name: string;
   slug: string;
@@ -68,7 +84,7 @@ export type Activity = {
   updatedAt?: string;
 };
 
-export type TourismType = {
+export type TourismType = EditorialFields & {
   id: string;
   name: string;
   slug: string;
@@ -83,7 +99,7 @@ export type TourismType = {
   updatedAt?: string;
 };
 
-export type Destino = {
+export type Destino = EditorialFields & {
   id: string;
   nombre: string;
   tipoTurismoPrincipal: string;
@@ -115,16 +131,65 @@ export type Destino = {
   tourismTypeIds?: string[];
 };
 
+export type TemperatureUnit = 'C' | 'F';
+export type ClimateMetric = 'rain' | 'sun' | 'crowd';
+
+export type ClimateMonth = {
+  month: number;
+  name: string;
+  temperatureMaxC: number | null;
+  temperatureMinC: number | null;
+  rainyDaysPerYear: number | null;
+  precipitationMmPerYear: number | null;
+  sunshineHoursPerDay: number | null;
+  sampleYears: number;
+  coverage: number;
+  crowd: number | null;
+  recommendationScore: number | null;
+  scoreComponents: Partial<Record<'comfort' | 'rain' | 'sunshine' | 'crowd', number>>;
+};
+
+export type ClimateResponse = {
+  destinationId: string;
+  source: string;
+  provider: string;
+  model: string;
+  period: { start: string; end: string; sampleYears: number; coverage: number };
+  stale: boolean;
+  fetchedAt: string;
+  months: ClimateMonth[];
+  recommendedMonths: Array<{
+    rank: number;
+    month: number;
+    name: string;
+    score: number;
+    components: ClimateMonth['scoreComponents'];
+  }>;
+};
+
 export type Review = {
   id: string;
   rating: number;
   comment?: string | null;
   visitMonth?: number | null;
   createdAt: string;
-  status?: string;
+  status: 'pending' | 'published' | 'rejected' | 'flagged';
   adminResponse?: string | null;
-  user?: { id: string; nombre?: string | null; avatarUrl?: string | null };
+  respondedAt?: string | null;
+  updatedAt?: string;
+  user?: {
+    id: string;
+    nombre?: string | null;
+    apellidos?: string | null;
+    avatarUrl?: string | null;
+  };
   destino?: { id: string; nombre: string };
+};
+
+export type ReviewStats = {
+  average?: number;
+  count?: number;
+  distribution?: Record<1 | 2 | 3 | 4 | 5, number>;
 };
 
 export type CollectionSummary = {
@@ -138,10 +203,17 @@ export type CollectionSummary = {
   role: string;
   startDate?: string | null;
   endDate?: string | null;
+  travelerCount: number;
+  itineraryDays?: number;
+  memberCount?: number;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type CollectionDetail = CollectionSummary & {
   shareToken?: string | null;
+  itinerary: ItineraryDay[];
+  owner?: Pick<User, 'id' | 'nombre' | 'avatarUrl'>;
   items: Array<{
     id: string;
     destinoId: string;
@@ -153,9 +225,18 @@ export type CollectionDetail = CollectionSummary & {
   members?: Array<{
     id: string;
     role: string;
-    user: Pick<User, 'id' | 'email' | 'nombre' | 'avatarUrl'>;
+    user: Pick<User, 'id' | 'nombre' | 'avatarUrl'> & { email?: string };
   }>;
 };
+
+export interface ItineraryDay {
+  dayNumber: number;
+  date?: string;
+  destinationId: string;
+  baseMunicipioId?: string;
+  notes?: string;
+  plannedActivities?: string[];
+}
 
 export type SearchFilters = {
   q?: string;

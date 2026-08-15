@@ -2,8 +2,10 @@ const destinoService = require("../services/destinoService");
 const { asyncHandler } = require("../utils/asyncHandler");
 
 const search = asyncHandler(async (req, res) => {
-  const destinos = await destinoService.searchDestinos(req.query);
-  res.json(destinos);
+  const page = await destinoService.searchDestinosPage(req.query);
+  res.set('X-Total-Count', String(page.total));
+  res.set('X-Has-More', String(page.hasMore));
+  res.json(req.query.meta === '1' ? page : page.items);
 });
 
 const getById = asyncHandler(async (req, res) => {

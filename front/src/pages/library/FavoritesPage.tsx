@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Heart, Search } from 'lucide-react';
 import { PageHeading, Shell } from '../../components/layout';
-import { Empty, Loader } from '../../components/ui';
+import { Empty, Loader, Notice } from '../../components/ui';
 import { useAuth } from '../../contexts';
 import { GuestGate } from '../../features/auth/components/GuestGate';
 import { DestinationCard } from '../../features/destinations/components/DestinationCard';
@@ -19,6 +19,7 @@ export default function FavoritesPage() {
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!token) {
@@ -26,8 +27,10 @@ export default function FavoritesPage() {
       return;
     }
 
+    setError('');
     api<Favorite[]>('/favoritos', {}, token)
       .then(setFavorites)
+      .catch((cause) => setError(cause instanceof Error ? cause.message : 'No se pudieron cargar tus guardados'))
       .finally(() => setIsLoading(false));
   }, [token]);
 
@@ -78,6 +81,7 @@ export default function FavoritesPage() {
       </section>
 
       <section className="library-content">
+        {error && <Notice tone="error">{error}. Recarga la página para intentarlo de nuevo.</Notice>}
         {isLoading ? (
           <Loader />
         ) : filteredFavorites.length ? (

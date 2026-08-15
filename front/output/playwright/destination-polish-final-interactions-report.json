@@ -1,0 +1,65 @@
+{
+  "anchor": {
+    "hash": "#cuando-ir",
+    "headingTop": 1465,
+    "chromeBottom": 522,
+    "visible": true
+  },
+  "climate": {
+    "focused": "Ago30.9°",
+    "selectedMonth": "Agosto"
+  },
+  "base": {
+    "selected": "CERCEDILLA",
+    "heading": "CERCEDILLA",
+    "budgetCopy": "PONLE NÚMEROS AL VIAJE\n\nCalcula tu presupuesto\n\nPartiendo de CERCEDILLA. Ajusta el viaje y compara el total al instante."
+  },
+  "budget": {
+    "totalBefore": "1070 €",
+    "totalAfter": "1830 €",
+    "updated": true
+  },
+  "share": {
+    "feedback": [
+      "Enlace copiado."
+    ],
+    "clipboard": "http://127.0.0.1:5173/destino/fe943ea9-52fc-4bd4-860f-c639cd872ea7#cuando-ir"
+  },
+  "guestTrip": {
+    "url": "http://127.0.0.1:5173/auth"
+  },
+  "essentials": {
+    "focused": "Primera elecciónVisitar el Monasterio de San Lorenzo de El Escorial.Ver criterio",
+    "expanded": "true",
+    "mobileDetailVisible": true
+  },
+  "dark": {
+    "theme": "dark",
+    "scrollWidth": 1081,
+    "viewport": 1081,
+    "canvas": "rgb(11, 12, 16)"
+  },
+  "reflow320": {
+    "viewport": 320,
+    "scrollWidth": 320,
+    "horizontalOverflow": false
+  },
+  "authLimited": {
+    "tripDialog": "El invitado se deriva a acceso; no hay sesión disponible para abrir el diálogo real.",
+    "reviewRating": "El formulario de valoración requiere sesión y no se simuló autenticación."
+  },
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+    "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+  ]
+}

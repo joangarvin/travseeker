@@ -6,7 +6,7 @@
   grid-template-columns: auto 1fr auto;
   align-items: center;
   min-height: 72px;
-  padding: 0 clamp(16px, 3vw, 48px);
+  padding-inline: clamp(16px, 4vw, 72px);
   border-bottom: 1px solid var(--line);
   background: color-mix(in srgb, var(--canvas) 94%, transparent);
   backdrop-filter: blur(18px);
@@ -15,6 +15,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  min-height: 44px;
   font-family: 'Bricolage Grotesque', sans-serif;
   font-size: 1.2rem;
   font-weight: 800;
@@ -329,10 +330,20 @@ textarea:hover {
   }
 }
 .notice {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   padding: 14px 16px;
   border-left: 4px solid var(--brand);
   background: var(--brand-soft);
   border-radius: var(--r-1);
+}
+.notice__message {
+  min-width: 0;
+}
+.notice > button {
+  flex: 0 0 auto;
+  margin-left: auto;
 }
 .notice--error {
   border-color: var(--danger);

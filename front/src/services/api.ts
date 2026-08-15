@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+export const COOKIE_SESSION_MARKER = '__trav_cookie_session__';
 
 export class ApiError extends Error {
   status: number;
@@ -21,11 +22,15 @@ export async function api<T>(
     headers.set('Content-Type', 'application/json');
   }
 
-  if (token) {
+  if (token && token !== COOKIE_SESSION_MARKER) {
     headers.set('Authorization', `Bearer ${token}`);
   }
 
-  const response = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...options,
+    headers,
+    credentials: 'include',
+  });
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {

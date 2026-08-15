@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#111111" />
+    <script>
+      (() => {
+        const stored = localStorage.getItem('trav_theme');
+        const theme = stored === 'dark' || stored === 'light' ? stored : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
     <meta
       name="description"
       content="TravSeeker — descubre destinos españoles por presupuesto, temporada y afluencia."

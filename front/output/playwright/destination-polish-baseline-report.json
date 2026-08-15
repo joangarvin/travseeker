@@ -1,0 +1,4417 @@
+{
+  "1669x1063": {
+    "viewport": 1669,
+    "scrollWidth": 1669,
+    "pageHeight": 7783,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 1030,
+      "width": 1669,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 1669,
+        "height": 926,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 195,
+        "y": 1088,
+        "width": 1280,
+        "height": 833,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1921,
+        "width": 1669,
+        "height": 1161,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 195,
+        "y": 3082,
+        "width": 1280,
+        "height": 1283,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 195,
+        "y": 4365,
+        "width": 1280,
+        "height": 1556,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 195,
+        "y": 5921,
+        "width": 1280,
+        "height": 530,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 195,
+        "y": 6452,
+        "width": 1280,
+        "height": 863,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "heroTitle": {
+      "x": 259,
+      "y": 421,
+      "width": 860,
+      "height": 211,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 801,
+      "y": 889,
+      "width": 609,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Ocio y experiencias estacionales2",
+        "rect": {
+          "left": 1586,
+          "right": 1874
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Ocio y experiencias estacionales",
+        "rect": {
+          "left": 1622,
+          "right": 1859
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "2",
+        "rect": {
+          "left": 1867,
+          "right": 1874
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Gastronomía y productos locales1",
+        "rect": {
+          "left": 1898,
+          "right": 2186
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1898,
+          "right": 1926
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1902,
+          "right": 1922
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1909,
+          "right": 1916
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1904,
+          "right": 1921
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Gastronomía y productos locales",
+        "rect": {
+          "left": 1934,
+          "right": 2173
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "1",
+        "rect": {
+          "left": 2181,
+          "right": 2186
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "TravSeeker, inicio",
+        "width": 142,
+        "height": 32
+      },
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 315,
+        "height": 34
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 183,
+        "height": 34
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 262,
+        "height": 34
+      }
+    ],
+    "headings": [
+      "H1:Montañas y el Valle de Madrid",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Julio",
+      "H3:Más datos de Julio",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Turismo cultural, histórico y patrimonial",
+      "H2:Elige una base práctica",
+      "H3:BUITRAGO DEL LOZOYA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 550,
+        "height": 307
+      },
+      {
+        "complete": true,
+        "width": 550,
+        "height": 366
+      },
+      {
+        "complete": true,
+        "width": 550,
+        "height": 364
+      }
+    ],
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "1515x1040": {
+    "viewport": 1515,
+    "scrollWidth": 1515,
+    "pageHeight": 7752,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 1017,
+      "width": 1515,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 1515,
+        "height": 913,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 118,
+        "y": 1075,
+        "width": 1280,
+        "height": 833,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1908,
+        "width": 1515,
+        "height": 1154,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 118,
+        "y": 3062,
+        "width": 1280,
+        "height": 1283,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 118,
+        "y": 4345,
+        "width": 1280,
+        "height": 1556,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 118,
+        "y": 5901,
+        "width": 1280,
+        "height": 530,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 118,
+        "y": 6432,
+        "width": 1280,
+        "height": 863,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "heroTitle": {
+      "x": 182,
+      "y": 414,
+      "width": 860,
+      "height": 205,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 724,
+      "y": 876,
+      "width": 609,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Ocio y experiencias estacionales2",
+        "rect": {
+          "left": 1509,
+          "right": 1797
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1509,
+          "right": 1537
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1513,
+          "right": 1533
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1519,
+          "right": 1526
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1515,
+          "right": 1531
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Ocio y experiencias estacionales",
+        "rect": {
+          "left": 1545,
+          "right": 1782
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "2",
+        "rect": {
+          "left": 1790,
+          "right": 1797
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Gastronomía y productos locales1",
+        "rect": {
+          "left": 1821,
+          "right": 2109
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1821,
+          "right": 1849
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1825,
+          "right": 1845
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1832,
+          "right": 1839
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1827,
+          "right": 1844
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Gastronomía y productos locales",
+        "rect": {
+          "left": 1857,
+          "right": 2096
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "1",
+        "rect": {
+          "left": 2104,
+          "right": 2109
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "TravSeeker, inicio",
+        "width": 142,
+        "height": 32
+      },
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 315,
+        "height": 34
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 183,
+        "height": 34
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 262,
+        "height": 34
+      }
+    ],
+    "headings": [
+      "H1:Montañas y el Valle de Madrid",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Julio",
+      "H3:Más datos de Julio",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Turismo cultural, histórico y patrimonial",
+      "H2:Elige una base práctica",
+      "H3:BUITRAGO DEL LOZOYA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 499,
+        "height": 278
+      },
+      {
+        "complete": true,
+        "width": 499,
+        "height": 333
+      },
+      {
+        "complete": true,
+        "width": 499,
+        "height": 331
+      }
+    ],
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "1366x900": {
+    "viewport": 1366,
+    "scrollWidth": 1366,
+    "pageHeight": 7599,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 922,
+      "width": 1366,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 1366,
+        "height": 818,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 43,
+        "y": 980,
+        "width": 1280,
+        "height": 829,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1809,
+        "width": 1366,
+        "height": 1140,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 43,
+        "y": 2949,
+        "width": 1280,
+        "height": 1279,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 43,
+        "y": 4228,
+        "width": 1280,
+        "height": 1553,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 43,
+        "y": 5781,
+        "width": 1280,
+        "height": 527,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 43,
+        "y": 6308,
+        "width": 1280,
+        "height": 855,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "heroTitle": {
+      "x": 107,
+      "y": 341,
+      "width": 860,
+      "height": 185,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 650,
+      "y": 781,
+      "width": 609,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Turismo urbano y pueblos con encanto3",
+        "rect": {
+          "left": 1080,
+          "right": 1410
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Turismo urbano y pueblos con encanto",
+        "rect": {
+          "left": 1116,
+          "right": 1395
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "3",
+        "rect": {
+          "left": 1403,
+          "right": 1410
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Ocio y experiencias estacionales2",
+        "rect": {
+          "left": 1434,
+          "right": 1723
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1434,
+          "right": 1462
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1438,
+          "right": 1458
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1445,
+          "right": 1452
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1440,
+          "right": 1457
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Ocio y experiencias estacionales",
+        "rect": {
+          "left": 1470,
+          "right": 1707
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "2",
+        "rect": {
+          "left": 1715,
+          "right": 1723
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Gastronomía y productos locales1",
+        "rect": {
+          "left": 1747,
+          "right": 2035
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1747,
+          "right": 1775
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1751,
+          "right": 1771
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1757,
+          "right": 1765
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1753,
+          "right": 1769
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Gastronomía y productos locales",
+        "rect": {
+          "left": 1783,
+          "right": 2021
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "1",
+        "rect": {
+          "left": 2029,
+          "right": 2035
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "TravSeeker, inicio",
+        "width": 142,
+        "height": 32
+      },
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 308,
+        "height": 32
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 178,
+        "height": 32
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 256,
+        "height": 32
+      }
+    ],
+    "headings": [
+      "H1:Montañas y el Valle de Madrid",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Julio",
+      "H3:Más datos de Julio",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Turismo cultural, histórico y patrimonial",
+      "H2:Elige una base práctica",
+      "H3:BUITRAGO DEL LOZOYA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 450,
+        "height": 250
+      },
+      {
+        "complete": true,
+        "width": 450,
+        "height": 300
+      },
+      {
+        "complete": true,
+        "width": 450,
+        "height": 298
+      }
+    ],
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "1280x900": {
+    "viewport": 1280,
+    "scrollWidth": 1280,
+    "pageHeight": 7541,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 922,
+      "width": 1280,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 1280,
+        "height": 818,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 980,
+        "width": 1280,
+        "height": 825,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1805,
+        "width": 1280,
+        "height": 1132,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 16,
+        "y": 2937,
+        "width": 1248,
+        "height": 1275,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 4211,
+        "width": 1280,
+        "height": 1544,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 5755,
+        "width": 1280,
+        "height": 522,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 6278,
+        "width": 1280,
+        "height": 845,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "heroTitle": {
+      "x": 80,
+      "y": 358,
+      "width": 860,
+      "height": 173,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 591,
+      "y": 781,
+      "width": 609,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Turismo urbano y pueblos con encanto3",
+        "rect": {
+          "left": 1053,
+          "right": 1383
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Turismo urbano y pueblos con encanto",
+        "rect": {
+          "left": 1089,
+          "right": 1368
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "3",
+        "rect": {
+          "left": 1376,
+          "right": 1383
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Ocio y experiencias estacionales2",
+        "rect": {
+          "left": 1407,
+          "right": 1696
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1407,
+          "right": 1435
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1411,
+          "right": 1431
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1418,
+          "right": 1425
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1413,
+          "right": 1430
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Ocio y experiencias estacionales",
+        "rect": {
+          "left": 1443,
+          "right": 1680
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "2",
+        "rect": {
+          "left": 1688,
+          "right": 1696
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Gastronomía y productos locales1",
+        "rect": {
+          "left": 1720,
+          "right": 2008
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1720,
+          "right": 1748
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1724,
+          "right": 1744
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1730,
+          "right": 1738
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1726,
+          "right": 1742
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Gastronomía y productos locales",
+        "rect": {
+          "left": 1756,
+          "right": 1994
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "1",
+        "rect": {
+          "left": 2002,
+          "right": 2008
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "TravSeeker, inicio",
+        "width": 142,
+        "height": 32
+      },
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 289,
+        "height": 31
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 167,
+        "height": 31
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 240,
+        "height": 31
+      }
+    ],
+    "headings": [
+      "H1:Montañas y el Valle de Madrid",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Julio",
+      "H3:Más datos de Julio",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Turismo cultural, histórico y patrimonial",
+      "H2:Elige una base práctica",
+      "H3:BUITRAGO DEL LOZOYA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 422,
+        "height": 234
+      },
+      {
+        "complete": true,
+        "width": 422,
+        "height": 281
+      },
+      {
+        "complete": true,
+        "width": 422,
+        "height": 279
+      }
+    ],
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "1184x913": {
+    "viewport": 1184,
+    "scrollWidth": 1184,
+    "pageHeight": 7440,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 931,
+      "width": 1184,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 1184,
+        "height": 827,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 989,
+        "width": 1184,
+        "height": 820,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1809,
+        "width": 1184,
+        "height": 1141,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 16,
+        "y": 2950,
+        "width": 1152,
+        "height": 1270,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 4220,
+        "width": 1184,
+        "height": 1493,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 5714,
+        "width": 1184,
+        "height": 518,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 6231,
+        "width": 1184,
+        "height": 809,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "heroTitle": {
+      "x": 75,
+      "y": 386,
+      "width": 823,
+      "height": 160,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 500,
+      "y": 790,
+      "width": 609,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Turismo urbano y pueblos con encanto3",
+        "rect": {
+          "left": 1053,
+          "right": 1383
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Turismo urbano y pueblos con encanto",
+        "rect": {
+          "left": 1089,
+          "right": 1368
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "3",
+        "rect": {
+          "left": 1376,
+          "right": 1383
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Ocio y experiencias estacionales2",
+        "rect": {
+          "left": 1407,
+          "right": 1696
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1407,
+          "right": 1435
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1411,
+          "right": 1431
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1418,
+          "right": 1425
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1413,
+          "right": 1430
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Ocio y experiencias estacionales",
+        "rect": {
+          "left": 1443,
+          "right": 1680
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "2",
+        "rect": {
+          "left": 1688,
+          "right": 1696
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Gastronomía y productos locales1",
+        "rect": {
+          "left": 1720,
+          "right": 2008
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1720,
+          "right": 1748
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1724,
+          "right": 1744
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1730,
+          "right": 1738
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1726,
+          "right": 1742
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Gastronomía y productos locales",
+        "rect": {
+          "left": 1756,
+          "right": 1994
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "1",
+        "rect": {
+          "left": 2002,
+          "right": 2008
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "TravSeeker, inicio",
+        "width": 142,
+        "height": 32
+      },
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 268,
+        "height": 28
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 155,
+        "height": 28
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 223,
+        "height": 28
+      }
+    ],
+    "headings": [
+      "H1:Montañas y el Valle de Madrid",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Julio",
+      "H3:Más datos de Julio",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Turismo cultural, histórico y patrimonial",
+      "H2:Elige una base práctica",
+      "H3:BUITRAGO DEL LOZOYA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 390,
+        "height": 217
+      },
+      {
+        "complete": true,
+        "width": 390,
+        "height": 260
+      },
+      {
+        "complete": true,
+        "width": 390,
+        "height": 258
+      }
+    ],
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "1081x850": {
+    "viewport": 1081,
+    "scrollWidth": 1081,
+    "pageHeight": 7387,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 909,
+      "width": 1081,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 1081,
+        "height": 805,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 967,
+        "width": 1081,
+        "height": 855,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1823,
+        "width": 1081,
+        "height": 1121,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 16,
+        "y": 2943,
+        "width": 1049,
+        "height": 1307,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 4251,
+        "width": 1081,
+        "height": 1474,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 5725,
+        "width": 1081,
+        "height": 513,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 6237,
+        "width": 1081,
+        "height": 771,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "heroTitle": {
+      "x": 70,
+      "y": 362,
+      "width": 759,
+      "height": 146,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 402,
+      "y": 758,
+      "width": 609,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Turismo urbano y pueblos con encanto3",
+        "rect": {
+          "left": 1053,
+          "right": 1383
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Turismo urbano y pueblos con encanto",
+        "rect": {
+          "left": 1089,
+          "right": 1368
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "3",
+        "rect": {
+          "left": 1376,
+          "right": 1383
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Ocio y experiencias estacionales2",
+        "rect": {
+          "left": 1407,
+          "right": 1696
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1407,
+          "right": 1435
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1411,
+          "right": 1431
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1418,
+          "right": 1425
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1413,
+          "right": 1430
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Ocio y experiencias estacionales",
+        "rect": {
+          "left": 1443,
+          "right": 1680
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "2",
+        "rect": {
+          "left": 1688,
+          "right": 1696
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Gastronomía y productos locales1",
+        "rect": {
+          "left": 1720,
+          "right": 2008
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1720,
+          "right": 1748
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1724,
+          "right": 1744
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1730,
+          "right": 1738
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1726,
+          "right": 1742
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Gastronomía y productos locales",
+        "rect": {
+          "left": 1756,
+          "right": 1994
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "1",
+        "rect": {
+          "left": 2002,
+          "right": 2008
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "TravSeeker, inicio",
+        "width": 142,
+        "height": 32
+      },
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 246,
+        "height": 26
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 142,
+        "height": 26
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 204,
+        "height": 26
+      }
+    ],
+    "headings": [
+      "H1:Montañas y el Valle de Madrid",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Julio",
+      "H3:Más datos de Julio",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Turismo cultural, histórico y patrimonial",
+      "H2:Elige una base práctica",
+      "H3:BUITRAGO DEL LOZOYA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 540,
+        "height": 301
+      },
+      {
+        "complete": true,
+        "width": 540,
+        "height": 360
+      },
+      {
+        "complete": true,
+        "width": 540,
+        "height": 358
+      }
+    ],
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "1024x900": {
+    "viewport": 1024,
+    "scrollWidth": 1024,
+    "pageHeight": 7443,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 951,
+      "width": 1024,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 1024,
+        "height": 847,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 1009,
+        "width": 1024,
+        "height": 884,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1894,
+        "width": 1024,
+        "height": 1109,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 16,
+        "y": 3003,
+        "width": 992,
+        "height": 1347,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 4350,
+        "width": 1024,
+        "height": 1463,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 5813,
+        "width": 1024,
+        "height": 510,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 6323,
+        "width": 1024,
+        "height": 750,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "heroTitle": {
+      "x": 67,
+      "y": 407,
+      "width": 724,
+      "height": 139,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 67,
+      "y": 843,
+      "width": 890,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Senderismo y turismo activo4",
+        "rect": {
+          "left": 771,
+          "right": 1029
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "4",
+        "rect": {
+          "left": 1021,
+          "right": 1029
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Turismo urbano y pueblos con encanto3",
+        "rect": {
+          "left": 1053,
+          "right": 1383
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1053,
+          "right": 1081
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1057,
+          "right": 1077
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1063,
+          "right": 1070
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1059,
+          "right": 1075
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Turismo urbano y pueblos con encanto",
+        "rect": {
+          "left": 1089,
+          "right": 1368
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "3",
+        "rect": {
+          "left": 1376,
+          "right": 1383
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Ocio y experiencias estacionales2",
+        "rect": {
+          "left": 1407,
+          "right": 1696
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1407,
+          "right": 1435
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1411,
+          "right": 1431
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1418,
+          "right": 1425
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1413,
+          "right": 1430
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Ocio y experiencias estacionales",
+        "rect": {
+          "left": 1443,
+          "right": 1680
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "2",
+        "rect": {
+          "left": 1688,
+          "right": 1696
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Gastronomía y productos locales1",
+        "rect": {
+          "left": 1720,
+          "right": 2008
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1720,
+          "right": 1748
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1724,
+          "right": 1744
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1730,
+          "right": 1738
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "TravSeeker, inicio",
+        "width": 142,
+        "height": 32
+      },
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 233,
+        "height": 25
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 135,
+        "height": 25
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 194,
+        "height": 25
+      }
+    ],
+    "headings": [
+      "H1:Montañas y el Valle de Madrid",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Julio",
+      "H3:Más datos de Julio",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Turismo cultural, histórico y patrimonial",
+      "H2:Elige una base práctica",
+      "H3:BUITRAGO DEL LOZOYA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 512,
+        "height": 285
+      },
+      {
+        "complete": true,
+        "width": 512,
+        "height": 341
+      },
+      {
+        "complete": true,
+        "width": 512,
+        "height": 339
+      }
+    ],
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "960x800": {
+    "viewport": 960,
+    "scrollWidth": 960,
+    "pageHeight": 7200,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 883,
+      "width": 960,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 960,
+        "height": 779,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 941,
+        "width": 960,
+        "height": 881,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1822,
+        "width": 960,
+        "height": 1096,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 16,
+        "y": 2919,
+        "width": 928,
+        "height": 1280,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 4199,
+        "width": 960,
+        "height": 1451,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 5650,
+        "width": 960,
+        "height": 506,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 6156,
+        "width": 960,
+        "height": 679,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "heroTitle": {
+      "x": 64,
+      "y": 352,
+      "width": 683,
+      "height": 130,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 64,
+      "y": 775,
+      "width": 832,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Dic9.3°",
+        "rect": {
+          "left": 900,
+          "right": 976
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Dic",
+        "rect": {
+          "left": 908,
+          "right": 968
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "9.3°",
+        "rect": {
+          "left": 908,
+          "right": 968
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Senderismo y turismo activo4",
+        "rect": {
+          "left": 771,
+          "right": 1029
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Senderismo y turismo activo",
+        "rect": {
+          "left": 807,
+          "right": 1013
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "4",
+        "rect": {
+          "left": 1021,
+          "right": 1029
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Turismo urbano y pueblos con encanto3",
+        "rect": {
+          "left": 1053,
+          "right": 1383
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1053,
+          "right": 1081
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1057,
+          "right": 1077
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1063,
+          "right": 1070
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1059,
+          "right": 1075
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Turismo urbano y pueblos con encanto",
+        "rect": {
+          "left": 1089,
+          "right": 1368
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "3",
+        "rect": {
+          "left": 1376,
+          "right": 1383
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Ocio y experiencias estacionales2",
+        "rect": {
+          "left": 1407,
+          "right": 1696
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1407,
+          "right": 1435
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1411,
+          "right": 1431
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1418,
+          "right": 1425
+        }
+      },
+      {
+        "tag": "circle",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 1413,
+          "right": 1430
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "Ocio y experiencias estacionales",
+        "rect": {
+          "left": 1443,
+          "right": 1680
+        }
+      },
+      {
+        "tag": "SMALL",
+        "className": "",
+        "text": "2",
+        "rect": {
+          "left": 1688,
+          "right": 1696
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "TravSeeker, inicio",
+        "width": 142,
+        "height": 32
+      },
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 228,
+        "height": 24
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 132,
+        "height": 24
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 189,
+        "height": 24
+      }
+    ],
+    "headings": [
+      "H1:Montañas y el Valle de Madrid",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Julio",
+      "H3:Más datos de Julio",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Turismo cultural, histórico y patrimonial",
+      "H2:Elige una base práctica",
+      "H3:BUITRAGO DEL LOZOYA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 480,
+        "height": 267
+      },
+      {
+        "complete": true,
+        "width": 480,
+        "height": 320
+      },
+      {
+        "complete": true,
+        "width": 480,
+        "height": 318
+      }
+    ],
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "820x900": {
+    "viewport": 820,
+    "scrollWidth": 820,
+    "pageHeight": 7548,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 951,
+      "width": 820,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 820,
+        "height": 847,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 1009,
+        "width": 820,
+        "height": 914,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1923,
+        "width": 820,
+        "height": 1070,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 16,
+        "y": 2994,
+        "width": 788,
+        "height": 1382,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 4375,
+        "width": 820,
+        "height": 1663,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 6039,
+        "width": 820,
+        "height": 499,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 6538,
+        "width": 820,
+        "height": 657,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "heroTitle": {
+      "x": 57,
+      "y": 447,
+      "width": 600,
+      "height": 113,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 57,
+      "y": 843,
+      "width": 706,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Nov12°",
+        "rect": {
+          "left": 820,
+          "right": 896
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Nov",
+        "rect": {
+          "left": 828,
+          "right": 888
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "12°",
+        "rect": {
+          "left": 828,
+          "right": 888
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Dic9.3°",
+        "rect": {
+          "left": 900,
+          "right": 976
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Dic",
+        "rect": {
+          "left": 908,
+          "right": 968
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "9.3°",
+        "rect": {
+          "left": 908,
+          "right": 968
+        }
+      },
+      {
+        "tag": "SECTION",
+        "className": "",
+        "text": "Más datos de Julio Sol14.2 h de sol/día Precipitac",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "H3",
+        "className": "",
+        "text": "Más datos de Julio",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "DL",
+        "className": "climate-secondary-data",
+        "text": "Sol14.2 h de sol/día Precipitación10.1 mm al mesCo",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "",
+        "text": "Cobertura100% · 5 años",
+        "rect": {
+          "left": 639,
+          "right": 926
+        }
+      },
+      {
+        "tag": "DT",
+        "className": "",
+        "text": "Cobertura",
+        "rect": {
+          "left": 639,
+          "right": 926
+        }
+      },
+      {
+        "tag": "DD",
+        "className": "",
+        "text": "100% · 5 años",
+        "rect": {
+          "left": 639,
+          "right": 926
+        }
+      },
+      {
+        "tag": "SECTION",
+        "className": "",
+        "text": "Todo el añoPromedios mensuales de clima y afluenci",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "H3",
+        "className": "",
+        "text": "Todo el año",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "climate-table",
+        "text": "Promedios mensuales de clima y afluenciaMesMín.Máx",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "TABLE",
+        "className": "",
+        "text": "Promedios mensuales de clima y afluenciaMesMín.Máx",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "CAPTION",
+        "className": "",
+        "text": "Promedios mensuales de clima y afluencia",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "THEAD",
+        "className": "",
+        "text": "MesMín.Máx.LluviaPrecipitaciónSolAfluencia",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "TR",
+        "className": "",
+        "text": "MesMín.Máx.LluviaPrecipitaciónSolAfluencia",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "TH",
+        "className": "",
+        "text": "Afluencia",
+        "rect": {
+          "left": 731,
+          "right": 926
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "TravSeeker, inicio",
+        "width": 142,
+        "height": 32
+      },
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 160,
+        "height": 44
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 132,
+        "height": 24
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 189,
+        "height": 24
+      }
+    ],
+    "headings": [
+      "H1:Montañas y el Valle de Madrid",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Julio",
+      "H3:Más datos de Julio",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Turismo cultural, histórico y patrimonial",
+      "H2:Elige una base práctica",
+      "H3:BUITRAGO DEL LOZOYA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 410,
+        "height": 228
+      },
+      {
+        "complete": true,
+        "width": 410,
+        "height": 273
+      },
+      {
+        "complete": true,
+        "width": 410,
+        "height": 271
+      }
+    ],
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "761x900": {
+    "viewport": 761,
+    "scrollWidth": 761,
+    "pageHeight": 7632,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 951,
+      "width": 761,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "hero": {
+        "x": 0,
+        "y": 72,
+        "width": 761,
+        "height": 847,
+        "paddingBlock": "32px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 1009,
+        "width": 761,
+        "height": 913,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 1922,
+        "width": 761,
+        "height": 1116,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 16,
+        "y": 3038,
+        "width": 729,
+        "height": 1444,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 4483,
+        "width": 761,
+        "height": 1658,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 6140,
+        "width": 761,
+        "height": 498,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 6639,
+        "width": 761,
+        "height": 641,
+        "paddingBlock": "96px / 96px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "heroTitle": {
+      "x": 54,
+      "y": 452,
+      "width": 600,
+      "height": 113,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 54,
+      "y": 843,
+      "width": 653,
+      "height": 48,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Oct19.1°",
+        "rect": {
+          "left": 740,
+          "right": 816
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Oct",
+        "rect": {
+          "left": 748,
+          "right": 808
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "19.1°",
+        "rect": {
+          "left": 748,
+          "right": 808
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Nov12°",
+        "rect": {
+          "left": 820,
+          "right": 896
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Nov",
+        "rect": {
+          "left": 828,
+          "right": 888
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "12°",
+        "rect": {
+          "left": 828,
+          "right": 888
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Dic9.3°",
+        "rect": {
+          "left": 900,
+          "right": 976
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Dic",
+        "rect": {
+          "left": 908,
+          "right": 968
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "9.3°",
+        "rect": {
+          "left": 908,
+          "right": 968
+        }
+      },
+      {
+        "tag": "SECTION",
+        "className": "",
+        "text": "Más datos de Julio Sol14.2 h de sol/día Precipitac",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "H3",
+        "className": "",
+        "text": "Más datos de Julio",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "DL",
+        "className": "climate-secondary-data",
+        "text": "Sol14.2 h de sol/día Precipitación10.1 mm al mesCo",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "",
+        "text": "Cobertura100% · 5 años",
+        "rect": {
+          "left": 639,
+          "right": 926
+        }
+      },
+      {
+        "tag": "DT",
+        "className": "",
+        "text": "Cobertura",
+        "rect": {
+          "left": 639,
+          "right": 926
+        }
+      },
+      {
+        "tag": "DD",
+        "className": "",
+        "text": "100% · 5 años",
+        "rect": {
+          "left": 639,
+          "right": 926
+        }
+      },
+      {
+        "tag": "SECTION",
+        "className": "",
+        "text": "Todo el añoPromedios mensuales de clima y afluenci",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "H3",
+        "className": "",
+        "text": "Todo el año",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "climate-table",
+        "text": "Promedios mensuales de clima y afluenciaMesMín.Máx",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "TABLE",
+        "className": "",
+        "text": "Promedios mensuales de clima y afluenciaMesMín.Máx",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "CAPTION",
+        "className": "",
+        "text": "Promedios mensuales de clima y afluencia",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "TravSeeker, inicio",
+        "width": 142,
+        "height": 32
+      },
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 160,
+        "height": 44
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 132,
+        "height": 24
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 189,
+        "height": 24
+      }
+    ],
+    "headings": [
+      "H1:Montañas y el Valle de Madrid",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Julio",
+      "H3:Más datos de Julio",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Turismo cultural, histórico y patrimonial",
+      "H2:Elige una base práctica",
+      "H3:BUITRAGO DEL LOZOYA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 380,
+        "height": 211
+      },
+      {
+        "complete": true,
+        "width": 380,
+        "height": 253
+      },
+      {
+        "complete": true,
+        "width": 380,
+        "height": 252
+      }
+    ],
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "759x900": {
+    "viewport": 759,
+    "scrollWidth": 759,
+    "pageHeight": 9824,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 916,
+      "width": 759,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "hero": {
+        "x": 0,
+        "y": 64,
+        "width": 759,
+        "height": 852,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 974,
+        "width": 759,
+        "height": 1121,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 2095,
+        "width": 759,
+        "height": 1068,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 0,
+        "y": 3163,
+        "width": 759,
+        "height": 1168,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 4331,
+        "width": 759,
+        "height": 2009,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 6340,
+        "width": 759,
+        "height": 512,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 6852,
+        "width": 759,
+        "height": 2448,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "heroTitle": {
+      "x": 38,
+      "y": 311,
+      "width": 683,
+      "height": 150,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 16,
+      "y": 776,
+      "width": 727,
+      "height": 108,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Oct19.1°",
+        "rect": {
+          "left": 740,
+          "right": 816
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Oct",
+        "rect": {
+          "left": 748,
+          "right": 808
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "19.1°",
+        "rect": {
+          "left": 748,
+          "right": 808
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Nov12°",
+        "rect": {
+          "left": 820,
+          "right": 896
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Nov",
+        "rect": {
+          "left": 828,
+          "right": 888
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "12°",
+        "rect": {
+          "left": 828,
+          "right": 888
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Dic9.3°",
+        "rect": {
+          "left": 900,
+          "right": 976
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Dic",
+        "rect": {
+          "left": 908,
+          "right": 968
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "9.3°",
+        "rect": {
+          "left": 908,
+          "right": 968
+        }
+      },
+      {
+        "tag": "SECTION",
+        "className": "",
+        "text": "Más datos de Julio Sol14.2 h de sol/día Precipitac",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "H3",
+        "className": "",
+        "text": "Más datos de Julio",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "DL",
+        "className": "climate-secondary-data",
+        "text": "Sol14.2 h de sol/día Precipitación10.1 mm al mesCo",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "",
+        "text": "Cobertura100% · 5 años",
+        "rect": {
+          "left": 639,
+          "right": 926
+        }
+      },
+      {
+        "tag": "DT",
+        "className": "",
+        "text": "Cobertura",
+        "rect": {
+          "left": 639,
+          "right": 926
+        }
+      },
+      {
+        "tag": "DD",
+        "className": "",
+        "text": "100% · 5 años",
+        "rect": {
+          "left": 639,
+          "right": 926
+        }
+      },
+      {
+        "tag": "SECTION",
+        "className": "",
+        "text": "Todo el añoPromedios mensuales de clima y afluenci",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "H3",
+        "className": "",
+        "text": "Todo el año",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "climate-table",
+        "text": "Promedios mensuales de clima y afluenciaMesMín.Máx",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "TABLE",
+        "className": "",
+        "text": "Promedios mensuales de clima y afluenciaMesMín.Máx",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      },
+      {
+        "tag": "CAPTION",
+        "className": "",
+        "text": "Promedios mensuales de clima y afluencia",
+        "rect": {
+          "left": 16,
+          "right": 926
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "TravSeeker, inicio",
+        "width": 142,
+        "height": 32
+      },
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 228,
+        "height": 24
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 132,
+        "height": 24
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 189,
+        "height": 24
+      }
+    ],
+    "headings": [
+      "H1:Montañas y el Valle de Madrid",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Julio",
+      "H3:Más datos de Julio",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Turismo cultural, histórico y patrimonial",
+      "H2:Elige una base práctica",
+      "H3:BUITRAGO DEL LOZOYA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 758,
+        "height": 423
+      },
+      {
+        "complete": true,
+        "width": 758,
+        "height": 505
+      },
+      {
+        "complete": true,
+        "width": 758,
+        "height": 502
+      }
+    ],
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "390x844": {
+    "viewport": 390,
+    "scrollWidth": 390,
+    "pageHeight": 10518,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 973,
+      "width": 390,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "hero": {
+        "x": 0,
+        "y": 64,
+        "width": 390,
+        "height": 909,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 1031,
+        "width": 390,
+        "height": 1386,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 2417,
+        "width": 390,
+        "height": 1640,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 0,
+        "y": 4057,
+        "width": 390,
+        "height": 1337,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 5394,
+        "width": 390,
+        "height": 2298,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 7692,
+        "width": 390,
+        "height": 623,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 8315,
+        "width": 390,
+        "height": 1647,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "heroTitle": {
+      "x": 24,
+      "y": 266,
+      "width": 342,
+      "height": 176,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 16,
+      "y": 777,
+      "width": 358,
+      "height": 164,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "A",
+        "className": "",
+        "text": "Opiniones",
+        "rect": {
+          "left": 390,
+          "right": 459
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "May20.3°",
+        "rect": {
+          "left": 380,
+          "right": 468
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "May",
+        "rect": {
+          "left": 388,
+          "right": 460
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "20.3°",
+        "rect": {
+          "left": 388,
+          "right": 460
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Jun25.9°",
+        "rect": {
+          "left": 472,
+          "right": 560
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Jun",
+        "rect": {
+          "left": 480,
+          "right": 552
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "25.9°",
+        "rect": {
+          "left": 480,
+          "right": 552
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Jul30.7° Ideal",
+        "rect": {
+          "left": 564,
+          "right": 652
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Jul",
+        "rect": {
+          "left": 572,
+          "right": 644
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "30.7°",
+        "rect": {
+          "left": 572,
+          "right": 644
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__recommendation",
+        "text": "Ideal",
+        "rect": {
+          "left": 572,
+          "right": 644
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 572,
+          "right": 586
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 573,
+          "right": 585
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Ago30.9°",
+        "rect": {
+          "left": 656,
+          "right": 744
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Ago",
+        "rect": {
+          "left": 664,
+          "right": 736
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "30.9°",
+        "rect": {
+          "left": 664,
+          "right": 736
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Sep23°",
+        "rect": {
+          "left": 748,
+          "right": 836
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Sep",
+        "rect": {
+          "left": 756,
+          "right": 828
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "23°",
+        "rect": {
+          "left": 756,
+          "right": 828
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Oct19.1°",
+        "rect": {
+          "left": 840,
+          "right": 928
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "TravSeeker, inicio",
+        "width": 32,
+        "height": 32
+      },
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 228,
+        "height": 24
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 132,
+        "height": 24
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 189,
+        "height": 24
+      }
+    ],
+    "headings": [
+      "H1:Montañas y el Valle de Madrid",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Julio",
+      "H3:Más datos de Julio",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Turismo cultural, histórico y patrimonial",
+      "H2:Elige una base práctica",
+      "H3:BUITRAGO DEL LOZOYA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 389,
+        "height": 216
+      },
+      {
+        "complete": true,
+        "width": 389,
+        "height": 259
+      },
+      {
+        "complete": true,
+        "width": 389,
+        "height": 258
+      }
+    ],
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  },
+  "320x800": {
+    "viewport": 320,
+    "scrollWidth": 320,
+    "pageHeight": 10774,
+    "stickyOverlap": {
+      "x": 0,
+      "y": 973,
+      "width": 320,
+      "height": 58,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "1px / 1px",
+      "background": "color(srgb 0.952941 0.960784 0.980392 / 0.96)"
+    },
+    "sections": {
+      "hero": {
+        "x": 0,
+        "y": 64,
+        "width": 320,
+        "height": 909,
+        "paddingBlock": "0px / 0px",
+        "borderBlock": "0px / 0px",
+        "background": "rgb(243, 245, 250)"
+      },
+      "summary": {
+        "x": 0,
+        "y": 1031,
+        "width": 320,
+        "height": 1522,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "climate": {
+        "x": 0,
+        "y": 2553,
+        "width": 320,
+        "height": 1651,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "1px / 1px",
+        "background": "rgb(255, 255, 255)"
+      },
+      "essentials": {
+        "x": 0,
+        "y": 4204,
+        "width": 320,
+        "height": 1503,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "0px / 0px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "planning": {
+        "x": 0,
+        "y": 5707,
+        "width": 320,
+        "height": 2331,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "reviews": {
+        "x": 0,
+        "y": 8038,
+        "width": 320,
+        "height": 631,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      "related": {
+        "x": 0,
+        "y": 8669,
+        "width": 320,
+        "height": 1464,
+        "paddingBlock": "72px / 72px",
+        "borderBlock": "0px / 1px",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    },
+    "heroTitle": {
+      "x": 24,
+      "y": 297,
+      "width": 272,
+      "height": 144,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "departureActions": {
+      "x": 16,
+      "y": 777,
+      "width": 288,
+      "height": 164,
+      "paddingBlock": "0px / 0px",
+      "borderBlock": "0px / 0px",
+      "background": "rgba(0, 0, 0, 0)"
+    },
+    "overflow": [
+      {
+        "tag": "A",
+        "className": "",
+        "text": "Bases",
+        "rect": {
+          "left": 325,
+          "right": 366
+        }
+      },
+      {
+        "tag": "A",
+        "className": "",
+        "text": "Opiniones",
+        "rect": {
+          "left": 390,
+          "right": 459
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Abr16.3°",
+        "rect": {
+          "left": 288,
+          "right": 376
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Abr",
+        "rect": {
+          "left": 296,
+          "right": 368
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "16.3°",
+        "rect": {
+          "left": 296,
+          "right": 368
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "May20.3°",
+        "rect": {
+          "left": 380,
+          "right": 468
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "May",
+        "rect": {
+          "left": 388,
+          "right": 460
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "20.3°",
+        "rect": {
+          "left": 388,
+          "right": 460
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Jun25.9°",
+        "rect": {
+          "left": 472,
+          "right": 560
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Jun",
+        "rect": {
+          "left": 480,
+          "right": 552
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "25.9°",
+        "rect": {
+          "left": 480,
+          "right": 552
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Jul30.7° Ideal",
+        "rect": {
+          "left": 564,
+          "right": 652
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Jul",
+        "rect": {
+          "left": 572,
+          "right": 644
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "30.7°",
+        "rect": {
+          "left": 572,
+          "right": 644
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__recommendation",
+        "text": "Ideal",
+        "rect": {
+          "left": 572,
+          "right": 644
+        }
+      },
+      {
+        "tag": "svg",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 572,
+          "right": 586
+        }
+      },
+      {
+        "tag": "path",
+        "className": "",
+        "text": "",
+        "rect": {
+          "left": 573,
+          "right": 585
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "className": "",
+        "text": "Ago30.9°",
+        "rect": {
+          "left": 656,
+          "right": 744
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "climate-months__name",
+        "text": "Ago",
+        "rect": {
+          "left": 664,
+          "right": 736
+        }
+      },
+      {
+        "tag": "STRONG",
+        "className": "",
+        "text": "30.9°",
+        "rect": {
+          "left": 664,
+          "right": 736
+        }
+      }
+    ],
+    "undersized": [
+      {
+        "text": "TravSeeker, inicio",
+        "width": 32,
+        "height": 32
+      },
+      {
+        "text": "Bases",
+        "width": 41,
+        "height": 56
+      },
+      {
+        "text": "Open-Meteo Historical Weather API",
+        "width": 264,
+        "height": 22
+      },
+      {
+        "text": "Entra para compartir tu experiencia",
+        "width": 273,
+        "height": 22
+      },
+      {
+        "text": "Pinares de Soria y Burgos",
+        "width": 228,
+        "height": 24
+      },
+      {
+        "text": "Costa de la Luz",
+        "width": 132,
+        "height": 24
+      },
+      {
+        "text": "Cuenca de Pamplona",
+        "width": 189,
+        "height": 24
+      }
+    ],
+    "headings": [
+      "H1:Montañas y el Valle de Madrid",
+      "H2:¿Encaja contigo?",
+      "H3:La experiencia",
+      "H2:Cuándo ir",
+      "H3:Julio",
+      "H3:Más datos de Julio",
+      "H3:Todo el año",
+      "H3:Cómo se calcula",
+      "H2:Lo imprescindible",
+      "H3:Turismo cultural, histórico y patrimonial",
+      "H2:Elige una base práctica",
+      "H3:BUITRAGO DEL LOZOYA",
+      "H3:Calcula tu presupuesto",
+      "H2:Opiniones de viajeros",
+      "H3:Sé la primera persona en contarlo",
+      "H2:Otros destinos que pueden encajar",
+      "H3:Pinares de Soria y Burgos",
+      "H3:Costa de la Luz",
+      "H3:Cuenca de Pamplona"
+    ],
+    "relatedImages": [
+      {
+        "complete": true,
+        "width": 320,
+        "height": 178
+      },
+      {
+        "complete": true,
+        "width": 320,
+        "height": 213
+      },
+      {
+        "complete": true,
+        "width": 320,
+        "height": 212
+      }
+    ],
+    "errors": [
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+    ]
+  }
+}

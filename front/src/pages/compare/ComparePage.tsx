@@ -5,7 +5,7 @@ import { api } from '../../services/api';
 import { useCompare } from '../../contexts';
 import { imageUrl, plain } from '../../utils';
 import type { Destino } from '../../types';
-import { Empty, Loader, MediaImage } from '../../components/ui';
+import { Empty, Loader, MediaImage, Notice } from '../../components/ui';
 import { PageHeading, Shell } from '../../components/layout';
 import { TourismMarks } from '../../features/tourism/tourism';
 import { ActivityMarks } from '../../features/activities/activities';
@@ -27,8 +27,12 @@ export default function ComparePage() {
   const [items, setItems] = useState<Destino[]>([]);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [activeSuggestion, setActiveSuggestion] = useState(-1);
   useEffect(() => {
-    api<Destino[]>('/destinos').then(setCatalog);
+    api<Destino[]>('/destinos?limit=100')
+      .then(setCatalog)
+      .catch((cause) => setError(cause instanceof Error ? cause.message : 'No se pudo cargar el catálogo'));
   }, []);
   useEffect(() => {
     const fromUrl = (params.get('ids') || '').split(',').filter(Boolean).slice(0, 4);
@@ -42,8 +46,10 @@ export default function ComparePage() {
       return;
     }
     setLoading(true);
+    setError('');
     api<Destino[]>(`/destinos/compare?ids=${compare.ids.join(',')}`)
       .then(setItems)
+      .catch((cause) => setError(cause instanceof Error ? cause.message : 'No se pudo preparar la comparación'))
       .finally(() => setLoading(false));
   }, [compare.ids.join(',')]);
   const suggestions = useMemo(
@@ -57,6 +63,14 @@ export default function ComparePage() {
         .slice(0, 8),
     [catalog, compare.ids, query],
   );
+  const chooseSuggestion = (id: string) => {
+    if (!compare.toggle(id)) {
+      setError('Puedes comparar un máximo de cuatro destinos');
+      return;
+    }
+    setQuery('');
+    setActiveSuggestion(-1);
+  };
   return (
     <Shell>
       <PageHeading kicker="Decide con los datos delante" title="Comparar destinos">
@@ -73,6 +87,7 @@ export default function ComparePage() {
               <span key={id}>
                 {item?.nombre || 'Destino'}
                 <button
+                  type="button"
                   onClick={() => compare.toggle(id)}
                   aria-label={`Quitar ${item?.nombre || 'destino'}`}
                 >
@@ -86,20 +101,43 @@ export default function ComparePage() {
           <div className="compare-picker__search">
             <Search />
             <input
+              id="compare-search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Añade otro destino"
               aria-label="Buscar destino para comparar"
+              role="combobox"
+              aria-expanded={Boolean(query && suggestions.length)}
+              aria-controls="compare-suggestions"
+              aria-autocomplete="list"
+              aria-activedescendant={activeSuggestion >= 0 ? `compare-option-${suggestions[activeSuggestion]?.id}` : undefined}
+              onKeyDown={(event) => {
+                if (!suggestions.length) return;
+                if (event.key === 'ArrowDown') {
+                  event.preventDefault();
+                  setActiveSuggestion((current) => (current + 1) % suggestions.length);
+                } else if (event.key === 'ArrowUp') {
+                  event.preventDefault();
+                  setActiveSuggestion((current) => (current - 1 + suggestions.length) % suggestions.length);
+                } else if (event.key === 'Enter' && activeSuggestion >= 0) {
+                  event.preventDefault();
+                  chooseSuggestion(suggestions[activeSuggestion].id);
+                } else if (event.key === 'Escape') {
+                  setQuery('');
+                  setActiveSuggestion(-1);
+                }
+              }}
             />
             {query && (
-              <div>
-                {suggestions.map((item) => (
+              <div id="compare-suggestions" role="listbox" aria-label="Destinos sugeridos">
+                {suggestions.map((item, index) => (
                   <button
                     key={item.id}
-                    onClick={() => {
-                      compare.toggle(item.id);
-                      setQuery('');
-                    }}
+                    id={`compare-option-${item.id}`}
+                    type="button"
+                    role="option"
+                    aria-selected={index === activeSuggestion}
+                    onClick={() => chooseSuggestion(item.id)}
                   >
                     <Plus /> {item.nombre}
                     <small>{plain(item.ubicacion)}</small>
@@ -122,22 +160,28 @@ export default function ComparePage() {
           </Empty>
         ) : loading ? (
           <Loader label="Preparando la comparación" />
+        ) : error ? (
+          <Notice tone="error">{error}. Puedes reintentar seleccionando de nuevo los destinos.</Notice>
         ) : (
           <div
             className="compare-table"
+            role="table"
+            aria-label="Comparación de destinos"
             style={{ '--compare-count': items.length } as React.CSSProperties}
           >
-            <div className="compare-table__corner" />
-            {items.map((item) => (
-              <article key={item.id} className="compare-table__head">
-                <MediaImage src={imageUrl(item.imagen)} alt="" />
-                <Link to={`/destino/${item.id}`}>{item.nombre.trim()}</Link>
-                <span>{plain(item.ubicacion)}</span>
-              </article>
-            ))}
+            <div className="compare-table__header-row" role="row">
+              <div className="compare-table__corner" role="columnheader" />
+              {items.map((item) => (
+                <article key={item.id} className="compare-table__head" role="columnheader">
+                  <MediaImage src={imageUrl(item.imagen)} alt="" />
+                  <Link to={`/destino/${item.id}`}>{item.nombre.trim()}</Link>
+                  <span>{plain(item.ubicacion)}</span>
+                </article>
+              ))}
+            </div>
             {rows.map(([label, key]) => (
-              <div className="compare-table__row" key={key}>
-                <strong>{label}</strong>
+              <div className="compare-table__row" key={key} role="row">
+                <strong role="rowheader">{label}</strong>
                 {items.map((item) => {
                   const value = item[key];
                   const isTourism = key === 'tipoTurismoPrincipal';
@@ -146,7 +190,7 @@ export default function ComparePage() {
                     ? `${value}%`
                     : plain(String(value || '—'));
                   return (
-                    <div key={item.id}>
+                    <div key={item.id} role="cell">
                       {isTourism ? (
                         <TourismMarks value={String(value || '')} compact />
                       ) : isActivity ? (

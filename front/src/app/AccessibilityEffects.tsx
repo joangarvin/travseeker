@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const FOCUSABLE_SELECTOR = [
   'a[href]',
@@ -18,6 +19,14 @@ function getVisibleFocusableElements(container: HTMLElement) {
 }
 
 export function AccessibilityEffects() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const main = document.getElementById('main');
+    main?.focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [location.pathname]);
+
   useEffect(() => {
     let activeOverlay: HTMLElement | null = null;
     let returnFocus: HTMLElement | null = null;

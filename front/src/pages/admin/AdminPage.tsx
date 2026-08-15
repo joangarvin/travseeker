@@ -15,11 +15,28 @@ import { MunicipalitiesPanel } from '../../features/admin/components/Municipalit
 import { MunicipalityEditorModal } from '../../features/admin/components/MunicipalityEditorModal';
 import { PlaceEditorModal } from '../../features/admin/components/PlaceEditorModal';
 import { PlacesPanel } from '../../features/admin/components/PlacesPanel';
-import { ReviewsPanel } from '../../features/admin/components/ReviewsPanel';
-import type { AdminFeedback, AdminResource, AdminTab } from '../../features/admin/types';
+import { ReviewsPanel, type ReviewStatus } from '../../features/admin/components/ReviewsPanel';
+import {
+  EditorialReviewPanel,
+  type EditorialItem,
+} from '../../features/admin/components/EditorialReviewPanel';
+import type {
+  AdminFeedback,
+  AdminResource,
+  AdminTab,
+  EditorialResource,
+} from '../../features/admin/types';
 import { DestinationEditor } from '../../features/admin/components/DestinationEditor';
 import { api } from '../../services/api';
-import type { Activity, Destino, Municipio, Place, Review, TourismType } from '../../types';
+import type {
+  Activity,
+  Destino,
+  EditorialStatus,
+  Municipio,
+  Place,
+  Review,
+  TourismType,
+} from '../../types';
 import { plain } from '../../utils';
 import { tourismValues } from '../../features/tourism/tourism';
 import { activityValues } from '../../features/activities/activities';
@@ -67,13 +84,14 @@ export default function AdminPage() {
   const { user, token, loading: isAuthLoading } = useAuth();
   const { refreshActivities } = useActivities();
   const { refreshTourismTypes } = useTourismTypes();
-  const [activeTab, setActiveTab] = useState<AdminTab>('destinos');
+  const [activeTab, setActiveTab] = useState<AdminTab>('editorial');
   const [destinations, setDestinations] = useState<Destino[]>([]);
   const [municipalities, setMunicipalities] = useState<Municipio[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [places, setPlaces] = useState<Place[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [travelTypes, setTravelTypes] = useState<TourismType[]>([]);
+  const [editorialItems, setEditorialItems] = useState<EditorialItem[]>([]);
   const [selectedDestinationId, setSelectedDestinationId] = useState('');
   const [destinationQuery, setDestinationQuery] = useState('');
   const [municipalityQuery, setMunicipalityQuery] = useState('');
@@ -101,20 +119,28 @@ export default function AdminPage() {
     setFeedback(null);
 
     try {
-      const [destinationData, municipalityData, reviewData, activityData, travelTypeData] =
-        await Promise.all([
-          api<Destino[]>('/admin/destinos', {}, token),
-          api<Municipio[]>('/admin/municipios', {}, token),
-          api<Review[]>('/admin/reviews', {}, token),
-          api<Activity[]>('/admin/activities', {}, token),
-          api<TourismType[]>('/admin/tourism-types', {}, token),
-        ]);
+      const [
+        destinationData,
+        municipalityData,
+        reviewData,
+        activityData,
+        travelTypeData,
+        editorialData,
+      ] = await Promise.all([
+        api<Destino[]>('/admin/destinos', {}, token),
+        api<Municipio[]>('/admin/municipios', {}, token),
+        api<Review[]>('/admin/reviews', {}, token),
+        api<Activity[]>('/admin/activities', {}, token),
+        api<TourismType[]>('/admin/tourism-types', {}, token),
+        api<EditorialItem[]>('/admin/editorial?status=all', {}, token),
+      ]);
 
       setDestinations(destinationData);
       setMunicipalities(municipalityData);
       setReviews(reviewData);
       setActivities(activityData);
       setTravelTypes(travelTypeData);
+      setEditorialItems(editorialData);
       setSelectedDestinationId((currentId) => currentId || destinationData[0]?.id || '');
     } catch (cause) {
       setFeedback({
@@ -165,16 +191,6 @@ export default function AdminPage() {
           .includes(municipalityQuery.toLowerCase()),
       ),
     [municipalities, municipalityQuery],
-  );
-
-  const filteredReviews = useMemo(
-    () =>
-      reviews.filter((review) =>
-        `${review.destino?.nombre} ${review.user?.nombre} ${review.comment}`
-          .toLowerCase()
-          .includes(reviewQuery.toLowerCase()),
-      ),
-    [reviewQuery, reviews],
   );
 
   const filteredPlaces = useMemo(
@@ -236,6 +252,18 @@ export default function AdminPage() {
         (first, second) => first.nombre.localeCompare(second.nombre, 'es'),
       ),
     );
+    setEditorialItems((current) => [
+      ...current.filter((item) => !(item.resource === 'destinos' && item.id === destination.id)),
+      {
+        id: destination.id,
+        resource: 'destinos',
+        title: destination.nombre,
+        editorialStatus: destination.editorialStatus,
+        submittedAt: destination.submittedAt || new Date().toISOString(),
+        reviewedAt: destination.reviewedAt,
+        createdBy: destination.createdBy,
+      },
+    ]);
   };
 
   const saveMunicipality = async (event: FormEvent) => {
@@ -255,7 +283,12 @@ export default function AdminPage() {
         token,
       );
       setMunicipalityForm(null);
-      setFeedback({ tone: 'success', text: 'Municipio guardado' });
+      setFeedback({
+        tone: 'success',
+        text: municipalityForm.id
+          ? 'Municipio actualizado'
+          : 'Municipio creado y enviado a revisión',
+      });
       await loadAdminData();
     } catch (cause) {
       setFeedback({
@@ -279,7 +312,7 @@ export default function AdminPage() {
         ? `/admin/places/${placeForm.id}`
         : `/admin/destinos/${selectedDestinationId}/places`;
 
-      await api(
+      const saved = await api<Place>(
         endpoint,
         {
           method: placeForm.id ? 'PUT' : 'POST',
@@ -296,7 +329,23 @@ export default function AdminPage() {
 
       setPlaceForm(null);
       await loadPlaces();
-      setFeedback({ tone: 'success', text: 'Lugar guardado' });
+      setEditorialItems((current) => [
+        ...current.filter((item) => !(item.resource === 'places' && item.id === saved.id)),
+        {
+          id: saved.id,
+          resource: 'places',
+          title: saved.nombre,
+          editorialStatus: saved.editorialStatus,
+          submittedAt: saved.submittedAt || new Date().toISOString(),
+          reviewedAt: saved.reviewedAt,
+          createdBy: saved.createdBy,
+          isActive: saved.isActive,
+        },
+      ]);
+      setFeedback({
+        tone: 'success',
+        text: placeForm.id ? 'Lugar actualizado' : 'Lugar creado y enviado a revisión',
+      });
     } catch (cause) {
       setFeedback({
         tone: 'error',
@@ -342,8 +391,24 @@ export default function AdminPage() {
         );
       }
       setActivityForm(null);
+      setEditorialItems((current) => [
+        ...current.filter((item) => !(item.resource === 'activities' && item.id === saved.id)),
+        {
+          id: saved.id,
+          resource: 'activities',
+          title: saved.name,
+          editorialStatus: saved.editorialStatus,
+          submittedAt: saved.submittedAt || new Date().toISOString(),
+          reviewedAt: saved.reviewedAt,
+          createdBy: saved.createdBy,
+          isActive: saved.isActive,
+        },
+      ]);
       await refreshActivities();
-      setFeedback({ tone: 'success', text: 'Actividad guardada y disponible en los selectores' });
+      setFeedback({
+        tone: 'success',
+        text: activity.id ? 'Actividad actualizada' : 'Actividad creada y enviada a revisión',
+      });
     } catch (cause) {
       setFeedback({
         tone: 'error',
@@ -423,10 +488,23 @@ export default function AdminPage() {
         );
       }
       setTravelTypeForm(null);
+      setEditorialItems((current) => [
+        ...current.filter((item) => !(item.resource === 'tourism-types' && item.id === saved.id)),
+        {
+          id: saved.id,
+          resource: 'tourism-types',
+          title: saved.name,
+          editorialStatus: saved.editorialStatus,
+          submittedAt: saved.submittedAt || new Date().toISOString(),
+          reviewedAt: saved.reviewedAt,
+          createdBy: saved.createdBy,
+          isActive: saved.isActive,
+        },
+      ]);
       await refreshTourismTypes();
       setFeedback({
         tone: 'success',
-        text: 'Tipo de viaje guardado y disponible en los selectores',
+        text: type.id ? 'Tipo de viaje actualizado' : 'Tipo de viaje creado y enviado a revisión',
       });
     } catch (cause) {
       setFeedback({
@@ -499,27 +577,137 @@ export default function AdminPage() {
     }
   };
 
-  const moderateReview = async (id: string, status: 'published' | 'hidden') => {
-    if (!token) return;
+  const transitionEditorial = async (
+    resource: EditorialResource,
+    ids: string[],
+    status: EditorialStatus,
+  ) => {
+    if (!token) throw new Error('La sesión de administración ha expirado');
+    const idSet = new Set(ids);
+    const previousEditorial = editorialItems;
+    const previousDestinations = destinations;
+    const previousMunicipalities = municipalities;
+    const previousPlaces = places;
+    const previousActivities = activities;
+    const previousTravelTypes = travelTypes;
+    const reviewedAt =
+      status === 'published' || status === 'archived' ? new Date().toISOString() : null;
+    const optimistic = <
+      T extends { id: string; editorialStatus: EditorialStatus; isActive?: boolean },
+    >(
+      rows: T[],
+    ) =>
+      rows.map((row) =>
+        idSet.has(row.id)
+          ? {
+              ...row,
+              editorialStatus: status,
+              reviewedAt,
+              ...(typeof row.isActive === 'boolean' ? { isActive: status === 'published' } : {}),
+            }
+          : row,
+      );
+
+    setEditorialItems((current) => optimistic(current));
+    if (resource === 'destinos') setDestinations((current) => optimistic(current));
+    if (resource === 'municipios') setMunicipalities((current) => optimistic(current));
+    if (resource === 'places') setPlaces((current) => optimistic(current));
+    if (resource === 'activities') setActivities((current) => optimistic(current));
+    if (resource === 'tourism-types') setTravelTypes((current) => optimistic(current));
 
     try {
       await api(
-        `/admin/reviews/${id}`,
-        { method: 'PATCH', body: JSON.stringify({ status }) },
+        `/admin/editorial/${resource}/batch`,
+        { method: 'PATCH', body: JSON.stringify({ ids, status }) },
         token,
       );
-      setReviews((currentReviews) =>
-        currentReviews.map((review) => (review.id === id ? { ...review, status } : review)),
-      );
-      setFeedback({
-        tone: 'success',
-        text: status === 'published' ? 'Reseña publicada' : 'Reseña oculta',
-      });
+      if (resource === 'activities') await refreshActivities();
+      if (resource === 'tourism-types') await refreshTourismTypes();
     } catch (cause) {
-      setFeedback({
-        tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo moderar la reseña',
-      });
+      setEditorialItems(previousEditorial);
+      setDestinations(previousDestinations);
+      setMunicipalities(previousMunicipalities);
+      setPlaces(previousPlaces);
+      setActivities(previousActivities);
+      setTravelTypes(previousTravelTypes);
+      throw cause;
+    }
+  };
+
+  const moderateReview = async (
+    id: string,
+    patch: { status?: ReviewStatus; adminResponse?: string | null },
+  ) => {
+    if (!token) throw new Error('La sesión de administración ha expirado');
+    const previous = reviews.find((review) => review.id === id);
+    if (!previous) throw new Error('La reseña ya no está disponible');
+
+    setReviews((current) =>
+      current.map((review) =>
+        review.id === id
+          ? {
+              ...review,
+              ...patch,
+              respondedAt:
+                patch.adminResponse === undefined
+                  ? review.respondedAt
+                  : patch.adminResponse?.trim()
+                    ? new Date().toISOString()
+                    : null,
+            }
+          : review,
+      ),
+    );
+
+    try {
+      const saved = await api<Review>(
+        `/admin/reviews/${id}`,
+        { method: 'PATCH', body: JSON.stringify(patch) },
+        token,
+      );
+      setReviews((current) => current.map((review) => (review.id === id ? saved : review)));
+    } catch (cause) {
+      setReviews((current) => current.map((review) => (review.id === id ? previous : review)));
+      throw cause;
+    }
+  };
+
+  const moderateReviews = async (ids: string[], status: ReviewStatus) => {
+    if (!token) throw new Error('La sesión de administración ha expirado');
+    const selected = new Set(ids);
+    const previous = reviews.filter((review) => selected.has(review.id));
+    setReviews((current) =>
+      current.map((review) => (selected.has(review.id) ? { ...review, status } : review)),
+    );
+
+    try {
+      await api(
+        '/admin/reviews/batch',
+        { method: 'PATCH', body: JSON.stringify({ reviewIds: ids, status }) },
+        token,
+      );
+    } catch (cause) {
+      const previousById = new Map(previous.map((review) => [review.id, review]));
+      setReviews((current) => current.map((review) => previousById.get(review.id) || review));
+      throw cause;
+    }
+  };
+
+  const deleteReviews = async (ids: string[]) => {
+    if (!token) throw new Error('La sesión de administración ha expirado');
+    const selected = new Set(ids);
+    const previous = reviews;
+    setReviews((current) => current.filter((review) => !selected.has(review.id)));
+
+    try {
+      await api(
+        '/admin/reviews/batch',
+        { method: 'DELETE', body: JSON.stringify({ reviewIds: ids }) },
+        token,
+      );
+    } catch (cause) {
+      setReviews(previous);
+      throw cause;
     }
   };
 
@@ -544,6 +732,7 @@ export default function AdminPage() {
   }
 
   const resourceCounts: Record<AdminTab, number> = {
+    editorial: editorialItems.filter((item) => item.editorialStatus === 'pending').length,
     destinos: destinations.length,
     'tipos-viaje': travelTypes.length,
     actividades: activities.length,
@@ -564,12 +753,20 @@ export default function AdminPage() {
       <div className="admin-layout">
         <AdminNavigation activeTab={activeTab} counts={resourceCounts} onChange={setActiveTab} />
 
-        <section className="admin-workspace" aria-live="polite">
+        <section
+          className="admin-workspace"
+          id="admin-panel"
+          role="tabpanel"
+          aria-labelledby={`admin-tab-${activeTab}`}
+        >
           {feedback && <Notice tone={feedback.tone}>{feedback.text}</Notice>}
           {isLoading ? (
             <Loader />
           ) : (
             <>
+              {activeTab === 'editorial' && (
+                <EditorialReviewPanel items={editorialItems} onTransition={transitionEditorial} />
+              )}
               {activeTab === 'destinos' && (
                 <DestinationsPanel
                   destinations={filteredDestinations}
@@ -628,10 +825,12 @@ export default function AdminPage() {
 
               {activeTab === 'reviews' && (
                 <ReviewsPanel
-                  reviews={filteredReviews}
+                  reviews={reviews}
                   query={reviewQuery}
                   onQueryChange={setReviewQuery}
-                  onModerate={(id, status) => void moderateReview(id, status)}
+                  onModerate={moderateReview}
+                  onBulkModerate={moderateReviews}
+                  onBulkDelete={deleteReviews}
                 />
               )}
 

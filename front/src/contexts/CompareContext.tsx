@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 
 type CompareContextValue = {
   ids: string[];
-  toggle: (id: string) => void;
+  toggle: (id: string) => boolean;
   clear: () => void;
 };
 
@@ -30,13 +30,13 @@ export function CompareProvider({ children }: { children: ReactNode }) {
     () => ({
       ids,
       toggle: (id) => {
-        setIds((currentIds) => {
-          if (currentIds.includes(id)) {
-            return currentIds.filter((currentId) => currentId !== id);
-          }
-
-          return currentIds.length < MAX_COMPARE_ITEMS ? [...currentIds, id] : currentIds;
-        });
+        if (ids.includes(id)) {
+          setIds(ids.filter((currentId) => currentId !== id));
+          return true;
+        }
+        if (ids.length >= MAX_COMPARE_ITEMS) return false;
+        setIds([...ids, id]);
+        return true;
       },
       clear: () => setIds([]),
     }),

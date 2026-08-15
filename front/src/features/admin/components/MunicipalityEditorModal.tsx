@@ -57,6 +57,44 @@ export function MunicipalityEditorModal({
             onChange={(event) => onChange({ ...form, tipoTurismo: event.target.value })}
           />
         </Field>
+        <div className="admin-form-grid admin-form-grid--two">
+          <Field
+            label="Latitud"
+            htmlFor="mun-latitude"
+            hint="Opcional, pero mejora el cálculo de rutas."
+          >
+            <input
+              id="mun-latitude"
+              type="number"
+              step="any"
+              min="-90"
+              max="90"
+              value={form.latitud ?? ''}
+              onChange={(event) =>
+                onChange({
+                  ...form,
+                  latitud: event.target.value ? Number(event.target.value) : null,
+                })
+              }
+            />
+          </Field>
+          <Field label="Longitud" htmlFor="mun-longitude">
+            <input
+              id="mun-longitude"
+              type="number"
+              step="any"
+              min="-180"
+              max="180"
+              value={form.longitud ?? ''}
+              onChange={(event) =>
+                onChange({
+                  ...form,
+                  longitud: event.target.value ? Number(event.target.value) : null,
+                })
+              }
+            />
+          </Field>
+        </div>
         <Button type="submit" loading={isSaving}>
           Guardar municipio
         </Button>

@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const uploadController = require('../controllers/uploadController');
 const { requireAuth, requireAdmin } = require('../middleware/auth');
-const { upload, essentialUpload, handleUploadError } = require('../middleware/upload');
+const { upload, essentialUpload, handleUploadError, validateImageSignature } = require('../middleware/upload');
 
 const router = Router();
 
@@ -12,6 +12,7 @@ router.post(
   requireAuth,
   upload.single('image'),
   handleUploadError,
+  validateImageSignature,
   uploadController.uploadAvatar,
 );
 
@@ -21,6 +22,7 @@ router.post(
   requireAdmin,
   upload.single('image'),
   handleUploadError,
+  validateImageSignature,
   uploadController.uploadDestinoCover,
 );
 
@@ -30,6 +32,7 @@ router.post(
   requireAdmin,
   essentialUpload.single('image'),
   handleUploadError,
+  validateImageSignature,
   uploadController.uploadEssentialImage,
 );
 

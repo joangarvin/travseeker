@@ -27,15 +27,39 @@ export function AdminModal({
     const previousOverflow = document.body.style.overflow;
     const previousFocus =
       document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onCloseRef.current();
+    const handleDialogKeys = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onCloseRef.current();
+        return;
+      }
+      if (event.key !== 'Tab' || !dialogRef.current) return;
+
+      const focusable = Array.from(
+        dialogRef.current.querySelectorAll<HTMLElement>(
+          'button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href], [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+      const first = focusable[0];
+      const last = focusable.at(-1);
+      if (!first || !last) return;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     document.body.style.overflow = 'hidden';
-    document.addEventListener('keydown', closeOnEscape);
-    dialogRef.current?.querySelector<HTMLElement>('button, input, select, textarea')?.focus();
+    document.addEventListener('keydown', handleDialogKeys);
+    const initialFocus = dialogRef.current?.querySelector<HTMLElement>('[data-autofocus]');
+    const firstControl = dialogRef.current?.querySelector<HTMLElement>(
+      'button, input, select, textarea, a[href]',
+    );
+    (initialFocus || firstControl)?.focus();
     return () => {
       document.body.style.overflow = previousOverflow;
-      document.removeEventListener('keydown', closeOnEscape);
+      document.removeEventListener('keydown', handleDialogKeys);
       previousFocus?.focus();
     };
   }, []);

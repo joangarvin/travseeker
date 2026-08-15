@@ -1,5 +1,6 @@
 .compare-picker {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 12px;
   max-width: var(--max);
@@ -25,8 +26,8 @@
 .compare-picker__selected button {
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border: 0;
   background: var(--surface-muted);
@@ -64,6 +65,15 @@
   background: transparent;
   text-align: left;
 }
+.compare-picker__search > div button[aria-selected='true'] {
+  background: var(--brand-soft);
+}
+.compare-picker__limit {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
 .compare-picker__search small {
   grid-column: 2;
   color: var(--muted);
@@ -81,6 +91,9 @@
   min-width: calc(160px + var(--compare-count) * 220px);
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
+}
+.compare-table__header-row {
+  display: contents;
 }
 .compare-table__corner,
 .compare-table__head,

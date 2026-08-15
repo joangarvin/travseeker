@@ -22,10 +22,10 @@ async function sendVerificationEmail(userId, email) {
   const token = await createToken(userId, EMAIL_VERIFY, 24 * 60 * 60 * 1000);
   await sendMail({
     to: email,
-    subject: 'Verifica tu email en TravSeeker',
-    title: 'Confirma tu dirección de email',
-    message: 'Gracias por unirte a TravSeeker. Verifica tu email para activar todas las funciones de tu cuenta.',
-    ctaLabel: 'Verificar email',
+    subject: 'Un último paso para activar TravSeeker',
+    title: 'Tu próximo viaje empieza aquí',
+    message: 'Confirma tu dirección para crear viajes, guardar tus decisiones y compartirlas con quien viaja contigo. El enlace es válido durante 24 horas.',
+    ctaLabel: 'Confirmar mi correo',
     ctaUrl: `${APP_URL}/verificar-email?token=${token}`,
   });
 }
@@ -168,17 +168,24 @@ async function requestEmailVerification(userId) {
     throw error;
   }
   if (user.emailVerified) {
-    const error = new Error('Tu email ya está verificado');
-    error.status = 400;
-    throw error;
+    return { sent: false, verified: true };
   }
   await sendVerificationEmail(user.id, user.email);
-  return { sent: true };
+  return { sent: true, verified: false };
 }
 
 async function confirmEmailVerification(tokenStr) {
-  const record = await prisma.verificationToken.findUnique({ where: { token: tokenStr } });
-  if (!record || record.type !== EMAIL_VERIFY || record.usedAt || record.expiresAt < new Date()) {
+  const record = await prisma.verificationToken.findUnique({
+    where: { token: tokenStr },
+    include: { user: { select: { emailVerified: true } } },
+  });
+  if (!record || record.type !== EMAIL_VERIFY) {
+    const error = new Error('El enlace de verificación no es válido o ha caducado');
+    error.status = 400;
+    throw error;
+  }
+  if (record.user.emailVerified) return { verified: true, alreadyVerified: true };
+  if (record.usedAt || record.expiresAt < new Date()) {
     const error = new Error('El enlace de verificación no es válido o ha caducado');
     error.status = 400;
     throw error;
@@ -187,7 +194,7 @@ async function confirmEmailVerification(tokenStr) {
     prisma.user.update({ where: { id: record.userId }, data: { emailVerified: true } }),
     prisma.verificationToken.update({ where: { id: record.id }, data: { usedAt: new Date() } }),
   ]);
-  return { verified: true };
+  return { verified: true, alreadyVerified: false };
 }
 
 async function requestPasswordReset(email) {

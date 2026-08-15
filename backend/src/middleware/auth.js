@@ -1,14 +1,18 @@
 const { verifyToken } = require('../utils/jwt');
 const { prisma } = require('../config/database');
+const { getSessionCookie } = require('../utils/sessionCookie');
 
 async function requireAuth(req, res, next) {
   const header = req.headers.authorization;
-  if (!header?.startsWith('Bearer ')) {
+  const token = header?.startsWith('Bearer ')
+    ? header.slice(7)
+    : getSessionCookie(req);
+  if (!token) {
     return res.status(401).json({ error: 'Debes iniciar sesión' });
   }
 
   try {
-    const payload = verifyToken(header.slice(7));
+    const payload = verifyToken(token);
     const user = await prisma.user.findUnique({
       where: { id: payload.userId },
       select: { id: true, email: true, isActive: true, role: true },

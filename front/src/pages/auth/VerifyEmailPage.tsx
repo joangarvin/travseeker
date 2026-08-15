@@ -3,11 +3,13 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { CheckCircle2, Mail } from 'lucide-react';
 import { Shell } from '../../components/layout';
 import { Notice } from '../../components/ui';
+import { useAuth } from '../../contexts';
 import { api } from '../../services/api';
 
 type VerificationStatus = 'loading' | 'success' | 'error';
 
 export default function VerifyEmailPage() {
+  const auth = useAuth();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   const [status, setStatus] = useState<VerificationStatus>(token ? 'loading' : 'error');
@@ -18,19 +20,23 @@ export default function VerifyEmailPage() {
   useEffect(() => {
     if (!token) return;
 
-    api('/auth/verify-email/confirm', {
-      method: 'POST',
-      body: JSON.stringify({ token }),
-    })
-      .then(() => {
+    const confirmVerification = async () => {
+      try {
+        await api('/auth/verify-email/confirm', {
+          method: 'POST',
+          body: JSON.stringify({ token }),
+        });
+        await auth.refresh();
         setStatus('success');
-        setMessage('Tu email ya está verificado.');
-      })
-      .catch((cause) => {
+        setMessage('Tu cuenta está activa. Ya puedes crear y compartir viajes.');
+      } catch (cause) {
         setStatus('error');
         setMessage(cause instanceof Error ? cause.message : 'El enlace no es válido');
-      });
-  }, [token]);
+      }
+    };
+
+    void confirmVerification();
+  }, [auth.refresh, token]);
 
   const title =
     status === 'loading'
@@ -51,8 +57,8 @@ export default function VerifyEmailPage() {
           {message}
         </Notice>
         {status !== 'loading' && (
-          <Link className="button button--primary" to={status === 'success' ? '/perfil' : '/'}>
-            {status === 'success' ? 'Ir a mi perfil' : 'Volver al inicio'}
+          <Link className="button button--primary" to={status === 'success' ? '/colecciones' : '/'}>
+            {status === 'success' ? 'Ir a mis viajes' : 'Volver al inicio'}
           </Link>
         )}
       </section>
