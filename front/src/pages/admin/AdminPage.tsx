@@ -27,6 +27,19 @@ import type {
   EditorialResource,
 } from '../../features/admin/types';
 import { DestinationEditor } from '../../features/admin/components/DestinationEditor';
+import {
+  EMPTY_DESTINATION,
+  EMPTY_MUNICIPALITY,
+  EMPTY_PLACE,
+  filterActivities,
+  filterDestinationChoices,
+  filterDestinations,
+  filterMunicipalities,
+  filterPlaces,
+  filterTourismTypes,
+} from '../../features/admin/adminCatalog';
+import { activityValues } from '../../features/activities/activities';
+import { tourismValues } from '../../features/tourism/tourism';
 import { api } from '../../services/api';
 import type {
   Activity,
@@ -37,48 +50,6 @@ import type {
   Review,
   TourismType,
 } from '../../types';
-import { plain } from '../../utils';
-import { tourismValues } from '../../features/tourism/tourism';
-import { activityValues } from '../../features/activities/activities';
-
-const EMPTY_DESTINATION: Partial<Destino> = {
-  nombre: '',
-  ubicacion: '',
-  presupuesto: 'Medio',
-  masificacion: 'Medio',
-  tipoTurismoPrincipal: 'Cultural',
-  tipoTurismoSecundario: '',
-  descripcion: '',
-  imprescindibles: '',
-  essentialGroups: [],
-  places: [],
-  imagen: '',
-  destinosItem: '',
-  latitud: null,
-  longitud: null,
-  municipios: [],
-  mesesJulioAgosto: 70,
-  mesesMayJunSeptOct: 45,
-  mesesNovAbril: 25,
-};
-
-const EMPTY_MUNICIPALITY: Partial<Municipio> = {
-  nombre: '',
-  precios: '',
-  conexiones: '',
-  tipoTurismo: '',
-};
-
-const EMPTY_PLACE: Partial<Place> = {
-  nombre: '',
-  categoria: '',
-  descripcion: '',
-  latitud: 40.2,
-  longitud: -3.5,
-  website: '',
-  sortOrder: 0,
-  isActive: true,
-};
 
 export default function AdminPage() {
   const { user, token, loading: isAuthLoading } = useAuth();
@@ -174,59 +145,28 @@ export default function AdminPage() {
   }, [token, selectedDestinationId]);
 
   const filteredDestinations = useMemo(
-    () =>
-      destinations.filter((destination) =>
-        `${destination.nombre} ${plain(destination.ubicacion)} ${tourismValues(destination.tipoTurismoPrincipal).join(' ')} ${activityValues(destination.tipoTurismoSecundario).join(' ')}`
-          .toLowerCase()
-          .includes(destinationQuery.toLowerCase()),
-      ),
+    () => filterDestinations(destinations, destinationQuery),
     [destinationQuery, destinations],
   );
 
   const filteredMunicipalities = useMemo(
-    () =>
-      municipalities.filter((municipality) =>
-        `${municipality.nombre} ${plain(municipality.tipoTurismo)} ${plain(municipality.conexiones)}`
-          .toLowerCase()
-          .includes(municipalityQuery.toLowerCase()),
-      ),
+    () => filterMunicipalities(municipalities, municipalityQuery),
     [municipalities, municipalityQuery],
   );
 
-  const filteredPlaces = useMemo(
-    () =>
-      places.filter((place) =>
-        `${place.nombre} ${place.categoria} ${place.descripcion}`
-          .toLowerCase()
-          .includes(placeQuery.toLowerCase()),
-      ),
-    [placeQuery, places],
-  );
+  const filteredPlaces = useMemo(() => filterPlaces(places, placeQuery), [placeQuery, places]);
 
   const filteredActivities = useMemo(
-    () =>
-      activities.filter((activity) =>
-        `${activity.name} ${activity.isActive ? 'visible' : 'oculta'}`
-          .toLowerCase()
-          .includes(activityQuery.toLowerCase()),
-      ),
+    () => filterActivities(activities, activityQuery),
     [activities, activityQuery],
   );
   const filteredTravelTypes = useMemo(
-    () =>
-      travelTypes.filter((type) =>
-        `${type.name} ${type.description} ${type.isActive ? 'visible' : 'oculto'}`
-          .toLowerCase()
-          .includes(travelTypeQuery.toLowerCase()),
-      ),
+    () => filterTourismTypes(travelTypes, travelTypeQuery),
     [travelTypeQuery, travelTypes],
   );
 
   const destinationChoices = useMemo(
-    () =>
-      destinations.filter((destination) =>
-        destination.nombre.toLowerCase().includes(placeDestinationQuery.toLowerCase()),
-      ),
+    () => filterDestinationChoices(destinations, placeDestinationQuery),
     [destinations, placeDestinationQuery],
   );
 
