@@ -1,0 +1,187 @@
+/* Motion language: short, spatial and tied to navigation or direct feedback. */
+.route-surface {
+  animation: route-enter var(--motion-ui) var(--ease-out) both;
+}
+
+.mobile-menu {
+  transform-origin: top center;
+  animation: mobile-menu-enter var(--motion-ui) var(--ease-drawer) both;
+}
+
+.mobile-menu a {
+  animation: mobile-menu-item 220ms var(--ease-out) both;
+}
+
+.mobile-menu a:nth-child(2) {
+  animation-delay: 35ms;
+}
+.mobile-menu a:nth-child(3) {
+  animation-delay: 70ms;
+}
+.mobile-menu a:nth-child(4) {
+  animation-delay: 105ms;
+}
+.mobile-menu a:nth-child(5) {
+  animation-delay: 140ms;
+}
+.mobile-menu a:nth-child(6) {
+  animation-delay: 175ms;
+}
+.mobile-menu a:nth-child(7) {
+  animation-delay: 210ms;
+}
+
+.home-filter-panel,
+.compare-picker__search > div {
+  transform-origin: top center;
+  animation: disclosure-enter 200ms var(--ease-drawer) both;
+}
+
+.compare-picker__selected > span,
+.nav b {
+  animation: selection-confirm 180ms var(--ease-out) both;
+}
+
+.profile-panel,
+.admin-workspace {
+  animation: panel-enter 200ms var(--ease-out) both;
+}
+
+.destination-list > .destination-card {
+  animation: result-enter var(--motion-ui) var(--ease-out) both;
+}
+
+.destination-list > .destination-card:nth-child(2) {
+  animation-delay: 35ms;
+}
+.destination-list > .destination-card:nth-child(3) {
+  animation-delay: 70ms;
+}
+.destination-list > .destination-card:nth-child(4) {
+  animation-delay: 105ms;
+}
+.destination-list > .destination-card:nth-child(5) {
+  animation-delay: 140ms;
+}
+.destination-list > .destination-card:nth-child(6) {
+  animation-delay: 175ms;
+}
+
+.modal-backdrop {
+  animation: backdrop-enter 180ms var(--ease-out) both;
+}
+
+.modal {
+  transform-origin: center;
+  animation: dialog-enter var(--motion-ui) var(--ease-drawer) both;
+}
+
+.button:active:not(:disabled),
+.icon-button:active:not(:disabled),
+.destination-card__compare:active:not(:disabled),
+.modal__close:active:not(:disabled),
+.trip-moods__list button:active:not(:disabled) {
+  transform: scale(0.97);
+  transition-duration: 100ms;
+}
+
+:focus-visible {
+  transition: none !important;
+}
+
+@keyframes route-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes mobile-menu-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes mobile-menu-item {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes disclosure-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scaleY(0.98);
+  }
+}
+
+@keyframes selection-confirm {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  70% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes panel-enter {
+  from {
+    opacity: 0;
+    transform: translateX(6px);
+  }
+}
+
+@keyframes result-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@keyframes backdrop-enter {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-surface,
+  .mobile-menu,
+  .mobile-menu a,
+  .home-filter-panel,
+  .compare-picker__search > div,
+  .compare-picker__selected > span,
+  .nav b,
+  .profile-panel,
+  .admin-workspace,
+  .destination-list > .destination-card,
+  .modal-backdrop,
+  .modal {
+    animation: reduced-enter 100ms linear both !important;
+    animation-delay: 0ms !important;
+  }
+
+  .button:active:not(:disabled),
+  .icon-button:active:not(:disabled),
+  .destination-card__compare:active:not(:disabled),
+  .modal__close:active:not(:disabled),
+  .trip-moods__list button:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+@keyframes reduced-enter {
+  from {
+    opacity: 0.72;
+  }
+}

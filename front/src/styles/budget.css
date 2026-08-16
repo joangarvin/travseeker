@@ -97,7 +97,6 @@
 
 .budget-breakdown > span {
   min-width: 3px;
-  transition: width 320ms var(--ease);
 }
 
 .budget-breakdown__accommodation {
@@ -285,11 +284,5 @@
   }
   .budget-estimator__actions .button {
     width: 100%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .budget-breakdown > span {
-    transition: none;
   }
 }

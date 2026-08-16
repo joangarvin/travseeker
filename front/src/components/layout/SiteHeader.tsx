@@ -57,7 +57,14 @@ export function SiteHeader() {
           {mainNavigation.map(({ to, label }) => (
             <NavLink key={to} to={to} end={to === '/'}>
               {label}
-              {to === '/comparar' && compareIds.length > 0 && <b>{compareIds.length}</b>}
+              {to === '/comparar' && compareIds.length > 0 && (
+                <b
+                  key={compareIds.length}
+                  aria-label={`${compareIds.length} destinos en comparación`}
+                >
+                  {compareIds.length}
+                </b>
+              )}
             </NavLink>
           ))}
         </nav>

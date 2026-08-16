@@ -303,7 +303,11 @@ export default function Home() {
               onClick={() => {
                 const next = { ...filters, tipoTurismo: mode.label };
                 void search(next);
-                document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('results')?.scrollIntoView({
+                  behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                    ? 'auto'
+                    : 'smooth',
+                });
               }}
             >
               <span className="trip-moods__icon">
@@ -381,7 +385,9 @@ export default function Home() {
                 disabled={loadingMore}
                 aria-busy={loadingMore}
               >
-                {loadingMore ? 'Cargando más destinos…' : `Mostrar más destinos (${Math.max(resultCount - visibleResults.length, 0)} restantes)`}
+                {loadingMore
+                  ? 'Cargando más destinos…'
+                  : `Mostrar más destinos (${Math.max(resultCount - visibleResults.length, 0)} restantes)`}
               </button>
             )}
           </>

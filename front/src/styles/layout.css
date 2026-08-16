@@ -334,7 +334,7 @@ textarea:hover {
   align-items: center;
   gap: 16px;
   padding: 14px 16px;
-  border-left: 4px solid var(--brand);
+  border: 1px solid color-mix(in srgb, var(--brand) 46%, var(--line));
   background: var(--brand-soft);
   border-radius: var(--r-1);
 }
@@ -346,11 +346,11 @@ textarea:hover {
   margin-left: auto;
 }
 .notice--error {
-  border-color: var(--danger);
+  border-color: color-mix(in srgb, var(--danger) 54%, var(--line));
   color: var(--danger);
 }
 .notice--success {
-  border-color: var(--success);
+  border-color: color-mix(in srgb, var(--success) 54%, var(--line));
   color: var(--success);
 }
 .empty {

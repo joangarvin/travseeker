@@ -1,14 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  Bell,
-  Check,
-  KeyRound,
-  LogOut,
-  Settings,
-  Shield,
-  Trash2,
-  UserRound,
-} from 'lucide-react';
+import { Bell, Check, KeyRound, LogOut, Settings, Shield, Trash2, UserRound } from 'lucide-react';
 import { api } from '../../services/api';
 import { useAuth } from '../../contexts';
 import { Button, Field, ImageUploader, Loader, Notice } from '../../components/ui';
@@ -131,7 +122,10 @@ export default function ProfilePage() {
       setAlerts((current) => [item, ...current]);
       setFeedback({ tone: 'success', text: 'Alerta creada' });
     } catch (cause) {
-      setFeedback({ tone: 'error', text: cause instanceof Error ? cause.message : 'No se pudo crear la alerta' });
+      setFeedback({
+        tone: 'error',
+        text: cause instanceof Error ? cause.message : 'No se pudo crear la alerta',
+      });
     } finally {
       setAlertActionPending(false);
     }
@@ -144,7 +138,10 @@ export default function ProfilePage() {
       setAlerts((current) => current.filter((item) => item.id !== id));
       setFeedback({ tone: 'success', text: 'Alerta eliminada' });
     } catch (cause) {
-      setFeedback({ tone: 'error', text: cause instanceof Error ? cause.message : 'No se pudo eliminar la alerta' });
+      setFeedback({
+        tone: 'error',
+        text: cause instanceof Error ? cause.message : 'No se pudo eliminar la alerta',
+      });
     } finally {
       setAlertActionPending(false);
     }
@@ -154,9 +151,10 @@ export default function ProfilePage() {
     event.preventDefault();
     const ids = ['profile', 'preferences', 'security'];
     const currentIndex = ids.indexOf(current);
-    const nextIndex = event.key === 'ArrowRight'
-      ? (currentIndex + 1) % ids.length
-      : (currentIndex - 1 + ids.length) % ids.length;
+    const nextIndex =
+      event.key === 'ArrowRight'
+        ? (currentIndex + 1) % ids.length
+        : (currentIndex - 1 + ids.length) % ids.length;
     const next = ids[nextIndex] as typeof tab;
     setTab(next);
     requestAnimationFrame(() => document.getElementById(`profile-tab-${next}`)?.focus());
@@ -197,7 +195,13 @@ export default function ProfilePage() {
             </button>
           ))}
         </nav>
-        <section id="profile-panel" className="profile-panel" role="tabpanel" aria-labelledby={`profile-tab-${tab}`}>
+        <section
+          key={tab}
+          id="profile-panel"
+          className="profile-panel"
+          role="tabpanel"
+          aria-labelledby={`profile-tab-${tab}`}
+        >
           {feedback && <Notice tone={feedback.tone}>{feedback.text}</Notice>}
           {tab === 'profile' && (
             <form
@@ -337,7 +341,11 @@ export default function ProfilePage() {
                       </option>
                     ))}
                   </select>
-                  <Button variant="secondary" loading={alertActionPending} onClick={() => void createAlert()}>
+                  <Button
+                    variant="secondary"
+                    loading={alertActionPending}
+                    onClick={() => void createAlert()}
+                  >
                     Crear alerta
                   </Button>
                 </div>
@@ -350,7 +358,12 @@ export default function ProfilePage() {
                         : 'Cualquier mes'}{' '}
                       · {alert.presupuesto || 'Cualquier presupuesto'}
                     </span>
-                    <button type="button" disabled={alertActionPending} onClick={() => void deleteAlert(alert.id)} aria-label="Eliminar alerta">
+                    <button
+                      type="button"
+                      disabled={alertActionPending}
+                      onClick={() => void deleteAlert(alert.id)}
+                      aria-label="Eliminar alerta"
+                    >
                       <Trash2 />
                     </button>
                   </article>

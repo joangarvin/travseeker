@@ -694,6 +694,7 @@ export default function AdminPage() {
         <AdminNavigation activeTab={activeTab} counts={resourceCounts} onChange={setActiveTab} />
 
         <section
+          key={activeTab}
           className="admin-workspace"
           id="admin-panel"
           role="tabpanel"

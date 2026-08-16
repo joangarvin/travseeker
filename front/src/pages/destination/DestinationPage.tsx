@@ -522,7 +522,7 @@ export default function DestinationPage() {
         </div>
       </nav>
 
-      <main className="destination-guide">
+      <div className="destination-guide">
         <section id="resumen" className="destination-summary" aria-labelledby="summary-title">
           <div className="destination-section-heading">
             <p className="kicker">La decisión rápida</p>
@@ -894,7 +894,7 @@ export default function DestinationPage() {
             </p>
           )}
         </section>
-      </main>
+      </div>
 
       {tripDialogItem !== undefined && token && (
         <DestinationTripDialog

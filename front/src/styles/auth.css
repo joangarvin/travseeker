@@ -36,7 +36,7 @@
 }
 .auth-tabs button {
   flex: 1;
-  min-height: 40px;
+  min-height: 44px;
   border: 0;
   background: transparent;
   border-radius: var(--r-pill);
@@ -60,7 +60,10 @@
   width: 100%;
 }
 .auth-panel__forgot {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   margin-top: 24px;
   text-align: center;
 }

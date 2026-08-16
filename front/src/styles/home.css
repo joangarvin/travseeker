@@ -572,8 +572,7 @@
 
 .smart-empty__no-filters {
   margin: 0;
-  padding: 0 clamp(24px, 3vw, 36px) clamp(24px, 3vw, 36px)
-    calc(44px + clamp(40px, 5vw, 60px));
+  padding: 0 clamp(24px, 3vw, 36px) clamp(24px, 3vw, 36px) calc(44px + clamp(40px, 5vw, 60px));
   color: var(--muted);
 }
 
@@ -639,7 +638,7 @@
   width: fit-content;
   margin: 0 0 10px;
   padding-left: 8px;
-  border-left: 3px solid var(--brand);
+  box-shadow: inset 2px 0 var(--brand);
   color: var(--muted);
   font-size: 0.7rem;
   font-weight: 750;
