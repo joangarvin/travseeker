@@ -223,7 +223,7 @@
   background: var(--surface);
 }
 .trip-filters button {
-  min-height: 38px;
+  min-height: 44px;
   padding: 0 14px;
   border: 0;
   border-radius: var(--r-pill);
@@ -244,12 +244,20 @@
 .collection-card {
   grid-template-columns: minmax(190px, 0.76fr) minmax(0, 1.24fr);
   min-height: 330px;
-  transition: border-color 150ms var(--ease), transform 150ms var(--ease), box-shadow 150ms var(--ease);
+  transition:
+    border-color 150ms var(--ease),
+    transform 150ms var(--ease),
+    box-shadow 150ms var(--ease);
 }
 .collection-card:hover {
   border-color: var(--ink);
-  transform: translateY(-3px);
   box-shadow: var(--shadow-1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .collection-card:hover {
+    transform: translateY(-3px);
+  }
 }
 .collection-card:focus-visible {
   outline: 3px solid var(--brand);
@@ -281,8 +289,10 @@
   height: 20px;
   transition: transform 150ms var(--ease);
 }
-.collection-card:hover .collection-card__arrow {
-  transform: translate(2px, -2px);
+@media (hover: hover) and (pointer: fine) {
+  .collection-card:hover .collection-card__arrow {
+    transform: translate(2px, -2px);
+  }
 }
 .collection-card__title {
   align-self: center;
@@ -463,7 +473,10 @@
   aspect-ratio: 1;
   padding: 14px;
   border-radius: 50%;
-  background: conic-gradient(var(--brand) var(--trip-progress), color-mix(in srgb, var(--ink-inverse) 17%, transparent) 0);
+  background: conic-gradient(
+    var(--brand) var(--trip-progress),
+    color-mix(in srgb, var(--ink-inverse) 17%, transparent) 0
+  );
 }
 .trip-progress-orbit::before {
   grid-area: 1 / 1;

@@ -68,7 +68,7 @@
   gap: 16px;
   margin: 0 0 32px;
   padding: 16px;
-  border-inline-start: 4px solid var(--sun);
+  border: 1px solid color-mix(in srgb, var(--sun) 62%, var(--line));
   background: color-mix(in srgb, var(--sun) 20%, var(--surface));
 }
 

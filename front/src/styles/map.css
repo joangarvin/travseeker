@@ -271,7 +271,7 @@
 }
 .map-state--error {
   align-items: flex-start;
-  border-left: 4px solid var(--danger);
+  border-color: color-mix(in srgb, var(--danger) 54%, var(--line));
 }
 .map-state--error > svg {
   color: var(--danger);

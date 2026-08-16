@@ -325,7 +325,7 @@
 
 .destination-summary__decision {
   padding: 4px 0 0 28px;
-  border-inline-start: 4px solid var(--brand);
+  box-shadow: inset 2px 0 var(--brand);
 }
 
 .destination-summary__decision > h3 {

@@ -13,13 +13,13 @@ export default function AboutPage() {
           para mí, ahora?
         </p>
       </section>
-      <section className="about-manifesto">
+      <section className="about-manifesto" data-reveal>
         <p>No vendemos paquetes.</p>
         <p>No ordenamos destinos por quién paga.</p>
         <p>No fingimos que agosto y noviembre son el mismo viaje.</p>
         <strong>Buscamos información útil para que decidas tú.</strong>
       </section>
-      <section className="about-values">
+      <section className="about-values" data-reveal>
         <header>
           <p className="kicker">Cómo trabajamos</p>
           <h2>Cuatro compromisos</h2>
@@ -44,7 +44,7 @@ export default function AboutPage() {
           ))}
         </div>
       </section>
-      <section className="about-cta">
+      <section className="about-cta" data-reveal>
         <h2>Encuentra un lugar que encaje contigo.</h2>
         <Link className="button button--sun" to="/">
           Empezar a descubrir <ArrowRight />

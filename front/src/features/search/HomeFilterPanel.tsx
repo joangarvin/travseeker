@@ -15,6 +15,7 @@ type HomeFilterPanelProps = {
   onUpdate: (key: keyof SearchFilters, value: string) => void;
   onClear: () => void;
   onApply: () => void;
+  loading?: boolean;
 };
 
 const months = Array.from({ length: 12 }, (_, index) => String(index + 1));
@@ -31,6 +32,7 @@ export function HomeFilterPanel({
   onUpdate,
   onClear,
   onApply,
+  loading = false,
 }: HomeFilterPanelProps) {
   return (
     <div className="home-filter-control">
@@ -161,7 +163,12 @@ export function HomeFilterPanel({
               <button className="button button--quiet" type="button" onClick={onClear}>
                 Limpiar
               </button>
-              <button className="button button--primary" type="submit">
+              <button
+                className="button button--primary"
+                type="submit"
+                disabled={loading}
+                aria-busy={loading || undefined}
+              >
                 Ver resultados
               </button>
             </div>

@@ -164,6 +164,9 @@
   gap: 10px;
 }
 .footer nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   color: inherit;
 }
 .footer__bottom {

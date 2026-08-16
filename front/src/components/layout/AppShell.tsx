@@ -22,7 +22,9 @@ export function AppShell({ children, footer = true }: AppShellProps) {
       </a>
       <SiteHeader />
       <EmailVerificationBanner />
-      <main id="main" tabIndex={-1}>{children}</main>
+      <main id="main" className="route-surface" tabIndex={-1}>
+        {children}
+      </main>
       {shouldShowFooter && <SiteFooter />}
     </>
   );

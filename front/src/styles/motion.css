@@ -1,0 +1,388 @@
+/* Motion language: purposeful, brief and limited to spatial or state feedback. */
+.mobile-menu {
+  transform-origin: top center;
+  animation: mobile-menu-enter var(--motion-ui) var(--ease-drawer) both;
+}
+
+.mobile-menu a {
+  animation: mobile-menu-item 220ms var(--ease-out) both;
+}
+
+.mobile-menu a:nth-child(2) {
+  animation-delay: 35ms;
+}
+.mobile-menu a:nth-child(3) {
+  animation-delay: 70ms;
+}
+.mobile-menu a:nth-child(4) {
+  animation-delay: 105ms;
+}
+.mobile-menu a:nth-child(5) {
+  animation-delay: 140ms;
+}
+.mobile-menu a:nth-child(6) {
+  animation-delay: 175ms;
+}
+.mobile-menu a:nth-child(7) {
+  animation-delay: 210ms;
+}
+
+.home-filter-panel,
+.compare-picker__search > div {
+  transform-origin: top center;
+  animation: disclosure-enter 200ms var(--ease-drawer) both;
+}
+
+.compare-picker__selected > span,
+.nav b {
+  animation: selection-confirm 180ms var(--ease-out) both;
+}
+
+.modal-backdrop {
+  animation: backdrop-enter 180ms var(--ease-out) both;
+}
+.modal {
+  transform-origin: center;
+  animation: dialog-enter var(--motion-ui) var(--ease-drawer) both;
+}
+
+/* Editorial pages get one authored opening moment. */
+.home-hero__copy > .kicker,
+.home-hero__copy > h1,
+.home-hero__lead,
+.home-hero__copy > .search-box-group,
+.home-hero__copy > .home-filter-control {
+  animation: editorial-copy-enter 520ms var(--ease-out) both;
+}
+
+.home-hero__copy > h1 {
+  animation-delay: 55ms;
+}
+.home-hero__lead {
+  animation-delay: 110ms;
+}
+.home-hero__copy > .search-box-group {
+  animation-delay: 165ms;
+}
+.home-hero__copy > .home-filter-control {
+  animation-delay: 220ms;
+}
+
+.image-wall,
+.destination-cover__media {
+  animation: editorial-media-enter 680ms var(--ease-in-out) both;
+}
+
+.destination-cover__topline,
+.destination-cover__content,
+.departure-card {
+  animation: editorial-copy-enter 520ms var(--ease-out) both;
+}
+
+.destination-cover__content {
+  animation-delay: 90ms;
+}
+.departure-card {
+  animation-delay: 160ms;
+}
+
+.about-hero > .kicker,
+.about-hero > h1,
+.about-hero > p:last-child {
+  animation: editorial-copy-enter 560ms var(--ease-out) both;
+}
+
+.about-hero > h1 {
+  animation-delay: 70ms;
+}
+.about-hero > p:last-child {
+  animation-delay: 140ms;
+}
+
+/* Viewport reveals run once. Content stays visible without JavaScript. */
+.motion-ready [data-reveal]:not([data-reveal-state]),
+[data-reveal-state='pending'] {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+[data-reveal-state='visible'] {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 420ms var(--ease-out),
+    transform 420ms var(--ease-out);
+}
+
+.map-filters[data-motion-trigger='pointer'] {
+  transform-origin: top right;
+  animation: map-filters-enter 220ms var(--ease-drawer) both;
+}
+
+.map-list[data-motion-trigger='pointer'] {
+  transform-origin: left center;
+  animation: map-list-enter 240ms var(--ease-drawer) both;
+}
+
+/* Universal button contract: color confirms every press; motion is pointer/touch only. */
+button {
+  --button-press-tint: color-mix(in srgb, currentColor 16%, transparent);
+  transition:
+    background-color 120ms var(--ease-out),
+    border-color 120ms var(--ease-out),
+    color 120ms var(--ease-out),
+    opacity 120ms var(--ease-out),
+    scale 120ms var(--ease-out),
+    transform 120ms var(--ease-out);
+}
+
+button:active:not(:disabled),
+button[aria-busy='true'] {
+  background-image: linear-gradient(var(--button-press-tint), var(--button-press-tint));
+}
+
+button:active:not(:disabled):not(:focus-visible) {
+  scale: 0.97;
+}
+
+.button:active:not(:disabled):not(:focus-visible) {
+  transform: translateY(0);
+}
+
+button[aria-busy='true'] {
+  position: relative;
+  cursor: progress;
+}
+
+button[aria-busy='true']:disabled {
+  opacity: 1;
+}
+
+.button {
+  position: relative;
+}
+
+.button__content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: inherit;
+}
+
+.button[data-loading='true'] .button__content {
+  animation: button-content-hide 80ms linear 180ms both;
+}
+
+.button__loading {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding-inline: 12px;
+  white-space: nowrap;
+  animation: button-loading-reveal 80ms var(--ease-out) 180ms both;
+}
+
+.button__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid color-mix(in srgb, currentColor 34%, transparent);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: button-spinner 700ms linear 180ms infinite;
+}
+
+button[aria-busy='true']:not([data-loading]) {
+  overflow: hidden;
+  isolation: isolate;
+}
+
+button[aria-busy='true']:not([data-loading])::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, currentColor 18%, transparent),
+    transparent
+  );
+  pointer-events: none;
+  transform: translateX(-100%);
+  animation: button-busy-sweep 900ms linear 180ms infinite;
+}
+
+:focus-visible {
+  transition: none !important;
+}
+
+@keyframes mobile-menu-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes mobile-menu-item {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes disclosure-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scaleY(0.98);
+  }
+}
+
+@keyframes selection-confirm {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  70% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes backdrop-enter {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+}
+
+@keyframes editorial-copy-enter {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+}
+
+@keyframes editorial-media-enter {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 16% 0);
+    transform: scale(1.025);
+  }
+}
+
+@keyframes map-filters-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.985);
+  }
+}
+
+@keyframes map-list-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+}
+
+@keyframes button-content-hide {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes button-loading-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes button-spinner {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@keyframes button-busy-sweep {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu,
+  .mobile-menu a,
+  .home-filter-panel,
+  .compare-picker__search > div,
+  .compare-picker__selected > span,
+  .nav b,
+  .modal-backdrop,
+  .modal,
+  .home-hero__copy > .kicker,
+  .home-hero__copy > h1,
+  .home-hero__lead,
+  .home-hero__copy > .search-box-group,
+  .home-hero__copy > .home-filter-control,
+  .image-wall,
+  .destination-cover__media,
+  .destination-cover__topline,
+  .destination-cover__content,
+  .departure-card,
+  .about-hero > .kicker,
+  .about-hero > h1,
+  .about-hero > p:last-child,
+  .map-filters,
+  .map-list {
+    animation: reduced-enter 100ms linear both !important;
+    animation-delay: 0ms !important;
+    clip-path: none !important;
+  }
+
+  .motion-ready [data-reveal]:not([data-reveal-state]),
+  [data-reveal-state='pending'],
+  [data-reveal-state='visible'] {
+    opacity: 1;
+    transform: none;
+    transition: opacity 100ms linear;
+  }
+
+  button {
+    transition-duration: 50ms;
+  }
+
+  button:active:not(:disabled):not(:focus-visible) {
+    scale: 1;
+  }
+
+  .button:hover {
+    transform: none;
+  }
+
+  .button__spinner,
+  button[aria-busy='true']:not([data-loading])::after {
+    animation: none;
+  }
+
+  button[aria-busy='true']:not([data-loading])::after {
+    opacity: 0.12;
+    transform: none;
+  }
+}
+
+@keyframes reduced-enter {
+  from {
+    opacity: 0.72;
+  }
+}

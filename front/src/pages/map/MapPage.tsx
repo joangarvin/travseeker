@@ -59,6 +59,7 @@ export default function MapPage() {
     () => typeof window === 'undefined' || !window.matchMedia('(max-width: 760px)').matches,
   );
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [motionSource, setMotionSource] = useState<'pointer' | 'keyboard'>('keyboard');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [tilesReady, setTilesReady] = useState(false);
@@ -125,7 +126,10 @@ export default function MapPage() {
           <div className="map-toolbar__actions">
             <button
               className="button button--secondary"
-              onClick={() => setFiltersOpen((value) => !value)}
+              onClick={(event) => {
+                setMotionSource(event.detail > 0 ? 'pointer' : 'keyboard');
+                setFiltersOpen((value) => !value);
+              }}
               aria-expanded={filtersOpen}
               aria-controls="map-filters"
             >
@@ -133,7 +137,10 @@ export default function MapPage() {
             </button>
             <button
               className="icon-button"
-              onClick={() => setListOpen((value) => !value)}
+              onClick={(event) => {
+                setMotionSource(event.detail > 0 ? 'pointer' : 'keyboard');
+                setListOpen((value) => !value);
+              }}
               aria-label={listOpen ? 'Ver solo el mapa' : 'Mostrar lista de destinos'}
               title={listOpen ? 'Ver solo el mapa' : 'Mostrar lista'}
             >
@@ -142,7 +149,13 @@ export default function MapPage() {
           </div>
         </header>
         {filtersOpen && (
-          <div className="map-filters" id="map-filters" role="region" aria-label="Filtros del mapa">
+          <div
+            className="map-filters"
+            id="map-filters"
+            role="region"
+            aria-label="Filtros del mapa"
+            data-motion-trigger={motionSource}
+          >
             <select
               value={filters.month || ''}
               onChange={(event) => update('month', event.target.value)}
@@ -225,7 +238,11 @@ export default function MapPage() {
         )}
         <div className={`map-layout ${listOpen ? '' : 'map-layout--closed'}`}>
           {listOpen && (
-            <aside className="map-list" aria-label="Destinos del mapa">
+            <aside
+              className="map-list"
+              aria-label="Destinos del mapa"
+              data-motion-trigger={motionSource}
+            >
               {loading ? (
                 <Loader />
               ) : error ? (

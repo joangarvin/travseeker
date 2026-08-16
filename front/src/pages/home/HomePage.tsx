@@ -44,6 +44,7 @@ export default function Home() {
   const [featured, setFeatured] = useState<Destino[]>([]);
   const [results, setResults] = useState<Destino[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchPending, setSearchPending] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState('');
   const [resultsTotal, setResultsTotal] = useState(0);
@@ -74,6 +75,7 @@ export default function Home() {
     setAppliedFilters(next);
     setParams(nextParams, { replace: true });
     setLoading(true);
+    setSearchPending(true);
     setError('');
     setResults([]);
     setResultsTotal(0);
@@ -92,7 +94,10 @@ export default function Home() {
       if (controller.signal.aborted) return;
       setError(cause instanceof Error ? cause.message : 'No se pudieron cargar los destinos');
     } finally {
-      if (mainSearchAbort.current === controller) setLoading(false);
+      if (mainSearchAbort.current === controller) {
+        setLoading(false);
+        setSearchPending(false);
+      }
     }
   };
 
@@ -244,6 +249,7 @@ export default function Home() {
             value={filters.q || ''}
             onChange={(value) => update('q', value)}
             onSubmit={() => void submitMainSearch()}
+            loading={searchPending}
           />
           <HomeFilterPanel
             filters={filters}
@@ -260,6 +266,7 @@ export default function Home() {
               setFiltersOpen(false);
               void search();
             }}
+            loading={searchPending}
           />
         </div>
         <div className="image-wall" aria-label="Destinos destacados">
@@ -289,7 +296,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="trip-moods">
+      <section className="trip-moods" data-reveal>
         <div>
           <h2>¿Qué quieres que pase?</h2>
         </div>
@@ -303,7 +310,11 @@ export default function Home() {
               onClick={() => {
                 const next = { ...filters, tipoTurismo: mode.label };
                 void search(next);
-                document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('results')?.scrollIntoView({
+                  behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                    ? 'auto'
+                    : 'smooth',
+                });
               }}
             >
               <span className="trip-moods__icon">
@@ -319,7 +330,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="results" className="results-section">
+      <section id="results" className="results-section" data-reveal>
         <header className="section-head">
           <div>
             <p className="kicker" role="status" aria-live="polite">
@@ -381,14 +392,16 @@ export default function Home() {
                 disabled={loadingMore}
                 aria-busy={loadingMore}
               >
-                {loadingMore ? 'Cargando más destinos…' : `Mostrar más destinos (${Math.max(resultCount - visibleResults.length, 0)} restantes)`}
+                {loadingMore
+                  ? 'Cargando más destinos…'
+                  : `Mostrar más destinos (${Math.max(resultCount - visibleResults.length, 0)} restantes)`}
               </button>
             )}
           </>
         )}
       </section>
 
-      <section className="decision-band" aria-labelledby="decision-band-title">
+      <section className="decision-band" aria-labelledby="decision-band-title" data-reveal>
         <header>
           <p className="kicker">La brújula de TravSeeker</p>
           <h2 id="decision-band-title">Tres señales antes de elegir</h2>
