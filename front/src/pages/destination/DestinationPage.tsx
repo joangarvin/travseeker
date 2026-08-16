@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowLeft,
-  BedDouble,
   BookmarkPlus,
   Check,
   Compass,
@@ -32,12 +31,11 @@ import {
 } from '../../utils';
 import type { CollectionSummary, Destino, EssentialItem, Review, ReviewStats } from '../../types';
 import { Button, Field, Loader, MediaImage, Notice } from '../../components/ui';
-import { BudgetEstimator } from '../../components/BudgetEstimator';
-import { FormattedContent } from '../../components/FormattedContent';
 import { PageMeta, Shell } from '../../components/layout';
 import { DestinationCard } from '../../features/destinations/components/DestinationCard';
 import { EssentialRoute } from '../../features/destinations/components/EssentialRoute';
 import { DestinationTripDialog } from '../../features/destinations/components/DestinationTripDialog';
+import { DestinationPlanningSection } from '../../features/destinations/components/DestinationPlanningSection';
 import { TourismMarks } from '../../features/tourism/tourism';
 import { ActivityMarks, activityValues } from '../../features/activities/activities';
 import { ClimateSection } from '../../features/climate/components/ClimateSection';
@@ -63,6 +61,22 @@ const reviewDateFormatter = new Intl.DateTimeFormat('es-ES', {
   year: 'numeric',
 });
 
+function reviewAuthor(review: Review) {
+  return (
+    [review.user?.nombre, review.user?.apellidos].filter(Boolean).join(' ').trim() ||
+    'Viajero de TravSeeker'
+  );
+}
+
+function initials(name: string) {
+  return name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join('')
+    .toLocaleUpperCase('es');
+}
+
 function DestinationSchema({ destino }: { destino: Destino }) {
   const coordinates = validCoordinates(destino.latitud, destino.longitud);
   const schema = {
@@ -85,22 +99,6 @@ function DestinationSchema({ destino }: { destino: Destino }) {
       dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }}
     />
   );
-}
-
-function reviewAuthor(review: Review) {
-  return (
-    [review.user?.nombre, review.user?.apellidos].filter(Boolean).join(' ').trim() ||
-    'Viajero de TravSeeker'
-  );
-}
-
-function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join('')
-    .toLocaleUpperCase('es');
 }
 
 export default function DestinationPage() {
@@ -392,13 +390,6 @@ export default function DestinationPage() {
   const average = reviewStats.average || 0;
   const destinationMapUrl = coordinates ? openStreetMapUrl(coordinates) : null;
   const loginState = { returnTo: location.pathname + location.search };
-  const selectedBase =
-    destino.municipios?.find((municipio) => municipio.id === selectedBaseMunicipioId) ||
-    destino.municipios?.[0];
-  const alternativeBases = destino.municipios?.filter(
-    (municipio) => municipio.id !== selectedBase?.id,
-  );
-  const visibleAlternativeBases = basesExpanded ? alternativeBases : alternativeBases?.slice(0, 3);
   const destinationNameLength = destino.nombre.trim().length;
   const titleSizeClass =
     destinationNameLength > 34
@@ -621,124 +612,13 @@ export default function DestinationPage() {
           />
         </div>
 
-        {!!destino.municipios?.length && (
-          <section id="bases" className="municipalities" aria-labelledby="bases-title">
-            <div className="destination-section-heading">
-              <p className="kicker">Dónde hacer base</p>
-              <h2 id="bases-title">Elige una base práctica</h2>
-              <p>
-                Compara el coste orientativo y las conexiones. La base elegida se aplica al cálculo
-                de presupuesto.
-              </p>
-            </div>
-            <div className="planning-workbench">
-              <div className="municipalities__chooser">
-                <label htmlFor="destination-base-selector">Base del viaje</label>
-                <select
-                  id="destination-base-selector"
-                  value={selectedBase?.id}
-                  onChange={(event) => setSelectedBaseMunicipioId(event.target.value)}
-                >
-                  {destino.municipios.map((municipio) => (
-                    <option key={municipio.id} value={municipio.id}>
-                      {municipio.nombre}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {selectedBase &&
-                (() => {
-                  const municipioCoordinates = validCoordinates(
-                    selectedBase.latitud,
-                    selectedBase.longitud,
-                  );
-                  return (
-                    <article className="municipalities__selected-base">
-                      <div className="municipalities__selected-heading">
-                        <div>
-                          <p>
-                            <Check aria-hidden="true" /> Base seleccionada
-                          </p>
-                          <h3>{selectedBase.nombre}</h3>
-                        </div>
-                        {municipioCoordinates && (
-                          <a
-                            href={openStreetMapUrl(municipioCoordinates, 14)}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            Ver en el mapa <ExternalLink aria-hidden="true" />
-                          </a>
-                        )}
-                      </div>
-                      <dl>
-                        <div>
-                          <dt>
-                            <BedDouble aria-hidden="true" /> Precio orientativo/noche
-                          </dt>
-                          <dd>
-                            {plain(selectedBase.precios) ? (
-                              <FormattedContent content={selectedBase.precios} asPlaintext />
-                            ) : (
-                              'Sin precio publicado'
-                            )}
-                          </dd>
-                        </div>
-                        <div>
-                          <dt>
-                            <MapPin aria-hidden="true" /> Conexiones
-                          </dt>
-                          <dd>
-                            {plain(selectedBase.conexiones) ? (
-                              <FormattedContent content={selectedBase.conexiones} asPlaintext />
-                            ) : (
-                              'Sin detalle de conexiones'
-                            )}
-                          </dd>
-                        </div>
-                      </dl>
-                    </article>
-                  );
-                })()}
-
-              {!!visibleAlternativeBases?.length && (
-                <div className="municipalities__alternatives">
-                  <p>Otras bases</p>
-                  <ul>
-                    {visibleAlternativeBases.map((municipio) => (
-                      <li key={municipio.id}>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedBaseMunicipioId(municipio.id)}
-                        >
-                          <span>{municipio.nombre}</span>
-                          <small>
-                            {excerptAtWord(plain(municipio.precios), 62) || 'Precio por confirmar'}
-                          </small>
-                          <span aria-hidden="true">Elegir</span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                  {(alternativeBases?.length || 0) > 3 && (
-                    <Button variant="secondary" onClick={() => setBasesExpanded((value) => !value)}>
-                      {basesExpanded
-                        ? 'Ver menos bases'
-                        : `Ver las ${alternativeBases?.length} alternativas`}
-                    </Button>
-                  )}
-                </div>
-              )}
-
-              <BudgetEstimator
-                municipios={destino.municipios}
-                defaultMunicipioId={selectedBaseMunicipioId}
-                showMunicipioControl={false}
-              />
-            </div>
-          </section>
-        )}
+        <DestinationPlanningSection
+          destination={destino}
+          selectedMunicipioId={selectedBaseMunicipioId}
+          alternativesExpanded={basesExpanded}
+          onSelectMunicipio={setSelectedBaseMunicipioId}
+          onToggleAlternatives={() => setBasesExpanded((value) => !value)}
+        />
 
         {!!destino.places?.length && (
           <section className="nearby" aria-labelledby="nearby-title">
