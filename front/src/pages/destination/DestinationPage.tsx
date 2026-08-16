@@ -523,7 +523,12 @@ export default function DestinationPage() {
       </nav>
 
       <div className="destination-guide">
-        <section id="resumen" className="destination-summary" aria-labelledby="summary-title">
+        <section
+          id="resumen"
+          className="destination-summary"
+          aria-labelledby="summary-title"
+          data-reveal
+        >
           <div className="destination-section-heading">
             <p className="kicker">La decisión rápida</p>
             <h2 id="summary-title">¿Encaja contigo?</h2>
@@ -599,7 +604,12 @@ export default function DestinationPage() {
           </div>
         </section>
 
-        <section id="cuando-ir" className="season-section" aria-labelledby="when-to-go-heading">
+        <section
+          id="cuando-ir"
+          className="season-section"
+          aria-labelledby="when-to-go-heading"
+          data-reveal
+        >
           <ClimateSection destinationId={destino.id} hasValidCoordinates={Boolean(coordinates)} />
         </section>
 
@@ -621,7 +631,7 @@ export default function DestinationPage() {
         />
 
         {!!destino.places?.length && (
-          <section className="nearby" aria-labelledby="nearby-title">
+          <section className="nearby" aria-labelledby="nearby-title" data-reveal>
             <div className="destination-section-heading">
               <p className="kicker">Amplía el viaje</p>
               <h2 id="nearby-title">Lugares alrededor</h2>
@@ -667,7 +677,7 @@ export default function DestinationPage() {
           </section>
         )}
 
-        <section id="opiniones" className="reviews" aria-labelledby="reviews-title">
+        <section id="opiniones" className="reviews" aria-labelledby="reviews-title" data-reveal>
           <header className="reviews__heading">
             <div className="destination-section-heading">
               <p className="kicker">Experiencias reales</p>

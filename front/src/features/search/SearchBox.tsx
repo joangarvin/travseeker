@@ -5,6 +5,7 @@ type SearchBoxProps = {
   onChange: (value: string) => void;
   onSubmit: () => void;
   placeholder?: string;
+  loading?: boolean;
 };
 
 export function SearchBox({
@@ -12,6 +13,7 @@ export function SearchBox({
   onChange,
   onSubmit,
   placeholder = 'Destino, municipio, actividad o plan',
+  loading = false,
 }: SearchBoxProps) {
   return (
     <div className="search-box-group">
@@ -37,7 +39,7 @@ export function SearchBox({
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
         />
-        <button type="submit">
+        <button type="submit" disabled={loading} aria-busy={loading || undefined}>
           Buscar <ArrowRight />
         </button>
       </form>

@@ -251,8 +251,13 @@
 }
 .collection-card:hover {
   border-color: var(--ink);
-  transform: translateY(-3px);
   box-shadow: var(--shadow-1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .collection-card:hover {
+    transform: translateY(-3px);
+  }
 }
 .collection-card:focus-visible {
   outline: 3px solid var(--brand);
@@ -284,8 +289,10 @@
   height: 20px;
   transition: transform 150ms var(--ease);
 }
-.collection-card:hover .collection-card__arrow {
-  transform: translate(2px, -2px);
+@media (hover: hover) and (pointer: fine) {
+  .collection-card:hover .collection-card__arrow {
+    transform: translate(2px, -2px);
+  }
 }
 .collection-card__title {
   align-self: center;

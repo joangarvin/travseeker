@@ -34,6 +34,7 @@ export default function CollectionsPage() {
   const loadCollections = async () => {
     if (!token) return;
 
+    setIsLoading(true);
     try {
       setError('');
       setCollections(await api<CollectionSummary[]>('/colecciones', {}, token));

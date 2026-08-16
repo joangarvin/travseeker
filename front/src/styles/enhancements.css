@@ -625,9 +625,14 @@
 .trip-moods__list button {
   position: relative;
 }
-.trip-moods__list button:hover::before,
 .trip-moods__list button:focus-visible::before {
   transform: scaleX(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .trip-moods__list button:hover::before {
+    transform: scaleX(1);
+  }
 }
 .trip-moods__icon {
   display: grid;
@@ -1315,11 +1320,6 @@
 .toast button:hover {
   background: color-mix(in srgb, var(--ink) 8%, transparent);
 }
-.email-verification-banner .button:active:not(:disabled),
-.email-verification-banner__dismiss:active,
-.toast button:active {
-  transform: scale(0.97);
-}
 .toast {
   position: fixed;
   z-index: 1200;
@@ -1335,7 +1335,16 @@
   background: var(--ink);
   color: var(--canvas);
   box-shadow: 0 18px 50px color-mix(in srgb, #000 28%, transparent);
-  animation: toast-enter 180ms var(--ease) both;
+  transition:
+    opacity 180ms var(--ease-out),
+    transform 180ms var(--ease-out);
+}
+
+@starting-style {
+  .toast {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 }
 .toast--success > svg {
   color: var(--success);
@@ -1350,15 +1359,9 @@
 .toast button {
   color: inherit;
 }
-@keyframes toast-enter {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-}
 @media (prefers-reduced-motion: reduce) {
   .toast {
-    animation: none;
+    transition: opacity 100ms linear;
   }
   .email-verification-banner .button,
   .email-verification-banner__dismiss,

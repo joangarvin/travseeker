@@ -169,8 +169,10 @@
     color 160ms var(--ease),
     transform 160ms var(--ease);
 }
-.button:hover {
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .button:hover {
+    transform: translateY(-1px);
+  }
 }
 .button--primary {
   background: var(--brand);

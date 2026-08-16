@@ -258,8 +258,10 @@
   transition: scale 600ms var(--ease);
 }
 
-.image-wall a:hover img {
-  scale: 1.04;
+@media (hover: hover) and (pointer: fine) {
+  .image-wall a:hover img {
+    scale: 1.04;
+  }
 }
 
 .image-wall a::after {
@@ -329,8 +331,10 @@
   letter-spacing: 0.12em;
 }
 
-.trip-moods__list button:hover svg {
-  transform: translateX(5px);
+@media (hover: hover) and (pointer: fine) {
+  .trip-moods__list button:hover svg {
+    transform: translateX(5px);
+  }
 }
 
 .results-section {
@@ -608,8 +612,10 @@
   transition: scale 400ms var(--ease);
 }
 
-.destination-card:hover .destination-card__image img {
-  scale: 1.025;
+@media (hover: hover) and (pointer: fine) {
+  .destination-card:hover .destination-card__image img {
+    scale: 1.025;
+  }
 }
 
 .destination-card__image > span {

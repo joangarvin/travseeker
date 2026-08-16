@@ -40,6 +40,8 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [actionPending, setActionPending] = useState(false);
+  const [pendingDestinationId, setPendingDestinationId] = useState<string | null>(null);
+  const [deletePending, setDeletePending] = useState(false);
   const [view, setView] = useState<'overview' | 'destinations' | 'itinerary'>(
     publicView ? 'itinerary' : 'overview',
   );
@@ -48,6 +50,7 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
   const endpoint = publicView ? `/colecciones/public/${shareToken}` : `/colecciones/${id}`;
 
   const loadCollection = async () => {
+    setIsLoading(true);
     try {
       setError('');
       setCollection(await api<CollectionDetail>(endpoint, {}, publicView ? null : token));
@@ -65,6 +68,7 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
   const removeDestination = async (destinationId: string) => {
     if (!token || !id) return;
     setActionPending(true);
+    setPendingDestinationId(destinationId);
     try {
       await api(`/colecciones/${id}/items/${destinationId}`, { method: 'DELETE' }, token);
       await loadCollection();
@@ -72,6 +76,7 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
       setError(cause instanceof Error ? cause.message : 'No se pudo quitar el destino');
     } finally {
       setActionPending(false);
+      setPendingDestinationId(null);
     }
   };
 
@@ -179,12 +184,14 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
     if (!token || !id || !confirmed) return;
 
     setActionPending(true);
+    setDeletePending(true);
     try {
       await api(`/colecciones/${id}`, { method: 'DELETE' }, token);
       navigate('/colecciones');
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'No se pudo eliminar el viaje');
       setActionPending(false);
+      setDeletePending(false);
     }
   };
 
@@ -336,6 +343,7 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
                     <button
                       type="button"
                       disabled={actionPending}
+                      aria-busy={pendingDestinationId === item.destino.id || undefined}
                       onClick={() => void removeDestination(item.destino.id)}
                       aria-label={`Quitar ${item.destino.nombre}`}
                     >
@@ -386,7 +394,13 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
             <strong>Eliminar viaje</strong>
             <p>Se borrarán el itinerario, los destinos guardados y el enlace público.</p>
           </div>
-          <Button variant="danger" disabled={actionPending} onClick={() => void removeCollection()}>
+          <Button
+            variant="danger"
+            loading={deletePending}
+            disabled={actionPending}
+            loadingLabel="Eliminando…"
+            onClick={() => void removeCollection()}
+          >
             <Trash2 /> Eliminar
           </Button>
         </section>
