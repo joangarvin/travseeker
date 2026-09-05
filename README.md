@@ -6,7 +6,7 @@ Aplicación web full-stack para descubrir destinos turísticos en España con in
 
 | Capa | Tecnologías |
 |------|-------------|
-| Frontend | React, Vite, TypeScript, Tailwind CSS v4 |
+| Frontend | React, Vite, TypeScript, CSS |
 | Backend | Node.js, Express, Prisma |
 | Base de datos | PostgreSQL |
 
@@ -39,18 +39,12 @@ Cada carpeta tiene su propio `README.md` con la descripción de archivos y subca
 - [backend/src/utils/README.md](./backend/src/utils/README.md)
 
 ### Frontend
-- [front/README.md](./front/README.md)
-- [front/public/README.md](./front/public/README.md)
-- [front/src/README.md](./front/src/README.md)
-- [front/src/api/README.md](./front/src/api/README.md)
-- [front/src/assets/README.md](./front/src/assets/README.md)
-- [front/src/components/README.md](./front/src/components/README.md)
-- [front/src/context/README.md](./front/src/context/README.md)
-- [front/src/hooks/README.md](./front/src/hooks/README.md)
-- [front/src/pages/README.md](./front/src/pages/README.md)
-- [front/src/styles/README.md](./front/src/styles/README.md)
-- [front/src/types/README.md](./front/src/types/README.md)
-- [front/src/utils/README.md](./front/src/utils/README.md)
+- [Guía del frontend](./front/README.md)
+- [Revisión de legibilidad y refactorización](./REFACTORING_REVIEW.md)
+
+## Comprobaciones
+
+Desde la raíz, `npm test` ejecuta los tests del backend y frontend. `npm run check` añade lint y el build de producción del frontend. Los tests del frontend requieren Node con soporte nativo para TypeScript (22.18+ o una versión posterior compatible).
 
 ## Arranque local
 

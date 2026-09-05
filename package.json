@@ -10,6 +10,8 @@
     "install:all": "cd backend && npm install && cd ../front && npm install",
     "db:push": "cd backend && npm run db:push",
     "db:seed": "cd backend && npm run db:seed",
-    "db:coords": "cd backend && npm run db:coords"
+    "db:coords": "cd backend && npm run db:coords",
+    "test": "npm test --prefix backend && npm test --prefix front",
+    "check": "npm test && npm run lint --prefix front && npm run build:front"
   }
 }

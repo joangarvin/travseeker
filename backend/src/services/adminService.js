@@ -1,156 +1,15 @@
 const { prisma } = require("../config/database");
+const { parseTags } = require("../constants/scales");
+const { normalizeEssentialGroups } = require("../domain/essentials");
 const {
-  parseTags,
-  serializeTags,
-  isTourismType,
-  normalizeActivity,
-} = require("../constants/scales");
-const {
-  normalizeEssentialGroups,
-  plainHtml,
-  serializeEssentialGroups,
-} = require("../domain/essentials");
+  normalizeDestinationPayload,
+  validateDestino,
+  normalizeMunicipioPayload,
+  normalizePlace,
+} = require("../domain/adminPayload");
+const { mapAdminDestination } = require("../domain/destinationMapping");
+const { cleanMunicipalityFields } = require("../utils/sanitizeContent");
 const uploadService = require("./uploadService");
-const {
-  cleanMunicipalityFields,
-  stripHtmlToText,
-} = require("../utils/sanitizeContent");
-
-function clean(value, max) {
-  if (typeof value !== "string") return null;
-  const normalized = value.trim();
-  return normalized ? normalized.slice(0, max) : null;
-}
-
-function normalizePayload(data, essentialGroups = null) {
-  const secondaryValues = parseTags(data.tipoTurismoSecundario);
-  const primaryTypes = [
-    ...new Set([
-      ...parseTags(data.tipoTurismoPrincipal),
-      ...secondaryValues.filter(isTourismType),
-    ]),
-  ];
-  const secondaryTypes = [
-    ...new Set(
-      secondaryValues
-        .filter((value) => !isTourismType(value))
-        .map(normalizeActivity),
-    ),
-  ];
-  return {
-    nombre: String(data.nombre || "").trim(),
-    tipoTurismoPrincipal: serializeTags(primaryTypes),
-    tipoTurismoSecundario: serializeTags(secondaryTypes),
-    presupuesto: String(data.presupuesto || "").trim(),
-    masificacion: String(data.masificacion || "").trim(),
-    mesesJulioAgosto: Number(data.mesesJulioAgosto || 0),
-    mesesMayJunSeptOct: Number(data.mesesMayJunSeptOct || 0),
-    mesesNovAbril: Number(data.mesesNovAbril || 0),
-    destinosItem: data.destinosItem ? String(data.destinosItem).trim() : null,
-    ubicacion: String(data.ubicacion || "").trim(),
-    descripcion: String(data.descripcion || "").trim(),
-    imprescindibles:
-      essentialGroups?.length > 0
-        ? serializeEssentialGroups(essentialGroups)
-        : String(data.imprescindibles || "").trim(),
-    imagen: String(data.imagen || "").trim(),
-    latitud:
-      data.latitud === "" || data.latitud == null ? null : Number(data.latitud),
-    longitud:
-      data.longitud === "" || data.longitud == null
-        ? null
-        : Number(data.longitud),
-  };
-}
-
-function validateDestino(data, essentialGroups = null) {
-  if (!parseTags(data.tipoTurismoPrincipal).length) {
-    const err = new Error("Falta completar: Tipo de turismo principal");
-    err.status = 400;
-    throw err;
-  }
-  const labels = {
-    nombre: "Nombre del destino",
-    presupuesto: "Presupuesto",
-    masificacion: "Masificación",
-    ubicacion: "Zona o región",
-    descripcion: "Descripción",
-    imagen: "Imagen de portada",
-  };
-  for (const [key, label] of Object.entries(labels)) {
-    if (!data[key]) {
-      const err = new Error(`Falta completar: ${label}`);
-      err.status = 400;
-      throw err;
-    }
-  }
-  if (!plainHtml(data.imprescindibles) && !essentialGroups?.length) {
-    const error = new Error("Añade al menos un imprescindible");
-    error.status = 400;
-    throw error;
-  }
-}
-
-function normalizeMunicipioPayload(payload) {
-  const nombre = stripHtmlToText(payload.nombre);
-  if (!nombre) {
-    const err = new Error("El nombre del municipio es obligatorio");
-    err.status = 400;
-    throw err;
-  }
-  const latitud = payload.latitud === "" || payload.latitud == null ? null : Number(payload.latitud);
-  const longitud = payload.longitud === "" || payload.longitud == null ? null : Number(payload.longitud);
-  if (
-    (latitud === null) !== (longitud === null) ||
-    (latitud !== null && (!Number.isFinite(latitud) || Math.abs(latitud) > 90)) ||
-    (longitud !== null && (!Number.isFinite(longitud) || Math.abs(longitud) > 180))
-  ) {
-    const err = new Error("Las coordenadas del municipio no son válidas");
-    err.status = 400;
-    throw err;
-  }
-  return {
-    nombre,
-    precios: stripHtmlToText(payload.precios),
-    conexiones: stripHtmlToText(payload.conexiones),
-    tipoTurismo: stripHtmlToText(payload.tipoTurismo),
-    latitud,
-    longitud,
-  };
-}
-
-function mapDestinoMunicipios(destino) {
-  if (!destino) return destino;
-  const municipios = (destino.municipioLinks || [])
-    .map((link) => cleanMunicipalityFields(link.municipio))
-    .filter(Boolean)
-    .sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
-  const activities = (destino.activityLinks || [])
-    .map((link) => link.activity)
-    .filter(Boolean)
-    .sort((a, b) => a.name.localeCompare(b.name, "es"));
-  const tourismTypes = (destino.tourismTypeLinks || [])
-    .map((link) => link.tourismType)
-    .filter(Boolean)
-    .sort(
-      (a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name, "es"),
-    );
-  const { municipioLinks, activityLinks, tourismTypeLinks, ...rest } = destino;
-  return {
-    ...rest,
-    tipoTurismoPrincipal: tourismTypes.length
-      ? serializeTags(tourismTypes.map((type) => type.name))
-      : rest.tipoTurismoPrincipal,
-    tipoTurismoSecundario: activities.length
-      ? serializeTags(activities.map((activity) => activity.name))
-      : rest.tipoTurismoSecundario,
-    municipios,
-    activities,
-    activityIds: activities.map((activity) => activity.id),
-    tourismTypes,
-    tourismTypeIds: tourismTypes.map((type) => type.id),
-  };
-}
 
 async function syncDestinationTourismTypes(
   transaction,
@@ -249,10 +108,22 @@ const destinationRelations = {
     },
   },
   createdBy: {
-    select: { id: true, nombre: true, apellidos: true, avatarUrl: true, email: true },
+    select: {
+      id: true,
+      nombre: true,
+      apellidos: true,
+      avatarUrl: true,
+      email: true,
+    },
   },
   reviewedBy: {
-    select: { id: true, nombre: true, apellidos: true, avatarUrl: true, email: true },
+    select: {
+      id: true,
+      nombre: true,
+      apellidos: true,
+      avatarUrl: true,
+      email: true,
+    },
   },
 };
 
@@ -326,7 +197,7 @@ async function listDestinos() {
       tourismTypeLinks: { include: { tourismType: true } },
     },
   });
-  return rows.map(mapDestinoMunicipios);
+  return rows.map(mapAdminDestination);
 }
 
 async function getDestino(id) {
@@ -339,12 +210,12 @@ async function getDestino(id) {
     error.status = 404;
     throw error;
   }
-  return mapDestinoMunicipios(destination);
+  return mapAdminDestination(destination);
 }
 
 async function createDestino(payload, createdById) {
   const essentialGroups = normalizeEssentialGroups(payload.essentialGroups);
-  const data = normalizePayload(payload, essentialGroups);
+  const data = normalizeDestinationPayload(payload, essentialGroups);
   validateDestino(data, essentialGroups);
   const created = await prisma.$transaction(async (transaction) => {
     const destination = await transaction.destino.create({
@@ -370,12 +241,12 @@ async function createDestino(payload, createdById) {
       include: destinationRelations,
     });
   });
-  return mapDestinoMunicipios(created);
+  return mapAdminDestination(created);
 }
 
 async function updateDestino(id, payload) {
   const essentialGroups = normalizeEssentialGroups(payload.essentialGroups);
-  const data = normalizePayload(payload, essentialGroups);
+  const data = normalizeDestinationPayload(payload, essentialGroups);
   validateDestino(data, essentialGroups);
   const previousImages = await prisma.essentialItem.findMany({
     where: { group: { destinoId: id }, imageUrl: { not: null } },
@@ -405,9 +276,11 @@ async function updateDestino(id, payload) {
     ),
   );
   await uploadService.deleteEssentialImages(
-    previousImages.map((item) => item.imageUrl).filter((url) => !retainedImages.has(url)),
+    previousImages
+      .map((item) => item.imageUrl)
+      .filter((url) => !retainedImages.has(url)),
   );
-  return mapDestinoMunicipios(updated);
+  return mapAdminDestination(updated);
 }
 
 async function deleteDestino(id) {
@@ -416,7 +289,9 @@ async function deleteDestino(id) {
     select: { imageUrl: true },
   });
   await prisma.destino.delete({ where: { id } });
-  await uploadService.deleteEssentialImages(images.map((item) => item.imageUrl));
+  await uploadService.deleteEssentialImages(
+    images.map((item) => item.imageUrl),
+  );
   return { success: true };
 }
 
@@ -517,39 +392,6 @@ async function unlinkMunicipio(destinoId, municipioId) {
     where: { destinoId, municipioId },
   });
   return { success: true };
-}
-
-function normalizePlace(payload) {
-  const nombre = clean(payload.nombre, 100);
-  const categoria = clean(payload.categoria, 40);
-  const latitud = Number(payload.latitud);
-  const longitud = Number(payload.longitud);
-  if (
-    !nombre ||
-    !categoria ||
-    !Number.isFinite(latitud) ||
-    !Number.isFinite(longitud) ||
-    Math.abs(latitud) > 90 ||
-    Math.abs(longitud) > 180
-  ) {
-    const error = new Error(
-      "Nombre, categoría y coordenadas válidas son obligatorios",
-    );
-    error.status = 400;
-    throw error;
-  }
-  return {
-    nombre,
-    categoria,
-    latitud,
-    longitud,
-    descripcion: clean(payload.descripcion, 500),
-    website: clean(payload.website, 300),
-    sortOrder: Number.isInteger(Number(payload.sortOrder))
-      ? Number(payload.sortOrder)
-      : 0,
-    isActive: payload.isActive !== false,
-  };
 }
 
 async function listPlaces(destinoId) {

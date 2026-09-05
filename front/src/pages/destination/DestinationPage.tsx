@@ -1,3 +1,5 @@
+import { DestinationReviews } from '../../features/destinations/components/DestinationReviews';
+import { useDestinationReviews } from '../../features/destinations/hooks/useDestinationReviews';
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
@@ -29,8 +31,8 @@ import {
   serializeJsonLd,
   validCoordinates,
 } from '../../utils';
-import type { CollectionSummary, Destino, EssentialItem, Review, ReviewStats } from '../../types';
-import { Button, Field, Loader, MediaImage, Notice } from '../../components/ui';
+import type { CollectionSummary, Destino, EssentialItem } from '../../types';
+import { Button, Loader, MediaImage, Notice } from '../../components/ui';
 import { PageMeta, Shell } from '../../components/layout';
 import { DestinationCard } from '../../features/destinations/components/DestinationCard';
 import { EssentialRoute } from '../../features/destinations/components/EssentialRoute';
@@ -39,43 +41,6 @@ import { DestinationPlanningSection } from '../../features/destinations/componen
 import { TourismMarks } from '../../features/tourism/tourism';
 import { ActivityMarks, activityValues } from '../../features/activities/activities';
 import { ClimateSection } from '../../features/climate/components/ClimateSection';
-
-const monthNames = [
-  'enero',
-  'febrero',
-  'marzo',
-  'abril',
-  'mayo',
-  'junio',
-  'julio',
-  'agosto',
-  'septiembre',
-  'octubre',
-  'noviembre',
-  'diciembre',
-];
-
-const reviewDateFormatter = new Intl.DateTimeFormat('es-ES', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-});
-
-function reviewAuthor(review: Review) {
-  return (
-    [review.user?.nombre, review.user?.apellidos].filter(Boolean).join(' ').trim() ||
-    'Viajero de TravSeeker'
-  );
-}
-
-function initials(name: string) {
-  return name
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join('')
-    .toLocaleUpperCase('es');
-}
 
 function DestinationSchema({ destino }: { destino: Destino }) {
   const coordinates = validCoordinates(destino.latitud, destino.longitud);
@@ -107,10 +72,10 @@ export default function DestinationPage() {
   const navigate = useNavigate();
   const { user, token } = useAuth();
   const compare = useCompare();
+  const reviewState = useDestinationReviews(id, token);
+  const { reviews, reviewStats } = reviewState;
   const [destino, setDestino] = useState<Destino | null>(null);
   const [related, setRelated] = useState<Destino[]>([]);
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [reviewStats, setReviewStats] = useState<ReviewStats>({});
   const [favorite, setFavorite] = useState(false);
   const [collections, setCollections] = useState<CollectionSummary[]>([]);
   const [tripDialogItem, setTripDialogItem] = useState<EssentialItem | null | undefined>(undefined);
@@ -119,8 +84,6 @@ export default function DestinationPage() {
   const [error, setError] = useState('');
   const [relatedLoading, setRelatedLoading] = useState(false);
   const [relatedError, setRelatedError] = useState('');
-  const [reviewsLoading, setReviewsLoading] = useState(false);
-  const [reviewsError, setReviewsError] = useState('');
   const [collectionsLoading, setCollectionsLoading] = useState(false);
   const [collectionsError, setCollectionsError] = useState('');
   const [favoritePending, setFavoritePending] = useState(false);
@@ -131,12 +94,6 @@ export default function DestinationPage() {
   const [sharePending, setSharePending] = useState(false);
   const [shareError, setShareError] = useState('');
   const [shareFeedback, setShareFeedback] = useState('');
-  const [rating, setRating] = useState(5);
-  const [comment, setComment] = useState('');
-  const [reviewPending, setReviewPending] = useState(false);
-  const [reviewError, setReviewError] = useState('');
-  const [reviewConfirmation, setReviewConfirmation] = useState('');
-  const [visibleReviewCount, setVisibleReviewCount] = useState(3);
   const [basesExpanded, setBasesExpanded] = useState(false);
 
   useEffect(() => {
@@ -182,28 +139,6 @@ export default function DestinationPage() {
     }
   };
 
-  const loadReviews = async (signal?: AbortSignal) => {
-    setReviewsLoading(true);
-    setReviewsError('');
-    try {
-      const data = await api<{ reviews: Review[]; stats: ReviewStats }>(`/destinos/${id}/reviews`, {
-        signal,
-      });
-      if (!signal?.aborted) {
-        setReviews(data.reviews);
-        setReviewStats(data.stats);
-      }
-    } catch (cause) {
-      if (!signal?.aborted) {
-        setReviewsError(
-          cause instanceof Error ? cause.message : 'No se pudieron cargar las opiniones',
-        );
-      }
-    } finally {
-      if (!signal?.aborted) setReviewsLoading(false);
-    }
-  };
-
   const loadCollections = async (signal?: AbortSignal) => {
     if (!token) return;
     setCollectionsLoading(true);
@@ -225,11 +160,7 @@ export default function DestinationPage() {
   useEffect(() => {
     const controller = new AbortController();
     setRelated([]);
-    setReviews([]);
-    setReviewStats({});
-    setVisibleReviewCount(3);
     void loadRelated(controller.signal);
-    void loadReviews(controller.signal);
     return () => controller.abort();
   }, [id]);
 
@@ -311,35 +242,6 @@ export default function DestinationPage() {
       }
     } finally {
       setSharePending(false);
-    }
-  };
-
-  const submitReview = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!token) return;
-    const cleanComment = comment.trim();
-    if (cleanComment.length < 20) {
-      setReviewError('Cuenta tu experiencia con al menos 20 caracteres.');
-      return;
-    }
-    setReviewPending(true);
-    setReviewError('');
-    setReviewConfirmation('');
-    try {
-      await api(
-        `/destinos/${id}/reviews`,
-        { method: 'POST', body: JSON.stringify({ rating, comment: cleanComment }) },
-        token,
-      );
-      setComment('');
-      setRating(5);
-      setReviewConfirmation(
-        'Reseña enviada y pendiente de moderación. Aparecerá aquí cuando el equipo la publique.',
-      );
-    } catch (cause) {
-      setReviewError(cause instanceof Error ? cause.message : 'No se pudo enviar la reseña');
-    } finally {
-      setReviewPending(false);
     }
   };
 
@@ -677,202 +579,11 @@ export default function DestinationPage() {
           </section>
         )}
 
-        <section id="opiniones" className="reviews" aria-labelledby="reviews-title" data-reveal>
-          <header className="reviews__heading">
-            <div className="destination-section-heading">
-              <p className="kicker">Experiencias reales</p>
-              <h2 id="reviews-title">Opiniones de viajeros</h2>
-            </div>
-            {hasReviews ? (
-              <div
-                className="reviews__score"
-                aria-label={`${average} de 5, ${reviewCount} ${reviewCount === 1 ? 'opinión' : 'opiniones'}`}
-              >
-                <Star aria-hidden="true" />
-                <strong>
-                  {average.toLocaleString('es-ES', { maximumFractionDigits: 1 })} de 5
-                </strong>
-                <span>
-                  {reviewCount} {reviewCount === 1 ? 'opinión publicada' : 'opiniones publicadas'}
-                </span>
-              </div>
-            ) : (
-              <p className="reviews__no-score">Todavía no hay una valoración pública.</p>
-            )}
-          </header>
-
-          {hasReviews && reviewStats.distribution && (
-            <div className="reviews__distribution" aria-label="Distribución de valoraciones">
-              {[5, 4, 3, 2, 1].map((value) => {
-                const count = reviewStats.distribution?.[value as 1 | 2 | 3 | 4 | 5] || 0;
-                return (
-                  <div key={value}>
-                    <span>{value} estrellas</span>
-                    <progress
-                      max={reviewCount}
-                      value={count}
-                      aria-label={`${value} estrellas: ${count} opiniones`}
-                    />
-                    <b>{count}</b>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {reviewsError ? (
-            <Notice
-              tone="error"
-              action={
-                <button type="button" onClick={() => void loadReviews()}>
-                  Reintentar
-                </button>
-              }
-            >
-              {reviewsError}
-            </Notice>
-          ) : reviewsLoading ? (
-            <Loader label="Cargando opiniones" />
-          ) : reviews.length ? (
-            <>
-              <div className="reviews__list">
-                {reviews.slice(0, visibleReviewCount).map((review) => {
-                  const author = reviewAuthor(review);
-                  return (
-                    <article className="review" key={review.id}>
-                      <header>
-                        {review.user?.avatarUrl ? (
-                          <MediaImage
-                            className="review__avatar"
-                            src={imageUrl(review.user.avatarUrl)}
-                            alt=""
-                            loading="lazy"
-                          />
-                        ) : (
-                          <span className="review__avatar-fallback" aria-hidden="true">
-                            {initials(author)}
-                          </span>
-                        )}
-                        <div>
-                          <h3>{author}</h3>
-                          <p>
-                            <time dateTime={review.createdAt}>
-                              {reviewDateFormatter.format(new Date(review.createdAt))}
-                            </time>
-                            {review.visitMonth &&
-                              ` · Viajó en ${monthNames[review.visitMonth - 1]}`}
-                          </p>
-                        </div>
-                        <span
-                          className="review__rating"
-                          aria-label={`${review.rating} de 5 estrellas`}
-                        >
-                          {Array.from({ length: 5 }).map((_, index) => (
-                            <Star
-                              key={index}
-                              className={index < review.rating ? 'is-filled' : ''}
-                              aria-hidden="true"
-                            />
-                          ))}
-                        </span>
-                      </header>
-                      <p className="review__comment">
-                        {review.comment || 'Valoración sin comentario.'}
-                      </p>
-                      {review.adminResponse && (
-                        <aside
-                          className="review__response"
-                          aria-label="Respuesta oficial de TravSeeker"
-                        >
-                          <strong>Respuesta oficial</strong>
-                          <p>{review.adminResponse}</p>
-                        </aside>
-                      )}
-                    </article>
-                  );
-                })}
-              </div>
-              {visibleReviewCount < reviews.length && (
-                <Button
-                  className="reviews__more"
-                  variant="secondary"
-                  onClick={() => setVisibleReviewCount((value) => value + 3)}
-                >
-                  Ver más opiniones
-                </Button>
-              )}
-            </>
-          ) : (
-            <div className="reviews__empty">
-              <h3>Sé la primera persona en contarlo</h3>
-              <p>Una experiencia concreta puede ayudar a otra persona a decidir mejor.</p>
-            </div>
-          )}
-
-          {user ? (
-            <form className="review-form" onSubmit={submitReview}>
-              <div>
-                <h3>Cuenta cómo fue</h3>
-                <p>
-                  Revisamos cada reseña antes de publicarla. Tu envío quedará pendiente y no
-                  cambiará la valoración pública inmediatamente.
-                </p>
-              </div>
-              <fieldset className="review-rating">
-                <legend>Tu puntuación</legend>
-                <div>
-                  {[1, 2, 3, 4, 5].map((value) => (
-                    <label key={value}>
-                      <input
-                        type="radio"
-                        name="rating"
-                        value={value}
-                        checked={rating === value}
-                        onChange={() => setRating(value)}
-                      />
-                      <Star aria-hidden="true" />
-                      <span className="sr-only">
-                        {value} {value === 1 ? 'estrella' : 'estrellas'}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-                <p aria-live="polite">{rating} de 5 estrellas</p>
-              </fieldset>
-              <Field label="Tu experiencia" htmlFor="review">
-                <textarea
-                  id="review"
-                  value={comment}
-                  onChange={(event) => {
-                    setComment(event.target.value);
-                    setReviewError('');
-                    setReviewConfirmation('');
-                  }}
-                  minLength={20}
-                  maxLength={1000}
-                  required
-                  placeholder="¿Qué te ayudó a disfrutar el destino y qué conviene saber antes de ir?"
-                  aria-describedby="review-counter"
-                />
-              </Field>
-              <p id="review-counter" className="review-form__counter">
-                {comment.length}/1000 caracteres · mínimo 20
-              </p>
-              {reviewError && <Notice tone="error">{reviewError}</Notice>}
-              {reviewConfirmation && <Notice tone="success">{reviewConfirmation}</Notice>}
-              <Button type="submit" loading={reviewPending}>
-                Enviar para revisión
-              </Button>
-            </form>
-          ) : (
-            <p className="reviews__login">
-              <Link to="/auth" state={loginState}>
-                Entra para compartir tu experiencia
-              </Link>
-              . La reseña se revisará antes de publicarse.
-            </p>
-          )}
-        </section>
+        <DestinationReviews
+          reviewState={reviewState}
+          authenticated={Boolean(user)}
+          loginState={loginState}
+        />
 
         <section className="related" aria-labelledby="related-title">
           <div className="destination-section-heading">
