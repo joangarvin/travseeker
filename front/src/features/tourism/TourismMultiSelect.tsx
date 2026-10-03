@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { Check } from 'lucide-react';
 import { useTourismTypes } from '../../contexts';
 import { tourismColorStyle, tourismDefinition, tourismTypes, tourismValues } from './tourism';
@@ -45,7 +46,7 @@ export function TourismMultiSelect({
       aria-describedby={hintId}
     >
       <legend>
-        {label}
+        {t(label)}
         {required && <span aria-hidden> *</span>}
       </legend>
       {hint && <p id={hintId}>{hint}</p>}
@@ -71,14 +72,14 @@ export function TourismMultiSelect({
               <span className="tourism-multi-select__symbol" aria-hidden>
                 <tourismType.Icon />
               </span>
-              <span>{tourismType.label}</span>
+              <span>{tourismType.displayLabel || t(tourismType.label)}</span>
               {isSelected && <Check className="tourism-multi-select__check" aria-hidden />}
             </label>
           );
         })}
         {onRequestCreate && (
           <button className="tourism-multi-select__create" type="button" onClick={onRequestCreate}>
-            Crear tipo de viaje
+            {t('Crear tipo de viaje')}
           </button>
         )}
       </div>

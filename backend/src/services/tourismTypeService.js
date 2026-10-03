@@ -1,3 +1,4 @@
+const { translationData } = require("../domain/localization");
 const { prisma } = require("../config/database");
 const {
   TOURISM_COLORS,
@@ -50,6 +51,7 @@ function validatePayload(payload) {
     throw error;
   }
   return {
+    ...translationData(payload, "tourismType"),
     name,
     slug,
     description,

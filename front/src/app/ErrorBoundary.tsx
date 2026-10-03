@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { RefreshCw } from 'lucide-react';
 
@@ -20,11 +21,17 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     return (
       <main className="status-page" role="alert">
         <div>
-          <p className="kicker">La guía necesita un momento</p>
-          <h1>Algo se ha interrumpido</h1>
-          <p>La pantalla no pudo cargarse. Puedes intentarlo de nuevo sin perder tu sesión.</p>
-          <button className="button button--primary" type="button" onClick={() => window.location.reload()}>
-            <RefreshCw aria-hidden /> Reintentar
+          <p className="kicker">{t('La guía necesita un momento')}</p>
+          <h1>{t('Algo se ha interrumpido')}</h1>
+          <p>
+            {t('La pantalla no pudo cargarse. Puedes intentarlo de nuevo sin perder tu sesión.')}
+          </p>
+          <button
+            className="button button--primary"
+            type="button"
+            onClick={() => window.location.reload()}
+          >
+            <RefreshCw aria-hidden /> {t('Reintentar')}
           </button>
         </div>
       </main>

@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { useState, type FormEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { KeyRound, Mail } from 'lucide-react';
@@ -25,16 +26,16 @@ export default function RecoveryPage() {
           method: 'POST',
           body: JSON.stringify({ token, newPassword: password }),
         });
-        setMessage('Contraseña actualizada. Ya puedes entrar.');
+        setMessage(t('Contraseña actualizada. Ya puedes entrar.'));
       } else {
         await api('/auth/password/forgot', {
           method: 'POST',
           body: JSON.stringify({ email }),
         });
-        setMessage('Si existe una cuenta con ese email, recibirás un enlace en unos minutos.');
+        setMessage(t('Si existe una cuenta con ese email, recibirás un enlace en unos minutos.'));
       }
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No se pudo completar la solicitud');
+      setError(cause instanceof Error ? cause.message : t('No se pudo completar la solicitud'));
     } finally {
       setIsSubmitting(false);
     }
@@ -44,27 +45,27 @@ export default function RecoveryPage() {
     <Shell>
       <section className="status-form">
         <div className="status-form__icon">{token ? <KeyRound /> : <Mail />}</div>
-        <p className="kicker">Acceso a tu cuenta</p>
-        <h1>{token ? 'Crea una contraseña nueva' : 'Recupera tu contraseña'}</h1>
+        <p className="kicker">{t('Acceso a tu cuenta')}</p>
+        <h1>{token ? t('Crea una contraseña nueva') : t('Recupera tu contraseña')}</h1>
         <p>
           {token
-            ? 'Elige una contraseña que no uses en otros servicios.'
-            : 'Te enviaremos un enlace de recuperación si el email está registrado.'}
+            ? t('Elige una contraseña que no uses en otros servicios.')
+            : t('Te enviaremos un enlace de recuperación si el email está registrado.')}
         </p>
 
         {message ? (
           <>
             <Notice tone="success">{message}</Notice>
             <Link className="button button--primary" to="/auth">
-              Volver a entrar
+              {t('Volver a entrar')}
             </Link>
           </>
         ) : (
           <form onSubmit={handleSubmit}>
             <Field
-              label={token ? 'Nueva contraseña' : 'Email'}
+              label={token ? t('Nueva contraseña') : t('Email')}
               htmlFor="recovery"
-              hint={token ? 'Mínimo 8 caracteres' : undefined}
+              hint={token ? t('Mínimo 8 caracteres') : undefined}
             >
               <input
                 id="recovery"
@@ -80,7 +81,7 @@ export default function RecoveryPage() {
             </Field>
             {error && <Notice tone="error">{error}</Notice>}
             <Button type="submit" loading={isSubmitting}>
-              {token ? 'Guardar contraseña' : 'Enviar enlace'}
+              {token ? t('Guardar contraseña') : t('Enviar enlace')}
             </Button>
           </form>
         )}

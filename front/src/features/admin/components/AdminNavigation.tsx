@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import { Building2, ClipboardCheck, Compass, MapPin, MessageSquare, Signpost } from 'lucide-react';
 import type { AdminTab } from '../types';
 
@@ -8,13 +9,18 @@ type AdminNavigationProps = {
 };
 
 const tabs = [
-  { id: 'editorial', label: 'Revisión editorial', mobileLabel: 'Revisión', Icon: ClipboardCheck },
-  { id: 'destinos', label: 'Destinos', Icon: MapPin },
-  { id: 'tipos-viaje', label: 'Tipos de viaje', mobileLabel: 'Tipos', Icon: Signpost },
-  { id: 'actividades', label: 'Actividades', Icon: Compass },
-  { id: 'municipios', label: 'Municipios', Icon: Building2 },
-  { id: 'reviews', label: 'Reseñas', Icon: MessageSquare },
-  { id: 'places', label: 'Lugares', Icon: MapPin },
+  {
+    id: 'editorial',
+    label: t('Revisión editorial'),
+    mobileLabel: t('Revisión'),
+    Icon: ClipboardCheck,
+  },
+  { id: 'destinos', label: t('Destinos'), Icon: MapPin },
+  { id: 'tipos-viaje', label: t('Tipos de viaje'), mobileLabel: t('Tipos'), Icon: Signpost },
+  { id: 'actividades', label: t('Actividades'), Icon: Compass },
+  { id: 'municipios', label: t('Municipios'), Icon: Building2 },
+  { id: 'reviews', label: t('Reseñas'), Icon: MessageSquare },
+  { id: 'places', label: t('Lugares'), Icon: MapPin },
 ] as const;
 
 export function AdminNavigation({ activeTab, counts, onChange }: AdminNavigationProps) {
@@ -37,7 +43,7 @@ export function AdminNavigation({ activeTab, counts, onChange }: AdminNavigation
   };
 
   return (
-    <nav className="admin-nav" aria-label="Administración" role="tablist">
+    <nav className="admin-nav" aria-label={t('Administración')} role="tablist">
       {tabs.map(({ id, label, Icon, ...tab }) => (
         <button
           key={id}
@@ -50,11 +56,11 @@ export function AdminNavigation({ activeTab, counts, onChange }: AdminNavigation
           aria-controls="admin-panel"
           tabIndex={activeTab === id ? 0 : -1}
           onKeyDown={(event) => moveTab(event, id)}
-          aria-label={label}
+          aria-label={t(label)}
         >
           <Icon />
           <span className="admin-nav__label">
-            <span className="admin-nav__label-long">{label}</span>
+            <span className="admin-nav__label-long">{t(label)}</span>
             <span className="admin-nav__label-short">
               {'mobileLabel' in tab ? tab.mobileLabel : label}
             </span>

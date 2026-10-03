@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { CheckCircle2, Mail } from 'lucide-react';
@@ -14,7 +15,7 @@ export default function VerifyEmailPage() {
   const token = searchParams.get('token');
   const [status, setStatus] = useState<VerificationStatus>(token ? 'loading' : 'error');
   const [message, setMessage] = useState(
-    token ? 'Verificando tu dirección…' : 'Falta el token de verificación.',
+    token ? t('Verificando tu dirección…') : t('Falta el token de verificación.'),
   );
 
   useEffect(() => {
@@ -28,10 +29,10 @@ export default function VerifyEmailPage() {
         });
         await auth.refresh();
         setStatus('success');
-        setMessage('Tu cuenta está activa. Ya puedes crear y compartir viajes.');
+        setMessage(t('Tu cuenta está activa. Ya puedes crear y compartir viajes.'));
       } catch (cause) {
         setStatus('error');
-        setMessage(cause instanceof Error ? cause.message : 'El enlace no es válido');
+        setMessage(cause instanceof Error ? cause.message : t('El enlace no es válido'));
       }
     };
 
@@ -40,10 +41,10 @@ export default function VerifyEmailPage() {
 
   const title =
     status === 'loading'
-      ? 'Un momento'
+      ? t('Un momento')
       : status === 'success'
-        ? 'Todo listo'
-        : 'No pudimos verificarte';
+        ? t('Todo listo')
+        : t('No pudimos verificarte');
 
   return (
     <Shell>
@@ -51,14 +52,14 @@ export default function VerifyEmailPage() {
         <div className="status-form__icon">
           {status === 'success' ? <CheckCircle2 /> : <Mail />}
         </div>
-        <p className="kicker">Verificación</p>
+        <p className="kicker">{t('Verificación')}</p>
         <h1>{title}</h1>
         <Notice tone={status === 'success' ? 'success' : status === 'error' ? 'error' : 'info'}>
           {message}
         </Notice>
         {status !== 'loading' && (
           <Link className="button button--primary" to={status === 'success' ? '/colecciones' : '/'}>
-            {status === 'success' ? 'Ir a mis viajes' : 'Volver al inicio'}
+            {status === 'success' ? t('Ir a mis viajes') : t('Volver al inicio')}
           </Link>
         )}
       </section>

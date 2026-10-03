@@ -1,3 +1,4 @@
+import { t, catalogName } from '../i18n';
 import type { CollectionDetail, ItineraryDay } from '../types';
 
 type ExportableCollection = Pick<
@@ -27,7 +28,7 @@ export function resolveItineraryDate(
 function destinationName(day: ItineraryDay, collection: ExportableCollection): string {
   return (
     collection.items.find((item) => item.destino.id === day.destinationId)?.destino.nombre ||
-    'Destino'
+    t('Destino')
   );
 }
 
@@ -37,10 +38,11 @@ function dayDetails(day: ItineraryDay, collection: ExportableCollection): string
     const destination = collection.items.find(
       (item) => item.destino.id === day.destinationId,
     )?.destino;
-    const activities = day.plannedActivities.map(
-      (value) => destination?.activities?.find((activity) => activity.id === value)?.name || value,
-    );
-    lines.push(`Actividades: ${activities.join(', ')}`);
+    const activities = day.plannedActivities.map((value) => {
+      const activity = destination?.activities?.find((item) => item.id === value);
+      return activity ? catalogName(activity) : t(value);
+    });
+    lines.push(t('Actividades: {0}', { 0: activities.join(', ') }));
   }
   return lines.filter(Boolean).join('\n');
 }
@@ -52,7 +54,11 @@ export function generateGoogleCalendarUrl(
   const date = resolveItineraryDate(day, collection);
   const parameters = new URLSearchParams({
     action: 'TEMPLATE',
-    text: `${collection.nombre} · Día ${day.dayNumber}: ${destinationName(day, collection)}`,
+    text: t('{0} · Día {1}: {2}', {
+      0: collection.nombre,
+      1: day.dayNumber,
+      2: destinationName(day, collection),
+    }),
     details: dayDetails(day, collection),
   });
   if (date) parameters.set('dates', `${compactDate(date)}/${compactDate(addDays(date, 1))}`);
@@ -75,7 +81,11 @@ export function generateICalContent(collection: ExportableCollection): string {
   const events = collection.itinerary.flatMap((day) => {
     const date = resolveItineraryDate(day, collection);
     if (!date) return [];
-    const title = `${collection.nombre} · Día ${day.dayNumber}: ${destinationName(day, collection)}`;
+    const title = t('{0} · Día {1}: {2}', {
+      0: collection.nombre,
+      1: day.dayNumber,
+      2: destinationName(day, collection),
+    });
     return [
       'BEGIN:VEVENT',
       `UID:${day.dayNumber}-${compactDate(date)}@travseeker`,

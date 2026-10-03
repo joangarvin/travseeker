@@ -1,3 +1,5 @@
+import { LocalizedField } from './LocalizedField';
+import { t } from '../../../i18n';
 import type { FormEvent } from 'react';
 import { AdminModal } from '../../../components/admin/AdminModal';
 import { Button, Field } from '../../../components/ui';
@@ -21,47 +23,75 @@ export function MunicipalityEditorModal({
 }: MunicipalityEditorModalProps) {
   return (
     <AdminModal
-      title={form.id ? 'Editar municipio' : 'Nuevo municipio'}
-      subtitle="Información práctica que se reutiliza en todos los destinos asociados."
+      title={form.id ? t('Editar municipio') : t('Nuevo municipio')}
+      subtitle={t('Información práctica que se reutiliza en todos los destinos asociados.')}
       onClose={onClose}
     >
       <form onSubmit={onSubmit}>
-        <Field label="Nombre" htmlFor="mun-name">
+        <LocalizedField
+          resource="municipality"
+          field="nombre"
+          translations={form.translations}
+          onTranslationsChange={(translations) => onChange({ ...form, translations })}
+          label={t('Nombre')}
+          htmlFor="mun-name"
+        >
           <input
             id="mun-name"
             value={form.nombre || ''}
             onChange={(event) => onChange({ ...form, nombre: event.target.value })}
             required
           />
-        </Field>
-        <Field label="Nivel de precios" htmlFor="mun-price">
+        </LocalizedField>
+        <LocalizedField
+          resource="municipality"
+          field="precios"
+          translations={form.translations}
+          onTranslationsChange={(translations) => onChange({ ...form, translations })}
+          label={t('Nivel de precios')}
+          htmlFor="mun-price"
+        >
           <input
             id="mun-price"
             value={plain(form.precios)}
             onChange={(event) => onChange({ ...form, precios: event.target.value })}
-            placeholder="30–50 € por noche"
+            placeholder={t('30–50 € por noche')}
           />
-        </Field>
-        <Field label="Conexiones y transporte" htmlFor="mun-conn">
+        </LocalizedField>
+        <LocalizedField
+          resource="municipality"
+          field="conexiones"
+          translations={form.translations}
+          onTranslationsChange={(translations) => onChange({ ...form, translations })}
+          label={t('Conexiones y transporte')}
+          htmlFor="mun-conn"
+        >
           <textarea
             id="mun-conn"
             value={plain(form.conexiones)}
             onChange={(event) => onChange({ ...form, conexiones: event.target.value })}
-            placeholder="Autobús, tren, carretera y tiempos aproximados"
+            placeholder={t('Autobús, tren, carretera y tiempos aproximados')}
           />
-        </Field>
-        <Field label="Tipo de turismo" htmlFor="mun-type">
+        </LocalizedField>
+        <LocalizedField
+          resource="municipality"
+          field="tipoTurismo"
+          translations={form.translations}
+          onTranslationsChange={(translations) => onChange({ ...form, translations })}
+          label={t('Tipo de turismo')}
+          htmlFor="mun-type"
+        >
           <input
             id="mun-type"
             value={plain(form.tipoTurismo)}
             onChange={(event) => onChange({ ...form, tipoTurismo: event.target.value })}
           />
-        </Field>
+        </LocalizedField>
         <div className="admin-form-grid admin-form-grid--two">
           <Field
-            label="Latitud"
+            label={t('Latitud')}
             htmlFor="mun-latitude"
-            hint="Opcional, pero mejora el cálculo de rutas."
+            hint={t('Opcional, pero mejora el cálculo de rutas.')}
           >
             <input
               id="mun-latitude"
@@ -78,7 +108,7 @@ export function MunicipalityEditorModal({
               }
             />
           </Field>
-          <Field label="Longitud" htmlFor="mun-longitude">
+          <Field label={t('Longitud')} htmlFor="mun-longitude">
             <input
               id="mun-longitude"
               type="number"
@@ -96,7 +126,7 @@ export function MunicipalityEditorModal({
           </Field>
         </div>
         <Button type="submit" loading={isSaving}>
-          Guardar municipio
+          {t('Guardar municipio')}
         </Button>
       </form>
     </AdminModal>

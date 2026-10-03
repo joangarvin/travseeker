@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { Children, cloneElement, isValidElement, type ReactNode } from 'react';
 
 type FieldProps = {
@@ -11,8 +12,15 @@ export function Field({ label, htmlFor, hint, children }: FieldProps) {
   const hintId = hint ? `${htmlFor}-hint` : undefined;
   const describedChildren = hintId
     ? Children.map(children, (child) => {
-        if (!isValidElement<{ 'aria-describedby'?: string }>(child) || child.props['aria-describedby']) return child;
-        if (typeof child.type === 'string' && ['input', 'select', 'textarea'].includes(child.type)) {
+        if (
+          !isValidElement<{ 'aria-describedby'?: string }>(child) ||
+          child.props['aria-describedby']
+        )
+          return child;
+        if (
+          typeof child.type === 'string' &&
+          ['input', 'select', 'textarea'].includes(child.type)
+        ) {
           return cloneElement(child, { 'aria-describedby': hintId });
         }
         return child;
@@ -20,7 +28,7 @@ export function Field({ label, htmlFor, hint, children }: FieldProps) {
     : children;
   return (
     <div className="field">
-      <label htmlFor={htmlFor}>{label}</label>
+      <label htmlFor={htmlFor}>{t(label)}</label>
       {describedChildren}
       {hint && <small id={hintId}>{hint}</small>}
     </div>

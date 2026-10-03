@@ -1,3 +1,11 @@
+import {
+  t,
+  intlLocale,
+  languages,
+  changeLanguage,
+  locale as interfaceLocale,
+  resolveLocale,
+} from '../../i18n';
 import { useEffect, useState } from 'react';
 import { Bell, Check, KeyRound, LogOut, Settings, Shield, Trash2, UserRound } from 'lucide-react';
 import { api } from '../../services/api';
@@ -39,7 +47,7 @@ export default function ProfilePage() {
     setName(user.nombre || '');
     setSurname(user.apellidos || '');
     setBio(user.bio || '');
-    setLocale(user.locale || 'es');
+    setLocale(interfaceLocale);
     const prefs = (user.preferences || {}) as any;
     setNotifications(prefs.notifications ?? true);
     setAvoidCrowds(prefs.travel?.evitarMasificacion ?? false);
@@ -50,7 +58,7 @@ export default function ProfilePage() {
         .catch((cause) =>
           setFeedback({
             tone: 'error',
-            text: cause instanceof Error ? cause.message : 'No se pudieron cargar las alertas',
+            text: cause instanceof Error ? cause.message : t('No se pudieron cargar las alertas'),
           }),
         );
     }
@@ -63,8 +71,8 @@ export default function ProfilePage() {
     );
   if (!user)
     return (
-      <GuestGate title="Tu espacio personal">
-        Entra para gestionar perfil, preferencias y alertas de viaje.
+      <GuestGate title={t('Tu espacio personal')}>
+        {t('Entra para gestionar perfil, preferencias y alertas de viaje.')}
       </GuestGate>
     );
   const save = async (payload: Record<string, unknown>) => {
@@ -74,11 +82,13 @@ export default function ProfilePage() {
     try {
       await api('/auth/me', { method: 'PATCH', body: JSON.stringify(payload) }, token);
       await auth.refresh();
-      setFeedback({ tone: 'success', text: 'Cambios guardados' });
+      if (typeof payload.locale === 'string' && resolveLocale(payload.locale) !== interfaceLocale)
+        changeLanguage(resolveLocale(payload.locale));
+      setFeedback({ tone: 'success', text: t('Cambios guardados') });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo guardar',
+        text: cause instanceof Error ? cause.message : t('No se pudo guardar'),
       });
     } finally {
       setSaving(false);
@@ -95,11 +105,11 @@ export default function ProfilePage() {
       );
       setCurrentPassword('');
       setNewPassword('');
-      setFeedback({ tone: 'success', text: 'Contraseña actualizada' });
+      setFeedback({ tone: 'success', text: t('Contraseña actualizada') });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo actualizar',
+        text: cause instanceof Error ? cause.message : t('No se pudo actualizar'),
       });
     }
   };
@@ -120,11 +130,11 @@ export default function ProfilePage() {
         token,
       );
       setAlerts((current) => [item, ...current]);
-      setFeedback({ tone: 'success', text: 'Alerta creada' });
+      setFeedback({ tone: 'success', text: t('Alerta creada') });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo crear la alerta',
+        text: cause instanceof Error ? cause.message : t('No se pudo crear la alerta'),
       });
     } finally {
       setAlertActionPending(false);
@@ -136,11 +146,11 @@ export default function ProfilePage() {
     try {
       await api(`/alertas/${id}`, { method: 'DELETE' }, token);
       setAlerts((current) => current.filter((item) => item.id !== id));
-      setFeedback({ tone: 'success', text: 'Alerta eliminada' });
+      setFeedback({ tone: 'success', text: t('Alerta eliminada') });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo eliminar la alerta',
+        text: cause instanceof Error ? cause.message : t('No se pudo eliminar la alerta'),
       });
     } finally {
       setAlertActionPending(false);
@@ -162,22 +172,22 @@ export default function ProfilePage() {
   return (
     <Shell>
       <PageHeading
-        kicker="Cuenta"
-        title={user.nombre ? `Hola, ${user.nombre}` : 'Tu perfil'}
+        kicker={t('Cuenta')}
+        title={user.nombre ? t('Hola, {0}', { 0: user.nombre }) : t('Tu perfil')}
         action={
           <Button variant="quiet" onClick={auth.logout}>
-            <LogOut /> Salir
+            <LogOut /> {t('Salir')}
           </Button>
         }
       >
-        <p>Configura cómo quieres descubrir y guardar viajes.</p>
+        <p>{t('Configura cómo quieres descubrir y guardar viajes.')}</p>
       </PageHeading>
       <div className="profile-layout">
-        <nav className="profile-nav" aria-label="Secciones del perfil" role="tablist">
+        <nav className="profile-nav" aria-label={t('Secciones del perfil')} role="tablist">
           {[
-            ['profile', 'Perfil', UserRound],
-            ['preferences', 'Preferencias', Settings],
-            ['security', 'Seguridad', Shield],
+            ['profile', t('Perfil'), UserRound],
+            ['preferences', t('Preferencias'), Settings],
+            ['security', t('Seguridad'), Shield],
           ].map(([id, label, Icon]: any) => (
             <button
               key={id}
@@ -191,7 +201,7 @@ export default function ProfilePage() {
               onKeyDown={(event) => moveProfileTab(event, id)}
               onClick={() => setTab(id)}
             >
-              <Icon /> {label}
+              <Icon /> {t(label)}
             </button>
           ))}
         </nav>
@@ -210,11 +220,11 @@ export default function ProfilePage() {
                 void save({ nombre: name, apellidos: surname, bio, locale });
               }}
             >
-              <h2>Información personal</h2>
+              <h2>{t('Información personal')}</h2>
               {token && (
                 <ImageUploader
                   id="profile-avatar"
-                  label="Foto de perfil"
+                  label={t('Foto de perfil')}
                   value={user.avatarUrl}
                   token={token}
                   endpoint="/upload/avatar"
@@ -223,10 +233,10 @@ export default function ProfilePage() {
                 />
               )}
               <div className="form-grid">
-                <Field label="Nombre" htmlFor="profile-name">
+                <Field label={t('Nombre')} htmlFor="profile-name">
                   <input id="profile-name" value={name} onChange={(e) => setName(e.target.value)} />
                 </Field>
-                <Field label="Apellidos" htmlFor="profile-surname">
+                <Field label={t('Apellidos')} htmlFor="profile-surname">
                   <input
                     id="profile-surname"
                     value={surname}
@@ -234,7 +244,7 @@ export default function ProfilePage() {
                   />
                 </Field>
               </div>
-              <Field label="Bio" htmlFor="profile-bio" hint="Máximo 280 caracteres">
+              <Field label={t('Bio')} htmlFor="profile-bio" hint={t('Máximo 280 caracteres')}>
                 <textarea
                   id="profile-bio"
                   value={bio}
@@ -242,37 +252,39 @@ export default function ProfilePage() {
                   maxLength={280}
                 />
               </Field>
-              <Field label="Idioma" htmlFor="profile-locale">
+              <Field label={t('Idioma')} htmlFor="profile-locale">
                 <select
                   id="profile-locale"
                   value={locale}
                   onChange={(e) => setLocale(e.target.value)}
                 >
-                  <option value="es">Español</option>
-                  <option value="ca">Català</option>
-                  <option value="en">English</option>
+                  {languages.map((language) => (
+                    <option key={language.code} value={language.code}>
+                      {language.name}
+                    </option>
+                  ))}
                 </select>
               </Field>
               <Button type="submit" loading={saving}>
-                Guardar perfil
+                {t('Guardar perfil')}
               </Button>
             </form>
           )}
           {tab === 'preferences' && (
             <div>
-              <h2>Preferencias de viaje</h2>
+              <h2>{t('Preferencias de viaje')}</h2>
               <div className="setting-row">
                 <div>
                   <Bell />
                   <span>
-                    <b>Notificaciones</b>
-                    <small>Actualizaciones útiles sobre tus viajes</small>
+                    <b>{t('Notificaciones')}</b>
+                    <small>{t('Actualizaciones útiles sobre tus viajes')}</small>
                   </span>
                 </div>
                 <button
                   role="switch"
                   type="button"
-                  aria-label="Activar notificaciones"
+                  aria-label={t('Activar notificaciones')}
                   aria-checked={notifications}
                   className={`switch ${notifications ? 'is-on' : ''}`}
                   onClick={() => setNotifications((value) => !value)}
@@ -284,14 +296,14 @@ export default function ProfilePage() {
                 <div>
                   <Check />
                   <span>
-                    <b>Evitar aglomeraciones</b>
-                    <small>Prioriza épocas y destinos más tranquilos</small>
+                    <b>{t('Evitar aglomeraciones')}</b>
+                    <small>{t('Prioriza épocas y destinos más tranquilos')}</small>
                   </span>
                 </div>
                 <button
                   role="switch"
                   type="button"
-                  aria-label="Evitar aglomeraciones"
+                  aria-label={t('Evitar aglomeraciones')}
                   aria-checked={avoidCrowds}
                   className={`switch ${avoidCrowds ? 'is-on' : ''}`}
                   onClick={() => setAvoidCrowds((value) => !value)}
@@ -299,18 +311,18 @@ export default function ProfilePage() {
                   <span />
                 </button>
               </div>
-              <Field label="Presupuesto habitual" htmlFor="profile-budget">
+              <Field label={t('Presupuesto habitual')} htmlFor="profile-budget">
                 <select
                   id="profile-budget"
                   value={budget}
                   onChange={(e) => setBudget(e.target.value)}
                 >
-                  <option value="">Sin preferencia</option>
-                  <option>Bajo</option>
-                  <option>Medio-Bajo</option>
-                  <option>Medio</option>
-                  <option>Medio-Alto</option>
-                  <option>Alto</option>
+                  <option value="">{t('Sin preferencia')}</option>
+                  <option>{t('Bajo')}</option>
+                  <option>{t('Medio-Bajo')}</option>
+                  <option>{t('Medio')}</option>
+                  <option>{t('Medio-Alto')}</option>
+                  <option>{t('Alto')}</option>
                 </select>
               </Field>
               <Button
@@ -324,20 +336,20 @@ export default function ProfilePage() {
                 }
                 loading={saving}
               >
-                Guardar preferencias
+                {t('Guardar preferencias')}
               </Button>
               <div className="alerts">
-                <h3>Alertas de decisión</h3>
+                <h3>{t('Alertas de decisión')}</h3>
                 <div className="alerts__create">
                   <select
                     value={month}
                     onChange={(e) => setMonth(e.target.value)}
-                    aria-label="Mes para la alerta"
+                    aria-label={t('Mes para la alerta')}
                   >
-                    <option value="">Cualquier mes</option>
+                    <option value="">{t('Cualquier mes')}</option>
                     {Array.from({ length: 12 }).map((_, i) => (
                       <option key={i} value={i + 1}>
-                        {new Date(2026, i).toLocaleString('es', { month: 'long' })}
+                        {new Date(2026, i).toLocaleString(intlLocale, { month: 'long' })}
                       </option>
                     ))}
                   </select>
@@ -346,7 +358,7 @@ export default function ProfilePage() {
                     loading={alertActionPending}
                     onClick={() => void createAlert()}
                   >
-                    Crear alerta
+                    {t('Crear alerta')}
                   </Button>
                 </div>
                 {alerts.map((alert) => (
@@ -354,15 +366,17 @@ export default function ProfilePage() {
                     <Bell />
                     <span>
                       {alert.month
-                        ? new Date(2026, alert.month - 1).toLocaleString('es', { month: 'long' })
-                        : 'Cualquier mes'}{' '}
-                      · {alert.presupuesto || 'Cualquier presupuesto'}
+                        ? new Date(2026, alert.month - 1).toLocaleString(intlLocale, {
+                            month: 'long',
+                          })
+                        : t('Cualquier mes')}{' '}
+                      · {alert.presupuesto || t('Cualquier presupuesto')}
                     </span>
                     <button
                       type="button"
                       disabled={alertActionPending}
                       onClick={() => void deleteAlert(alert.id)}
-                      aria-label="Eliminar alerta"
+                      aria-label={t('Eliminar alerta')}
                     >
                       <Trash2 />
                     </button>
@@ -373,9 +387,11 @@ export default function ProfilePage() {
           )}
           {tab === 'security' && (
             <form onSubmit={changePassword}>
-              <h2>Contraseña</h2>
-              <p className="panel-intro">Usa una contraseña única de al menos ocho caracteres.</p>
-              <Field label="Contraseña actual" htmlFor="current-password">
+              <h2>{t('Contraseña')}</h2>
+              <p className="panel-intro">
+                {t('Usa una contraseña única de al menos ocho caracteres.')}
+              </p>
+              <Field label={t('Contraseña actual')} htmlFor="current-password">
                 <input
                   id="current-password"
                   type="password"
@@ -385,7 +401,7 @@ export default function ProfilePage() {
                   required
                 />
               </Field>
-              <Field label="Nueva contraseña" htmlFor="new-password">
+              <Field label={t('Nueva contraseña')} htmlFor="new-password">
                 <input
                   id="new-password"
                   type="password"
@@ -397,7 +413,7 @@ export default function ProfilePage() {
                 />
               </Field>
               <Button type="submit">
-                <KeyRound /> Cambiar contraseña
+                <KeyRound /> {t('Cambiar contraseña')}
               </Button>
             </form>
           )}

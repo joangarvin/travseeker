@@ -1,11 +1,5 @@
-import {
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-  type KeyboardEvent,
-} from 'react';
+import { t } from '../../i18n';
+import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { Check, ChevronDown, MapPin, Search, X } from 'lucide-react';
 import type { Municipio } from '../../types';
 import { plain } from '../../utils';
@@ -115,9 +109,9 @@ export function MunicipioCombobox({
       ref={rootRef}
       aria-busy={isChanging || undefined}
     >
-      <div className="municipio-combobox__selected" aria-label="Municipios seleccionados">
+      <div className="municipio-combobox__selected" aria-label={t('Municipios seleccionados')}>
         <div>
-          <strong>Bases seleccionadas</strong>
+          <strong>{t('Bases seleccionadas')}</strong>
           <span>{selectedIds.length}</span>
         </div>
         {selectedMunicipios.length ? (
@@ -130,7 +124,7 @@ export function MunicipioCombobox({
                   type="button"
                   disabled={busy}
                   onClick={() => toggle(municipio)}
-                  aria-label={`Retirar ${municipio.nombre}`}
+                  aria-label={t('Retirar {0}', { 0: municipio.nombre })}
                 >
                   <X aria-hidden="true" />
                 </button>
@@ -138,12 +132,12 @@ export function MunicipioCombobox({
             ))}
           </ul>
         ) : (
-          <p>Busca y añade el primer municipio base.</p>
+          <p>{t('Busca y añade el primer municipio base.')}</p>
         )}
       </div>
 
       <div className="municipio-combobox__search">
-        <label htmlFor={inputId}>Buscar en el catálogo</label>
+        <label htmlFor={inputId}>{t('Buscar en el catálogo')}</label>
         <div>
           <Search aria-hidden="true" />
           <input
@@ -162,7 +156,7 @@ export function MunicipioCombobox({
                 ? `${listboxId}-${visibleOptions[activeIndex].id}`
                 : undefined
             }
-            placeholder={`Buscar entre ${allMunicipios.length} municipios`}
+            placeholder={t('Buscar entre {0} municipios', { 0: allMunicipios.length })}
             value={searchQuery}
             onFocus={() => setIsOpen(true)}
             onChange={(event) => {
@@ -175,7 +169,7 @@ export function MunicipioCombobox({
           <button
             type="button"
             disabled={disabled}
-            aria-label={isOpen ? 'Cerrar opciones' : 'Abrir opciones'}
+            aria-label={isOpen ? t('Cerrar opciones') : t('Abrir opciones')}
             aria-expanded={isOpen}
             onClick={() => {
               setIsOpen((current) => !current);
@@ -205,28 +199,41 @@ export function MunicipioCombobox({
                 >
                   <span>
                     <strong>{municipio.nombre}</strong>
-                    <small>{plain(municipio.tipoTurismo) || 'Sin categoría'}</small>
+                    <small>{plain(municipio.tipoTurismo) || t('Sin categoría')}</small>
                   </span>
                   <span className="municipio-combobox__status">
-                    {selected ? <><Check aria-hidden="true" /> Seleccionado</> : 'Añadir'}
+                    {selected ? (
+                      <>
+                        <Check aria-hidden="true" /> {t('Seleccionado')}
+                      </>
+                    ) : (
+                      t('Añadir')
+                    )}
                   </span>
                 </li>
               );
             })}
           </ul>
           {!visibleOptions.length ? (
-            <p role="status">No hay municipios que coincidan con “{searchQuery.trim()}”.</p>
+            <p role="status">
+              {t('No hay municipios que coincidan con “')}
+              {searchQuery.trim()}”.
+            </p>
           ) : (
             <p role="status">
               {visibleOptions.length === limit
-                ? `Mostrando los primeros ${limit} resultados · Sigue escribiendo para afinar`
-                : `${visibleOptions.length} ${visibleOptions.length === 1 ? 'resultado' : 'resultados'}`}
+                ? t('Mostrando los primeros {0} resultados · Sigue escribiendo para afinar', {
+                    0: limit,
+                  })
+                : `${visibleOptions.length} ${visibleOptions.length === 1 ? 'resultado' : t('resultados')}`}
             </p>
           )}
         </div>
       )}
       <span className="sr-only" aria-live="polite">
-        {isChanging ? 'Actualizando municipios' : `${selectedIds.length} municipios seleccionados`}
+        {isChanging
+          ? t('Actualizando municipios')
+          : t('{0} municipios seleccionados', { 0: selectedIds.length })}
       </span>
     </div>
   );

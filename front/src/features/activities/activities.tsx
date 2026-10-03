@@ -1,3 +1,4 @@
+import { t, catalogName } from '../../i18n';
 import type { LucideIcon } from 'lucide-react';
 import {
   Bike,
@@ -33,6 +34,7 @@ import { isTourismValue } from '../tourism/tourism';
 export type ActivityDefinition = {
   key: string;
   label: string;
+  displayLabel?: string;
   icon: string;
   Icon: LucideIcon;
 };
@@ -157,6 +159,7 @@ export function activityDefinition(value: string, catalog: Activity[] = []): Act
     return {
       key: catalogActivity.slug,
       label: catalogActivity.name,
+      displayLabel: catalogName(catalogActivity),
       icon: catalogActivity.icon,
       Icon: activityIconRegistry[catalogActivity.icon] || Compass,
     };
@@ -183,7 +186,7 @@ export function ActivityMarks({ value }: { value?: string | null }) {
         return (
           <span className="activity-mark" key={value}>
             <activity.Icon aria-hidden />
-            <span>{activity.label}</span>
+            <span>{activity.displayLabel || t(activity.label)}</span>
           </span>
         );
       })}

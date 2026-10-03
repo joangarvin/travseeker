@@ -1,3 +1,4 @@
+import { t, intlLocale, locale, languageUrl, catalogName } from '../../i18n';
 import { DestinationReviews } from '../../features/destinations/components/DestinationReviews';
 import { useDestinationReviews } from '../../features/destinations/hooks/useDestinationReviews';
 import { useEffect, useState } from 'react';
@@ -113,7 +114,7 @@ export default function DestinationPage() {
       })
       .catch((cause) => {
         if (!controller.signal.aborted) {
-          setError(cause instanceof Error ? cause.message : 'No se pudo abrir este destino');
+          setError(cause instanceof Error ? cause.message : t('No se pudo abrir este destino'));
         }
       })
       .finally(() => {
@@ -131,7 +132,7 @@ export default function DestinationPage() {
     } catch (cause) {
       if (!signal?.aborted) {
         setRelatedError(
-          cause instanceof Error ? cause.message : 'No se pudieron cargar las recomendaciones',
+          cause instanceof Error ? cause.message : t('No se pudieron cargar las recomendaciones'),
         );
       }
     } finally {
@@ -149,7 +150,7 @@ export default function DestinationPage() {
     } catch (cause) {
       if (!signal?.aborted) {
         setCollectionsError(
-          cause instanceof Error ? cause.message : 'No se pudieron cargar tus viajes',
+          cause instanceof Error ? cause.message : t('No se pudieron cargar tus viajes'),
         );
       }
     } finally {
@@ -184,7 +185,7 @@ export default function DestinationPage() {
       .catch((cause) => {
         if (!controller.signal.aborted) {
           setFavoriteError(
-            cause instanceof Error ? cause.message : 'No se pudo comprobar el guardado',
+            cause instanceof Error ? cause.message : t('No se pudo comprobar el guardado'),
           );
         }
       });
@@ -199,10 +200,10 @@ export default function DestinationPage() {
     try {
       await api(`/favoritos/${id}`, { method: favorite ? 'DELETE' : 'POST' }, token);
       setFavorite((value) => !value);
-      setFavoriteFeedback(favorite ? 'Destino retirado de guardados.' : 'Destino guardado.');
+      setFavoriteFeedback(favorite ? t('Destino retirado de guardados.') : t('Destino guardado.'));
     } catch (cause) {
       setFavoriteError(
-        cause instanceof Error ? cause.message : 'No se pudo actualizar el guardado',
+        cause instanceof Error ? cause.message : t('No se pudo actualizar el guardado'),
       );
     } finally {
       setFavoritePending(false);
@@ -211,34 +212,34 @@ export default function DestinationPage() {
 
   const toggleComparison = () => {
     setCompareError('');
-    if (!compare.toggle(id)) setCompareError('Puedes comparar un máximo de cuatro destinos.');
+    if (!compare.toggle(id)) setCompareError(t('Puedes comparar un máximo de cuatro destinos.'));
   };
 
   const shareDestination = async () => {
     setSharePending(true);
     setShareError('');
     setShareFeedback('');
-    const url = window.location.href;
+    const url = languageUrl(locale);
     const shareData = {
       title: destino?.nombre.trim() || 'TravSeeker',
-      text: destino ? `Descubre ${destino.nombre.trim()} en TravSeeker` : undefined,
+      text: destino ? t('Descubre {0} en TravSeeker', { 0: destino.nombre.trim() }) : undefined,
       url,
     };
     try {
       if (navigator.share && (!navigator.canShare || navigator.canShare(shareData))) {
         await navigator.share(shareData);
-        setShareFeedback('Destino compartido.');
+        setShareFeedback(t('Destino compartido.'));
       } else {
         await navigator.clipboard.writeText(url);
-        setShareFeedback('Enlace copiado.');
+        setShareFeedback(t('Enlace copiado.'));
       }
     } catch (cause) {
       if (cause instanceof DOMException && cause.name === 'AbortError') return;
       try {
         await navigator.clipboard.writeText(url);
-        setShareFeedback('Enlace copiado.');
+        setShareFeedback(t('Enlace copiado.'));
       } catch {
-        setShareError('No se pudo compartir. Copia la dirección desde el navegador.');
+        setShareError(t('No se pudo compartir. Copia la dirección desde el navegador.'));
       }
     } finally {
       setSharePending(false);
@@ -259,7 +260,7 @@ export default function DestinationPage() {
   if (loading) {
     return (
       <Shell>
-        <Loader label="Abriendo el destino" />
+        <Loader label={t('Abriendo el destino')} />
       </Shell>
     );
   }
@@ -269,10 +270,10 @@ export default function DestinationPage() {
       <Shell>
         <section className="status-page">
           <div>
-            <h1>Destino no disponible</h1>
-            <Notice tone="error">{error || 'Este destino no existe'}</Notice>
+            <h1>{t('Destino no disponible')}</h1>
+            <Notice tone="error">{error || t('Este destino no existe')}</Notice>
             <Button variant="secondary" onClick={returnToDiscovery}>
-              <ArrowLeft aria-hidden="true" /> Volver
+              <ArrowLeft aria-hidden="true" /> {t('Volver')}
             </Button>
           </div>
         </section>
@@ -283,10 +284,16 @@ export default function DestinationPage() {
   const coordinates = validCoordinates(destino.latitud, destino.longitud);
   const lead =
     excerptAtWord(plain(destino.descripcion), 190) ||
-    `Información práctica para decidir si ${destino.nombre.trim()} encaja en tu viaje.`;
-  const budget = plain(destino.presupuesto) || 'Consulta las bases disponibles';
-  const crowd = plain(destino.masificacion) || 'Sin estimación publicada';
-  const tripType = plain(destino.tipoTurismoPrincipal) || 'Sin clasificar';
+    t('Información práctica para decidir si {0} encaja en tu viaje.', { 0: destino.nombre.trim() });
+  const budget = plain(destino.presupuesto) || t('Consulta las bases disponibles');
+  const crowd = plain(destino.masificacion) || t('Sin estimación publicada');
+  const tripType =
+    (destino.tourismTypes?.length
+      ? destino.tourismTypes.map(catalogName).join(', ')
+      : plain(destino.tipoTurismoPrincipal)
+          .split(', ')
+          .map((name) => t(name))
+          .join(', ')) || t('Sin clasificar');
   const hasReviews = (reviewStats.count || reviews.length) > 0;
   const reviewCount = reviewStats.count || reviews.length;
   const average = reviewStats.average || 0;
@@ -310,7 +317,7 @@ export default function DestinationPage() {
           <div className="destination-cover__media">
             <MediaImage
               src={imageUrl(destino.imagen)}
-              alt={`Vista principal de ${destino.nombre.trim()}`}
+              alt={t('Vista principal de {0}', { 0: destino.nombre.trim() })}
               fetchPriority="high"
               loading="eager"
               sizes="100vw"
@@ -320,56 +327,56 @@ export default function DestinationPage() {
             <div className="destination-cover__shade" aria-hidden="true" />
             <div className="destination-cover__topline">
               <button type="button" className="destination-cover__back" onClick={returnToDiscovery}>
-                <ArrowLeft aria-hidden="true" /> Volver a descubrir
+                <ArrowLeft aria-hidden="true" /> {t('Volver a descubrir')}
               </button>
-              <nav aria-label="Migas de pan">
-                <Link to="/">Descubrir</Link>
+              <nav aria-label={t('Migas de pan')}>
+                <Link to="/">{t('Descubrir')}</Link>
                 <span aria-hidden="true">/</span>
                 <span aria-current="page">{destino.nombre.trim()}</span>
               </nav>
             </div>
             <div className={`destination-cover__content ${titleSizeClass}`.trim()}>
               <p className="destination-cover__location">
-                <MapPin aria-hidden="true" /> {plain(destino.ubicacion) || 'España'}
+                <MapPin aria-hidden="true" /> {plain(destino.ubicacion) || t('España')}
               </p>
               <h1>{destino.nombre.trim()}</h1>
               <p className="destination-cover__lead">{lead}</p>
               {hasReviews && (
                 <a className="destination-cover__rating" href="#opiniones">
                   <Star aria-hidden="true" />{' '}
-                  {average.toLocaleString('es-ES', { maximumFractionDigits: 1 })} de 5 ·{' '}
-                  {reviewCount} {reviewCount === 1 ? 'opinión' : 'opiniones'}
+                  {average.toLocaleString(intlLocale, { maximumFractionDigits: 1 })} {t('de 5 ·')}{' '}
+                  {reviewCount} {reviewCount === 1 ? t('opinión') : t('opiniones')}
                 </a>
               )}
             </div>
           </div>
 
           <div className="departure-card">
-            <dl aria-label="Datos clave para decidir">
+            <dl aria-label={t('Datos clave para decidir')}>
               <div>
-                <dt>Presupuesto</dt>
-                <dd>{budget}</dd>
+                <dt>{t('Presupuesto')}</dt>
+                <dd>{t(budget)}</dd>
               </div>
               <div>
-                <dt>Afluencia</dt>
-                <dd>{crowd}</dd>
+                <dt>{t('Afluencia')}</dt>
+                <dd>{t(crowd)}</dd>
               </div>
               <div>
-                <dt>Tipo de viaje</dt>
-                <dd>{tripType}</dd>
+                <dt>{t('Tipo de viaje')}</dt>
+                <dd>{t(tripType)}</dd>
               </div>
             </dl>
             <div className="departure-card__planning">
               {user ? (
                 <Button onClick={() => setTripDialogItem(null)}>
-                  <BookmarkPlus aria-hidden="true" /> Añadir a un viaje
+                  <BookmarkPlus aria-hidden="true" /> {t('Añadir a un viaje')}
                 </Button>
               ) : (
                 <Link className="button button--primary" to="/auth" state={loginState}>
-                  <BookmarkPlus aria-hidden="true" /> Añadir a un viaje
+                  <BookmarkPlus aria-hidden="true" /> {t('Añadir a un viaje')}
                 </Link>
               )}
-              <div className="departure-card__secondary" aria-label="Otras acciones">
+              <div className="departure-card__secondary" aria-label={t('Otras acciones')}>
                 {user ? (
                   <Button
                     variant="secondary"
@@ -377,11 +384,11 @@ export default function DestinationPage() {
                     onClick={() => void toggleFavorite()}
                   >
                     {favorite ? <Check aria-hidden="true" /> : <Heart aria-hidden="true" />}
-                    {favorite ? 'Guardado' : 'Guardar'}
+                    {favorite ? t('Guardado') : t('Guardar')}
                   </Button>
                 ) : (
                   <Link className="button button--secondary" to="/auth" state={loginState}>
-                    <Heart aria-hidden="true" /> Guardar
+                    <Heart aria-hidden="true" /> {t('Guardar')}
                   </Link>
                 )}
                 <Button
@@ -390,14 +397,14 @@ export default function DestinationPage() {
                   onClick={toggleComparison}
                 >
                   <GitCompare aria-hidden="true" />
-                  {compare.ids.includes(id) ? 'Comparando' : 'Comparar'}
+                  {compare.ids.includes(id) ? t('Comparando') : t('Comparar')}
                 </Button>
                 <Button
                   variant="secondary"
                   loading={sharePending}
                   onClick={() => void shareDestination()}
                 >
-                  <Share2 aria-hidden="true" /> Compartir
+                  <Share2 aria-hidden="true" /> {t('Compartir')}
                 </Button>
               </div>
             </div>
@@ -413,14 +420,16 @@ export default function DestinationPage() {
         </div>
       </header>
 
-      <nav className="destination-nav" aria-label="En esta guía">
+      <nav className="destination-nav" aria-label={t('En esta guía')}>
         <div>
-          <a href="#resumen">Resumen</a>
-          <a href="#cuando-ir">Cuándo ir</a>
+          <a href="#resumen">{t('Resumen')}</a>
+          <a href="#cuando-ir">{t('Cuándo ir')}</a>
           {(destino.essentialGroups?.some((group) => group.items?.length) ||
-            plain(destino.imprescindibles)) && <a href="#imprescindibles">Imprescindibles</a>}
-          {!!destino.municipios?.length && <a href="#bases">Bases</a>}
-          <a href="#opiniones">Opiniones</a>
+            plain(destino.imprescindibles)) && (
+            <a href="#imprescindibles">{t('Imprescindibles')}</a>
+          )}
+          {!!destino.municipios?.length && <a href="#bases">{t('Bases')}</a>}
+          <a href="#opiniones">{t('Opiniones')}</a>
         </div>
       </nav>
 
@@ -432,12 +441,12 @@ export default function DestinationPage() {
           data-reveal
         >
           <div className="destination-section-heading">
-            <p className="kicker">La decisión rápida</p>
-            <h2 id="summary-title">¿Encaja contigo?</h2>
+            <p className="kicker">{t('La decisión rápida')}</p>
+            <h2 id="summary-title">{t('¿Encaja contigo?')}</h2>
           </div>
           <div className="destination-summary__layout">
             <div className="destination-summary__story">
-              <h3>La experiencia</h3>
+              <h3>{t('La experiencia')}</h3>
               {plain(destino.descripcion) ? (
                 <div
                   className="prose"
@@ -445,20 +454,21 @@ export default function DestinationPage() {
                 />
               ) : (
                 <p className="destination-empty-copy">
-                  La descripción editorial todavía no está disponible. Usa las señales prácticas y
-                  el clima para decidir.
+                  {t(
+                    'La descripción editorial todavía no está disponible. Usa las señales prácticas y el clima para decidir.',
+                  )}
                 </p>
               )}
             </div>
-            <aside className="destination-summary__decision" aria-label="Señales para decidir">
-              <p className="destination-summary__decision-title">Tu trip brief</p>
-              <h3>Buena elección si…</h3>
+            <aside className="destination-summary__decision" aria-label={t('Señales para decidir')}>
+              <p className="destination-summary__decision-title">{t('Tu trip brief')}</p>
+              <h3>{t('Buena elección si…')}</h3>
               <dl>
                 <div>
                   <span className="destination-summary__signal-icon" aria-hidden="true">
                     <Compass />
                   </span>
-                  <dt>Encaja si buscas</dt>
+                  <dt>{t('Encaja si buscas')}</dt>
                   <dd>
                     <TourismMarks value={destino.tipoTurismoPrincipal} compact />
                   </dd>
@@ -467,12 +477,12 @@ export default function DestinationPage() {
                   <span className="destination-summary__signal-icon" aria-hidden="true">
                     <Map />
                   </span>
-                  <dt>El plan toma forma con</dt>
+                  <dt>{t('El plan toma forma con')}</dt>
                   <dd>
                     {activityValues(destino.tipoTurismoSecundario).length ? (
                       <ActivityMarks value={destino.tipoTurismoSecundario} />
                     ) : (
-                      'La guía aún no ha clasificado actividades concretas.'
+                      t('La guía aún no ha clasificado actividades concretas.')
                     )}
                   </dd>
                 </div>
@@ -480,26 +490,26 @@ export default function DestinationPage() {
                   <span className="destination-summary__signal-icon" aria-hidden="true">
                     <Gauge />
                   </span>
-                  <dt>Ritmo y gasto</dt>
+                  <dt>{t('Ritmo y gasto')}</dt>
                   <dd>
-                    {crowd} · {budget}
+                    {t(crowd)} · {t(budget)}
                   </dd>
                 </div>
                 <div>
                   <span className="destination-summary__signal-icon" aria-hidden="true">
                     <WalletCards />
                   </span>
-                  <dt>Cómo organizarlo</dt>
+                  <dt>{t('Cómo organizarlo')}</dt>
                   <dd>
                     {destino.municipios?.length
-                      ? `${destino.municipios.length} ${destino.municipios.length === 1 ? 'base disponible' : 'bases para elegir y comparar'}`
-                      : 'Explora el destino sin una base publicada todavía.'}
+                      ? `${destino.municipios.length} ${destino.municipios.length === 1 ? t('base disponible') : t('bases para elegir y comparar')}`
+                      : t('Explora el destino sin una base publicada todavía.')}
                   </dd>
                 </div>
               </dl>
               {destinationMapUrl && (
                 <a href={destinationMapUrl} target="_blank" rel="noreferrer">
-                  <Map aria-hidden="true" /> Situar el destino en el mapa
+                  <Map aria-hidden="true" /> {t('Situar el destino en el mapa')}
                 </a>
               )}
             </aside>
@@ -535,8 +545,8 @@ export default function DestinationPage() {
         {!!destino.places?.length && (
           <section className="nearby" aria-labelledby="nearby-title" data-reveal>
             <div className="destination-section-heading">
-              <p className="kicker">Amplía el viaje</p>
-              <h2 id="nearby-title">Lugares alrededor</h2>
+              <p className="kicker">{t('Amplía el viaje')}</p>
+              <h2 id="nearby-title">{t('Lugares alrededor')}</h2>
             </div>
             <div className="nearby__list">
               {destino.places.map((place) => {
@@ -549,8 +559,12 @@ export default function DestinationPage() {
                 return (
                   <article id={`place-${place.id}`} key={place.id}>
                     <div className="nearby__meta">
-                      <span>{place.categoria}</span>
-                      {distance != null && <span>A {distanceLabel(distance)} en línea recta</span>}
+                      <span>{t(place.categoria)}</span>
+                      {distance != null && (
+                        <span>
+                          {t('A')} {distanceLabel(distance)} {t('en línea recta')}
+                        </span>
+                      )}
                     </div>
                     <div>
                       <h3>{place.nombre}</h3>
@@ -563,12 +577,12 @@ export default function DestinationPage() {
                           target="_blank"
                           rel="noreferrer"
                         >
-                          Ver en el mapa <Map aria-hidden="true" />
+                          {t('Ver en el mapa')} <Map aria-hidden="true" />
                         </a>
                       )}
                       {website && (
                         <a href={website} target="_blank" rel="noreferrer">
-                          Web oficial <ExternalLink aria-hidden="true" />
+                          {t('Web oficial')} <ExternalLink aria-hidden="true" />
                         </a>
                       )}
                     </div>
@@ -587,22 +601,22 @@ export default function DestinationPage() {
 
         <section className="related" aria-labelledby="related-title">
           <div className="destination-section-heading">
-            <p className="kicker">Sigue explorando</p>
-            <h2 id="related-title">Otros destinos que pueden encajar</h2>
+            <p className="kicker">{t('Sigue explorando')}</p>
+            <h2 id="related-title">{t('Otros destinos que pueden encajar')}</h2>
           </div>
           {relatedError ? (
             <Notice
               tone="error"
               action={
                 <button type="button" onClick={() => void loadRelated()}>
-                  Reintentar
+                  {t('Reintentar')}
                 </button>
               }
             >
               {relatedError}
             </Notice>
           ) : relatedLoading ? (
-            <Loader label="Buscando destinos relacionados" />
+            <Loader label={t('Buscando destinos relacionados')} />
           ) : related.length ? (
             <div className="destination-list">
               {related.slice(0, 3).map((item, index) => (
@@ -611,7 +625,7 @@ export default function DestinationPage() {
             </div>
           ) : (
             <p className="destination-empty-copy">
-              No hay recomendaciones relacionadas publicadas por ahora.
+              {t('No hay recomendaciones relacionadas publicadas por ahora.')}
             </p>
           )}
         </section>

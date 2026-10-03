@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import { Edit3, Plus, Trash2 } from 'lucide-react';
 import { Button } from '../../../components/ui';
 import type { Activity } from '../../../types';
@@ -31,11 +32,11 @@ export function ActivitiesPanel({
       <AdminToolbar
         query={query}
         onQueryChange={onQueryChange}
-        placeholder="Buscar actividad"
+        placeholder={t('Buscar actividad')}
         resultCount={visible.length}
       >
         <Button onClick={onCreate}>
-          <Plus /> Nueva actividad
+          <Plus /> {t('Nueva actividad')}
         </Button>
       </AdminToolbar>
       <EditorialStatusFilter value={status} onChange={setStatus} />
@@ -51,19 +52,27 @@ export function ActivitiesPanel({
               <div>
                 <EditorialStatusBadge status={activity.editorialStatus} />
                 <span className={`activity-status ${activity.isActive ? 'is-active' : ''}`}>
-                  {activity.isActive ? 'Visible' : 'Oculta'}
+                  {activity.isActive ? t('Visible') : t('Oculta')}
                 </span>
                 <h2>{activity.name}</h2>
                 <p>
                   {activity.destinationsCount || 0}{' '}
-                  {activity.destinationsCount === 1 ? 'destino asociado' : 'destinos asociados'}
+                  {activity.destinationsCount === 1
+                    ? t('destino asociado')
+                    : t('destinos asociados')}
                 </p>
               </div>
               <div>
-                <button onClick={() => onEdit(activity)} aria-label={`Editar ${activity.name}`}>
+                <button
+                  onClick={() => onEdit(activity)}
+                  aria-label={t('Editar {0}', { 0: activity.name })}
+                >
                   <Edit3 />
                 </button>
-                <button onClick={() => onDelete(activity)} aria-label={`Eliminar ${activity.name}`}>
+                <button
+                  onClick={() => onDelete(activity)}
+                  aria-label={t('Eliminar {0}', { 0: activity.name })}
+                >
                   <Trash2 />
                 </button>
               </div>

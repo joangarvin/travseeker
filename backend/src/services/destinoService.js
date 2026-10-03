@@ -21,7 +21,7 @@ const {
 } = require("../domain/editorial");
 
 function prepareSearchResults(destinations, query) {
-  const searched = rankDestinationSearch(destinations, query.q);
+  const searched = rankDestinationSearch(destinations, query.q, query.lang);
   const prepared = searched.map(mapDestinationRelations);
   const seasonal = rankForSeason(prepared, {
     month: normalizeMonth(query.month),
@@ -149,7 +149,10 @@ async function searchDestinosPage(query) {
   if (hasQuery) {
     // Fuzzy ranking needs the candidate set before it can score and sort it.
     // Pagination is still applied to the ranked result returned to the client.
-    const searchWhere = textSearchWhere(query, where);
+    // English ranking also examines translated relation text. The Spanish SQL
+    // prefilter cannot safely narrow those candidates without a translated index.
+    const searchWhere =
+      query.lang === "en" ? where : textSearchWhere(query, where);
     let destinos = await prisma.destino.findMany({
       where: searchWhere,
       select: SEARCH_LIST_SELECT,
@@ -340,11 +343,11 @@ async function getStats() {
   };
 }
 
-async function getFilterOptions() {
+async function getFilterOptions(locale = "es") {
   const [destinations, activityCatalog] = await Promise.all([
     prisma.destino.findMany({
       where: { editorialStatus: "published" },
-      select: { ubicacion: true },
+      select: { ubicacion: true, translations: true },
     }),
     prisma.activity.findMany({
       where: { isActive: true, editorialStatus: "published" },
@@ -358,7 +361,16 @@ async function getFilterOptions() {
     ),
   ].sort((first, second) => first.localeCompare(second, "es"));
   const activities = activityCatalog.map((activity) => activity.name);
-  return { locations, activities };
+  const locationLabels = {};
+  for (const destination of destinations) {
+    const originals = parseTags(destination.ubicacion);
+    const translated = parseTags(destination.translations?.[locale]?.ubicacion);
+    if (originals.length === translated.length)
+      originals.forEach((name, index) => {
+        locationLabels[name] = translated[index];
+      });
+  }
+  return { locations, activities, locationLabels };
 }
 
 module.exports = {

@@ -1,3 +1,4 @@
+import { t, intlLocale } from '../../../i18n';
 import { useEffect, useMemo, useState, type KeyboardEvent } from 'react';
 import {
   CalendarDays,
@@ -30,13 +31,13 @@ type ReviewsPanelProps = {
 };
 
 const STATUS_LABELS: Record<ReviewStatus, string> = {
-  pending: 'Pendiente',
-  published: 'Publicada',
-  rejected: 'Rechazada',
-  flagged: 'Señalada',
+  pending: t('Pendiente'),
+  published: t('Publicada'),
+  rejected: t('Rechazada'),
+  flagged: t('Señalada'),
 };
 
-const DATE_FORMATTER = new Intl.DateTimeFormat('es-ES', {
+const DATE_FORMATTER = new Intl.DateTimeFormat(intlLocale, {
   day: 'numeric',
   month: 'short',
   year: 'numeric',
@@ -44,7 +45,7 @@ const DATE_FORMATTER = new Intl.DateTimeFormat('es-ES', {
 
 function reviewerName(review: Review) {
   return (
-    [review.user?.nombre, review.user?.apellidos].filter(Boolean).join(' ') || 'Viajero anónimo'
+    [review.user?.nombre, review.user?.apellidos].filter(Boolean).join(' ') || t('Viajero anónimo')
   );
 }
 
@@ -70,7 +71,7 @@ function ReviewerAvatar({ review }: { review: Review }) {
 
 function ReviewRating({ rating }: { rating: number }) {
   return (
-    <div className="review-card__rating" aria-label={`${rating} de 5 estrellas`}>
+    <div className="review-card__rating" aria-label={t('{0} de 5 estrellas', { 0: rating })}>
       {Array.from({ length: 5 }, (_, index) => (
         <Star key={index} className={index < rating ? 'is-filled' : ''} aria-hidden="true" />
       ))}
@@ -91,23 +92,24 @@ function DeleteReviewsDialog({
 }) {
   return (
     <AdminModal
-      title={`Eliminar ${count} ${count === 1 ? 'reseña' : 'reseñas'}`}
-      subtitle="Esta acción no se puede deshacer."
+      title={t('Eliminar {0} {1}', { 0: count, 1: count === 1 ? t('reseña') : t('reseñas') })}
+      subtitle={t('Esta acción no se puede deshacer.')}
       onClose={onClose}
     >
       <div className="review-delete-dialog">
         <Trash2 aria-hidden="true" />
         <p>
-          Se eliminarán definitivamente las reseñas seleccionadas, incluidas sus respuestas del
-          equipo.
+          {t(
+            'Se eliminarán definitivamente las reseñas seleccionadas, incluidas sus respuestas del equipo.',
+          )}
         </p>
       </div>
       <footer className="modal-actions">
         <Button type="button" variant="quiet" data-autofocus onClick={onClose}>
-          Conservar reseñas
+          {t('Conservar reseñas')}
         </Button>
         <Button type="button" variant="danger" loading={isDeleting} onClick={onConfirm}>
-          Eliminar definitivamente
+          {t('Eliminar definitivamente')}
         </Button>
       </footer>
     </AdminModal>
@@ -197,7 +199,7 @@ export function ReviewsPanel({
     } catch (cause) {
       setToast({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo actualizar la reseña',
+        text: cause instanceof Error ? cause.message : t('No se pudo actualizar la reseña'),
       });
       return false;
     } finally {
@@ -231,8 +233,8 @@ export function ReviewsPanel({
       review,
       { adminResponse: responseDraft, status: 'published' },
       responseDraft.trim()
-        ? 'Respuesta guardada y reseña publicada'
-        : 'Respuesta eliminada y reseña publicada',
+        ? t('Respuesta guardada y reseña publicada')
+        : t('Respuesta eliminada y reseña publicada'),
     );
     if (saved) {
       setEditingResponseIds((current) => {
@@ -252,12 +254,12 @@ export function ReviewsPanel({
       setSelectedIds(new Set());
       setToast({
         tone: 'success',
-        text: `${ids.length} ${ids.length === 1 ? 'reseña actualizada' : 'reseñas actualizadas'}`,
+        text: `${ids.length} ${ids.length === 1 ? t('reseña actualizada') : t('reseñas actualizadas')}`,
       });
     } catch (cause) {
       setToast({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudieron actualizar las reseñas',
+        text: cause instanceof Error ? cause.message : t('No se pudieron actualizar las reseñas'),
       });
     } finally {
       setBulkAction(null);
@@ -273,12 +275,12 @@ export function ReviewsPanel({
       setConfirmDelete(false);
       setToast({
         tone: 'success',
-        text: `${ids.length} ${ids.length === 1 ? 'reseña eliminada' : 'reseñas eliminadas'}`,
+        text: `${ids.length} ${ids.length === 1 ? t('reseña eliminada') : t('reseñas eliminadas')}`,
       });
     } catch (cause) {
       setToast({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudieron eliminar las reseñas',
+        text: cause instanceof Error ? cause.message : t('No se pudieron eliminar las reseñas'),
       });
     } finally {
       setBulkAction(null);
@@ -286,10 +288,10 @@ export function ReviewsPanel({
   };
 
   const tabs: Array<{ id: ReviewTab; label: string }> = [
-    { id: 'all', label: 'Todas' },
-    { id: 'pending', label: 'Pendientes' },
-    { id: 'published', label: 'Publicadas' },
-    { id: 'rejected', label: 'Rechazadas / reportadas' },
+    { id: 'all', label: t('Todas') },
+    { id: 'pending', label: t('Pendientes') },
+    { id: 'published', label: t('Publicadas') },
+    { id: 'rejected', label: t('Rechazadas / reportadas') },
   ];
 
   const handleTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
@@ -310,19 +312,22 @@ export function ReviewsPanel({
     <div className="review-moderation">
       <header className="review-moderation__intro">
         <div>
-          <span className="kicker">Comunidad</span>
-          <h2>Moderación de reseñas</h2>
-          <p>Revisa cada experiencia antes de hacerla visible en TravSeeker.</p>
+          <span className="kicker">{t('Comunidad')}</span>
+          <h2>{t('Moderación de reseñas')}</h2>
+          <p>{t('Revisa cada experiencia antes de hacerla visible en TravSeeker.')}</p>
         </div>
         {counts.pending > 0 && (
-          <div className="review-moderation__queue" aria-label={`${counts.pending} pendientes`}>
+          <div
+            className="review-moderation__queue"
+            aria-label={t('{0} pendientes', { 0: counts.pending })}
+          >
             <strong>{counts.pending}</strong>
-            <span>por revisar</span>
+            <span>{t('por revisar')}</span>
           </div>
         )}
       </header>
 
-      <div className="review-tabs" role="tablist" aria-label="Filtrar reseñas por estado">
+      <div className="review-tabs" role="tablist" aria-label={t('Filtrar reseñas por estado')}>
         {tabs.map((tab, index) => (
           <button
             key={tab.id}
@@ -336,7 +341,7 @@ export function ReviewsPanel({
             onClick={() => setActiveTab(tab.id)}
             onKeyDown={(event) => handleTabKeyDown(event, index)}
           >
-            <span>{tab.label}</span>
+            <span>{t(tab.label)}</span>
             <strong>{counts[tab.id]}</strong>
           </button>
         ))}
@@ -345,13 +350,13 @@ export function ReviewsPanel({
       <AdminToolbar
         query={query}
         onQueryChange={onQueryChange}
-        placeholder="Buscar destino, persona o comentario"
+        placeholder={t('Buscar destino, persona o comentario')}
         resultCount={visibleReviews.length}
       >
         {visibleReviews.length > 0 && (
           <label className="review-select-all">
             <input type="checkbox" checked={allVisibleSelected} onChange={toggleAllVisible} />
-            <span>Seleccionar visibles</span>
+            <span>{t('Seleccionar visibles')}</span>
           </label>
         )}
       </AdminToolbar>
@@ -363,10 +368,10 @@ export function ReviewsPanel({
         className="review-card-list"
       >
         {visibleReviews.length === 0 ? (
-          <Empty icon={<MessageSquareReply />} title="No hay reseñas aquí">
+          <Empty icon={<MessageSquareReply />} title={t('No hay reseñas aquí')}>
             {query
-              ? 'Prueba con otra búsqueda.'
-              : 'Las reseñas aparecerán cuando lleguen a este estado.'}
+              ? t('Prueba con otra búsqueda.')
+              : t('Las reseñas aparecerán cuando lleguen a este estado.')}
           </Empty>
         ) : (
           visibleReviews.map((review) => {
@@ -387,7 +392,9 @@ export function ReviewsPanel({
                     checked={selectedIds.has(review.id)}
                     onChange={() => toggleReview(review.id)}
                   />
-                  <span className="sr-only">Seleccionar reseña de {author}</span>
+                  <span className="sr-only">
+                    {t('Seleccionar reseña de')} {author}
+                  </span>
                 </label>
 
                 <header className="review-card__header">
@@ -396,7 +403,7 @@ export function ReviewsPanel({
                     <h3>{author}</h3>
                     <div className="review-card__destination">
                       <MapPin aria-hidden="true" />
-                      <span>{review.destino?.nombre || 'Destino sin nombre'}</span>
+                      <span>{review.destino?.nombre || t('Destino sin nombre')}</span>
                     </div>
                   </div>
                   <span className={`review-status review-status--${review.status}`}>
@@ -416,7 +423,7 @@ export function ReviewsPanel({
                 </div>
 
                 <p className="review-card__comment">
-                  {review.comment || 'Valoración sin comentario.'}
+                  {review.comment || t('Valoración sin comentario.')}
                 </p>
 
                 <div className="review-card__response">
@@ -424,11 +431,12 @@ export function ReviewsPanel({
                     <div className="review-card__official-response">
                       <div>
                         <span>
-                          <MessageSquareReply aria-hidden="true" /> Respuesta oficial
+                          <MessageSquareReply aria-hidden="true" /> {t('Respuesta oficial')}
                         </span>
                         {review.respondedAt && (
                           <time dateTime={review.respondedAt}>
-                            Respondida el {DATE_FORMATTER.format(new Date(review.respondedAt))}
+                            {t('Respondida el')}{' '}
+                            {DATE_FORMATTER.format(new Date(review.respondedAt))}
                           </time>
                         )}
                       </div>
@@ -440,7 +448,7 @@ export function ReviewsPanel({
                     <div className="review-card__response-editor">
                       <label htmlFor={`review-response-${review.id}`}>
                         <MessageSquareReply aria-hidden="true" />
-                        Respuesta del equipo
+                        {t('Respuesta del equipo')}
                       </label>
                       <textarea
                         id={`review-response-${review.id}`}
@@ -449,7 +457,7 @@ export function ReviewsPanel({
                         rows={3}
                         autoFocus
                         disabled={isBusy}
-                        placeholder="Añade una respuesta pública y cercana…"
+                        placeholder={t('Añade una respuesta pública y cercana…')}
                         onChange={(event) =>
                           setResponseDrafts((current) => ({
                             ...current,
@@ -466,7 +474,7 @@ export function ReviewsPanel({
                             disabled={isBusy}
                             onClick={() => closeResponseEditor(review)}
                           >
-                            Cancelar
+                            {t('Cancelar')}
                           </Button>
                           <Button
                             type="button"
@@ -475,7 +483,7 @@ export function ReviewsPanel({
                             loading={isBusy && responseChanged}
                             onClick={() => void saveResponse(review, responseDraft)}
                           >
-                            Guardar y publicar
+                            {t('Guardar y publicar')}
                           </Button>
                         </div>
                       </div>
@@ -488,7 +496,7 @@ export function ReviewsPanel({
                       onClick={() => openResponseEditor(review)}
                     >
                       <MessageSquareReply aria-hidden="true" />
-                      {review.adminResponse ? 'Editar respuesta' : 'Responder y publicar'}
+                      {review.adminResponse ? t('Editar respuesta') : t('Responder y publicar')}
                     </Button>
                   )}
                 </div>
@@ -503,7 +511,7 @@ export function ReviewsPanel({
                       void moderateOne(review, { status: 'published' }, 'Reseña publicada')
                     }
                   >
-                    <Check aria-hidden="true" /> Aprobar
+                    <Check aria-hidden="true" /> {t('Aprobar')}
                   </Button>
                   <Button
                     type="button"
@@ -513,7 +521,7 @@ export function ReviewsPanel({
                       void moderateOne(review, { status: 'rejected' }, 'Reseña rechazada')
                     }
                   >
-                    <X aria-hidden="true" /> Rechazar
+                    <X aria-hidden="true" /> {t('Rechazar')}
                   </Button>
                 </footer>
               </article>
@@ -523,7 +531,7 @@ export function ReviewsPanel({
       </section>
 
       {selectedIds.size > 0 && (
-        <aside className="review-bulk-bar" aria-label="Acciones para reseñas seleccionadas">
+        <aside className="review-bulk-bar" aria-label={t('Acciones para reseñas seleccionadas')}>
           <div aria-live="polite">
             <strong>{selectedIds.size}</strong>
             <span>{selectedIds.size === 1 ? 'seleccionada' : 'seleccionadas'}</span>
@@ -536,7 +544,7 @@ export function ReviewsPanel({
               disabled={bulkAction !== null}
               onClick={() => void runBulkModeration('published')}
             >
-              <Check aria-hidden="true" /> Aprobar
+              <Check aria-hidden="true" /> {t('Aprobar')}
             </Button>
             <Button
               type="button"
@@ -545,7 +553,7 @@ export function ReviewsPanel({
               disabled={bulkAction !== null}
               onClick={() => void runBulkModeration('rejected')}
             >
-              <X aria-hidden="true" /> Rechazar
+              <X aria-hidden="true" /> {t('Rechazar')}
             </Button>
             <Button
               type="button"
@@ -553,7 +561,7 @@ export function ReviewsPanel({
               disabled={bulkAction !== null}
               onClick={() => setConfirmDelete(true)}
             >
-              <Trash2 aria-hidden="true" /> Eliminar
+              <Trash2 aria-hidden="true" /> {t('Eliminar')}
             </Button>
           </div>
         </aside>

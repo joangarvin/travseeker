@@ -1,11 +1,12 @@
+import { t } from '../../i18n';
 import { CheckCircle2, CircleAlert, X } from 'lucide-react';
 import type { ReactNode } from 'react';
 
-export function Loader({ label = 'Cargando' }: { label?: string }) {
+export function Loader({ label = t('Cargando') }: { label?: string }) {
   return (
     <div className="loader" role="status">
       <span />
-      <p>{label}</p>
+      <p>{t(label)}</p>
     </div>
   );
 }
@@ -37,7 +38,7 @@ export function Toast({ tone = 'success', children, onDismiss }: ToastProps) {
     <div className={`toast toast--${tone}`} role={tone === 'error' ? 'alert' : 'status'}>
       <Icon aria-hidden="true" />
       <span>{children}</span>
-      <button type="button" aria-label="Cerrar notificación" onClick={onDismiss}>
+      <button type="button" aria-label={t('Cerrar notificación')} onClick={onDismiss}>
         <X />
       </button>
     </div>

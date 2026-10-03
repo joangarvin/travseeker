@@ -1,3 +1,4 @@
+import type { Translations } from '../i18n';
 export type User = {
   id: string;
   email: string;
@@ -17,6 +18,8 @@ export type EditorialStatus = 'draft' | 'pending' | 'published' | 'archived';
 export type EditorialActor = Pick<User, 'id' | 'email' | 'nombre' | 'apellidos' | 'avatarUrl'>;
 
 export type EditorialFields = {
+  translations?: Translations;
+  displayName?: string;
   editorialStatus: EditorialStatus;
   submittedAt?: string;
   reviewedAt?: string | null;
@@ -49,6 +52,7 @@ export type Place = EditorialFields & {
 };
 
 export type EssentialItem = {
+  translations?: Translations;
   id: string;
   title: string;
   description?: string | null;
@@ -65,6 +69,7 @@ export type EssentialItem = {
 };
 
 export type EssentialGroup = {
+  translations?: Translations;
   id: string;
   title: string;
   icon: string;
@@ -250,6 +255,7 @@ export type SearchFilters = {
 };
 
 export type FilterOptions = {
+  locationLabels?: Record<string, string>;
   locations: string[];
   activities: string[];
 };

@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Check, GitCompare, Plus, Search, Trash2, X } from 'lucide-react';
@@ -11,13 +12,13 @@ import { TourismMarks } from '../../features/tourism/tourism';
 import { ActivityMarks } from '../../features/activities/activities';
 
 const rows: Array<[string, keyof Destino]> = [
-  ['Presupuesto', 'presupuesto'],
-  ['Afluencia', 'masificacion'],
-  ['Tipos de viaje', 'tipoTurismoPrincipal'],
-  ['Actividades', 'tipoTurismoSecundario'],
-  ['Julio y agosto', 'mesesJulioAgosto'],
-  ['Entretiempo', 'mesesMayJunSeptOct'],
-  ['Noviembre a abril', 'mesesNovAbril'],
+  [t('Presupuesto'), 'presupuesto'],
+  [t('Afluencia'), 'masificacion'],
+  [t('Tipos de viaje'), 'tipoTurismoPrincipal'],
+  [t('Actividades'), 'tipoTurismoSecundario'],
+  [t('Julio y agosto'), 'mesesJulioAgosto'],
+  [t('Entretiempo'), 'mesesMayJunSeptOct'],
+  [t('Noviembre a abril'), 'mesesNovAbril'],
 ];
 
 export default function ComparePage() {
@@ -32,7 +33,9 @@ export default function ComparePage() {
   useEffect(() => {
     api<Destino[]>('/destinos?limit=100')
       .then(setCatalog)
-      .catch((cause) => setError(cause instanceof Error ? cause.message : 'No se pudo cargar el catálogo'));
+      .catch((cause) =>
+        setError(cause instanceof Error ? cause.message : t('No se pudo cargar el catálogo')),
+      );
   }, []);
   useEffect(() => {
     const fromUrl = (params.get('ids') || '').split(',').filter(Boolean).slice(0, 4);
@@ -49,7 +52,9 @@ export default function ComparePage() {
     setError('');
     api<Destino[]>(`/destinos/compare?ids=${compare.ids.join(',')}`)
       .then(setItems)
-      .catch((cause) => setError(cause instanceof Error ? cause.message : 'No se pudo preparar la comparación'))
+      .catch((cause) =>
+        setError(cause instanceof Error ? cause.message : t('No se pudo preparar la comparación')),
+      )
       .finally(() => setLoading(false));
   }, [compare.ids.join(',')]);
   const suggestions = useMemo(
@@ -65,7 +70,7 @@ export default function ComparePage() {
   );
   const chooseSuggestion = (id: string) => {
     if (!compare.toggle(id)) {
-      setError('Puedes comparar un máximo de cuatro destinos');
+      setError(t('Puedes comparar un máximo de cuatro destinos'));
       return;
     }
     setQuery('');
@@ -73,10 +78,11 @@ export default function ComparePage() {
   };
   return (
     <Shell>
-      <PageHeading kicker="Decide con los datos delante" title="Comparar destinos">
+      <PageHeading kicker={t('Decide con los datos delante')} title={t('Comparar destinos')}>
         <p>
-          Hasta cuatro lugares, criterio por criterio. Sin ganador automático: la mejor opción
-          depende de tu viaje.
+          {t(
+            'Hasta cuatro lugares, criterio por criterio. Sin ganador automático: la mejor opción depende de tu viaje.',
+          )}
         </p>
       </PageHeading>
       <section className="compare-picker">
@@ -85,11 +91,11 @@ export default function ComparePage() {
             const item = catalog.find((d) => d.id === id);
             return (
               <span key={id}>
-                {item?.nombre || 'Destino'}
+                {item?.nombre || t('Destino')}
                 <button
                   type="button"
                   onClick={() => compare.toggle(id)}
-                  aria-label={`Quitar ${item?.nombre || 'destino'}`}
+                  aria-label={t('Quitar {0}', { 0: item?.nombre || 'destino' })}
                 >
                   <X />
                 </button>
@@ -104,13 +110,17 @@ export default function ComparePage() {
               id="compare-search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Añade otro destino"
-              aria-label="Buscar destino para comparar"
+              placeholder={t('Añade otro destino')}
+              aria-label={t('Buscar destino para comparar')}
               role="combobox"
               aria-expanded={Boolean(query && suggestions.length)}
               aria-controls="compare-suggestions"
               aria-autocomplete="list"
-              aria-activedescendant={activeSuggestion >= 0 ? `compare-option-${suggestions[activeSuggestion]?.id}` : undefined}
+              aria-activedescendant={
+                activeSuggestion >= 0
+                  ? `compare-option-${suggestions[activeSuggestion]?.id}`
+                  : undefined
+              }
               onKeyDown={(event) => {
                 if (!suggestions.length) return;
                 if (event.key === 'ArrowDown') {
@@ -118,7 +128,9 @@ export default function ComparePage() {
                   setActiveSuggestion((current) => (current + 1) % suggestions.length);
                 } else if (event.key === 'ArrowUp') {
                   event.preventDefault();
-                  setActiveSuggestion((current) => (current - 1 + suggestions.length) % suggestions.length);
+                  setActiveSuggestion(
+                    (current) => (current - 1 + suggestions.length) % suggestions.length,
+                  );
                 } else if (event.key === 'Enter' && activeSuggestion >= 0) {
                   event.preventDefault();
                   chooseSuggestion(suggestions[activeSuggestion].id);
@@ -129,7 +141,7 @@ export default function ComparePage() {
               }}
             />
             {query && (
-              <div id="compare-suggestions" role="listbox" aria-label="Destinos sugeridos">
+              <div id="compare-suggestions" role="listbox" aria-label={t('Destinos sugeridos')}>
                 {suggestions.map((item, index) => (
                   <button
                     key={item.id}
@@ -149,24 +161,27 @@ export default function ComparePage() {
         )}
         {compare.ids.length > 0 && (
           <button className="button button--quiet" onClick={compare.clear}>
-            <Trash2 /> Vaciar
+            <Trash2 /> {t('Vaciar')}
           </button>
         )}
       </section>
       <section className="compare-content">
         {compare.ids.length < 2 ? (
-          <Empty icon={<GitCompare />} title="Elige al menos dos destinos">
-            Añade lugares desde el buscador o desde cualquier ficha para verlos cara a cara.
+          <Empty icon={<GitCompare />} title={t('Elige al menos dos destinos')}>
+            {t('Añade lugares desde el buscador o desde cualquier ficha para verlos cara a cara.')}
           </Empty>
         ) : loading ? (
-          <Loader label="Preparando la comparación" />
+          <Loader label={t('Preparando la comparación')} />
         ) : error ? (
-          <Notice tone="error">{error}. Puedes reintentar seleccionando de nuevo los destinos.</Notice>
+          <Notice tone="error">
+            {error}
+            {t('. Puedes reintentar seleccionando de nuevo los destinos.')}
+          </Notice>
         ) : (
           <div
             className="compare-table"
             role="table"
-            aria-label="Comparación de destinos"
+            aria-label={t('Comparación de destinos')}
             style={{ '--compare-count': items.length } as React.CSSProperties}
           >
             <div className="compare-table__header-row" role="row">
@@ -181,7 +196,7 @@ export default function ComparePage() {
             </div>
             {rows.map(([label, key]) => (
               <div className="compare-table__row" key={key} role="row">
-                <strong role="rowheader">{label}</strong>
+                <strong role="rowheader">{t(label)}</strong>
                 {items.map((item) => {
                   const value = item[key];
                   const isTourism = key === 'tipoTurismoPrincipal';
@@ -198,7 +213,7 @@ export default function ComparePage() {
                       ) : (
                         <>
                           {key.toString().startsWith('meses') && Number(value) <= 40 && <Check />}
-                          <span>{crowd}</span>
+                          <span>{t(crowd)}</span>
                         </>
                       )}
                     </div>

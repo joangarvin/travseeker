@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { CircleMarker, MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { Crosshair, MapPin } from 'lucide-react';
 
@@ -27,8 +28,8 @@ export function CoordinatePicker({
       <div className="coordinate-picker__hint">
         <Crosshair />
         <span>
-          <b>Haz clic en el mapa</b>
-          <small>Las coordenadas se completan automáticamente.</small>
+          <b>{t('Haz clic en el mapa')}</b>
+          <small>{t('Las coordenadas se completan automáticamente.')}</small>
         </span>
       </div>
       <MapContainer
@@ -54,7 +55,7 @@ export function CoordinatePicker({
       <div className="coordinate-picker__readout">
         <MapPin />
         <span>
-          {hasPoint ? `${latitude?.toFixed(5)}, ${longitude?.toFixed(5)}` : 'Sin punto asignado'}
+          {hasPoint ? `${latitude?.toFixed(5)}, ${longitude?.toFixed(5)}` : t('Sin punto asignado')}
         </span>
       </div>
     </div>

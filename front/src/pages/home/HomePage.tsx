@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowRight, CalendarDays, Map, Sparkles, Users } from 'lucide-react';
@@ -92,7 +93,7 @@ export default function Home() {
       setHasMore(data.hasMore);
     } catch (cause) {
       if (controller.signal.aborted) return;
-      setError(cause instanceof Error ? cause.message : 'No se pudieron cargar los destinos');
+      setError(cause instanceof Error ? cause.message : t('No se pudieron cargar los destinos'));
     } finally {
       if (mainSearchAbort.current === controller) {
         setLoading(false);
@@ -116,7 +117,7 @@ export default function Home() {
       setResultsTotal(data.total);
       setHasMore(data.hasMore);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No se pudieron cargar más destinos');
+      setError(cause instanceof Error ? cause.message : t('No se pudieron cargar más destinos'));
     } finally {
       setLoadingMore(false);
     }
@@ -141,7 +142,9 @@ export default function Home() {
           setResultsTotal(list.value.total);
           setHasMore(list.value.hasMore);
         } else if (!listController.signal.aborted) {
-          setError('No se pudieron cargar los destinos. Revisa la conexión e inténtalo de nuevo.');
+          setError(
+            t('No se pudieron cargar los destinos. Revisa la conexión e inténtalo de nuevo.'),
+          );
         }
         if (options.status === 'fulfilled') setFilterOptions(options.value);
       })
@@ -233,17 +236,18 @@ export default function Home() {
     <Shell>
       <section className="home-hero">
         <div className="home-hero__copy">
-          <p className="kicker">Guía de viajeros</p>
+          <p className="kicker">{t('Guía de viajeros')}</p>
           <h1>
             TravSeeker,
             <br />
             <em>
-              <span className="home-hero__accent">Donde empieza tu viaje. </span>
+              <span className="home-hero__accent">{t('Donde empieza tu viaje.')} </span>
             </em>
           </h1>
           <p className="home-hero__lead">
-            Compara afluencia, presupuesto y mejor momento. El viaje empieza tomando una buena
-            decisión.
+            {t(
+              'Compara afluencia, presupuesto y mejor momento. El viaje empieza tomando una buena decisión.',
+            )}
           </p>
           <SearchBox
             value={filters.q || ''}
@@ -256,6 +260,7 @@ export default function Home() {
             isOpen={filtersOpen}
             activeCount={draftActiveCount}
             locations={filterOptions.locations}
+            locationLabels={filterOptions.locationLabels}
             activities={filterOptions.activities}
             onToggle={() => setFiltersOpen((currentValue) => !currentValue)}
             onUpdate={update}
@@ -269,7 +274,7 @@ export default function Home() {
             loading={searchPending}
           />
         </div>
-        <div className="image-wall" aria-label="Destinos destacados">
+        <div className="image-wall" aria-label={t('Destinos destacados')}>
           {featured.slice(0, 3).map((destino, index) => (
             <Link
               key={destino.id}
@@ -290,7 +295,7 @@ export default function Home() {
           {featured.length === 0 && (
             <div className="image-wall__fallback">
               <Sparkles />
-              <span>Tu próxima historia empieza aquí</span>
+              <span>{t('Tu próxima historia empieza aquí')}</span>
             </div>
           )}
         </div>
@@ -298,7 +303,7 @@ export default function Home() {
 
       <section className="trip-moods" data-reveal>
         <div>
-          <h2>¿Qué quieres que pase?</h2>
+          <h2>{t('¿Qué quieres que pase?')}</h2>
         </div>
         <div className="trip-moods__list">
           {moodOptions.map((mode) => (
@@ -321,7 +326,7 @@ export default function Home() {
                 <mode.Icon />
               </span>
               <span className="trip-moods__copy">
-                <b>{mode.label}</b>
+                <b>{mode.displayLabel || t(mode.label)}</b>
                 <small>{mode.description}</small>
               </span>
               <ArrowRight />
@@ -334,18 +339,18 @@ export default function Home() {
         <header className="section-head">
           <div>
             <p className="kicker" role="status" aria-live="polite">
-              {activeCount ? 'Tu búsqueda' : 'La selección completa'}
+              {activeCount ? t('Tu búsqueda') : t('La selección completa')}
             </p>
             <h2>
               {activeCount
                 ? resultCount === 1
-                  ? '1 lugar encaja'
-                  : `${resultCount} lugares encajan`
-                : 'Sitios que merecen el viaje'}
+                  ? t('1 lugar encaja')
+                  : t('{0} lugares encajan', { 0: resultCount })
+                : t('Sitios que merecen el viaje')}
             </h2>
           </div>
           <Link to={`/mapa${queryString(appliedFilters)}`}>
-            Abrir en el mapa <Map />
+            {t('Abrir en el mapa')} <Map />
           </Link>
         </header>
         {error && (
@@ -357,15 +362,16 @@ export default function Home() {
                 type="button"
                 onClick={() => void (results.length && hasMore ? loadMore() : search())}
               >
-                Reintentar
+                {t('Reintentar')}
               </button>
             }
           >
-            {error}. Revisa la conexión e inténtalo de nuevo.
+            {error}
+            {t('. Revisa la conexión e inténtalo de nuevo.')}
           </Notice>
         )}
         {loading ? (
-          <Loader label="Buscando lugares" />
+          <Loader label={t('Buscando lugares')} />
         ) : (
           <>
             {visibleResults.length ? (
@@ -393,8 +399,10 @@ export default function Home() {
                 aria-busy={loadingMore}
               >
                 {loadingMore
-                  ? 'Cargando más destinos…'
-                  : `Mostrar más destinos (${Math.max(resultCount - visibleResults.length, 0)} restantes)`}
+                  ? t('Cargando más destinos…')
+                  : t('Mostrar más destinos ({0} restantes)', {
+                      0: Math.max(resultCount - visibleResults.length, 0),
+                    })}
               </button>
             )}
           </>
@@ -403,26 +411,26 @@ export default function Home() {
 
       <section className="decision-band" aria-labelledby="decision-band-title" data-reveal>
         <header>
-          <p className="kicker">La brújula de TravSeeker</p>
-          <h2 id="decision-band-title">Tres señales antes de elegir</h2>
+          <p className="kicker">{t('La brújula de TravSeeker')}</p>
+          <h2 id="decision-band-title">{t('Tres señales antes de elegir')}</h2>
         </header>
         <div>
           <CalendarDays />
-          <span>Cuándo ir</span>
-          <b>Temporadas comparadas</b>
-          <p>Lectura mes a mes para encontrar el momento adecuado.</p>
+          <span>{t('Cuándo ir')}</span>
+          <b>{t('Temporadas comparadas')}</b>
+          <p>{t('Lectura mes a mes para encontrar el momento adecuado.')}</p>
         </div>
         <div>
           <Users />
-          <span>Cuánta gente</span>
-          <b>Afluencia estimada</b>
-          <p>Una escala comprensible para anticipar los periodos con más presión.</p>
+          <span>{t('Cuánta gente')}</span>
+          <b>{t('Afluencia estimada')}</b>
+          <p>{t('Una escala comprensible para anticipar los periodos con más presión.')}</p>
         </div>
         <div>
           <Sparkles />
-          <span>Por qué merece la pena</span>
-          <b>Selección independiente</b>
-          <p>Los resultados no dependen de posiciones pagadas.</p>
+          <span>{t('Por qué merece la pena')}</span>
+          <b>{t('Selección independiente')}</b>
+          <p>{t('Los resultados no dependen de posiciones pagadas.')}</p>
         </div>
       </section>
     </Shell>

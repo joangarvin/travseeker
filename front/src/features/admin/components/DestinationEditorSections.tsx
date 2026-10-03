@@ -1,3 +1,5 @@
+import { LocalizedField } from './LocalizedField';
+import { t } from '../../../i18n';
 import { CoordinatePicker } from '../../../components/admin/CoordinatePicker';
 import { MunicipioCombobox } from '../../../components/admin/MunicipioCombobox';
 import { Field, ImageUploader, Notice } from '../../../components/ui';
@@ -34,55 +36,71 @@ export function DestinationIdentitySection({
       <SectionHeading
         number="01"
         id="editor-identity"
-        title="Identidad y clasificación"
-        description="Cómo se llama, dónde está y qué clase de experiencia propone."
+        title={t('Identidad y clasificación')}
+        description={t('Cómo se llama, dónde está y qué clase de experiencia propone.')}
       />
 
       <div className="form-grid">
-        <Field label="Nombre del destino" htmlFor="admin-name">
+        <LocalizedField
+          resource="destination"
+          field="nombre"
+          translations={form.translations}
+          onTranslationsChange={(translations) => update('translations', translations)}
+          label={t('Nombre del destino')}
+          htmlFor="admin-name"
+        >
           <input
             id="admin-name"
             value={form.nombre || ''}
             onChange={(event) => update('nombre', event.target.value)}
             required
           />
-        </Field>
-        <Field label="Zona o región" htmlFor="admin-location">
+        </LocalizedField>
+        <LocalizedField
+          resource="destination"
+          field="ubicacion"
+          translations={form.translations}
+          onTranslationsChange={(translations) => update('translations', translations)}
+          label={t('Zona o región')}
+          htmlFor="admin-location"
+        >
           <input
             id="admin-location"
             value={form.ubicacion || ''}
             onChange={(event) => update('ubicacion', event.target.value)}
             required
-            placeholder="Navarra · Interior"
+            placeholder={t('Navarra · Interior')}
           />
-        </Field>
+        </LocalizedField>
         <TourismMultiSelect
           id="admin-type"
-          label="Tipos de viaje"
+          label={t('Tipos de viaje')}
           value={form.tipoTurismoPrincipal}
-          hint="Selecciona una o varias formas de viaje que definan el destino."
+          hint={t('Selecciona una o varias formas de viaje que definan el destino.')}
           required
           onRequestCreate={onRequestCreateTourismType}
           onChange={(values) => update('tipoTurismoPrincipal', serializeTourismValues(values))}
         />
         <ActivityMultiSelect
           id="admin-activities"
-          label="Actividades"
+          label={t('Actividades')}
           value={form.tipoTurismoSecundario}
-          hint="Opcional. Selecciona actividades del catálogo. Si falta una, créala con su icono."
+          hint={t(
+            'Opcional. Selecciona actividades del catálogo. Si falta una, créala con su icono.',
+          )}
           onRequestCreate={onRequestCreateActivity}
           onChange={(values) => update('tipoTurismoSecundario', serializeActivityValues(values))}
         />
         <SelectField
           id="admin-budget"
-          label="Presupuesto"
+          label={t('Presupuesto')}
           value={form.presupuesto}
           options={BUDGET_OPTIONS}
           onChange={(value) => update('presupuesto', value)}
         />
         <SelectField
           id="admin-crowd"
-          label="Afluencia general"
+          label={t('Afluencia general')}
           value={form.masificacion}
           options={CROWD_OPTIONS}
           onChange={(value) => update('masificacion', value)}
@@ -90,9 +108,9 @@ export function DestinationIdentitySection({
       </div>
 
       <Field
-        label="Etiqueta interna o agrupación"
+        label={t('Etiqueta interna o agrupación')}
         htmlFor="admin-item"
-        hint="Opcional. Úsala para ordenar o agrupar destinos internamente."
+        hint={t('Opcional. Úsala para ordenar o agrupar destinos internamente.')}
       >
         <input
           id="admin-item"
@@ -110,13 +128,17 @@ export function DestinationContentSection({ form, update }: DestinationSectionPr
       <SectionHeading
         number="02"
         id="editor-content"
-        title="Texto y contenido"
-        description="Escribe para ayudar a decidir, no para vender el destino."
+        title={t('Texto y contenido')}
+        description={t('Escribe para ayudar a decidir, no para vender el destino.')}
       />
-      <Field
-        label="Descripción"
+      <LocalizedField
+        resource="destination"
+        field="descripcion"
+        translations={form.translations}
+        onTranslationsChange={(translations) => update('translations', translations)}
+        label={t('Descripción')}
         htmlFor="admin-description"
-        hint="Puedes usar párrafos, listas y texto en negrita."
+        hint={t('Puedes usar párrafos, listas y texto en negrita.')}
       >
         <textarea
           id="admin-description"
@@ -125,15 +147,31 @@ export function DestinationContentSection({ form, update }: DestinationSectionPr
           onChange={(event) => update('descripcion', event.target.value)}
           required
         />
-      </Field>
+      </LocalizedField>
+      {!form.essentialGroups?.length && (
+        <LocalizedField
+          resource="destination"
+          field="imprescindibles"
+          translations={form.translations}
+          onTranslationsChange={(translations) => update('translations', translations)}
+          label={t('Imprescindibles')}
+          htmlFor="admin-essentials-text"
+        >
+          <textarea
+            id="admin-essentials-text"
+            value={form.imprescindibles || ''}
+            onChange={(event) => update('imprescindibles', event.target.value)}
+          />
+        </LocalizedField>
+      )}
     </section>
   );
 }
 
 const SEASONS = [
-  ['mesesNovAbril', 'Noviembre — abril'],
-  ['mesesMayJunSeptOct', 'Mayo — junio / septiembre — octubre'],
-  ['mesesJulioAgosto', 'Julio — agosto'],
+  ['mesesNovAbril', t('Noviembre — abril')],
+  ['mesesMayJunSeptOct', t('Mayo — junio / septiembre — octubre')],
+  ['mesesJulioAgosto', t('Julio — agosto')],
 ] as const;
 
 export function DestinationSeasonSection({ form, update }: DestinationSectionProps) {
@@ -142,14 +180,14 @@ export function DestinationSeasonSection({ form, update }: DestinationSectionPro
       <SectionHeading
         number="04"
         id="editor-season"
-        title="Afluencia por temporada"
-        description="0 significa muy tranquilo; 100, máxima ocupación."
+        title={t('Afluencia por temporada')}
+        description={t('0 significa muy tranquilo; 100, máxima ocupación.')}
       />
       <div className="season-editor">
         {SEASONS.map(([key, label]) => (
           <label key={key}>
             <span>
-              <b>{label}</b>
+              <b>{t(label)}</b>
               <output>{Number(form[key] || 0)}%</output>
             </span>
             <input
@@ -177,12 +215,12 @@ export function DestinationImageSection({ form, update, token }: DestinationImag
       <SectionHeading
         number="05"
         id="editor-image"
-        title="Imagen de portada"
-        description="Sube el archivo directamente o pega una URL existente."
+        title={t('Imagen de portada')}
+        description={t('Sube el archivo directamente o pega una URL existente.')}
       />
       <ImageUploader
         id="destination-cover"
-        label="Portada del destino"
+        label={t('Portada del destino')}
         value={form.imagen}
         token={token}
         endpoint="/upload/destino"
@@ -190,9 +228,9 @@ export function DestinationImageSection({ form, update, token }: DestinationImag
         onChange={(url) => update('imagen', url)}
       />
       <Field
-        label="URL de la imagen"
+        label={t('URL de la imagen')}
         htmlFor="admin-image"
-        hint="Se actualiza automáticamente cuando subes un archivo."
+        hint={t('Se actualiza automáticamente cuando subes un archivo.')}
       >
         <input
           id="admin-image"
@@ -212,8 +250,10 @@ export function DestinationLocationSection({ form, update }: DestinationSectionP
       <SectionHeading
         number="06"
         id="editor-map"
-        title="Punto en el mapa"
-        description="Haz clic en la localización aproximada y ajusta las coordenadas si hace falta."
+        title={t('Punto en el mapa')}
+        description={t(
+          'Haz clic en la localización aproximada y ajusta las coordenadas si hace falta.',
+        )}
       />
       <CoordinatePicker
         latitude={form.latitud}
@@ -226,7 +266,7 @@ export function DestinationLocationSection({ form, update }: DestinationSectionP
       <div className="form-grid">
         <CoordinateField
           id="admin-lat"
-          label="Latitud"
+          label={t('Latitud')}
           value={form.latitud}
           min={-90}
           max={90}
@@ -234,7 +274,7 @@ export function DestinationLocationSection({ form, update }: DestinationSectionP
         />
         <CoordinateField
           id="admin-lng"
-          label="Longitud"
+          label={t('Longitud')}
           value={form.longitud}
           min={-180}
           max={180}
@@ -263,12 +303,12 @@ export function DestinationMunicipalitiesSection({
       <SectionHeading
         number="07"
         id="editor-municipalities"
-        title="Municipios asociados"
-        description="Estos municipios aparecerán en la ficha pública del destino."
+        title={t('Municipios asociados')}
+        description={t('Estos municipios aparecerán en la ficha pública del destino.')}
       />
 
       {!destinationId ? (
-        <Notice>Guarda primero el destino para poder asociar municipios.</Notice>
+        <Notice>{t('Guarda primero el destino para poder asociar municipios.')}</Notice>
       ) : (
         <MunicipioCombobox
           allMunicipios={allMunicipios}
@@ -309,7 +349,7 @@ type SelectFieldProps = {
 
 function SelectField({ id, label, value, options, onChange }: SelectFieldProps) {
   return (
-    <Field label={label} htmlFor={id}>
+    <Field label={t(label)} htmlFor={id}>
       <select
         id={id}
         value={plain(value)}
@@ -317,7 +357,9 @@ function SelectField({ id, label, value, options, onChange }: SelectFieldProps) 
         required
       >
         {options.map((option) => (
-          <option key={option}>{option}</option>
+          <option key={option} value={option}>
+            {t(option)}
+          </option>
         ))}
       </select>
     </Field>
@@ -335,7 +377,7 @@ type CoordinateFieldProps = {
 
 function CoordinateField({ id, label, value, min, max, onChange }: CoordinateFieldProps) {
   return (
-    <Field label={label} htmlFor={id}>
+    <Field label={t(label)} htmlFor={id}>
       <input
         id={id}
         type="number"

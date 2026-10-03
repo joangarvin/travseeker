@@ -1,3 +1,4 @@
+import { t, serverMessage } from '../../../i18n';
 import { Link } from 'react-router-dom';
 import { GitCompare, Search } from 'lucide-react';
 import { MediaImage } from '../../../components/ui';
@@ -31,7 +32,7 @@ export function DestinationCard({
         {destino.searchMatch && (
           <p className="destination-card__match">
             <Search aria-hidden />
-            {destino.searchMatch.label}
+            {serverMessage(destino.searchMatch.label)}
           </p>
         )}
         <div className="destination-card__eyebrow">
@@ -42,8 +43,8 @@ export function DestinationCard({
           <Link to={`/destino/${destino.id}`}>{destino.nombre.trim()}</Link>
         </h3>
         <div className="destination-card__facts">
-          <span>{plain(destino.presupuesto)}</span>
-          <span>{plain(destino.masificacion)}</span>
+          <span>{t(plain(destino.presupuesto))}</span>
+          <span>{t(plain(destino.masificacion))}</span>
         </div>
       </div>
 
@@ -51,11 +52,13 @@ export function DestinationCard({
         className={`destination-card__compare ${isCompared ? 'is-active' : ''}`}
         onClick={() => toggle(destino.id)}
         aria-label={
-          isCompared ? `Quitar ${destino.nombre} de la comparación` : `Comparar ${destino.nombre}`
+          isCompared
+            ? t('Quitar {0} de la comparación', { 0: destino.nombre })
+            : t('Comparar {0}', { 0: destino.nombre })
         }
       >
         <GitCompare />
-        <span>{isCompared ? 'Añadido' : 'Comparar'}</span>
+        <span>{isCompared ? t('Añadido') : t('Comparar')}</span>
       </button>
     </article>
   );

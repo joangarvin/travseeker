@@ -1,3 +1,4 @@
+const { translationData } = require("./localization");
 const {
   parseTags,
   serializeTags,
@@ -29,6 +30,7 @@ function normalizeDestinationPayload(data, essentialGroups = null) {
     ),
   ];
   return {
+    ...translationData(data, "destination"),
     nombre: String(data.nombre || "").trim(),
     tipoTurismoPrincipal: serializeTags(primaryTypes),
     tipoTurismoSecundario: serializeTags(secondaryTypes),
@@ -109,6 +111,7 @@ function normalizeMunicipioPayload(payload) {
     throw err;
   }
   return {
+    ...translationData(payload, "municipality"),
     nombre,
     precios: stripHtmlToText(payload.precios),
     conexiones: stripHtmlToText(payload.conexiones),
@@ -138,6 +141,7 @@ function normalizePlace(payload) {
     throw error;
   }
   return {
+    ...translationData(payload, "place"),
     nombre,
     categoria,
     latitud,

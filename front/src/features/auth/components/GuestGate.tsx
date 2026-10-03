@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import type { ReactNode } from 'react';
 import { Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -19,7 +20,7 @@ export function GuestGate({ title, children }: GuestGateProps) {
           title={title}
           action={
             <Link className="button button--primary" to="/auth">
-              Entrar o crear una cuenta
+              {t('Entrar o crear una cuenta')}
             </Link>
           }
         >

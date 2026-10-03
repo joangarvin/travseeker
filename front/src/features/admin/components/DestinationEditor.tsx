@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import { useState, type FormEvent } from 'react';
 import {
   BookOpen,
@@ -50,13 +51,13 @@ type DestinationEditorProps = {
 };
 
 const editorSections = [
-  { id: 'identity', label: 'Identidad', Icon: Tag },
-  { id: 'content', label: 'Contenido', Icon: BookOpen },
-  { id: 'essentials', label: 'Imprescindibles', Icon: ListChecks },
-  { id: 'season', label: 'Temporadas', Icon: CalendarRange },
-  { id: 'image', label: 'Portada', Icon: ImageIcon },
-  { id: 'location', label: 'Localización', Icon: MapPinned },
-  { id: 'municipalities', label: 'Municipios', Icon: Link2 },
+  { id: 'identity', label: t('Identidad'), Icon: Tag },
+  { id: 'content', label: t('Contenido'), Icon: BookOpen },
+  { id: 'essentials', label: t('Imprescindibles'), Icon: ListChecks },
+  { id: 'season', label: t('Temporadas'), Icon: CalendarRange },
+  { id: 'image', label: t('Portada'), Icon: ImageIcon },
+  { id: 'location', label: t('Localización'), Icon: MapPinned },
+  { id: 'municipalities', label: t('Municipios'), Icon: Link2 },
 ] as const;
 
 function normalizeDestination(destination: Partial<Destino>): Partial<Destino> {
@@ -106,12 +107,12 @@ export function DestinationEditor({
     event?.preventDefault();
     if (!tourismValues(form.tipoTurismoPrincipal).length) {
       setActiveSection('identity');
-      setMessage({ tone: 'error', text: 'Selecciona al menos un tipo principal.' });
+      setMessage({ tone: 'error', text: t('Selecciona al menos un tipo principal.') });
       return;
     }
     if (!plain(form.imprescindibles) && !form.essentialGroups?.length) {
       setActiveSection('essentials');
-      setMessage({ tone: 'error', text: 'Añade al menos un imprescindible.' });
+      setMessage({ tone: 'error', text: t('Añade al menos un imprescindible.') });
       return;
     }
     setIsSaving(true);
@@ -137,13 +138,13 @@ export function DestinationEditor({
       setMessage({
         tone: 'success',
         text: form.id
-          ? 'Destino actualizado'
-          : 'Destino creado y enviado a revisión. Ya puedes asociar municipios.',
+          ? t('Destino actualizado')
+          : t('Destino creado y enviado a revisión. Ya puedes asociar municipios.'),
       });
     } catch (cause) {
       setMessage({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo guardar el destino',
+        text: cause instanceof Error ? cause.message : t('No se pudo guardar el destino'),
       });
     } finally {
       setIsSaving(false);
@@ -168,7 +169,7 @@ export function DestinationEditor({
     } catch (cause) {
       setMessage({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo asociar el municipio',
+        text: cause instanceof Error ? cause.message : t('No se pudo asociar el municipio'),
       });
     }
   };
@@ -191,7 +192,7 @@ export function DestinationEditor({
     } catch (cause) {
       setMessage({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo retirar el municipio',
+        text: cause instanceof Error ? cause.message : t('No se pudo retirar el municipio'),
       });
     }
   };
@@ -229,12 +230,14 @@ export function DestinationEditor({
       setActivityDraft(null);
       setMessage({
         tone: 'success',
-        text: `${created.name} se ha creado y enviado a revisión. Queda seleccionado para este destino.`,
+        text: t('{0} se ha creado y enviado a revisión. Queda seleccionado para este destino.', {
+          0: created.name,
+        }),
       });
     } catch (cause) {
       setMessage({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo crear la actividad',
+        text: cause instanceof Error ? cause.message : t('No se pudo crear la actividad'),
       });
     } finally {
       setIsActivitySaving(false);
@@ -259,12 +262,12 @@ export function DestinationEditor({
       setTourismTypeDraft(null);
       setMessage({
         tone: 'success',
-        text: `${created.name} se ha creado y enviado a revisión. Queda seleccionado.`,
+        text: t('{0} se ha creado y enviado a revisión. Queda seleccionado.', { 0: created.name }),
       });
     } catch (cause) {
       setMessage({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo crear el tipo de viaje',
+        text: cause instanceof Error ? cause.message : t('No se pudo crear el tipo de viaje'),
       });
     } finally {
       setIsTourismTypeSaving(false);
@@ -281,7 +284,7 @@ export function DestinationEditor({
     place?: Place;
   }) => {
     if (!form.id) {
-      setMessage({ tone: 'error', text: 'Guarda primero el destino para situar el punto.' });
+      setMessage({ tone: 'error', text: t('Guarda primero el destino para situar el punto.') });
       return;
     }
     setPlaceTarget({ groupId, itemId });
@@ -332,12 +335,14 @@ export function DestinationEditor({
       setPlaceTarget(null);
       setMessage({
         tone: 'success',
-        text: `${saved.nombre} se ha creado, enviado a revisión y vinculado al imprescindible.`,
+        text: t('{0} se ha creado, enviado a revisión y vinculado al imprescindible.', {
+          0: saved.nombre,
+        }),
       });
     } catch (cause) {
       setMessage({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo guardar la ubicación',
+        text: cause instanceof Error ? cause.message : t('No se pudo guardar la ubicación'),
       });
     } finally {
       setIsPlaceSaving(false);
@@ -348,12 +353,12 @@ export function DestinationEditor({
     <>
       <AdminModal
         wide
-        title={form.id ? `Editar ${form.nombre}` : 'Crear un destino'}
-        subtitle="Completa cada apartado. Puedes guardar y continuar cuando quieras."
+        title={form.id ? t('Editar {0}', { 0: form.nombre }) : t('Crear un destino')}
+        subtitle={t('Completa cada apartado. Puedes guardar y continuar cuando quieras.')}
         onClose={onClose}
       >
         <form className="admin-editor" onSubmit={saveDestination}>
-          <nav className="admin-editor__nav" aria-label="Apartados del destino" role="tablist">
+          <nav className="admin-editor__nav" aria-label={t('Apartados del destino')} role="tablist">
             {editorSections.map(({ id, label, Icon }) => (
               <button
                 type="button"
@@ -364,7 +369,7 @@ export function DestinationEditor({
                 key={id}
               >
                 <Icon />
-                <span>{label}</span>
+                <span>{t(label)}</span>
                 {id === 'municipalities' && <b>{associatedMunicipalities.length}</b>}
               </button>
             ))}
@@ -433,10 +438,10 @@ export function DestinationEditor({
               )}
             </span>
             <Button type="button" variant="quiet" onClick={onClose}>
-              Cerrar
+              {t('Cerrar')}
             </Button>
             <Button type="submit" loading={isSaving}>
-              Guardar cambios
+              {t('Guardar cambios')}
             </Button>
           </footer>
         </form>

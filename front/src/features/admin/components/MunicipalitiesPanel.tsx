@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import { Edit3, Plus, Trash2 } from 'lucide-react';
 import { Button } from '../../../components/ui';
 import type { Municipio } from '../../../types';
@@ -33,18 +34,20 @@ export function MunicipalitiesPanel({
       <AdminToolbar
         query={query}
         onQueryChange={onQueryChange}
-        placeholder="Buscar municipio, tipo o conexión"
+        placeholder={t('Buscar municipio, tipo o conexión')}
         resultCount={visible.length}
       >
         <Button onClick={onCreate}>
-          <Plus /> Nuevo municipio
+          <Plus /> {t('Nuevo municipio')}
         </Button>
       </AdminToolbar>
       <EditorialStatusFilter value={status} onChange={setStatus} />
 
       {visible.length > MAX_VISIBLE_MUNICIPALITIES && (
         <p className="admin-result-hint">
-          Mostrando los primeros 100. Escribe un nombre, tipo o conexión para acotar la lista.
+          {t(
+            'Mostrando los primeros 100. Escribe un nombre, tipo o conexión para acotar la lista.',
+          )}
         </p>
       )}
 
@@ -53,23 +56,25 @@ export function MunicipalitiesPanel({
           <article key={municipality.id}>
             <div>
               <EditorialStatusBadge status={municipality.editorialStatus} />
-              <span>{municipality.destinosCount || 0} destinos asociados</span>
+              <span>
+                {municipality.destinosCount || 0} {t('destinos asociados')}
+              </span>
               <h2>{municipality.nombre}</h2>
               <p>
-                {plain(municipality.tipoTurismo) || 'Sin tipo'} ·{' '}
-                {plain(municipality.precios) || 'Precios sin indicar'}
+                {plain(municipality.tipoTurismo) || t('Sin tipo')} ·{' '}
+                {plain(municipality.precios) || t('Precios sin indicar')}
               </p>
             </div>
             <div>
               <button
                 onClick={() => onEdit(municipality)}
-                aria-label={`Editar ${municipality.nombre}`}
+                aria-label={t('Editar {0}', { 0: municipality.nombre })}
               >
                 <Edit3 />
               </button>
               <button
                 onClick={() => onDelete(municipality.id)}
-                aria-label={`Eliminar ${municipality.nombre}`}
+                aria-label={t('Eliminar {0}', { 0: municipality.nombre })}
               >
                 <Trash2 />
               </button>

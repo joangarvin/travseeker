@@ -1,3 +1,5 @@
+import { LocalizedField } from './LocalizedField';
+import { t } from '../../../i18n';
 import { useState, type FormEvent } from 'react';
 import { Check } from 'lucide-react';
 import { AdminModal } from '../../../components/admin/AdminModal';
@@ -38,12 +40,19 @@ export function TourismTypeEditorModal({
   const PreviewIcon = tourismIconRegistry[form.icon || 'Compass'] || tourismIconRegistry.Compass;
   return (
     <AdminModal
-      title={form.id ? `Editar ${form.name}` : 'Crear un tipo de viaje'}
-      subtitle="Define cómo se reconoce este tipo en tarjetas, filtros, mapas y comparaciones."
+      title={form.id ? t('Editar {0}', { 0: form.name }) : t('Crear un tipo de viaje')}
+      subtitle={t('Define cómo se reconoce este tipo en tarjetas, filtros, mapas y comparaciones.')}
       onClose={onClose}
     >
       <form className="activity-editor" onSubmit={submit}>
-        <Field label="Nombre" htmlFor="tourism-type-name">
+        <LocalizedField
+          resource="tourismType"
+          field="name"
+          translations={form.translations}
+          onTranslationsChange={(translations) => setForm({ ...form, translations })}
+          label={t('Nombre')}
+          htmlFor="tourism-type-name"
+        >
           <input
             id="tourism-type-name"
             data-autofocus
@@ -53,11 +62,15 @@ export function TourismTypeEditorModal({
             value={form.name || ''}
             onChange={(event) => setForm({ ...form, name: event.target.value })}
           />
-        </Field>
-        <Field
-          label="Descripción breve"
+        </LocalizedField>
+        <LocalizedField
+          resource="tourismType"
+          field="description"
+          translations={form.translations}
+          onTranslationsChange={(translations) => setForm({ ...form, translations })}
+          label={t('Descripción breve')}
           htmlFor="tourism-type-description"
-          hint="Explica qué experiencia reúne, sin lenguaje publicitario."
+          hint={t('Explica qué experiencia reúne, sin lenguaje publicitario.')}
         >
           <input
             id="tourism-type-description"
@@ -65,10 +78,10 @@ export function TourismTypeEditorModal({
             value={form.description || ''}
             onChange={(event) => setForm({ ...form, description: event.target.value })}
           />
-        </Field>
+        </LocalizedField>
 
         <fieldset className="activity-icon-picker tourism-icon-picker">
-          <legend>Icono</legend>
+          <legend>{t('Icono')}</legend>
           <div>
             {tourismIconChoices.map(([iconName, label]) => {
               const Icon = tourismIconRegistry[iconName];
@@ -83,7 +96,7 @@ export function TourismTypeEditorModal({
                     onChange={() => setForm({ ...form, icon: iconName })}
                   />
                   <Icon aria-hidden />
-                  <span>{label}</span>
+                  <span>{t(label)}</span>
                   {selected && <Check aria-hidden />}
                 </label>
               );
@@ -92,11 +105,11 @@ export function TourismTypeEditorModal({
         </fieldset>
 
         <fieldset className="tourism-color-picker">
-          <legend>Color identificativo</legend>
-          <p>Escoge un color visualmente o escribe su código hexadecimal.</p>
+          <legend>{t('Color identificativo')}</legend>
+          <p>{t('Escoge un color visualmente o escribe su código hexadecimal.')}</p>
           <div className="tourism-color-picker__custom">
             <label className="tourism-color-picker__well">
-              <span className="sr-only">Abrir paleta de color</span>
+              <span className="sr-only">{t('Abrir paleta de color')}</span>
               <input
                 type="color"
                 value={currentColor}
@@ -105,7 +118,7 @@ export function TourismTypeEditorModal({
                 }
               />
             </label>
-            <Field label="Código de color" htmlFor="tourism-color-code">
+            <Field label={t('Código de color')} htmlFor="tourism-color-code">
               <input
                 id="tourism-color-code"
                 value={form.colorValue || ''}
@@ -121,10 +134,10 @@ export function TourismTypeEditorModal({
               <span aria-hidden>
                 <PreviewIcon />
               </span>
-              Vista previa
+              {t('Vista previa')}
             </span>
           </div>
-          <div className="tourism-color-picker__presets" aria-label="Colores sugeridos">
+          <div className="tourism-color-picker__presets" aria-label={t('Colores sugeridos')}>
             {tourismColorChoices.map(([colorKey, label, colorValue]) => (
               <button
                 type="button"
@@ -133,14 +146,14 @@ export function TourismTypeEditorModal({
                 key={colorKey}
               >
                 <span style={{ backgroundColor: colorValue }} aria-hidden />
-                {label}
+                {t(label)}
               </button>
             ))}
           </div>
         </fieldset>
 
         <div className="form-grid">
-          <Field label="Orden" htmlFor="tourism-type-order">
+          <Field label={t('Orden')} htmlFor="tourism-type-order">
             <input
               id="tourism-type-order"
               type="number"
@@ -155,17 +168,17 @@ export function TourismTypeEditorModal({
               onChange={(event) => setForm({ ...form, isActive: event.target.checked })}
             />
             <span>
-              <b>Tipo visible</b>
-              <small>Aparece en filtros y selectores públicos.</small>
+              <b>{t('Tipo visible')}</b>
+              <small>{t('Aparece en filtros y selectores públicos.')}</small>
             </span>
           </label>
         </div>
         <footer className="modal-actions">
           <Button type="button" variant="quiet" onClick={onClose}>
-            Cancelar
+            {t('Cancelar')}
           </Button>
           <Button type="submit" loading={isSaving}>
-            {form.id ? 'Guardar cambios' : 'Crear tipo'}
+            {form.id ? t('Guardar cambios') : t('Crear tipo')}
           </Button>
         </footer>
       </form>

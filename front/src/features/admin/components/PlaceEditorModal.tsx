@@ -1,3 +1,5 @@
+import { LocalizedField } from './LocalizedField';
+import { t } from '../../../i18n';
 import type { FormEvent } from 'react';
 import { AdminModal } from '../../../components/admin/AdminModal';
 import { CoordinatePicker } from '../../../components/admin/CoordinatePicker';
@@ -34,45 +36,68 @@ export function PlaceEditorModal({
   return (
     <AdminModal
       wide
-      title={form.id ? 'Editar lugar' : 'Nuevo lugar'}
-      subtitle="Un punto concreto que ayuda a recorrer el destino."
+      title={form.id ? t('Editar lugar') : t('Nuevo lugar')}
+      subtitle={t('Un punto concreto que ayuda a recorrer el destino.')}
       onClose={onClose}
     >
       <form onSubmit={onSubmit} className="place-editor">
         <div className="form-grid">
-          <Field label="Nombre" htmlFor="place-name">
+          <LocalizedField
+            resource="place"
+            field="nombre"
+            translations={form.translations}
+            onTranslationsChange={(translations) => onChange({ ...form, translations })}
+            label={t('Nombre')}
+            htmlFor="place-name"
+          >
             <input
               id="place-name"
               value={form.nombre || ''}
               onChange={(event) => onChange({ ...form, nombre: event.target.value })}
               required
             />
-          </Field>
-          <Field label="Categoría" htmlFor="place-category">
+          </LocalizedField>
+          <LocalizedField
+            resource="place"
+            field="categoria"
+            translations={form.translations}
+            onTranslationsChange={(translations) => onChange({ ...form, translations })}
+            label={t('Categoría')}
+            htmlFor="place-category"
+          >
             <select
               id="place-category"
               value={form.categoria || ''}
               onChange={(event) => onChange({ ...form, categoria: event.target.value })}
               required
             >
-              <option value="">Elige una categoría</option>
+              <option value="">{t('Elige una categoría')}</option>
               {PLACE_CATEGORIES.map((category) => (
-                <option key={category}>{category}</option>
+                <option key={category} value={category}>
+                  {t(category)}
+                </option>
               ))}
             </select>
-          </Field>
+          </LocalizedField>
         </div>
 
-        <Field label="Descripción" htmlFor="place-description">
+        <LocalizedField
+          resource="place"
+          field="descripcion"
+          translations={form.translations}
+          onTranslationsChange={(translations) => onChange({ ...form, translations })}
+          label={t('Descripción')}
+          htmlFor="place-description"
+        >
           <textarea
             id="place-description"
             value={form.descripcion || ''}
             onChange={(event) => onChange({ ...form, descripcion: event.target.value })}
           />
-        </Field>
+        </LocalizedField>
 
         <div className="form-grid">
-          <Field label="Sitio web" htmlFor="place-web">
+          <Field label={t('Sitio web')} htmlFor="place-web">
             <input
               id="place-web"
               type="url"
@@ -81,7 +106,7 @@ export function PlaceEditorModal({
               placeholder="https://"
             />
           </Field>
-          <Field label="Orden" htmlFor="place-order">
+          <Field label={t('Orden')} htmlFor="place-order">
             <input
               id="place-order"
               type="number"
@@ -95,8 +120,8 @@ export function PlaceEditorModal({
 
         <label className="setting-row">
           <span>
-            <b>Visible en la ficha pública</b>
-            <small>Desactívalo para conservarlo sin mostrarlo.</small>
+            <b>{t('Visible en la ficha pública')}</b>
+            <small>{t('Desactívalo para conservarlo sin mostrarlo.')}</small>
           </span>
           <input
             type="checkbox"
@@ -113,7 +138,7 @@ export function PlaceEditorModal({
         />
 
         <div className="form-grid">
-          <Field label="Latitud" htmlFor="place-lat">
+          <Field label={t('Latitud')} htmlFor="place-lat">
             <input
               id="place-lat"
               type="number"
@@ -123,7 +148,7 @@ export function PlaceEditorModal({
               required
             />
           </Field>
-          <Field label="Longitud" htmlFor="place-lng">
+          <Field label={t('Longitud')} htmlFor="place-lng">
             <input
               id="place-lng"
               type="number"
@@ -136,7 +161,7 @@ export function PlaceEditorModal({
         </div>
 
         <Button type="submit" loading={isSaving}>
-          Guardar lugar
+          {t('Guardar lugar')}
         </Button>
       </form>
     </AdminModal>

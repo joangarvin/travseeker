@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import { AlertTriangle } from 'lucide-react';
 import { AdminModal } from '../../../components/admin/AdminModal';
 import { Button } from '../../../components/ui';
@@ -16,23 +17,26 @@ export function ActivityDeleteDialog({
 }) {
   const destinationsCount = activity.destinationsCount || 0;
   return (
-    <AdminModal title={`Eliminar ${activity.name}`} onClose={onClose}>
+    <AdminModal title={t('Eliminar {0}', { 0: activity.name })} onClose={onClose}>
       <div className="activity-delete-dialog">
         <AlertTriangle aria-hidden />
         <div>
           <p>
-            La actividad desaparecerá del catálogo y se retirará de{' '}
-            <strong>{destinationsCount} destinos</strong>.
+            {t('La actividad desaparecerá del catálogo y se retirará de')}{' '}
+            <strong>
+              {destinationsCount} {t('destinos')}
+            </strong>
+            .
           </p>
-          <p>Esta acción no se puede deshacer.</p>
+          <p>{t('Esta acción no se puede deshacer.')}</p>
         </div>
       </div>
       <footer className="modal-actions">
         <Button data-autofocus type="button" variant="quiet" onClick={onClose}>
-          Conservar actividad
+          {t('Conservar actividad')}
         </Button>
         <Button type="button" variant="danger" loading={isDeleting} onClick={onConfirm}>
-          Eliminar definitivamente
+          {t('Eliminar definitivamente')}
         </Button>
       </footer>
     </AdminModal>

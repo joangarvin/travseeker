@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import type { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { SiteFooter } from './SiteFooter';
@@ -18,7 +19,7 @@ export function AppShell({ children, footer = true }: AppShellProps) {
   return (
     <>
       <a className="skip" href="#main">
-        Saltar al contenido
+        {t('Saltar al contenido')}
       </a>
       <SiteHeader />
       <EmailVerificationBanner />

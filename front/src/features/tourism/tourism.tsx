@@ -1,3 +1,4 @@
+import { t, catalogName } from '../../i18n';
 import type { CSSProperties } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import {
@@ -23,6 +24,7 @@ export type TourismKind = string;
 export type TourismDefinition = {
   key: TourismKind;
   label: string;
+  displayLabel?: string;
   description: string;
   icon: string;
   colorValue: string;
@@ -73,7 +75,7 @@ export const tourismTypes: TourismDefinition[] = [
   {
     key: 'cultural',
     label: 'Cultural',
-    description: 'Ideas, arte y vida local',
+    description: t('Ideas, arte y vida local'),
     icon: 'Landmark',
     colorValue: '#3047f2',
     Icon: Landmark,
@@ -81,7 +83,7 @@ export const tourismTypes: TourismDefinition[] = [
   {
     key: 'naturaleza',
     label: 'Naturaleza',
-    description: 'Paisajes con espacio para respirar',
+    description: t('Paisajes con espacio para respirar'),
     icon: 'Leaf',
     colorValue: '#256628',
     Icon: Leaf,
@@ -89,7 +91,7 @@ export const tourismTypes: TourismDefinition[] = [
   {
     key: 'playa',
     label: 'Sol y playa',
-    description: 'Costa, luz y tiempo junto al mar',
+    description: t('Costa, luz y tiempo junto al mar'),
     icon: 'Waves',
     colorValue: '#006b63',
     Icon: Waves,
@@ -97,7 +99,7 @@ export const tourismTypes: TourismDefinition[] = [
   {
     key: 'rural',
     label: 'Rural',
-    description: 'Pueblos, caminos y ritmo pausado',
+    description: t('Pueblos, caminos y ritmo pausado'),
     icon: 'Wheat',
     colorValue: '#6d4c41',
     Icon: Wheat,
@@ -105,7 +107,7 @@ export const tourismTypes: TourismDefinition[] = [
   {
     key: 'montana',
     label: 'Montaña',
-    description: 'Altura, senderos y aire abierto',
+    description: t('Altura, senderos y aire abierto'),
     icon: 'Mountain',
     colorValue: '#4b4db0',
     Icon: Mountain,
@@ -113,7 +115,7 @@ export const tourismTypes: TourismDefinition[] = [
   {
     key: 'patrimonial',
     label: 'Patrimonial',
-    description: 'Historia que todavía se recorre',
+    description: t('Historia que todavía se recorre'),
     icon: 'Castle',
     colorValue: '#8c1046',
     Icon: Castle,
@@ -158,6 +160,7 @@ export function tourismDefinition(
     return {
       key: catalogType.colorKey,
       label: catalogType.name,
+      displayLabel: catalogName(catalogType),
       description: catalogType.description,
       icon: catalogType.icon,
       colorValue: catalogType.colorValue,
@@ -168,7 +171,7 @@ export function tourismDefinition(
     tourismTypes.find((item) => normalized.includes(normalizedTourismKey(item.label))) || {
       key: 'otro',
       label: firstValue || 'Otros viajes',
-      description: 'Una forma distinta de descubrir',
+      description: t('Una forma distinta de descubrir'),
       icon: 'Compass',
       colorValue: '#5f6470',
       Icon: Compass,
@@ -209,7 +212,7 @@ export function TourismMark({
       <span className="tourism-mark__symbol" aria-hidden>
         <type.Icon />
       </span>
-      <span className="tourism-mark__label">{type.label}</span>
+      <span className="tourism-mark__label">{type.displayLabel || t(type.label)}</span>
       {extraCount > 0 && <span className="tourism-mark__more">+{extraCount}</span>}
     </span>
   );

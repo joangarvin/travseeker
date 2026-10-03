@@ -1,3 +1,4 @@
+import { t, intlLocale } from '../../i18n';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import {
@@ -88,7 +89,7 @@ export default function MapPage() {
       .catch((cause) =>
         controller.signal.aborted
           ? undefined
-          : setError(cause instanceof Error ? cause.message : 'No se pudo cargar el mapa'),
+          : setError(cause instanceof Error ? cause.message : t('No se pudo cargar el mapa')),
       )
       .finally(() => {
         if (!controller.signal.aborted) setLoading(false);
@@ -110,17 +111,17 @@ export default function MapPage() {
       <section className="map-workspace">
         <header className="map-toolbar">
           <div className="map-toolbar__title">
-            <p className="kicker">Exploración visual</p>
-            <h1>El mapa</h1>
-            <span>{loading ? 'Buscando…' : `${destinos.length} destinos`}</span>
+            <p className="kicker">{t('Exploración visual')}</p>
+            <h1>{t('El mapa')}</h1>
+            <span>{loading ? 'Buscando…' : t('{0} destinos', { 0: destinos.length })}</span>
           </div>
           <label className="map-search">
             <Search aria-hidden />
-            <span className="sr-only">Buscar en el mapa</span>
+            <span className="sr-only">{t('Buscar en el mapa')}</span>
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Destino, municipio o actividad"
+              placeholder={t('Destino, municipio o actividad')}
             />
           </label>
           <div className="map-toolbar__actions">
@@ -133,7 +134,7 @@ export default function MapPage() {
               aria-expanded={filtersOpen}
               aria-controls="map-filters"
             >
-              <SlidersHorizontal /> Filtros {filterCount > 0 && <b>{filterCount}</b>}
+              <SlidersHorizontal /> {t('Filtros')} {filterCount > 0 && <b>{filterCount}</b>}
             </button>
             <button
               className="icon-button"
@@ -141,8 +142,8 @@ export default function MapPage() {
                 setMotionSource(event.detail > 0 ? 'pointer' : 'keyboard');
                 setListOpen((value) => !value);
               }}
-              aria-label={listOpen ? 'Ver solo el mapa' : 'Mostrar lista de destinos'}
-              title={listOpen ? 'Ver solo el mapa' : 'Mostrar lista'}
+              aria-label={listOpen ? t('Ver solo el mapa') : t('Mostrar lista de destinos')}
+              title={listOpen ? t('Ver solo el mapa') : t('Mostrar lista')}
             >
               {listOpen ? <MapIcon /> : <List />}
             </button>
@@ -153,59 +154,61 @@ export default function MapPage() {
             className="map-filters"
             id="map-filters"
             role="region"
-            aria-label="Filtros del mapa"
+            aria-label={t('Filtros del mapa')}
             data-motion-trigger={motionSource}
           >
             <select
               value={filters.month || ''}
               onChange={(event) => update('month', event.target.value)}
-              aria-label="Mes"
+              aria-label={t('Mes')}
             >
-              <option value="">Cualquier mes</option>
+              <option value="">{t('Cualquier mes')}</option>
               {Array.from({ length: 12 }).map((_, index) => (
                 <option key={index} value={String(index + 1)}>
-                  {new Date(2026, index).toLocaleString('es', { month: 'long' })}
+                  {new Date(2026, index).toLocaleString(intlLocale, { month: 'long' })}
                 </option>
               ))}
             </select>
             <select
               value={filters.ubicacion || ''}
               onChange={(event) => update('ubicacion', event.target.value)}
-              aria-label="Ubicación"
+              aria-label={t('Ubicación')}
             >
-              <option value="">Cualquier ubicación</option>
+              <option value="">{t('Cualquier ubicación')}</option>
               {filterOptions.locations.map((location) => (
-                <option key={location}>{location}</option>
+                <option key={location} value={location}>
+                  {filterOptions.locationLabels?.[location] || t(location)}
+                </option>
               ))}
             </select>
             <select
               value={filters.presupuesto || ''}
               onChange={(event) => update('presupuesto', event.target.value)}
-              aria-label="Presupuesto"
+              aria-label={t('Presupuesto')}
             >
-              <option value="">Cualquier presupuesto</option>
-              <option>Bajo</option>
-              <option>Medio-Bajo</option>
-              <option>Medio</option>
-              <option>Medio-Alto</option>
-              <option>Alto</option>
+              <option value="">{t('Cualquier presupuesto')}</option>
+              <option>{t('Bajo')}</option>
+              <option>{t('Medio-Bajo')}</option>
+              <option>{t('Medio')}</option>
+              <option>{t('Medio-Alto')}</option>
+              <option>{t('Alto')}</option>
             </select>
             <select
               value={filters.masificacion || ''}
               onChange={(event) => update('masificacion', event.target.value)}
-              aria-label="Masificación"
+              aria-label={t('Masificación')}
             >
-              <option value="">Cualquier afluencia</option>
-              <option>Bajo</option>
-              <option>Medio-Bajo</option>
-              <option>Medio</option>
-              <option>Medio-Alto</option>
-              <option>Alto</option>
+              <option value="">{t('Cualquier afluencia')}</option>
+              <option>{t('Bajo')}</option>
+              <option>{t('Medio-Bajo')}</option>
+              <option>{t('Medio')}</option>
+              <option>{t('Medio-Alto')}</option>
+              <option>{t('Alto')}</option>
             </select>
             <div className="map-filters__tourism">
               <TourismMultiSelect
                 id="map-tourism-types"
-                label="Tipos de viaje"
+                label={t('Tipos de viaje')}
                 value={tourismValues(filters.tipoTurismo)}
                 compact
                 onChange={(values) => update('tipoTurismo', tourismQueryValue(values))}
@@ -214,7 +217,7 @@ export default function MapPage() {
             <div className="map-filters__activities">
               <ActivityMultiSelect
                 id="map-activities"
-                label="Actividades"
+                label={t('Actividades')}
                 value={activityValues(filters.actividades)}
                 suggestions={filterOptions.activities}
                 compact
@@ -227,11 +230,11 @@ export default function MapPage() {
                 checked={filters.avoidCrowds === 'true'}
                 onChange={(event) => update('avoidCrowds', event.target.checked ? 'true' : '')}
               />{' '}
-              Evitar aglomeraciones
+              {t('Evitar aglomeraciones')}
             </label>
             {(query || Object.values(filters).some(Boolean)) && (
               <button onClick={clear}>
-                <X /> Limpiar
+                <X /> {t('Limpiar')}
               </button>
             )}
           </div>
@@ -240,13 +243,13 @@ export default function MapPage() {
           {listOpen && (
             <aside
               className="map-list"
-              aria-label="Destinos del mapa"
+              aria-label={t('Destinos del mapa')}
               data-motion-trigger={motionSource}
             >
               {loading ? (
                 <Loader />
               ) : error ? (
-                <Empty title="El mapa no está disponible">{error}</Empty>
+                <Empty title={t('El mapa no está disponible')}>{error}</Empty>
               ) : destinos.length ? (
                 destinos.map((destino, index) => (
                   <button
@@ -265,18 +268,18 @@ export default function MapPage() {
                       </small>
                       <b>{destino.nombre.trim()}</b>
                       {destino.searchMatch && (
-                        <small className="map-list__match">{destino.searchMatch.label}</small>
+                        <small className="map-list__match">{t(destino.searchMatch.label)}</small>
                       )}
                       <em>
-                        {plain(destino.presupuesto)} · {plain(destino.masificacion)}
+                        {t(plain(destino.presupuesto))} · {t(plain(destino.masificacion))}
                       </em>
                       <TourismMark value={destino.tipoTurismoPrincipal} compact />
                     </span>
                   </button>
                 ))
               ) : (
-                <Empty title="Ningún destino coincide">
-                  Prueba con otra zona o elimina algún filtro.
+                <Empty title={t('Ningún destino coincide')}>
+                  {t('Prueba con otra zona o elimina algún filtro.')}
                 </Empty>
               )}
             </aside>
@@ -314,15 +317,15 @@ export default function MapPage() {
             {!tilesReady && !tilesFailed && (
               <div className="map-state" role="status">
                 <span />
-                <b>Cargando cartografía</b>
+                <b>{t('Cargando cartografía')}</b>
               </div>
             )}
             {tilesFailed && !tilesReady && (
               <div className="map-state map-state--error" role="alert">
                 <MapIcon />
                 <span>
-                  <b>No se pudo cargar la cartografía</b>
-                  <small>Los resultados siguen disponibles en la lista.</small>
+                  <b>{t('No se pudo cargar la cartografía')}</b>
+                  <small>{t('Los resultados siguen disponibles en la lista.')}</small>
                 </span>
               </div>
             )}
@@ -334,29 +337,29 @@ export default function MapPage() {
                   <span>{plain(active.ubicacion)}</span>
                   <h2>{active.nombre.trim()}</h2>
                   <p>
-                    {plain(active.presupuesto)} · {plain(active.masificacion)}
+                    {t(plain(active.presupuesto))} · {t(plain(active.masificacion))}
                   </p>
                   <Link to={`/destino/${active.id}`}>
-                    Ver destino <MapPin />
+                    {t('Ver destino')} <MapPin />
                   </Link>
                 </div>
-                <button onClick={() => setSelected(null)} aria-label="Cerrar">
+                <button onClick={() => setSelected(null)} aria-label={t('Cerrar')}>
                   <X />
                 </button>
               </article>
             )}
-            <div className="map-legend" aria-label="Leyenda de tipos de turismo">
+            <div className="map-legend" aria-label={t('Leyenda de tipos de turismo')}>
               {tourismTypes.map((type) => (
                 <span className={`tourism--${type.key}`} key={type.key}>
                   <span className="map-legend__symbol">
                     <type.Icon aria-hidden />
                   </span>
-                  <b>{type.label}</b>
+                  <b>{type.displayLabel || t(type.label)}</b>
                 </span>
               ))}
             </div>
             <div className="map-watermark">
-              <LocateFixed /> Mueve el mapa o elige un resultado
+              <LocateFixed /> {t('Mueve el mapa o elige un resultado')}
             </div>
           </div>
         </div>
@@ -454,7 +457,7 @@ function MapPoints({
             <Marker
               key={group.key}
               position={[group.latitude, group.longitude]}
-              title={`${group.items.length} destinos`}
+              title={t('{0} destinos', { 0: group.items.length })}
               icon={divIcon({
                 className: 'map-cluster',
                 html: `<span>${group.items.length}</span>`,
@@ -492,7 +495,7 @@ function MapPoints({
                 <TourismMark value={destination.tipoTurismoPrincipal} compact />
                 <strong>{destination.nombre}</strong>
                 <span>{plain(destination.ubicacion)}</span>
-                <Link to={`/destino/${destination.id}`}>Abrir destino</Link>
+                <Link to={`/destino/${destination.id}`}>{t('Abrir destino')}</Link>
               </div>
             </Popup>
           </CircleMarker>

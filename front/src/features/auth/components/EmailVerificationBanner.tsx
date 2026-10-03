@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import { useEffect, useState } from 'react';
 import { Check, MailCheck, X } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
@@ -53,18 +54,18 @@ export function EmailVerificationBanner() {
       );
       if (result.verified) {
         await auth.refresh();
-        setFeedback({ tone: 'success', message: 'Tu cuenta ya estaba verificada.' });
+        setFeedback({ tone: 'success', message: t('Tu cuenta ya estaba verificada.') });
         return;
       }
       setSent(true);
       setFeedback({
         tone: 'success',
-        message: `Enlace enviado a ${user.email}. Revisa también la carpeta de spam.`,
+        message: t('Enlace enviado a {0}. Revisa también la carpeta de spam.', { 0: user.email }),
       });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        message: cause instanceof Error ? cause.message : 'No se pudo reenviar el enlace.',
+        message: cause instanceof Error ? cause.message : t('No se pudo reenviar el enlace.'),
       });
     } finally {
       setPending(false);
@@ -81,8 +82,10 @@ export function EmailVerificationBanner() {
       <aside className="email-verification-banner" aria-labelledby="email-verification-title">
         <MailCheck aria-hidden="true" />
         <div>
-          <strong id="email-verification-title">Confirma tu correo para completar tu cuenta</strong>
-          <p>Podrás crear viajes, compartirlos y publicar reseñas.</p>
+          <strong id="email-verification-title">
+            {t('Confirma tu correo para completar tu cuenta')}
+          </strong>
+          <p>{t('Podrás crear viajes, compartirlos y publicar reseñas.')}</p>
         </div>
         <Button
           variant="secondary"
@@ -90,12 +93,18 @@ export function EmailVerificationBanner() {
           disabled={sent}
           onClick={() => void resendVerification()}
         >
-          {sent ? <><Check /> Enlace enviado</> : 'Reenviar verificación'}
+          {sent ? (
+            <>
+              <Check /> {t('Enlace enviado')}
+            </>
+          ) : (
+            t('Reenviar verificación')
+          )}
         </Button>
         <button
           className="email-verification-banner__dismiss"
           type="button"
-          aria-label="Ocultar aviso de verificación durante esta sesión"
+          aria-label={t('Ocultar aviso de verificación durante esta sesión')}
           onClick={dismiss}
         >
           <X />

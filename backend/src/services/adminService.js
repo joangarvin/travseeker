@@ -162,6 +162,8 @@ async function syncDestinationEssentials(
       data: {
         destinoId,
         title: group.title,
+        icon: group.icon,
+        translations: group.translations,
         sortOrder: group.sortOrder,
         items: { create: group.items },
       },

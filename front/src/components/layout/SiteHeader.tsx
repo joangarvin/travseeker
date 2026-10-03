@@ -1,3 +1,5 @@
+import { t } from '../../i18n';
+import { LanguageSwitcher } from '../../i18n/LanguageSwitcher';
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Menu, Moon, ShieldCheck, Sun, UserRound, X } from 'lucide-react';
@@ -6,11 +8,11 @@ import { imageUrl } from '../../utils';
 import { MediaImage } from '../ui';
 
 const mainNavigation = [
-  { to: '/', label: 'Descubrir' },
-  { to: '/mapa', label: 'Mapa' },
-  { to: '/comparar', label: 'Comparar' },
-  { to: '/favoritos', label: 'Guardados' },
-  { to: '/colecciones', label: 'Viajes' },
+  { to: '/', label: t('Descubrir') },
+  { to: '/mapa', label: t('Mapa') },
+  { to: '/comparar', label: t('Comparar') },
+  { to: '/favoritos', label: t('Guardados') },
+  { to: '/colecciones', label: t('Viajes') },
 ] as const;
 
 export function SiteHeader() {
@@ -48,19 +50,19 @@ export function SiteHeader() {
   return (
     <>
       <header className="header">
-        <Link to="/" className="brand" aria-label="TravSeeker, inicio">
+        <Link to="/" className="brand" aria-label={t('TravSeeker, inicio')}>
           <span className="brand__mark">T</span>
           <span>TravSeeker</span>
         </Link>
 
-        <nav className="nav nav--desktop" aria-label="Principal">
+        <nav className="nav nav--desktop" aria-label={t('Principal')}>
           {mainNavigation.map(({ to, label }) => (
             <NavLink key={to} to={to} end={to === '/'}>
-              {label}
+              {t(label)}
               {to === '/comparar' && compareIds.length > 0 && (
                 <b
                   key={compareIds.length}
-                  aria-label={`${compareIds.length} destinos en comparación`}
+                  aria-label={t('{0} destinos en comparación', { 0: compareIds.length })}
                 >
                   {compareIds.length}
                 </b>
@@ -70,10 +72,11 @@ export function SiteHeader() {
         </nav>
 
         <div className="header__actions">
+          <LanguageSwitcher />
           <button
             className="icon-button"
             onClick={toggleTheme}
-            aria-label={theme === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
+            aria-label={theme === 'light' ? t('Activar modo oscuro') : t('Activar modo claro')}
           >
             {theme === 'light' ? <Moon /> : <Sun />}
           </button>
@@ -81,7 +84,7 @@ export function SiteHeader() {
           {user ? (
             <div className="account-short">
               {user.role === 'admin' && (
-                <Link to="/admin" aria-label="Administración">
+                <Link to="/admin" aria-label={t('Administración')}>
                   <ShieldCheck /> <span>Admin</span>
                 </Link>
               )}
@@ -95,13 +98,13 @@ export function SiteHeader() {
                 ) : (
                   <UserRound />
                 )}{' '}
-                <span>{user.nombre || 'Perfil'}</span>
+                <span>{user.nombre || t('Perfil')}</span>
               </Link>
-              <button onClick={logout}>Salir</button>
+              <button onClick={logout}>{t('Salir')}</button>
             </div>
           ) : (
             <Link className="button button--ink header__login" to="/auth">
-              Entrar
+              {t('Entrar')}
             </Link>
           )}
 
@@ -111,7 +114,7 @@ export function SiteHeader() {
             onClick={() => setIsMenuOpen((currentValue) => !currentValue)}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-nav"
-            aria-label={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+            aria-label={isMenuOpen ? t('Cerrar menú') : t('Abrir menú')}
           >
             {isMenuOpen ? <X /> : <Menu />}
           </button>
@@ -124,21 +127,23 @@ export function SiteHeader() {
           id="mobile-nav"
           role="dialog"
           aria-modal="true"
-          aria-label="Menú principal"
+          aria-label={t('Menú principal')}
         >
-          <nav aria-label="Navegación móvil">
+          <nav aria-label={t('Navegación móvil')}>
             {mainNavigation.map(({ to, label }, index) => (
               <NavLink key={to} to={to}>
                 <span>0{index + 1}</span>
-                {label}
+                {t(label)}
               </NavLink>
             ))}
             <NavLink to="/sobre-nosotros">
-              <span>06</span>El proyecto
+              <span>06</span>
+              {t('El proyecto')}
             </NavLink>
             {user?.role === 'admin' && (
               <NavLink to="/admin">
-                <span>07</span>Administración
+                <span>07</span>
+                {t('Administración')}
               </NavLink>
             )}
           </nav>

@@ -2,10 +2,13 @@ const destinoService = require("../services/destinoService");
 const { asyncHandler } = require("../utils/asyncHandler");
 
 const search = asyncHandler(async (req, res) => {
-  const page = await destinoService.searchDestinosPage(req.query);
-  res.set('X-Total-Count', String(page.total));
-  res.set('X-Has-More', String(page.hasMore));
-  res.json(req.query.meta === '1' ? page : page.items);
+  const page = await destinoService.searchDestinosPage({
+    ...req.query,
+    lang: req.locale,
+  });
+  res.set("X-Total-Count", String(page.total));
+  res.set("X-Has-More", String(page.hasMore));
+  res.json(req.query.meta === "1" ? page : page.items);
 });
 
 const getById = asyncHandler(async (req, res) => {
@@ -28,7 +31,10 @@ const getDestacados = asyncHandler(async (req, res) => {
 });
 
 const getMapa = asyncHandler(async (req, res) => {
-  const destinos = await destinoService.getMapaDestinos(req.query);
+  const destinos = await destinoService.getMapaDestinos({
+    ...req.query,
+    lang: req.locale,
+  });
   res.json(destinos);
 });
 
@@ -46,8 +52,8 @@ const getStats = asyncHandler(async (req, res) => {
   res.json(stats);
 });
 
-const getFilterOptions = asyncHandler(async (_req, res) => {
-  res.json(await destinoService.getFilterOptions());
+const getFilterOptions = asyncHandler(async (req, res) => {
+  res.json(await destinoService.getFilterOptions(req.locale));
 });
 
 module.exports = {

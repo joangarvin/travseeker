@@ -4,11 +4,11 @@ Aplicación web full-stack para descubrir destinos turísticos en España con in
 
 ## Stack
 
-| Capa | Tecnologías |
-|------|-------------|
-| Frontend | React, Vite, TypeScript, CSS |
-| Backend | Node.js, Express, Prisma |
-| Base de datos | PostgreSQL |
+| Capa          | Tecnologías                  |
+| ------------- | ---------------------------- |
+| Frontend      | React, Vite, TypeScript, CSS |
+| Backend       | Node.js, Express, Prisma     |
+| Base de datos | PostgreSQL                   |
 
 ## Estructura del repositorio
 
@@ -24,9 +24,11 @@ Cada carpeta tiene su propio `README.md` con la descripción de archivos y subca
 ## Documentación por carpeta
 
 ### Raíz y marca
+
 - [Logo/README.md](./Logo/README.md)
 
 ### Backend
+
 - [backend/README.md](./backend/README.md)
 - [backend/prisma/README.md](./backend/prisma/README.md)
 - [backend/src/README.md](./backend/src/README.md)
@@ -39,7 +41,9 @@ Cada carpeta tiene su propio `README.md` con la descripción de archivos y subca
 - [backend/src/utils/README.md](./backend/src/utils/README.md)
 
 ### Frontend
+
 - [Guía del frontend](./front/README.md)
+- [Idiomas y edición de traducciones](./MULTILINGUAL.md)
 - [Revisión de legibilidad y refactorización](./REFACTORING_REVIEW.md)
 
 ## Comprobaciones
@@ -47,6 +51,8 @@ Cada carpeta tiene su propio `README.md` con la descripción de archivos y subca
 Desde la raíz, `npm test` ejecuta los tests del backend y frontend. `npm run check` añade lint y el build de producción del frontend. Los tests del frontend requieren Node con soporte nativo para TypeScript (22.18+ o una versión posterior compatible).
 
 ## Arranque local
+
+Si actualizas una instalación existente, aplica primero `npm run db:migrate-translations` y regenera el cliente con `npm exec --prefix backend -- prisma generate --schema backend/prisma/schema.prisma`. Consulta la [guía de idiomas](./MULTILINGUAL.md).
 
 Necesitas **dos terminales**: una para el backend y otra para el frontend.
 
@@ -96,11 +102,11 @@ Guía completa paso a paso: **[DEPLOY.md](./DEPLOY.md)**
 
 Resumen rápido:
 
-| Pieza | Plataforma sugerida |
-|-------|---------------------|
-| PostgreSQL | Neon |
-| Backend API | Railway o Render |
-| Frontend React | Vercel o Netlify |
+| Pieza          | Plataforma sugerida |
+| -------------- | ------------------- |
+| PostgreSQL     | Neon                |
+| Backend API    | Railway o Render    |
+| Frontend React | Vercel o Netlify    |
 
 ## Funcionalidades
 

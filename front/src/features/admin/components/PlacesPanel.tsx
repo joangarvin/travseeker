@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import { Edit3, ExternalLink, Plus, Search, Trash2 } from 'lucide-react';
 import { Button, Empty, Field } from '../../../components/ui';
 import type { Destino, Place } from '../../../types';
@@ -37,18 +38,18 @@ export function PlacesPanel({
     <>
       <div className="admin-place-context">
         <div>
-          <label htmlFor="destination-filter">Buscar destino</label>
+          <label htmlFor="destination-filter">{t('Buscar destino')}</label>
           <div className="admin-search">
             <Search />
             <input
               id="destination-filter"
               value={destinationQuery}
               onChange={(event) => onDestinationQueryChange(event.target.value)}
-              placeholder="Filtrar destinos"
+              placeholder={t('Filtrar destinos')}
             />
           </div>
         </div>
-        <Field label="Destino activo" htmlFor="places-destination">
+        <Field label={t('Destino activo')} htmlFor="places-destination">
           <select
             id="places-destination"
             value={selectedDestinationId}
@@ -66,11 +67,11 @@ export function PlacesPanel({
       <AdminToolbar
         query={placeQuery}
         onQueryChange={onPlaceQueryChange}
-        placeholder="Buscar lugar o categoría"
+        placeholder={t('Buscar lugar o categoría')}
         resultCount={visible.length}
       >
         <Button onClick={onCreate}>
-          <Plus /> Nuevo lugar
+          <Plus /> {t('Nuevo lugar')}
         </Button>
       </AdminToolbar>
       <EditorialStatusFilter value={status} onChange={setStatus} />
@@ -82,30 +83,36 @@ export function PlacesPanel({
               <div>
                 <EditorialStatusBadge status={place.editorialStatus} />
                 <span>
-                  {place.categoria} · {place.isActive === false ? 'Oculto' : 'Visible'} · orden{' '}
-                  {place.sortOrder || 0}
+                  {t(place.categoria)} · {place.isActive === false ? t('Oculto') : t('Visible')}{' '}
+                  {t('· orden')} {place.sortOrder || 0}
                 </span>
                 <h2>{place.nombre}</h2>
-                <p>{place.descripcion || 'Sin descripción'}</p>
+                <p>{place.descripcion || t('Sin descripción')}</p>
                 {place.website && (
                   <a href={place.website} target="_blank" rel="noreferrer">
-                    Abrir web <ExternalLink />
+                    {t('Abrir web')} <ExternalLink />
                   </a>
                 )}
               </div>
               <div>
-                <button onClick={() => onEdit(place)} aria-label={`Editar ${place.nombre}`}>
+                <button
+                  onClick={() => onEdit(place)}
+                  aria-label={t('Editar {0}', { 0: place.nombre })}
+                >
                   <Edit3 />
                 </button>
-                <button onClick={() => onDelete(place.id)} aria-label={`Eliminar ${place.nombre}`}>
+                <button
+                  onClick={() => onDelete(place.id)}
+                  aria-label={t('Eliminar {0}', { 0: place.nombre })}
+                >
                   <Trash2 />
                 </button>
               </div>
             </article>
           ))
         ) : (
-          <Empty title="Este destino no tiene lugares">
-            Añade miradores, monumentos, playas u otros puntos útiles.
+          <Empty title={t('Este destino no tiene lugares')}>
+            {t('Añade miradores, monumentos, playas u otros puntos útiles.')}
           </Empty>
         )}
       </div>

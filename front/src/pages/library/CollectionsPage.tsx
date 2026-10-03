@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { useEffect, useMemo, useState } from 'react';
 import { CalendarRange, Plus, Search } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -39,7 +40,7 @@ export default function CollectionsPage() {
       setError('');
       setCollections(await api<CollectionSummary[]>('/colecciones', {}, token));
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No se pudieron cargar tus viajes');
+      setError(cause instanceof Error ? cause.message : t('No se pudieron cargar tus viajes'));
     } finally {
       setIsLoading(false);
     }
@@ -76,7 +77,7 @@ export default function CollectionsPage() {
       );
       navigate(`/colecciones/${created.id}`);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No se pudo crear el viaje');
+      setError(cause instanceof Error ? cause.message : t('No se pudo crear el viaje'));
       throw cause;
     }
   };
@@ -111,8 +112,8 @@ export default function CollectionsPage() {
 
   if (!user) {
     return (
-      <GuestGate title="Convierte ideas en viajes">
-        Agrupa destinos, ordénalos por días y comparte el plan con quien viaja contigo.
+      <GuestGate title={t('Convierte ideas en viajes')}>
+        {t('Agrupa destinos, ordénalos por días y comparte el plan con quien viaja contigo.')}
       </GuestGate>
     );
   }
@@ -121,46 +122,48 @@ export default function CollectionsPage() {
     <Shell>
       <PageHeading
         className="trips-heading"
-        kicker="Planificación"
-        title="Tus viajes"
+        kicker={t('Planificación')}
+        title={t('Tus viajes')}
         action={
           <Button
             disabled={!user.emailVerified}
             aria-describedby={!user.emailVerified ? 'new-trip-verification-requirement' : undefined}
             onClick={() => setIsCreateModalOpen(true)}
           >
-            <Plus /> Nuevo viaje
+            <Plus /> {t('Nuevo viaje')}
           </Button>
         }
       >
-        <p>Todo lo necesario para convertir una idea en una ruta compartida.</p>
+        <p>{t('Todo lo necesario para convertir una idea en una ruta compartida.')}</p>
       </PageHeading>
 
       {!user.emailVerified && (
         <p id="new-trip-verification-requirement" className="trip-verification-requirement">
-          Verifica tu correo para crear un viaje nuevo. Tus viajes actuales siguen disponibles.
+          {t(
+            'Verifica tu correo para crear un viaje nuevo. Tus viajes actuales siguen disponibles.',
+          )}
         </p>
       )}
 
-      <section className="trips-toolbar" aria-label="Buscar y filtrar viajes">
+      <section className="trips-toolbar" aria-label={t('Buscar y filtrar viajes')}>
         <label className="trips-search" htmlFor="trip-search">
           <Search aria-hidden="true" />
-          <span className="sr-only">Buscar viajes</span>
+          <span className="sr-only">{t('Buscar viajes')}</span>
           <input
             id="trip-search"
             type="search"
-            placeholder="Buscar por nombre o descripción"
+            placeholder={t('Buscar por nombre o descripción')}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
         </label>
-        <div className="trip-filters" aria-label="Filtrar viajes">
+        <div className="trip-filters" aria-label={t('Filtrar viajes')}>
           {(
             [
-              ['all', 'Todos'],
-              ['upcoming', 'Próximos'],
-              ['open', 'Sin fechas'],
-              ['shared', 'Compartidos'],
+              ['all', t('Todos')],
+              ['upcoming', t('Próximos')],
+              ['open', t('Sin fechas')],
+              ['shared', t('Compartidos')],
             ] as const
           ).map(([value, label]) => (
             <button
@@ -169,7 +172,7 @@ export default function CollectionsPage() {
               aria-pressed={filter === value}
               onClick={() => setFilter(value)}
             >
-              {label}
+              {t(label)}
             </button>
           ))}
         </div>
@@ -180,33 +183,33 @@ export default function CollectionsPage() {
           <Notice tone="error">
             {error}.{' '}
             <button type="button" onClick={() => void loadCollections()}>
-              Reintentar
+              {t('Reintentar')}
             </button>
           </Notice>
         )}
         {isLoading ? (
-          <Loader label="Preparando tus viajes" />
+          <Loader label={t('Preparando tus viajes')} />
         ) : visibleCollections.length ? (
           visibleCollections.map((collection) => (
             <CollectionCover key={collection.id} collection={collection} />
           ))
         ) : collections.length ? (
-          <Empty icon={<Search />} title="No hay viajes con esos filtros">
-            Prueba otra búsqueda o vuelve a ver todos los viajes.
+          <Empty icon={<Search />} title={t('No hay viajes con esos filtros')}>
+            {t('Prueba otra búsqueda o vuelve a ver todos los viajes.')}
           </Empty>
         ) : (
           <Empty
             icon={<CalendarRange />}
-            title="Tu próxima ruta empieza aquí"
+            title={t('Tu próxima ruta empieza aquí')}
             action={
               user.emailVerified ? (
                 <Button onClick={() => setIsCreateModalOpen(true)}>
-                  <Plus /> Crear mi primer viaje
+                  <Plus /> {t('Crear mi primer viaje')}
                 </Button>
               ) : undefined
             }
           >
-            Elige unas fechas, guarda destinos y organízalos día a día.
+            {t('Elige unas fechas, guarda destinos y organízalos día a día.')}
           </Empty>
         )}
       </section>

@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import { useState } from 'react';
 import { Edit3, Plus, Trash2 } from 'lucide-react';
 import { Button, Loader } from '../../../components/ui';
@@ -35,16 +36,16 @@ export function DestinationsPanel({
       <AdminToolbar
         query={query}
         onQueryChange={onQueryChange}
-        placeholder="Buscar por nombre, zona o tipo"
+        placeholder={t('Buscar por nombre, zona o tipo')}
         resultCount={visible.length}
       >
         <Button onClick={onCreate}>
-          <Plus /> Nuevo destino
+          <Plus /> {t('Nuevo destino')}
         </Button>
       </AdminToolbar>
       <EditorialStatusFilter value={status} onChange={setStatus} />
 
-      {isEditorLoading && <Loader label="Abriendo todos los datos" />}
+      {isEditorLoading && <Loader label={t('Abriendo todos los datos')} />}
 
       <div className="admin-list">
         {visible.map((destination) => (
@@ -56,21 +57,22 @@ export function DestinationsPanel({
               <div className="admin-list__meta">
                 <TourismMark value={destination.tipoTurismoPrincipal} compact />
                 <small>
-                  {plain(destination.presupuesto)} · {destination.municipios?.length || 0}{' '}
-                  municipios{destination.latitud == null ? ' · Sin punto en mapa' : ''}
+                  {t(plain(destination.presupuesto))} · {destination.municipios?.length || 0}{' '}
+                  {t('municipios')}
+                  {destination.latitud == null ? t(' · Sin punto en mapa') : ''}
                 </small>
               </div>
             </div>
             <div>
               <button
                 onClick={() => onEdit(destination)}
-                aria-label={`Editar ${destination.nombre}`}
+                aria-label={t('Editar {0}', { 0: destination.nombre })}
               >
                 <Edit3 />
               </button>
               <button
                 onClick={() => onDelete(destination.id)}
-                aria-label={`Eliminar ${destination.nombre}`}
+                aria-label={t('Eliminar {0}', { 0: destination.nombre })}
               >
                 <Trash2 />
               </button>

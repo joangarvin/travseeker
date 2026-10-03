@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 
@@ -92,7 +93,7 @@ export function Dialog({
         tabIndex={-1}
         onMouseDown={(event) => event.stopPropagation()}
       >
-        <button className="modal__close" type="button" onClick={onClose} aria-label="Cerrar">
+        <button className="modal__close" type="button" onClick={onClose} aria-label={t('Cerrar')}>
           <X aria-hidden="true" />
         </button>
         <header className="public-dialog__heading">

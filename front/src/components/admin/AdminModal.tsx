@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 
@@ -36,9 +37,9 @@ export function AdminModal({
 
       const focusable = Array.from(
         dialogRef.current.querySelectorAll<HTMLElement>(
-          'button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href], [tabindex]:not([tabindex="-1"])',
+          'button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), summary, a[href], [tabindex]:not([tabindex="-1"])',
         ),
-      );
+      ).filter((element) => element.getClientRects().length > 0);
       const first = focusable[0];
       const last = focusable.at(-1);
       if (!first || !last) return;
@@ -75,7 +76,7 @@ export function AdminModal({
         aria-describedby={subtitle ? subtitleId : undefined}
         onMouseDown={(event) => event.stopPropagation()}
       >
-        <button className="modal__close" onClick={onClose} aria-label="Cerrar">
+        <button className="modal__close" onClick={onClose} aria-label={t('Cerrar')}>
           <X />
         </button>
         <header className="modal__heading">

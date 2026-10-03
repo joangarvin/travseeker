@@ -1,3 +1,4 @@
+import { t, intlLocale } from '../../../i18n';
 import { useEffect, useMemo, useState } from 'react';
 import { CalendarPlus, Check, ChevronLeft, MapPin, Plus, Route } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -19,7 +20,7 @@ type DestinationTripDialogProps = {
   onAdded: (message: string) => void;
 };
 
-const dateFormatter = new Intl.DateTimeFormat('es-ES', {
+const dateFormatter = new Intl.DateTimeFormat(intlLocale, {
   weekday: 'long',
   day: 'numeric',
   month: 'short',
@@ -27,8 +28,11 @@ const dateFormatter = new Intl.DateTimeFormat('es-ES', {
 });
 
 function dayLabel(day: CollectionDetail['itinerary'][number]) {
-  if (!day.date) return `Día ${day.dayNumber}`;
-  return `Día ${day.dayNumber} · ${dateFormatter.format(new Date(`${day.date}T00:00:00Z`))}`;
+  if (!day.date) return t('Día {0}', { 0: day.dayNumber });
+  return t('Día {0} · {1}', {
+    0: day.dayNumber,
+    1: dateFormatter.format(new Date(`${day.date}T00:00:00Z`)),
+  });
 }
 
 export function DestinationTripDialog({
@@ -71,10 +75,14 @@ export function DestinationTripDialog({
           { method: 'POST', body: JSON.stringify({ destinoId: destination.id }) },
           token,
         );
-        onAdded(`${destination.nombre.trim()} se ha añadido a ${collection.nombre}.`);
+        onAdded(
+          t('{0} se ha añadido a {1}.', { 0: destination.nombre.trim(), 1: collection.nombre }),
+        );
         onClose();
       } catch (cause) {
-        setError(cause instanceof Error ? cause.message : 'No se pudo añadir el destino al viaje');
+        setError(
+          cause instanceof Error ? cause.message : t('No se pudo añadir el destino al viaje'),
+        );
       } finally {
         setPending(false);
       }
@@ -87,7 +95,7 @@ export function DestinationTripDialog({
         await api<CollectionDetail>(`/colecciones/${collection.id}`, {}, token),
       );
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No se pudo abrir el itinerario');
+      setError(cause instanceof Error ? cause.message : t('No se pudo abrir el itinerario'));
     } finally {
       setDetailLoading(false);
     }
@@ -105,7 +113,7 @@ export function DestinationTripDialog({
         token,
       );
       destinationWasAdded = true;
-      const activityName = plain(plannedItem.title) || 'Experiencia imprescindible';
+      const activityName = plain(plannedItem.title) || t('Experiencia imprescindible');
       const itinerary =
         selectedDayNumber === 'new'
           ? [
@@ -134,15 +142,22 @@ export function DestinationTripDialog({
         token,
       );
       onAdded(
-        `${activityName} se ha añadido ${selectedDayNumber === 'new' ? 'a un día nuevo' : `al día ${selectedDayNumber}`} de ${selectedCollection.nombre}.`,
+        t('{0} se ha añadido {1} de {2}.', {
+          0: activityName,
+          1:
+            selectedDayNumber === 'new'
+              ? t('a un día nuevo')
+              : t('al día {0}', { 0: selectedDayNumber }),
+          2: selectedCollection.nombre,
+        }),
       );
       onClose();
     } catch (cause) {
       const message =
-        cause instanceof Error ? cause.message : 'No se pudo actualizar el itinerario';
+        cause instanceof Error ? cause.message : t('No se pudo actualizar el itinerario');
       setError(
         destinationWasAdded
-          ? `El destino ya está en el viaje, pero la actividad no se guardó: ${message}`
+          ? t('El destino ya está en el viaje, pero la actividad no se guardó: {0}', { 0: message })
           : message,
       );
     } finally {
@@ -152,11 +167,11 @@ export function DestinationTripDialog({
 
   return (
     <Dialog
-      title={plannedItem ? 'Añadir al itinerario' : 'Añadir a un viaje'}
+      title={plannedItem ? t('Añadir al itinerario') : t('Añadir a un viaje')}
       description={
         plannedItem
-          ? `Elige dónde encajar “${plain(plannedItem.title)}” dentro de un viaje real.`
-          : `Guarda ${destination.nombre.trim()} en uno de tus viajes.`
+          ? t('Elige dónde encajar “{0}” dentro de un viaje real.', { 0: plain(plannedItem.title) })
+          : t('Guarda {0} en uno de tus viajes.', { 0: destination.nombre.trim() })
       }
       onClose={onClose}
       className="trip-dialog"
@@ -167,7 +182,7 @@ export function DestinationTripDialog({
           action={
             selectedCollection ? (
               <button type="button" onClick={() => void addEssentialToDay()}>
-                Reintentar
+                {t('Reintentar')}
               </button>
             ) : undefined
           }
@@ -177,20 +192,20 @@ export function DestinationTripDialog({
       )}
 
       {collectionsLoading ? (
-        <Loader label="Cargando tus viajes" />
+        <Loader label={t('Cargando tus viajes')} />
       ) : collectionsError ? (
         <Notice
           tone="error"
           action={
             <button type="button" onClick={onRetryCollections}>
-              Reintentar
+              {t('Reintentar')}
             </button>
           }
         >
           {collectionsError}
         </Notice>
       ) : detailLoading ? (
-        <Loader label="Abriendo el itinerario" />
+        <Loader label={t('Abriendo el itinerario')} />
       ) : selectedCollection && plannedItem ? (
         <div className="trip-dialog__day-step">
           <button
@@ -201,10 +216,10 @@ export function DestinationTripDialog({
               setError('');
             }}
           >
-            <ChevronLeft aria-hidden="true" /> Elegir otro viaje
+            <ChevronLeft aria-hidden="true" /> {t('Elegir otro viaje')}
           </button>
           <fieldset className="trip-dialog__days">
-            <legend>¿En qué día?</legend>
+            <legend>{t('¿En qué día?')}</legend>
             {eligibleDays.map((day) => (
               <label key={day.dayNumber}>
                 <input
@@ -216,7 +231,9 @@ export function DestinationTripDialog({
                 />
                 <span>
                   <strong>{dayLabel(day)}</strong>
-                  <small>Este día ya incluye {destination.nombre.trim()}.</small>
+                  <small>
+                    {t('Este día ya incluye')} {destination.nombre.trim()}.
+                  </small>
                 </span>
                 {selectedDayNumber === day.dayNumber && <Check aria-hidden="true" />}
               </label>
@@ -230,20 +247,21 @@ export function DestinationTripDialog({
                 onChange={() => setSelectedDayNumber('new')}
               />
               <span>
-                <strong>Crear un día nuevo al final</strong>
+                <strong>{t('Crear un día nuevo al final')}</strong>
                 <small>
-                  Usará este destino{defaultMunicipioId ? ' y la base seleccionada' : ''}.
+                  {t('Usará este destino')}
+                  {defaultMunicipioId ? t(' y la base seleccionada') : ''}.
                 </small>
               </span>
               {selectedDayNumber === 'new' && <Check aria-hidden="true" />}
             </label>
           </fieldset>
           <Button loading={pending} onClick={() => void addEssentialToDay()}>
-            <CalendarPlus aria-hidden="true" /> Añadir al día
+            <CalendarPlus aria-hidden="true" /> {t('Añadir al día')}
           </Button>
         </div>
       ) : editableCollections.length ? (
-        <div className="trip-dialog__list" aria-label="Viajes editables">
+        <div className="trip-dialog__list" aria-label={t('Viajes editables')}>
           {editableCollections.map((collection) => (
             <button
               key={collection.id}
@@ -257,9 +275,9 @@ export function DestinationTripDialog({
               <span>
                 <strong>{collection.nombre}</strong>
                 <small>
-                  {collection.count} {collection.count === 1 ? 'destino' : 'destinos'} ·{' '}
+                  {collection.count} {collection.count === 1 ? t('destino') : t('destinos')} ·{' '}
                   {collection.itineraryDays || 0}{' '}
-                  {(collection.itineraryDays || 0) === 1 ? 'día' : 'días'}
+                  {(collection.itineraryDays || 0) === 1 ? t('día') : t('días')}
                 </small>
               </span>
               <MapPin aria-hidden="true" />
@@ -271,10 +289,10 @@ export function DestinationTripDialog({
           <span>
             <Plus aria-hidden="true" />
           </span>
-          <h3>Crea el primer viaje</h3>
-          <p>Después podrás añadir este destino y organizarlo por días.</p>
+          <h3>{t('Crea el primer viaje')}</h3>
+          <p>{t('Después podrás añadir este destino y organizarlo por días.')}</p>
           <Link className="button button--primary" to="/colecciones" state={{ openCreate: true }}>
-            Crear un viaje
+            {t('Crear un viaje')}
           </Link>
         </div>
       )}

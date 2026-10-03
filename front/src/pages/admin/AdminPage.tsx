@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { ShieldCheck } from 'lucide-react';
 import { PageHeading, Shell } from '../../components/layout';
@@ -116,7 +117,7 @@ export default function AdminPage() {
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo cargar la administración',
+        text: cause instanceof Error ? cause.message : t('No se pudo cargar la administración'),
       });
     } finally {
       setIsLoading(false);
@@ -131,7 +132,7 @@ export default function AdminPage() {
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudieron cargar los lugares',
+        text: cause instanceof Error ? cause.message : t('No se pudieron cargar los lugares'),
       });
     }
   };
@@ -179,7 +180,7 @@ export default function AdminPage() {
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo abrir el destino completo',
+        text: cause instanceof Error ? cause.message : t('No se pudo abrir el destino completo'),
       });
     } finally {
       setIsDestinationLoading(false);
@@ -226,14 +227,14 @@ export default function AdminPage() {
       setFeedback({
         tone: 'success',
         text: municipalityForm.id
-          ? 'Municipio actualizado'
-          : 'Municipio creado y enviado a revisión',
+          ? t('Municipio actualizado')
+          : t('Municipio creado y enviado a revisión'),
       });
       await loadAdminData();
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo guardar el municipio',
+        text: cause instanceof Error ? cause.message : t('No se pudo guardar el municipio'),
       });
     } finally {
       setIsSaving(false);
@@ -284,12 +285,12 @@ export default function AdminPage() {
       ]);
       setFeedback({
         tone: 'success',
-        text: placeForm.id ? 'Lugar actualizado' : 'Lugar creado y enviado a revisión',
+        text: placeForm.id ? t('Lugar actualizado') : t('Lugar creado y enviado a revisión'),
       });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo guardar el lugar',
+        text: cause instanceof Error ? cause.message : t('No se pudo guardar el lugar'),
       });
     } finally {
       setIsSaving(false);
@@ -347,12 +348,12 @@ export default function AdminPage() {
       await refreshActivities();
       setFeedback({
         tone: 'success',
-        text: activity.id ? 'Actividad actualizada' : 'Actividad creada y enviada a revisión',
+        text: activity.id ? t('Actividad actualizada') : t('Actividad creada y enviada a revisión'),
       });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo guardar la actividad',
+        text: cause instanceof Error ? cause.message : t('No se pudo guardar la actividad'),
       });
     } finally {
       setIsSaving(false);
@@ -384,12 +385,12 @@ export default function AdminPage() {
       await refreshActivities();
       setFeedback({
         tone: 'success',
-        text: `Actividad eliminada de ${result.removedFromDestinations} destinos`,
+        text: t('Actividad eliminada de {0} destinos', { 0: result.removedFromDestinations }),
       });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo eliminar la actividad',
+        text: cause instanceof Error ? cause.message : t('No se pudo eliminar la actividad'),
       });
     } finally {
       setIsSaving(false);
@@ -444,12 +445,14 @@ export default function AdminPage() {
       await refreshTourismTypes();
       setFeedback({
         tone: 'success',
-        text: type.id ? 'Tipo de viaje actualizado' : 'Tipo de viaje creado y enviado a revisión',
+        text: type.id
+          ? t('Tipo de viaje actualizado')
+          : t('Tipo de viaje creado y enviado a revisión'),
       });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo guardar el tipo de viaje',
+        text: cause instanceof Error ? cause.message : t('No se pudo guardar el tipo de viaje'),
       });
     } finally {
       setIsSaving(false);
@@ -481,12 +484,12 @@ export default function AdminPage() {
       await refreshTourismTypes();
       setFeedback({
         tone: 'success',
-        text: `Tipo eliminado de ${result.removedFromDestinations} destinos`,
+        text: t('Tipo eliminado de {0} destinos', { 0: result.removedFromDestinations }),
       });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo eliminar el tipo de viaje',
+        text: cause instanceof Error ? cause.message : t('No se pudo eliminar el tipo de viaje'),
       });
     } finally {
       setIsSaving(false);
@@ -495,7 +498,7 @@ export default function AdminPage() {
 
   const removeResource = async (resource: AdminResource, id: string) => {
     const confirmed = confirm(
-      '¿Eliminar este elemento definitivamente? Esta acción no se puede deshacer.',
+      t('¿Eliminar este elemento definitivamente? Esta acción no se puede deshacer.'),
     );
     if (!token || !confirmed) return;
 
@@ -508,11 +511,11 @@ export default function AdminPage() {
         await loadAdminData();
       }
 
-      setFeedback({ tone: 'success', text: 'Elemento eliminado' });
+      setFeedback({ tone: 'success', text: t('Elemento eliminado') });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo eliminar',
+        text: cause instanceof Error ? cause.message : t('No se pudo eliminar'),
       });
     }
   };
@@ -522,7 +525,7 @@ export default function AdminPage() {
     ids: string[],
     status: EditorialStatus,
   ) => {
-    if (!token) throw new Error('La sesión de administración ha expirado');
+    if (!token) throw new Error(t('La sesión de administración ha expirado'));
     const idSet = new Set(ids);
     const previousEditorial = editorialItems;
     const previousDestinations = destinations;
@@ -578,9 +581,9 @@ export default function AdminPage() {
     id: string,
     patch: { status?: ReviewStatus; adminResponse?: string | null },
   ) => {
-    if (!token) throw new Error('La sesión de administración ha expirado');
+    if (!token) throw new Error(t('La sesión de administración ha expirado'));
     const previous = reviews.find((review) => review.id === id);
-    if (!previous) throw new Error('La reseña ya no está disponible');
+    if (!previous) throw new Error(t('La reseña ya no está disponible'));
 
     setReviews((current) =>
       current.map((review) =>
@@ -613,7 +616,7 @@ export default function AdminPage() {
   };
 
   const moderateReviews = async (ids: string[], status: ReviewStatus) => {
-    if (!token) throw new Error('La sesión de administración ha expirado');
+    if (!token) throw new Error(t('La sesión de administración ha expirado'));
     const selected = new Set(ids);
     const previous = reviews.filter((review) => selected.has(review.id));
     setReviews((current) =>
@@ -634,7 +637,7 @@ export default function AdminPage() {
   };
 
   const deleteReviews = async (ids: string[]) => {
-    if (!token) throw new Error('La sesión de administración ha expirado');
+    if (!token) throw new Error(t('La sesión de administración ha expirado'));
     const selected = new Set(ids);
     const previous = reviews;
     setReviews((current) => current.filter((review) => !selected.has(review.id)));
@@ -663,8 +666,8 @@ export default function AdminPage() {
     return (
       <Shell footer={false}>
         <section className="status-page">
-          <Empty headingLevel="h1" icon={<ShieldCheck />} title="Acceso restringido">
-            Esta zona solo está disponible para administradores.
+          <Empty headingLevel="h1" icon={<ShieldCheck />} title={t('Acceso restringido')}>
+            {t('Esta zona solo está disponible para administradores.')}
           </Empty>
         </section>
       </Shell>
@@ -683,10 +686,11 @@ export default function AdminPage() {
 
   return (
     <Shell footer={false}>
-      <PageHeading kicker="Back office" title="Administración">
+      <PageHeading kicker="Back office" title={t('Administración')}>
         <p>
-          Gestiona destinos, tipos de viaje, actividades, municipios, lugares y reseñas sin tocar
-          código.
+          {t(
+            'Gestiona destinos, tipos de viaje, actividades, municipios, lugares y reseñas sin tocar código.',
+          )}
         </p>
       </PageHeading>
 

@@ -1,16 +1,18 @@
-const { prisma } = require('../config/database');
-const { hashPassword, comparePassword } = require('../utils/password');
-const { signToken } = require('../utils/jwt');
-const { generateToken } = require('../utils/token');
-const { sendMail } = require('../utils/mailer');
-const { USER_PUBLIC_SELECT } = require('../constants/selects');
+const { prisma } = require("../config/database");
+const { hashPassword, comparePassword } = require("../utils/password");
+const { signToken } = require("../utils/jwt");
+const { generateToken } = require("../utils/token");
+const { sendMail } = require("../utils/mailer");
+const { USER_PUBLIC_SELECT } = require("../constants/selects");
 
-const APP_URL = process.env.APP_URL || 'http://localhost:5173';
-const EMAIL_VERIFY = 'email_verify';
-const PASSWORD_RESET = 'password_reset';
+const APP_URL = process.env.APP_URL || "http://localhost:5173";
+const EMAIL_VERIFY = "email_verify";
+const PASSWORD_RESET = "password_reset";
 
 async function createToken(userId, type, ttlMs) {
-  await prisma.verificationToken.deleteMany({ where: { userId, type, usedAt: null } });
+  await prisma.verificationToken.deleteMany({
+    where: { userId, type, usedAt: null },
+  });
   const token = generateToken();
   await prisma.verificationToken.create({
     data: { userId, type, token, expiresAt: new Date(Date.now() + ttlMs) },
@@ -22,10 +24,11 @@ async function sendVerificationEmail(userId, email) {
   const token = await createToken(userId, EMAIL_VERIFY, 24 * 60 * 60 * 1000);
   await sendMail({
     to: email,
-    subject: 'Un último paso para activar TravSeeker',
-    title: 'Tu próximo viaje empieza aquí',
-    message: 'Confirma tu dirección para crear viajes, guardar tus decisiones y compartirlas con quien viaja contigo. El enlace es válido durante 24 horas.',
-    ctaLabel: 'Confirmar mi correo',
+    subject: "Un último paso para activar TravSeeker",
+    title: "Tu próximo viaje empieza aquí",
+    message:
+      "Confirma tu dirección para crear viajes, guardar tus decisiones y compartirlas con quien viaja contigo. El enlace es válido durante 24 horas.",
+    ctaLabel: "Confirmar mi correo",
     ctaUrl: `${APP_URL}/verificar-email?token=${token}`,
   });
 }
@@ -35,12 +38,14 @@ function sanitizeUser(user) {
   return publicUser;
 }
 
-async function register({ email, password, nombre }) {
+async function register({ email, password, nombre, locale = "es" }) {
   const normalizedEmail = email.trim().toLowerCase();
 
-  const existing = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+  const existing = await prisma.user.findUnique({
+    where: { email: normalizedEmail },
+  });
   if (existing) {
-    const error = new Error('Este email ya está registrado');
+    const error = new Error("Este email ya está registrado");
     error.status = 409;
     throw error;
   }
@@ -50,10 +55,11 @@ async function register({ email, password, nombre }) {
   const user = await prisma.user.create({
     data: {
       email: normalizedEmail,
+      locale: require("../domain/localization").resolveLocale(locale),
       passwordHash,
       nombre: nombre?.trim() || null,
-      preferences: { notifications: true, theme: 'system' },
-      metadata: { source: 'web', version: 1 },
+      preferences: { notifications: true, theme: "system" },
+      metadata: { source: "web", version: 1 },
     },
     select: USER_PUBLIC_SELECT,
   });
@@ -61,7 +67,7 @@ async function register({ email, password, nombre }) {
   try {
     await sendVerificationEmail(user.id, user.email);
   } catch (err) {
-    console.error('No se pudo enviar el email de verificación:', err.message);
+    console.error("No se pudo enviar el email de verificación:", err.message);
   }
 
   const token = signToken(user.id);
@@ -71,16 +77,18 @@ async function register({ email, password, nombre }) {
 async function login({ email, password }) {
   const normalizedEmail = email.trim().toLowerCase();
 
-  const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+  const user = await prisma.user.findUnique({
+    where: { email: normalizedEmail },
+  });
   if (!user || !user.isActive) {
-    const error = new Error('Email o contraseña incorrectos');
+    const error = new Error("Email o contraseña incorrectos");
     error.status = 401;
     throw error;
   }
 
   const valid = await comparePassword(password, user.passwordHash);
   if (!valid) {
-    const error = new Error('Email o contraseña incorrectos');
+    const error = new Error("Email o contraseña incorrectos");
     error.status = 401;
     throw error;
   }
@@ -101,32 +109,46 @@ async function getMe(userId) {
     select: USER_PUBLIC_SELECT,
   });
   if (!user) {
-    const error = new Error('Usuario no encontrado');
+    const error = new Error("Usuario no encontrado");
     error.status = 404;
     throw error;
   }
   return user;
 }
 
-const ALLOWED_LOCALES = ['es', 'en', 'ca'];
+const ALLOWED_LOCALES =
+  require("../../../shared/localization.json").languages.map(
+    ({ code }) => code,
+  );
 
 async function updateProfile(userId, data) {
   const updateData = {};
 
-  if (data.nombre !== undefined) updateData.nombre = data.nombre?.trim() || null;
-  if (data.apellidos !== undefined) updateData.apellidos = data.apellidos?.trim() || null;
-  if (data.bio !== undefined) updateData.bio = data.bio?.trim().slice(0, 280) || null;
-  if (data.avatarUrl !== undefined) updateData.avatarUrl = data.avatarUrl?.trim() || null;
+  if (data.nombre !== undefined)
+    updateData.nombre = data.nombre?.trim() || null;
+  if (data.apellidos !== undefined)
+    updateData.apellidos = data.apellidos?.trim() || null;
+  if (data.bio !== undefined)
+    updateData.bio = data.bio?.trim().slice(0, 280) || null;
+  if (data.avatarUrl !== undefined)
+    updateData.avatarUrl = data.avatarUrl?.trim() || null;
   if (data.locale !== undefined && ALLOWED_LOCALES.includes(data.locale)) {
     updateData.locale = data.locale;
   }
 
-  if (data.preferences !== undefined && data.preferences && typeof data.preferences === 'object') {
+  if (
+    data.preferences !== undefined &&
+    data.preferences &&
+    typeof data.preferences === "object"
+  ) {
     const current = await prisma.user.findUnique({
       where: { id: userId },
       select: { preferences: true },
     });
-    updateData.preferences = { ...(current?.preferences || {}), ...data.preferences };
+    updateData.preferences = {
+      ...(current?.preferences || {}),
+      ...data.preferences,
+    };
   }
 
   const user = await prisma.user.update({
@@ -140,14 +162,14 @@ async function updateProfile(userId, data) {
 async function changePassword(userId, currentPassword, newPassword) {
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) {
-    const error = new Error('Usuario no encontrado');
+    const error = new Error("Usuario no encontrado");
     error.status = 404;
     throw error;
   }
 
   const valid = await comparePassword(currentPassword, user.passwordHash);
   if (!valid) {
-    const error = new Error('La contraseña actual no es correcta');
+    const error = new Error("La contraseña actual no es correcta");
     error.status = 400;
     throw error;
   }
@@ -163,7 +185,7 @@ async function requestEmailVerification(userId) {
     select: { id: true, email: true, emailVerified: true },
   });
   if (!user) {
-    const error = new Error('Usuario no encontrado');
+    const error = new Error("Usuario no encontrado");
     error.status = 404;
     throw error;
   }
@@ -180,19 +202,30 @@ async function confirmEmailVerification(tokenStr) {
     include: { user: { select: { emailVerified: true } } },
   });
   if (!record || record.type !== EMAIL_VERIFY) {
-    const error = new Error('El enlace de verificación no es válido o ha caducado');
+    const error = new Error(
+      "El enlace de verificación no es válido o ha caducado",
+    );
     error.status = 400;
     throw error;
   }
-  if (record.user.emailVerified) return { verified: true, alreadyVerified: true };
+  if (record.user.emailVerified)
+    return { verified: true, alreadyVerified: true };
   if (record.usedAt || record.expiresAt < new Date()) {
-    const error = new Error('El enlace de verificación no es válido o ha caducado');
+    const error = new Error(
+      "El enlace de verificación no es válido o ha caducado",
+    );
     error.status = 400;
     throw error;
   }
   await prisma.$transaction([
-    prisma.user.update({ where: { id: record.userId }, data: { emailVerified: true } }),
-    prisma.verificationToken.update({ where: { id: record.id }, data: { usedAt: new Date() } }),
+    prisma.user.update({
+      where: { id: record.userId },
+      data: { emailVerified: true },
+    }),
+    prisma.verificationToken.update({
+      where: { id: record.id },
+      data: { usedAt: new Date() },
+    }),
   ]);
   return { verified: true, alreadyVerified: false };
 }
@@ -208,10 +241,11 @@ async function requestPasswordReset(email) {
     const token = await createToken(user.id, PASSWORD_RESET, 60 * 60 * 1000);
     await sendMail({
       to: user.email,
-      subject: 'Restablece tu contraseña en TravSeeker',
-      title: 'Restablecer contraseña',
-      message: 'Recibimos una solicitud para restablecer tu contraseña. Este enlace caduca en 1 hora. Si no fuiste tú, ignora este email.',
-      ctaLabel: 'Crear nueva contraseña',
+      subject: "Restablece tu contraseña en TravSeeker",
+      title: "Restablecer contraseña",
+      message:
+        "Recibimos una solicitud para restablecer tu contraseña. Este enlace caduca en 1 hora. Si no fuiste tú, ignora este email.",
+      ctaLabel: "Crear nueva contraseña",
       ctaUrl: `${APP_URL}/recuperar?token=${token}`,
     });
   }
@@ -220,16 +254,31 @@ async function requestPasswordReset(email) {
 }
 
 async function resetPassword(tokenStr, newPassword) {
-  const record = await prisma.verificationToken.findUnique({ where: { token: tokenStr } });
-  if (!record || record.type !== PASSWORD_RESET || record.usedAt || record.expiresAt < new Date()) {
-    const error = new Error('El enlace de recuperación no es válido o ha caducado');
+  const record = await prisma.verificationToken.findUnique({
+    where: { token: tokenStr },
+  });
+  if (
+    !record ||
+    record.type !== PASSWORD_RESET ||
+    record.usedAt ||
+    record.expiresAt < new Date()
+  ) {
+    const error = new Error(
+      "El enlace de recuperación no es válido o ha caducado",
+    );
     error.status = 400;
     throw error;
   }
   const passwordHash = await hashPassword(newPassword);
   await prisma.$transaction([
-    prisma.user.update({ where: { id: record.userId }, data: { passwordHash } }),
-    prisma.verificationToken.update({ where: { id: record.id }, data: { usedAt: new Date() } }),
+    prisma.user.update({
+      where: { id: record.userId },
+      data: { passwordHash },
+    }),
+    prisma.verificationToken.update({
+      where: { id: record.id },
+      data: { usedAt: new Date() },
+    }),
   ]);
   return { reset: true };
 }

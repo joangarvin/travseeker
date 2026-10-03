@@ -1,3 +1,5 @@
+import { t } from '../i18n';
+import { locale, serverMessage } from '../i18n';
 export const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 export const COOKIE_SESSION_MARKER = '__trav_cookie_session__';
 
@@ -17,6 +19,7 @@ export async function api<T>(
   token?: string | null,
 ): Promise<T> {
   const headers = new Headers(options.headers);
+  headers.set('Accept-Language', locale);
 
   if (!(options.body instanceof FormData)) {
     headers.set('Content-Type', 'application/json');
@@ -34,7 +37,10 @@ export async function api<T>(
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new ApiError(data.error || 'No se pudo completar la operación', response.status);
+    throw new ApiError(
+      serverMessage(data.error || t('No se pudo completar la operación')),
+      response.status,
+    );
   }
 
   return data as T;

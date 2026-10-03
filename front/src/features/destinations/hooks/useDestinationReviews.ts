@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { api } from '../../../services/api';
 import type { Review, ReviewStats } from '../../../types';
@@ -32,7 +33,7 @@ export function useDestinationReviews(id: string, token: string | null) {
       } catch (cause) {
         if (!signal?.aborted) {
           setReviewsError(
-            cause instanceof Error ? cause.message : 'No se pudieron cargar las opiniones',
+            cause instanceof Error ? cause.message : t('No se pudieron cargar las opiniones'),
           );
         }
       } finally {
@@ -56,7 +57,7 @@ export function useDestinationReviews(id: string, token: string | null) {
     if (!token) return;
     const cleanComment = comment.trim();
     if (cleanComment.length < 20) {
-      setReviewError('Cuenta tu experiencia con al menos 20 caracteres.');
+      setReviewError(t('Cuenta tu experiencia con al menos 20 caracteres.'));
       return;
     }
     setReviewPending(true);
@@ -71,10 +72,10 @@ export function useDestinationReviews(id: string, token: string | null) {
       setComment('');
       setRating(5);
       setReviewConfirmation(
-        'Reseña enviada y pendiente de moderación. Aparecerá aquí cuando el equipo la publique.',
+        t('Reseña enviada y pendiente de moderación. Aparecerá aquí cuando el equipo la publique.'),
       );
     } catch (cause) {
-      setReviewError(cause instanceof Error ? cause.message : 'No se pudo enviar la reseña');
+      setReviewError(cause instanceof Error ? cause.message : t('No se pudo enviar la reseña'));
     } finally {
       setReviewPending(false);
     }

@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { useState } from 'react';
 import { Check, Plus, Search } from 'lucide-react';
 import { useActivities } from '../../contexts';
@@ -37,7 +38,11 @@ export function ActivityMultiSelect({
     ...selectedValues,
   ]);
   const visibleOptions = normalizedQuery
-    ? options.filter((option) => option.toLocaleLowerCase('es').includes(normalizedQuery))
+    ? options.filter((option) =>
+        [option, activityDefinition(option, activities).displayLabel || t(option)].some((label) =>
+          label.toLocaleLowerCase().includes(normalizedQuery),
+        ),
+      )
     : options;
   const canRequestCreate =
     Boolean(onRequestCreate) &&
@@ -58,15 +63,17 @@ export function ActivityMultiSelect({
       className={`activity-multi-select ${compact ? 'activity-multi-select--compact' : ''}`}
       aria-describedby={hintId}
     >
-      <legend>{label}</legend>
+      <legend>{t(label)}</legend>
       {hint && <p id={hintId}>{hint}</p>}
       <label className="activity-multi-select__search">
         <Search aria-hidden />
-        <span className="sr-only">Buscar {label.toLocaleLowerCase('es')}</span>
+        <span className="sr-only">
+          {t('Buscar')} {label.toLocaleLowerCase('es')}
+        </span>
         <input
           type="search"
           value={query}
-          placeholder="Buscar una actividad"
+          placeholder={t('Buscar una actividad')}
           onChange={(event) => setQuery(event.target.value)}
         />
       </label>
@@ -88,7 +95,7 @@ export function ActivityMultiSelect({
                 onChange={() => toggle(option)}
               />
               <activity.Icon aria-hidden />
-              <span>{activity.label}</span>
+              <span>{activity.displayLabel || t(activity.label)}</span>
               {isSelected && <Check aria-hidden />}
             </label>
           );
@@ -99,11 +106,13 @@ export function ActivityMultiSelect({
             type="button"
             onClick={() => onRequestCreate?.(query.trim())}
           >
-            <Plus aria-hidden /> Crear “{query.trim()}” con icono
+            <Plus aria-hidden /> {t('Crear “')}
+            {query.trim()}
+            {t('” con icono')}
           </button>
         )}
         {!visibleOptions.length && !canRequestCreate && (
-          <p className="activity-multi-select__empty">No hay actividades con ese nombre.</p>
+          <p className="activity-multi-select__empty">{t('No hay actividades con ese nombre.')}</p>
         )}
       </div>
     </fieldset>

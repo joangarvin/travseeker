@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { AlertTriangle, CloudRain, RefreshCw, Star, Sun } from 'lucide-react';
 import { getDestinationClimate } from '../../../services/climateService';
@@ -23,10 +24,16 @@ function alternativeReason(
   unit: TemperatureUnit,
 ) {
   if (role === 'quiet') {
-    return `${crowdLabel(month.crowd)} · máxima ${temperatureLabel(month.temperatureMaxC, unit)}`;
+    return t('{0} · máxima {1}', {
+      0: crowdLabel(month.crowd),
+      1: temperatureLabel(month.temperatureMaxC, unit),
+    });
   }
   if (role === 'warm') {
-    return `Máxima ${temperatureLabel(month.temperatureMaxC, unit)} · ${metricLabel(month.rainyDaysPerYear, 'rain')}`;
+    return t('Máxima {0} · {1}', {
+      0: temperatureLabel(month.temperatureMaxC, unit),
+      1: metricLabel(month.rainyDaysPerYear, 'rain'),
+    });
   }
   return monthSummary(month);
 }
@@ -44,7 +51,7 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
     if (!hasValidCoordinates) {
       setLoading(false);
       setData(null);
-      setError('No tenemos la ubicación necesaria para calcular el tiempo de este destino.');
+      setError(t('No tenemos la ubicación necesaria para calcular el tiempo de este destino.'));
       return;
     }
     const controller = new AbortController();
@@ -59,7 +66,7 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
       .catch((cause: unknown) => {
         if (cause instanceof DOMException && cause.name === 'AbortError') return;
         setError(
-          cause instanceof Error ? cause.message : 'No pudimos consultar el clima ahora mismo.',
+          cause instanceof Error ? cause.message : t('No pudimos consultar el clima ahora mismo.'),
         );
       })
       .finally(() => {
@@ -104,10 +111,10 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
     <div className="climate-section" aria-busy={loading}>
       <header className="climate-section__heading">
         <div>
-          <p className="kicker">El momento importa</p>
-          <h2 id="when-to-go-heading">Cuándo ir</h2>
+          <p className="kicker">{t('El momento importa')}</p>
+          <h2 id="when-to-go-heading">{t('Cuándo ir')}</h2>
         </div>
-        <div className="climate-unit" role="group" aria-label="Unidad de temperatura">
+        <div className="climate-unit" role="group" aria-label={t('Unidad de temperatura')}>
           {(['C', 'F'] as const).map((value) => (
             <button
               key={value}
@@ -122,7 +129,7 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
       </header>
 
       {loading && (
-        <div className="climate-skeleton" role="status" aria-label="Consultando el clima">
+        <div className="climate-skeleton" role="status" aria-label={t('Consultando el clima')}>
           <span className="climate-skeleton__lead" />
           <span className="climate-skeleton__facts" />
           <span className="climate-skeleton__choices" />
@@ -134,12 +141,12 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
         <div className="climate-state" role="alert">
           <AlertTriangle aria-hidden="true" />
           <div>
-            <strong>No podemos mostrar cuándo ir</strong>
+            <strong>{t('No podemos mostrar cuándo ir')}</strong>
             <p>{error}</p>
           </div>
           {hasValidCoordinates && (
             <button type="button" onClick={() => setRetry((value) => value + 1)}>
-              <RefreshCw aria-hidden="true" /> Reintentar
+              <RefreshCw aria-hidden="true" /> {t('Reintentar')}
             </button>
           )}
         </div>
@@ -149,8 +156,8 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
         <>
           {data.stale && (
             <p className="climate-warning" role="status">
-              <AlertTriangle aria-hidden="true" /> Mostramos la última información guardada porque
-              no pudimos actualizarla ahora.
+              <AlertTriangle aria-hidden="true" />{' '}
+              {t('Mostramos la última información guardada porque no pudimos actualizarla ahora.')}
             </p>
           )}
           <article className="climate-decision" aria-live="polite" aria-atomic="true">
@@ -159,41 +166,41 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
             >
               {selected.month === recommendedMonth ? (
                 <>
-                  <Star aria-hidden="true" /> Nuestra recomendación
+                  <Star aria-hidden="true" /> {t('Nuestra recomendación')}
                 </>
               ) : (
-                'Mes seleccionado'
+                t('Mes seleccionado')
               )}
             </p>
             <h3>{selected.name}</h3>
             <p className="climate-decision__summary">
-              En {selected.name} suele haber {monthSummary(selected)}.
+              {t('En')} {selected.name} {t('suele haber')} {monthSummary(selected)}.
             </p>
             <dl className="climate-essentials">
               <div>
-                <dt>Temperatura</dt>
+                <dt>{t('Temperatura')}</dt>
                 <dd>
                   {temperatureLabel(selected.temperatureMinC, unit)} —{' '}
                   {temperatureLabel(selected.temperatureMaxC, unit)}
                 </dd>
               </div>
               <div>
-                <dt>Días de lluvia</dt>
+                <dt>{t('Días de lluvia')}</dt>
                 <dd>
                   {selected.rainyDaysPerYear == null
-                    ? 'Sin datos'
-                    : `${selected.rainyDaysPerYear} al mes`}
+                    ? t('Sin datos')
+                    : t('{0} al mes', { 0: selected.rainyDaysPerYear })}
                 </dd>
               </div>
               <div>
-                <dt>Afluencia</dt>
-                <dd>{crowdLabel(selected.crowd).replace('Afluencia ', '')}</dd>
+                <dt>{t('Afluencia')}</dt>
+                <dd>{crowdLabel(selected.crowd).replace(t('Afluencia '), '')}</dd>
               </div>
             </dl>
           </article>
 
           {visibleAlternatives.length > 0 && (
-            <div className="climate-alternatives" aria-label="Alternativas recomendadas">
+            <div className="climate-alternatives" aria-label={t('Alternativas recomendadas')}>
               {visibleAlternatives.map((alternative) => {
                 const isSelected = selected.month === alternative.month.month;
                 return (
@@ -205,7 +212,7 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
                   >
                     <span className="climate-alternatives__role">
                       {alternative.role === 'balance' && <Star aria-hidden="true" />}
-                      {alternative.label}
+                      {t(alternative.label)}
                     </span>
                     <strong>{alternative.month.name}</strong>
                     <span>{alternativeReason(alternative.month, alternative.role, unit)}</span>
@@ -217,11 +224,11 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
 
           <div className="climate-ribbon-heading">
             <p>
-              <strong>Explora el año</strong>
+              <strong>{t('Explora el año')}</strong>
             </p>
-            <p>Usa las flechas del teclado para cambiar de mes.</p>
+            <p>{t('Usa las flechas del teclado para cambiar de mes.')}</p>
           </div>
-          <div className="climate-months" role="group" aria-label="Mes del año">
+          <div className="climate-months" role="group" aria-label={t('Mes del año')}>
             {orderedMonths.map((month, index) => {
               const isSelected = selected.month === month.month;
               const isRecommended = recommendedMonth === month.month;
@@ -232,7 +239,12 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
                     monthButtons.current[index] = node;
                   }}
                   type="button"
-                  aria-label={`${month.name}, máxima ${temperatureLabel(month.temperatureMaxC, unit)}${isRecommended ? ', recomendación principal' : ''}${isSelected ? ', seleccionado' : ''}`}
+                  aria-label={t('{0}, máxima {1}{2}{3}', {
+                    0: month.name,
+                    1: temperatureLabel(month.temperatureMaxC, unit),
+                    2: isRecommended ? t(', recomendación principal') : '',
+                    3: isSelected ? t(', seleccionado') : '',
+                  })}
                   aria-pressed={isSelected}
                   tabIndex={isSelected ? 0 : -1}
                   onClick={() => setSelectedMonth(month.month)}
@@ -246,7 +258,7 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
                   </strong>
                   {isRecommended && (
                     <span className="climate-months__recommendation" aria-hidden="true">
-                      <Star /> Ideal
+                      <Star /> {t('Ideal')}
                     </span>
                   )}
                 </button>
@@ -254,49 +266,51 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
             })}
           </div>
           <details className="climate-details">
-            <summary>Ver datos y metodología</summary>
+            <summary>{t('Ver datos y metodología')}</summary>
             <div className="climate-details__content">
               <section aria-labelledby="climate-selected-data">
-                <h3 id="climate-selected-data">Más datos de {selected.name}</h3>
+                <h3 id="climate-selected-data">
+                  {t('Más datos de')} {selected.name}
+                </h3>
                 <dl className="climate-secondary-data">
                   <div>
                     <dt>
-                      <Sun aria-hidden="true" /> Sol
+                      <Sun aria-hidden="true" /> {t('Sol')}
                     </dt>
                     <dd>{metricLabel(selected.sunshineHoursPerDay, 'sun')}</dd>
                   </div>
                   <div>
                     <dt>
-                      <CloudRain aria-hidden="true" /> Precipitación
+                      <CloudRain aria-hidden="true" /> {t('Precipitación')}
                     </dt>
                     <dd>
                       {selected.precipitationMmPerYear == null
-                        ? 'Sin datos'
-                        : `${selected.precipitationMmPerYear} mm al mes`}
+                        ? t('Sin datos')
+                        : t('{0} mm al mes', { 0: selected.precipitationMmPerYear })}
                     </dd>
                   </div>
                   <div>
-                    <dt>Cobertura</dt>
+                    <dt>{t('Cobertura')}</dt>
                     <dd>
-                      {Math.round(selected.coverage * 100)}% · {selected.sampleYears} años
+                      {Math.round(selected.coverage * 100)}% · {selected.sampleYears} {t('años')}
                     </dd>
                   </div>
                 </dl>
               </section>
               <section aria-labelledby="climate-all-data">
-                <h3 id="climate-all-data">Todo el año</h3>
+                <h3 id="climate-all-data">{t('Todo el año')}</h3>
                 <div className="climate-table">
                   <table>
-                    <caption>Promedios mensuales de clima y afluencia</caption>
+                    <caption>{t('Promedios mensuales de clima y afluencia')}</caption>
                     <thead>
                       <tr>
-                        <th scope="col">Mes</th>
-                        <th scope="col">Mín.</th>
-                        <th scope="col">Máx.</th>
-                        <th scope="col">Lluvia</th>
-                        <th scope="col">Precipitación</th>
-                        <th scope="col">Sol</th>
-                        <th scope="col">Afluencia</th>
+                        <th scope="col">{t('Mes')}</th>
+                        <th scope="col">{t('Mín.')}</th>
+                        <th scope="col">{t('Máx.')}</th>
+                        <th scope="col">{t('Lluvia')}</th>
+                        <th scope="col">{t('Precipitación')}</th>
+                        <th scope="col">{t('Sol')}</th>
+                        <th scope="col">{t('Afluencia')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -308,8 +322,8 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
                           <td>{metricLabel(month.rainyDaysPerYear, 'rain')}</td>
                           <td>
                             {month.precipitationMmPerYear == null
-                              ? 'Sin datos'
-                              : `${month.precipitationMmPerYear} mm/mes`}
+                              ? t('Sin datos')
+                              : t('{0} mm/mes', { 0: month.precipitationMmPerYear })}
                           </td>
                           <td>{metricLabel(month.sunshineHoursPerDay, 'sun')}</td>
                           <td>{crowdLabel(month.crowd, true)}</td>
@@ -320,15 +334,16 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
                 </div>
               </section>
               <section className="climate-method" aria-labelledby="climate-method-heading">
-                <h3 id="climate-method-heading">Cómo se calcula</h3>
+                <h3 id="climate-method-heading">{t('Cómo se calcula')}</h3>
                 <p>
-                  Reanálisis histórico {data.period.start} — {data.period.end} ·{' '}
-                  {data.period.sampleYears} años · {Math.round(data.period.coverage * 100)}% de
-                  cobertura. Medias de máximas y mínimas diarias; consideramos lluvioso un día con
-                  al menos 1 mm. La afluencia es una estimación editorial de TravSeeker.
+                  {t('Reanálisis histórico')} {data.period.start} — {data.period.end} ·{' '}
+                  {data.period.sampleYears} {t('años ·')} {Math.round(data.period.coverage * 100)}
+                  {t(
+                    '% de cobertura. Medias de máximas y mínimas diarias; consideramos lluvioso un día con al menos 1 mm. La afluencia es una estimación editorial de TravSeeker.',
+                  )}
                 </p>
                 <p>
-                  Fuente:{' '}
+                  {t('Fuente:')}{' '}
                   <a
                     href="https://open-meteo.com/en/docs/historical-weather-api"
                     target="_blank"

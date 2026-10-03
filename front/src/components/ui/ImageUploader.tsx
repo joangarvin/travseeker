@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { useState, type ChangeEvent, type DragEvent } from 'react';
 import { Image as ImageIcon, Trash2, UploadCloud } from 'lucide-react';
 import { api } from '../../services/api';
@@ -32,8 +33,8 @@ export function ImageUploader({
   extraData,
   circular = false,
   acceptedTypes = ACCEPTED_IMAGE_TYPES,
-  acceptedLabel = 'JPG, PNG, WebP o GIF',
-  previewAlt = 'Vista previa',
+  acceptedLabel = t('JPG, PNG, WebP o GIF'),
+  previewAlt = t('Vista previa'),
   onRemove,
 }: ImageUploaderProps) {
   const [uploading, setUploading] = useState(false);
@@ -44,12 +45,12 @@ export function ImageUploader({
     if (!file) return;
 
     if (!acceptedTypes.includes(file.type)) {
-      setError(`Elige una imagen ${acceptedLabel}.`);
+      setError(t('Elige una imagen {0}.', { 0: acceptedLabel }));
       return;
     }
 
     if (file.size > MAX_IMAGE_SIZE_BYTES) {
-      setError('La imagen supera el máximo de 10 MB.');
+      setError(t('La imagen supera el máximo de 10 MB.'));
       return;
     }
 
@@ -64,7 +65,7 @@ export function ImageUploader({
       const result = await api<{ url: string }>(endpoint, { method: 'POST', body }, token);
       onChange(result.url);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No se pudo subir la imagen');
+      setError(cause instanceof Error ? cause.message : t('No se pudo subir la imagen'));
     } finally {
       setUploading(false);
     }
@@ -101,15 +102,18 @@ export function ImageUploader({
       </div>
 
       <div>
-        <strong>{label}</strong>
-        <p>Arrastra una imagen aquí o selecciónala. {acceptedLabel} · máximo 10 MB.</p>
+        <strong>{t(label)}</strong>
+        <p>
+          {t('Arrastra una imagen aquí o selecciónala.')} {acceptedLabel} {t('· máximo 10 MB.')}
+        </p>
         <div className="image-uploader__actions">
           <label className="button button--secondary" htmlFor={id}>
-            <UploadCloud /> {uploading ? 'Subiendo…' : value ? 'Cambiar imagen' : 'Elegir imagen'}
+            <UploadCloud />{' '}
+            {uploading ? 'Subiendo…' : value ? t('Cambiar imagen') : t('Elegir imagen')}
           </label>
           {value && onRemove && (
             <button className="button button--quiet" type="button" onClick={onRemove}>
-              <Trash2 /> Quitar imagen
+              <Trash2 /> {t('Quitar imagen')}
             </button>
           )}
         </div>
