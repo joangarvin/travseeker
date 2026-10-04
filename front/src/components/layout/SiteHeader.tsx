@@ -92,6 +92,7 @@ export function SiteHeader() {
                 {user.avatarUrl ? (
                   <MediaImage
                     className="account-short__avatar"
+                    sizes="40px"
                     src={imageUrl(user.avatarUrl)}
                     alt=""
                   />

@@ -26,6 +26,8 @@ const {
 
 const { localization } = require("./middleware/localization");
 
+const { publicDataCache } = require("./middleware/publicCache");
+
 const app = express();
 
 app.disable("x-powered-by");
@@ -40,6 +42,7 @@ app.use(
 );
 app.use(csrfProtection);
 app.use(localization);
+app.use(publicDataCache);
 app.use(express.json({ limit: "1mb" }));
 
 app.get("/api/health", (_req, res) => {

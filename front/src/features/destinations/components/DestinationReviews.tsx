@@ -149,7 +149,7 @@ export function DestinationReviews({
                 <article className="review" key={review.id}>
                   <header>
                     {review.user?.avatarUrl ? (
-                      <MediaImage
+                      <MediaImage sizes="48px"
                         className="review__avatar"
                         src={imageUrl(review.user.avatarUrl)}
                         alt=""

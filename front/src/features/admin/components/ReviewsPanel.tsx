@@ -14,7 +14,7 @@ import {
 import { AdminModal } from '../../../components/admin/AdminModal';
 import { Button, Empty, Toast } from '../../../components/ui';
 import type { Review } from '../../../types';
-import { imageUrl } from '../../../utils/media';
+import { imageUrl, responsiveImageUrl } from '../../../utils/media';
 import { AdminToolbar } from './AdminToolbar';
 
 export type ReviewStatus = Review['status'];
@@ -61,7 +61,7 @@ function ReviewerAvatar({ review }: { review: Review }) {
   const source = imageUrl(review.user?.avatarUrl);
 
   return source && !failed ? (
-    <img className="review-card__avatar" src={source} alt="" onError={() => setFailed(true)} />
+    <img className="review-card__avatar" src={responsiveImageUrl(source, 96)} loading="lazy" decoding="async" alt="" onError={() => setFailed(true)} />
   ) : (
     <span className="review-card__avatar review-card__avatar--fallback" aria-hidden="true">
       {initials}

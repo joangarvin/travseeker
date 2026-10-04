@@ -1,3 +1,4 @@
+const { cachedPublic } = require("../cache/publicData");
 const { translationData } = require("../domain/localization");
 const { prisma } = require("../config/database");
 const {
@@ -208,7 +209,7 @@ async function remove(id) {
 }
 
 module.exports = {
-  listPublic,
+  listPublic: cachedPublic("tourismTypeService.listPublic", listPublic),
   listAdmin,
   create,
   update,

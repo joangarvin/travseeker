@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { Button, Field, Notice } from '../../../components/ui';
 import type { CollectionDetail } from '../../../types';
-import { imageUrl } from '../../../utils';
+import { imageUrl, responsiveImageUrl } from '../../../utils';
 
 type Member = NonNullable<CollectionDetail['members']>[number];
 
@@ -63,7 +63,7 @@ function Avatar({
   src?: string | null;
 }) {
   return src ? (
-    <img className="trip-avatar" src={imageUrl(src)} alt="" />
+    <img className="trip-avatar" src={responsiveImageUrl(imageUrl(src), 96)} loading="lazy" decoding="async" alt="" />
   ) : (
     <span className="trip-avatar trip-avatar--initials" aria-hidden="true">
       {initials(name, email)}

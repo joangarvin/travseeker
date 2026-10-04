@@ -1,3 +1,4 @@
+const { cachedPublic } = require("../cache/publicData");
 const { prisma } = require('../config/database');
 const { env } = require('../config/env');
 const {
@@ -206,5 +207,5 @@ module.exports = {
   responseFromSummary,
   validateProviderResponse,
   fetchHistoricalClimate,
-  getDestinationClimate,
+  getDestinationClimate: cachedPublic("climateService.getDestinationClimate", getDestinationClimate),
 };

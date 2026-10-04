@@ -129,7 +129,7 @@ export default function Home() {
     const initialFilters = Object.fromEntries(params.entries());
     const initialQuery = { ...initialFilters, limit: String(PAGE_SIZE), offset: '0', meta: '1' };
     Promise.allSettled([
-      api<Destino[]>('/destacados?limit=5'),
+      api<Destino[]>('/destacados?limit=3'),
       api<DestinationPage>(`/destinos${queryString(initialQuery)}`, {
         signal: listController.signal,
       }),

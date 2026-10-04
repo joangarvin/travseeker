@@ -20,7 +20,7 @@ import { Button, Empty, Loader, MediaImage, Notice } from '../../components/ui';
 import { useAuth } from '../../contexts';
 import { api } from '../../services/api';
 import type { CollectionDetail, ItineraryDay } from '../../types';
-import { imageUrl } from '../../utils';
+import { imageUrl, responsiveImageUrl } from '../../utils';
 import { CollectionBudgetSummary } from '../../components/BudgetEstimator';
 import { ItineraryBuilder } from '../../components/ItineraryBuilder';
 import {
@@ -420,7 +420,7 @@ function ParticipantAvatars({ collection }: { collection: CollectionDetail }) {
       <div className="trip-participants__avatars" aria-hidden="true">
         {people.map((person) =>
           person.avatarUrl ? (
-            <img key={person.id} className="trip-avatar" src={imageUrl(person.avatarUrl)} alt="" />
+            <img key={person.id} className="trip-avatar" src={responsiveImageUrl(imageUrl(person.avatarUrl), 96)} loading="lazy" decoding="async" alt="" />
           ) : (
             <span key={person.id} className="trip-avatar trip-avatar--initials">
               {(person.nombre || '?').slice(0, 2).toUpperCase()}

@@ -145,3 +145,7 @@ WHERE email = 'tu@email.com';
 Tras cambiar el rol, **cierra sesión y vuelve a entrar** (o recarga la pestaña) para que el menú muestre «Panel admin».
 
 Si en local no ves el panel, comprueba que el backend use la misma base de datos que el script de promoción: al arrancar debe mostrar `Base de datos: ...neon.tech` (no `localhost`). Si no, reinicia el backend (`Ctrl+C` y `npm run dev` en `backend/`).
+
+### Performance and free-tier usage
+
+See [PERFORMANCE.md](PERFORMANCE.md) for public-data caching, Cloudinary image optimization, deployment settings and Neon usage recommendations.

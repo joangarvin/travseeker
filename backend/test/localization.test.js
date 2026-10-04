@@ -160,7 +160,7 @@ test("admin responses stay canonical even when the interface requests English", 
     assert.equal(req.locale, "en");
     assert.equal(sent.nombre, name);
     assert.equal(headers["Content-Language"], language);
-    assert.deepEqual(sent.translations, body.translations);
+    assert.deepEqual(sent.translations, path.startsWith("/api/admin") ? body.translations : undefined);
   }
 });
 

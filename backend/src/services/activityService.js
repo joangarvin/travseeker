@@ -1,3 +1,4 @@
+const { cachedPublic } = require("../cache/publicData");
 const { translationData } = require("../domain/localization");
 const { prisma } = require("../config/database");
 const {
@@ -202,7 +203,7 @@ async function deleteActivity(id) {
 }
 
 module.exports = {
-  listPublicActivities,
+  listPublicActivities: cachedPublic("activityService.listPublicActivities", listPublicActivities),
   listAdminActivities,
   createActivity,
   updateActivity,

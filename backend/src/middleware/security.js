@@ -70,7 +70,7 @@ function gzipJson(req, res, next) {
     }
     const compressed = zlib.gzipSync(body);
     res.setHeader('Content-Encoding', 'gzip');
-    res.setHeader('Vary', 'Accept-Encoding');
+    res.vary('Accept-Encoding');
     res.removeHeader('Content-Length');
     res.setHeader('Content-Length', compressed.length);
     return originalEnd(compressed, undefined, callback);

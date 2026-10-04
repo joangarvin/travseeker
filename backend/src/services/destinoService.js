@@ -1,3 +1,4 @@
+const { cachedPublic } = require("../cache/publicData");
 const { prisma } = require("../config/database");
 const { buildWhereClause } = require("../utils/buildWhereClause");
 const {
@@ -19,6 +20,10 @@ const {
   publicDestinationByIdWhere,
   publicEditorialWhere,
 } = require("../domain/editorial");
+
+const searchCandidates = cachedPublic("searchCandidates", (where) => prisma.destino.findMany({
+  where, select: SEARCH_LIST_SELECT, orderBy: [{ updatedAt: "desc" }, { id: "asc" }],
+}));
 
 function prepareSearchResults(destinations, query) {
   const searched = rankDestinationSearch(destinations, query.q, query.lang);
@@ -153,19 +158,11 @@ async function searchDestinosPage(query) {
     // prefilter cannot safely narrow those candidates without a translated index.
     const searchWhere =
       query.lang === "en" ? where : textSearchWhere(query, where);
-    let destinos = await prisma.destino.findMany({
-      where: searchWhere,
-      select: SEARCH_LIST_SELECT,
-      orderBy: [{ updatedAt: "desc" }, { id: "asc" }],
-    });
+    let destinos = await searchCandidates(searchWhere);
     let ranked = prepareSearchResults(destinos, query);
     // Preserve typo-tolerant search when the database pre-filter finds no candidates.
-    if (!ranked.length) {
-      destinos = await prisma.destino.findMany({
-        where,
-        select: SEARCH_LIST_SELECT,
-        orderBy: [{ updatedAt: "desc" }, { id: "asc" }],
-      });
+    if (!ranked.length && query.lang !== "en") {
+      destinos = await searchCandidates(where);
       ranked = prepareSearchResults(destinos, query);
     }
     const items = ranked.slice(offset, offset + limit);
@@ -374,13 +371,13 @@ async function getFilterOptions(locale = "es") {
 }
 
 module.exports = {
-  searchDestinos,
-  searchDestinosPage,
-  getDestinoById,
-  getDestacados,
-  getRelacionados,
-  getMapaDestinos,
-  compareDestinos,
-  getStats,
-  getFilterOptions,
+  searchDestinos: cachedPublic("destinoService.searchDestinos", searchDestinos),
+  searchDestinosPage: cachedPublic("destinoService.searchDestinosPage", searchDestinosPage),
+  getDestinoById: cachedPublic("destinoService.getDestinoById", getDestinoById),
+  getDestacados: cachedPublic("destinoService.getDestacados", getDestacados),
+  getRelacionados: cachedPublic("destinoService.getRelacionados", getRelacionados),
+  getMapaDestinos: cachedPublic("destinoService.getMapaDestinos", getMapaDestinos),
+  compareDestinos: cachedPublic("destinoService.compareDestinos", compareDestinos),
+  getStats: cachedPublic("destinoService.getStats", getStats),
+  getFilterOptions: cachedPublic("destinoService.getFilterOptions", getFilterOptions),
 };

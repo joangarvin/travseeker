@@ -4,7 +4,7 @@ import { Archive, Check, RotateCcw, Search } from 'lucide-react';
 import { AdminModal } from '../../../components/admin/AdminModal';
 import { Button, Empty, Toast } from '../../../components/ui';
 import type { EditorialActor, EditorialStatus } from '../../../types';
-import { imageUrl } from '../../../utils/media';
+import { imageUrl, responsiveImageUrl } from '../../../utils/media';
 import type { EditorialResource } from '../types';
 import { EditorialStatusBadge } from './EditorialStatusBadge';
 
@@ -49,7 +49,7 @@ function AuthorAvatar({ actor }: { actor?: EditorialActor | null }) {
   const name = actorName(actor);
   const source = imageUrl(actor?.avatarUrl);
   if (source && !failed) {
-    return <img src={source} alt="" onError={() => setFailed(true)} />;
+    return <img src={responsiveImageUrl(source, 96)} loading="lazy" decoding="async" alt="" onError={() => setFailed(true)} />;
   }
   return <span aria-hidden="true">{name.slice(0, 2).toUpperCase()}</span>;
 }
