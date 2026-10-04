@@ -4,6 +4,7 @@ const ALLOWED_HTML_TAGS = new Set([
   'BLOCKQUOTE',
   'BR',
   'EM',
+  'I',
   'H2',
   'H3',
   'H4',

@@ -1,3 +1,4 @@
+import { markEditorSaved } from '../../../utils/editorDraft';
 import { t } from '../../../i18n';
 import { useState, type FormEvent } from 'react';
 import {
@@ -88,6 +89,7 @@ export function DestinationEditor({
   const { refreshTourismTypes } = useTourismTypes();
   const [form, setForm] = useState<Partial<Destino>>(() => normalizeDestination(initial));
   const [activeSection, setActiveSection] = useState<EditorSection>('identity');
+  const [savedVersion, setSavedVersion] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<EditorMessage | null>(null);
   const [activityDraft, setActivityDraft] = useState<Partial<Activity> | null>(null);
@@ -105,6 +107,12 @@ export function DestinationEditor({
 
   const saveDestination = async (event?: FormEvent) => {
     event?.preventDefault();
+    if (isSaving) return;
+    if (!plain(form.descripcion)) {
+      setActiveSection('content');
+      setMessage({ tone: 'error', text: t('Añade una descripción en español.') });
+      return;
+    }
     if (!tourismValues(form.tipoTurismoPrincipal).length) {
       setActiveSection('identity');
       setMessage({ tone: 'error', text: t('Selecciona al menos un tipo principal.') });
@@ -133,7 +141,9 @@ export function DestinationEditor({
         token,
       );
 
+      markEditorSaved(`destination:${form.id || 'new'}`);
       setForm(result);
+      setSavedVersion((value) => value + 1);
       onChange(result);
       setMessage({
         tone: 'success',
@@ -227,6 +237,7 @@ export function DestinationEditor({
       );
       onActivityCreated?.(created);
       await refreshActivities();
+      markEditorSaved(`activity:${activityDraft?.id || 'new'}`);
       setActivityDraft(null);
       setMessage({
         tone: 'success',
@@ -259,6 +270,7 @@ export function DestinationEditor({
       );
       onTourismTypeCreated?.(created);
       await refreshTourismTypes();
+      markEditorSaved(`tourism:${tourismTypeDraft?.id || 'new'}`);
       setTourismTypeDraft(null);
       setMessage({
         tone: 'success',
@@ -331,6 +343,7 @@ export function DestinationEditor({
         }));
         return { ...current, places, essentialGroups };
       });
+      markEditorSaved(`place:${placeDraft?.id || 'new'}`);
       setPlaceDraft(null);
       setPlaceTarget(null);
       setMessage({
@@ -352,6 +365,12 @@ export function DestinationEditor({
   return (
     <>
       <AdminModal
+        draft={form}
+        draftKey={`destination:${initial.id || 'new'}`}
+        onRestore={setForm}
+        busy={isSaving || isPlaceSaving || isActivitySaving || isTourismTypeSaving}
+        savedVersion={savedVersion}
+        error={message?.tone === 'error' ? message.text : undefined}
         wide
         title={form.id ? t('Editar {0}', { 0: form.nombre }) : t('Crear un destino')}
         subtitle={t('Completa cada apartado. Puedes guardar y continuar cuando quieras.')}
@@ -376,7 +395,7 @@ export function DestinationEditor({
           </nav>
 
           <div className="admin-editor__content">
-            {message && <Notice tone={message.tone}>{message.text}</Notice>}
+            {message?.tone === 'success' && <Notice tone={message.tone}>{message.text}</Notice>}
             {activeSection === 'identity' && (
               <DestinationIdentitySection
                 form={form}
@@ -437,7 +456,7 @@ export function DestinationEditor({
                 </>
               )}
             </span>
-            <Button type="button" variant="quiet" onClick={onClose}>
+            <Button type="button" variant="quiet" data-close-editor="true">
               {t('Cerrar')}
             </Button>
             <Button type="submit" loading={isSaving}>
@@ -449,6 +468,7 @@ export function DestinationEditor({
       {activityDraft && (
         <ActivityEditorModal
           initial={activityDraft}
+          error={message?.tone === 'error' ? message.text : undefined}
           isSaving={isActivitySaving}
           onSave={createActivity}
           onClose={() => setActivityDraft(null)}
@@ -457,6 +477,7 @@ export function DestinationEditor({
       {tourismTypeDraft && (
         <TourismTypeEditorModal
           initial={tourismTypeDraft}
+          error={message?.tone === 'error' ? message.text : undefined}
           isSaving={isTourismTypeSaving}
           onSave={createTourismType}
           onClose={() => setTourismTypeDraft(null)}
@@ -465,6 +486,7 @@ export function DestinationEditor({
       {placeDraft && (
         <PlaceEditorModal
           form={placeDraft}
+          error={message?.tone === 'error' ? message.text : undefined}
           isSaving={isPlaceSaving}
           onChange={setPlaceDraft}
           onSubmit={saveEssentialPlace}

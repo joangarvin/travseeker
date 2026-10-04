@@ -1,8 +1,8 @@
 import { t, intlLocale } from '../../../i18n';
-import { useEffect, useMemo, useState, type KeyboardEvent } from 'react';
-import { Archive, Check, RotateCcw, Search } from 'lucide-react';
+import { useEffect, useState, type KeyboardEvent } from 'react';
+import { Archive, Check, RotateCcw, Search, Eye } from 'lucide-react';
 import { AdminModal } from '../../../components/admin/AdminModal';
-import { Button, Empty, Toast } from '../../../components/ui';
+import { Button, Empty, Toast, Notice } from '../../../components/ui';
 import type { EditorialActor, EditorialStatus } from '../../../types';
 import { imageUrl, responsiveImageUrl } from '../../../utils/media';
 import type { EditorialResource } from '../types';
@@ -19,6 +19,9 @@ export type EditorialItem = {
   reviewedBy?: EditorialActor | null;
   isActive?: boolean;
 };
+
+import { api } from '../../../services/api';
+import { useAuth } from '../../../contexts';
 
 type EditorialTab = EditorialStatus | 'all';
 
@@ -49,7 +52,15 @@ function AuthorAvatar({ actor }: { actor?: EditorialActor | null }) {
   const name = actorName(actor);
   const source = imageUrl(actor?.avatarUrl);
   if (source && !failed) {
-    return <img src={responsiveImageUrl(source, 96)} loading="lazy" decoding="async" alt="" onError={() => setFailed(true)} />;
+    return (
+      <img
+        src={responsiveImageUrl(source, 96)}
+        loading="lazy"
+        decoding="async"
+        alt=""
+        onError={() => setFailed(true)}
+      />
+    );
   }
   return <span aria-hidden="true">{name.slice(0, 2).toUpperCase()}</span>;
 }
@@ -88,10 +99,12 @@ function ArchiveDialog({
 }
 
 export function EditorialReviewPanel({
-  items,
+  onEdit,
+  revision,
   onTransition,
 }: {
-  items: EditorialItem[];
+  onEdit: (item: EditorialItem) => void;
+  revision: number;
   onTransition: (
     resource: EditorialResource,
     ids: string[],
@@ -106,31 +119,62 @@ export function EditorialReviewPanel({
   const [archiveTargets, setArchiveTargets] = useState<EditorialItem[] | null>(null);
   const [toast, setToast] = useState<{ tone: 'success' | 'error'; text: string } | null>(null);
 
-  const counts = useMemo(
-    () => ({
-      all: items.length,
-      draft: items.filter((item) => item.editorialStatus === 'draft').length,
-      pending: items.filter((item) => item.editorialStatus === 'pending').length,
-      published: items.filter((item) => item.editorialStatus === 'published').length,
-      archived: items.filter((item) => item.editorialStatus === 'archived').length,
-    }),
-    [items],
-  );
-
-  const visible = useMemo(() => {
-    const normalized = query.trim().toLocaleLowerCase('es');
-    return items.filter(
-      (item) =>
-        (tab === 'all' || item.editorialStatus === tab) &&
-        (resource === 'all' || item.resource === resource) &&
-        (!normalized ||
-          `${item.title} ${actorName(item.createdBy)}`
-            .toLocaleLowerCase('es')
-            .includes(normalized)),
+  const { token } = useAuth();
+  const [items, setItems] = useState<EditorialItem[]>([]);
+  const [counts, setCounts] = useState({ all: 0, draft: 0, pending: 0, published: 0, archived: 0 });
+  const [cursors, setCursors] = useState<string[]>(['']);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [retry, setRetry] = useState(0);
+  const cursor = cursors.at(-1) || '';
+  useEffect(() => {
+    setCursors(['']);
+    setSelectedIds(new Set());
+  }, [query, resource, tab]);
+  useEffect(() => {
+    const controller = new AbortController();
+    setLoading(true);
+    const timer = window.setTimeout(
+      () => {
+        const params = new URLSearchParams({
+          status: tab,
+          resource,
+          q: query,
+          limit: '40',
+          cursor,
+        });
+        api<{ items: EditorialItem[]; counts: typeof counts; nextCursor: string | null }>(
+          `/admin/editorial?${params}`,
+          { signal: controller.signal },
+          token,
+        )
+          .then((page) => {
+            if (controller.signal.aborted) return;
+            setItems(page.items);
+            setCounts(page.counts);
+            setNextCursor(page.nextCursor);
+            setError('');
+            setSelectedIds(new Set());
+          })
+          .catch((cause) => {
+            if (!controller.signal.aborted)
+              setError(
+                cause instanceof Error ? cause.message : t('No se pudo cargar el contenido'),
+              );
+          })
+          .finally(() => {
+            if (!controller.signal.aborted) setLoading(false);
+          });
+      },
+      query ? 250 : 0,
     );
-  }, [items, query, resource, tab]);
-
-  useEffect(() => setSelectedIds(new Set()), [query, resource, tab]);
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [tab, resource, query, cursor, token, retry, revision]);
+  const visible = items;
 
   const tabs: Array<{ id: EditorialTab; label: string }> = [
     { id: 'pending', label: t('Pendientes') },
@@ -140,11 +184,13 @@ export function EditorialReviewPanel({
     { id: 'all', label: t('Todos') },
   ];
 
-  const selected = visible.filter((item) => selectedIds.has(item.id));
+  const selected = visible.filter((item) => selectedIds.has(`${item.resource}:${item.id}`));
   const allSelected = visible.length > 0 && selected.length === visible.length;
 
   const toggleAll = () =>
-    setSelectedIds(allSelected ? new Set() : new Set(visible.map((item) => item.id)));
+    setSelectedIds(
+      allSelected ? new Set() : new Set(visible.map((item) => `${item.resource}:${item.id}`)),
+    );
 
   const toggleOne = (id: string) =>
     setSelectedIds((current) => {
@@ -190,6 +236,7 @@ export function EditorialReviewPanel({
       });
     } finally {
       setBusy(false);
+      setRetry((value) => value + 1);
     }
   };
 
@@ -248,12 +295,12 @@ export function EditorialReviewPanel({
 
       <div className="editorial-review__filters">
         <label className="editorial-search">
-          <span className="sr-only">{t('Buscar contenido o autor')}</span>
+          <span className="sr-only">{t('Buscar contenido')}</span>
           <Search aria-hidden="true" />
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder={t('Buscar contenido o autor')}
+            placeholder={t('Buscar contenido')}
           />
         </label>
         <label>
@@ -272,7 +319,21 @@ export function EditorialReviewPanel({
         </label>
       </div>
 
-      <div id="editorial-status-panel" role="tabpanel" aria-labelledby={`editorial-tab-${tab}`}>
+      {error && (
+        <Notice tone="error">
+          {error}
+          <Button variant="quiet" onClick={() => setRetry((value) => value + 1)}>
+            {t('Reintentar')}
+          </Button>
+        </Notice>
+      )}
+      {loading && <p role="status">{t('Cargando…')}</p>}
+      <div
+        aria-busy={loading}
+        id="editorial-status-panel"
+        role="tabpanel"
+        aria-labelledby={`editorial-tab-${tab}`}
+      >
         {visible.length ? (
           <>
             <label className="editorial-select-all">
@@ -285,8 +346,8 @@ export function EditorialReviewPanel({
                   <label className="editorial-card__check">
                     <input
                       type="checkbox"
-                      checked={selectedIds.has(item.id)}
-                      onChange={() => toggleOne(item.id)}
+                      checked={selectedIds.has(`${item.resource}:${item.id}`)}
+                      onChange={() => toggleOne(`${item.resource}:${item.id}`)}
                     />
                     <span className="sr-only">
                       {t('Seleccionar')} {item.title}
@@ -313,8 +374,19 @@ export function EditorialReviewPanel({
                         : ''}
                     </p>
                     <div className="editorial-card__actions">
+                      <Button
+                        variant="quiet"
+                        disabled={busy || loading}
+                        onClick={() => onEdit(item)}
+                      >
+                        <Eye /> {t('Revisar y editar')}
+                      </Button>
                       {item.editorialStatus !== 'published' && (
-                        <Button loading={busy} onClick={() => void transition([item], 'published')}>
+                        <Button
+                          loading={busy}
+                          disabled={loading}
+                          onClick={() => void transition([item], 'published')}
+                        >
                           <Check /> {t('Aprobar')}
                         </Button>
                       )}
@@ -322,6 +394,7 @@ export function EditorialReviewPanel({
                         <Button
                           variant="quiet"
                           loading={busy}
+                          disabled={loading}
                           onClick={() => void transition([item], 'draft')}
                         >
                           <RotateCcw /> {t('Borrador')}
@@ -330,7 +403,7 @@ export function EditorialReviewPanel({
                       {item.editorialStatus !== 'archived' && (
                         <Button
                           variant="quiet"
-                          disabled={busy}
+                          disabled={busy || loading}
                           onClick={() => setArchiveTargets([item])}
                         >
                           <Archive /> {t('Archivar')}
@@ -342,30 +415,56 @@ export function EditorialReviewPanel({
               ))}
             </div>
           </>
-        ) : (
+        ) : !loading && !error ? (
           <Empty title={t('No hay contenido en esta vista')}>
             {t('Cambia el estado, el tipo o la búsqueda para revisar otra parte de la cola.')}
           </Empty>
-        )}
+        ) : null}
       </div>
 
+      <nav className="pagination" aria-label={t('Páginas de revisión')}>
+        <Button
+          variant="quiet"
+          disabled={loading || cursors.length === 1}
+          onClick={() => setCursors((current) => current.slice(0, -1))}
+        >
+          {t('Anterior')}
+        </Button>
+        <span>{t('Página {0}', { 0: cursors.length })}</span>
+        <Button
+          variant="quiet"
+          disabled={loading || !nextCursor}
+          onClick={() => nextCursor && setCursors((current) => [...current, nextCursor])}
+        >
+          {t('Siguiente')}
+        </Button>
+      </nav>
       {selected.length > 0 && (
         <div className="editorial-bulk" role="region" aria-label={t('Acciones por lote')}>
           <strong>
             {selected.length} {t('seleccionados')}
           </strong>
           <div>
-            <Button loading={busy} onClick={() => void transition(selected, 'published')}>
+            <Button
+              loading={busy}
+              disabled={loading}
+              onClick={() => void transition(selected, 'published')}
+            >
               <Check /> {t('Aprobar')}
             </Button>
             <Button
               variant="quiet"
               loading={busy}
+              disabled={loading}
               onClick={() => void transition(selected, 'draft')}
             >
               <RotateCcw /> {t('Borrador')}
             </Button>
-            <Button variant="danger" disabled={busy} onClick={() => setArchiveTargets(selected)}>
+            <Button
+              variant="danger"
+              disabled={busy || loading}
+              onClick={() => setArchiveTargets(selected)}
+            >
               <Archive /> {t('Archivar')}
             </Button>
           </div>

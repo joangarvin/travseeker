@@ -1,10 +1,19 @@
-import { cloneElement, useState, type InputHTMLAttributes, type ReactElement } from 'react';
+import { stripHtmlToText } from '../../../utils/sanitizeContent';
+import { RichTextEditor } from './RichTextEditor';
+import { useEditorLanguage } from './EditorLanguage';
+import {
+  cloneElement,
+  useEffect,
+  useState,
+  type InputHTMLAttributes,
+  type ReactElement,
+} from 'react';
 import config from '../../../../../shared/localization.json';
 import { languages, t, type Locale, type Translations } from '../../../i18n';
 
 type TextControlProps = InputHTMLAttributes<
   HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
->;
+> & { onValueChange?: (value: string) => void };
 
 type LocalizedFieldProps = {
   label: string;
@@ -29,7 +38,10 @@ export function LocalizedField({
   onTranslationsChange,
   children,
 }: LocalizedFieldProps) {
-  const [language, setLanguage] = useState<Locale>('es');
+  const preferred = useEditorLanguage();
+  const [language, setLanguage] = useState<Locale>(preferred);
+  useEffect(() => setLanguage(preferred), [preferred]);
+  const [originalSource] = useState(String(children.props.value || ''));
   const source = String(children.props.value || '');
   const translated = translations?.[language]?.[field] || '';
   const isOriginal = language === 'es';
@@ -57,7 +69,17 @@ export function LocalizedField({
   return (
     <div className="field localized-field">
       <div className="localized-field__heading">
-        <label htmlFor={htmlFor}>{label}</label>
+        <label id={`${htmlFor}-label`} htmlFor={htmlFor}>
+          {label}
+        </label>
+        {!translations?.en?.[field]?.trim() && (
+          <span className="translation-status">{t('Falta inglés')}</span>
+        )}
+        {translations?.en?.[field]?.trim() && originalSource !== source && (
+          <span className="translation-status">
+            {t('Revisa la traducción tras cambiar el original')}
+          </span>
+        )}
         <div
           className="localized-field__languages"
           role="group"
@@ -80,7 +102,19 @@ export function LocalizedField({
       {!isOriginal && children.type === 'select' ? (
         <input {...props} />
       ) : (
-        cloneElement(children, props)
+        cloneElement(
+          children,
+          children.type === RichTextEditor && !isOriginal
+            ? {
+                ...props,
+                onValueChange: (value: string) =>
+                  onTranslationsChange({
+                    ...translations,
+                    [language]: { ...translations?.[language], [field]: value },
+                  }),
+              }
+            : props,
+        )
       )}
       <small id={hintId}>
         {isOriginal ? (
@@ -88,7 +122,7 @@ export function LocalizedField({
         ) : (
           <>
             {!translated.trim() && <span>{t('Sin traducción: se mostrará en español')} · </span>}
-            {t('Español: {0}', { 0: source || t('Sin texto original') })}
+            {t('Español: {0}', { 0: stripHtmlToText(source) || t('Sin texto original') })}
           </>
         )}
       </small>

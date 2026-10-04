@@ -25,6 +25,7 @@ type Alert = {
 export default function ProfilePage() {
   const auth = useAuth();
   const { user, token } = auth;
+  const [passwordSaving, setPasswordSaving] = useState(false);
   const [tab, setTab] = useState<'profile' | 'preferences' | 'security'>('profile');
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
@@ -96,7 +97,8 @@ export default function ProfilePage() {
   };
   const changePassword = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!token) return;
+    if (!token || passwordSaving) return;
+    setPasswordSaving(true);
     try {
       await api(
         '/auth/change-password',
@@ -111,6 +113,8 @@ export default function ProfilePage() {
         tone: 'error',
         text: cause instanceof Error ? cause.message : t('No se pudo actualizar'),
       });
+    } finally {
+      setPasswordSaving(false);
     }
   };
   const createAlert = async () => {
@@ -412,7 +416,7 @@ export default function ProfilePage() {
                   required
                 />
               </Field>
-              <Button type="submit">
+              <Button type="submit" loading={passwordSaving}>
                 <KeyRound /> {t('Cambiar contraseña')}
               </Button>
             </form>

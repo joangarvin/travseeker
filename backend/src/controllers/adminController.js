@@ -1,8 +1,8 @@
 const adminService = require("../services/adminService");
 const { asyncHandler } = require("../utils/asyncHandler");
 
-const listDestinos = asyncHandler(async (_req, res) => {
-  res.json(await adminService.listDestinos());
+const listDestinos = asyncHandler(async (req, res) => {
+  res.json(await adminService.listDestinos(req.query));
 });
 
 const getDestino = asyncHandler(async (req, res) => {
@@ -21,12 +21,14 @@ const deleteDestino = asyncHandler(async (req, res) => {
   res.json(await adminService.deleteDestino(req.params.destinoId));
 });
 
-const listMunicipios = asyncHandler(async (_req, res) => {
-  res.json(await adminService.listMunicipios());
+const listMunicipios = asyncHandler(async (req, res) => {
+  res.json(await adminService.listMunicipios(req.query));
 });
 
 const createMunicipio = asyncHandler(async (req, res) => {
-  res.status(201).json(await adminService.createMunicipio(req.body, req.user.id));
+  res
+    .status(201)
+    .json(await adminService.createMunicipio(req.body, req.user.id));
 });
 
 const updateMunicipio = asyncHandler(async (req, res) => {
@@ -60,7 +62,13 @@ const listPlaces = asyncHandler(async (req, res) =>
 const createPlace = asyncHandler(async (req, res) =>
   res
     .status(201)
-    .json(await adminService.createPlace(req.params.destinoId, req.body, req.user.id)),
+    .json(
+      await adminService.createPlace(
+        req.params.destinoId,
+        req.body,
+        req.user.id,
+      ),
+    ),
 );
 const updatePlace = asyncHandler(async (req, res) =>
   res.json(await adminService.updatePlace(req.params.placeId, req.body)),

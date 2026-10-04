@@ -20,6 +20,7 @@ export default function FavoritesPage() {
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [retry, setRetry] = useState(0);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -28,6 +29,7 @@ export default function FavoritesPage() {
       return;
     }
 
+    setIsLoading(true);
     setError('');
     api<Favorite[]>('/favoritos', {}, token)
       .then(setFavorites)
@@ -35,7 +37,7 @@ export default function FavoritesPage() {
         setError(cause instanceof Error ? cause.message : t('No se pudieron cargar tus guardados')),
       )
       .finally(() => setIsLoading(false));
-  }, [token]);
+  }, [token, retry]);
 
   const filteredFavorites = useMemo(
     () =>
@@ -87,7 +89,13 @@ export default function FavoritesPage() {
         {error && (
           <Notice tone="error">
             {error}
-            {t('. Recarga la página para intentarlo de nuevo.')}
+            <button
+              type="button"
+              className="button button--quiet"
+              onClick={() => setRetry((value) => value + 1)}
+            >
+              {t('Reintentar')}
+            </button>
           </Notice>
         )}
         {isLoading ? (
@@ -99,8 +107,26 @@ export default function FavoritesPage() {
             ))}
           </div>
         ) : (
-          <Empty icon={<Heart />} title={t('Nada por aquí')}>
-            {t('Guarda un destino desde su ficha y volverá a aparecer aquí.')}
+          <Empty
+            icon={<Heart />}
+            title={
+              favorites.length ? t('No hay coincidencias') : t('Aún no tienes destinos guardados')
+            }
+            action={
+              favorites.length ? (
+                <button type="button" className="button" onClick={() => setQuery('')}>
+                  {t('Limpiar búsqueda')}
+                </button>
+              ) : (
+                <a className="button" href="/">
+                  {t('Explorar destinos')}
+                </a>
+              )
+            }
+          >
+            {favorites.length
+              ? t('Prueba otro nombre o limpia la búsqueda.')
+              : t('Guarda un destino desde su ficha y volverá a aparecer aquí.')}
           </Empty>
         )}
       </section>

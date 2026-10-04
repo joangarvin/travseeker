@@ -1,3 +1,4 @@
+const { pagination, catalogWhere } = require("../domain/pagination");
 const { prisma } = require("../config/database");
 const { parseTags } = require("../constants/scales");
 const { normalizeEssentialGroups } = require("../domain/essentials");
@@ -171,9 +172,22 @@ async function syncDestinationEssentials(
   }
 }
 
-async function listDestinos() {
+async function listDestinos(query = {}) {
+  if (query.options === "1")
+    return prisma.destino.findMany({
+      select: { id: true, nombre: true },
+      orderBy: { nombre: "asc" },
+    });
+  const where = catalogWhere(query, [
+    "nombre",
+    "ubicacion",
+    "tipoTurismoPrincipal",
+  ]);
+  const paging = query.meta === "1" ? pagination(query) : {};
   const rows = await prisma.destino.findMany({
-    orderBy: { nombre: "asc" },
+    where,
+    ...paging,
+    orderBy: [{ nombre: "asc" }, { id: "asc" }],
     select: {
       id: true,
       nombre: true,
@@ -199,7 +213,10 @@ async function listDestinos() {
       tourismTypeLinks: { include: { tourismType: true } },
     },
   });
-  return rows.map(mapAdminDestination);
+  const items = rows.map(mapAdminDestination);
+  return query.meta === "1"
+    ? { items, total: await prisma.destino.count({ where }) }
+    : items;
 }
 
 async function getDestino(id) {
@@ -297,17 +314,30 @@ async function deleteDestino(id) {
   return { success: true };
 }
 
-async function listMunicipios() {
+async function listMunicipios(query = {}) {
+  const where = catalogWhere(query, ["nombre", "tipoTurismo", "conexiones"]);
+  const paging = query.meta === "1" ? pagination(query) : {};
+  if (query.options === "1")
+    return prisma.municipio.findMany({
+      where,
+      select: { id: true, nombre: true, latitud: true, longitud: true },
+      orderBy: { nombre: "asc" },
+    });
   const rows = await prisma.municipio.findMany({
-    orderBy: { nombre: "asc" },
+    where,
+    ...paging,
+    orderBy: [{ nombre: "asc" }, { id: "asc" }],
     include: {
       _count: { select: { destinoLinks: true } },
     },
   });
-  return rows.map(({ _count, ...m }) => ({
+  const items = rows.map(({ _count, ...m }) => ({
     ...cleanMunicipalityFields(m),
     destinosCount: _count.destinoLinks,
   }));
+  return query.meta === "1"
+    ? { items, total: await prisma.municipio.count({ where }) }
+    : items;
 }
 
 async function createMunicipio(payload, createdById) {
@@ -317,6 +347,7 @@ async function createMunicipio(payload, createdById) {
     include: { _count: { select: { destinoLinks: true } } },
   });
   return {
+    ...cleanMunicipalityFields(created),
     id: created.id,
     nombre: created.nombre,
     precios: created.precios,
@@ -336,6 +367,7 @@ async function updateMunicipio(id, payload) {
     include: { _count: { select: { destinoLinks: true } } },
   });
   return {
+    ...cleanMunicipalityFields(updated),
     id: updated.id,
     nombre: updated.nombre,
     precios: updated.precios,

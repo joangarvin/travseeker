@@ -6,6 +6,7 @@ import { AdminToolbar } from './AdminToolbar';
 import { EditorialStatusBadge, EditorialStatusFilter } from './EditorialStatusBadge';
 
 type PlacesPanelProps = {
+  loading?: boolean;
   places: Place[];
   destinations: Destino[];
   selectedDestinationId: string;
@@ -20,6 +21,7 @@ type PlacesPanelProps = {
 };
 
 export function PlacesPanel({
+  loading = false,
   places,
   destinations,
   selectedDestinationId,
@@ -70,14 +72,16 @@ export function PlacesPanel({
         placeholder={t('Buscar lugar o categoría')}
         resultCount={visible.length}
       >
-        <Button onClick={onCreate}>
+        <Button onClick={onCreate} disabled={loading || !selectedDestinationId}>
           <Plus /> {t('Nuevo lugar')}
         </Button>
       </AdminToolbar>
       <EditorialStatusFilter value={status} onChange={setStatus} />
 
       <div className="admin-list">
-        {visible.length ? (
+        {loading ? (
+          <p role="status">{t('Cargando…')}</p>
+        ) : visible.length ? (
           visible.map((place) => (
             <article key={place.id}>
               <div>

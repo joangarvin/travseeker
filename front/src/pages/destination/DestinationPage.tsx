@@ -620,7 +620,7 @@ export default function DestinationPage() {
           ) : related.length ? (
             <div className="destination-list">
               {related.slice(0, 3).map((item, index) => (
-                <DestinationCard key={item.id} destino={item} index={index} imageLoading="eager" />
+                <DestinationCard key={item.id} destino={item} index={index} imageLoading="lazy" />
               ))}
             </div>
           ) : (

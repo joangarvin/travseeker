@@ -62,6 +62,7 @@ export default function MapPage() {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [motionSource, setMotionSource] = useState<'pointer' | 'keyboard'>('keyboard');
   const [loading, setLoading] = useState(true);
+  const [retry, setRetry] = useState(0);
   const [error, setError] = useState('');
   const [tilesReady, setTilesReady] = useState(false);
   const [tilesFailed, setTilesFailed] = useState(false);
@@ -95,7 +96,7 @@ export default function MapPage() {
         if (!controller.signal.aborted) setLoading(false);
       });
     return () => controller.abort();
-  }, [filters, setSearchParams]);
+  }, [filters, setSearchParams, retry]);
 
   const active = useMemo(() => destinos.find((item) => item.id === selected), [destinos, selected]);
   const update = (key: keyof SearchFilters, value: string) =>
@@ -239,6 +240,18 @@ export default function MapPage() {
             )}
           </div>
         )}
+        {error && (
+          <div className="notice notice--error" role="alert">
+            {error}{' '}
+            <button
+              type="button"
+              className="button button--quiet"
+              onClick={() => setRetry((value) => value + 1)}
+            >
+              {t('Reintentar')}
+            </button>
+          </div>
+        )}
         <div className={`map-layout ${listOpen ? '' : 'map-layout--closed'}`}>
           {listOpen && (
             <aside
@@ -271,7 +284,8 @@ export default function MapPage() {
                         <small className="map-list__match">{t(destino.searchMatch.label)}</small>
                       )}
                       <em>
-                        {t(plain(destino.presupuesto))} · {t(plain(destino.masificacion))}
+                        {t('Presupuesto')}: {t(plain(destino.presupuesto))} · {t('Afluencia')}:{' '}
+                        {t(plain(destino.masificacion))}
                       </em>
                       <TourismMark value={destino.tipoTurismoPrincipal} compact />
                     </span>

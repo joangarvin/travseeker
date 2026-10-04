@@ -1,3 +1,4 @@
+import { RichTextEditor } from './RichTextEditor';
 import { LocalizedField } from './LocalizedField';
 import { t } from '../../../i18n';
 import { CoordinatePicker } from '../../../components/admin/CoordinatePicker';
@@ -37,7 +38,9 @@ export function DestinationIdentitySection({
         number="01"
         id="editor-identity"
         title={t('Identidad y clasificación')}
-        description={t('Cómo se llama, dónde está y qué clase de experiencia propone.')}
+        description={t(
+          'Cómo se llama, dónde está y qué clase de experiencia propone. Las nuevas actividades y tipos de viaje se guardan en el catálogo al crearlos.',
+        )}
       />
 
       <div className="form-grid">
@@ -140,12 +143,10 @@ export function DestinationContentSection({ form, update }: DestinationSectionPr
         htmlFor="admin-description"
         hint={t('Puedes usar párrafos, listas y texto en negrita.')}
       >
-        <textarea
+        <RichTextEditor
           id="admin-description"
-          className="editor-textarea"
           value={form.descripcion || ''}
-          onChange={(event) => update('descripcion', event.target.value)}
-          required
+          onValueChange={(value) => update('descripcion', value)}
         />
       </LocalizedField>
       {!form.essentialGroups?.length && (
@@ -304,7 +305,9 @@ export function DestinationMunicipalitiesSection({
         number="07"
         id="editor-municipalities"
         title={t('Municipios asociados')}
-        description={t('Estos municipios aparecerán en la ficha pública del destino.')}
+        description={t(
+          'Los municipios se vinculan o desvinculan al instante. No necesitan Guardar cambios.',
+        )}
       />
 
       {!destinationId ? (

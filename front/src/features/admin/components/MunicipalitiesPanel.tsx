@@ -8,6 +8,9 @@ import { EditorialStatusBadge, EditorialStatusFilter } from './EditorialStatusBa
 
 type MunicipalitiesPanelProps = {
   municipalities: Municipio[];
+  total: number;
+  status: string;
+  onStatusChange: (value: string) => void;
   query: string;
   onQueryChange: (value: string) => void;
   onCreate: () => void;
@@ -15,44 +18,37 @@ type MunicipalitiesPanelProps = {
   onDelete: (id: string) => void;
 };
 
-const MAX_VISIBLE_MUNICIPALITIES = 100;
-
 export function MunicipalitiesPanel({
   municipalities,
+  total,
+  status,
+  onStatusChange,
   query,
   onQueryChange,
   onCreate,
   onEdit,
   onDelete,
 }: MunicipalitiesPanelProps) {
-  const [status, setStatus] = useState<Municipio['editorialStatus'] | 'all'>('all');
-  const visible = municipalities.filter(
-    (municipality) => status === 'all' || municipality.editorialStatus === status,
-  );
+  const visible = municipalities;
   return (
     <>
       <AdminToolbar
         query={query}
         onQueryChange={onQueryChange}
         placeholder={t('Buscar municipio, tipo o conexión')}
-        resultCount={visible.length}
+        resultCount={total}
       >
         <Button onClick={onCreate}>
           <Plus /> {t('Nuevo municipio')}
         </Button>
       </AdminToolbar>
-      <EditorialStatusFilter value={status} onChange={setStatus} />
-
-      {visible.length > MAX_VISIBLE_MUNICIPALITIES && (
-        <p className="admin-result-hint">
-          {t(
-            'Mostrando los primeros 100. Escribe un nombre, tipo o conexión para acotar la lista.',
-          )}
-        </p>
-      )}
+      <EditorialStatusFilter
+        value={status as 'all' | Municipio['editorialStatus']}
+        onChange={onStatusChange}
+      />
 
       <div className="admin-list">
-        {visible.slice(0, MAX_VISIBLE_MUNICIPALITIES).map((municipality) => (
+        {visible.map((municipality) => (
           <article key={municipality.id}>
             <div>
               <EditorialStatusBadge status={municipality.editorialStatus} />
@@ -85,4 +81,3 @@ export function MunicipalitiesPanel({
     </>
   );
 }
-import { useState } from 'react';

@@ -10,6 +10,8 @@ const router = Router();
 
 router.use(requireAuth, requireAdmin);
 
+router.get("/counts", editorialController.adminCounts);
+router.get("/editorial/:resource/:id", editorialController.record);
 router.get("/editorial", editorialController.list);
 router.get("/editorial/counts", editorialController.counts);
 router.patch("/editorial/:resource/batch", editorialController.transitionBatch);

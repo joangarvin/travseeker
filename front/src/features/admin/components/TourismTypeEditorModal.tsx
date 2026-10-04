@@ -15,11 +15,13 @@ import {
 export function TourismTypeEditorModal({
   initial,
   isSaving,
+  error,
   onSave,
   onClose,
 }: {
   initial: Partial<TourismType>;
   isSaving: boolean;
+  error?: string;
   onSave: (type: Partial<TourismType>) => Promise<void>;
   onClose: () => void;
 }) {
@@ -40,6 +42,11 @@ export function TourismTypeEditorModal({
   const PreviewIcon = tourismIconRegistry[form.icon || 'Compass'] || tourismIconRegistry.Compass;
   return (
     <AdminModal
+      draft={form}
+      draftKey={`tourism:${form.id || 'new'}`}
+      onRestore={setForm}
+      busy={isSaving}
+      error={error}
       title={form.id ? t('Editar {0}', { 0: form.name }) : t('Crear un tipo de viaje')}
       subtitle={t('Define cómo se reconoce este tipo en tarjetas, filtros, mapas y comparaciones.')}
       onClose={onClose}
@@ -174,7 +181,7 @@ export function TourismTypeEditorModal({
           </label>
         </div>
         <footer className="modal-actions">
-          <Button type="button" variant="quiet" onClick={onClose}>
+          <Button type="button" variant="quiet" data-close-editor="true">
             {t('Cancelar')}
           </Button>
           <Button type="submit" loading={isSaving}>

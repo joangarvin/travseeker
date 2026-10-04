@@ -1,3 +1,8 @@
+const {
+  pagination,
+  encodeEditorialCursor,
+  editorialCursorWhere,
+} = require("../domain/pagination");
 const { prisma } = require("../config/database");
 const {
   EDITORIAL_RESOURCES,
@@ -46,7 +51,9 @@ function listWhere(config, query) {
   const status = validateEditorialStatus(query.status || "pending", {
     allowAll: true,
   });
-  const search = String(query.q || "").trim().slice(0, 120);
+  const search = String(query.q || "")
+    .trim()
+    .slice(0, 120);
   return {
     ...(status === "all" ? {} : { editorialStatus: status }),
     ...(search
@@ -63,28 +70,68 @@ async function listEditorial(query = {}) {
       : [requestedResource];
   resources.forEach(validateEditorialResource);
 
-  const rows = await Promise.all(
+  const { take } = pagination(query);
+  const pages = await Promise.all(
     resources.map(async (resource) => {
       const { config, delegate } = delegateFor(resource);
-      const items = await delegate.findMany({
-        where: listWhere(config, query),
-        select: editorialSelect(config),
-        orderBy: [{ submittedAt: "desc" }, { id: "asc" }],
-        take: 250,
-      });
-      return items.map((item) => normalizeItem(resource, config, item));
+      const where = listWhere(config, query);
+      const [items, counts] = await Promise.all([
+        delegate.findMany({
+          where: { AND: [where, editorialCursorWhere(query.cursor, resource)] },
+          select: editorialSelect(config),
+          orderBy: [{ submittedAt: "desc" }, { id: "desc" }],
+          take: take + 1,
+        }),
+        delegate.groupBy({
+          by: ["editorialStatus"],
+          where: listWhere(config, { ...query, status: "all" }),
+          _count: { _all: true },
+        }),
+      ]);
+      return {
+        items: items.map((item) => normalizeItem(resource, config, item)),
+        counts,
+      };
     }),
   );
-  return rows
-    .flat()
-    .sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+  const merged = pages
+    .flatMap((page) => page.items)
+    .sort(
+      (a, b) =>
+        new Date(b.submittedAt) - new Date(a.submittedAt) ||
+        (a.id < b.id
+          ? 1
+          : a.id > b.id
+            ? -1
+            : a.resource < b.resource
+              ? -1
+              : a.resource > b.resource
+                ? 1
+                : 0),
+    );
+  const items = merged.slice(0, take);
+  const counts = { all: 0, pending: 0, draft: 0, published: 0, archived: 0 };
+  pages.forEach((page) =>
+    page.counts.forEach((row) => {
+      counts[row.editorialStatus] += row._count._all;
+      counts.all += row._count._all;
+    }),
+  );
+  return {
+    items,
+    counts,
+    nextCursor:
+      merged.length > take ? encodeEditorialCursor(items.at(-1)) : null,
+  };
 }
 
 async function getPendingCounts() {
   const entries = await Promise.all(
     Object.entries(EDITORIAL_RESOURCES).map(async ([resource, config]) => [
       resource,
-      await prisma[config.model].count({ where: { editorialStatus: "pending" } }),
+      await prisma[config.model].count({
+        where: { editorialStatus: "pending" },
+      }),
     ]),
   );
   const byResource = Object.fromEntries(entries);
@@ -111,9 +158,7 @@ async function transitionOne(resource, id, status, reviewerId) {
     where: { id },
     data: {
       ...editorialUpdateData(status, reviewerId),
-      ...(config.publicActive
-        ? { isActive: status === "published" }
-        : {}),
+      ...(config.publicActive ? { isActive: status === "published" } : {}),
     },
     select: editorialSelect(config),
   });
@@ -133,7 +178,9 @@ async function transitionBatch(resource, ids, status, reviewerId) {
     error.status = 404;
     throw error;
   }
-  existing.forEach((item) => assertEditorialTransition(item.editorialStatus, status));
+  existing.forEach((item) =>
+    assertEditorialTransition(item.editorialStatus, status),
+  );
   await prisma.$transaction(
     existing.map((item) =>
       delegate.update({
@@ -148,7 +195,40 @@ async function transitionBatch(resource, ids, status, reviewerId) {
   return { updated: existing.length, ids: cleanIds, status };
 }
 
+async function getAdminCounts() {
+  const models = {
+    destinos: "destino",
+    municipios: "municipio",
+    activities: "activity",
+    "tourism-types": "tourismType",
+    places: "place",
+    reviews: "review",
+  };
+  const entries = await Promise.all(
+    Object.entries(models).map(async ([key, model]) => [
+      key,
+      await prisma[model].count(),
+    ]),
+  );
+  return {
+    ...Object.fromEntries(entries),
+    editorial: (await getPendingCounts()).total,
+  };
+}
+async function getEditorialRecord(resource, id) {
+  const { delegate } = delegateFor(resource);
+  const record = await delegate.findUnique({ where: { id } });
+  if (!record) {
+    const error = new Error("Contenido no encontrado");
+    error.status = 404;
+    throw error;
+  }
+  return record;
+}
+
 module.exports = {
+  getAdminCounts,
+  getEditorialRecord,
   listEditorial,
   getPendingCounts,
   transitionOne,

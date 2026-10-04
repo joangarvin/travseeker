@@ -9,6 +9,7 @@ import { plain } from '../../../utils';
 type MunicipalityEditorModalProps = {
   form: Partial<Municipio>;
   isSaving: boolean;
+  error?: string;
   onChange: (form: Partial<Municipio>) => void;
   onSubmit: (event: FormEvent) => void;
   onClose: () => void;
@@ -17,12 +18,18 @@ type MunicipalityEditorModalProps = {
 export function MunicipalityEditorModal({
   form,
   isSaving,
+  error,
   onChange,
   onSubmit,
   onClose,
 }: MunicipalityEditorModalProps) {
   return (
     <AdminModal
+      draft={form}
+      draftKey={`municipality:${form.id || 'new'}`}
+      onRestore={onChange}
+      busy={isSaving}
+      error={error}
       title={form.id ? t('Editar municipio') : t('Nuevo municipio')}
       subtitle={t('Información práctica que se reutiliza en todos los destinos asociados.')}
       onClose={onClose}

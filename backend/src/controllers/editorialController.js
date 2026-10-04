@@ -31,4 +31,22 @@ const transitionOne = asyncHandler(async (req, res) => {
   );
 });
 
-module.exports = { list, counts, transitionBatch, transitionOne };
+const adminCounts = asyncHandler(async (_req, res) =>
+  res.json(await editorialService.getAdminCounts()),
+);
+const record = asyncHandler(async (req, res) =>
+  res.json(
+    await editorialService.getEditorialRecord(
+      req.params.resource,
+      req.params.id,
+    ),
+  ),
+);
+module.exports = {
+  list,
+  counts,
+  adminCounts,
+  record,
+  transitionBatch,
+  transitionOne,
+};

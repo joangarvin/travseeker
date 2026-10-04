@@ -21,6 +21,7 @@ const PLACE_CATEGORIES = [
 type PlaceEditorModalProps = {
   form: Partial<Place>;
   isSaving: boolean;
+  error?: string;
   onChange: (form: Partial<Place>) => void;
   onSubmit: (event: FormEvent) => void;
   onClose: () => void;
@@ -29,12 +30,18 @@ type PlaceEditorModalProps = {
 export function PlaceEditorModal({
   form,
   isSaving,
+  error,
   onChange,
   onSubmit,
   onClose,
 }: PlaceEditorModalProps) {
   return (
     <AdminModal
+      draft={form}
+      draftKey={`place:${form.id || 'new'}`}
+      onRestore={onChange}
+      busy={isSaving}
+      error={error}
       wide
       title={form.id ? t('Editar lugar') : t('Nuevo lugar')}
       subtitle={t('Un punto concreto que ayuda a recorrer el destino.')}

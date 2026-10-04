@@ -10,6 +10,7 @@ import { activityIconChoices, activityIconRegistry } from '../../activities/acti
 type ActivityEditorModalProps = {
   initial: Partial<Activity>;
   isSaving: boolean;
+  error?: string;
   onSave: (activity: Partial<Activity>) => Promise<void>;
   onClose: () => void;
 };
@@ -17,6 +18,7 @@ type ActivityEditorModalProps = {
 export function ActivityEditorModal({
   initial,
   isSaving,
+  error,
   onSave,
   onClose,
 }: ActivityEditorModalProps) {
@@ -34,6 +36,11 @@ export function ActivityEditorModal({
 
   return (
     <AdminModal
+      draft={form}
+      draftKey={`activity:${form.id || 'new'}`}
+      onRestore={setForm}
+      busy={isSaving}
+      error={error}
       title={form.id ? t('Editar {0}', { 0: form.name }) : t('Crear una actividad')}
       subtitle={t('El nombre y el icono se utilizarán en filtros, destinos y comparaciones.')}
       onClose={onClose}
@@ -111,7 +118,7 @@ export function ActivityEditorModal({
         </div>
 
         <footer className="modal-actions">
-          <Button type="button" variant="quiet" onClick={onClose}>
+          <Button type="button" variant="quiet" data-close-editor="true">
             {t('Cancelar')}
           </Button>
           <Button type="submit" loading={isSaving}>

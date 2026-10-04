@@ -1,3 +1,4 @@
+import { normalizeCompareIds } from '../../utils/compareSelection';
 import { t } from '../../i18n';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -30,43 +31,93 @@ export default function ComparePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [activeSuggestion, setActiveSuggestion] = useState(-1);
+  const [ready, setReady] = useState(false);
+  const [retry, setRetry] = useState(0);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState('');
   useEffect(() => {
-    api<Destino[]>('/destinos?limit=100')
-      .then(setCatalog)
-      .catch((cause) =>
-        setError(cause instanceof Error ? cause.message : t('No se pudo cargar el catálogo')),
-      );
+    if (params.has('ids'))
+      compare.replace(normalizeCompareIds((params.get('ids') || '').split(',')));
+    setReady(true);
   }, []);
   useEffect(() => {
-    const fromUrl = (params.get('ids') || '').split(',').filter(Boolean).slice(0, 4);
-    if (fromUrl.length && !compare.ids.length) fromUrl.forEach(compare.toggle);
-  }, []);
-  useEffect(() => {
-    if (compare.ids.length) setParams({ ids: compare.ids.join(',') }, { replace: true });
-    else setParams({}, { replace: true });
-    if (compare.ids.length < 2) {
-      setItems([]);
+    if (!ready) return;
+    setParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+        if (compare.ids.length) next.set('ids', compare.ids.join(','));
+        else next.delete('ids');
+        return next;
+      },
+      { replace: true },
+    );
+    setError('');
+    setItems([]);
+    if (!compare.ids.length) {
+      setLoading(false);
       return;
     }
+    const controller = new AbortController();
     setLoading(true);
-    setError('');
-    api<Destino[]>(`/destinos/compare?ids=${compare.ids.join(',')}`)
-      .then(setItems)
-      .catch((cause) =>
-        setError(cause instanceof Error ? cause.message : t('No se pudo preparar la comparación')),
-      )
-      .finally(() => setLoading(false));
-  }, [compare.ids.join(',')]);
+    const request =
+      compare.ids.length === 1
+        ? api<Destino>(`/destinos/${encodeURIComponent(compare.ids[0])}`, {
+            signal: controller.signal,
+          }).then((item) => [item])
+        : api<Destino[]>(`/destinos/compare?ids=${compare.ids.join(',')}`, {
+            signal: controller.signal,
+          });
+    request
+      .then((data) => {
+        if (controller.signal.aborted) return;
+        setItems(data);
+        if (data.length !== compare.ids.length)
+          setError(t('Algún destino ya no está disponible. Retíralo de la comparación.'));
+      })
+      .catch((cause) => {
+        if (!controller.signal.aborted)
+          setError(
+            cause instanceof Error ? cause.message : t('No se pudo preparar la comparación'),
+          );
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
+    return () => controller.abort();
+  }, [ready, compare.ids.join(','), retry]);
+  useEffect(() => {
+    const controller = new AbortController();
+    setCatalog([]);
+    setSearchError('');
+    setActiveSuggestion(-1);
+    if (!query.trim()) {
+      setSearchLoading(false);
+      return;
+    }
+    setSearchLoading(true);
+    const timer = window.setTimeout(() => {
+      api<Destino[]>(`/destinos?q=${encodeURIComponent(query.trim())}&limit=12`, {
+        signal: controller.signal,
+      })
+        .then(setCatalog)
+        .catch((cause) => {
+          if (!controller.signal.aborted)
+            setSearchError(
+              cause instanceof Error ? cause.message : t('No se pudo cargar el catálogo'),
+            );
+        })
+        .finally(() => {
+          if (!controller.signal.aborted) setSearchLoading(false);
+        });
+    }, 250);
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [query, retry]);
   const suggestions = useMemo(
-    () =>
-      catalog
-        .filter(
-          (item) =>
-            !compare.ids.includes(item.id) &&
-            item.nombre.toLowerCase().includes(query.toLowerCase()),
-        )
-        .slice(0, 8),
-    [catalog, compare.ids, query],
+    () => catalog.filter((item) => !compare.ids.includes(item.id)).slice(0, 8),
+    [catalog, compare.ids],
   );
   const chooseSuggestion = (id: string) => {
     if (!compare.toggle(id)) {
@@ -88,7 +139,7 @@ export default function ComparePage() {
       <section className="compare-picker">
         <div className="compare-picker__selected">
           {compare.ids.map((id) => {
-            const item = catalog.find((d) => d.id === id);
+            const item = items.find((d) => d.id === id) || catalog.find((d) => d.id === id);
             return (
               <span key={id}>
                 {item?.nombre || t('Destino')}
@@ -113,7 +164,7 @@ export default function ComparePage() {
               placeholder={t('Añade otro destino')}
               aria-label={t('Buscar destino para comparar')}
               role="combobox"
-              aria-expanded={Boolean(query && suggestions.length)}
+              aria-expanded={Boolean(query)}
               aria-controls="compare-suggestions"
               aria-autocomplete="list"
               aria-activedescendant={
@@ -142,6 +193,18 @@ export default function ComparePage() {
             />
             {query && (
               <div id="compare-suggestions" role="listbox" aria-label={t('Destinos sugeridos')}>
+                {searchLoading && <p role="status">{t('Buscando destinos…')}</p>}
+                {searchError && (
+                  <Notice tone="error">
+                    {searchError}{' '}
+                    <button type="button" onClick={() => setRetry((value) => value + 1)}>
+                      {t('Reintentar')}
+                    </button>
+                  </Notice>
+                )}
+                {!searchLoading && !searchError && !suggestions.length && (
+                  <p role="status">{t('No hay destinos que coincidan. Prueba otra búsqueda.')}</p>
+                )}
                 {suggestions.map((item, index) => (
                   <button
                     key={item.id}
@@ -166,17 +229,28 @@ export default function ComparePage() {
         )}
       </section>
       <section className="compare-content">
-        {compare.ids.length < 2 ? (
+        <p className="decision-help">
+          {t(
+            'Presupuesto: nivel orientativo de gasto, no una tarifa. Afluencia: estimación editorial de ocupación; un porcentaje menor indica más tranquilidad. No son datos en tiempo real.',
+          )}
+        </p>
+        {error ? (
+          <Notice tone="error">
+            {error}{' '}
+            <button
+              type="button"
+              className="button button--quiet"
+              onClick={() => setRetry((value) => value + 1)}
+            >
+              {t('Reintentar')}
+            </button>
+          </Notice>
+        ) : compare.ids.length < 2 ? (
           <Empty icon={<GitCompare />} title={t('Elige al menos dos destinos')}>
             {t('Añade lugares desde el buscador o desde cualquier ficha para verlos cara a cara.')}
           </Empty>
         ) : loading ? (
           <Loader label={t('Preparando la comparación')} />
-        ) : error ? (
-          <Notice tone="error">
-            {error}
-            {t('. Puedes reintentar seleccionando de nuevo los destinos.')}
-          </Notice>
         ) : (
           <div
             className="compare-table"

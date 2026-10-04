@@ -388,29 +388,29 @@
 }
 
 /* Let the heading determine its own height so long titles never hide Save. */
-.modal--editor:has(> .admin-editor) {
+.modal--editor:has(.admin-editor) {
   display: flex;
   flex-direction: column;
 }
-.modal--editor:has(> .admin-editor) > .modal__heading {
+.modal--editor:has(.admin-editor) > .modal__heading {
   display: block;
   flex-shrink: 0;
 }
-.modal--editor > .admin-editor {
+.modal--editor .admin-modal-body {
   flex: 1;
   min-height: 0;
   height: auto;
 }
 @media (max-width: 700px) {
-  .modal--editor:has(> .admin-editor) {
+  .modal--editor:has(.admin-editor) {
     height: calc(100dvh - 32px);
     max-height: calc(100dvh - 32px);
   }
-  .modal--editor:has(> .admin-editor) > .modal__heading h2 {
+  .modal--editor:has(.admin-editor) > .modal__heading h2 {
     font-size: 1.25rem;
     line-height: 1.25;
   }
-  .modal--editor:has(> .admin-editor) > .modal__heading p {
+  .modal--editor:has(.admin-editor) > .modal__heading p {
     font-size: 0.8rem;
     line-height: 1.5;
   }

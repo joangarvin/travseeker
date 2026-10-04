@@ -78,9 +78,7 @@ export default function Home() {
     setLoading(true);
     setSearchPending(true);
     setError('');
-    setResults([]);
-    setResultsTotal(0);
-    setHasMore(false);
+
     setFallbackResult(null);
     setFallbackLoading(false);
     try {
@@ -370,7 +368,8 @@ export default function Home() {
             {t('. Revisa la conexión e inténtalo de nuevo.')}
           </Notice>
         )}
-        {loading ? (
+        {loading && results.length > 0 && <p role="status">{t('Actualizando resultados…')}</p>}
+        {loading && results.length === 0 ? (
           <Loader label={t('Buscando lugares')} />
         ) : (
           <>
