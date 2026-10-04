@@ -442,7 +442,7 @@
   "Ej. A primera hora": "E.g. First thing in the morning",
   "Reserva": "Booking",
   "Sin indicar": "Not specified",
-  "Reserva necesaria": "Booking required",
+  "Reserva necesaria": "Reservation required",
   "No requiere reserva": "No booking required",
   "Web oficial": "Official website",
   "Opcional. Se muestra únicamente cuando alguien abre este imprescindible.": "Optional. Only shown when someone opens this essential.",
@@ -1453,5 +1453,12 @@
   "Tienes cambios sin guardar": "You have unsaved changes",
   "Ver {0}": "View {0}",
   "{0} resultados": "{0} results",
-  "Añade una descripción en español.": "Add a description in Spanish."
+  "Añade una descripción en español.": "Add a description in Spanish.",
+  "Dónde quieres ir": "Where you want to go",
+  "Cuándo quieres viajar": "When you want to travel",
+  "Cómo quieres viajar": "How you want to travel",
+  "Vista previa editorial": "Editorial preview",
+  "Idioma de la vista previa": "Preview language",
+  "Los campos sin traducción se muestran en español.": "Fields without a translation are shown in Spanish.",
+  "Mayo, junio, septiembre y octubre": "May, June, September and October"
 }

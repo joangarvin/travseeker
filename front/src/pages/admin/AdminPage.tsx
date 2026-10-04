@@ -280,6 +280,14 @@ export default function AdminPage() {
         loadMunicipalityOptions(),
       ]);
       setDestinationForm(record);
+      setParams(
+        (current) => {
+          const next = new URLSearchParams(current);
+          next.set('edit', record.id);
+          return next;
+        },
+        { replace: true },
+      );
     } catch (cause) {
       setFeedback({
         tone: 'error',
@@ -288,6 +296,25 @@ export default function AdminPage() {
     } finally {
       setIsDestinationLoading(false);
     }
+  };
+
+  const requestedEditor = params.get('edit');
+  useEffect(() => {
+    if (requestedEditor && !destinationForm && token && user?.role === 'admin') {
+      void openDestination({ id: requestedEditor } as Destino);
+    }
+  }, [requestedEditor, token, user?.role]);
+  const closeDestination = () => {
+    setDestinationForm(null);
+    setParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+        next.delete('edit');
+        next.delete('section');
+        return next;
+      },
+      { replace: true },
+    );
   };
 
   const editEditorialItem = async (item: EditorialItem) => {
@@ -318,6 +345,14 @@ export default function AdminPage() {
   };
 
   const updateDestinationList = (destination: Destino) => {
+    setParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+        next.set('edit', destination.id);
+        return next;
+      },
+      { replace: true },
+    );
     setEditorialRevision((value) => value + 1);
     void refreshCounts();
     setDestinations((currentDestinations) =>
@@ -863,7 +898,9 @@ export default function AdminPage() {
                   className="button button--quiet"
                   onClick={() => {
                     setFeedback(null);
-                    void loadAdminData();
+                    if (requestedEditor && !destinationForm)
+                      void openDestination({ id: requestedEditor } as Destino);
+                    else void loadAdminData();
                     if (activeTab === 'places') void loadPlaces();
                   }}
                 >
@@ -1024,7 +1061,7 @@ export default function AdminPage() {
               ),
             )
           }
-          onClose={() => setDestinationForm(null)}
+          onClose={closeDestination}
         />
       )}
 

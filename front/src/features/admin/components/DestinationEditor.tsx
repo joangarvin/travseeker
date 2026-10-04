@@ -1,3 +1,4 @@
+import { useSearchParams } from 'react-router-dom';
 import { markEditorSaved } from '../../../utils/editorDraft';
 import { t } from '../../../i18n';
 import { useState, type FormEvent } from 'react';
@@ -88,7 +89,22 @@ export function DestinationEditor({
   const { refreshActivities } = useActivities();
   const { refreshTourismTypes } = useTourismTypes();
   const [form, setForm] = useState<Partial<Destino>>(() => normalizeDestination(initial));
-  const [activeSection, setActiveSection] = useState<EditorSection>('identity');
+  const [editorParams, setEditorParams] = useSearchParams();
+  const requestedSection = editorParams.get('section');
+  const activeSection: EditorSection = editorSections.some(
+    (section) => section.id === requestedSection,
+  )
+    ? (requestedSection as EditorSection)
+    : 'identity';
+  const setActiveSection = (section: EditorSection) =>
+    setEditorParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+        next.set('section', section);
+        return next;
+      },
+      { replace: true },
+    );
   const [savedVersion, setSavedVersion] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<EditorMessage | null>(null);
@@ -372,6 +388,7 @@ export function DestinationEditor({
         savedVersion={savedVersion}
         error={message?.tone === 'error' ? message.text : undefined}
         wide
+        fullPage
         title={form.id ? t('Editar {0}', { 0: form.nombre }) : t('Crear un destino')}
         subtitle={t('Completa cada apartado. Puedes guardar y continuar cuando quieras.')}
         onClose={onClose}

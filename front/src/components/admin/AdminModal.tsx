@@ -10,6 +10,7 @@ export function AdminModal<Draft extends object = object>({
   onClose,
   children,
   wide = false,
+  fullPage = false,
   draft,
   draftKey,
   onRestore,
@@ -22,6 +23,7 @@ export function AdminModal<Draft extends object = object>({
   onClose: () => void;
   children: ReactNode;
   wide?: boolean;
+  fullPage?: boolean;
   draft?: Draft;
   draftKey?: string;
   onRestore?: (draft: Draft) => void;
@@ -210,7 +212,10 @@ export function AdminModal<Draft extends object = object>({
     </>
   );
   return (
-    <div className="modal-backdrop" onMouseDown={requestClose}>
+    <div
+      className={`modal-backdrop${fullPage ? ' modal-backdrop--page' : ''}`}
+      onMouseDown={requestClose}
+    >
       <section
         ref={dialogRef}
         className={`modal ${wide ? 'modal--editor' : 'modal--wide'}${draft ? ' modal--draft' : ''}`}

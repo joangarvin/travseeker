@@ -1,3 +1,4 @@
+import { EditorialPreview } from './EditorialPreview';
 import { t, intlLocale } from '../../../i18n';
 import { useEffect, useState, type KeyboardEvent } from 'react';
 import { Archive, Check, RotateCcw, Search, Eye } from 'lucide-react';
@@ -111,6 +112,7 @@ export function EditorialReviewPanel({
     status: EditorialStatus,
   ) => Promise<void>;
 }) {
+  const [preview, setPreview] = useState<EditorialItem | null>(null);
   const [tab, setTab] = useState<EditorialTab>('pending');
   const [resource, setResource] = useState<EditorialResource | 'all'>('all');
   const [query, setQuery] = useState('');
@@ -377,6 +379,13 @@ export function EditorialReviewPanel({
                       <Button
                         variant="quiet"
                         disabled={busy || loading}
+                        onClick={() => setPreview(item)}
+                      >
+                        {t('Vista previa')}
+                      </Button>
+                      <Button
+                        variant="quiet"
+                        disabled={busy || loading}
                         onClick={() => onEdit(item)}
                       >
                         <Eye /> {t('Revisar y editar')}
@@ -469,6 +478,16 @@ export function EditorialReviewPanel({
             </Button>
           </div>
         </div>
+      )}
+      {preview && (
+        <EditorialPreview
+          item={preview}
+          onClose={() => setPreview(null)}
+          onEdit={() => {
+            setPreview(null);
+            onEdit(preview);
+          }}
+        />
       )}
       {archiveTargets && (
         <ArchiveDialog

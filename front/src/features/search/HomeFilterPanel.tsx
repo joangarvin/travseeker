@@ -75,94 +75,98 @@ export function HomeFilterPanel({
           </div>
 
           <div className="home-filter-panel__grid">
-            <label>
-              {t('Mes')}
-              <select
-                value={filters.month || ''}
-                onChange={(event) => onUpdate('month', event.target.value)}
-              >
-                <option value="">{t('Cualquier momento')}</option>
-                {months.map((month) => (
-                  <option key={month} value={month}>
-                    {new Date(2026, Number(month) - 1).toLocaleString(intlLocale, {
-                      month: 'long',
-                    })}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label>
-              {t('Presupuesto')}
-              <select
-                value={filters.presupuesto || ''}
-                onChange={(event) => onUpdate('presupuesto', event.target.value)}
-              >
-                <option value="">{t('Cualquiera')}</option>
-                {budgetOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {t(option)}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label>
-              {t('Masificación')}
-              <select
-                value={filters.masificacion || ''}
-                onChange={(event) => onUpdate('masificacion', event.target.value)}
-              >
-                <option value="">{t('Cualquiera')}</option>
-                {crowdOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {t(option)}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label>
-              {t('Ubicación')}
-              <select
-                value={filters.ubicacion || ''}
-                onChange={(event) => onUpdate('ubicacion', event.target.value)}
-              >
-                <option value="">{t('Cualquiera')}</option>
-                {locations.map((location) => (
-                  <option key={location} value={location}>
-                    {locationLabels[location] || t(location)}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <div className="home-filter-panel__tourism">
-              <TourismMultiSelect
-                id="home-tourism-types"
-                label={t('Tipos de viaje')}
-                value={tourismValues(filters.tipoTurismo)}
-                hint={t(
-                  'Puedes combinar varias opciones. Mostraremos destinos que coincidan con cualquiera.',
-                )}
-                compact
-                onChange={(values) => onUpdate('tipoTurismo', tourismQueryValue(values))}
-              />
-            </div>
-
-            <div className="home-filter-panel__activities">
-              <ActivityMultiSelect
-                id="home-activities"
-                label={t('Actividades')}
-                value={activityValues(filters.actividades)}
-                suggestions={activities}
-                hint={t(
-                  'Elige qué quieres hacer. Los resultados pueden coincidir con cualquiera de las seleccionadas.',
-                )}
-                compact
-                onChange={(values) => onUpdate('actividades', activityQueryValue(values))}
-              />
-            </div>
+            <fieldset className="travel-filter-group">
+              <legend>{t('Dónde quieres ir')}</legend>
+              <label>
+                {t('Ubicación')}
+                <select
+                  value={filters.ubicacion || ''}
+                  onChange={(event) => onUpdate('ubicacion', event.target.value)}
+                >
+                  <option value="">{t('Cualquiera')}</option>
+                  {locations.map((location) => (
+                    <option key={location} value={location}>
+                      {locationLabels[location] || t(location)}
+                    </option>
+                  ))}
+                </select>
+              </label>{' '}
+            </fieldset>
+            <fieldset className="travel-filter-group">
+              <legend>{t('Cuándo quieres viajar')}</legend>
+              <label>
+                {t('Mes')}
+                <select
+                  value={filters.month || ''}
+                  onChange={(event) => onUpdate('month', event.target.value)}
+                >
+                  <option value="">{t('Cualquier momento')}</option>
+                  {months.map((month) => (
+                    <option key={month} value={month}>
+                      {new Date(2026, Number(month) - 1).toLocaleString(intlLocale, {
+                        month: 'long',
+                      })}
+                    </option>
+                  ))}
+                </select>
+              </label>{' '}
+              <label>
+                {t('Masificación')}
+                <select
+                  value={filters.masificacion || ''}
+                  onChange={(event) => onUpdate('masificacion', event.target.value)}
+                >
+                  <option value="">{t('Cualquiera')}</option>
+                  {crowdOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {t(option)}
+                    </option>
+                  ))}
+                </select>
+              </label>{' '}
+            </fieldset>
+            <fieldset className="travel-filter-group travel-filter-group--wide">
+              <legend>{t('Cómo quieres viajar')}</legend>
+              <label>
+                {t('Presupuesto')}
+                <select
+                  value={filters.presupuesto || ''}
+                  onChange={(event) => onUpdate('presupuesto', event.target.value)}
+                >
+                  <option value="">{t('Cualquiera')}</option>
+                  {budgetOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {t(option)}
+                    </option>
+                  ))}
+                </select>
+              </label>{' '}
+              <div className="home-filter-panel__tourism">
+                <TourismMultiSelect
+                  id="home-tourism-types"
+                  label={t('Tipos de viaje')}
+                  value={tourismValues(filters.tipoTurismo)}
+                  hint={t(
+                    'Puedes combinar varias opciones. Mostraremos destinos que coincidan con cualquiera.',
+                  )}
+                  compact
+                  onChange={(values) => onUpdate('tipoTurismo', tourismQueryValue(values))}
+                />
+              </div>
+              <div className="home-filter-panel__activities">
+                <ActivityMultiSelect
+                  id="home-activities"
+                  label={t('Actividades')}
+                  value={activityValues(filters.actividades)}
+                  suggestions={activities}
+                  hint={t(
+                    'Elige qué quieres hacer. Los resultados pueden coincidir con cualquiera de las seleccionadas.',
+                  )}
+                  compact
+                  onChange={(values) => onUpdate('actividades', activityQueryValue(values))}
+                />
+              </div>
+            </fieldset>
           </div>
 
           <div className="home-filter-panel__actions">
