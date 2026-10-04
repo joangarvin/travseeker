@@ -1460,5 +1460,6 @@
   "Vista previa editorial": "Editorial preview",
   "Idioma de la vista previa": "Preview language",
   "Los campos sin traducción se muestran en español.": "Fields without a translation are shown in Spanish.",
-  "Mayo, junio, septiembre y octubre": "May, June, September and October"
+  "Mayo, junio, septiembre y octubre": "May, June, September and October",
+  "La respuesta de administración no es compatible. Reinicia el servidor backend y vuelve a intentarlo.": "The admin response is incompatible. Restart the backend server and try again."
 }

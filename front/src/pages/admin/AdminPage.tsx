@@ -1,3 +1,4 @@
+import { readCatalogPage } from '../../features/admin/adminResponses';
 import { markEditorSaved } from '../../utils/editorDraft';
 import { useSearchParams } from 'react-router-dom';
 import { t } from '../../i18n';
@@ -154,8 +155,9 @@ export default function AdminPage() {
           token,
         );
         if (!controller.signal.aborted) {
-          setDestinations(page.items);
-          setCatalogTotal(page.total);
+          const checked = readCatalogPage<Destino>(page);
+          setDestinations(checked.items);
+          setCatalogTotal(checked.total);
         }
       } else if (activeTab === 'municipios') {
         const page = await api<{ items: Municipio[]; total: number }>(
@@ -164,8 +166,9 @@ export default function AdminPage() {
           token,
         );
         if (!controller.signal.aborted) {
-          setMunicipalities(page.items);
-          setCatalogTotal(page.total);
+          const checked = readCatalogPage<Municipio>(page);
+          setMunicipalities(checked.items);
+          setCatalogTotal(checked.total);
         }
       } else if (activeTab === 'reviews')
         setReviews(await api<Review[]>('/admin/reviews', options, token));
@@ -184,7 +187,8 @@ export default function AdminPage() {
       if (!controller.signal.aborted)
         setFeedback({
           tone: 'error',
-          text: cause instanceof Error ? cause.message : t('No se pudo cargar la administración'),
+          text:
+            cause instanceof Error ? t(cause.message) : t('No se pudo cargar la administración'),
         });
     } finally {
       if (!controller.signal.aborted) setIsLoading(false);

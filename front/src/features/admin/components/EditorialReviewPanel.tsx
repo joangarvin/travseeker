@@ -1,3 +1,4 @@
+import { readEditorialPage } from '../adminResponses';
 import { EditorialPreview } from './EditorialPreview';
 import { t, intlLocale } from '../../../i18n';
 import { useEffect, useState, type KeyboardEvent } from 'react';
@@ -153,16 +154,17 @@ export function EditorialReviewPanel({
         )
           .then((page) => {
             if (controller.signal.aborted) return;
-            setItems(page.items);
-            setCounts(page.counts);
-            setNextCursor(page.nextCursor);
+            const checked = readEditorialPage<EditorialItem>(page);
+            setItems(checked.items);
+            setCounts(checked.counts);
+            setNextCursor(checked.nextCursor);
             setError('');
             setSelectedIds(new Set());
           })
           .catch((cause) => {
             if (!controller.signal.aborted)
               setError(
-                cause instanceof Error ? cause.message : t('No se pudo cargar el contenido'),
+                cause instanceof Error ? t(cause.message) : t('No se pudo cargar el contenido'),
               );
           })
           .finally(() => {
