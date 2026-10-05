@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Menu, Moon, ShieldCheck, Sun, UserRound, X } from 'lucide-react';
 import { useAuth, useCompare, useTheme } from '../../contexts';
+import { usePrivacySettings } from '../../features/privacy/CookieConsent';
 import { imageUrl } from '../../utils';
 import { MediaImage } from '../ui';
 
@@ -19,6 +20,7 @@ export function SiteHeader() {
   const { user, logout } = useAuth();
   const { ids: compareIds } = useCompare();
   const { theme, toggle: toggleTheme } = useTheme();
+  const { openSettings: openPrivacySettings } = usePrivacySettings();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
@@ -148,6 +150,32 @@ export function SiteHeader() {
               </NavLink>
             )}
           </nav>
+          <div className="mobile-menu__secondary">
+            {user ? (
+              <>
+                <Link className="button button--secondary" to="/perfil">
+                  <UserRound aria-hidden="true" /> {user.nombre || t('Perfil')}
+                </Link>
+                <button className="button button--secondary" type="button" onClick={logout}>
+                  {t('Salir')}
+                </button>
+              </>
+            ) : (
+              <Link className="button button--ink" to="/auth">
+                {t('Entrar')}
+              </Link>
+            )}
+            <button
+              className="mobile-menu__privacy"
+              type="button"
+              onClick={() => {
+                setIsMenuOpen(false);
+                openPrivacySettings();
+              }}
+            >
+              {t('Privacidad y cookies')}
+            </button>
+          </div>
         </div>
       )}
     </>

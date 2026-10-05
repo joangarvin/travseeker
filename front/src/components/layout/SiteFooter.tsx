@@ -1,3 +1,4 @@
+import { usePrivacySettings } from '../../features/privacy/CookieConsent';
 import { useGuidedTour } from '../../features/tour/GuidedTour';
 import { locale } from '../../i18n';
 import { t } from '../../i18n';
@@ -5,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 export function SiteFooter() {
   const { restart } = useGuidedTour();
+  const { openSettings } = usePrivacySettings();
   return (
     <footer className="footer">
       <div className="footer__top">
@@ -27,6 +29,9 @@ export function SiteFooter() {
         <Link to="/cookies">{t('Política de cookies')}</Link>
         <Link to="/privacidad">{t('Privacidad')}</Link>
         <Link to="/aviso-legal">{t('Aviso legal')}</Link>
+        <button className="footer-tour" type="button" onClick={openSettings}>
+          {t('Preferencias de cookies')}
+        </button>
       </nav>
       <div className="footer__bottom">
         <span>TravSeeker © {new Date().getFullYear()}</span>

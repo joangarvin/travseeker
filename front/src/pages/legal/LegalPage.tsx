@@ -39,10 +39,10 @@ const storageRows = [
     persistent,
   ],
   [
-    'trav_compare / travseeker:saved-essentials',
+    'trav_compare',
     say(
-      'Almacenamiento local. Destinos comparados e imprescindibles que decides guardar.',
-      'Local storage. Destinations you compare and essentials you choose to save.',
+      'Almacenamiento local. Destinos que decides comparar.',
+      'Local storage. Destinations you choose to compare.',
     ),
     persistent,
   ],
@@ -106,17 +106,12 @@ const providers = [
     'https://cloudinary.com/privacy',
   ],
   [
-    'OpenStreetMap / CARTO',
+    'OpenStreetMap',
     say(
-      'Mapas opcionales: IP, navegador y área visualizada. Solo se cargan al permitir mapas externos.',
-      'Optional maps: IP, browser and viewed area. Loaded only when external maps are allowed.',
+      'Cartografía opcional de los mapas: IP, navegador y área visualizada. Solo se carga al permitir mapas externos.',
+      'Optional map tiles: IP, browser and viewed area. Loaded only when external maps are allowed.',
     ),
     'https://osmfoundation.org/wiki/Privacy_Policy',
-  ],
-  [
-    'CARTO',
-    say('Proveedor de la cartografía del mapa público.', 'Basemap provider for the public map.'),
-    'https://carto.com/privacy',
   ],
   [
     'OSRM',

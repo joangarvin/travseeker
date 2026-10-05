@@ -126,11 +126,20 @@
   }
   .trip-moods {
     gap: 24px;
-    padding-block: 72px;
+    padding-block: 48px 56px;
   }
   .destination-list {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 32px;
+  }
+  .destination-card__image {
+    aspect-ratio: 16 / 10;
+  }
+  .section-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 28px;
   }
   .smart-empty__intro {
     grid-template-columns: 40px minmax(0, 1fr);
@@ -337,10 +346,19 @@
   }
   .map-legend {
     right: auto;
-    bottom: 12px;
+    bottom: 28px;
     left: 12px;
-    grid-template-columns: repeat(2, max-content);
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    gap: 12px;
     max-width: calc(100% - 72px);
+    padding: 8px 10px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+  }
+  .map-legend > span {
+    white-space: nowrap;
   }
   .map-canvas:has(.map-selected) .map-legend {
     display: none;
@@ -502,11 +520,30 @@
   }
   .about-cta,
   .footer__top {
-    align-items: flex-start;
+    align-items: stretch;
     flex-direction: column;
+  }
+  .footer nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 16px;
+  }
+  .footer-legal {
+    padding-top: 16px;
+    border-top: 1px solid color-mix(in srgb, var(--ink-inverse) 30%, transparent);
   }
   .footer__bottom {
     flex-direction: column;
+    margin-top: 48px;
+  }
+  .legal-page nav {
+    gap: 0 20px;
+    padding-block: 16px;
+  }
+  .legal-page nav a,
+  .legal-page nav button {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
   }
 }
 
@@ -524,13 +561,6 @@
   }
   .modal-actions {
     display: grid;
-  }
-  .brand > span:last-child {
-    display: none;
-  }
-  .brand {
-    justify-content: center;
-    min-width: 44px;
   }
   .home-hero h1 {
     font-size: 3.5rem;
@@ -566,10 +596,15 @@
     font-size: 3.8rem;
   }
   .map-toolbar .button {
+    position: relative;
     width: 44px;
     padding-inline: 0;
-    overflow: hidden;
     font-size: 0;
+  }
+  .map-toolbar__actions .button b {
+    position: absolute;
+    top: -4px;
+    right: -4px;
   }
   .map-toolbar .button svg {
     width: 20px;
@@ -585,6 +620,16 @@
   .itinerary article > div,
   .itinerary article > button {
     grid-column: 2;
+  }
+}
+
+@media (max-width: 359px) {
+  .brand > span:last-child {
+    display: none;
+  }
+  .brand {
+    justify-content: center;
+    min-width: 44px;
   }
 }
 

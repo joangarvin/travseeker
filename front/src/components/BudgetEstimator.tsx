@@ -10,6 +10,7 @@ import {
   type TravelStyle,
 } from '../utils/budgetCalculator';
 import { getTripDuration } from '../utils/tripDuration';
+import { displayBaseName } from '../features/destinations/baseInsights';
 import { Button, Field } from './ui';
 
 const euro = new Intl.NumberFormat(intlLocale, {
@@ -108,7 +109,7 @@ export function BudgetEstimator({
   const rooms = Math.ceil(travelers / 2);
   const days = nights + 1;
   const summary = [
-    t('Presupuesto de viaje — {0}', { 0: municipio?.nombre || t('Destino') }),
+    t('Presupuesto de viaje — {0}', { 0: municipio ? displayBaseName(municipio) : t('Destino') }),
     t('{0} viajeros · {1} noches · estilo {2} · temporada {3}', {
       0: travelers,
       1: nights,
@@ -165,7 +166,7 @@ export function BudgetEstimator({
         <p className="kicker">{t('Ponle números al viaje')}</p>
         <h3 id="budget-estimator-title">{t('Calcula tu presupuesto')}</h3>
         <p>
-          {municipio ? t('Partiendo de {0}. ', { 0: municipio.nombre }) : ''}
+          {municipio ? t('Partiendo de {0}. ', { 0: displayBaseName(municipio) }) : ''}
           {t('Ajusta el viaje y compara el total al instante.')}
         </p>
       </div>

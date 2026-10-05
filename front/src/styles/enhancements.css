@@ -31,6 +31,8 @@
   --tourism-mark-size: 30px;
   display: inline-grid;
   grid-template-columns: var(--tourism-mark-size) auto;
+  grid-auto-columns: auto;
+  grid-auto-flow: column;
   align-items: center;
   gap: 8px;
   width: fit-content;
@@ -719,28 +721,6 @@
 .map-list .tourism-mark {
   margin-top: 5px;
 }
-.map-marker.tourism--cultural {
-  fill: var(--tourism-cultural-solid);
-}
-.map-marker.tourism--naturaleza {
-  fill: var(--tourism-nature-solid);
-}
-.map-marker.tourism--playa {
-  fill: var(--tourism-beach-solid);
-}
-.map-marker.tourism--rural {
-  fill: var(--tourism-rural-solid);
-}
-.map-marker.tourism--montana {
-  fill: var(--tourism-mountain-solid);
-}
-.map-marker.tourism--patrimonial {
-  fill: var(--tourism-heritage-solid);
-}
-.map-marker.is-selected {
-  fill: var(--sun);
-  stroke-width: 4;
-}
 .map-legend {
   position: absolute;
   z-index: 400;
@@ -766,8 +746,8 @@
   place-items: center;
   width: 22px;
   height: 22px;
-  background: var(--tourism-solid);
-  color: white;
+  background: var(--tourism-custom, var(--tourism-solid));
+  color: var(--tourism-custom-ink, white);
 }
 .map-legend__symbol svg {
   width: 12px;

@@ -33,6 +33,7 @@ import {
 } from '../../features/activities/activities';
 import {
   TourismMark,
+  tourismColorStyle,
   tourismDefinition,
   tourismQueryValue,
   tourismTypes,
@@ -42,11 +43,18 @@ import { imageUrl, plain, queryString } from '../../utils';
 import type { Destino, FilterOptions, SearchFilters } from '../../types';
 import { Empty, Loader, MediaImage } from '../../components/ui';
 import { Shell } from '../../components/layout';
-import { useTheme, useTourismTypes } from '../../contexts';
+import { useTourismTypes } from '../../contexts';
 
 export default function MapPage() {
   const { maps } = useConsent();
-  const { theme } = useTheme();
+  const { tourismTypes: tourismCatalog } = useTourismTypes();
+  const legendTypes = useMemo(
+    () =>
+      tourismCatalog.length
+        ? tourismCatalog.map((type) => tourismDefinition(type.name, tourismCatalog))
+        : tourismTypes,
+    [tourismCatalog],
+  );
   const [searchParams, setSearchParams] = useSearchParams();
   const [destinos, setDestinos] = useState<Destino[]>([]);
   const [filters, setFilters] = useState<SearchFilters>(() =>
@@ -313,10 +321,9 @@ export default function MapPage() {
                 className="map"
               >
                 <TileLayer
-                  key={theme}
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                  url={`https://{s}.basemaps.cartocdn.com/${theme === 'dark' ? 'dark_all' : 'light_all'}/{z}/{x}/{y}{r}.png`}
-                  subdomains="abcd"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                  url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  maxZoom={19}
                   eventHandlers={{
                     loading: () => {
                       setTilesReady(false);
@@ -367,8 +374,12 @@ export default function MapPage() {
               </article>
             )}
             <div className="map-legend" aria-label={t('Leyenda de tipos de turismo')}>
-              {tourismTypes.map((type) => (
-                <span className={`tourism--${type.key}`} key={type.key}>
+              {legendTypes.map((type) => (
+                <span
+                  className={`tourism--${type.key}`}
+                  key={type.label}
+                  style={tourismColorStyle(type.colorValue)}
+                >
                   <span className="map-legend__symbol">
                     <type.Icon aria-hidden />
                   </span>
@@ -429,6 +440,28 @@ function MapViewport({ destinations, selected }: { destinations: Destino[]; sele
   return null;
 }
 
+type TourismCatalog = ReturnType<typeof useTourismTypes>['tourismTypes'];
+
+function clusterGradient(items: Destino[], catalog: TourismCatalog) {
+  const counts = new Map<string, number>();
+  items.forEach((item) => {
+    const color = tourismDefinition(item.tipoTurismoPrincipal, catalog).colorValue;
+    // Admin-defined colors end up inside inline HTML, so only plain hex values are allowed.
+    const safe = /^#[0-9a-f]{6}$/i.test(color) ? color : '#5f6470';
+    counts.set(safe, (counts.get(safe) || 0) + 1);
+  });
+  let start = 0;
+  const stops = [...counts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([color, count]) => {
+      const end = start + (count / items.length) * 360;
+      const stop = `${color} ${start}deg ${end}deg`;
+      start = end;
+      return stop;
+    });
+  return `conic-gradient(${stops.join(', ')})`;
+}
+
 function MapPoints({
   destinations,
   selectedId,
@@ -478,7 +511,7 @@ function MapPoints({
               title={t('{0} destinos', { 0: group.items.length })}
               icon={divIcon({
                 className: 'map-cluster',
-                html: `<span>${group.items.length}</span>`,
+                html: `<span style="background:${clusterGradient(group.items, tourismCatalog)}"><b>${group.items.length}</b></span>`,
                 iconSize: [38, 38],
                 iconAnchor: [19, 19],
               })}

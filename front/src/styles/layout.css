@@ -72,6 +72,8 @@
   border-radius: var(--r-pill);
 }
 .header__actions {
+  grid-column: 3;
+  justify-self: end;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -146,6 +148,35 @@
   color: var(--brand);
   font: 700 0.7rem Manrope;
   letter-spacing: 0.1em;
+}
+.mobile-menu__secondary {
+  display: grid;
+  gap: 12px;
+  margin-top: 32px;
+}
+.mobile-menu .mobile-menu__secondary a {
+  display: inline-flex;
+  grid-template-columns: none;
+  min-height: var(--control);
+  border-bottom: 0;
+  font: inherit;
+  font-weight: 800;
+}
+.mobile-menu__secondary .button svg {
+  width: 18px;
+  height: 18px;
+}
+.mobile-menu__privacy {
+  justify-self: start;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.875rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .button {

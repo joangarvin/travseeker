@@ -15,9 +15,32 @@
   margin-bottom: 0;
 }
 
+.climate-section__lede {
+  max-width: 60ch;
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
 .climate-unit {
   display: flex;
-  gap: 8px;
+  flex: none;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill, 999px);
+  background: var(--canvas);
+}
+.climate-section .climate-unit > button {
+  min-height: 40px;
+  border: 0;
+  border-radius: var(--r-pill, 999px);
+  color: var(--muted);
+}
+.climate-section .climate-unit > button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--canvas);
 }
 
 .climate-unit button,
@@ -38,21 +61,13 @@
   white-space: nowrap;
 }
 
-.climate-unit button:hover,
+.climate-unit button:not([aria-pressed='true']):hover,
 .climate-state button:hover {
   background: var(--surface-muted);
 }
 
-.climate-unit button[aria-pressed='true'] {
-  border-color: var(--brand);
-  background: var(--brand-soft);
-  color: var(--brand);
-  box-shadow: inset 0 -3px var(--brand);
-}
-
 .climate-unit button:focus-visible,
-.climate-alternatives button:focus-visible,
-.climate-months button:focus-visible,
+.climate-tile:focus-visible,
 .climate-state button:focus-visible,
 .climate-details summary:focus-visible,
 .climate-method a:focus-visible {
@@ -97,279 +112,271 @@
   margin: 8px 0 0;
 }
 
-.climate-decision {
-  display: grid;
-  grid-template-columns: minmax(220px, 0.38fr) minmax(0, 0.62fr);
-  gap: 12px clamp(32px, 5vw, 56px);
-  align-items: end;
-  padding: clamp(24px, 3vw, 40px);
-  background: var(--canvas);
+/* Month grades share one palette across tiles, legend and detail. */
+.climate-section [data-grade='ideal'] {
+  --grade: #1f9d63;
+}
+.climate-section [data-grade='good'] {
+  --grade: #6a9f2c;
+}
+.climate-section [data-grade='fair'] {
+  --grade: #c98a0c;
+}
+.climate-section [data-grade='poor'] {
+  --grade: #c9573f;
+}
+.climate-section [data-grade='none'] {
+  --grade: var(--line-strong);
+}
+:root[data-theme='dark'] .climate-section [data-grade='ideal'] {
+  --grade: #3ccf8e;
+}
+:root[data-theme='dark'] .climate-section [data-grade='good'] {
+  --grade: #9ccc5a;
+}
+:root[data-theme='dark'] .climate-section [data-grade='fair'] {
+  --grade: #f2b84b;
+}
+:root[data-theme='dark'] .climate-section [data-grade='poor'] {
+  --grade: #ff8a70;
 }
 
-.climate-decision__eyebrow {
-  grid-column: 1 / -1;
+.climate-dot {
+  display: inline-block;
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+.climate-dot--baja {
+  background: #2fb67c;
+}
+.climate-dot--media {
+  background: #f2b31b;
+}
+.climate-dot--alta {
+  background: #e5484d;
+}
+
+.climate-planner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr);
+  gap: clamp(20px, 3vw, 32px);
+  align-items: start;
+}
+
+.climate-calendar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+.climate-tile {
+  display: grid;
+  min-width: 0;
+  align-content: start;
+  gap: 6px;
+  padding: 14px;
+  border: 2px solid transparent;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--grade) 13%, var(--surface));
+  color: var(--ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition:
+    transform 160ms var(--ease-out, ease),
+    box-shadow 160ms ease,
+    border-color 160ms ease;
+}
+@media (hover: hover) {
+  .climate-tile:hover {
+    border-color: color-mix(in srgb, var(--grade) 45%, transparent);
+  }
+}
+.climate-tile:active {
+  transform: scale(0.98);
+}
+.climate-tile[aria-pressed='true'] {
+  border-color: var(--ink);
+  box-shadow: 0 10px 26px rgb(17 18 23 / 12%);
+}
+.climate-tile__top {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.875rem;
+}
+.climate-tile__top b {
   font-weight: 800;
 }
-
-.climate-decision__eyebrow--recommended {
-  width: fit-content;
-  padding: 7px 10px;
-  background: var(--sun);
-  color: var(--sun-ink);
-}
-
-.climate-decision__eyebrow svg {
+.climate-tile__top svg {
   width: 16px;
   height: 16px;
-  fill: currentColor;
+  color: var(--grade);
+  fill: var(--grade);
 }
-.climate-decision h3 {
-  margin: 8px 0 0;
-  font-size: clamp(2.75rem, 5vw, 4.75rem);
-  line-height: 0.94;
-  letter-spacing: -0.05em;
-}
-.climate-decision__summary {
-  max-width: 55ch;
-  margin: 0;
-  font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
-  line-height: 1.55;
-}
-
-.climate-essentials,
-.climate-secondary-data {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-  margin: 16px 0 0;
-}
-
-.climate-essentials > div,
-.climate-secondary-data > div {
-  min-width: 0;
-  padding-block-start: 16px;
-  border-block-start: 1px solid var(--line-strong);
-}
-
-.climate-essentials dt,
-.climate-secondary-data dt {
-  margin-bottom: 8px;
-  color: var(--muted);
-  font-size: 0.875rem;
-}
-
-.climate-essentials dd,
-.climate-secondary-data dd {
-  margin: 0;
-  font-family: 'Bricolage Grotesque', Manrope, sans-serif;
-  font-size: clamp(1.125rem, 2vw, 1.5rem);
-  font-weight: 700;
-  line-height: 1.2;
-  font-variant-numeric: tabular-nums;
-}
-
-.climate-alternatives {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
-  gap: 24px;
-  margin-block: 24px 32px;
-}
-
-.climate-alternatives button {
-  display: grid;
-  align-content: start;
-  gap: 8px;
-  min-width: 0;
-  min-height: 112px;
-  padding: 16px 0;
-  border: 0;
-  border-block: 1px solid var(--line);
-  border-radius: 0;
-  background: transparent;
-  color: var(--ink);
-  text-align: start;
-}
-
-.climate-alternatives button:hover {
-  background: var(--surface-muted);
-}
-.climate-alternatives button[aria-pressed='true'] {
-  box-shadow: inset 0 -4px var(--brand);
-}
-.climate-alternatives__role {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--muted);
-  font-size: 0.875rem;
+.climate-tile__grade {
+  justify-self: start;
+  padding: 3px 9px;
+  border-radius: var(--r-pill, 999px);
+  background: var(--grade);
+  color: #fff;
+  font-size: 0.6875rem;
   font-weight: 800;
-}
-.climate-alternatives__role svg {
-  width: 17px;
-  height: 17px;
-  fill: var(--sun);
-  color: var(--sun-ink);
-}
-.climate-alternatives button strong {
-  font-family: 'Bricolage Grotesque', Manrope, sans-serif;
-  font-size: 1.25rem;
-}
-.climate-alternatives button > span:last-child {
-  color: var(--muted);
-  font-size: 0.875rem;
-  line-height: 1.45;
-}
-
-.climate-ribbon-heading {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 16px;
-}
-
-.climate-ribbon-heading p {
-  margin: 0;
-}
-.climate-ribbon-heading p + p {
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 0.875rem;
-}
-
-.climate-months {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(76px, 1fr));
-  gap: 4px;
-  padding: 4px 4px 12px;
-  overflow-x: auto;
-  overscroll-behavior-inline: contain;
-  scrollbar-width: thin;
-}
-
-.climate-months button {
-  display: grid;
-  align-content: start;
-  gap: 8px;
-  min-width: 76px;
-  min-height: 92px;
-  padding: 12px 8px 8px;
-  border: 0;
-  border-block-start: 1px solid var(--line-strong);
-  border-radius: 0;
-  background: transparent;
-  color: var(--ink);
-  text-align: start;
-  scroll-snap-align: start;
-}
-
-.climate-months button:hover {
-  background: var(--surface-muted);
-}
-.climate-months button[aria-pressed='true'] {
-  background: var(--brand-soft);
-  box-shadow: inset 0 -4px var(--brand);
-}
-.climate-months__name {
-  color: var(--muted);
-  font-size: 0.875rem;
-}
-.climate-months button > strong {
-  font-family: 'Bricolage Grotesque', Manrope, sans-serif;
-  font-size: 1.25rem;
-  font-variant-numeric: tabular-nums;
-}
-.climate-months__crowd {
-  --crowd-color: var(--line-strong);
-  display: grid;
-  gap: 6px;
-}
-.climate-months__crowd--baja {
-  --crowd-color: var(--success);
-}
-.climate-months__crowd--media {
-  --crowd-color: var(--warning);
-}
-.climate-months__crowd--alta {
-  --crowd-color: var(--danger);
-}
-.climate-months__crowd-track {
-  display: flex;
-  align-items: flex-end;
-  block-size: 44px;
-  background: var(--surface-muted);
-}
-.climate-months__crowd-track > span {
-  display: block;
-  inline-size: 100%;
-  min-block-size: 2px;
-  background: var(--crowd-color);
-}
-.climate-months__crowd-label {
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   white-space: nowrap;
 }
-.climate-months__crowd--none .climate-months__crowd-track > span {
-  display: none;
+:root[data-theme='dark'] .climate-tile__grade,
+:root[data-theme='dark'] .climate-detail__grade {
+  color: #0b0c10;
 }
-
-.climate-crowd-legend {
+.climate-tile__temp {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.climate-tile__temp strong {
+  font-family: 'Bricolage Grotesque', Manrope, sans-serif;
+  font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+  line-height: 1;
+}
+.climate-tile__temp span {
+  color: var(--muted);
+  font-weight: 700;
+}
+.climate-tile__meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  margin: 0;
+  gap: 4px 12px;
+  color: color-mix(in srgb, var(--ink) 78%, transparent);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+.climate-tile__meta > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.climate-tile__meta svg {
+  width: 14px;
+  height: 14px;
+}
+
+.climate-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 16px 0 0;
   padding: 0;
   list-style: none;
   color: var(--muted);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
 }
-.climate-crowd-legend li {
+.climate-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.climate-legend li[data-grade]::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  background: var(--grade);
+}
+.climate-legend svg {
+  width: 15px;
+  height: 15px;
+}
+
+.climate-detail {
+  position: sticky;
+  top: 140px;
+  display: grid;
+  gap: 14px;
+  padding: clamp(20px, 2.4vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--canvas);
+}
+.climate-detail__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.climate-detail__grade {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--r-pill, 999px);
+  background: var(--grade);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.climate-detail__grade svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+.climate-detail__eyebrow {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.climate-detail h3 {
+  margin: 0;
+  font-size: clamp(2.25rem, 3.6vw, 3rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.climate-detail__summary {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+.climate-detail__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+.climate-detail__stats > div {
+  min-width: 0;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--surface);
+}
+.climate-detail__stats dt {
   display: flex;
   align-items: center;
   gap: 6px;
-  text-transform: capitalize;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 750;
 }
-.climate-crowd-legend li::before {
-  content: '';
-  inline-size: 10px;
-  block-size: 10px;
-  background: var(--crowd-color);
+.climate-detail__stats dt svg {
+  width: 15px;
+  height: 15px;
 }
-.climate-crowd-legend__item--baja {
-  --crowd-color: var(--success);
-}
-.climate-crowd-legend__item--media {
-  --crowd-color: var(--warning);
-}
-.climate-crowd-legend__item--alta {
-  --crowd-color: var(--danger);
-}
-
-.climate-months__recommendation {
+.climate-detail__stats dd {
   display: flex;
   align-items: center;
-  gap: 4px;
-  color: var(--sun-ink);
-  font-size: 0.75rem;
+  gap: 6px;
+  margin: 4px 0 0;
+  font-size: 1.125rem;
   font-weight: 800;
-}
-.climate-months__recommendation svg {
-  width: 14px;
-  height: 14px;
-  fill: var(--sun);
-}
-.climate-months button:has(.climate-months__recommendation) {
-  border-block-start-color: var(--sun-ink);
+  font-variant-numeric: tabular-nums;
 }
 
 .climate-details {
@@ -397,18 +404,6 @@
 .climate-details__content section > h3 {
   margin: 0 0 24px;
   font-size: 1.25rem;
-}
-.climate-secondary-data {
-  margin-top: 0;
-}
-.climate-secondary-data dt {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.climate-secondary-data dt svg {
-  width: 18px;
-  height: 18px;
 }
 .climate-table {
   max-width: 100%;
@@ -451,24 +446,15 @@
 
 .climate-skeleton {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr);
+  gap: 32px;
 }
 .climate-skeleton span {
   display: block;
-  min-height: 96px;
+  min-height: 420px;
+  border-radius: 24px;
   background: var(--surface-muted);
   animation: climate-pulse 1.2s ease-in-out infinite alternate;
-}
-.climate-skeleton__lead,
-.climate-skeleton__ribbon {
-  grid-column: 1 / -1;
-}
-.climate-skeleton__lead {
-  min-height: 176px !important;
-}
-.climate-skeleton__ribbon {
-  min-height: 116px !important;
 }
 
 @keyframes climate-pulse {
@@ -477,22 +463,18 @@
   }
 }
 
-@media (max-width: 1200px) and (min-width: 901px) {
-  .climate-decision {
-    grid-template-columns: minmax(190px, 0.34fr) minmax(0, 0.66fr);
-    gap: 12px 32px;
+@media (max-width: 1100px) {
+  .climate-planner {
+    grid-template-columns: minmax(0, 1fr);
   }
-
-  .climate-alternatives {
-    gap: 16px;
+  .climate-detail {
+    position: static;
   }
-
-  .climate-months {
-    grid-template-columns: repeat(12, minmax(68px, 1fr));
+  .climate-skeleton {
+    grid-template-columns: 1fr;
   }
-
-  .climate-months button {
-    min-width: 68px;
+  .climate-skeleton__detail {
+    min-height: 280px !important;
   }
 }
 
@@ -500,45 +482,7 @@
   .climate-section__heading {
     align-items: flex-start;
     flex-direction: column;
-    margin-bottom: 32px;
-  }
-  .climate-decision {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    padding: 24px 16px;
-  }
-  .climate-decision__eyebrow,
-  .climate-essentials {
-    grid-column: 1;
-  }
-  .climate-decision h3 {
-    font-size: clamp(3rem, 16vw, 4.5rem);
-  }
-  .climate-essentials,
-  .climate-secondary-data {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .climate-alternatives {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
-  .climate-alternatives button {
-    min-height: 88px;
-  }
-  .climate-ribbon-heading {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .climate-months {
-    display: flex;
-    margin-inline: -4px;
-    scroll-snap-type: inline mandatory;
-  }
-  .climate-months button {
-    flex: 0 0 88px;
-    min-width: 88px;
+    margin-bottom: 28px;
   }
   .climate-state {
     flex-wrap: wrap;
@@ -546,12 +490,26 @@
   .climate-state button {
     margin-inline-start: 36px;
   }
-  .climate-skeleton {
-    grid-template-columns: 1fr;
+}
+
+@media (max-width: 600px) {
+  .climate-calendar {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
   }
-  .climate-skeleton__lead,
-  .climate-skeleton__ribbon {
-    grid-column: auto;
+  .climate-tile {
+    gap: 5px;
+    padding: 10px;
+    border-radius: 14px;
+  }
+  .climate-tile__grade {
+    padding: 2px 7px;
+    font-size: 0.5625rem;
+  }
+  .climate-tile__meta {
+    flex-direction: column;
+    gap: 2px;
+    font-size: 0.75rem;
   }
 }
 
@@ -559,10 +517,10 @@
   .climate-skeleton span {
     animation: none;
   }
-  .climate-unit button:active,
-  .climate-state button:active,
-  .climate-alternatives button:active,
-  .climate-months button:active {
-    translate: none;
+  .climate-tile {
+    transition: none;
+  }
+  .climate-tile:active {
+    transform: none;
   }
 }

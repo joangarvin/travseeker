@@ -17,6 +17,7 @@
     "db:migrate-municipios": "node scripts/migrate-municipios-m2m.js",
     "db:migrate-tourism": "node scripts/migrate-tourism-taxonomy.js",
     "db:migrate-essentials": "node scripts/migrate-structured-essentials.js",
+    "db:fix-essential-headings": "node scripts/fix-essential-headings.js",
     "db:enrich-amarina": "node scripts/enrich-amarina-essentials.js",
     "test": "node --test",
     "alerts:process": "node scripts/process-alerts.js",

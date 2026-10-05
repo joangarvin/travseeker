@@ -1,4 +1,4 @@
-import { t, intlLocale, locale, languageUrl, catalogName } from '../../i18n';
+import { t, locale, languageUrl } from '../../i18n';
 import { DestinationReviews } from '../../features/destinations/components/DestinationReviews';
 import { useDestinationReviews } from '../../features/destinations/hooks/useDestinationReviews';
 import { useEffect, useState } from 'react';
@@ -6,17 +6,11 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowLeft,
   BookmarkPlus,
-  Check,
-  Compass,
   ExternalLink,
-  Gauge,
   GitCompare,
   Heart,
   Map,
-  MapPin,
   Share2,
-  Star,
-  WalletCards,
 } from 'lucide-react';
 import { api } from '../../services/api';
 import { useAuth, useCompare } from '../../contexts';
@@ -28,19 +22,22 @@ import {
   openStreetMapUrl,
   plain,
   safeExternalUrl,
-  safeHtml,
   serializeJsonLd,
   validCoordinates,
 } from '../../utils';
 import type { CollectionSummary, Destino, EssentialItem } from '../../types';
-import { Button, Loader, MediaImage, Notice } from '../../components/ui';
+import { Button, Loader, Notice } from '../../components/ui';
 import { PageMeta, Shell } from '../../components/layout';
 import { DestinationCard } from '../../features/destinations/components/DestinationCard';
-import { EssentialRoute } from '../../features/destinations/components/EssentialRoute';
+import {
+  ALL_ESSENTIALS,
+  EssentialRoute,
+} from '../../features/destinations/components/EssentialRoute';
+import { DestinationSummary } from '../../features/destinations/components/DestinationSummary';
 import { DestinationTripDialog } from '../../features/destinations/components/DestinationTripDialog';
+import { DestinationHero } from '../../features/destinations/components/DestinationHero';
 import { DestinationPlanningSection } from '../../features/destinations/components/DestinationPlanningSection';
-import { TourismMarks } from '../../features/tourism/tourism';
-import { ActivityMarks, activityValues } from '../../features/activities/activities';
+import { recommendedBaseId } from '../../features/destinations/baseInsights';
 import { ClimateSection } from '../../features/climate/components/ClimateSection';
 
 function DestinationSchema({ destino }: { destino: Destino }) {
@@ -81,6 +78,7 @@ export default function DestinationPage() {
   const [collections, setCollections] = useState<CollectionSummary[]>([]);
   const [tripDialogItem, setTripDialogItem] = useState<EssentialItem | null | undefined>(undefined);
   const [selectedBaseMunicipioId, setSelectedBaseMunicipioId] = useState<string>();
+  const [essentialFilter, setEssentialFilter] = useState(ALL_ESSENTIALS);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [relatedLoading, setRelatedLoading] = useState(false);
@@ -95,8 +93,6 @@ export default function DestinationPage() {
   const [sharePending, setSharePending] = useState(false);
   const [shareError, setShareError] = useState('');
   const [shareFeedback, setShareFeedback] = useState('');
-  const [basesExpanded, setBasesExpanded] = useState(false);
-
   useEffect(() => {
     const controller = new AbortController();
     window.scrollTo(0, 0);
@@ -104,12 +100,12 @@ export default function DestinationPage() {
     setError('');
     setDestino(null);
     setSelectedBaseMunicipioId(undefined);
-    setBasesExpanded(false);
+    setEssentialFilter(ALL_ESSENTIALS);
     void api<Destino>(`/destinos/${id}`, { signal: controller.signal })
       .then((data) => {
         if (!controller.signal.aborted) {
           setDestino(data);
-          setSelectedBaseMunicipioId(data.municipios?.[0]?.id);
+          setSelectedBaseMunicipioId(recommendedBaseId(data));
         }
       })
       .catch((cause) => {
@@ -285,141 +281,96 @@ export default function DestinationPage() {
   const lead =
     excerptAtWord(plain(destino.descripcion), 190) ||
     t('Información práctica para decidir si {0} encaja en tu viaje.', { 0: destino.nombre.trim() });
-  const budget = plain(destino.presupuesto) || t('Consulta las bases disponibles');
-  const crowd = plain(destino.masificacion) || t('Sin estimación publicada');
-  const tripType =
-    (destino.tourismTypes?.length
-      ? destino.tourismTypes.map(catalogName).join(', ')
-      : plain(destino.tipoTurismoPrincipal)
-          .split(', ')
-          .map((name) => t(name))
-          .join(', ')) || t('Sin clasificar');
   const hasReviews = (reviewStats.count || reviews.length) > 0;
   const reviewCount = reviewStats.count || reviews.length;
   const average = reviewStats.average || 0;
   const destinationMapUrl = coordinates ? openStreetMapUrl(coordinates) : null;
   const loginState = { returnTo: location.pathname + location.search };
-  const destinationNameLength = destino.nombre.trim().length;
-  const titleSizeClass =
-    destinationNameLength > 34
-      ? 'destination-cover__content--title-xl'
-      : destinationNameLength > 20
-        ? 'destination-cover__content--title-long'
-        : '';
+  const exploreEssentials = (groupKeys: string[]) => {
+    setEssentialFilter(groupKeys.length === 1 ? groupKeys[0] : ALL_ESSENTIALS);
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document
+      .getElementById('imprescindibles')
+      ?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  };
 
   return (
     <Shell>
       <DestinationSchema destino={destino} />
       <PageMeta title={`${destino.nombre.trim()} — TravSeeker`} description={lead} />
 
-      <header className="destination-cover">
-        <div className="destination-cover__composition">
-          <div className="destination-cover__media">
-            <MediaImage
-              src={imageUrl(destino.imagen)}
-              alt={t('Vista principal de {0}', { 0: destino.nombre.trim() })}
-              fetchPriority="high"
-              loading="eager"
-              sizes="100vw"
-              width={1920}
-              height={1080}
-            />
-            <div className="destination-cover__shade" aria-hidden="true" />
-            <div className="destination-cover__topline">
-              <button type="button" className="destination-cover__back" onClick={returnToDiscovery}>
-                <ArrowLeft aria-hidden="true" /> {t('Volver a descubrir')}
-              </button>
-              <nav aria-label={t('Migas de pan')}>
-                <Link to="/">{t('Descubrir')}</Link>
-                <span aria-hidden="true">/</span>
-                <span aria-current="page">{destino.nombre.trim()}</span>
-              </nav>
-            </div>
-            <div className={`destination-cover__content ${titleSizeClass}`.trim()}>
-              <p className="destination-cover__location">
-                <MapPin aria-hidden="true" /> {plain(destino.ubicacion) || t('España')}
-              </p>
-              <h1>{destino.nombre.trim()}</h1>
-              <p className="destination-cover__lead">{lead}</p>
-              {hasReviews && (
-                <a className="destination-cover__rating" href="#opiniones">
-                  <Star aria-hidden="true" />{' '}
-                  {average.toLocaleString(intlLocale, { maximumFractionDigits: 1 })} {t('de 5 ·')}{' '}
-                  {reviewCount} {reviewCount === 1 ? t('opinión') : t('opiniones')}
-                </a>
-              )}
-            </div>
-          </div>
-
-          <div className="departure-card">
-            <dl aria-label={t('Datos clave para decidir')}>
-              <div>
-                <dt>{t('Presupuesto')}</dt>
-                <dd>{t(budget)}</dd>
-              </div>
-              <div>
-                <dt>{t('Afluencia')}</dt>
-                <dd>{t(crowd)}</dd>
-              </div>
-              <div>
-                <dt>{t('Tipo de viaje')}</dt>
-                <dd>{t(tripType)}</dd>
-              </div>
-            </dl>
-            <div className="departure-card__planning">
-              {user ? (
-                <Button onClick={() => setTripDialogItem(null)}>
-                  <BookmarkPlus aria-hidden="true" /> {t('Añadir a un viaje')}
-                </Button>
-              ) : (
-                <Link className="button button--primary" to="/auth" state={loginState}>
-                  <BookmarkPlus aria-hidden="true" /> {t('Añadir a un viaje')}
-                </Link>
-              )}
-              <div className="departure-card__secondary" aria-label={t('Otras acciones')}>
-                {user ? (
-                  <Button
-                    variant="secondary"
-                    loading={favoritePending}
-                    onClick={() => void toggleFavorite()}
-                  >
-                    {favorite ? <Check aria-hidden="true" /> : <Heart aria-hidden="true" />}
-                    {favorite ? t('Guardado') : t('Guardar')}
-                  </Button>
-                ) : (
-                  <Link className="button button--secondary" to="/auth" state={loginState}>
-                    <Heart aria-hidden="true" /> {t('Guardar')}
-                  </Link>
-                )}
-                <Button
-                  variant="secondary"
-                  aria-pressed={compare.ids.includes(id)}
-                  data-tour="compare-destination"
-                  onClick={toggleComparison}
-                >
-                  <GitCompare aria-hidden="true" />
-                  {compare.ids.includes(id) ? t('Comparando') : t('Comparar')}
-                </Button>
-                <Button
-                  variant="secondary"
-                  loading={sharePending}
-                  onClick={() => void shareDestination()}
-                >
-                  <Share2 aria-hidden="true" /> {t('Compartir')}
-                </Button>
-              </div>
-            </div>
-            <div className="departure-card__feedback" aria-live="polite">
-              {favoriteError && <Notice tone="error">{favoriteError}</Notice>}
-              {favoriteFeedback && <Notice tone="success">{favoriteFeedback}</Notice>}
-              {tripFeedback && <Notice tone="success">{tripFeedback}</Notice>}
-              {compareError && <Notice tone="error">{compareError}</Notice>}
-              {shareError && <Notice tone="error">{shareError}</Notice>}
-              {shareFeedback && <Notice tone="success">{shareFeedback}</Notice>}
-            </div>
-          </div>
-        </div>
-      </header>
+      <DestinationHero
+        destination={destino}
+        rating={hasReviews ? { average, count: reviewCount } : undefined}
+        onBack={returnToDiscovery}
+        actions={
+          <>
+            {user ? (
+              <Button onClick={() => setTripDialogItem(null)}>
+                <BookmarkPlus aria-hidden="true" /> {t('Añadir a un viaje')}
+              </Button>
+            ) : (
+              <Link className="button button--primary" to="/auth" state={loginState}>
+                <BookmarkPlus aria-hidden="true" /> {t('Añadir a un viaje')}
+              </Link>
+            )}
+            {user ? (
+              <Button
+                variant="secondary"
+                className="dest-hero__icon"
+                aria-label={favorite ? t('Guardado') : t('Guardar')}
+                aria-pressed={favorite}
+                title={favorite ? t('Guardado') : t('Guardar')}
+                loading={favoritePending}
+                onClick={() => void toggleFavorite()}
+              >
+                <Heart aria-hidden="true" />
+              </Button>
+            ) : (
+              <Link
+                className="button button--secondary dest-hero__icon"
+                to="/auth"
+                state={loginState}
+                aria-label={t('Guardar')}
+                title={t('Guardar')}
+              >
+                <Heart aria-hidden="true" />
+              </Link>
+            )}
+            <Button
+              variant="secondary"
+              className="dest-hero__icon"
+              aria-label={compare.ids.includes(id) ? t('Comparando') : t('Comparar')}
+              aria-pressed={compare.ids.includes(id)}
+              title={compare.ids.includes(id) ? t('Comparando') : t('Comparar')}
+              data-tour="compare-destination"
+              onClick={toggleComparison}
+            >
+              <GitCompare aria-hidden="true" />
+            </Button>
+            <Button
+              variant="secondary"
+              className="dest-hero__icon"
+              aria-label={t('Compartir')}
+              title={t('Compartir')}
+              loading={sharePending}
+              onClick={() => void shareDestination()}
+            >
+              <Share2 aria-hidden="true" />
+            </Button>
+          </>
+        }
+        feedback={
+          <>
+            {favoriteError && <Notice tone="error">{favoriteError}</Notice>}
+            {favoriteFeedback && <Notice tone="success">{favoriteFeedback}</Notice>}
+            {tripFeedback && <Notice tone="success">{tripFeedback}</Notice>}
+            {compareError && <Notice tone="error">{compareError}</Notice>}
+            {shareError && <Notice tone="error">{shareError}</Notice>}
+            {shareFeedback && <Notice tone="success">{shareFeedback}</Notice>}
+          </>
+        }
+      />
 
       <nav className="destination-nav" aria-label={t('En esta guía')}>
         <div>
@@ -435,87 +386,11 @@ export default function DestinationPage() {
       </nav>
 
       <div className="destination-guide">
-        <section
-          id="resumen"
-          className="destination-summary"
-          aria-labelledby="summary-title"
-          data-reveal
-        >
-          <div className="destination-section-heading">
-            <p className="kicker">{t('La decisión rápida')}</p>
-            <h2 id="summary-title">{t('¿Encaja contigo?')}</h2>
-          </div>
-          <div className="destination-summary__layout">
-            <div className="destination-summary__story">
-              <h3>{t('La experiencia')}</h3>
-              {plain(destino.descripcion) ? (
-                <div
-                  className="prose"
-                  dangerouslySetInnerHTML={{ __html: safeHtml(destino.descripcion) }}
-                />
-              ) : (
-                <p className="destination-empty-copy">
-                  {t(
-                    'La descripción editorial todavía no está disponible. Usa las señales prácticas y el clima para decidir.',
-                  )}
-                </p>
-              )}
-            </div>
-            <aside className="destination-summary__decision" aria-label={t('Señales para decidir')}>
-              <p className="destination-summary__decision-title">{t('Tu trip brief')}</p>
-              <h3>{t('Buena elección si…')}</h3>
-              <dl>
-                <div>
-                  <span className="destination-summary__signal-icon" aria-hidden="true">
-                    <Compass />
-                  </span>
-                  <dt>{t('Encaja si buscas')}</dt>
-                  <dd>
-                    <TourismMarks value={destino.tipoTurismoPrincipal} compact />
-                  </dd>
-                </div>
-                <div>
-                  <span className="destination-summary__signal-icon" aria-hidden="true">
-                    <Map />
-                  </span>
-                  <dt>{t('El plan toma forma con')}</dt>
-                  <dd>
-                    {activityValues(destino.tipoTurismoSecundario).length ? (
-                      <ActivityMarks value={destino.tipoTurismoSecundario} />
-                    ) : (
-                      t('La guía aún no ha clasificado actividades concretas.')
-                    )}
-                  </dd>
-                </div>
-                <div>
-                  <span className="destination-summary__signal-icon" aria-hidden="true">
-                    <Gauge />
-                  </span>
-                  <dt>{t('Ritmo y gasto')}</dt>
-                  <dd>
-                    {t(crowd)} · {t(budget)}
-                  </dd>
-                </div>
-                <div>
-                  <span className="destination-summary__signal-icon" aria-hidden="true">
-                    <WalletCards />
-                  </span>
-                  <dt>{t('Cómo organizarlo')}</dt>
-                  <dd>
-                    {destino.municipios?.length
-                      ? `${destino.municipios.length} ${destino.municipios.length === 1 ? t('base disponible') : t('bases para elegir y comparar')}`
-                      : t('Explora el destino sin una base publicada todavía.')}
-                  </dd>
-                </div>
-              </dl>
-              {destinationMapUrl && (
-                <a href={destinationMapUrl} target="_blank" rel="noreferrer">
-                  <Map aria-hidden="true" /> {t('Situar el destino en el mapa')}
-                </a>
-              )}
-            </aside>
-          </div>
-        </section>
+        <DestinationSummary
+          destination={destino}
+          mapUrl={destinationMapUrl}
+          onExplore={exploreEssentials}
+        />
 
         <section
           id="cuando-ir"
@@ -529,8 +404,13 @@ export default function DestinationPage() {
         <div id="imprescindibles" data-tour="essentials" className="destination-anchor">
           <EssentialRoute
             groups={destino.essentialGroups}
+            filter={essentialFilter}
+            onFilterChange={setEssentialFilter}
             legacyHtml={destino.imprescindibles}
+            coverImage={destino.imagen}
+            coverAlt={t('Vista principal de {0}', { 0: destino.nombre.trim() })}
             authenticated={Boolean(user)}
+            loginState={loginState}
             onAddToTrip={(item) => setTripDialogItem(item)}
           />
         </div>
@@ -538,9 +418,7 @@ export default function DestinationPage() {
         <DestinationPlanningSection
           destination={destino}
           selectedMunicipioId={selectedBaseMunicipioId}
-          alternativesExpanded={basesExpanded}
           onSelectMunicipio={setSelectedBaseMunicipioId}
-          onToggleAlternatives={() => setBasesExpanded((value) => !value)}
         />
 
         {!!destino.places?.length && (

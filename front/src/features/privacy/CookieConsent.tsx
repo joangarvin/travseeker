@@ -139,7 +139,7 @@ export function PrivacyProvider({ children }: { children: ReactNode }) {
               <strong>{t('Mapas y rutas externos')}</strong>
               <span>
                 {t(
-                  'Permite conexiones con OpenStreetMap, CARTO y OSRM. Reciben tu dirección IP y las coordenadas del mapa o de la ruta solicitada. Sin permiso puedes seguir consultando las listas de destinos.',
+                  'Permite conexiones con OpenStreetMap y OSRM. Reciben tu dirección IP y las coordenadas del mapa o de la ruta solicitada. Sin permiso puedes seguir consultando las listas de destinos.',
                 )}
               </span>
             </span>

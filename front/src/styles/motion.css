@@ -69,20 +69,20 @@
 }
 
 .image-wall,
-.destination-cover__media {
+.dest-hero__image {
   animation: editorial-media-enter 680ms var(--ease-in-out) both;
 }
 
-.destination-cover__topline,
-.destination-cover__content,
-.departure-card {
+.dest-hero__topline,
+.dest-hero__intro,
+.dest-hero__card {
   animation: editorial-copy-enter 520ms var(--ease-out) both;
 }
 
-.destination-cover__content {
+.dest-hero__intro {
   animation-delay: 90ms;
 }
-.departure-card {
+.dest-hero__card {
   animation-delay: 160ms;
 }
 
@@ -336,10 +336,10 @@ button[aria-busy='true']:not([data-loading])::after {
   .home-hero__copy > .search-box-group,
   .home-hero__copy > .home-filter-control,
   .image-wall,
-  .destination-cover__media,
-  .destination-cover__topline,
-  .destination-cover__content,
-  .departure-card,
+  .dest-hero__image,
+  .dest-hero__topline,
+  .dest-hero__intro,
+  .dest-hero__card,
   .about-hero > .kicker,
   .about-hero > h1,
   .about-hero > p:last-child,

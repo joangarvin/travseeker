@@ -1,3 +1,6 @@
+:root[data-theme='dark'] .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9) saturate(0.6);
+}
 .map-workspace {
   position: relative;
   display: grid;
@@ -144,27 +147,35 @@
 }
 .map-marker {
   stroke: var(--surface);
-  fill: var(--brand);
   filter: drop-shadow(0 2px 2px rgb(5 7 14 / 38%));
 }
 .map-marker.is-selected {
-  fill: var(--sun);
+  stroke: var(--ink);
 }
 .map-cluster {
   display: grid;
   place-items: center;
-  border: 3px solid var(--surface);
+  border: 2px solid var(--surface);
   background: var(--brand-solid);
-  color: white;
   border-radius: 50%;
   box-shadow: 0 3px 10px rgb(5 7 14 / 28%);
   font: 800 0.76rem/1 Manrope;
 }
-.map-cluster span {
+.map-cluster > span {
   display: grid;
   place-items: center;
   width: 100%;
   height: 100%;
+  border-radius: 50%;
+}
+.map-cluster b {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: 50%;
 }
 .leaflet-container {
   font-family: Manrope, sans-serif;

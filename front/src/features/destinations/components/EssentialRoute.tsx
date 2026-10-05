@@ -1,396 +1,243 @@
 import { t } from '../../../i18n';
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
-import { Bookmark, Check, ChevronDown, ChevronRight, Route } from 'lucide-react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ChevronDown, Plus } from 'lucide-react';
 import type { EssentialGroup, EssentialItem } from '../../../types';
 import { imageUrl, plain, safeHtml } from '../../../utils';
 import { MediaImage } from '../../../components/ui';
-import { EssentialIconGlyph } from '../../essentials/essentialIcons';
-import { essentialPresentation } from '../../essentials/essentialPresentation';
+import {
+  essentialGroupKey,
+  essentialPresentation,
+  hasEssentialDetails,
+} from '../../essentials/essentialPresentation';
+import { EssentialIconGlyph, essentialCategory } from '../../essentials/essentialIcons';
 import { EssentialDetail } from './EssentialDetail';
 
 type EssentialRouteProps = {
   groups?: EssentialGroup[];
   legacyHtml?: string;
+  coverImage?: string | null;
+  coverAlt?: string;
   authenticated?: boolean;
+  loginState?: { returnTo: string };
   onAddToTrip?: (item: EssentialItem) => void;
+  filter?: string;
+  onFilterChange?: (key: string) => void;
 };
 
-const SAVED_STORAGE_KEY = 'travseeker:saved-essentials';
+type Category = ReturnType<typeof essentialCategory>;
+type Entry = { key: string; item: EssentialItem; groupKey: string; category: Category };
 
-function groupKey(group: EssentialGroup, index: number) {
-  return group.id || `essential-group-${index}`;
-}
-
-function itemKey(item: EssentialItem, index: number) {
-  return item.id || `essential-item-${index}`;
-}
-
-function priorityLabel(index: number, total: number) {
-  if (index === 0) return t('Primera elección');
-  if (index < Math.min(3, total)) return t('Recomendada');
-  return t('Alternativa');
-}
-
-function useStoredKeys(storageKey: string) {
-  const [keys, setKeys] = useState<Set<string>>(() => {
-    if (typeof window === 'undefined') return new Set();
-    try {
-      const stored = JSON.parse(window.localStorage.getItem(storageKey) || '[]');
-      return new Set(
-        Array.isArray(stored) ? stored.filter((value) => typeof value === 'string') : [],
-      );
-    } catch {
-      return new Set();
-    }
-  });
-
-  const toggle = (key: string) => {
-    setKeys((current) => {
-      const next = new Set(current);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      window.localStorage.setItem(storageKey, JSON.stringify([...next]));
-      return next;
-    });
-  };
-
-  return { keys, toggle };
-}
-
-function useMobileGuide() {
-  const [mobile, setMobile] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(max-width: 1100px)').matches,
-  );
-
-  useEffect(() => {
-    const query = window.matchMedia('(max-width: 1100px)');
-    const onChange = (event: MediaQueryListEvent) => setMobile(event.matches);
-    setMobile(query.matches);
-    query.addEventListener('change', onChange);
-    return () => query.removeEventListener('change', onChange);
-  }, []);
-
-  return mobile;
-}
+export const ALL_ESSENTIALS = 'all';
+const ALL = ALL_ESSENTIALS;
+const PREVIEW_SIZE = 6;
 
 export function EssentialRoute({
   groups = [],
   legacyHtml = '',
+  coverImage,
+  coverAlt = '',
   authenticated = false,
+  loginState,
   onAddToTrip,
+  filter: controlledFilter,
+  onFilterChange,
 }: EssentialRouteProps) {
-  const populatedGroups = groups.filter((group) => group.items?.length);
-  const initialGroupKey = populatedGroups[0] ? groupKey(populatedGroups[0], 0) : '';
-  const [activeGroupKey, setActiveGroupKey] = useState(initialGroupKey);
-  const [selectedItemKey, setSelectedItemKey] = useState('');
-  const [expandedMobileKey, setExpandedMobileKey] = useState('');
-  const [itemsExpanded, setItemsExpanded] = useState(false);
-  const [announcement, setAnnouncement] = useState('');
-  const tabRefs = useRef(new Map<string, HTMLButtonElement>());
-  const itemRefs = useRef(new Map<string, HTMLButtonElement>());
-  const saved = useStoredKeys(SAVED_STORAGE_KEY);
-  const mobile = useMobileGuide();
+  const [ownFilter, setOwnFilter] = useState(ALL);
+  const [showAll, setShowAll] = useState(false);
+  const [expandedKey, setExpandedKey] = useState('');
+  const filter = controlledFilter ?? ownFilter;
 
-  const resolvedGroupKey = populatedGroups.some(
-    (group, index) => groupKey(group, index) === activeGroupKey,
-  )
-    ? activeGroupKey
-    : initialGroupKey;
-  const activeGroupIndex = Math.max(
-    0,
-    populatedGroups.findIndex((group, index) => groupKey(group, index) === resolvedGroupKey),
+  const populatedGroups = groups
+    .map((group, index) => ({
+      group,
+      key: essentialGroupKey(group, index),
+      category: essentialCategory(group.title, group.icon),
+    }))
+    .filter(({ group }) => group.items?.length);
+  const entries: Entry[] = populatedGroups.flatMap(({ group, key: groupKey, category }) =>
+    group.items.map((item, index) => ({
+      key: item.id || `${groupKey}-${index}`,
+      item,
+      groupKey,
+      category,
+    })),
   );
-  const activeGroup = populatedGroups[activeGroupIndex];
-  const initialItemKey = activeGroup?.items[0] ? itemKey(activeGroup.items[0], 0) : '';
-  const resolvedItemKey = activeGroup?.items.some(
-    (item, index) => itemKey(item, index) === selectedItemKey,
-  )
-    ? selectedItemKey
-    : initialItemKey;
-  const selectedItemIndex = Math.max(
-    0,
-    activeGroup?.items.findIndex((item, index) => itemKey(item, index) === resolvedItemKey) ?? 0,
-  );
-  const selectedItem = activeGroup?.items[selectedItemIndex];
-  const visibleItems = itemsExpanded ? activeGroup?.items : activeGroup?.items.slice(0, 5);
 
-  useEffect(() => {
-    setSelectedItemKey(initialItemKey);
-    setExpandedMobileKey('');
-    setItemsExpanded(false);
-  }, [initialItemKey, resolvedGroupKey]);
+  if (!entries.length && !plain(legacyHtml)) return null;
 
-  if (!populatedGroups.length && !plain(legacyHtml)) return null;
+  const activeFilter = populatedGroups.some(({ key }) => key === filter) ? filter : ALL;
+  const filtered =
+    activeFilter === ALL ? entries : entries.filter((entry) => entry.groupKey === activeFilter);
+  const visible = showAll ? filtered : filtered.slice(0, PREVIEW_SIZE);
+  const labelIsUnique = (label: string) =>
+    populatedGroups.filter(({ category }) => category.label === label).length === 1;
+  const filters = [
+    { key: ALL, title: t('Todo'), count: entries.length },
+    ...populatedGroups.map(({ group, key, category }) => ({
+      key,
+      title: labelIsUnique(category.label) ? category.label : group.title,
+      count: group.items.length,
+    })),
+  ];
 
-  const selectGroup = (key: string) => {
-    setActiveGroupKey(key);
-  };
-
-  const handleTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    const lastIndex = populatedGroups.length - 1;
-    let nextIndex = index;
-    if (event.key === 'ArrowRight') nextIndex = index === lastIndex ? 0 : index + 1;
-    else if (event.key === 'ArrowLeft') nextIndex = index === 0 ? lastIndex : index - 1;
-    else if (event.key === 'Home') nextIndex = 0;
-    else if (event.key === 'End') nextIndex = lastIndex;
-    else return;
-
-    event.preventDefault();
-    const nextKey = groupKey(populatedGroups[nextIndex], nextIndex);
-    selectGroup(nextKey);
-    tabRefs.current.get(nextKey)?.focus();
-  };
-
-  const selectItem = (key: string) => {
-    setSelectedItemKey(key);
-    if (mobile) setExpandedMobileKey((current) => (current === key ? '' : key));
-  };
-
-  const closeMobileDetail = (key: string) => {
-    setExpandedMobileKey('');
-    window.requestAnimationFrame(() => itemRefs.current.get(key)?.focus());
-  };
-
-  const toggleSaved = (key: string, title: string) => {
-    const willSave = !saved.keys.has(key);
-    saved.toggle(key);
-    setAnnouncement(
-      willSave
-        ? t('{0} se ha guardado en esta guía.', { 0: title })
-        : t('{0} ya no está guardada.', { 0: title }),
-    );
-  };
-
-  const toggleRoute = (key: string, title: string) => {
-    const item = activeGroup?.items.find((candidate, index) => itemKey(candidate, index) === key);
-    if (authenticated && item && onAddToTrip) {
-      onAddToTrip(item);
-      return;
-    }
-    setAnnouncement(
-      t('{0} solo puede añadirse a un viaje después de iniciar sesión.', { 0: title }),
-    );
+  const selectFilter = (key: string) => {
+    (onFilterChange ?? setOwnFilter)(key);
+    setShowAll(false);
+    setExpandedKey('');
   };
 
   return (
     <section className="essential-discovery" aria-labelledby="essential-discovery-title">
       <header className="essential-discovery__intro">
-        <div>
-          <p className="kicker">{t('Selección sobre el terreno')}</p>
-          <h2 id="essential-discovery-title">{t('Lo imprescindible')}</h2>
-          <p className="essential-discovery__lede">
-            {t(
-              'Una selección editorial para entender qué merece tu tiempo y encajarlo en el viaje sin perder el contexto.',
-            )}
-          </p>
-        </div>
-        <div
-          className="essential-discovery__summary"
-          aria-label={t('Resumen de tu selección local')}
-        >
-          <span>
-            <Bookmark aria-hidden /> {saved.keys.size} {t('guardadas')}
-          </span>
-          {authenticated && (
-            <span>
-              <Route aria-hidden /> {t('Itinerario conectado')}
-            </span>
-          )}
-        </div>
+        <p className="kicker">{t('Selección sobre el terreno')}</p>
+        <h2 id="essential-discovery-title">{t('Lo imprescindible')}</h2>
+        <p className="essential-discovery__lede">
+          {populatedGroups.length > 1
+            ? t('{0} experiencias en {1} temas, en el orden en que las recomendamos.', {
+                0: entries.length,
+                1: populatedGroups.length,
+              })
+            : t('Una selección editorial de lo que merece tu tiempo.')}
+        </p>
       </header>
 
-      {populatedGroups.length ? (
-        <div className="essential-discovery__workspace">
-          <label className="essential-discovery__mobile-select">
-            <span>{t('Tipo de experiencia')}</span>
-            <select value={resolvedGroupKey} onChange={(event) => selectGroup(event.target.value)}>
-              {populatedGroups.map((group, index) => (
-                <option key={groupKey(group, index)} value={groupKey(group, index)}>
-                  {group.title} · {group.items.length}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <div
-            className="essential-discovery__tabs"
-            role="tablist"
-            aria-label={t('Tipos de experiencia imprescindible')}
-          >
-            {populatedGroups.map((group, index) => {
-              const key = groupKey(group, index);
-              const active = key === resolvedGroupKey;
-              return (
+      {entries.length ? (
+        <>
+          {populatedGroups.length > 1 && (
+            <div
+              className="essential-filters"
+              role="group"
+              aria-label={t('Filtrar por tipo de experiencia')}
+            >
+              {filters.map(({ key, title, count }) => (
                 <button
                   type="button"
-                  role="tab"
-                  id={`essential-tab-${key}`}
-                  aria-selected={active}
-                  aria-controls={`essential-tabpanel-${key}`}
-                  tabIndex={active ? 0 : -1}
-                  onClick={() => selectGroup(key)}
-                  onKeyDown={(event) => handleTabKeyDown(event, index)}
-                  ref={(node) => {
-                    if (node) tabRefs.current.set(key, node);
-                    else tabRefs.current.delete(key);
-                  }}
+                  aria-pressed={key === activeFilter}
+                  onClick={() => selectFilter(key)}
                   key={key}
                 >
-                  <span aria-hidden>
-                    <EssentialIconGlyph name={group.icon} />
-                  </span>
-                  <strong>{group.title}</strong>
-                  <small>{group.items.length}</small>
+                  {title} <span>{count}</span>
                 </button>
+              ))}
+            </div>
+          )}
+
+          <ol className="essential-grid">
+            {visible.map(({ key, item, category }, index) => {
+              const presentation = essentialPresentation(item);
+              const featured = index === 0;
+              const media = item.imageUrl || (featured ? coverImage : null);
+              const detailed = hasEssentialDetails(
+                media === item.imageUrl ? { ...item, imageUrl: null } : item,
+              );
+              const expanded = expandedKey === key;
+              const titleId = `essential-title-${key}`;
+              const detailId = `essential-detail-${key}`;
+              const addLabel = t('Añadir {0} al viaje', { 0: presentation.title });
+              return (
+                <li
+                  className={`essential-card${featured ? ' essential-card--featured' : ''}${media ? ' has-media' : ''}`}
+                  data-tone={category.tone}
+                  key={key}
+                >
+                  {media && (
+                    <>
+                      <MediaImage
+                        className="essential-card__cover"
+                        src={imageUrl(media)}
+                        alt={item.imageUrl ? item.imageAlt || '' : coverAlt}
+                        sizes={
+                          featured
+                            ? '(max-width: 1100px) 100vw, 66vw'
+                            : '(max-width: 680px) 100vw, (max-width: 1100px) 50vw, 33vw'
+                        }
+                        width={1280}
+                        height={860}
+                      />
+                      <span className="essential-card__shade" aria-hidden="true" />
+                    </>
+                  )}
+                  <span className="essential-card__number" aria-hidden="true">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  {authenticated && onAddToTrip ? (
+                    <button
+                      type="button"
+                      className="essential-card__add"
+                      aria-label={addLabel}
+                      title={t('Añadir al viaje')}
+                      onClick={() => onAddToTrip(item)}
+                    >
+                      <Plus aria-hidden />
+                    </button>
+                  ) : (
+                    <Link
+                      className="essential-card__add"
+                      to="/auth"
+                      state={loginState}
+                      aria-label={addLabel}
+                      title={t('Entra para añadirla a un viaje')}
+                    >
+                      <Plus aria-hidden />
+                    </Link>
+                  )}
+                  <div className="essential-card__body">
+                    <p className="essential-card__category">
+                      <EssentialIconGlyph name={category.icon} />
+                      {category.label}
+                    </p>
+                    <h3 className="essential-card__title" id={titleId}>
+                      <strong>{presentation.lead}</strong>
+                      {featured && presentation.subline ? (
+                        <span className="essential-card__subline"> {presentation.subline}</span>
+                      ) : (
+                        presentation.rest
+                      )}
+                    </h3>
+                    {expanded && (
+                      <EssentialDetail
+                        item={item}
+                        id={detailId}
+                        showMedia={media !== item.imageUrl}
+                      />
+                    )}
+                    {detailed && (
+                      <button
+                        type="button"
+                        className="essential-card__toggle"
+                        aria-expanded={expanded}
+                        aria-controls={expanded ? detailId : undefined}
+                        aria-describedby={titleId}
+                        onClick={() => setExpandedKey(expanded ? '' : key)}
+                      >
+                        {expanded ? t('Menos detalles') : t('Detalles')}
+                        <ChevronDown aria-hidden />
+                      </button>
+                    )}
+                  </div>
+                </li>
               );
             })}
-          </div>
+          </ol>
 
-          {activeGroup && (
-            <section
-              className="essential-discovery__panel"
-              role="tabpanel"
-              id={`essential-tabpanel-${resolvedGroupKey}`}
-              aria-labelledby={`essential-tab-${resolvedGroupKey}`}
-              tabIndex={0}
+          {filtered.length > PREVIEW_SIZE && (
+            <button
+              type="button"
+              className="essential-discovery__more"
+              aria-expanded={showAll}
+              onClick={() => setShowAll((value) => !value)}
             >
-              <div className="essential-discovery__catalogue">
-                <header>
-                  <div>
-                    <p className="kicker">{t('Orden editorial')}</p>
-                    <h3>{activeGroup.title}</h3>
-                  </div>
-                  <span>
-                    {activeGroup.items.length} {t('opciones')}
-                  </span>
-                </header>
-
-                <ol className="essential-discovery__list">
-                  {visibleItems?.map((item, index) => {
-                    const key = itemKey(item, index);
-                    const presentation = essentialPresentation(item);
-                    const active = key === resolvedItemKey;
-                    const expanded = key === expandedMobileKey;
-                    const priority = priorityLabel(index, activeGroup.items.length);
-                    return (
-                      <li className={active ? 'is-selected' : ''} key={key}>
-                        <button
-                          type="button"
-                          className="essential-discovery__choice"
-                          aria-pressed={active}
-                          aria-expanded={mobile ? expanded : undefined}
-                          aria-controls={mobile ? `essential-mobile-detail-${key}` : undefined}
-                          onClick={() => selectItem(key)}
-                          ref={(node) => {
-                            if (node) itemRefs.current.set(key, node);
-                            else itemRefs.current.delete(key);
-                          }}
-                        >
-                          <span className="essential-discovery__thumb" aria-hidden>
-                            {item.imageUrl ? (
-                              <MediaImage src={imageUrl(item.imageUrl)} alt="" loading="lazy" />
-                            ) : (
-                              <EssentialIconGlyph name={item.icon || activeGroup.icon} />
-                            )}
-                          </span>
-                          <span className="essential-discovery__choice-copy">
-                            <small>{priority}</small>
-                            <strong>{presentation.title}</strong>
-                            <span>
-                              {[item.duration, item.place?.nombre].filter(Boolean).join(' · ') ||
-                                t('Ver criterio editorial')}
-                            </span>
-                          </span>
-                          <span className="essential-discovery__choice-state" aria-hidden>
-                            {active ? <Check /> : mobile ? <ChevronDown /> : <ChevronRight />}
-                          </span>
-                        </button>
-
-                        {mobile && expanded && (
-                          <div
-                            className="essential-discovery__mobile-detail"
-                            id={`essential-mobile-detail-${key}`}
-                          >
-                            <EssentialDetail
-                              item={item}
-                              groupIcon={activeGroup.icon}
-                              headingId={`essential-mobile-title-${key}`}
-                              priority={priority}
-                              saved={saved.keys.has(key)}
-                              inRoute={false}
-                              onToggleSaved={() => toggleSaved(key, presentation.title)}
-                              onToggleRoute={() => toggleRoute(key, presentation.title)}
-                              authenticated={authenticated}
-                              onClose={() => closeMobileDetail(key)}
-                            />
-                          </div>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ol>
-                {activeGroup.items.length > 5 && (
-                  <button
-                    type="button"
-                    className="essential-discovery__more"
-                    aria-expanded={itemsExpanded}
-                    onClick={() => setItemsExpanded((value) => !value)}
-                  >
-                    {itemsExpanded
-                      ? t('Ver selección breve')
-                      : t('Ver las {0} experiencias', { 0: activeGroup.items.length })}
-                  </button>
-                )}
-              </div>
-
-              {!mobile && selectedItem && (
-                <aside
-                  className="essential-discovery__detail"
-                  aria-label={t('Experiencia seleccionada')}
-                >
-                  <EssentialDetail
-                    item={selectedItem}
-                    groupIcon={activeGroup.icon}
-                    headingId={`essential-detail-title-${resolvedItemKey}`}
-                    priority={priorityLabel(selectedItemIndex, activeGroup.items.length)}
-                    saved={saved.keys.has(resolvedItemKey)}
-                    inRoute={false}
-                    onToggleSaved={() =>
-                      toggleSaved(resolvedItemKey, essentialPresentation(selectedItem).title)
-                    }
-                    onToggleRoute={() =>
-                      toggleRoute(resolvedItemKey, essentialPresentation(selectedItem).title)
-                    }
-                    authenticated={authenticated}
-                  />
-                </aside>
-              )}
-            </section>
+              {showAll ? t('Ver menos') : t('Ver las {0} experiencias', { 0: filtered.length })}
+              <ChevronDown aria-hidden />
+            </button>
           )}
-        </div>
+        </>
       ) : (
         <div className="essential-discovery__legacy">
-          <p className="essential-discovery__legacy-note">
-            {t(
-              'Esta guía conserva el contenido editorial original; todavía no dispone de imágenes ni datos prácticos estructurados.',
-            )}
-          </p>
           <div className="prose" dangerouslySetInnerHTML={{ __html: safeHtml(legacyHtml) }} />
         </div>
       )}
-
-      <p className="sr-only" aria-live="polite" aria-atomic="true">
-        {announcement}
-      </p>
-      <p className="essential-discovery__storage-note">
-        {authenticated
-          ? t(
-              'Los guardados de la guía permanecen en este dispositivo; “Añadir a un viaje” actualiza tu itinerario real.',
-            )
-          : t(
-              'Estas selecciones se guardan únicamente en este dispositivo. Entra para añadirlas a un viaje real.',
-            )}
-      </p>
     </section>
   );
 }

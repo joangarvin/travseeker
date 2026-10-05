@@ -1,5 +1,5 @@
 import { t, intlLocale } from '../i18n';
-import type { ClimateMonth, ClimateMetric, ClimateResponse, TemperatureUnit } from '../types';
+import type { ClimateMonth, ClimateMetric, TemperatureUnit } from '../types';
 
 export const MONTH_SHORT = Array.from({ length: 12 }, (_, month) =>
   new Intl.DateTimeFormat(intlLocale, { month: 'short', timeZone: 'UTC' }).format(
@@ -81,46 +81,60 @@ export function monthSummary(month: ClimateMonth) {
   });
 }
 
-export type ClimateAlternative = {
-  role: 'balance' | 'quiet' | 'warm';
-  label: string;
-  month: ClimateMonth;
-};
+export type MonthGrade = 'ideal' | 'good' | 'fair' | 'poor';
 
-export function buildClimateAlternatives(
-  months: ClimateMonth[],
-  recommendedMonths: ClimateResponse['recommendedMonths'],
-): ClimateAlternative[] {
-  const usableMonths = months.filter((month) => month && Number.isInteger(month.month));
-  if (!usableMonths.length) return [];
+const clampScore = (value: number) => Math.max(0, Math.min(100, value));
 
-  const byNumber = new Map(usableMonths.map((month) => [month.month, month]));
-  const recommended = recommendedMonths
-    .map((item) => byNumber.get(item.month))
-    .filter((month): month is ClimateMonth => Boolean(month));
-  const scoredFallback = [...usableMonths].sort(
-    (a, b) => (b.recommendationScore ?? -1) - (a.recommendationScore ?? -1),
-  );
-  const balance = recommended[0] ?? scoredFallback[0];
-  const alternatives: ClimateAlternative[] = [
-    { role: 'balance', label: t('Mejor equilibrio'), month: balance },
-  ];
-  const used = new Set([balance.month]);
-
-  const quiet = usableMonths
-    .filter((month) => !used.has(month.month) && Number.isFinite(month.crowd))
-    .sort((a, b) => a.crowd! - b.crowd! || a.month - b.month)[0];
-  if (quiet) {
-    alternatives.push({ role: 'quiet', label: t('Más tranquilo'), month: quiet });
-    used.add(quiet.month);
+// Weighted mix of comfortable highs (20–26 °C), few rainy days and low crowds.
+export function monthScore(month: ClimateMonth) {
+  const parts: [number, number][] = [];
+  if (month.temperatureMaxC != null) {
+    parts.push([clampScore(100 - Math.max(0, Math.abs(month.temperatureMaxC - 23) - 3) * 9), 0.4]);
   }
+  if (month.rainyDaysPerYear != null) {
+    parts.push([clampScore(100 - Math.max(0, month.rainyDaysPerYear - 3) * 7), 0.25]);
+  }
+  if (typeof month.crowd === 'number' && Number.isFinite(month.crowd)) {
+    parts.push([clampScore(100 - month.crowd), 0.35]);
+  }
+  const weight = parts.reduce((sum, [, part]) => sum + part, 0);
+  if (!weight) return null;
+  return Math.round(parts.reduce((sum, [value, part]) => sum + value * part, 0) / weight);
+}
 
-  const warm = usableMonths
-    .filter((month) => !used.has(month.month) && Number.isFinite(month.temperatureMaxC))
-    .sort((a, b) => b.temperatureMaxC! - a.temperatureMaxC! || a.month - b.month)[0];
-  if (warm) alternatives.push({ role: 'warm', label: t('Más cálido'), month: warm });
+export function monthGrade(score: number | null): MonthGrade | null {
+  if (score == null) return null;
+  if (score >= 68) return 'ideal';
+  if (score >= 55) return 'good';
+  if (score >= 42) return 'fair';
+  return 'poor';
+}
 
-  return alternatives;
+export function monthGradeLabel(grade: MonthGrade) {
+  return {
+    ideal: t('Ideal'),
+    good: t('Buena'),
+    fair: t('Regular'),
+    poor: t('Poco ideal'),
+  }[grade];
+}
+
+export function bestClimateMonths(months: ClimateMonth[]) {
+  const scored = months
+    .map((month) => ({ month, score: monthScore(month) }))
+    .filter((item): item is { month: ClimateMonth; score: number } => item.score != null)
+    .sort((a, b) => b.score - a.score || a.month.month - b.month.month);
+  if (!scored.length) return [];
+  const ideal = scored.filter(({ score }) => monthGrade(score) === 'ideal');
+  return (ideal.length ? ideal : scored.slice(0, 1))
+    .slice(0, 3)
+    .map(({ month }) => month)
+    .sort((a, b) => a.month - b.month);
+}
+
+export function listMonths(names: string[]) {
+  if (names.length <= 1) return names[0] || '';
+  return t('{0} y {1}', { 0: names.slice(0, -1).join(', '), 1: names.at(-1)! });
 }
 
 export function safeStoredTemperatureUnit(

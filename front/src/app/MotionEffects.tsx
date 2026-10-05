@@ -33,7 +33,8 @@ export function MotionEffects() {
           intersectionObserver.unobserve(element);
         });
       },
-      { rootMargin: '0px 0px -10% 0px', threshold: 0.12 },
+      // A ratio threshold never fires for sections taller than the viewport divided by it.
+      { rootMargin: '0px 0px -8% 0px', threshold: 0 },
     );
 
     const register = (root: ParentNode) => {

@@ -88,6 +88,41 @@ export function inferEssentialIcon(value: string): EssentialIconName {
   return 'Compass';
 }
 
+export type EssentialTone = 'heritage' | 'urban' | 'nature' | 'routes' | 'coast' | 'food' | 'explore';
+
+const toneRules: [RegExp, EssentialTone, EssentialIconName][] = [
+  [/(gastronom|vino|enoturism|sabor|comer)/, 'food', 'Utensils'],
+  [/(playa|costa|litoral|\bmar\b)/, 'coast', 'Waves'],
+  [/(natur|parque|paisaje|bosque|montan|sender)/, 'nature', 'Trees'],
+  [/(activo|ruta|camino|aventura)/, 'routes', 'Footprints'],
+  [/(urban|vida local|ciudad|barrio)/, 'urban', 'Building2'],
+  [/(cultur|histor|patrimon|monument|arte|museo)/, 'heritage', 'Landmark'],
+];
+
+export function essentialToneLabel(tone: EssentialTone) {
+  return {
+    heritage: t('Patrimonio'),
+    urban: t('Vida urbana'),
+    nature: t('Naturaleza'),
+    routes: t('Rutas'),
+    coast: t('Costa'),
+    food: t('Gastronomía'),
+    explore: '',
+  }[tone];
+}
+
+// Imported groups all carry the default Compass icon, so the title decides the category.
+export function essentialCategory(title: string, icon?: string | null) {
+  const rule = toneRules.find(([pattern]) => pattern.test(normalizedKey(title)));
+  const tone = rule?.[1] ?? 'explore';
+  const ownIcon = icon && icon !== 'Compass' && icon in essentialIconRegistry ? icon : null;
+  return {
+    tone,
+    icon: (ownIcon ?? rule?.[2] ?? 'Compass') as EssentialIconName,
+    label: essentialToneLabel(tone) || title,
+  };
+}
+
 export function essentialIcon(icon?: string | null): LucideIcon {
   return essentialIconRegistry[icon as EssentialIconName] || Compass;
 }

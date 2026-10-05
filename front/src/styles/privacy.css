@@ -65,6 +65,12 @@
   font-size: 0.75rem;
   box-shadow: var(--shadow-1);
 }
+@media (max-width: 760px) {
+  /* The mobile menu and footer expose the same settings without covering content. */
+  .privacy-reopen {
+    display: none;
+  }
+}
 .privacy-dialog {
   width: min(100%, 740px);
 }
@@ -132,8 +138,10 @@ div.privacy-category {
   border-bottom: 1px solid var(--line);
 }
 .legal-page nav button {
+  padding: 0;
   border: 0;
   background: transparent;
+  font: inherit;
   color: var(--ink);
   text-decoration: underline;
   min-height: 32px;

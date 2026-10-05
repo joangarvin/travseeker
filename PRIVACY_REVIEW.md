@@ -9,7 +9,7 @@ Reviewed on 5 October 2026. This is a technical audit and implementation record,
 - Separate permission for performance measurement and external maps/routes. No advertising category because no advertising tracker was found.
 - Decisions last 180 days, include the policy version and synchronize across tabs. Invalid, outdated and expired records do not authorize optional processing. No consent identifier or extra database request is introduced.
 - Performance reports only run after permission, omit authentication cookies and use coarse page names instead of full paths that could contain account tokens or identifiers.
-- CARTO/OpenStreetMap maps and OSRM route requests are gated. Without permission, destination lists and manually entered coordinates remain usable; itinerary distances use a local straight-line estimate. Withdrawal clears route caches and aborts active routing requests. It cannot undo data already received by a provider.
+- OpenStreetMap tiles and OSRM route requests are gated. Without permission, destination lists and manually entered coordinates remain usable; itinerary distances use a local straight-line estimate. Withdrawal clears route caches and aborts active routing requests. It cannot undo data already received by a provider.
 - Fonts are served locally, with their licenses, instead of contacting Google Fonts. Theme and comparison preferences are no longer written merely by visiting a page.
 
 ## Storage inventory
@@ -19,7 +19,7 @@ Reviewed on 5 October 2026. This is a technical audit and implementation record,
 | `trav_session` cookie | API authentication; HttpOnly, Secure in production | One hour; cleared on logout |
 | `trav_privacy_choices` local storage | Consent choices, dates and policy version | 180-day validity; renewed choice on expiry/version change |
 | `trav_locale`, `trav_theme`, `travseeker-temperature-unit` | Requested preferences | Until changed or browser data cleared |
-| `trav_compare`, `travseeker:saved-essentials` | Requested comparisons and saved essentials | Until removed or browser data cleared |
+| `trav_compare` | Requested comparisons | Until removed or browser data cleared |
 | `trav_editor_language` | Requested editor language | Until changed or browser data cleared |
 | `trav_editor_draft:*` session storage | Administrator drafts | Until saved/discarded or the tab session ends |
 | `trav_email_verification_banner_dismissed:v2:*` session storage | Dismissed verification reminder | Tab session |
@@ -31,7 +31,7 @@ Persistent functional preferences have no automatic expiry. Clearing site data r
 
 Cloudinary delivers images and receives network information such as IP addresses; its documentation says asset delivery does not set cookies. A read-only audit of destination, essential and avatar URLs found 80 Cloudinary URLs and no other image hosts in those fields. The editor can accept external image URLs, so new providers require review. Ordinary image delivery is disclosed separately from optional tracking.
 
-CARTO/OpenStreetMap receive IP addresses and requested map areas after map permission. OSRM receives route coordinates and IP addresses. Neon stores application data. Open-Meteo climate requests are made server-to-server with destination coordinates. Hosting and SMTP providers, actual processing regions, contracts, logs and backup retention must be confirmed by the operators. No Google Analytics, advertising pixel or behavioural advertising integration was found in the reviewed code.
+OpenStreetMap receives IP addresses and requested map areas after map permission (CARTO basemaps were removed on 5 October 2026 because they now require an API key). The public OSM tile servers are intended for light use; heavy production traffic needs a commercial tile provider or a self-hosted tile server under the OSM tile usage policy. OSRM receives route coordinates and IP addresses. Neon stores application data. Open-Meteo climate requests are made server-to-server with destination coordinates. Hosting and SMTP providers, actual processing regions, contracts, logs and backup retention must be confirmed by the operators. No Google Analytics, advertising pixel or behavioural advertising integration was found in the reviewed code.
 
 ## Required before treating the notices as final
 
@@ -57,7 +57,7 @@ Update the bilingual copy in `front/src/pages/legal/LegalPage.tsx` when processi
 - [AEPD: exercising data-protection rights](https://www.aepd.es/derechos-y-deberes/ejerce-tus-derechos)
 - [Cloudinary asset-delivery cookie documentation](https://cloudinary.com/documentation/ts_does_cloudinary_store_any_cookies)
 - [OpenStreetMap tile-user privacy FAQ](https://osmfoundation.org/wiki/Services_and_tile_users_privacy_FAQ)
-- [CARTO basemap terms](https://www.carto.com/legal/basemap-terms/)
+- [OpenStreetMap tile usage policy](https://operations.osmfoundation.org/policies/tiles/)
 
 ## Guided tutorial (5 October 2026)
 

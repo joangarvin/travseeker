@@ -110,6 +110,81 @@ function cleanPlainText(value, maximum) {
     .slice(0, maximum);
 }
 
+const SENTENCE_END = /[.!?…)]$/;
+
+function hasStructuredData(item) {
+  return Boolean(
+    item.description ||
+    item.placeId ||
+    item.place ||
+    item.imageUrl ||
+    item.duration ||
+    item.bestTime ||
+    item.officialUrl ||
+    item.reservationRequired != null,
+  );
+}
+
+function isEmbeddedHeading(item, index, items, sentenceRatio) {
+  const title = String(item.title || "").trim();
+  const next = items[index + 1];
+  return (
+    sentenceRatio >= 0.6 &&
+    !hasStructuredData(item) &&
+    !SENTENCE_END.test(title) &&
+    title.length <= 70 &&
+    title.split(/\s+/).length <= 9 &&
+    Boolean(next) &&
+    SENTENCE_END.test(String(next.title || "").trim())
+  );
+}
+
+// Some imported guides wrote their category names as list items, so they were
+// stored as experiences. Each such heading starts a new group of the items that follow.
+function splitEmbeddedHeadings(groups) {
+  const result = [];
+  const headings = [];
+  for (const group of groups) {
+    const items = group.items || [];
+    const sentenceRatio = items.length
+      ? items.filter((item) =>
+          SENTENCE_END.test(String(item.title || "").trim()),
+        ).length / items.length
+      : 0;
+    let current = { ...group, source: group, items: [] };
+    result.push(current);
+    items.forEach((item, index) => {
+      if (!isEmbeddedHeading(item, index, items, sentenceRatio)) {
+        current.items.push(item);
+        return;
+      }
+      headings.push(item);
+      const title = String(item.title).trim();
+      const translations = item.translations?.en?.title
+        ? { en: { title: item.translations.en.title } }
+        : {};
+      if (!current.items.length) {
+        current.title = title;
+        current.translations = translations;
+        current.icon = inferEssentialIcon(title);
+        return;
+      }
+      current = {
+        title,
+        translations,
+        icon: inferEssentialIcon(title),
+        source: null,
+        items: [],
+      };
+      result.push(current);
+    });
+  }
+  return {
+    groups: result.filter((group) => group.items.length),
+    headings,
+  };
+}
+
 function parseLegacyEssentials(html) {
   const source = String(html || "").trim();
   if (!source) return [];
@@ -149,7 +224,16 @@ function parseLegacyEssentials(html) {
     token = tokenPattern.exec(source);
   }
 
-  const populatedGroups = groups.filter((group) => group.items.length);
+  const populatedGroups = splitEmbeddedHeadings(
+    groups.filter((group) => group.items.length),
+  ).groups.map((group, groupIndex) => ({
+    title: group.title,
+    sortOrder: groupIndex,
+    items: group.items.map((item, itemIndex) => ({
+      ...item,
+      sortOrder: itemIndex,
+    })),
+  }));
   if (populatedGroups.length) return populatedGroups;
 
   const lines = plainHtml(source)
@@ -285,4 +369,5 @@ module.exports = {
   parseLegacyEssentials,
   plainHtml,
   serializeEssentialGroups,
+  splitEmbeddedHeadings,
 };
