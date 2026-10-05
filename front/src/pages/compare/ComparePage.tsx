@@ -1,3 +1,5 @@
+import { normalizeCompareIds } from '../../utils/compareSelection';
+import { t } from '../../i18n';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Check, GitCompare, Plus, Search, Trash2, X } from 'lucide-react';
@@ -11,13 +13,13 @@ import { TourismMarks } from '../../features/tourism/tourism';
 import { ActivityMarks } from '../../features/activities/activities';
 
 const rows: Array<[string, keyof Destino]> = [
-  ['Presupuesto', 'presupuesto'],
-  ['Afluencia', 'masificacion'],
-  ['Tipos de viaje', 'tipoTurismoPrincipal'],
-  ['Actividades', 'tipoTurismoSecundario'],
-  ['Julio y agosto', 'mesesJulioAgosto'],
-  ['Entretiempo', 'mesesMayJunSeptOct'],
-  ['Noviembre a abril', 'mesesNovAbril'],
+  [t('Presupuesto'), 'presupuesto'],
+  [t('Afluencia'), 'masificacion'],
+  [t('Tipos de viaje'), 'tipoTurismoPrincipal'],
+  [t('Actividades'), 'tipoTurismoSecundario'],
+  [t('Julio y agosto'), 'mesesJulioAgosto'],
+  [t('Entretiempo'), 'mesesMayJunSeptOct'],
+  [t('Noviembre a abril'), 'mesesNovAbril'],
 ];
 
 export default function ComparePage() {
@@ -29,43 +31,97 @@ export default function ComparePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [activeSuggestion, setActiveSuggestion] = useState(-1);
+  const [ready, setReady] = useState(false);
+  const [retry, setRetry] = useState(0);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState('');
   useEffect(() => {
-    api<Destino[]>('/destinos?limit=100')
-      .then(setCatalog)
-      .catch((cause) => setError(cause instanceof Error ? cause.message : 'No se pudo cargar el catálogo'));
+    if (params.has('ids'))
+      compare.replace(normalizeCompareIds((params.get('ids') || '').split(',')));
+    setReady(true);
   }, []);
   useEffect(() => {
-    const fromUrl = (params.get('ids') || '').split(',').filter(Boolean).slice(0, 4);
-    if (fromUrl.length && !compare.ids.length) fromUrl.forEach(compare.toggle);
-  }, []);
-  useEffect(() => {
-    if (compare.ids.length) setParams({ ids: compare.ids.join(',') }, { replace: true });
-    else setParams({}, { replace: true });
-    if (compare.ids.length < 2) {
-      setItems([]);
+    if (!ready) return;
+    setParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+        if (compare.ids.length) next.set('ids', compare.ids.join(','));
+        else next.delete('ids');
+        return next;
+      },
+      { replace: true },
+    );
+    setError('');
+    setItems([]);
+    if (!compare.ids.length) {
+      setLoading(false);
       return;
     }
+    const controller = new AbortController();
     setLoading(true);
-    setError('');
-    api<Destino[]>(`/destinos/compare?ids=${compare.ids.join(',')}`)
-      .then(setItems)
-      .catch((cause) => setError(cause instanceof Error ? cause.message : 'No se pudo preparar la comparación'))
-      .finally(() => setLoading(false));
-  }, [compare.ids.join(',')]);
+    const request =
+      compare.ids.length === 1
+        ? api<Destino>(`/destinos/${encodeURIComponent(compare.ids[0])}`, {
+            signal: controller.signal,
+          }).then((item) => [item])
+        : api<Destino[]>(`/destinos/compare?ids=${compare.ids.join(',')}`, {
+            signal: controller.signal,
+          });
+    request
+      .then((data) => {
+        if (controller.signal.aborted) return;
+        setItems(data);
+        if (data.length !== compare.ids.length)
+          setError(t('Algún destino ya no está disponible. Retíralo de la comparación.'));
+      })
+      .catch((cause) => {
+        if (!controller.signal.aborted)
+          setError(
+            cause instanceof Error ? cause.message : t('No se pudo preparar la comparación'),
+          );
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
+    return () => controller.abort();
+  }, [ready, compare.ids.join(','), retry]);
+  useEffect(() => {
+    const controller = new AbortController();
+    setCatalog([]);
+    setSearchError('');
+    setActiveSuggestion(-1);
+    if (!query.trim()) {
+      setSearchLoading(false);
+      return;
+    }
+    setSearchLoading(true);
+    const timer = window.setTimeout(() => {
+      api<Destino[]>(`/destinos?q=${encodeURIComponent(query.trim())}&limit=12`, {
+        signal: controller.signal,
+      })
+        .then(setCatalog)
+        .catch((cause) => {
+          if (!controller.signal.aborted)
+            setSearchError(
+              cause instanceof Error ? cause.message : t('No se pudo cargar el catálogo'),
+            );
+        })
+        .finally(() => {
+          if (!controller.signal.aborted) setSearchLoading(false);
+        });
+    }, 250);
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [query, retry]);
   const suggestions = useMemo(
-    () =>
-      catalog
-        .filter(
-          (item) =>
-            !compare.ids.includes(item.id) &&
-            item.nombre.toLowerCase().includes(query.toLowerCase()),
-        )
-        .slice(0, 8),
-    [catalog, compare.ids, query],
+    () => catalog.filter((item) => !compare.ids.includes(item.id)).slice(0, 8),
+    [catalog, compare.ids],
   );
   const chooseSuggestion = (id: string) => {
     if (!compare.toggle(id)) {
-      setError('Puedes comparar un máximo de cuatro destinos');
+      setError(t('Puedes comparar un máximo de cuatro destinos'));
       return;
     }
     setQuery('');
@@ -73,23 +129,24 @@ export default function ComparePage() {
   };
   return (
     <Shell>
-      <PageHeading kicker="Decide con los datos delante" title="Comparar destinos">
+      <PageHeading kicker={t('Decide con los datos delante')} title={t('Comparar destinos')}>
         <p>
-          Hasta cuatro lugares, criterio por criterio. Sin ganador automático: la mejor opción
-          depende de tu viaje.
+          {t(
+            'Hasta cuatro lugares, criterio por criterio. Sin ganador automático: la mejor opción depende de tu viaje.',
+          )}
         </p>
       </PageHeading>
-      <section className="compare-picker">
+      <section className="compare-picker" data-tour="comparison">
         <div className="compare-picker__selected">
           {compare.ids.map((id) => {
-            const item = catalog.find((d) => d.id === id);
+            const item = items.find((d) => d.id === id) || catalog.find((d) => d.id === id);
             return (
               <span key={id}>
-                {item?.nombre || 'Destino'}
+                {item?.nombre || t('Destino')}
                 <button
                   type="button"
                   onClick={() => compare.toggle(id)}
-                  aria-label={`Quitar ${item?.nombre || 'destino'}`}
+                  aria-label={t('Quitar {0}', { 0: item?.nombre || 'destino' })}
                 >
                   <X />
                 </button>
@@ -104,13 +161,17 @@ export default function ComparePage() {
               id="compare-search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Añade otro destino"
-              aria-label="Buscar destino para comparar"
+              placeholder={t('Añade otro destino')}
+              aria-label={t('Buscar destino para comparar')}
               role="combobox"
-              aria-expanded={Boolean(query && suggestions.length)}
+              aria-expanded={Boolean(query)}
               aria-controls="compare-suggestions"
               aria-autocomplete="list"
-              aria-activedescendant={activeSuggestion >= 0 ? `compare-option-${suggestions[activeSuggestion]?.id}` : undefined}
+              aria-activedescendant={
+                activeSuggestion >= 0
+                  ? `compare-option-${suggestions[activeSuggestion]?.id}`
+                  : undefined
+              }
               onKeyDown={(event) => {
                 if (!suggestions.length) return;
                 if (event.key === 'ArrowDown') {
@@ -118,7 +179,9 @@ export default function ComparePage() {
                   setActiveSuggestion((current) => (current + 1) % suggestions.length);
                 } else if (event.key === 'ArrowUp') {
                   event.preventDefault();
-                  setActiveSuggestion((current) => (current - 1 + suggestions.length) % suggestions.length);
+                  setActiveSuggestion(
+                    (current) => (current - 1 + suggestions.length) % suggestions.length,
+                  );
                 } else if (event.key === 'Enter' && activeSuggestion >= 0) {
                   event.preventDefault();
                   chooseSuggestion(suggestions[activeSuggestion].id);
@@ -129,7 +192,19 @@ export default function ComparePage() {
               }}
             />
             {query && (
-              <div id="compare-suggestions" role="listbox" aria-label="Destinos sugeridos">
+              <div id="compare-suggestions" role="listbox" aria-label={t('Destinos sugeridos')}>
+                {searchLoading && <p role="status">{t('Buscando destinos…')}</p>}
+                {searchError && (
+                  <Notice tone="error">
+                    {searchError}{' '}
+                    <button type="button" onClick={() => setRetry((value) => value + 1)}>
+                      {t('Reintentar')}
+                    </button>
+                  </Notice>
+                )}
+                {!searchLoading && !searchError && !suggestions.length && (
+                  <p role="status">{t('No hay destinos que coincidan. Prueba otra búsqueda.')}</p>
+                )}
                 {suggestions.map((item, index) => (
                   <button
                     key={item.id}
@@ -149,24 +224,38 @@ export default function ComparePage() {
         )}
         {compare.ids.length > 0 && (
           <button className="button button--quiet" onClick={compare.clear}>
-            <Trash2 /> Vaciar
+            <Trash2 /> {t('Vaciar')}
           </button>
         )}
       </section>
       <section className="compare-content">
-        {compare.ids.length < 2 ? (
-          <Empty icon={<GitCompare />} title="Elige al menos dos destinos">
-            Añade lugares desde el buscador o desde cualquier ficha para verlos cara a cara.
+        <p className="decision-help">
+          {t(
+            'Presupuesto: nivel orientativo de gasto, no una tarifa. Afluencia: estimación editorial de ocupación; un porcentaje menor indica más tranquilidad. No son datos en tiempo real.',
+          )}
+        </p>
+        {error ? (
+          <Notice tone="error">
+            {error}{' '}
+            <button
+              type="button"
+              className="button button--quiet"
+              onClick={() => setRetry((value) => value + 1)}
+            >
+              {t('Reintentar')}
+            </button>
+          </Notice>
+        ) : compare.ids.length < 2 ? (
+          <Empty icon={<GitCompare />} title={t('Elige al menos dos destinos')}>
+            {t('Añade lugares desde el buscador o desde cualquier ficha para verlos cara a cara.')}
           </Empty>
         ) : loading ? (
-          <Loader label="Preparando la comparación" />
-        ) : error ? (
-          <Notice tone="error">{error}. Puedes reintentar seleccionando de nuevo los destinos.</Notice>
+          <Loader label={t('Preparando la comparación')} />
         ) : (
           <div
             className="compare-table"
             role="table"
-            aria-label="Comparación de destinos"
+            aria-label={t('Comparación de destinos')}
             style={{ '--compare-count': items.length } as React.CSSProperties}
           >
             <div className="compare-table__header-row" role="row">
@@ -181,7 +270,7 @@ export default function ComparePage() {
             </div>
             {rows.map(([label, key]) => (
               <div className="compare-table__row" key={key} role="row">
-                <strong role="rowheader">{label}</strong>
+                <strong role="rowheader">{t(label)}</strong>
                 {items.map((item) => {
                   const value = item[key];
                   const isTourism = key === 'tipoTurismoPrincipal';
@@ -198,7 +287,7 @@ export default function ComparePage() {
                       ) : (
                         <>
                           {key.toString().startsWith('meses') && Number(value) <= 40 && <Check />}
-                          <span>{crowd}</span>
+                          <span>{t(crowd)}</span>
                         </>
                       )}
                     </div>

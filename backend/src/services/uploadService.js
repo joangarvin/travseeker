@@ -21,6 +21,8 @@ function uploadBuffer(buffer, options) {
         overwrite: true,
         resource_type: 'image',
         invalidate: true,
+        // Store web-sized originals; delivery URLs handle browser-specific format.
+        transformation: [{ width: options.maxSize || 1600, height: options.maxSize || 1600, crop: 'limit' }],
       },
       (error, result) => {
         if (error) reject(error);
@@ -71,9 +73,10 @@ async function uploadAvatar(userId, buffer, previousUrl) {
   const result = await uploadBuffer(buffer, {
     folder,
     publicId: String(userId),
+    maxSize: 512,
   });
 
-  if (previousUrl && previousUrl !== result.secure_url) {
+  if (previousUrl && extractPublicId(previousUrl) !== result.public_id) {
     await deleteByUrl(previousUrl);
   }
 

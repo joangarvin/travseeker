@@ -1,3 +1,4 @@
+import { t, intlLocale } from '../i18n';
 import { useEffect, useMemo, useState } from 'react';
 import { BedDouble, Bus, Check, Copy, Save, Sparkles, Utensils } from 'lucide-react';
 import type { CollectionDetail, Municipio } from '../types';
@@ -11,22 +12,22 @@ import {
 import { getTripDuration } from '../utils/tripDuration';
 import { Button, Field } from './ui';
 
-const euro = new Intl.NumberFormat('es-ES', {
+const euro = new Intl.NumberFormat(intlLocale, {
   style: 'currency',
   currency: 'EUR',
   maximumFractionDigits: 0,
 });
 
 const styleLabels: Record<TravelStyle, string> = {
-  economy: 'Económico',
-  moderate: 'Moderado',
-  premium: 'Premium',
+  economy: t('Económico'),
+  moderate: t('Moderado'),
+  premium: t('Premium'),
 };
 
 const seasonLabels: Record<TravelSeason, string> = {
-  low: 'Baja',
-  mid: 'Media',
-  high: 'Alta',
+  low: t('Baja'),
+  mid: t('Media'),
+  high: t('Alta'),
 };
 
 export type SavedBudget = Budget & {
@@ -53,7 +54,7 @@ type NumberControlProps = {
 
 function NumberControl({ id, label, value, onChange }: NumberControlProps) {
   return (
-    <Field label={label} htmlFor={id}>
+    <Field label={t(label)} htmlFor={id}>
       <input
         id={id}
         type="number"
@@ -69,10 +70,10 @@ function NumberControl({ id, label, value, onChange }: NumberControlProps) {
 }
 
 const categories = [
-  { key: 'accommodation', label: 'Alojamiento', icon: BedDouble },
-  { key: 'food', label: 'Comida', icon: Utensils },
-  { key: 'transport', label: 'Transporte', icon: Bus },
-  { key: 'activities', label: 'Actividades', icon: Sparkles },
+  { key: 'accommodation', label: t('Alojamiento'), icon: BedDouble },
+  { key: 'food', label: t('Comida'), icon: Utensils },
+  { key: 'transport', label: t('Transporte'), icon: Bus },
+  { key: 'activities', label: t('Actividades'), icon: Sparkles },
 ] as const;
 
 export function BudgetEstimator({
@@ -107,13 +108,21 @@ export function BudgetEstimator({
   const rooms = Math.ceil(travelers / 2);
   const days = nights + 1;
   const summary = [
-    `Presupuesto de viaje — ${municipio?.nombre || 'Destino'}`,
-    `${travelers} viajeros · ${nights} noches · estilo ${styleLabels[style].toLowerCase()} · temporada ${seasonLabels[season].toLowerCase()}`,
-    `Alojamiento: ${euro.format(budget.accommodation)}`,
-    `Comida: ${euro.format(budget.food)}`,
-    `Transporte: ${euro.format(budget.transport)}`,
-    `Actividades: ${euro.format(budget.activities)}`,
-    `Total estimado: ${euro.format(budget.total)} (${euro.format(budget.perPerson)} por persona)`,
+    t('Presupuesto de viaje — {0}', { 0: municipio?.nombre || t('Destino') }),
+    t('{0} viajeros · {1} noches · estilo {2} · temporada {3}', {
+      0: travelers,
+      1: nights,
+      2: styleLabels[style].toLowerCase(),
+      3: seasonLabels[season].toLowerCase(),
+    }),
+    t('Alojamiento: {0}', { 0: euro.format(budget.accommodation) }),
+    t('Comida: {0}', { 0: euro.format(budget.food) }),
+    t('Transporte: {0}', { 0: euro.format(budget.transport) }),
+    t('Actividades: {0}', { 0: euro.format(budget.activities) }),
+    t('Total estimado: {0} ({1} por persona)', {
+      0: euro.format(budget.total),
+      1: euro.format(budget.perPerson),
+    }),
   ].join('\n');
 
   const copySummary = async () => {
@@ -127,38 +136,57 @@ export function BudgetEstimator({
   };
 
   const formulas: Record<(typeof categories)[number]['key'], string> = {
-    accommodation: `${rooms} ${rooms === 1 ? 'habitación' : 'habitaciones'} × ${nights} noches × ${euro.format(budget.nightlyHotelRate)}`,
-    food: `${travelers} personas × ${days} días × ${euro.format(budget.food / travelers / days)}/día`,
-    transport: `${travelers} personas × ${days} días × ${euro.format(budget.transport / travelers / days)}/día`,
-    activities: `${travelers} personas × ${days} días × ${euro.format(budget.activities / travelers / days)}/día`,
+    accommodation: t('{0} {1} × {2} noches × {3}', {
+      0: rooms,
+      1: rooms === 1 ? t('habitación') : t('habitaciones'),
+      2: nights,
+      3: euro.format(budget.nightlyHotelRate),
+    }),
+    food: t('{0} personas × {1} días × {2}/día', {
+      0: travelers,
+      1: days,
+      2: euro.format(budget.food / travelers / days),
+    }),
+    transport: t('{0} personas × {1} días × {2}/día', {
+      0: travelers,
+      1: days,
+      2: euro.format(budget.transport / travelers / days),
+    }),
+    activities: t('{0} personas × {1} días × {2}/día', {
+      0: travelers,
+      1: days,
+      2: euro.format(budget.activities / travelers / days),
+    }),
   };
 
   return (
     <section className="budget-estimator" aria-labelledby="budget-estimator-title">
       <div className="budget-estimator__intro">
-        <p className="kicker">Ponle números al viaje</p>
-        <h3 id="budget-estimator-title">Calcula tu presupuesto</h3>
+        <p className="kicker">{t('Ponle números al viaje')}</p>
+        <h3 id="budget-estimator-title">{t('Calcula tu presupuesto')}</h3>
         <p>
-          {municipio ? `Partiendo de ${municipio.nombre}. ` : ''}Ajusta el viaje y compara el total
-          al instante.
+          {municipio ? t('Partiendo de {0}. ', { 0: municipio.nombre }) : ''}
+          {t('Ajusta el viaje y compara el total al instante.')}
         </p>
       </div>
 
       <div className="budget-estimator__total" aria-live="polite">
-        <span>Total estimado</span>
+        <span>{t('Total estimado')}</span>
         <strong>{euro.format(budget.total)}</strong>
-        <small>{euro.format(budget.perPerson)} por persona</small>
+        <small>
+          {euro.format(budget.perPerson)} {t('por persona')}
+        </small>
       </div>
 
       <div className="budget-estimator__controls">
         <NumberControl
           id="budget-travelers"
-          label="Viajeros"
+          label={t('Viajeros')}
           value={travelers}
           onChange={setTravelers}
         />
-        <NumberControl id="budget-nights" label="Noches" value={nights} onChange={setNights} />
-        <Field label="Estilo de viaje" htmlFor="budget-style">
+        <NumberControl id="budget-nights" label={t('Noches')} value={nights} onChange={setNights} />
+        <Field label={t('Estilo de viaje')} htmlFor="budget-style">
           <select
             id="budget-style"
             value={style}
@@ -166,12 +194,12 @@ export function BudgetEstimator({
           >
             {Object.entries(styleLabels).map(([value, label]) => (
               <option key={value} value={value}>
-                {label}
+                {t(label)}
               </option>
             ))}
           </select>
         </Field>
-        <Field label="Temporada" htmlFor="budget-season">
+        <Field label={t('Temporada')} htmlFor="budget-season">
           <select
             id="budget-season"
             value={season}
@@ -179,13 +207,13 @@ export function BudgetEstimator({
           >
             {Object.entries(seasonLabels).map(([value, label]) => (
               <option key={value} value={value}>
-                {label}
+                {t(label)}
               </option>
             ))}
           </select>
         </Field>
         {showMunicipioControl && (
-          <Field label="Municipio base" htmlFor="budget-municipio">
+          <Field label={t('Municipio base')} htmlFor="budget-municipio">
             <select
               id="budget-municipio"
               value={selectedMunicipioId}
@@ -203,8 +231,8 @@ export function BudgetEstimator({
 
       <div className="budget-estimator__result">
         <details className="budget-estimator__details">
-          <summary>Ver desglose y cálculo</summary>
-          <div className="budget-breakdown" aria-label="Distribución del presupuesto">
+          <summary>{t('Ver desglose y cálculo')}</summary>
+          <div className="budget-breakdown" aria-label={t('Distribución del presupuesto')}>
             {categories.map(({ key, label }) => {
               const percentage = budget.total ? (budget[key] / budget.total) * 100 : 0;
               return (
@@ -225,7 +253,7 @@ export function BudgetEstimator({
                 <Icon className={`budget-estimator__icon--${key}`} aria-hidden="true" />
                 <div>
                   <b>
-                    {label} <span>{Math.round((budget[key] / budget.total) * 100)}%</span>
+                    {t(label)} <span>{Math.round((budget[key] / budget.total) * 100)}%</span>
                   </b>
                   <small>{formulas[key]}</small>
                 </div>
@@ -236,7 +264,7 @@ export function BudgetEstimator({
         </details>
         <div className="budget-estimator__actions">
           <Button variant="secondary" onClick={() => void copySummary()}>
-            {copied ? <Check /> : <Copy />} {copied ? 'Resumen copiado' : 'Copiar resumen'}
+            {copied ? <Check /> : <Copy />} {copied ? t('Resumen copiado') : t('Copiar resumen')}
           </Button>
           {onSaveToCollection && (
             <Button
@@ -244,7 +272,7 @@ export function BudgetEstimator({
                 onSaveToCollection({ ...budget, travelers, nights, style, season, municipio })
               }
             >
-              <Save /> Guardar presupuesto
+              <Save /> {t('Guardar presupuesto')}
             </Button>
           )}
         </div>
@@ -287,12 +315,14 @@ export function CollectionBudgetSummary({ collection }: { collection: Collection
   return (
     <section className="collection-budget" aria-labelledby="collection-budget-title">
       <div>
-        <p className="kicker">Presupuesto conjunto</p>
-        <h2 id="collection-budget-title">El viaje, en números</h2>
-        <p>Calculado una sola vez para la duración real del viaje y sus noches planificadas.</p>
+        <p className="kicker">{t('Presupuesto conjunto')}</p>
+        <h2 id="collection-budget-title">{t('El viaje, en números')}</h2>
+        <p>
+          {t('Calculado una sola vez para la duración real del viaje y sus noches planificadas.')}
+        </p>
       </div>
       <div className="collection-budget__controls">
-        <Field label="Estilo" htmlFor="collection-budget-style">
+        <Field label={t('Estilo')} htmlFor="collection-budget-style">
           <select
             id="collection-budget-style"
             value={style}
@@ -300,12 +330,12 @@ export function CollectionBudgetSummary({ collection }: { collection: Collection
           >
             {Object.entries(styleLabels).map(([value, label]) => (
               <option key={value} value={value}>
-                {label}
+                {t(label)}
               </option>
             ))}
           </select>
         </Field>
-        <Field label="Temporada" htmlFor="collection-budget-season">
+        <Field label={t('Temporada')} htmlFor="collection-budget-season">
           <select
             id="collection-budget-season"
             value={season}
@@ -313,7 +343,7 @@ export function CollectionBudgetSummary({ collection }: { collection: Collection
           >
             {Object.entries(seasonLabels).map(([value, label]) => (
               <option key={value} value={value}>
-                {label}
+                {t(label)}
               </option>
             ))}
           </select>
@@ -321,22 +351,26 @@ export function CollectionBudgetSummary({ collection }: { collection: Collection
       </div>
       <div className="collection-budget__total" aria-live="polite">
         <small>
-          {travelers} viajeros · {duration.days} {duration.days === 1 ? 'día' : 'días'} ·{' '}
-          {duration.nights} {duration.nights === 1 ? 'noche' : 'noches'}
+          {travelers} {t('viajeros ·')} {duration.days} {duration.days === 1 ? t('día') : t('días')}{' '}
+          · {duration.nights} {duration.nights === 1 ? 'noche' : 'noches'}
         </small>
         <strong>{euro.format(totals.total)}</strong>
-        <span>{euro.format(totals.total / travelers)} por persona</span>
+        <span>
+          {euro.format(totals.total / travelers)} {t('por persona')}
+        </span>
       </div>
       <div className="collection-budget__legend">
         {categories.map(({ key, label }) => (
           <span key={key}>
-            <i className={`budget-breakdown__${key}`} /> {label} <b>{euro.format(totals[key])}</b>
+            <i className={`budget-breakdown__${key}`} /> {t(label)}{' '}
+            <b>{euro.format(totals[key])}</b>
           </span>
         ))}
       </div>
       <p className="collection-budget__method">
-        Alojamiento por cada noche real; comida, transporte y actividades por persona y día. Las
-        bases del itinerario determinan el precio de cada noche.
+        {t(
+          'Alojamiento por cada noche real; comida, transporte y actividades por persona y día. Las bases del itinerario determinan el precio de cada noche.',
+        )}
       </p>
     </section>
   );

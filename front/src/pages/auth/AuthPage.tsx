@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
@@ -40,7 +41,7 @@ export default function AuthPage() {
       }
       navigate(returnTo);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No se pudo continuar');
+      setError(cause instanceof Error ? cause.message : t('No se pudo continuar'));
     } finally {
       setIsSubmitting(false);
     }
@@ -68,18 +69,18 @@ export default function AuthPage() {
       <section className="auth-layout">
         <div className="auth-layout__visual">
           <span>
-            Viaja con una idea.
+            {t('Viaja con una idea.')}
             <br />
-            Vuelve con una historia.
+            {t('Vuelve con una historia.')}
           </span>
         </div>
 
         <div className="auth-panel">
           <Link to="/" className="auth-panel__back">
-            <ArrowLeft /> Volver
+            <ArrowLeft /> {t('Volver')}
           </Link>
 
-          <div className="auth-tabs" role="tablist" aria-label="Acceso y registro">
+          <div className="auth-tabs" role="tablist" aria-label={t('Acceso y registro')}>
             <button
               id="auth-tab-login"
               role="tab"
@@ -90,7 +91,7 @@ export default function AuthPage() {
               onKeyDown={moveTab}
               onClick={() => setMode('login')}
             >
-              Entrar
+              {t('Entrar')}
             </button>
             <button
               id="auth-tab-register"
@@ -102,7 +103,7 @@ export default function AuthPage() {
               onKeyDown={moveTab}
               onClick={() => setMode('register')}
             >
-              Crear cuenta
+              {t('Crear cuenta')}
             </button>
           </div>
 
@@ -111,16 +112,16 @@ export default function AuthPage() {
             role="tabpanel"
             aria-labelledby={isLogin ? 'auth-tab-login' : 'auth-tab-register'}
           >
-            <h1>{isLogin ? 'Qué bueno verte.' : 'Guarda el próximo viaje.'}</h1>
+            <h1>{isLogin ? t('Qué bueno verte.') : t('Guarda el próximo viaje.')}</h1>
             <p>
               {isLogin
-                ? 'Tus destinos y viajes siguen aquí.'
-                : 'Una cuenta sirve para guardar, comparar y organizar. Nada más.'}
+                ? t('Tus destinos y viajes siguen aquí.')
+                : t('Una cuenta sirve para guardar, comparar y organizar. Nada más.')}
             </p>
 
             <form onSubmit={handleSubmit}>
               {!isLogin && (
-                <Field label="Nombre" htmlFor="nombre">
+                <Field label={t('Nombre')} htmlFor="nombre">
                   <input
                     id="nombre"
                     value={name}
@@ -130,7 +131,7 @@ export default function AuthPage() {
                 </Field>
               )}
 
-              <Field label="Email" htmlFor="email">
+              <Field label={t('Email')} htmlFor="email">
                 <input
                   id="email"
                   type="email"
@@ -141,7 +142,7 @@ export default function AuthPage() {
                 />
               </Field>
 
-              <Field label="Contraseña" htmlFor="password" hint="Mínimo 8 caracteres">
+              <Field label={t('Contraseña')} htmlFor="password" hint={t('Mínimo 8 caracteres')}>
                 <div className="password-field">
                   <input
                     id="password"
@@ -156,22 +157,33 @@ export default function AuthPage() {
                   <button
                     type="button"
                     onClick={() => setIsPasswordVisible((currentValue) => !currentValue)}
-                    aria-label={isPasswordVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                    aria-label={
+                      isPasswordVisible ? t('Ocultar contraseña') : t('Mostrar contraseña')
+                    }
                   >
                     {isPasswordVisible ? <EyeOff /> : <Eye />}
                   </button>
                 </div>
               </Field>
 
+              {!isLogin && (
+                <p className="auth-legal">
+                  {t(
+                    'Al crear una cuenta solicitas las funciones del servicio. Consulta cómo tratamos tus datos y las condiciones de uso.',
+                  )}{' '}
+                  <Link to="/privacidad">{t('Política de privacidad')}</Link> ·{' '}
+                  <Link to="/aviso-legal">{t('Condiciones de uso')}</Link>
+                </p>
+              )}
               {error && <Notice tone="error">{error}</Notice>}
               <Button type="submit" loading={isSubmitting}>
-                {isLogin ? 'Entrar' : 'Crear cuenta'}
+                {isLogin ? t('Entrar') : t('Crear cuenta')}
               </Button>
             </form>
 
             {isLogin && (
               <Link className="auth-panel__forgot" to="/recuperar">
-                He olvidado mi contraseña
+                {t('He olvidado mi contraseña')}
               </Link>
             )}
           </section>

@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refresh = useCallback(async () => {
     setLoading(true);
     try {
-      setUser(await api<User>('/auth/me', {}, token));
+      setUser(await api<User>('/auth/me'));
       setToken(COOKIE_SESSION_MARKER);
     } catch {
       setToken(null);
@@ -39,7 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } finally {
       setLoading(false);
     }
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     localStorage.removeItem(LEGACY_TOKEN_STORAGE_KEY);

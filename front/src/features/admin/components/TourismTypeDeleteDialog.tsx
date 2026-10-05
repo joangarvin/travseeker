@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import { AlertTriangle } from 'lucide-react';
 import { AdminModal } from '../../../components/admin/AdminModal';
 import { Button } from '../../../components/ui';
@@ -15,23 +16,26 @@ export function TourismTypeDeleteDialog({
   onClose: () => void;
 }) {
   return (
-    <AdminModal title={`Eliminar ${type.name}`} onClose={onClose}>
+    <AdminModal title={t('Eliminar {0}', { 0: type.name })} onClose={onClose}>
       <div className="activity-delete-dialog">
         <AlertTriangle aria-hidden />
         <div>
           <p>
-            El tipo desaparecerá del catálogo y se retirará de{' '}
-            <strong>{type.destinationsCount || 0} destinos</strong>.
+            {t('El tipo desaparecerá del catálogo y se retirará de')}{' '}
+            <strong>
+              {type.destinationsCount || 0} {t('destinos')}
+            </strong>
+            .
           </p>
-          <p>Los destinos que se queden sin ningún tipo deberán reclasificarse después.</p>
+          <p>{t('Los destinos que se queden sin ningún tipo deberán reclasificarse después.')}</p>
         </div>
       </div>
       <footer className="modal-actions">
         <Button data-autofocus variant="quiet" onClick={onClose}>
-          Conservar tipo
+          {t('Conservar tipo')}
         </Button>
         <Button variant="danger" loading={isDeleting} onClick={onConfirm}>
-          Eliminar definitivamente
+          {t('Eliminar definitivamente')}
         </Button>
       </footer>
     </AdminModal>

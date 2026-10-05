@@ -1,3 +1,5 @@
+import { ExternalMapGate } from '../../features/privacy/CookieConsent';
+import { t } from '../../i18n';
 import { CircleMarker, MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { Crosshair, MapPin } from 'lucide-react';
 
@@ -27,34 +29,36 @@ export function CoordinatePicker({
       <div className="coordinate-picker__hint">
         <Crosshair />
         <span>
-          <b>Haz clic en el mapa</b>
-          <small>Las coordenadas se completan automáticamente.</small>
+          <b>{t('Haz clic en el mapa')}</b>
+          <small>{t('Las coordenadas se completan automáticamente.')}</small>
         </span>
       </div>
-      <MapContainer
-        key={`${center[0]}-${center[1]}`}
-        center={center}
-        zoom={hasPoint ? 9 : 5}
-        zoomControl={compact}
-        className="coordinate-picker__map"
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <ClickHandler onPick={onChange} />
-        {hasPoint && (
-          <CircleMarker
-            center={center}
-            radius={9}
-            pathOptions={{ className: 'coordinate-picker__marker', weight: 3, fillOpacity: 1 }}
+      <ExternalMapGate>
+        <MapContainer
+          key={`${center[0]}-${center[1]}`}
+          center={center}
+          zoom={hasPoint ? 9 : 5}
+          zoomControl={compact}
+          className="coordinate-picker__map"
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-        )}
-      </MapContainer>
+          <ClickHandler onPick={onChange} />
+          {hasPoint && (
+            <CircleMarker
+              center={center}
+              radius={9}
+              pathOptions={{ className: 'coordinate-picker__marker', weight: 3, fillOpacity: 1 }}
+            />
+          )}
+        </MapContainer>
+      </ExternalMapGate>
       <div className="coordinate-picker__readout">
         <MapPin />
         <span>
-          {hasPoint ? `${latitude?.toFixed(5)}, ${longitude?.toFixed(5)}` : 'Sin punto asignado'}
+          {hasPoint ? `${latitude?.toFixed(5)}, ${longitude?.toFixed(5)}` : t('Sin punto asignado')}
         </span>
       </div>
     </div>

@@ -1,0 +1,89 @@
+{
+  "defaultLocale": "es",
+  "languages": [
+    {
+      "code": "es",
+      "name": "Español",
+      "intl": "es-ES"
+    },
+    {
+      "code": "en",
+      "name": "English",
+      "intl": "en-GB"
+    }
+  ],
+  "fields": {
+    "destination": {
+      "nombre": 200,
+      "ubicacion": 500,
+      "descripcion": 30000,
+      "imprescindibles": 30000
+    },
+    "municipality": {
+      "nombre": 200,
+      "precios": 2000,
+      "conexiones": 10000,
+      "tipoTurismo": 1000
+    },
+    "place": {
+      "nombre": 100,
+      "categoria": 40,
+      "descripcion": 500
+    },
+    "activity": {
+      "name": 80
+    },
+    "tourismType": {
+      "name": 80,
+      "description": 180
+    },
+    "essentialGroup": {
+      "title": 140
+    },
+    "essentialItem": {
+      "title": 320,
+      "description": 700,
+      "imageAlt": 180,
+      "duration": 80,
+      "bestTime": 120
+    }
+  },
+  "catalogLabels": {
+    "en": {
+      "Cultural": "Culture",
+      "Naturaleza": "Nature",
+      "Sol y playa": "Sun and beach",
+      "Rural": "Countryside",
+      "Montaña": "Mountains",
+      "Patrimonial": "Heritage",
+      "Aventura": "Adventure",
+      "Observación de fauna": "Wildlife watching",
+      "Observación astronómica": "Stargazing",
+      "Deportes acuáticos": "Water sports",
+      "Gastronomía": "Food and drink",
+      "Senderismo": "Hiking",
+      "Ocio": "Leisure",
+      "Relax y bienestar": "Relaxation and wellness",
+      "Lujo": "Luxury",
+      "Histórico": "History",
+      "Nieve": "Snow",
+      "Patrimonio Modernista": "Modernist heritage",
+      "Patrimonio Medieval": "Medieval heritage",
+      "Patrimonio Barroco": "Baroque heritage",
+      "Geológico": "Geology",
+      "Submarinismo": "Scuba diving",
+      "Ecoturismos": "Ecotourism",
+      "Enoturismo": "Wine tourism",
+      "Esquí": "Skiing",
+      "Misterio": "Mystery",
+      "Patrimonio Mozárabe": "Mozarabic heritage",
+      "Patrimonio Prehistórico": "Prehistoric heritage",
+      "Patrimonio Renacentista": "Renaissance heritage",
+      "Patrimonio Románico": "Romanesque heritage",
+      "Termal": "Thermal spas",
+      "Surf": "Surfing",
+      "Patrimonio Romano": "Roman heritage",
+      "Familiar": "Family-friendly"
+    }
+  }
+}

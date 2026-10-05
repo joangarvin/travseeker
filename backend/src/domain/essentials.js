@@ -1,3 +1,4 @@
+const { translationData } = require("./localization");
 const ENTITY_MAP = {
   amp: "&",
   apos: "'",
@@ -198,6 +199,7 @@ function normalizeEssentialGroups(value) {
     }
 
     return {
+      ...translationData(group, "essentialGroup"),
       title,
       icon: normalizeIcon(group?.icon, inferEssentialIcon(title)),
       sortOrder: groupIndex,
@@ -233,6 +235,7 @@ function normalizeEssentialGroups(value) {
           reservationRequired = item.reservationRequired;
         }
         return {
+          ...translationData(item, "essentialItem"),
           title: itemTitle,
           description: cleanPlainText(item?.description, 700) || null,
           icon: normalizeIcon(item?.icon),

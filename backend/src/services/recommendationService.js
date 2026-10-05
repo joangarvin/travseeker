@@ -9,6 +9,7 @@ const {
 const DISPLAY_SELECT = {
   id: true,
   nombre: true,
+  translations: true,
   imagen: true,
   presupuesto: true,
   masificacion: true,
@@ -24,6 +25,7 @@ function tagsOf(d) {
 function toDisplay(d) {
   return {
     id: d.id,
+    translations: d.translations,
     nombre: d.nombre,
     imagen: d.imagen,
     presupuesto: d.presupuesto,

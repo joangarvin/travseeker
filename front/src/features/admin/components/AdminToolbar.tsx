@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import type { ReactNode } from 'react';
 import { Search } from 'lucide-react';
 
@@ -28,7 +29,9 @@ export function AdminToolbar({
             placeholder={placeholder}
           />
         </label>
-        <small>{resultCount} resultados</small>
+        <small>
+          {resultCount} {t('resultados')}
+        </small>
       </div>
       {children}
     </header>

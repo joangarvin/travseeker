@@ -1,4 +1,13 @@
+const { localizeContent } = require("./localization");
 const STOP_WORDS = new Set([
+  "the",
+  "and",
+  "of",
+  "in",
+  "to",
+  "for",
+  "with",
+  "at",
   "a",
   "al",
   "con",
@@ -43,7 +52,9 @@ const FIELD_DEFINITIONS = [
     weight: 90,
     fuzzyThreshold: 0.78,
     values: (destination) =>
-      (destination.activityLinks || []).map((link) => link.activity?.name),
+      (destination.activityLinks || [])
+        .map((link) => [link.activity?.name, link.activity?.displayName])
+        .flat(),
     label: (value) => `Actividad · ${value}`,
   },
   {
@@ -51,9 +62,9 @@ const FIELD_DEFINITIONS = [
     weight: 88,
     fuzzyThreshold: 0.78,
     values: (destination) =>
-      (destination.tourismTypeLinks || []).map(
-        (link) => link.tourismType?.name,
-      ),
+      (destination.tourismTypeLinks || [])
+        .map((link) => [link.tourismType?.name, link.tourismType?.displayName])
+        .flat(),
     label: (value) => `Tipo de viaje · ${value}`,
   },
   {
@@ -282,10 +293,16 @@ function crossFieldMatch(query, fields) {
     : null;
 }
 
-function destinationSearchMatch(destination, query) {
+function destinationSearchMatch(destination, query, locale = "es") {
+  const localized = localizeContent(destination, locale);
   const fields = FIELD_DEFINITIONS.map((definition) => ({
     ...definition,
-    values: definition.values(destination).filter(Boolean),
+    values: [
+      ...new Set([
+        ...definition.values(destination),
+        ...definition.values(localized),
+      ]),
+    ].filter(Boolean),
   }));
   const candidates = fields.flatMap((field) =>
     field.values.map((value) => ({
@@ -306,14 +323,14 @@ function destinationSearchMatch(destination, query) {
   return crossFieldMatch(query, fields);
 }
 
-function rankDestinationSearch(destinations, query) {
+function rankDestinationSearch(destinations, query, locale = "es") {
   const cleanQuery = String(query || "")
     .trim()
     .slice(0, 120);
   if (!normalizeSearchText(cleanQuery)) return destinations;
   return destinations
     .map((destination) => {
-      const match = destinationSearchMatch(destination, cleanQuery);
+      const match = destinationSearchMatch(destination, cleanQuery, locale);
       return match
         ? {
             ...destination,

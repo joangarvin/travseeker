@@ -1,3 +1,4 @@
+import { locale, languages } from '../../i18n';
 import { useEffect } from 'react';
 
 type PageMetaProps = { title: string; description: string; canonical?: string };
@@ -35,7 +36,23 @@ export function PageMeta({ title, description, canonical }: PageMetaProps) {
       link.rel = 'canonical';
       document.head.appendChild(link);
     }
-    link.href = canonicalUrl;
+    const localizedUrl = new URL(canonicalUrl);
+    localizedUrl.searchParams.set('lang', locale);
+    link.href = localizedUrl.toString();
+    ensureProperty('og:locale', locale === 'en' ? 'en_GB' : 'es_ES');
+    for (const language of languages) {
+      let alternate = document.head.querySelector<HTMLLinkElement>(
+        `link[rel="alternate"][hreflang="${language.code}"]`,
+      );
+      if (!alternate) {
+        alternate = document.createElement('link');
+        alternate.rel = 'alternate';
+        alternate.hreflang = language.code;
+        document.head.appendChild(alternate);
+      }
+      localizedUrl.searchParams.set('lang', language.code);
+      alternate.href = localizedUrl.toString();
+    }
   }, [canonical, description, title]);
   return null;
 }

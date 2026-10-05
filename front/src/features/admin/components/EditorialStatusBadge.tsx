@@ -1,11 +1,12 @@
+import { t } from '../../../i18n';
 import { Archive, CheckCircle2, CircleDashed, Clock3 } from 'lucide-react';
 import type { EditorialStatus } from '../../../types';
 
 const STATUS = {
-  draft: { label: 'Borrador', Icon: CircleDashed },
-  pending: { label: 'Pendiente', Icon: Clock3 },
-  published: { label: 'Publicado', Icon: CheckCircle2 },
-  archived: { label: 'Archivado', Icon: Archive },
+  draft: { label: t('Borrador'), Icon: CircleDashed },
+  pending: { label: t('Pendiente'), Icon: Clock3 },
+  published: { label: t('Publicado'), Icon: CheckCircle2 },
+  archived: { label: t('Archivado'), Icon: Archive },
 } satisfies Record<EditorialStatus, { label: string; Icon: typeof Archive }>;
 
 export function EditorialStatusBadge({ status }: { status: EditorialStatus }) {
@@ -13,7 +14,7 @@ export function EditorialStatusBadge({ status }: { status: EditorialStatus }) {
   return (
     <span className={`editorial-status editorial-status--${status}`}>
       <Icon aria-hidden="true" />
-      {label}
+      {t(label)}
     </span>
   );
 }
@@ -27,13 +28,13 @@ export function EditorialStatusFilter({
 }) {
   return (
     <label className="editorial-inline-filter">
-      <span>Estado editorial</span>
+      <span>{t('Estado editorial')}</span>
       <select value={value} onChange={(event) => onChange(event.target.value as typeof value)}>
-        <option value="all">Todos</option>
-        <option value="draft">Borrador</option>
-        <option value="pending">Pendiente</option>
-        <option value="published">Publicado</option>
-        <option value="archived">Archivado</option>
+        <option value="all">{t('Todos')}</option>
+        <option value="draft">{t('Borrador')}</option>
+        <option value="pending">{t('Pendiente')}</option>
+        <option value="published">{t('Publicado')}</option>
+        <option value="archived">{t('Archivado')}</option>
       </select>
     </label>
   );

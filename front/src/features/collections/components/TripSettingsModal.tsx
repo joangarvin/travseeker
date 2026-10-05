@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { CalendarDays, Settings2, X } from 'lucide-react';
 import type { CollectionDetail } from '../../../types';
@@ -33,7 +34,9 @@ export function TripSettingsModal({ collection, onClose, onSave }: TripSettingsM
     itineraryLength: collection.itinerary.length,
     destinationCount: collection.items.length,
   });
-  const itineraryDelta = collection.itinerary.length ? duration.days - collection.itinerary.length : 0;
+  const itineraryDelta = collection.itinerary.length
+    ? duration.days - collection.itinerary.length
+    : 0;
 
   useEffect(() => {
     firstInput.current?.focus();
@@ -46,7 +49,16 @@ export function TripSettingsModal({ collection, onClose, onSave }: TripSettingsM
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
-    if (itineraryDelta < 0 && !window.confirm(`Se eliminarán ${Math.abs(itineraryDelta)} ${Math.abs(itineraryDelta) === 1 ? 'día' : 'días'} del final del itinerario. ¿Continuar?`)) return;
+    if (
+      itineraryDelta < 0 &&
+      !window.confirm(
+        t('Se eliminarán {0} {1} del final del itinerario. ¿Continuar?', {
+          0: Math.abs(itineraryDelta),
+          1: Math.abs(itineraryDelta) === 1 ? t('día') : t('días'),
+        }),
+      )
+    )
+      return;
     setSaving(true);
     setError('');
     try {
@@ -59,7 +71,9 @@ export function TripSettingsModal({ collection, onClose, onSave }: TripSettingsM
       });
       onClose();
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'No se pudieron guardar los datos del viaje');
+      setError(
+        cause instanceof Error ? cause.message : t('No se pudieron guardar los datos del viaje'),
+      );
     } finally {
       setSaving(false);
     }
@@ -67,36 +81,124 @@ export function TripSettingsModal({ collection, onClose, onSave }: TripSettingsM
 
   return (
     <div className="modal-backdrop" onMouseDown={onClose}>
-      <section className="modal trip-settings-modal" role="dialog" aria-modal="true" aria-labelledby="trip-settings-title" onMouseDown={(event) => event.stopPropagation()}>
-        <button className="modal__close" type="button" onClick={onClose} aria-label="Cerrar"><X /></button>
+      <section
+        className="modal trip-settings-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="trip-settings-title"
+        onMouseDown={(event) => event.stopPropagation()}
+      >
+        <button className="modal__close" type="button" onClick={onClose} aria-label={t('Cerrar')}>
+          <X />
+        </button>
         <div className="modal__heading">
-          <span className="modal__icon"><Settings2 aria-hidden="true" /></span>
-          <div><p className="kicker">Datos del viaje</p><h2 id="trip-settings-title">Editar planificación</h2></div>
+          <span className="modal__icon">
+            <Settings2 aria-hidden="true" />
+          </span>
+          <div>
+            <p className="kicker">{t('Datos del viaje')}</p>
+            <h2 id="trip-settings-title">{t('Editar planificación')}</h2>
+          </div>
         </div>
         <form onSubmit={submit}>
-          <Field label="Nombre" htmlFor="settings-trip-name">
-            <input ref={firstInput} id="settings-trip-name" value={nombre} onChange={(event) => setNombre(event.target.value)} maxLength={80} required />
+          <Field label={t('Nombre')} htmlFor="settings-trip-name">
+            <input
+              ref={firstInput}
+              id="settings-trip-name"
+              value={nombre}
+              onChange={(event) => setNombre(event.target.value)}
+              maxLength={80}
+              required
+            />
           </Field>
-          <Field label="Descripción" htmlFor="settings-trip-description">
-            <textarea id="settings-trip-description" value={descripcion} onChange={(event) => setDescripcion(event.target.value)} maxLength={280} />
+          <Field label={t('Descripción')} htmlFor="settings-trip-description">
+            <textarea
+              id="settings-trip-description"
+              value={descripcion}
+              onChange={(event) => setDescripcion(event.target.value)}
+              maxLength={280}
+            />
           </Field>
           <div className="form-grid form-grid--dates">
-            <Field label="Inicio" htmlFor="settings-trip-start"><input id="settings-trip-start" type="date" value={startDate} onChange={(event) => { setStartDate(event.target.value); if (endDate && event.target.value > endDate) setEndDate(event.target.value); }} /></Field>
-            <Field label="Fin" htmlFor="settings-trip-end"><input id="settings-trip-end" type="date" min={startDate || undefined} value={endDate} onChange={(event) => setEndDate(event.target.value)} /></Field>
+            <Field label={t('Inicio')} htmlFor="settings-trip-start">
+              <input
+                id="settings-trip-start"
+                type="date"
+                value={startDate}
+                onChange={(event) => {
+                  setStartDate(event.target.value);
+                  if (endDate && event.target.value > endDate) setEndDate(event.target.value);
+                }}
+              />
+            </Field>
+            <Field label={t('Fin')} htmlFor="settings-trip-end">
+              <input
+                id="settings-trip-end"
+                type="date"
+                min={startDate || undefined}
+                value={endDate}
+                onChange={(event) => setEndDate(event.target.value)}
+              />
+            </Field>
           </div>
           <div className="trip-duration-preview" aria-live="polite">
             <CalendarDays aria-hidden="true" />
-            <div><strong>{duration.days} {duration.days === 1 ? 'día' : 'días'} · {duration.nights} {duration.nights === 1 ? 'noche' : 'noches'}</strong><span>El itinerario y el presupuesto usarán esta duración.</span></div>
+            <div>
+              <strong>
+                {duration.days} {duration.days === 1 ? t('día') : t('días')} · {duration.nights}{' '}
+                {duration.nights === 1 ? 'noche' : 'noches'}
+              </strong>
+              <span>{t('El itinerario y el presupuesto usarán esta duración.')}</span>
+            </div>
           </div>
-          {itineraryDelta !== 0 && startDate && endDate && <Notice tone="info">Al guardar, el itinerario {itineraryDelta > 0 ? `añadirá ${itineraryDelta} ${itineraryDelta === 1 ? 'día' : 'días'}` : `se reducirá en ${Math.abs(itineraryDelta)} ${Math.abs(itineraryDelta) === 1 ? 'día' : 'días'}`} para coincidir con las fechas.</Notice>}
-          <Field label="Viajeros" htmlFor="settings-trip-travelers" hint="Se usa para contextualizar el viaje y calcular su presupuesto.">
-            <input id="settings-trip-travelers" type="number" min="1" max="50" inputMode="numeric" value={travelerCount} onChange={(event) => setTravelerCount(Math.min(50, Math.max(1, Number(event.target.value) || 1)))} />
+          {itineraryDelta !== 0 && startDate && endDate && (
+            <Notice tone="info">
+              {t('Al guardar, el itinerario')}{' '}
+              {itineraryDelta > 0
+                ? t('añadirá {0} {1}', {
+                    0: itineraryDelta,
+                    1: itineraryDelta === 1 ? t('día') : t('días'),
+                  })
+                : t('se reducirá en {0} {1}', {
+                    0: Math.abs(itineraryDelta),
+                    1: Math.abs(itineraryDelta) === 1 ? t('día') : t('días'),
+                  })}{' '}
+              {t('para coincidir con las fechas.')}
+            </Notice>
+          )}
+          <Field
+            label={t('Viajeros')}
+            htmlFor="settings-trip-travelers"
+            hint={t('Se usa para contextualizar el viaje y calcular su presupuesto.')}
+          >
+            <input
+              id="settings-trip-travelers"
+              type="number"
+              min="1"
+              max="50"
+              inputMode="numeric"
+              value={travelerCount}
+              onChange={(event) =>
+                setTravelerCount(Math.min(50, Math.max(1, Number(event.target.value) || 1)))
+              }
+            />
           </Field>
-          {!startDate && <p className="modal__skip-note"><CalendarDays /> Sin fecha de inicio, la duración se toma del itinerario y no se puede exportar al calendario.</p>}
+          {!startDate && (
+            <p className="modal__skip-note">
+              <CalendarDays />{' '}
+              {t(
+                'Sin fecha de inicio, la duración se toma del itinerario y no se puede exportar al calendario.',
+              )}
+            </p>
+          )}
           {error && <Notice tone="error">{error}</Notice>}
           <div className="modal__actions">
-            <Button type="button" variant="quiet" onClick={onClose} disabled={saving}>Cancelar</Button>
-            <Button type="submit" loading={saving} disabled={!nombre.trim()}>Guardar datos</Button>
+            <Button type="button" variant="quiet" onClick={onClose} disabled={saving}>
+              {t('Cancelar')}
+            </Button>
+            <Button type="submit" loading={saving} disabled={!nombre.trim()}>
+              {t('Guardar datos')}
+            </Button>
           </div>
         </form>
       </section>

@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import {
   Bookmark,
   Check,
@@ -53,12 +54,12 @@ export function EssentialDetail({
     : null;
   const mapUrl = placeCoordinates ? openStreetMapUrl(placeCoordinates, 16) : null;
   const practicalFacts = [
-    item.duration && { Icon: Clock3, label: 'Duración', value: item.duration },
-    item.bestTime && { Icon: Sunrise, label: 'Mejor momento', value: item.bestTime },
+    item.duration && { Icon: Clock3, label: t('Duración'), value: item.duration },
+    item.bestTime && { Icon: Sunrise, label: t('Mejor momento'), value: item.bestTime },
     item.reservationRequired != null && {
       Icon: TicketCheck,
-      label: 'Reserva',
-      value: item.reservationRequired ? 'Necesaria' : 'No necesaria',
+      label: t('Reserva'),
+      value: item.reservationRequired ? t('Necesaria') : t('No necesaria'),
     },
   ].filter(Boolean) as PracticalFact[];
 
@@ -77,7 +78,7 @@ export function EssentialDetail({
           <span className="essential-sheet__priority">{priority}</span>
           {onClose && (
             <button type="button" className="essential-sheet__close" onClick={onClose}>
-              <X aria-hidden /> <span>Cerrar detalle</span>
+              <X aria-hidden /> <span>{t('Cerrar detalle')}</span>
             </button>
           )}
         </div>
@@ -89,27 +90,29 @@ export function EssentialDetail({
             <EssentialIconGlyph name={item.icon || groupIcon} />
           </span>
           <div>
-            <p>{priority} · Por qué merece la pena</p>
+            <p>
+              {priority} {t('· Por qué merece la pena')}
+            </p>
             <h4 id={headingId}>{presentation.title}</h4>
           </div>
           {!item.imageUrl && onClose && (
             <button type="button" className="essential-sheet__close" onClick={onClose}>
-              <X aria-hidden /> <span>Cerrar detalle</span>
+              <X aria-hidden /> <span>{t('Cerrar detalle')}</span>
             </button>
           )}
         </header>
 
         <p className="essential-sheet__description">
           {presentation.description ||
-            'La guía todavía no dispone de una explicación ampliada para esta experiencia.'}
+            t('La guía todavía no dispone de una explicación ampliada para esta experiencia.')}
         </p>
 
         {!!practicalFacts.length && (
           <dl className="essential-sheet__facts">
             {practicalFacts.map(({ Icon, label, value }) => (
-              <div key={label}>
+              <div key={t(label)}>
                 <Icon aria-hidden />
-                <dt>{label}</dt>
+                <dt>{t(label)}</dt>
                 <dd>{value}</dd>
               </div>
             ))}
@@ -120,27 +123,27 @@ export function EssentialDetail({
           <div className="essential-sheet__place">
             <MapPin aria-hidden />
             <div>
-              <span>Dónde está</span>
+              <span>{t('Dónde está')}</span>
               <strong>{item.place.nombre}</strong>
-              <small>{item.place.categoria}</small>
+              <small>{t(item.place.categoria)}</small>
             </div>
             {mapUrl && (
               <a href={mapUrl} target="_blank" rel="noreferrer">
-                Ver mapa <ExternalLink aria-hidden />
+                {t('Ver mapa')} <ExternalLink aria-hidden />
               </a>
             )}
           </div>
         )}
 
-        <div className="essential-sheet__planning" aria-label="Planificar esta experiencia">
+        <div className="essential-sheet__planning" aria-label={t('Planificar esta experiencia')}>
           <button type="button" aria-pressed={saved} onClick={onToggleSaved}>
             {saved ? <Check aria-hidden /> : <Bookmark aria-hidden />}
-            {saved ? 'Guardado en este dispositivo' : 'Guardar en este dispositivo'}
+            {saved ? t('Guardado en este dispositivo') : t('Guardar en este dispositivo')}
           </button>
           {authenticated && (
             <button type="button" className="is-primary" onClick={onToggleRoute}>
               {inRoute ? <Check aria-hidden /> : <Route aria-hidden />}
-              {inRoute ? 'Añadido al viaje' : 'Añadir a un viaje'}
+              {inRoute ? t('Añadido al viaje') : t('Añadir a un viaje')}
             </button>
           )}
         </div>
@@ -152,7 +155,7 @@ export function EssentialDetail({
             target="_blank"
             rel="noreferrer"
           >
-            Consultar la web oficial <ExternalLink aria-hidden />
+            {t('Consultar la web oficial')} <ExternalLink aria-hidden />
           </a>
         )}
       </div>

@@ -1,3 +1,4 @@
+import { t, intlLocale } from '../i18n';
 import type { Destino, SearchFilters } from '../types';
 import { parseTagValues, tagQueryValue } from './tags';
 
@@ -51,7 +52,7 @@ function cleanFilters(filters: SearchFilters): SearchFilters {
 function monthLabel(value: string) {
   const month = Number(value);
   if (!Number.isInteger(month) || month < 1 || month > 12) return value;
-  const label = new Intl.DateTimeFormat('es', { month: 'long' }).format(
+  const label = new Intl.DateTimeFormat(intlLocale, { month: 'long' }).format(
     new Date(2026, month - 1, 1),
   );
   return label.charAt(0).toLocaleUpperCase('es') + label.slice(1);
@@ -59,8 +60,15 @@ function monthLabel(value: string) {
 
 function valueLabel(key: SearchFilterKey, value: string) {
   if (key === 'month') return monthLabel(value);
-  if (key === 'avoidCrowds') return FILTER_LABELS.avoidCrowds || 'Evitar aglomeraciones';
-  return `${FILTER_LABELS[key] || key}: ${value}`;
+  if (key === 'avoidCrowds') return t(FILTER_LABELS.avoidCrowds || 'Evitar aglomeraciones');
+  return `${t(FILTER_LABELS[key] || key)}: ${
+    key === 'q'
+      ? value
+      : value
+          .split(', ')
+          .map((part) => t(part))
+          .join(', ')
+  }`;
 }
 
 function groupValues(key: SearchFilterKey, value?: string) {
@@ -108,9 +116,7 @@ export function removeActiveFilter(
   return cleanFilters(next);
 }
 
-export function buildRelaxationCandidates(
-  filters: SearchFilters,
-): FilterRelaxationCandidate[] {
+export function buildRelaxationCandidates(filters: SearchFilters): FilterRelaxationCandidate[] {
   const active = cleanFilters(filters);
 
   return RELAX_PRIORITY.flatMap((key) => {

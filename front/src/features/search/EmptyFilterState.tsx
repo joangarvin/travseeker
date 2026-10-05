@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { ArrowRight, SearchX, Sparkles, X } from 'lucide-react';
 import type {
   ActiveFilterChip,
@@ -32,11 +33,9 @@ export function EmptyFilterState({
           <SearchX />
         </span>
         <div className="smart-empty__intro-copy">
-          <p className="kicker">Ajustemos la ruta</p>
-          <h3 id="smart-empty-title">No hay una coincidencia exacta</h3>
-          <p>
-            Prueba quitando una condición. Conservaremos el resto de tus preferencias.
-          </p>
+          <p className="kicker">{t('Ajustemos la ruta')}</p>
+          <h3 id="smart-empty-title">{t('No hay una coincidencia exacta')}</h3>
+          <p>{t('Prueba quitando una condición. Conservaremos el resto de tus preferencias.')}</p>
         </div>
         {hasFilters && (
           <button
@@ -44,15 +43,15 @@ export function EmptyFilterState({
             type="button"
             onClick={onResetAll}
           >
-            Limpiar todos los filtros
+            {t('Limpiar todos los filtros')}
           </button>
         )}
       </div>
 
       {hasFilters && (
-        <div className="smart-empty__filters" aria-label="Filtros activos">
+        <div className="smart-empty__filters" aria-label={t('Filtros activos')}>
           <p className="smart-empty__filters-label">
-            <span>Filtros activos</span>
+            <span>{t('Filtros activos')}</span>
             <strong>{activeChips.length}</strong>
           </p>
           <div className="smart-empty__chips">
@@ -62,9 +61,9 @@ export function EmptyFilterState({
                 className="smart-empty__chip"
                 type="button"
                 onClick={() => onRemoveFilter(chip.key, chip.value)}
-                aria-label={`Quitar ${chip.label}`}
+                aria-label={t('Quitar {0}', { 0: chip.label })}
               >
-                <span>{chip.label}</span>
+                <span>{t(chip.label)}</span>
                 <X aria-hidden />
               </button>
             ))}
@@ -74,16 +73,19 @@ export function EmptyFilterState({
 
       <div className="sr-only" role="status" aria-live="polite">
         {fallbackLoading
-          ? 'Buscando destinos cercanos a tus preferencias.'
+          ? t('Buscando destinos cercanos a tus preferencias.')
           : fallbackResult
-            ? `${fallbackResult.total} destinos disponibles al quitar ${fallbackResult.relaxedFilterLabel}.`
+            ? t('{0} destinos disponibles al quitar {1}.', {
+                0: fallbackResult.total,
+                1: fallbackResult.relaxedFilterLabel,
+              })
             : ''}
       </div>
 
       {fallbackLoading && hasFilters && (
         <div className="smart-empty__searching" aria-hidden="true">
           <Sparkles />
-          <span>Buscando la alternativa más cercana…</span>
+          <span>{t('Buscando la alternativa más cercana…')}</span>
         </div>
       )}
 
@@ -93,14 +95,17 @@ export function EmptyFilterState({
             <div className="smart-empty__suggestion-copy">
               <p className="kicker">
                 <Sparkles aria-hidden />
-                Ruta alternativa
+                {t('Ruta alternativa')}
               </p>
               <h3 id="fallback-title">
                 {fallbackResult.total === 1
-                  ? `1 destino encaja si quitamos ${fallbackResult.relaxedFilterLabel}`
-                  : `${fallbackResult.total} destinos encajan si quitamos ${fallbackResult.relaxedFilterLabel}`}
+                  ? t('1 destino encaja si quitamos {0}', { 0: fallbackResult.relaxedFilterLabel })
+                  : t('{0} destinos encajan si quitamos {1}', {
+                      0: fallbackResult.total,
+                      1: fallbackResult.relaxedFilterLabel,
+                    })}
               </h3>
-              <p>El resto de tu búsqueda se mantiene intacto.</p>
+              <p>{t('El resto de tu búsqueda se mantiene intacto.')}</p>
             </div>
             <button
               className="button button--primary"
@@ -108,8 +113,8 @@ export function EmptyFilterState({
               onClick={() => onApplySuggestion(fallbackResult)}
             >
               {fallbackResult.total === 1
-                ? 'Ver 1 destino'
-                : `Ver ${fallbackResult.total} destinos`}{' '}
+                ? t('Ver 1 destino')
+                : t('Ver {0} destinos', { 0: fallbackResult.total })}{' '}
               <ArrowRight aria-hidden />
             </button>
           </header>
@@ -124,7 +129,7 @@ export function EmptyFilterState({
 
       {!hasFilters && (
         <p className="smart-empty__no-filters">
-          No hay destinos disponibles en este momento. Vuelve a intentarlo en unos minutos.
+          {t('No hay destinos disponibles en este momento. Vuelve a intentarlo en unos minutos.')}
         </p>
       )}
     </div>

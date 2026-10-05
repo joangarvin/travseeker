@@ -1,3 +1,4 @@
+const { cachedPublic } = require("../cache/publicData");
 const { prisma } = require("../config/database");
 const { buildWhereClause } = require("../utils/buildWhereClause");
 const {
@@ -9,64 +10,24 @@ const {
 } = require("../constants/selects");
 const { normalizeMonth, rankForSeason } = require("../domain/season");
 const { rankDestinationSearch } = require("../domain/search");
-const { parseTags, serializeTags } = require("../constants/scales");
-const { cleanMunicipalityFields } = require("../utils/sanitizeContent");
+const { parseTags } = require("../constants/scales");
+const {
+  mapActivities,
+  mapTourismTypes,
+  mapDestinationRelations,
+} = require("../domain/destinationMapping");
 const {
   publicDestinationByIdWhere,
   publicEditorialWhere,
 } = require("../domain/editorial");
 
-function mapActivities(destino) {
-  if (!destino) return destino;
-  const activities = (destino.activityLinks || [])
-    .map((link) => link.activity)
-    .filter(Boolean)
-    .sort((first, second) => first.name.localeCompare(second.name, "es"));
-  const { activityLinks, ...rest } = destino;
-  return {
-    ...rest,
-    tipoTurismoSecundario: serializeTags(
-      activities.map((activity) => activity.name),
-    ),
-    activities,
-    activityIds: activities.map((activity) => activity.id),
-  };
-}
-
-function mapTourismTypes(destino) {
-  if (!destino) return destino;
-  const tourismTypes = (destino.tourismTypeLinks || [])
-    .map((link) => link.tourismType)
-    .filter(Boolean)
-    .sort(
-      (first, second) =>
-        first.sortOrder - second.sortOrder ||
-        first.name.localeCompare(second.name, "es"),
-    );
-  const { tourismTypeLinks, ...rest } = destino;
-  return {
-    ...rest,
-    tipoTurismoPrincipal: serializeTags(tourismTypes.map((type) => type.name)),
-    tourismTypes,
-    tourismTypeIds: tourismTypes.map((type) => type.id),
-  };
-}
-
-function mapMunicipalities(destino) {
-  if (!destino) return destino;
-  const municipios = (destino.municipioLinks || [])
-    .map((link) => cleanMunicipalityFields(link.municipio))
-    .filter(Boolean)
-    .sort((first, second) => first.nombre.localeCompare(second.nombre, "es"));
-  const { municipioLinks, ...rest } = destino;
-  return { ...rest, municipios };
-}
+const searchCandidates = cachedPublic("searchCandidates", (where) => prisma.destino.findMany({
+  where, select: SEARCH_LIST_SELECT, orderBy: [{ updatedAt: "desc" }, { id: "asc" }],
+}));
 
 function prepareSearchResults(destinations, query) {
-  const searched = rankDestinationSearch(destinations, query.q);
-  const prepared = searched.map((destination) =>
-    mapTourismTypes(mapActivities(mapMunicipalities(destination))),
-  );
+  const searched = rankDestinationSearch(destinations, query.q, query.lang);
+  const prepared = searched.map(mapDestinationRelations);
   const seasonal = rankForSeason(prepared, {
     month: normalizeMonth(query.month),
     avoidCrowds: query.avoidCrowds === "true",
@@ -106,7 +67,7 @@ function parsePagination(query) {
 }
 
 function textSearchWhere(query, structuredWhere) {
-  const terms = String(query.q || '')
+  const terms = String(query.q || "")
     .trim()
     .slice(0, 120)
     .split(/\s+/)
@@ -115,7 +76,7 @@ function textSearchWhere(query, structuredWhere) {
   if (!terms.length) return structuredWhere;
 
   const searchConditions = terms.flatMap((term) => {
-    const contains = { contains: term, mode: 'insensitive' };
+    const contains = { contains: term, mode: "insensitive" };
     return [
       { nombre: contains },
       { ubicacion: contains },
@@ -125,7 +86,9 @@ function textSearchWhere(query, structuredWhere) {
       { tipoTurismoSecundario: contains },
       {
         municipioLinks: {
-          some: { municipio: { nombre: contains, editorialStatus: "published" } },
+          some: {
+            municipio: { nombre: contains, editorialStatus: "published" },
+          },
         },
       },
       {
@@ -164,7 +127,13 @@ function textSearchWhere(query, structuredWhere) {
           some: {
             OR: [
               { title: contains },
-              { items: { some: { OR: [{ title: contains }, { description: contains }] } } },
+              {
+                items: {
+                  some: {
+                    OR: [{ title: contains }, { description: contains }],
+                  },
+                },
+              },
             ],
           },
         },
@@ -185,24 +154,23 @@ async function searchDestinosPage(query) {
   if (hasQuery) {
     // Fuzzy ranking needs the candidate set before it can score and sort it.
     // Pagination is still applied to the ranked result returned to the client.
-    const searchWhere = textSearchWhere(query, where);
-    let destinos = await prisma.destino.findMany({
-      where: searchWhere,
-      select: SEARCH_LIST_SELECT,
-      orderBy: [{ updatedAt: "desc" }, { id: "asc" }],
-    });
+    // English ranking also examines translated relation text. The Spanish SQL
+    // prefilter cannot safely narrow those candidates without a translated index.
+    const searchWhere =
+      query.lang === "en" ? where : textSearchWhere(query, where);
+    let destinos = await searchCandidates(searchWhere);
     let ranked = prepareSearchResults(destinos, query);
     // Preserve typo-tolerant search when the database pre-filter finds no candidates.
-    if (!ranked.length) {
-      destinos = await prisma.destino.findMany({
-        where,
-        select: SEARCH_LIST_SELECT,
-        orderBy: [{ updatedAt: "desc" }, { id: "asc" }],
-      });
+    if (!ranked.length && query.lang !== "en") {
+      destinos = await searchCandidates(where);
       ranked = prepareSearchResults(destinos, query);
     }
     const items = ranked.slice(offset, offset + limit);
-    return { items, total: ranked.length, hasMore: offset + items.length < ranked.length };
+    return {
+      items,
+      total: ranked.length,
+      hasMore: offset + items.length < ranked.length,
+    };
   }
 
   const [total, destinos] = await Promise.all([
@@ -252,7 +220,9 @@ async function getDestinoById(id) {
         include: { activity: true },
       },
       tourismTypeLinks: {
-        where: { tourismType: { isActive: true, editorialStatus: "published" } },
+        where: {
+          tourismType: { isActive: true, editorialStatus: "published" },
+        },
         include: { tourismType: true },
       },
     },
@@ -260,18 +230,16 @@ async function getDestinoById(id) {
   if (!destino) return null;
   destino.essentialGroups?.forEach((group) => {
     group.items?.forEach((item) => {
-      if (item.place?.editorialStatus !== "published" || item.place?.isActive !== true) {
+      if (
+        item.place?.editorialStatus !== "published" ||
+        item.place?.isActive !== true
+      ) {
         item.place = null;
         item.placeId = null;
       }
     });
   });
-  const municipios = (destino.municipioLinks || [])
-    .map((link) => cleanMunicipalityFields(link.municipio))
-    .filter(Boolean)
-    .sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
-  const { municipioLinks, ...rest } = destino;
-  return { ...mapTourismTypes(mapActivities(rest)), municipios };
+  return mapDestinationRelations(destino);
 }
 
 async function getDestacados(limit = 6) {
@@ -358,7 +326,7 @@ async function getStats() {
   const [total, reviewAgg] = await Promise.all([
     prisma.destino.count({ where: { editorialStatus: "published" } }),
     prisma.review.aggregate({
-      where: { status: 'published' },
+      where: { status: "published" },
       _avg: { rating: true },
       _count: { rating: true },
     }),
@@ -372,11 +340,11 @@ async function getStats() {
   };
 }
 
-async function getFilterOptions() {
+async function getFilterOptions(locale = "es") {
   const [destinations, activityCatalog] = await Promise.all([
     prisma.destino.findMany({
       where: { editorialStatus: "published" },
-      select: { ubicacion: true },
+      select: { ubicacion: true, translations: true },
     }),
     prisma.activity.findMany({
       where: { isActive: true, editorialStatus: "published" },
@@ -390,17 +358,26 @@ async function getFilterOptions() {
     ),
   ].sort((first, second) => first.localeCompare(second, "es"));
   const activities = activityCatalog.map((activity) => activity.name);
-  return { locations, activities };
+  const locationLabels = {};
+  for (const destination of destinations) {
+    const originals = parseTags(destination.ubicacion);
+    const translated = parseTags(destination.translations?.[locale]?.ubicacion);
+    if (originals.length === translated.length)
+      originals.forEach((name, index) => {
+        locationLabels[name] = translated[index];
+      });
+  }
+  return { locations, activities, locationLabels };
 }
 
 module.exports = {
-  searchDestinos,
-  searchDestinosPage,
-  getDestinoById,
-  getDestacados,
-  getRelacionados,
-  getMapaDestinos,
-  compareDestinos,
-  getStats,
-  getFilterOptions,
+  searchDestinos: cachedPublic("destinoService.searchDestinos", searchDestinos),
+  searchDestinosPage: cachedPublic("destinoService.searchDestinosPage", searchDestinosPage),
+  getDestinoById: cachedPublic("destinoService.getDestinoById", getDestinoById),
+  getDestacados: cachedPublic("destinoService.getDestacados", getDestacados),
+  getRelacionados: cachedPublic("destinoService.getRelacionados", getRelacionados),
+  getMapaDestinos: cachedPublic("destinoService.getMapaDestinos", getMapaDestinos),
+  compareDestinos: cachedPublic("destinoService.compareDestinos", compareDestinos),
+  getStats: cachedPublic("destinoService.getStats", getStats),
+  getFilterOptions: cachedPublic("destinoService.getFilterOptions", getFilterOptions),
 };

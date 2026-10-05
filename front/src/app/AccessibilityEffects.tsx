@@ -8,6 +8,8 @@ const FOCUSABLE_SELECTOR = [
   'select:not([disabled])',
   'textarea:not([disabled])',
   '[tabindex]:not([tabindex="-1"])',
+  'summary',
+  '[contenteditable="true"]',
 ].join(', ');
 
 const OVERLAY_SELECTOR = '[role="dialog"], .mobile-menu';
@@ -29,42 +31,57 @@ export function AccessibilityEffects() {
 
   useEffect(() => {
     let activeOverlay: HTMLElement | null = null;
-    let returnFocus: HTMLElement | null = null;
+    const returnFocus = new Map<HTMLElement, HTMLElement | null>();
+    const originalOverflow = document.body.style.overflow;
 
     const inspectOverlays = () => {
       const overlays = document.querySelectorAll<HTMLElement>(OVERLAY_SELECTOR);
       const nextOverlay = overlays[overlays.length - 1] || null;
 
       if (nextOverlay && nextOverlay !== activeOverlay) {
-        returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        const previousOverlay = activeOverlay;
+        const restoredFocus = previousOverlay ? returnFocus.get(previousOverlay) : null;
+        if (!returnFocus.has(nextOverlay))
+          returnFocus.set(
+            nextOverlay,
+            document.activeElement instanceof HTMLElement ? document.activeElement : null,
+          );
+        document.body.style.overflow = 'hidden';
         activeOverlay = nextOverlay;
         queueMicrotask(() => {
           const requestedFocus = nextOverlay.querySelector<HTMLElement>('[data-autofocus]');
-          (requestedFocus || getVisibleFocusableElements(nextOverlay)[0])?.focus();
+          (restoredFocus && nextOverlay.contains(restoredFocus)
+            ? restoredFocus
+            : requestedFocus || getVisibleFocusableElements(nextOverlay)[0]
+          )?.focus();
         });
         return;
       }
 
       if (!nextOverlay && activeOverlay) {
+        const target = returnFocus.get(activeOverlay);
         activeOverlay = null;
-        returnFocus?.focus();
-        returnFocus = null;
+        document.body.style.overflow = originalOverflow;
+        if (target?.isConnected) target.focus();
+        returnFocus.clear();
       }
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (!activeOverlay) return;
+      if (!activeOverlay?.isConnected) return;
 
       if (event.key === 'Escape') {
         const closeButton = activeOverlay.querySelector<HTMLButtonElement>('.modal__close');
         if (closeButton) {
           event.preventDefault();
+          event.stopImmediatePropagation();
           closeButton.click();
         }
         return;
       }
 
       if (event.key !== 'Tab') return;
+      event.stopImmediatePropagation();
 
       const focusableElements = getVisibleFocusableElements(activeOverlay);
       if (!focusableElements.length) return;
@@ -83,11 +100,12 @@ export function AccessibilityEffects() {
 
     const observer = new MutationObserver(inspectOverlays);
     observer.observe(document.body, { childList: true, subtree: true });
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown, true);
 
     return () => {
       observer.disconnect();
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown, true);
+      document.body.style.overflow = originalOverflow;
     };
   }, []);
 

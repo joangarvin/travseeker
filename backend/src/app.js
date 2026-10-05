@@ -15,7 +15,18 @@ const activityRoutes = require("./routes/activityRoutes");
 const tourismTypeRoutes = require("./routes/tourismTypeRoutes");
 const destinoController = require("./controllers/destinoController");
 const { errorHandler } = require("./middleware/errorHandler");
-const { securityHeaders, csrfProtection, gzipJson, authRateLimit, uploadRateLimit, metricsRateLimit } = require("./middleware/security");
+const {
+  securityHeaders,
+  csrfProtection,
+  gzipJson,
+  authRateLimit,
+  uploadRateLimit,
+  metricsRateLimit,
+} = require("./middleware/security");
+
+const { localization } = require("./middleware/localization");
+
+const { publicDataCache } = require("./middleware/publicCache");
 
 const app = express();
 
@@ -30,6 +41,8 @@ app.use(
   }),
 );
 app.use(csrfProtection);
+app.use(localization);
+app.use(publicDataCache);
 app.use(express.json({ limit: "1mb" }));
 
 app.get("/api/health", (_req, res) => {

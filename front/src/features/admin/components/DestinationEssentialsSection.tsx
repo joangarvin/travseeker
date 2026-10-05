@@ -1,5 +1,7 @@
+import { LocalizedField } from './LocalizedField';
+import { t, locale } from '../../../i18n';
 import { useMemo, useState } from 'react';
-import { ArrowDown, ArrowUp, ListPlus, Plus, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, ChevronDown, ListPlus, Plus, Trash2 } from 'lucide-react';
 import { Button, Empty, Field } from '../../../components/ui';
 import { EssentialIconGlyph, inferEssentialIcon } from '../../essentials/essentialIcons';
 import type { EssentialGroup, EssentialItem, Place } from '../../../types';
@@ -62,7 +64,7 @@ function parsePastedList(value: string) {
   let current: EssentialGroup | null = null;
   const ensureGroup = () => {
     if (!current) {
-      current = { ...newGroup('Selección esencial'), items: [] };
+      current = { ...newGroup(t('Selección esencial')), items: [] };
       groups.push(current);
     }
     return current;
@@ -107,6 +109,10 @@ export function DestinationEssentialsSection({
   update,
   onRequestPlace,
 }: DestinationEssentialsSectionProps) {
+  const [openGroups, setOpenGroups] = useState<Set<string>>(new Set());
+  const [removed, setRemoved] = useState<{
+    restore: (current: EssentialGroup[]) => EssentialGroup[];
+  } | null>(null);
   const [showImporter, setShowImporter] = useState(false);
   const [pastedList, setPastedList] = useState('');
   const parsedGroups = useMemo(() => parsePastedList(pastedList), [pastedList]);
@@ -124,20 +130,28 @@ export function DestinationEssentialsSection({
     });
   };
 
+  const addGroup = () => {
+    const group = newGroup();
+    setGroups([...groups, group]);
+    setOpenGroups((current) => new Set(current).add(group.id));
+  };
+
   return (
     <section className="editor-section" aria-labelledby="editor-essentials">
       <SectionHeading
         number="03"
         id="editor-essentials"
-        title="Lo imprescindible"
-        description="Agrupa recomendaciones por temas y completa solo la información que ayude a preparar la visita."
+        title={t('Lo imprescindible')}
+        description={t(
+          'Agrupa recomendaciones por temas y completa solo la información que ayude a preparar la visita.',
+        )}
       />
 
       <div className="essential-editor__toolbar">
-        <div>
-          <strong>{groups.length} temas</strong>
+        <div className="essential-editor__counts">
+          <strong>{t(groups.length === 1 ? '{0} tema' : '{0} temas', { 0: groups.length })}</strong>
           <span>
-            {groups.reduce((total, group) => total + group.items.length, 0)} imprescindibles
+            {groups.reduce((total, group) => total + group.items.length, 0)} {t('imprescindibles')}
           </span>
         </div>
         <Button
@@ -145,31 +159,46 @@ export function DestinationEssentialsSection({
           variant="secondary"
           onClick={() => setShowImporter((value) => !value)}
         >
-          <ListPlus /> Pegar una lista
+          <ListPlus /> {t('Pegar una lista')}
         </Button>
-        <Button type="button" onClick={() => setGroups([...groups, newGroup()])}>
-          <Plus /> Añadir tema
+        <Button type="button" onClick={addGroup}>
+          <Plus /> {t('Añadir tema')}
         </Button>
       </div>
+
+      {removed && (
+        <div className="essential-editor__undo" role="status">
+          <span>{t('Elemento eliminado.')}</span>
+          <button
+            type="button"
+            onClick={() => {
+              setGroups(removed.restore(groups));
+              setRemoved(null);
+            }}
+          >
+            {t('Deshacer')}
+          </button>
+        </div>
+      )}
 
       {showImporter && (
         <div className="essential-importer">
           <header>
             <div>
-              <h4>Convertir una lista</h4>
-              <p>Usa títulos terminados en dos puntos y una recomendación por línea.</p>
+              <h4>{t('Convertir una lista')}</h4>
+              <p>{t('Usa títulos terminados en dos puntos y una recomendación por línea.')}</p>
             </div>
             <span aria-live="polite">
-              {parsedGroups.length} temas · {parsedItems} elementos
+              {parsedGroups.length} {t('temas ·')} {parsedItems} {t('elementos')}
             </span>
           </header>
-          <Field label="Lista para importar" htmlFor="essential-import-list">
+          <Field label={t('Lista para importar')} htmlFor="essential-import-list">
             <textarea
               id="essential-import-list"
               value={pastedList}
-              placeholder={
-                'Costa:\n- Recorrer el paseo marítimo\n- Visitar el faro\n\nInterior:\n- Subir al castillo'
-              }
+              placeholder={t(
+                'Costa:\n- Recorrer el paseo marítimo\n- Visitar el faro\n\nInterior:\n- Subir al castillo',
+              )}
               onChange={(event) => setPastedList(event.target.value)}
             />
           </Field>
@@ -182,44 +211,74 @@ export function DestinationEssentialsSection({
               setShowImporter(false);
             }}
           >
-            Añadir lista al destino
+            {t('Añadir lista al destino')}
           </Button>
         </div>
       )}
 
       {!groups.length ? (
         <Empty
-          title="Aún no hay imprescindibles"
+          title={t('Aún no hay imprescindibles')}
           action={
-            <Button type="button" onClick={() => setGroups([newGroup()])}>
-              <Plus /> Crear el primer tema
+            <Button type="button" onClick={addGroup}>
+              <Plus /> {t('Crear el primer tema')}
             </Button>
           }
         >
-          Añade lugares y experiencias que de verdad ayuden a decidir y organizar el viaje.
+          {t('Añade lugares y experiencias que de verdad ayuden a decidir y organizar el viaje.')}
         </Empty>
       ) : (
         <div className="essential-editor__groups">
           {groups.map((group, groupIndex) => {
             return (
-              <details className="essential-editor__group" key={group.id}>
+              <details
+                className="essential-editor__group"
+                key={group.id}
+                open={openGroups.has(group.id)}
+                onToggle={(event) => {
+                  const open = event.currentTarget.open;
+                  setOpenGroups((current) => {
+                    if (current.has(group.id) === open) return current;
+                    const next = new Set(current);
+                    if (open) next.add(group.id);
+                    else next.delete(group.id);
+                    return next;
+                  });
+                }}
+              >
                 <summary>
                   <span className="essential-editor__group-symbol" aria-hidden>
                     <EssentialIconGlyph name={group.icon} />
                   </span>
                   <span>
-                    <strong>{group.title || 'Tema sin título'}</strong>
-                    <small>{group.items.length} imprescindibles</small>
+                    <strong>
+                      {group.translations?.[locale]?.title || group.title || t('Tema sin título')}
+                    </strong>
+                    <small>
+                      {t(group.items.length === 1 ? '{0} imprescindible' : '{0} imprescindibles', {
+                        0: group.items.length,
+                      })}
+                    </small>
                   </span>
+                  <ChevronDown className="essential-editor__chevron" aria-hidden />
                 </summary>
                 <div className="essential-editor__group-body">
                   <div className="essential-editor__group-heading">
-                    <Field label="Nombre del tema" htmlFor={`essential-group-${group.id}`}>
+                    <LocalizedField
+                      resource="essentialGroup"
+                      field="title"
+                      translations={group.translations}
+                      onTranslationsChange={(translations) =>
+                        updateGroup(groupIndex, { translations })
+                      }
+                      label={t('Nombre del tema')}
+                      htmlFor={`essential-group-${group.id}`}
+                    >
                       <input
                         id={`essential-group-${group.id}`}
                         value={group.title}
                         maxLength={140}
-                        placeholder="Ej. Arquitectura y patrimonio"
+                        placeholder={t('Ej. Arquitectura y patrimonio')}
                         onChange={(event) => updateGroup(groupIndex, { title: event.target.value })}
                         onBlur={() => {
                           if (!group.icon || group.icon === 'Compass') {
@@ -227,16 +286,16 @@ export function DestinationEssentialsSection({
                           }
                         }}
                       />
-                    </Field>
+                    </LocalizedField>
                     <div
                       className="essential-editor__order"
-                      aria-label={`Orden de ${group.title || 'tema'}`}
+                      aria-label={t('Orden de {0}', { 0: group.title || 'tema' })}
                     >
                       <button
                         type="button"
                         disabled={groupIndex === 0}
                         onClick={() => setGroups(move(groups, groupIndex, -1))}
-                        aria-label="Mover tema hacia arriba"
+                        aria-label={t('Mover tema hacia arriba')}
                       >
                         <ArrowUp />
                       </button>
@@ -244,15 +303,24 @@ export function DestinationEssentialsSection({
                         type="button"
                         disabled={groupIndex === groups.length - 1}
                         onClick={() => setGroups(move(groups, groupIndex, 1))}
-                        aria-label="Mover tema hacia abajo"
+                        aria-label={t('Mover tema hacia abajo')}
                       >
                         <ArrowDown />
                       </button>
                       <button
                         type="button"
                         className="is-danger"
-                        onClick={() => setGroups(groups.filter((_, index) => index !== groupIndex))}
-                        aria-label={`Eliminar ${group.title || 'tema'}`}
+                        onClick={() => {
+                          setRemoved({
+                            restore: (current) => [
+                              ...current.slice(0, groupIndex),
+                              group,
+                              ...current.slice(groupIndex),
+                            ],
+                          });
+                          setGroups(groups.filter((_, index) => index !== groupIndex));
+                        }}
+                        aria-label={t('Eliminar {0}', { 0: group.title || 'tema' })}
                       >
                         <Trash2 />
                       </button>
@@ -261,7 +329,7 @@ export function DestinationEssentialsSection({
 
                   <EssentialIconPicker
                     id={`essential-group-icon-${group.id}`}
-                    label="Símbolo del tema"
+                    label={t('Símbolo del tema')}
                     value={group.icon}
                     onChange={(icon) => updateGroup(groupIndex, { icon: icon || 'Compass' })}
                   />
@@ -283,11 +351,26 @@ export function DestinationEssentialsSection({
                             items: move(group.items, itemIndex, direction),
                           })
                         }
-                        onRemove={() =>
+                        onRemove={() => {
+                          setRemoved({
+                            restore: (current) =>
+                              current.map((candidate) =>
+                                candidate.id === group.id
+                                  ? {
+                                      ...candidate,
+                                      items: [
+                                        ...candidate.items.slice(0, itemIndex),
+                                        item,
+                                        ...candidate.items.slice(itemIndex),
+                                      ],
+                                    }
+                                  : candidate,
+                              ),
+                          });
                           updateGroup(groupIndex, {
                             items: group.items.filter((_, index) => index !== itemIndex),
-                          })
-                        }
+                          });
+                        }}
                         onRequestPlace={(place) =>
                           onRequestPlace({ groupId: group.id, itemId: item.id, place })
                         }
@@ -299,7 +382,7 @@ export function DestinationEssentialsSection({
                     variant="quiet"
                     onClick={() => updateGroup(groupIndex, { items: [...group.items, newItem()] })}
                   >
-                    <Plus /> Añadir imprescindible
+                    <Plus /> {t('Añadir imprescindible')}
                   </Button>
                 </div>
               </details>

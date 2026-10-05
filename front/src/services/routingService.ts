@@ -1,3 +1,4 @@
+import { hasConsent, subscribeConsent } from '../features/privacy/consent';
 import type { Destino } from '../types';
 
 export type Coordinates = {
@@ -12,6 +13,9 @@ export type RouteSegment = {
 };
 
 const memoryCache = new Map<string, RouteSegment>();
+subscribeConsent(() => {
+  if (!hasConsent('maps')) memoryCache.clear();
+});
 const CACHE_PREFIX = 'travseeker:route:';
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
@@ -104,7 +108,10 @@ function readCache(key: string): RouteSegment | undefined {
 function writeCache(key: string, value: RouteSegment): void {
   memoryCache.set(key, value);
   try {
-    localStorage.setItem(`${CACHE_PREFIX}${key}`, JSON.stringify({ value, cachedAt: Date.now() } satisfies CachedRouteSegment));
+    localStorage.setItem(
+      `${CACHE_PREFIX}${key}`,
+      JSON.stringify({ value, cachedAt: Date.now() } satisfies CachedRouteSegment),
+    );
   } catch {
     // The in-memory cache still prevents duplicate requests for this session.
   }
@@ -115,11 +122,18 @@ export async function calculateRouteSegment(
   to?: Coordinates,
 ): Promise<RouteSegment> {
   if (!from || !to) return { source: 'unavailable' };
+  if (!hasConsent('maps')) return fallbackSegment(from, to);
   const key = cacheKey(from, to);
   const cached = readCache(key);
   if (cached) return cached;
 
   const controller = new AbortController();
+  const unsubscribe = subscribeConsent(() => {
+    if (!hasConsent('maps')) {
+      memoryCache.clear();
+      controller.abort();
+    }
+  });
   const timeout = window.setTimeout(() => controller.abort(), 6500);
   try {
     const coordinates = `${from.longitud},${from.latitud};${to.longitud},${to.latitud}`;
@@ -140,13 +154,14 @@ export async function calculateRouteSegment(
       durationMinutes: route.duration / 60,
       source: 'osrm',
     };
-    writeCache(key, segment);
+    if (hasConsent('maps')) writeCache(key, segment);
     return segment;
   } catch {
     const segment = fallbackSegment(from, to);
-    writeCache(key, segment);
+    if (hasConsent('maps')) writeCache(key, segment);
     return segment;
   } finally {
+    unsubscribe();
     window.clearTimeout(timeout);
   }
 }

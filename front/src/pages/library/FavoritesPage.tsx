@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { useEffect, useMemo, useState } from 'react';
 import { Heart, Search } from 'lucide-react';
 import { PageHeading, Shell } from '../../components/layout';
@@ -19,6 +20,7 @@ export default function FavoritesPage() {
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [retry, setRetry] = useState(0);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -27,12 +29,15 @@ export default function FavoritesPage() {
       return;
     }
 
+    setIsLoading(true);
     setError('');
     api<Favorite[]>('/favoritos', {}, token)
       .then(setFavorites)
-      .catch((cause) => setError(cause instanceof Error ? cause.message : 'No se pudieron cargar tus guardados'))
+      .catch((cause) =>
+        setError(cause instanceof Error ? cause.message : t('No se pudieron cargar tus guardados')),
+      )
       .finally(() => setIsLoading(false));
-  }, [token]);
+  }, [token, retry]);
 
   const filteredFavorites = useMemo(
     () =>
@@ -52,19 +57,19 @@ export default function FavoritesPage() {
 
   if (!user) {
     return (
-      <GuestGate title="Guarda lo que te mueve">
-        Marca destinos para encontrarlos después, sin volver a empezar la búsqueda.
+      <GuestGate title={t('Guarda lo que te mueve')}>
+        {t('Marca destinos para encontrarlos después, sin volver a empezar la búsqueda.')}
       </GuestGate>
     );
   }
 
   return (
     <Shell>
-      <PageHeading kicker="Tu biblioteca" title="Destinos guardados">
+      <PageHeading kicker={t('Tu biblioteca')} title={t('Destinos guardados')}>
         <p>
           {favorites.length
-            ? `${favorites.length} lugares esperando su momento.`
-            : 'Aquí aparecerán los destinos que guardes.'}
+            ? t('{0} lugares esperando su momento.', { 0: favorites.length })
+            : t('Aquí aparecerán los destinos que guardes.')}
         </p>
       </PageHeading>
 
@@ -74,14 +79,25 @@ export default function FavoritesPage() {
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar entre tus guardados"
-            aria-label="Buscar guardados"
+            placeholder={t('Buscar entre tus guardados')}
+            aria-label={t('Buscar guardados')}
           />
         </div>
       </section>
 
       <section className="library-content">
-        {error && <Notice tone="error">{error}. Recarga la página para intentarlo de nuevo.</Notice>}
+        {error && (
+          <Notice tone="error">
+            {error}
+            <button
+              type="button"
+              className="button button--quiet"
+              onClick={() => setRetry((value) => value + 1)}
+            >
+              {t('Reintentar')}
+            </button>
+          </Notice>
+        )}
         {isLoading ? (
           <Loader />
         ) : filteredFavorites.length ? (
@@ -91,8 +107,26 @@ export default function FavoritesPage() {
             ))}
           </div>
         ) : (
-          <Empty icon={<Heart />} title="Nada por aquí">
-            Guarda un destino desde su ficha y volverá a aparecer aquí.
+          <Empty
+            icon={<Heart />}
+            title={
+              favorites.length ? t('No hay coincidencias') : t('Aún no tienes destinos guardados')
+            }
+            action={
+              favorites.length ? (
+                <button type="button" className="button" onClick={() => setQuery('')}>
+                  {t('Limpiar búsqueda')}
+                </button>
+              ) : (
+                <a className="button" href="/">
+                  {t('Explorar destinos')}
+                </a>
+              )
+            }
+          >
+            {favorites.length
+              ? t('Prueba otro nombre o limpia la búsqueda.')
+              : t('Guarda un destino desde su ficha y volverá a aparecer aquí.')}
           </Empty>
         )}
       </section>

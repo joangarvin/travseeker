@@ -355,11 +355,11 @@ button[aria-busy='true']:not([data-loading])::after {
   [data-reveal-state='visible'] {
     opacity: 1;
     transform: none;
-    transition: opacity 100ms linear;
+    transition: opacity 100ms linear !important;
   }
 
   button {
-    transition-duration: 50ms;
+    transition-duration: 50ms !important;
   }
 
   button:active:not(:disabled):not(:focus-visible) {

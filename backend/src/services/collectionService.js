@@ -1,21 +1,37 @@
-const { prisma } = require('../config/database');
-const { randomBytes } = require('crypto');
-const { LIST_SELECT } = require('../constants/selects');
-const { canAccess } = require('../domain/collectionAccess');
-const { buildCollectionOrder } = require('../domain/collectionOrder');
-const { cleanMunicipalityFields } = require('../utils/sanitizeContent');
-const { normalizeItinerary, reconcileItineraryDates } = require('../domain/itinerary');
+const { prisma } = require("../config/database");
+const { randomBytes } = require("crypto");
+const { LIST_SELECT } = require("../constants/selects");
+const { canAccess } = require("../domain/collectionAccess");
+const { buildCollectionOrder } = require("../domain/collectionOrder");
+const { cleanMunicipalityFields } = require("../utils/sanitizeContent");
+const {
+  normalizeItinerary,
+  reconcileItineraryDates,
+} = require("../domain/itinerary");
 
 const COLLECTION_DESTINATION_SELECT = {
   ...LIST_SELECT,
   latitud: true,
   longitud: true,
   municipioLinks: {
-    where: { municipio: { editorialStatus: 'published' } },
-    select: { municipio: { select: { id: true, nombre: true, precios: true, conexiones: true, tipoTurismo: true, latitud: true, longitud: true } } },
+    where: { municipio: { editorialStatus: "published" } },
+    select: {
+      municipio: {
+        select: {
+          id: true,
+          nombre: true,
+          translations: true,
+          precios: true,
+          conexiones: true,
+          tipoTurismo: true,
+          latitud: true,
+          longitud: true,
+        },
+      },
+    },
   },
   activityLinks: {
-    where: { activity: { isActive: true, editorialStatus: 'published' } },
+    where: { activity: { isActive: true, editorialStatus: "published" } },
     include: { activity: true },
   },
 };
@@ -24,25 +40,41 @@ function mapCollectionDestination(destino) {
   const municipios = (destino.municipioLinks || [])
     .map((link) => cleanMunicipalityFields(link.municipio))
     .filter(Boolean);
-  const activities = (destino.activityLinks || []).map((link) => link.activity).filter(Boolean);
+  const activities = (destino.activityLinks || [])
+    .map((link) => link.activity)
+    .filter(Boolean);
   const { municipioLinks, activityLinks, ...rest } = destino;
-  return { ...rest, municipios, activities, activityIds: activities.map((activity) => activity.id) };
+  return {
+    ...rest,
+    municipios,
+    activities,
+    activityIds: activities.map((activity) => activity.id),
+  };
 }
 
 function clean(str, max) {
-  if (typeof str !== 'string') return null;
+  if (typeof str !== "string") return null;
   const t = str.trim();
   return t ? t.slice(0, max) : null;
 }
 
 function optionalDate(value, field) {
   if (value === undefined) return undefined;
-  if (value === null || value === '') return null;
-  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-    const error = new Error(`${field} debe tener formato AAAA-MM-DD`); error.status = 400; throw error;
+  if (value === null || value === "") return null;
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    const error = new Error(`${field} debe tener formato AAAA-MM-DD`);
+    error.status = 400;
+    throw error;
   }
   const parsed = new Date(`${value}T00:00:00.000Z`);
-  if (Number.isNaN(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== value) { const error = new Error(`${field} no es válida`); error.status = 400; throw error; }
+  if (
+    Number.isNaN(parsed.getTime()) ||
+    parsed.toISOString().slice(0, 10) !== value
+  ) {
+    const error = new Error(`${field} no es válida`);
+    error.status = 400;
+    throw error;
+  }
   return parsed;
 }
 
@@ -50,7 +82,7 @@ function optionalTravelerCount(value) {
   if (value === undefined) return undefined;
   const count = Number(value);
   if (!Number.isInteger(count) || count < 1 || count > 50) {
-    const error = new Error('El número de viajeros debe estar entre 1 y 50');
+    const error = new Error("El número de viajeros debe estar entre 1 y 50");
     error.status = 400;
     throw error;
   }
@@ -60,26 +92,32 @@ function optionalTravelerCount(value) {
 function validateTripRange(startDate, endDate) {
   if (!startDate || !endDate) return;
   if (endDate < startDate) {
-    const error = new Error('La fecha de fin no puede ser anterior al inicio');
+    const error = new Error("La fecha de fin no puede ser anterior al inicio");
     error.status = 400;
     throw error;
   }
-  const days = Math.floor((endDate.getTime() - startDate.getTime()) / 86400000) + 1;
+  const days =
+    Math.floor((endDate.getTime() - startDate.getTime()) / 86400000) + 1;
   if (days > 366) {
-    const error = new Error('El viaje no puede superar 366 días');
+    const error = new Error("El viaje no puede superar 366 días");
     error.status = 400;
     throw error;
   }
 }
 
-async function getAccess(userId, collectionId, required = 'viewer') {
+async function getAccess(userId, collectionId, required = "viewer") {
   const collection = await prisma.collection.findFirst({
     where: { id: collectionId },
-    select: { id: true, userId: true, members: { where: { userId }, select: { role: true } } },
+    select: {
+      id: true,
+      userId: true,
+      members: { where: { userId }, select: { role: true } },
+    },
   });
-  const role = collection?.userId === userId ? 'owner' : collection?.members[0]?.role;
+  const role =
+    collection?.userId === userId ? "owner" : collection?.members[0]?.role;
   if (!collection || !canAccess(role, required)) {
-    const error = new Error('Colección no encontrada');
+    const error = new Error("Colección no encontrada");
     error.status = 404;
     throw error;
   }
@@ -89,12 +127,12 @@ async function getAccess(userId, collectionId, required = 'viewer') {
 async function listCollections(userId) {
   const collections = await prisma.collection.findMany({
     where: { OR: [{ userId }, { members: { some: { userId } } }] },
-    orderBy: { updatedAt: 'desc' },
+    orderBy: { updatedAt: "desc" },
     include: {
       items: {
-        where: { destino: { editorialStatus: 'published' } },
+        where: { destino: { editorialStatus: "published" } },
         take: 4,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: "desc" },
         include: { destino: { select: { imagen: true } } },
       },
       members: { where: { userId }, select: { role: true } },
@@ -113,7 +151,7 @@ async function listCollections(userId) {
     travelerCount: c.travelerCount,
     itineraryDays: Array.isArray(c.itinerary) ? c.itinerary.length : 0,
     memberCount: c._count.members,
-    role: c.userId === userId ? 'owner' : c.members[0]?.role || 'viewer',
+    role: c.userId === userId ? "owner" : c.members[0]?.role || "viewer",
     createdAt: c.createdAt,
     updatedAt: c.updatedAt,
     count: c._count.items,
@@ -128,16 +166,23 @@ async function getCollection(userId, id) {
     include: {
       user: { select: { id: true, nombre: true, avatarUrl: true } },
       items: {
-        where: { destino: { editorialStatus: 'published' } },
-        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+        where: { destino: { editorialStatus: "published" } },
+        orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
         include: { destino: { select: COLLECTION_DESTINATION_SELECT } },
       },
-      members: { include: { user: { select: { id: true, email: true, nombre: true, avatarUrl: true } } }, orderBy: { createdAt: 'asc' } },
+      members: {
+        include: {
+          user: {
+            select: { id: true, email: true, nombre: true, avatarUrl: true },
+          },
+        },
+        orderBy: { createdAt: "asc" },
+      },
     },
   });
 
   if (!collection) {
-    const error = new Error('Colección no encontrada');
+    const error = new Error("Colección no encontrada");
     error.status = 404;
     throw error;
   }
@@ -155,7 +200,11 @@ async function getCollection(userId, id) {
     itinerary: Array.isArray(collection.itinerary) ? collection.itinerary : [],
     role: access.role,
     owner: collection.user,
-    members: collection.members.map((member) => ({ id: member.id, role: member.role, user: member.user })),
+    members: collection.members.map((member) => ({
+      id: member.id,
+      role: member.role,
+      user: member.user,
+    })),
     createdAt: collection.createdAt,
     updatedAt: collection.updatedAt,
     items: collection.items.map((i) => ({
@@ -171,26 +220,29 @@ async function getCollection(userId, id) {
   };
 }
 
-async function createCollection(userId, { nombre, descripcion, color, startDate, endDate, travelerCount }) {
+async function createCollection(
+  userId,
+  { nombre, descripcion, color, startDate, endDate, travelerCount },
+) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { emailVerified: true },
   });
   if (!user?.emailVerified) {
-    const error = new Error('Verifica tu email antes de crear colecciones');
+    const error = new Error("Verifica tu email antes de crear colecciones");
     error.status = 403;
     throw error;
   }
 
   const cleanName = clean(nombre, 80);
   if (!cleanName) {
-    const error = new Error('El nombre de la colección es obligatorio');
+    const error = new Error("El nombre de la colección es obligatorio");
     error.status = 400;
     throw error;
   }
 
-  const parsedStart = optionalDate(startDate, 'La fecha de inicio');
-  const parsedEnd = optionalDate(endDate, 'La fecha de fin');
+  const parsedStart = optionalDate(startDate, "La fecha de inicio");
+  const parsedEnd = optionalDate(endDate, "La fecha de fin");
   validateTripRange(parsedStart, parsedEnd);
 
   const collection = await prisma.collection.create({
@@ -198,7 +250,7 @@ async function createCollection(userId, { nombre, descripcion, color, startDate,
       userId,
       nombre: cleanName,
       descripcion: clean(descripcion, 280),
-      color: color || 'emerald',
+      color: color || "emerald",
       startDate: parsedStart ?? null,
       endDate: parsedEnd ?? null,
       travelerCount: optionalTravelerCount(travelerCount) ?? 2,
@@ -207,14 +259,18 @@ async function createCollection(userId, { nombre, descripcion, color, startDate,
   return { ...collection, count: 0, covers: [] };
 }
 
-async function updateCollection(userId, id, { nombre, descripcion, color, startDate, endDate, travelerCount, itinerary }) {
-  await getAccess(userId, id, 'editor');
+async function updateCollection(
+  userId,
+  id,
+  { nombre, descripcion, color, startDate, endDate, travelerCount, itinerary },
+) {
+  await getAccess(userId, id, "editor");
 
   const data = {};
   if (nombre !== undefined) {
     const cleanName = clean(nombre, 80);
     if (!cleanName) {
-      const error = new Error('El nombre no puede estar vacío');
+      const error = new Error("El nombre no puede estar vacío");
       error.status = 400;
       throw error;
     }
@@ -222,14 +278,19 @@ async function updateCollection(userId, id, { nombre, descripcion, color, startD
   }
   if (descripcion !== undefined) data.descripcion = clean(descripcion, 280);
   if (color !== undefined) data.color = color;
-  const parsedStart = optionalDate(startDate, 'La fecha de inicio');
-  const parsedEnd = optionalDate(endDate, 'La fecha de fin');
+  const parsedStart = optionalDate(startDate, "La fecha de inicio");
+  const parsedEnd = optionalDate(endDate, "La fecha de fin");
   if (parsedStart !== undefined) data.startDate = parsedStart;
   if (parsedEnd !== undefined) data.endDate = parsedEnd;
   const parsedTravelerCount = optionalTravelerCount(travelerCount);
-  if (parsedTravelerCount !== undefined) data.travelerCount = parsedTravelerCount;
-  const current = await prisma.collection.findUnique({ where: { id }, select: { startDate: true, endDate: true, itinerary: true } });
-  const effectiveStart = parsedStart === undefined ? current.startDate : parsedStart;
+  if (parsedTravelerCount !== undefined)
+    data.travelerCount = parsedTravelerCount;
+  const current = await prisma.collection.findUnique({
+    where: { id },
+    select: { startDate: true, endDate: true, itinerary: true },
+  });
+  const effectiveStart =
+    parsedStart === undefined ? current.startDate : parsedStart;
   const effectiveEnd = parsedEnd === undefined ? current.endDate : parsedEnd;
   validateTripRange(effectiveStart, effectiveEnd);
 
@@ -238,15 +299,19 @@ async function updateCollection(userId, id, { nombre, descripcion, color, startD
       where: { collectionId: id },
       select: {
         destinoId: true,
-        destino: { select: { municipioLinks: { select: { municipioId: true } } } },
+        destino: {
+          select: { municipioLinks: { select: { municipioId: true } } },
+        },
       },
     });
     data.itinerary = normalizeItinerary(itinerary, {
       destinationIds: new Set(items.map((item) => item.destinoId)),
-      municipalityIdsByDestination: new Map(items.map((item) => [
-        item.destinoId,
-        new Set(item.destino.municipioLinks.map((link) => link.municipioId)),
-      ])),
+      municipalityIdsByDestination: new Map(
+        items.map((item) => [
+          item.destinoId,
+          new Set(item.destino.municipioLinks.map((link) => link.municipioId)),
+        ]),
+      ),
     });
   } else if (startDate !== undefined || endDate !== undefined) {
     data.itinerary = reconcileItineraryDates(
@@ -260,46 +325,51 @@ async function updateCollection(userId, id, { nombre, descripcion, color, startD
 }
 
 async function shareCollection(userId, id, { regenerate = false } = {}) {
-  await getAccess(userId, id, 'owner');
+  await getAccess(userId, id, "owner");
   if (!regenerate) {
     const current = await prisma.collection.findUnique({
       where: { id },
       select: { id: true, shareToken: true, visibility: true },
     });
-    if (current?.shareToken && current.visibility === 'shared') return current;
+    if (current?.shareToken && current.visibility === "shared") return current;
   }
-  const shareToken = randomBytes(24).toString('base64url');
+  const shareToken = randomBytes(24).toString("base64url");
   return prisma.collection.update({
     where: { id },
-    data: { visibility: 'shared', shareToken },
+    data: { visibility: "shared", shareToken },
     select: { id: true, shareToken: true, visibility: true },
   });
 }
 
 async function stopSharingCollection(userId, id) {
-  await getAccess(userId, id, 'owner');
+  await getAccess(userId, id, "owner");
   return prisma.collection.update({
     where: { id },
-    data: { visibility: 'private', shareToken: null },
+    data: { visibility: "private", shareToken: null },
     select: { id: true, visibility: true },
   });
 }
 
 async function getPublicCollection(shareToken) {
   const collection = await prisma.collection.findFirst({
-    where: { shareToken, visibility: 'shared' },
+    where: { shareToken, visibility: "shared" },
     include: {
       user: { select: { id: true, nombre: true, avatarUrl: true } },
-      members: { include: { user: { select: { id: true, nombre: true, avatarUrl: true } } }, orderBy: { createdAt: 'asc' } },
+      members: {
+        include: {
+          user: { select: { id: true, nombre: true, avatarUrl: true } },
+        },
+        orderBy: { createdAt: "asc" },
+      },
       items: {
-        where: { destino: { editorialStatus: 'published' } },
-        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
+        where: { destino: { editorialStatus: "published" } },
+        orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
         include: { destino: { select: COLLECTION_DESTINATION_SELECT } },
       },
     },
   });
   if (!collection) {
-    const error = new Error('Este enlace de viaje ya no está disponible');
+    const error = new Error("Este enlace de viaje ya no está disponible");
     error.status = 404;
     throw error;
   }
@@ -312,26 +382,36 @@ async function getPublicCollection(shareToken) {
     travelerCount: collection.travelerCount,
     itinerary: Array.isArray(collection.itinerary) ? collection.itinerary : [],
     owner: collection.user,
-    members: collection.members.map((member) => ({ id: member.id, role: member.role, user: member.user })),
-    items: collection.items.map((item) => ({ id: item.id, dayIndex: item.dayIndex, status: item.status, sortOrder: item.sortOrder, destino: mapCollectionDestination(item.destino) })),
+    members: collection.members.map((member) => ({
+      id: member.id,
+      role: member.role,
+      user: member.user,
+    })),
+    items: collection.items.map((item) => ({
+      id: item.id,
+      dayIndex: item.dayIndex,
+      status: item.status,
+      sortOrder: item.sortOrder,
+      destino: mapCollectionDestination(item.destino),
+    })),
   };
 }
 
 async function deleteCollection(userId, id) {
-  await getAccess(userId, id, 'owner');
+  await getAccess(userId, id, "owner");
   await prisma.collection.delete({ where: { id } });
   return { removed: true };
 }
 
 async function addItem(userId, collectionId, destinoId, notas) {
-  await getAccess(userId, collectionId, 'editor');
+  await getAccess(userId, collectionId, "editor");
 
   const destino = await prisma.destino.findFirst({
-    where: { id: destinoId, editorialStatus: 'published' },
+    where: { id: destinoId, editorialStatus: "published" },
     select: { id: true },
   });
   if (!destino) {
-    const error = new Error('Destino no encontrado');
+    const error = new Error("Destino no encontrado");
     error.status = 404;
     throw error;
   }
@@ -343,70 +423,109 @@ async function addItem(userId, collectionId, destinoId, notas) {
     create: { collectionId, destinoId, notas: cleanNotes },
   });
 
-  await prisma.collection.update({ where: { id: collectionId }, data: { updatedAt: new Date() } });
+  await prisma.collection.update({
+    where: { id: collectionId },
+    data: { updatedAt: new Date() },
+  });
   return item;
 }
 
 async function updateItem(userId, collectionId, destinoId, payload) {
-  await getAccess(userId, collectionId, 'editor');
+  await getAccess(userId, collectionId, "editor");
   const data = {};
   if (payload.notas !== undefined) data.notas = clean(payload.notas, 500);
   if (payload.dayIndex !== undefined) {
-    const day = payload.dayIndex === null || payload.dayIndex === '' ? null : Number(payload.dayIndex);
-    if (day !== null && (!Number.isInteger(day) || day < 1 || day > 365)) { const error = new Error('El día debe estar entre 1 y 365'); error.status = 400; throw error; }
+    const day =
+      payload.dayIndex === null || payload.dayIndex === ""
+        ? null
+        : Number(payload.dayIndex);
+    if (day !== null && (!Number.isInteger(day) || day < 1 || day > 365)) {
+      const error = new Error("El día debe estar entre 1 y 365");
+      error.status = 400;
+      throw error;
+    }
     data.dayIndex = day;
   }
   if (payload.status !== undefined) {
-    if (!['idea', 'confirmed', 'booked'].includes(payload.status)) { const error = new Error('Estado no válido'); error.status = 400; throw error; }
+    if (!["idea", "confirmed", "booked"].includes(payload.status)) {
+      const error = new Error("Estado no válido");
+      error.status = 400;
+      throw error;
+    }
     data.status = payload.status;
   }
   if (payload.sortOrder !== undefined) {
     const order = Number(payload.sortOrder);
-    if (!Number.isInteger(order) || order < 0 || order > 9999) { const error = new Error('Posición no válida'); error.status = 400; throw error; }
+    if (!Number.isInteger(order) || order < 0 || order > 9999) {
+      const error = new Error("Posición no válida");
+      error.status = 400;
+      throw error;
+    }
     data.sortOrder = order;
   }
   const item = await prisma.collectionItem.update({
     where: { collectionId_destinoId: { collectionId, destinoId } },
     data,
   });
-  await prisma.collection.update({ where: { id: collectionId }, data: { updatedAt: new Date() } });
+  await prisma.collection.update({
+    where: { id: collectionId },
+    data: { updatedAt: new Date() },
+  });
   return item;
 }
 
 async function reorderItems(userId, collectionId, orderedDestinoIds) {
-  await getAccess(userId, collectionId, 'editor');
-  const current = await prisma.collectionItem.findMany({ where: { collectionId }, select: { destinoId: true } });
-  const order = buildCollectionOrder(current.map((item) => item.destinoId), orderedDestinoIds);
+  await getAccess(userId, collectionId, "editor");
+  const current = await prisma.collectionItem.findMany({
+    where: { collectionId },
+    select: { destinoId: true },
+  });
+  const order = buildCollectionOrder(
+    current.map((item) => item.destinoId),
+    orderedDestinoIds,
+  );
   await prisma.$transaction([
-    ...order.map(({ destinoId, sortOrder }) => prisma.collectionItem.update({
-      where: { collectionId_destinoId: { collectionId, destinoId } },
-      data: { sortOrder },
-    })),
-    prisma.collection.update({ where: { id: collectionId }, data: { updatedAt: new Date() } }),
+    ...order.map(({ destinoId, sortOrder }) =>
+      prisma.collectionItem.update({
+        where: { collectionId_destinoId: { collectionId, destinoId } },
+        data: { sortOrder },
+      }),
+    ),
+    prisma.collection.update({
+      where: { id: collectionId },
+      data: { updatedAt: new Date() },
+    }),
   ]);
   return { order: orderedDestinoIds };
 }
 
 async function removeItem(userId, collectionId, destinoId) {
-  await getAccess(userId, collectionId, 'editor');
+  await getAccess(userId, collectionId, "editor");
   const collection = await prisma.collection.findUnique({
     where: { id: collectionId },
     select: { itinerary: true },
   });
-  const itinerary = (Array.isArray(collection?.itinerary) ? collection.itinerary : [])
+  const itinerary = (
+    Array.isArray(collection?.itinerary) ? collection.itinerary : []
+  )
     .filter((day) => day.destinationId !== destinoId)
     .map((day, index) => ({ ...day, dayNumber: index + 1 }));
   await prisma.$transaction([
     prisma.collectionItem.deleteMany({ where: { collectionId, destinoId } }),
-    prisma.collection.update({ where: { id: collectionId }, data: { itinerary, updatedAt: new Date() } }),
+    prisma.collection.update({
+      where: { id: collectionId },
+      data: { itinerary, updatedAt: new Date() },
+    }),
   ]);
   return { removed: true };
 }
 
 async function getCollectionsForDestino(userId, destinoId) {
   const collections = await prisma.collection.findMany({
-    where: { OR: [{ userId }, { members: { some: { userId, role: 'editor' } } }] },
-    orderBy: { updatedAt: 'desc' },
+    where: {
+      OR: [{ userId }, { members: { some: { userId, role: "editor" } } }],
+    },
+    orderBy: { updatedAt: "desc" },
     include: { items: { where: { destinoId }, select: { id: true } } },
   });
 
@@ -419,31 +538,64 @@ async function getCollectionsForDestino(userId, destinoId) {
 }
 
 async function addMember(userId, collectionId, { email, role }) {
-  await getAccess(userId, collectionId, 'owner');
-  if (!['editor', 'viewer'].includes(role)) {
-    const error = new Error('El permiso debe ser editor o lector'); error.status = 400; throw error;
+  await getAccess(userId, collectionId, "owner");
+  if (!["editor", "viewer"].includes(role)) {
+    const error = new Error("El permiso debe ser editor o lector");
+    error.status = 400;
+    throw error;
   }
-  const cleanEmail = String(email || '').trim().toLowerCase();
-  const invited = await prisma.user.findUnique({ where: { email: cleanEmail }, select: { id: true, email: true, nombre: true, avatarUrl: true } });
-  if (!invited) { const error = new Error('No existe una cuenta con ese email'); error.status = 404; throw error; }
-  const collection = await prisma.collection.findUnique({ where: { id: collectionId }, select: { userId: true } });
-  if (invited.id === collection.userId) { const error = new Error('El propietario ya forma parte del viaje'); error.status = 400; throw error; }
+  const cleanEmail = String(email || "")
+    .trim()
+    .toLowerCase();
+  const invited = await prisma.user.findUnique({
+    where: { email: cleanEmail },
+    select: { id: true, email: true, nombre: true, avatarUrl: true },
+  });
+  if (!invited) {
+    const error = new Error("No existe una cuenta con ese email");
+    error.status = 404;
+    throw error;
+  }
+  const collection = await prisma.collection.findUnique({
+    where: { id: collectionId },
+    select: { userId: true },
+  });
+  if (invited.id === collection.userId) {
+    const error = new Error("El propietario ya forma parte del viaje");
+    error.status = 400;
+    throw error;
+  }
   const member = await prisma.collectionMember.upsert({
     where: { collectionId_userId: { collectionId, userId: invited.id } },
-    update: { role }, create: { collectionId, userId: invited.id, role },
+    update: { role },
+    create: { collectionId, userId: invited.id, role },
   });
   return { id: member.id, role: member.role, user: invited };
 }
 
 async function updateMember(userId, collectionId, memberId, role) {
-  await getAccess(userId, collectionId, 'owner');
-  if (!['editor', 'viewer'].includes(role)) { const error = new Error('Permiso no válido'); error.status = 400; throw error; }
-  return prisma.collectionMember.update({ where: { id: memberId, collectionId }, data: { role }, include: { user: { select: { id: true, email: true, nombre: true, avatarUrl: true } } } });
+  await getAccess(userId, collectionId, "owner");
+  if (!["editor", "viewer"].includes(role)) {
+    const error = new Error("Permiso no válido");
+    error.status = 400;
+    throw error;
+  }
+  return prisma.collectionMember.update({
+    where: { id: memberId, collectionId },
+    data: { role },
+    include: {
+      user: {
+        select: { id: true, email: true, nombre: true, avatarUrl: true },
+      },
+    },
+  });
 }
 
 async function removeMember(userId, collectionId, memberId) {
-  await getAccess(userId, collectionId, 'owner');
-  await prisma.collectionMember.deleteMany({ where: { id: memberId, collectionId } });
+  await getAccess(userId, collectionId, "owner");
+  await prisma.collectionMember.deleteMany({
+    where: { id: memberId, collectionId },
+  });
   return { removed: true };
 }
 

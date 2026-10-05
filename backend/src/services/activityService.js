@@ -1,3 +1,5 @@
+const { cachedPublic } = require("../cache/publicData");
+const { translationData } = require("../domain/localization");
 const { prisma } = require("../config/database");
 const {
   ACTIVITY_ICONS,
@@ -44,6 +46,7 @@ function validatePayload(payload) {
   }
 
   return {
+    ...translationData(payload, "activity"),
     name,
     slug,
     icon,
@@ -200,7 +203,7 @@ async function deleteActivity(id) {
 }
 
 module.exports = {
-  listPublicActivities,
+  listPublicActivities: cachedPublic("activityService.listPublicActivities", listPublicActivities),
   listAdminActivities,
   createActivity,
   updateActivity,

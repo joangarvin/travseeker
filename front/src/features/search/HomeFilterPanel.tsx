@@ -1,3 +1,4 @@
+import { t, intlLocale } from '../../i18n';
 import { ChevronDown, SlidersHorizontal } from 'lucide-react';
 import type { SearchFilters } from '../../types';
 import { TourismMultiSelect } from '../tourism/TourismMultiSelect';
@@ -10,6 +11,7 @@ type HomeFilterPanelProps = {
   isOpen: boolean;
   activeCount: number;
   locations: string[];
+  locationLabels?: Record<string, string>;
   activities: string[];
   onToggle: () => void;
   onUpdate: (key: keyof SearchFilters, value: string) => void;
@@ -27,6 +29,7 @@ export function HomeFilterPanel({
   isOpen,
   activeCount,
   locations,
+  locationLabels = {},
   activities,
   onToggle,
   onUpdate,
@@ -47,10 +50,10 @@ export function HomeFilterPanel({
         <span className="filter-trigger__icon" aria-hidden>
           <SlidersHorizontal />
         </span>
-        <span>Afinar búsqueda</span>
+        <span>{t('Afinar búsqueda')}</span>
         {activeCount > 0 && (
-          <b aria-label={`${activeCount} filtros activos`}>
-            {activeCount} {activeCount === 1 ? 'filtro' : 'filtros'}
+          <b aria-label={t('{0} filtros activos', { 0: activeCount })}>
+            {activeCount} {activeCount === 1 ? t('filtro') : t('filtros')}
           </b>
         )}
         <ChevronDown className="filter-trigger__chevron" aria-hidden />
@@ -67,87 +70,103 @@ export function HomeFilterPanel({
           }}
         >
           <div className="home-filter-panel__heading">
-            <span>Preferencias de viaje</span>
-            <p>Ajusta solo lo que condiciona tu decisión.</p>
+            <span>{t('Preferencias de viaje')}</span>
+            <p>{t('Ajusta solo lo que condiciona tu decisión.')}</p>
           </div>
 
           <div className="home-filter-panel__grid">
-            <label>
-              Mes
-              <select
-                value={filters.month || ''}
-                onChange={(event) => onUpdate('month', event.target.value)}
-              >
-                <option value="">Cualquier momento</option>
-                {months.map((month) => (
-                  <option key={month} value={month}>
-                    {new Date(2026, Number(month) - 1).toLocaleString('es', { month: 'long' })}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label>
-              Presupuesto
-              <select
-                value={filters.presupuesto || ''}
-                onChange={(event) => onUpdate('presupuesto', event.target.value)}
-              >
-                <option value="">Cualquiera</option>
-                {budgetOptions.map((option) => (
-                  <option key={option}>{option}</option>
-                ))}
-              </select>
-            </label>
-
-            <label>
-              Masificación
-              <select
-                value={filters.masificacion || ''}
-                onChange={(event) => onUpdate('masificacion', event.target.value)}
-              >
-                <option value="">Cualquiera</option>
-                {crowdOptions.map((option) => (
-                  <option key={option}>{option}</option>
-                ))}
-              </select>
-            </label>
-
-            <label>
-              Ubicación
-              <select
-                value={filters.ubicacion || ''}
-                onChange={(event) => onUpdate('ubicacion', event.target.value)}
-              >
-                <option value="">Cualquiera</option>
-                {locations.map((location) => (
-                  <option key={location}>{location}</option>
-                ))}
-              </select>
-            </label>
-
-            <div className="home-filter-panel__tourism">
-              <TourismMultiSelect
-                id="home-tourism-types"
-                label="Tipos de viaje"
-                value={tourismValues(filters.tipoTurismo)}
-                hint="Puedes combinar varias opciones. Mostraremos destinos que coincidan con cualquiera."
-                compact
-                onChange={(values) => onUpdate('tipoTurismo', tourismQueryValue(values))}
-              />
-            </div>
-
-            <div className="home-filter-panel__activities">
-              <ActivityMultiSelect
-                id="home-activities"
-                label="Actividades"
-                value={activityValues(filters.actividades)}
-                suggestions={activities}
-                hint="Elige qué quieres hacer. Los resultados pueden coincidir con cualquiera de las seleccionadas."
-                compact
-                onChange={(values) => onUpdate('actividades', activityQueryValue(values))}
-              />
-            </div>
+            <fieldset className="travel-filter-group">
+              <legend>{t('Dónde quieres ir')}</legend>
+              <label>
+                {t('Ubicación')}
+                <select
+                  value={filters.ubicacion || ''}
+                  onChange={(event) => onUpdate('ubicacion', event.target.value)}
+                >
+                  <option value="">{t('Cualquiera')}</option>
+                  {locations.map((location) => (
+                    <option key={location} value={location}>
+                      {locationLabels[location] || t(location)}
+                    </option>
+                  ))}
+                </select>
+              </label>{' '}
+            </fieldset>
+            <fieldset className="travel-filter-group">
+              <legend>{t('Cuándo quieres viajar')}</legend>
+              <label>
+                {t('Mes')}
+                <select
+                  value={filters.month || ''}
+                  onChange={(event) => onUpdate('month', event.target.value)}
+                >
+                  <option value="">{t('Cualquier momento')}</option>
+                  {months.map((month) => (
+                    <option key={month} value={month}>
+                      {new Date(2026, Number(month) - 1).toLocaleString(intlLocale, {
+                        month: 'long',
+                      })}
+                    </option>
+                  ))}
+                </select>
+              </label>{' '}
+              <label>
+                {t('Masificación')}
+                <select
+                  value={filters.masificacion || ''}
+                  onChange={(event) => onUpdate('masificacion', event.target.value)}
+                >
+                  <option value="">{t('Cualquiera')}</option>
+                  {crowdOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {t(option)}
+                    </option>
+                  ))}
+                </select>
+              </label>{' '}
+            </fieldset>
+            <fieldset className="travel-filter-group travel-filter-group--wide">
+              <legend>{t('Cómo quieres viajar')}</legend>
+              <label>
+                {t('Presupuesto')}
+                <select
+                  value={filters.presupuesto || ''}
+                  onChange={(event) => onUpdate('presupuesto', event.target.value)}
+                >
+                  <option value="">{t('Cualquiera')}</option>
+                  {budgetOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {t(option)}
+                    </option>
+                  ))}
+                </select>
+              </label>{' '}
+              <div className="home-filter-panel__tourism">
+                <TourismMultiSelect
+                  id="home-tourism-types"
+                  label={t('Tipos de viaje')}
+                  value={tourismValues(filters.tipoTurismo)}
+                  hint={t(
+                    'Puedes combinar varias opciones. Mostraremos destinos que coincidan con cualquiera.',
+                  )}
+                  compact
+                  onChange={(values) => onUpdate('tipoTurismo', tourismQueryValue(values))}
+                />
+              </div>
+              <div className="home-filter-panel__activities">
+                <ActivityMultiSelect
+                  id="home-activities"
+                  label={t('Actividades')}
+                  value={activityValues(filters.actividades)}
+                  suggestions={activities}
+                  hint={t(
+                    'Elige qué quieres hacer. Los resultados pueden coincidir con cualquiera de las seleccionadas.',
+                  )}
+                  compact
+                  onChange={(values) => onUpdate('actividades', activityQueryValue(values))}
+                />
+              </div>
+            </fieldset>
           </div>
 
           <div className="home-filter-panel__actions">
@@ -157,11 +176,11 @@ export function HomeFilterPanel({
                 checked={filters.avoidCrowds === 'true'}
                 onChange={(event) => onUpdate('avoidCrowds', event.target.checked ? 'true' : '')}
               />
-              Evitar aglomeraciones
+              {t('Evitar aglomeraciones')}
             </label>
             <div>
               <button className="button button--quiet" type="button" onClick={onClear}>
-                Limpiar
+                {t('Limpiar')}
               </button>
               <button
                 className="button button--primary"
@@ -169,7 +188,7 @@ export function HomeFilterPanel({
                 disabled={loading}
                 aria-busy={loading || undefined}
               >
-                Ver resultados
+                {t('Ver resultados')}
               </button>
             </div>
           </div>

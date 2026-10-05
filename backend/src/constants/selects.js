@@ -1,6 +1,7 @@
 const LIST_SELECT = {
   id: true,
   nombre: true,
+  translations: true,
   imagen: true,
   presupuesto: true,
   masificacion: true,
@@ -18,6 +19,7 @@ const LIST_SELECT = {
 const MAP_SELECT = {
   id: true,
   nombre: true,
+  translations: true,
   latitud: true,
   longitud: true,
   imagen: true,
@@ -39,7 +41,9 @@ const SEARCH_RELATIONS = {
   imprescindibles: true,
   municipioLinks: {
     where: { municipio: { editorialStatus: "published" } },
-    select: { municipio: { select: { id: true, nombre: true } } },
+    select: {
+      municipio: { select: { id: true, nombre: true, translations: true } },
+    },
   },
   activityLinks: {
     where: { activity: { isActive: true, editorialStatus: "published" } },
@@ -47,13 +51,14 @@ const SEARCH_RELATIONS = {
   },
   places: {
     where: { isActive: true, editorialStatus: "published" },
-    select: { nombre: true },
+    select: { nombre: true, translations: true },
   },
   essentialGroups: {
     select: {
       title: true,
+      translations: true,
       items: {
-        select: { title: true, description: true },
+        select: { title: true, description: true, translations: true },
       },
     },
   },
@@ -72,6 +77,7 @@ const SEARCH_MAP_SELECT = {
 const COMPARE_SELECT = {
   id: true,
   nombre: true,
+  translations: true,
   imagen: true,
   ubicacion: true,
   presupuesto: true,

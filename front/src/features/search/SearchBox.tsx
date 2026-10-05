@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import { ArrowRight, Search } from 'lucide-react';
 
 type SearchBoxProps = {
@@ -12,15 +13,16 @@ export function SearchBox({
   value,
   onChange,
   onSubmit,
-  placeholder = 'Destino, municipio, actividad o plan',
+  placeholder = t('Destino, municipio, actividad o plan'),
   loading = false,
 }: SearchBoxProps) {
   return (
     <div className="search-box-group">
       <form
         className="search-box"
+        data-tour="search"
         role="search"
-        aria-label="Buscar destinos"
+        aria-label={t('Buscar destinos')}
         onSubmit={(event) => {
           event.preventDefault();
           onSubmit();
@@ -28,7 +30,7 @@ export function SearchBox({
       >
         <Search aria-hidden />
         <label className="sr-only" htmlFor="main-search">
-          Buscar destino, municipio, actividad o tipo de viaje
+          {t('Buscar destino, municipio, actividad o tipo de viaje')}
         </label>
         <input
           id="main-search"
@@ -40,11 +42,11 @@ export function SearchBox({
           placeholder={placeholder}
         />
         <button type="submit" disabled={loading} aria-busy={loading || undefined}>
-          Buscar <ArrowRight />
+          {t('Buscar')} <ArrowRight />
         </button>
       </form>
       <p id="main-search-help" className="search-box__help">
-        También encuentra actividades, tipos de viaje, imprescindibles y pequeñas erratas.
+        {t('También encuentra actividades, tipos de viaje, imprescindibles y pequeñas erratas.')}
       </p>
     </div>
   );

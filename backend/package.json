@@ -20,7 +20,10 @@
     "db:enrich-amarina": "node scripts/enrich-amarina-essentials.js",
     "test": "node --test",
     "alerts:process": "node scripts/process-alerts.js",
-    "alerts:dry-run": "node scripts/process-alerts.js --dry-run"
+    "alerts:dry-run": "node scripts/process-alerts.js --dry-run",
+    "db:migrate-translations": "node scripts/migrate-translations.js",
+    "db:translate-english": "node scripts/backfill-english.js",
+    "db:audit-translations": "node scripts/audit-translations.js"
   },
   "keywords": [],
   "author": "",

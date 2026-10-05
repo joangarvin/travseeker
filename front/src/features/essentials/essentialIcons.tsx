@@ -1,3 +1,4 @@
+import { t } from '../../i18n';
 import type { LucideIcon } from 'lucide-react';
 import { createElement } from 'react';
 import {
@@ -23,25 +24,25 @@ import {
 } from 'lucide-react';
 
 export const essentialIconChoices = [
-  ['Compass', 'Exploración'],
-  ['Landmark', 'Patrimonio'],
+  ['Compass', t('Exploración')],
+  ['Landmark', t('Patrimonio')],
   ['Trees', 'Naturaleza'],
-  ['Waves', 'Costa y agua'],
-  ['Footprints', 'Paseos y senderos'],
+  ['Waves', t('Costa y agua')],
+  ['Footprints', t('Paseos y senderos')],
   ['Utensils', 'Gastronomía'],
-  ['Mountain', 'Montaña y miradores'],
-  ['Palette', 'Arte y museos'],
-  ['Building2', 'Ciudad'],
-  ['Camera', 'Fotografía'],
-  ['Castle', 'Castillos'],
-  ['MapPin', 'Lugar destacado'],
-  ['Binoculars', 'Observación'],
-  ['Bike', 'Ciclismo'],
-  ['Sailboat', 'Navegación'],
-  ['Music', 'Música'],
-  ['Wine', 'Vino'],
-  ['Sun', 'Aire libre'],
-  ['TreePine', 'Bosque'],
+  ['Mountain', t('Montaña y miradores')],
+  ['Palette', t('Arte y museos')],
+  ['Building2', t('Ciudad')],
+  ['Camera', t('Fotografía')],
+  ['Castle', t('Castillos')],
+  ['MapPin', t('Lugar destacado')],
+  ['Binoculars', t('Observación')],
+  ['Bike', t('Ciclismo')],
+  ['Sailboat', t('Navegación')],
+  ['Music', t('Música')],
+  ['Wine', t('Vino')],
+  ['Sun', t('Aire libre')],
+  ['TreePine', t('Bosque')],
 ] as const;
 
 export type EssentialIconName = (typeof essentialIconChoices)[number][0];

@@ -1,7 +1,7 @@
 {
   "name": "travseeker",
   "private": true,
-  "description": "TravSeeker monorepo — frontend + backend",
+  "description": "TravSeeker monorepo \u2014 frontend + backend",
   "scripts": {
     "dev:backend": "cd backend && npm run dev",
     "dev:front": "cd front && npm run dev",
@@ -10,6 +10,11 @@
     "install:all": "cd backend && npm install && cd ../front && npm install",
     "db:push": "cd backend && npm run db:push",
     "db:seed": "cd backend && npm run db:seed",
-    "db:coords": "cd backend && npm run db:coords"
+    "db:coords": "cd backend && npm run db:coords",
+    "test": "npm test --prefix backend && npm test --prefix front",
+    "check": "npm test && npm run lint --prefix front && npm run build:front",
+    "db:migrate-translations": "npm run db:migrate-translations --prefix backend",
+    "db:translate-english": "npm run db:translate-english --prefix backend --",
+    "db:audit-translations": "npm run db:audit-translations --prefix backend"
   }
 }

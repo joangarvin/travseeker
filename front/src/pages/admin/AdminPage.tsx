@@ -1,4 +1,8 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { readCatalogPage } from '../../features/admin/adminResponses';
+import { markEditorSaved } from '../../utils/editorDraft';
+import { useSearchParams } from 'react-router-dom';
+import { t } from '../../i18n';
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { ShieldCheck } from 'lucide-react';
 import { PageHeading, Shell } from '../../components/layout';
 import { Empty, Loader, Notice } from '../../components/ui';
@@ -33,8 +37,6 @@ import {
   EMPTY_PLACE,
   filterActivities,
   filterDestinationChoices,
-  filterDestinations,
-  filterMunicipalities,
   filterPlaces,
   filterTourismTypes,
 } from '../../features/admin/adminCatalog';
@@ -55,17 +57,54 @@ export default function AdminPage() {
   const { user, token, loading: isAuthLoading } = useAuth();
   const { refreshActivities } = useActivities();
   const { refreshTourismTypes } = useTourismTypes();
-  const [activeTab, setActiveTab] = useState<AdminTab>('editorial');
+  const [params, setParams] = useSearchParams();
+  const tabNames: AdminTab[] = [
+    'editorial',
+    'destinos',
+    'tipos-viaje',
+    'actividades',
+    'municipios',
+    'reviews',
+    'places',
+  ];
+  const activeTab = tabNames.includes(params.get('tab') as AdminTab)
+    ? (params.get('tab') as AdminTab)
+    : 'editorial';
+  const setActiveTab = (tab: AdminTab) => {
+    setOffset(0);
+    setCatalogStatus('all');
+    setFeedback(null);
+    setParams((current) => {
+      const next = new URLSearchParams(current);
+      next.set('tab', tab);
+      next.delete('q');
+      next.delete('edit');
+      return next;
+    });
+  };
+  const [offset, setOffset] = useState(0);
+  const [catalogTotal, setCatalogTotal] = useState(0);
+  const [catalogStatus, setCatalogStatus] = useState('all');
+  const [serverCounts, setServerCounts] = useState<Record<string, number>>({});
+  const [placesLoading, setPlacesLoading] = useState(false);
+  const placesRequest = useRef<AbortController | null>(null);
+  const adminRequest = useRef<AbortController | null>(null);
   const [destinations, setDestinations] = useState<Destino[]>([]);
+  const [municipalityOptions, setMunicipalityOptions] = useState<Municipio[]>([]);
   const [municipalities, setMunicipalities] = useState<Municipio[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [places, setPlaces] = useState<Place[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [travelTypes, setTravelTypes] = useState<TourismType[]>([]);
+  const [editorialRevision, setEditorialRevision] = useState(0);
   const [editorialItems, setEditorialItems] = useState<EditorialItem[]>([]);
   const [selectedDestinationId, setSelectedDestinationId] = useState('');
-  const [destinationQuery, setDestinationQuery] = useState('');
-  const [municipalityQuery, setMunicipalityQuery] = useState('');
+  const [destinationQuery, setDestinationQuery] = useState(() =>
+    activeTab === 'destinos' ? params.get('q') || '' : '',
+  );
+  const [municipalityQuery, setMunicipalityQuery] = useState(() =>
+    activeTab === 'municipios' ? params.get('q') || '' : '',
+  );
   const [reviewQuery, setReviewQuery] = useState('');
   const [placeQuery, setPlaceQuery] = useState('');
   const [placeDestinationQuery, setPlaceDestinationQuery] = useState('');
@@ -83,76 +122,138 @@ export default function AdminPage() {
   const [travelTypeForm, setTravelTypeForm] = useState<Partial<TourismType> | null>(null);
   const [travelTypeToDelete, setTravelTypeToDelete] = useState<TourismType | null>(null);
 
+  const activeQuery =
+    activeTab === 'destinos'
+      ? destinationQuery
+      : activeTab === 'municipios'
+        ? municipalityQuery
+        : '';
+  const refreshCounts = async () => {
+    try {
+      setServerCounts(await api<Record<string, number>>('/admin/counts', {}, token));
+    } catch {
+      /* Panels remain usable when counts are unavailable. */
+    }
+  };
   const loadAdminData = async () => {
     if (!token || user?.role !== 'admin') return;
-
-    setIsLoading(true);
-    setFeedback(null);
-
-    try {
-      const [
-        destinationData,
-        municipalityData,
-        reviewData,
-        activityData,
-        travelTypeData,
-        editorialData,
-      ] = await Promise.all([
-        api<Destino[]>('/admin/destinos', {}, token),
-        api<Municipio[]>('/admin/municipios', {}, token),
-        api<Review[]>('/admin/reviews', {}, token),
-        api<Activity[]>('/admin/activities', {}, token),
-        api<TourismType[]>('/admin/tourism-types', {}, token),
-        api<EditorialItem[]>('/admin/editorial?status=all', {}, token),
-      ]);
-
-      setDestinations(destinationData);
-      setMunicipalities(municipalityData);
-      setReviews(reviewData);
-      setActivities(activityData);
-      setTravelTypes(travelTypeData);
-      setEditorialItems(editorialData);
-      setSelectedDestinationId((currentId) => currentId || destinationData[0]?.id || '');
-    } catch (cause) {
-      setFeedback({
-        tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo cargar la administración',
-      });
-    } finally {
+    adminRequest.current?.abort();
+    const controller = new AbortController();
+    adminRequest.current = controller;
+    if (activeTab === 'editorial') {
       setIsLoading(false);
+      return;
     }
-  };
-
-  const loadPlaces = async () => {
-    if (!token || !selectedDestinationId) return;
-
+    setIsLoading(true);
     try {
-      setPlaces(await api<Place[]>(`/admin/destinos/${selectedDestinationId}/places`, {}, token));
+      const pageQuery = `?meta=1&limit=40&offset=${offset}&q=${encodeURIComponent(activeQuery)}&status=${catalogStatus}`;
+      const options = { signal: controller.signal };
+      if (activeTab === 'destinos') {
+        const page = await api<{ items: Destino[]; total: number }>(
+          `/admin/destinos${pageQuery}`,
+          options,
+          token,
+        );
+        if (!controller.signal.aborted) {
+          const checked = readCatalogPage<Destino>(page);
+          setDestinations(checked.items);
+          setCatalogTotal(checked.total);
+        }
+      } else if (activeTab === 'municipios') {
+        const page = await api<{ items: Municipio[]; total: number }>(
+          `/admin/municipios${pageQuery}`,
+          options,
+          token,
+        );
+        if (!controller.signal.aborted) {
+          const checked = readCatalogPage<Municipio>(page);
+          setMunicipalities(checked.items);
+          setCatalogTotal(checked.total);
+        }
+      } else if (activeTab === 'reviews')
+        setReviews(await api<Review[]>('/admin/reviews', options, token));
+      else if (activeTab === 'actividades')
+        setActivities(await api<Activity[]>('/admin/activities', options, token));
+      else if (activeTab === 'tipos-viaje')
+        setTravelTypes(await api<TourismType[]>('/admin/tourism-types', options, token));
+      else if (activeTab === 'places') {
+        const choices = await api<Destino[]>('/admin/destinos?options=1', options, token);
+        if (!controller.signal.aborted) {
+          setDestinations(choices);
+          setSelectedDestinationId((current) => current || choices[0]?.id || '');
+        }
+      }
     } catch (cause) {
-      setFeedback({
-        tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudieron cargar los lugares',
-      });
+      if (!controller.signal.aborted)
+        setFeedback({
+          tone: 'error',
+          text:
+            cause instanceof Error ? t(cause.message) : t('No se pudo cargar la administración'),
+        });
+    } finally {
+      if (!controller.signal.aborted) setIsLoading(false);
     }
   };
-
+  const loadPlaces = async () => {
+    placesRequest.current?.abort();
+    const controller = new AbortController();
+    placesRequest.current = controller;
+    setPlaces([]);
+    if (!token || !selectedDestinationId || activeTab !== 'places') {
+      setPlacesLoading(false);
+      return;
+    }
+    setPlacesLoading(true);
+    try {
+      const records = await api<Place[]>(
+        `/admin/destinos/${selectedDestinationId}/places`,
+        { signal: controller.signal },
+        token,
+      );
+      if (!controller.signal.aborted) setPlaces(records);
+    } catch (cause) {
+      if (!controller.signal.aborted)
+        setFeedback({
+          tone: 'error',
+          text: cause instanceof Error ? cause.message : t('No se pudieron cargar los lugares'),
+        });
+    } finally {
+      if (!controller.signal.aborted) setPlacesLoading(false);
+    }
+  };
   useEffect(() => {
-    void loadAdminData();
+    if (token && user?.role === 'admin') void refreshCounts();
   }, [token, user?.role]);
-
+  useEffect(() => {
+    const timer = window.setTimeout(() => void loadAdminData(), activeQuery ? 250 : 0);
+    return () => {
+      window.clearTimeout(timer);
+      adminRequest.current?.abort();
+    };
+  }, [token, user?.role, activeTab, activeQuery, offset, catalogStatus]);
+  useEffect(() => {
+    setOffset(0);
+  }, [activeQuery, catalogStatus]);
+  useEffect(() => {
+    if (!['destinos', 'municipios'].includes(activeTab)) return;
+    setParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+        if (activeQuery) next.set('q', activeQuery);
+        else next.delete('q');
+        return next;
+      },
+      { replace: true },
+    );
+  }, [activeTab, activeQuery]);
   useEffect(() => {
     void loadPlaces();
-  }, [token, selectedDestinationId]);
+    return () => placesRequest.current?.abort();
+  }, [token, selectedDestinationId, activeTab]);
 
-  const filteredDestinations = useMemo(
-    () => filterDestinations(destinations, destinationQuery),
-    [destinationQuery, destinations],
-  );
+  const filteredDestinations = useMemo(() => destinations, [destinationQuery, destinations]);
 
-  const filteredMunicipalities = useMemo(
-    () => filterMunicipalities(municipalities, municipalityQuery),
-    [municipalities, municipalityQuery],
-  );
+  const filteredMunicipalities = useMemo(() => municipalities, [municipalities, municipalityQuery]);
 
   const filteredPlaces = useMemo(() => filterPlaces(places, placeQuery), [placeQuery, places]);
 
@@ -170,23 +271,94 @@ export default function AdminPage() {
     [destinations, placeDestinationQuery],
   );
 
+  const loadMunicipalityOptions = () =>
+    api<Municipio[]>('/admin/municipios?options=1', {}, token).then(setMunicipalityOptions);
+
   const openDestination = async (destination: Destino) => {
     setIsDestinationLoading(true);
     setFeedback(null);
 
     try {
-      setDestinationForm(await api<Destino>(`/admin/destinos/${destination.id}`, {}, token));
+      const [record] = await Promise.all([
+        api<Destino>(`/admin/destinos/${destination.id}`, {}, token),
+        loadMunicipalityOptions(),
+      ]);
+      setDestinationForm(record);
+      setParams(
+        (current) => {
+          const next = new URLSearchParams(current);
+          next.set('edit', record.id);
+          return next;
+        },
+        { replace: true },
+      );
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo abrir el destino completo',
+        text: cause instanceof Error ? cause.message : t('No se pudo abrir el destino completo'),
       });
     } finally {
       setIsDestinationLoading(false);
     }
   };
 
+  const requestedEditor = params.get('edit');
+  useEffect(() => {
+    if (requestedEditor && !destinationForm && token && user?.role === 'admin') {
+      void openDestination({ id: requestedEditor } as Destino);
+    }
+  }, [requestedEditor, token, user?.role]);
+  const closeDestination = () => {
+    setDestinationForm(null);
+    setParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+        next.delete('edit');
+        next.delete('section');
+        return next;
+      },
+      { replace: true },
+    );
+  };
+
+  const editEditorialItem = async (item: EditorialItem) => {
+    if (item.resource === 'destinos') {
+      await openDestination({ id: item.id } as Destino);
+      return;
+    }
+    setFeedback(null);
+    try {
+      const record = await api<Municipio & Place & Activity & TourismType & { destinoId: string }>(
+        `/admin/editorial/${item.resource}/${item.id}`,
+        {},
+        token,
+      );
+      if (item.resource === 'municipios') setMunicipalityForm(record);
+      if (item.resource === 'activities') setActivityForm(record);
+      if (item.resource === 'tourism-types') setTravelTypeForm(record);
+      if (item.resource === 'places') {
+        setSelectedDestinationId(record.destinoId);
+        setPlaceForm(record);
+      }
+    } catch (cause) {
+      setFeedback({
+        tone: 'error',
+        text: cause instanceof Error ? cause.message : t('No se pudo abrir el contenido'),
+      });
+    }
+  };
+
   const updateDestinationList = (destination: Destino) => {
+    setParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+        next.set('edit', destination.id);
+        return next;
+      },
+      { replace: true },
+    );
+    setEditorialRevision((value) => value + 1);
+    void refreshCounts();
     setDestinations((currentDestinations) =>
       [...currentDestinations.filter((current) => current.id !== destination.id), destination].sort(
         (first, second) => first.nombre.localeCompare(second.nombre, 'es'),
@@ -222,18 +394,22 @@ export default function AdminPage() {
         },
         token,
       );
+      markEditorSaved(`municipality:${municipalityForm?.id || 'new'}`);
+      setEditorialRevision((value) => value + 1);
       setMunicipalityForm(null);
       setFeedback({
         tone: 'success',
         text: municipalityForm.id
-          ? 'Municipio actualizado'
-          : 'Municipio creado y enviado a revisión',
+          ? t('Municipio actualizado')
+          : t('Municipio creado y enviado a revisión'),
       });
+      setEditorialRevision((value) => value + 1);
       await loadAdminData();
+      void refreshCounts();
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo guardar el municipio',
+        text: cause instanceof Error ? cause.message : t('No se pudo guardar el municipio'),
       });
     } finally {
       setIsSaving(false);
@@ -267,6 +443,8 @@ export default function AdminPage() {
         token,
       );
 
+      markEditorSaved(`place:${placeForm?.id || 'new'}`);
+      setEditorialRevision((value) => value + 1);
       setPlaceForm(null);
       await loadPlaces();
       setEditorialItems((current) => [
@@ -284,12 +462,12 @@ export default function AdminPage() {
       ]);
       setFeedback({
         tone: 'success',
-        text: placeForm.id ? 'Lugar actualizado' : 'Lugar creado y enviado a revisión',
+        text: placeForm.id ? t('Lugar actualizado') : t('Lugar creado y enviado a revisión'),
       });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo guardar el lugar',
+        text: cause instanceof Error ? cause.message : t('No se pudo guardar el lugar'),
       });
     } finally {
       setIsSaving(false);
@@ -330,6 +508,8 @@ export default function AdminPage() {
           })),
         );
       }
+      markEditorSaved(`activity:${activity?.id || 'new'}`);
+      setEditorialRevision((value) => value + 1);
       setActivityForm(null);
       setEditorialItems((current) => [
         ...current.filter((item) => !(item.resource === 'activities' && item.id === saved.id)),
@@ -347,12 +527,12 @@ export default function AdminPage() {
       await refreshActivities();
       setFeedback({
         tone: 'success',
-        text: activity.id ? 'Actividad actualizada' : 'Actividad creada y enviada a revisión',
+        text: activity.id ? t('Actividad actualizada') : t('Actividad creada y enviada a revisión'),
       });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo guardar la actividad',
+        text: cause instanceof Error ? cause.message : t('No se pudo guardar la actividad'),
       });
     } finally {
       setIsSaving(false);
@@ -384,12 +564,12 @@ export default function AdminPage() {
       await refreshActivities();
       setFeedback({
         tone: 'success',
-        text: `Actividad eliminada de ${result.removedFromDestinations} destinos`,
+        text: t('Actividad eliminada de {0} destinos', { 0: result.removedFromDestinations }),
       });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo eliminar la actividad',
+        text: cause instanceof Error ? cause.message : t('No se pudo eliminar la actividad'),
       });
     } finally {
       setIsSaving(false);
@@ -427,6 +607,8 @@ export default function AdminPage() {
           })),
         );
       }
+      markEditorSaved(`tourism:${type.id || 'new'}`);
+      setEditorialRevision((value) => value + 1);
       setTravelTypeForm(null);
       setEditorialItems((current) => [
         ...current.filter((item) => !(item.resource === 'tourism-types' && item.id === saved.id)),
@@ -444,12 +626,14 @@ export default function AdminPage() {
       await refreshTourismTypes();
       setFeedback({
         tone: 'success',
-        text: type.id ? 'Tipo de viaje actualizado' : 'Tipo de viaje creado y enviado a revisión',
+        text: type.id
+          ? t('Tipo de viaje actualizado')
+          : t('Tipo de viaje creado y enviado a revisión'),
       });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo guardar el tipo de viaje',
+        text: cause instanceof Error ? cause.message : t('No se pudo guardar el tipo de viaje'),
       });
     } finally {
       setIsSaving(false);
@@ -481,12 +665,12 @@ export default function AdminPage() {
       await refreshTourismTypes();
       setFeedback({
         tone: 'success',
-        text: `Tipo eliminado de ${result.removedFromDestinations} destinos`,
+        text: t('Tipo eliminado de {0} destinos', { 0: result.removedFromDestinations }),
       });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo eliminar el tipo de viaje',
+        text: cause instanceof Error ? cause.message : t('No se pudo eliminar el tipo de viaje'),
       });
     } finally {
       setIsSaving(false);
@@ -495,7 +679,7 @@ export default function AdminPage() {
 
   const removeResource = async (resource: AdminResource, id: string) => {
     const confirmed = confirm(
-      '¿Eliminar este elemento definitivamente? Esta acción no se puede deshacer.',
+      t('¿Eliminar este elemento definitivamente? Esta acción no se puede deshacer.'),
     );
     if (!token || !confirmed) return;
 
@@ -505,14 +689,16 @@ export default function AdminPage() {
       if (resource === 'places') {
         setPlaces((currentPlaces) => currentPlaces.filter((place) => place.id !== id));
       } else {
+        setEditorialRevision((value) => value + 1);
         await loadAdminData();
+        void refreshCounts();
       }
 
-      setFeedback({ tone: 'success', text: 'Elemento eliminado' });
+      setFeedback({ tone: 'success', text: t('Elemento eliminado') });
     } catch (cause) {
       setFeedback({
         tone: 'error',
-        text: cause instanceof Error ? cause.message : 'No se pudo eliminar',
+        text: cause instanceof Error ? cause.message : t('No se pudo eliminar'),
       });
     }
   };
@@ -522,7 +708,7 @@ export default function AdminPage() {
     ids: string[],
     status: EditorialStatus,
   ) => {
-    if (!token) throw new Error('La sesión de administración ha expirado');
+    if (!token) throw new Error(t('La sesión de administración ha expirado'));
     const idSet = new Set(ids);
     const previousEditorial = editorialItems;
     const previousDestinations = destinations;
@@ -561,6 +747,7 @@ export default function AdminPage() {
         { method: 'PATCH', body: JSON.stringify({ ids, status }) },
         token,
       );
+      void refreshCounts();
       if (resource === 'activities') await refreshActivities();
       if (resource === 'tourism-types') await refreshTourismTypes();
     } catch (cause) {
@@ -578,9 +765,9 @@ export default function AdminPage() {
     id: string,
     patch: { status?: ReviewStatus; adminResponse?: string | null },
   ) => {
-    if (!token) throw new Error('La sesión de administración ha expirado');
+    if (!token) throw new Error(t('La sesión de administración ha expirado'));
     const previous = reviews.find((review) => review.id === id);
-    if (!previous) throw new Error('La reseña ya no está disponible');
+    if (!previous) throw new Error(t('La reseña ya no está disponible'));
 
     setReviews((current) =>
       current.map((review) =>
@@ -613,7 +800,7 @@ export default function AdminPage() {
   };
 
   const moderateReviews = async (ids: string[], status: ReviewStatus) => {
-    if (!token) throw new Error('La sesión de administración ha expirado');
+    if (!token) throw new Error(t('La sesión de administración ha expirado'));
     const selected = new Set(ids);
     const previous = reviews.filter((review) => selected.has(review.id));
     setReviews((current) =>
@@ -634,7 +821,7 @@ export default function AdminPage() {
   };
 
   const deleteReviews = async (ids: string[]) => {
-    if (!token) throw new Error('La sesión de administración ha expirado');
+    if (!token) throw new Error(t('La sesión de administración ha expirado'));
     const selected = new Set(ids);
     const previous = reviews;
     setReviews((current) => current.filter((review) => !selected.has(review.id)));
@@ -663,8 +850,8 @@ export default function AdminPage() {
     return (
       <Shell footer={false}>
         <section className="status-page">
-          <Empty headingLevel="h1" icon={<ShieldCheck />} title="Acceso restringido">
-            Esta zona solo está disponible para administradores.
+          <Empty headingLevel="h1" icon={<ShieldCheck />} title={t('Acceso restringido')}>
+            {t('Esta zona solo está disponible para administradores.')}
           </Empty>
         </section>
       </Shell>
@@ -672,23 +859,28 @@ export default function AdminPage() {
   }
 
   const resourceCounts: Record<AdminTab, number> = {
-    editorial: editorialItems.filter((item) => item.editorialStatus === 'pending').length,
-    destinos: destinations.length,
-    'tipos-viaje': travelTypes.length,
-    actividades: activities.length,
-    municipios: municipalities.length,
-    reviews: reviews.length,
-    places: places.length,
+    editorial:
+      serverCounts.editorial ??
+      editorialItems.filter((item) => item.editorialStatus === 'pending').length,
+    destinos: serverCounts.destinos ?? destinations.length,
+    'tipos-viaje': serverCounts['tourism-types'] ?? travelTypes.length,
+    actividades: serverCounts.activities ?? activities.length,
+    municipios: serverCounts.municipios ?? municipalities.length,
+    reviews: serverCounts.reviews ?? reviews.length,
+    places: serverCounts.places ?? places.length,
   };
 
   return (
     <Shell footer={false}>
-      <PageHeading kicker="Back office" title="Administración">
-        <p>
-          Gestiona destinos, tipos de viaje, actividades, municipios, lugares y reseñas sin tocar
-          código.
-        </p>
-      </PageHeading>
+      <div className="admin-heading">
+        <PageHeading title={t('Administración')}>
+          <p>
+            {t(
+              'Gestiona destinos, tipos de viaje, actividades, municipios, lugares y reseñas sin tocar código.',
+            )}
+          </p>
+        </PageHeading>
+      </div>
 
       <div className="admin-layout">
         <AdminNavigation activeTab={activeTab} counts={resourceCounts} onChange={setActiveTab} />
@@ -696,101 +888,157 @@ export default function AdminPage() {
         <section
           key={activeTab}
           className="admin-workspace"
+          aria-busy={isLoading}
           id="admin-panel"
           role="tabpanel"
           aria-labelledby={`admin-tab-${activeTab}`}
         >
-          {feedback && <Notice tone={feedback.tone}>{feedback.text}</Notice>}
-          {isLoading ? (
-            <Loader />
-          ) : (
-            <>
-              {activeTab === 'editorial' && (
-                <EditorialReviewPanel items={editorialItems} onTransition={transitionEditorial} />
+          {feedback && (
+            <Notice tone={feedback.tone}>
+              {feedback.text}
+              {feedback.tone === 'error' && (
+                <button
+                  type="button"
+                  className="button button--quiet"
+                  onClick={() => {
+                    setFeedback(null);
+                    if (requestedEditor && !destinationForm)
+                      void openDestination({ id: requestedEditor } as Destino);
+                    else void loadAdminData();
+                    if (activeTab === 'places') void loadPlaces();
+                  }}
+                >
+                  {t('Reintentar')}
+                </button>
               )}
-              {activeTab === 'destinos' && (
-                <DestinationsPanel
-                  destinations={filteredDestinations}
-                  query={destinationQuery}
-                  isEditorLoading={isDestinationLoading}
-                  onQueryChange={setDestinationQuery}
-                  onCreate={() => setDestinationForm({ ...EMPTY_DESTINATION })}
-                  onEdit={(destination) => void openDestination(destination)}
-                  onDelete={(id) => void removeResource('destinos', id)}
-                />
-              )}
+            </Notice>
+          )}
+          {isLoading && <p role="status">{t('Cargando…')}</p>}
+          <>
+            {activeTab === 'editorial' && (
+              <EditorialReviewPanel
+                revision={editorialRevision}
+                onEdit={(item) => void editEditorialItem(item)}
+                onTransition={transitionEditorial}
+              />
+            )}
+            {activeTab === 'destinos' && (
+              <DestinationsPanel
+                total={catalogTotal}
+                status={catalogStatus}
+                onStatusChange={setCatalogStatus}
+                destinations={filteredDestinations}
+                query={destinationQuery}
+                isEditorLoading={isDestinationLoading}
+                onQueryChange={setDestinationQuery}
+                onCreate={() => {
+                  void loadMunicipalityOptions()
+                    .then(() => setDestinationForm({ ...EMPTY_DESTINATION }))
+                    .catch((cause) => setFeedback({ tone: 'error', text: cause.message }));
+                }}
+                onEdit={(destination) => void openDestination(destination)}
+                onDelete={(id) => void removeResource('destinos', id)}
+              />
+            )}
 
-              {activeTab === 'actividades' && (
-                <ActivitiesPanel
-                  activities={filteredActivities}
-                  query={activityQuery}
-                  onQueryChange={setActivityQuery}
-                  onCreate={() =>
-                    setActivityForm({ name: '', icon: 'Compass', sortOrder: 0, isActive: true })
-                  }
-                  onEdit={setActivityForm}
-                  onDelete={setActivityToDelete}
-                />
-              )}
-              {activeTab === 'tipos-viaje' && (
-                <TourismTypesPanel
-                  types={filteredTravelTypes}
-                  query={travelTypeQuery}
-                  onQueryChange={setTravelTypeQuery}
-                  onCreate={() =>
-                    setTravelTypeForm({
-                      name: '',
-                      description: '',
-                      icon: 'Compass',
-                      colorKey: 'otro',
-                      colorValue: '#5f6470',
-                      sortOrder: 100,
-                      isActive: true,
-                    })
-                  }
-                  onEdit={setTravelTypeForm}
-                  onDelete={setTravelTypeToDelete}
-                />
-              )}
+            {activeTab === 'actividades' && (
+              <ActivitiesPanel
+                activities={filteredActivities}
+                query={activityQuery}
+                onQueryChange={setActivityQuery}
+                onCreate={() =>
+                  setActivityForm({ name: '', icon: 'Compass', sortOrder: 0, isActive: true })
+                }
+                onEdit={setActivityForm}
+                onDelete={setActivityToDelete}
+              />
+            )}
+            {activeTab === 'tipos-viaje' && (
+              <TourismTypesPanel
+                types={filteredTravelTypes}
+                query={travelTypeQuery}
+                onQueryChange={setTravelTypeQuery}
+                onCreate={() =>
+                  setTravelTypeForm({
+                    name: '',
+                    description: '',
+                    icon: 'Compass',
+                    colorKey: 'otro',
+                    colorValue: '#5f6470',
+                    sortOrder: 100,
+                    isActive: true,
+                  })
+                }
+                onEdit={setTravelTypeForm}
+                onDelete={setTravelTypeToDelete}
+              />
+            )}
 
-              {activeTab === 'municipios' && (
-                <MunicipalitiesPanel
-                  municipalities={filteredMunicipalities}
-                  query={municipalityQuery}
-                  onQueryChange={setMunicipalityQuery}
-                  onCreate={() => setMunicipalityForm({ ...EMPTY_MUNICIPALITY })}
-                  onEdit={setMunicipalityForm}
-                  onDelete={(id) => void removeResource('municipios', id)}
-                />
-              )}
+            {activeTab === 'municipios' && (
+              <MunicipalitiesPanel
+                total={catalogTotal}
+                status={catalogStatus}
+                onStatusChange={setCatalogStatus}
+                municipalities={filteredMunicipalities}
+                query={municipalityQuery}
+                onQueryChange={setMunicipalityQuery}
+                onCreate={() => setMunicipalityForm({ ...EMPTY_MUNICIPALITY })}
+                onEdit={setMunicipalityForm}
+                onDelete={(id) => void removeResource('municipios', id)}
+              />
+            )}
 
-              {activeTab === 'reviews' && (
-                <ReviewsPanel
-                  reviews={reviews}
-                  query={reviewQuery}
-                  onQueryChange={setReviewQuery}
-                  onModerate={moderateReview}
-                  onBulkModerate={moderateReviews}
-                  onBulkDelete={deleteReviews}
-                />
-              )}
+            {activeTab === 'reviews' && (
+              <ReviewsPanel
+                reviews={reviews}
+                query={reviewQuery}
+                onQueryChange={setReviewQuery}
+                onModerate={moderateReview}
+                onBulkModerate={moderateReviews}
+                onBulkDelete={deleteReviews}
+              />
+            )}
 
-              {activeTab === 'places' && (
-                <PlacesPanel
-                  places={filteredPlaces}
-                  destinations={destinationChoices}
-                  selectedDestinationId={selectedDestinationId}
-                  placeQuery={placeQuery}
-                  destinationQuery={placeDestinationQuery}
-                  onPlaceQueryChange={setPlaceQuery}
-                  onDestinationQueryChange={setPlaceDestinationQuery}
-                  onDestinationChange={setSelectedDestinationId}
-                  onCreate={() => setPlaceForm({ ...EMPTY_PLACE })}
-                  onEdit={setPlaceForm}
-                  onDelete={(id) => void removeResource('places', id)}
-                />
-              )}
-            </>
+            {activeTab === 'places' && (
+              <PlacesPanel
+                loading={placesLoading}
+                places={filteredPlaces}
+                destinations={destinationChoices}
+                selectedDestinationId={selectedDestinationId}
+                placeQuery={placeQuery}
+                destinationQuery={placeDestinationQuery}
+                onPlaceQueryChange={setPlaceQuery}
+                onDestinationQueryChange={setPlaceDestinationQuery}
+                onDestinationChange={setSelectedDestinationId}
+                onCreate={() => setPlaceForm({ ...EMPTY_PLACE })}
+                onEdit={setPlaceForm}
+                onDelete={(id) => void removeResource('places', id)}
+              />
+            )}
+          </>
+          {['destinos', 'municipios'].includes(activeTab) && (
+            <nav className="pagination" aria-label={t('Páginas del catálogo')}>
+              <button
+                type="button"
+                className="button button--quiet"
+                disabled={offset === 0 || isLoading}
+                onClick={() => setOffset((value) => Math.max(0, value - 40))}
+              >
+                {t('Anterior')}
+              </button>
+              <span>
+                {t('{0} resultados', { 0: catalogTotal })} ·{' '}
+                {t('Página {0}', { 0: Math.floor(offset / 40) + 1 })}
+              </span>
+              <button
+                type="button"
+                className="button button--quiet"
+                disabled={offset + 40 >= catalogTotal || isLoading}
+                onClick={() => setOffset((value) => value + 40)}
+              >
+                {t('Siguiente')}
+              </button>
+            </nav>
           )}
         </section>
       </div>
@@ -798,7 +1046,7 @@ export default function AdminPage() {
       {destinationForm && token && (
         <DestinationEditor
           initial={destinationForm}
-          municipalities={municipalities}
+          municipalities={municipalityOptions}
           token={token}
           onChange={updateDestinationList}
           onActivityCreated={(activity) =>
@@ -817,12 +1065,13 @@ export default function AdminPage() {
               ),
             )
           }
-          onClose={() => setDestinationForm(null)}
+          onClose={closeDestination}
         />
       )}
 
       {municipalityForm && (
         <MunicipalityEditorModal
+          error={feedback?.tone === 'error' ? feedback.text : undefined}
           form={municipalityForm}
           isSaving={isSaving}
           onChange={setMunicipalityForm}
@@ -833,6 +1082,7 @@ export default function AdminPage() {
 
       {placeForm && (
         <PlaceEditorModal
+          error={feedback?.tone === 'error' ? feedback.text : undefined}
           form={placeForm}
           isSaving={isSaving}
           onChange={setPlaceForm}
@@ -843,6 +1093,7 @@ export default function AdminPage() {
 
       {activityForm && (
         <ActivityEditorModal
+          error={feedback?.tone === 'error' ? feedback.text : undefined}
           initial={activityForm}
           isSaving={isSaving}
           onSave={saveActivity}
@@ -860,6 +1111,7 @@ export default function AdminPage() {
       )}
       {travelTypeForm && (
         <TourismTypeEditorModal
+          error={feedback?.tone === 'error' ? feedback.text : undefined}
           initial={travelTypeForm}
           isSaving={isSaving}
           onSave={saveTravelType}

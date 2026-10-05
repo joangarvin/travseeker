@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { Bookmark, Check, ChevronDown, ChevronRight, Route } from 'lucide-react';
 import type { EssentialGroup, EssentialItem } from '../../../types';
@@ -25,9 +26,9 @@ function itemKey(item: EssentialItem, index: number) {
 }
 
 function priorityLabel(index: number, total: number) {
-  if (index === 0) return 'Primera elección';
-  if (index < Math.min(3, total)) return 'Recomendada';
-  return 'Alternativa';
+  if (index === 0) return t('Primera elección');
+  if (index < Math.min(3, total)) return t('Recomendada');
+  return t('Alternativa');
 }
 
 function useStoredKeys(storageKey: string) {
@@ -154,7 +155,9 @@ export function EssentialRoute({
     const willSave = !saved.keys.has(key);
     saved.toggle(key);
     setAnnouncement(
-      willSave ? `${title} se ha guardado en esta guía.` : `${title} ya no está guardada.`,
+      willSave
+        ? t('{0} se ha guardado en esta guía.', { 0: title })
+        : t('{0} ya no está guardada.', { 0: title }),
     );
   };
 
@@ -164,27 +167,33 @@ export function EssentialRoute({
       onAddToTrip(item);
       return;
     }
-    setAnnouncement(`${title} solo puede añadirse a un viaje después de iniciar sesión.`);
+    setAnnouncement(
+      t('{0} solo puede añadirse a un viaje después de iniciar sesión.', { 0: title }),
+    );
   };
 
   return (
     <section className="essential-discovery" aria-labelledby="essential-discovery-title">
       <header className="essential-discovery__intro">
         <div>
-          <p className="kicker">Selección sobre el terreno</p>
-          <h2 id="essential-discovery-title">Lo imprescindible</h2>
+          <p className="kicker">{t('Selección sobre el terreno')}</p>
+          <h2 id="essential-discovery-title">{t('Lo imprescindible')}</h2>
           <p className="essential-discovery__lede">
-            Una selección editorial para entender qué merece tu tiempo y encajarlo en el viaje sin
-            perder el contexto.
+            {t(
+              'Una selección editorial para entender qué merece tu tiempo y encajarlo en el viaje sin perder el contexto.',
+            )}
           </p>
         </div>
-        <div className="essential-discovery__summary" aria-label="Resumen de tu selección local">
+        <div
+          className="essential-discovery__summary"
+          aria-label={t('Resumen de tu selección local')}
+        >
           <span>
-            <Bookmark aria-hidden /> {saved.keys.size} guardadas
+            <Bookmark aria-hidden /> {saved.keys.size} {t('guardadas')}
           </span>
           {authenticated && (
             <span>
-              <Route aria-hidden /> Itinerario conectado
+              <Route aria-hidden /> {t('Itinerario conectado')}
             </span>
           )}
         </div>
@@ -193,7 +202,7 @@ export function EssentialRoute({
       {populatedGroups.length ? (
         <div className="essential-discovery__workspace">
           <label className="essential-discovery__mobile-select">
-            <span>Tipo de experiencia</span>
+            <span>{t('Tipo de experiencia')}</span>
             <select value={resolvedGroupKey} onChange={(event) => selectGroup(event.target.value)}>
               {populatedGroups.map((group, index) => (
                 <option key={groupKey(group, index)} value={groupKey(group, index)}>
@@ -206,7 +215,7 @@ export function EssentialRoute({
           <div
             className="essential-discovery__tabs"
             role="tablist"
-            aria-label="Tipos de experiencia imprescindible"
+            aria-label={t('Tipos de experiencia imprescindible')}
           >
             {populatedGroups.map((group, index) => {
               const key = groupKey(group, index);
@@ -248,10 +257,12 @@ export function EssentialRoute({
               <div className="essential-discovery__catalogue">
                 <header>
                   <div>
-                    <p className="kicker">Orden editorial</p>
+                    <p className="kicker">{t('Orden editorial')}</p>
                     <h3>{activeGroup.title}</h3>
                   </div>
-                  <span>{activeGroup.items.length} opciones</span>
+                  <span>
+                    {activeGroup.items.length} {t('opciones')}
+                  </span>
                 </header>
 
                 <ol className="essential-discovery__list">
@@ -287,7 +298,7 @@ export function EssentialRoute({
                             <strong>{presentation.title}</strong>
                             <span>
                               {[item.duration, item.place?.nombre].filter(Boolean).join(' · ') ||
-                                'Ver criterio editorial'}
+                                t('Ver criterio editorial')}
                             </span>
                           </span>
                           <span className="essential-discovery__choice-state" aria-hidden>
@@ -326,8 +337,8 @@ export function EssentialRoute({
                     onClick={() => setItemsExpanded((value) => !value)}
                   >
                     {itemsExpanded
-                      ? 'Ver selección breve'
-                      : `Ver las ${activeGroup.items.length} experiencias`}
+                      ? t('Ver selección breve')
+                      : t('Ver las {0} experiencias', { 0: activeGroup.items.length })}
                   </button>
                 )}
               </div>
@@ -335,7 +346,7 @@ export function EssentialRoute({
               {!mobile && selectedItem && (
                 <aside
                   className="essential-discovery__detail"
-                  aria-label="Experiencia seleccionada"
+                  aria-label={t('Experiencia seleccionada')}
                 >
                   <EssentialDetail
                     item={selectedItem}
@@ -360,8 +371,9 @@ export function EssentialRoute({
       ) : (
         <div className="essential-discovery__legacy">
           <p className="essential-discovery__legacy-note">
-            Esta guía conserva el contenido editorial original; todavía no dispone de imágenes ni
-            datos prácticos estructurados.
+            {t(
+              'Esta guía conserva el contenido editorial original; todavía no dispone de imágenes ni datos prácticos estructurados.',
+            )}
           </p>
           <div className="prose" dangerouslySetInnerHTML={{ __html: safeHtml(legacyHtml) }} />
         </div>
@@ -372,8 +384,12 @@ export function EssentialRoute({
       </p>
       <p className="essential-discovery__storage-note">
         {authenticated
-          ? 'Los guardados de la guía permanecen en este dispositivo; “Añadir a un viaje” actualiza tu itinerario real.'
-          : 'Estas selecciones se guardan únicamente en este dispositivo. Entra para añadirlas a un viaje real.'}
+          ? t(
+              'Los guardados de la guía permanecen en este dispositivo; “Añadir a un viaje” actualiza tu itinerario real.',
+            )
+          : t(
+              'Estas selecciones se guardan únicamente en este dispositivo. Entra para añadirlas a un viaje real.',
+            )}
       </p>
     </section>
   );

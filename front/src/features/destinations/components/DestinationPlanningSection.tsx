@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import { BedDouble, Check, ExternalLink, MapPin } from 'lucide-react';
 import { BudgetEstimator } from '../../../components/BudgetEstimator';
 import { FormattedContent } from '../../../components/FormattedContent';
@@ -32,16 +33,17 @@ export function DestinationPlanningSection({
   return (
     <section id="bases" className="municipalities" aria-labelledby="bases-title">
       <div className="destination-section-heading">
-        <p className="kicker">Dónde hacer base</p>
-        <h2 id="bases-title">Elige una base práctica</h2>
+        <p className="kicker">{t('Dónde hacer base')}</p>
+        <h2 id="bases-title">{t('Elige una base práctica')}</h2>
         <p>
-          Compara el coste orientativo y las conexiones. La base elegida se aplica al cálculo de
-          presupuesto.
+          {t(
+            'Compara el coste orientativo y las conexiones. La base elegida se aplica al cálculo de presupuesto.',
+          )}
         </p>
       </div>
       <div className="planning-workbench">
         <div className="municipalities__chooser">
-          <label htmlFor="destination-base-selector">Base del viaje</label>
+          <label htmlFor="destination-base-selector">{t('Base del viaje')}</label>
           <select
             id="destination-base-selector"
             value={selectedBase.id}
@@ -59,38 +61,38 @@ export function DestinationPlanningSection({
           <div className="municipalities__selected-heading">
             <div>
               <p>
-                <Check aria-hidden="true" /> Base seleccionada
+                <Check aria-hidden="true" /> {t('Base seleccionada')}
               </p>
               <h3>{selectedBase.nombre}</h3>
             </div>
             {coordinates && (
               <a href={openStreetMapUrl(coordinates, 14)} target="_blank" rel="noreferrer">
-                Ver en el mapa <ExternalLink aria-hidden="true" />
+                {t('Ver en el mapa')} <ExternalLink aria-hidden="true" />
               </a>
             )}
           </div>
           <dl>
             <div>
               <dt>
-                <BedDouble aria-hidden="true" /> Precio orientativo/noche
+                <BedDouble aria-hidden="true" /> {t('Precio orientativo/noche')}
               </dt>
               <dd>
                 {plain(selectedBase.precios) ? (
                   <FormattedContent content={selectedBase.precios} asPlaintext />
                 ) : (
-                  'Sin precio publicado'
+                  t('Sin precio publicado')
                 )}
               </dd>
             </div>
             <div>
               <dt>
-                <MapPin aria-hidden="true" /> Conexiones
+                <MapPin aria-hidden="true" /> {t('Conexiones')}
               </dt>
               <dd>
                 {plain(selectedBase.conexiones) ? (
                   <FormattedContent content={selectedBase.conexiones} asPlaintext />
                 ) : (
-                  'Sin detalle de conexiones'
+                  t('Sin detalle de conexiones')
                 )}
               </dd>
             </div>
@@ -99,16 +101,16 @@ export function DestinationPlanningSection({
 
         {!!visibleAlternatives.length && (
           <div className="municipalities__alternatives">
-            <p>Otras bases</p>
+            <p>{t('Otras bases')}</p>
             <ul>
               {visibleAlternatives.map((municipio) => (
                 <li key={municipio.id}>
                   <button type="button" onClick={() => onSelectMunicipio(municipio.id)}>
                     <span>{municipio.nombre}</span>
                     <small>
-                      {excerptAtWord(plain(municipio.precios), 62) || 'Precio por confirmar'}
+                      {excerptAtWord(plain(municipio.precios), 62) || t('Precio por confirmar')}
                     </small>
-                    <span aria-hidden="true">Elegir</span>
+                    <span aria-hidden="true">{t('Elegir')}</span>
                   </button>
                 </li>
               ))}
@@ -116,8 +118,8 @@ export function DestinationPlanningSection({
             {alternatives.length > 3 && (
               <Button variant="secondary" onClick={onToggleAlternatives}>
                 {alternativesExpanded
-                  ? 'Ver menos bases'
-                  : `Ver las ${alternatives.length} alternativas`}
+                  ? t('Ver menos bases')
+                  : t('Ver las {0} alternativas', { 0: alternatives.length })}
               </Button>
             )}
           </div>

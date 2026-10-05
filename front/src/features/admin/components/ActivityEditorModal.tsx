@@ -1,3 +1,5 @@
+import { LocalizedField } from './LocalizedField';
+import { t } from '../../../i18n';
 import { useState, type FormEvent } from 'react';
 import { Check } from 'lucide-react';
 import { AdminModal } from '../../../components/admin/AdminModal';
@@ -8,6 +10,7 @@ import { activityIconChoices, activityIconRegistry } from '../../activities/acti
 type ActivityEditorModalProps = {
   initial: Partial<Activity>;
   isSaving: boolean;
+  error?: string;
   onSave: (activity: Partial<Activity>) => Promise<void>;
   onClose: () => void;
 };
@@ -15,6 +18,7 @@ type ActivityEditorModalProps = {
 export function ActivityEditorModal({
   initial,
   isSaving,
+  error,
   onSave,
   onClose,
 }: ActivityEditorModalProps) {
@@ -32,12 +36,24 @@ export function ActivityEditorModal({
 
   return (
     <AdminModal
-      title={form.id ? `Editar ${form.name}` : 'Crear una actividad'}
-      subtitle="El nombre y el icono se utilizarán en filtros, destinos y comparaciones."
+      draft={form}
+      draftKey={`activity:${form.id || 'new'}`}
+      onRestore={setForm}
+      busy={isSaving}
+      error={error}
+      title={form.id ? t('Editar {0}', { 0: form.name }) : t('Crear una actividad')}
+      subtitle={t('El nombre y el icono se utilizarán en filtros, destinos y comparaciones.')}
       onClose={onClose}
     >
       <form className="activity-editor" onSubmit={submit}>
-        <Field label="Nombre de la actividad" htmlFor="activity-name">
+        <LocalizedField
+          resource="activity"
+          field="name"
+          translations={form.translations}
+          onTranslationsChange={(translations) => setForm({ ...form, translations })}
+          label={t('Nombre de la actividad')}
+          htmlFor="activity-name"
+        >
           <input
             id="activity-name"
             data-autofocus
@@ -47,11 +63,11 @@ export function ActivityEditorModal({
             required
             onChange={(event) => setForm({ ...form, name: event.target.value })}
           />
-        </Field>
+        </LocalizedField>
 
         <fieldset className="activity-icon-picker">
-          <legend>Icono</legend>
-          <p>Elige el símbolo que mejor permita reconocer la actividad.</p>
+          <legend>{t('Icono')}</legend>
+          <p>{t('Elige el símbolo que mejor permita reconocer la actividad.')}</p>
           <div>
             {activityIconChoices.map(([iconName, label]) => {
               const Icon = activityIconRegistry[iconName];
@@ -67,7 +83,7 @@ export function ActivityEditorModal({
                     onChange={() => setForm({ ...form, icon: iconName })}
                   />
                   <Icon aria-hidden />
-                  <span>{label}</span>
+                  <span>{t(label)}</span>
                   {selected && <Check aria-hidden />}
                 </label>
               );
@@ -77,9 +93,9 @@ export function ActivityEditorModal({
 
         <div className="form-grid">
           <Field
-            label="Orden"
+            label={t('Orden')}
             htmlFor="activity-order"
-            hint="Los números menores aparecen primero."
+            hint={t('Los números menores aparecen primero.')}
           >
             <input
               id="activity-order"
@@ -95,18 +111,18 @@ export function ActivityEditorModal({
               onChange={(event) => setForm({ ...form, isActive: event.target.checked })}
             />
             <span>
-              <b>Actividad visible</b>
-              <small>Aparece en filtros y selectores públicos.</small>
+              <b>{t('Actividad visible')}</b>
+              <small>{t('Aparece en filtros y selectores públicos.')}</small>
             </span>
           </label>
         </div>
 
         <footer className="modal-actions">
-          <Button type="button" variant="quiet" onClick={onClose}>
-            Cancelar
+          <Button type="button" variant="quiet" data-close-editor="true">
+            {t('Cancelar')}
           </Button>
           <Button type="submit" loading={isSaving}>
-            {form.id ? 'Guardar cambios' : 'Crear actividad'}
+            {form.id ? t('Guardar cambios') : t('Crear actividad')}
           </Button>
         </footer>
       </form>

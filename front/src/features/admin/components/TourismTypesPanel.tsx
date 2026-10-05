@@ -1,3 +1,4 @@
+import { t } from '../../../i18n';
 import { Edit3, Plus, Trash2 } from 'lucide-react';
 import { Button } from '../../../components/ui';
 import type { TourismType } from '../../../types';
@@ -27,11 +28,11 @@ export function TourismTypesPanel({
       <AdminToolbar
         query={query}
         onQueryChange={onQueryChange}
-        placeholder="Buscar tipo de viaje"
+        placeholder={t('Buscar tipo de viaje')}
         resultCount={visible.length}
       >
         <Button onClick={onCreate}>
-          <Plus /> Nuevo tipo
+          <Plus /> {t('Nuevo tipo')}
         </Button>
       </AdminToolbar>
       <EditorialStatusFilter value={status} onChange={setStatus} />
@@ -50,18 +51,22 @@ export function TourismTypesPanel({
               <div>
                 <EditorialStatusBadge status={type.editorialStatus} />
                 <span className={`activity-status ${type.isActive ? 'is-active' : ''}`}>
-                  {type.isActive ? 'Visible' : 'Oculto'}
+                  {type.isActive ? t('Visible') : t('Oculto')}
                 </span>
                 <h2>{type.name}</h2>
                 <p>
-                  {type.description || 'Sin descripción'} · {type.destinationsCount || 0} destinos
+                  {type.description || t('Sin descripción')} · {type.destinationsCount || 0}{' '}
+                  {t('destinos')}
                 </p>
               </div>
               <div>
-                <button onClick={() => onEdit(type)} aria-label={`Editar ${type.name}`}>
+                <button onClick={() => onEdit(type)} aria-label={t('Editar {0}', { 0: type.name })}>
                   <Edit3 />
                 </button>
-                <button onClick={() => onDelete(type)} aria-label={`Eliminar ${type.name}`}>
+                <button
+                  onClick={() => onDelete(type)}
+                  aria-label={t('Eliminar {0}', { 0: type.name })}
+                >
                   <Trash2 />
                 </button>
               </div>
