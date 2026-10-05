@@ -6,6 +6,7 @@ import { Shell } from '../components/layout';
 import { Empty, Loader } from '../components/ui';
 import { PageMeta } from '../components/layout/PageMeta';
 
+const LegalPage = lazy(() => import('../pages/legal/LegalPage'));
 const HomePage = lazy(() => import('../pages/home/HomePage'));
 const DestinationPage = lazy(() => import('../pages/destination/DestinationPage'));
 const MapPage = lazy(() => import('../pages/map/MapPage'));
@@ -43,7 +44,9 @@ function NotFoundPage() {
 
 export function AppRoutes() {
   const location = useLocation();
-  const isDestinationRoute = location.pathname.startsWith('/destino/');
+  const isDestinationRoute =
+    location.pathname.startsWith('/destino/') ||
+    ['/cookies', '/privacidad', '/aviso-legal'].includes(location.pathname);
   const canonical =
     typeof window === 'undefined' ? undefined : `${window.location.origin}${location.pathname}`;
   const routeMeta = location.pathname.startsWith('/mapa')
@@ -113,6 +116,9 @@ export function AppRoutes() {
           <Route path="/verificar-email" element={<VerifyEmailPage />} />
           <Route path="/perfil" element={<ProfilePage />} />
           <Route path="/sobre-nosotros" element={<AboutPage />} />
+          <Route path="/cookies" element={<LegalPage />} />
+          <Route path="/privacidad" element={<LegalPage />} />
+          <Route path="/aviso-legal" element={<LegalPage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

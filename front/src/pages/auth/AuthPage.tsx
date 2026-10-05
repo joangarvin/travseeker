@@ -166,6 +166,15 @@ export default function AuthPage() {
                 </div>
               </Field>
 
+              {!isLogin && (
+                <p className="auth-legal">
+                  {t(
+                    'Al crear una cuenta solicitas las funciones del servicio. Consulta cómo tratamos tus datos y las condiciones de uso.',
+                  )}{' '}
+                  <Link to="/privacidad">{t('Política de privacidad')}</Link> ·{' '}
+                  <Link to="/aviso-legal">{t('Condiciones de uso')}</Link>
+                </p>
+              )}
               {error && <Notice tone="error">{error}</Notice>}
               <Button type="submit" loading={isSubmitting}>
                 {isLogin ? t('Entrar') : t('Crear cuenta')}

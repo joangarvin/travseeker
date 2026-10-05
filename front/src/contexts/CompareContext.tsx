@@ -1,13 +1,5 @@
 import { normalizeCompareIds } from '../utils/compareSelection';
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from 'react';
+import { createContext, useContext, useMemo, useRef, useState, type ReactNode } from 'react';
 
 type CompareContextValue = {
   ids: string[];
@@ -36,15 +28,12 @@ export function CompareProvider({ children }: { children: ReactNode }) {
   const update = (next: string[]) => {
     latest.current = next;
     setIds(next);
-  };
-
-  useEffect(() => {
     try {
-      localStorage.setItem(COMPARE_STORAGE_KEY, JSON.stringify(ids));
+      localStorage.setItem(COMPARE_STORAGE_KEY, JSON.stringify(next));
     } catch {
-      /* Storage can be unavailable. */
+      /* selection remains in memory */
     }
-  }, [ids]);
+  };
 
   const value = useMemo<CompareContextValue>(
     () => ({

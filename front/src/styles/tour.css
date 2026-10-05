@@ -1,0 +1,72 @@
+.guided-tour {
+  position: fixed;
+  right: 24px;
+  bottom: 56px;
+  z-index: 80;
+  width: min(430px, calc(100vw - 32px));
+  max-height: 55dvh;
+  overflow-y: auto;
+  padding: 24px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-2);
+}
+.guided-tour h2 {
+  margin: 0 40px 12px 0;
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+.guided-tour p {
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+.guided-tour__progress {
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.guided-tour__close {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+}
+.guided-tour__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+.guided-tour__actions .button {
+  padding: 10px 16px;
+  min-height: 44px;
+}
+.footer-tour {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  min-height: 44px;
+}
+body:has(.guided-tour) {
+  padding-bottom: 350px;
+}
+body:has(.modal-backdrop) .guided-tour,
+body.menu-open .guided-tour {
+  visibility: hidden;
+}
+@media (max-width: 600px) {
+  .guided-tour {
+    right: 16px;
+    bottom: 52px;
+    padding: 20px;
+    max-height: 45dvh;
+  }
+  .guided-tour__actions .button {
+    font-size: 0.8rem;
+  }
+}

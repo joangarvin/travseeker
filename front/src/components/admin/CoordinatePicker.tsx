@@ -1,3 +1,4 @@
+import { ExternalMapGate } from '../../features/privacy/CookieConsent';
 import { t } from '../../i18n';
 import { CircleMarker, MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import { Crosshair, MapPin } from 'lucide-react';
@@ -32,26 +33,28 @@ export function CoordinatePicker({
           <small>{t('Las coordenadas se completan automáticamente.')}</small>
         </span>
       </div>
-      <MapContainer
-        key={`${center[0]}-${center[1]}`}
-        center={center}
-        zoom={hasPoint ? 9 : 5}
-        zoomControl={compact}
-        className="coordinate-picker__map"
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <ClickHandler onPick={onChange} />
-        {hasPoint && (
-          <CircleMarker
-            center={center}
-            radius={9}
-            pathOptions={{ className: 'coordinate-picker__marker', weight: 3, fillOpacity: 1 }}
+      <ExternalMapGate>
+        <MapContainer
+          key={`${center[0]}-${center[1]}`}
+          center={center}
+          zoom={hasPoint ? 9 : 5}
+          zoomControl={compact}
+          className="coordinate-picker__map"
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-        )}
-      </MapContainer>
+          <ClickHandler onPick={onChange} />
+          {hasPoint && (
+            <CircleMarker
+              center={center}
+              radius={9}
+              pathOptions={{ className: 'coordinate-picker__marker', weight: 3, fillOpacity: 1 }}
+            />
+          )}
+        </MapContainer>
+      </ExternalMapGate>
       <div className="coordinate-picker__readout">
         <MapPin />
         <span>

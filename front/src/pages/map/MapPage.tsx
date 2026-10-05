@@ -1,3 +1,4 @@
+import { ExternalMapGate, useConsent } from '../../features/privacy/CookieConsent';
 import { t, intlLocale } from '../../i18n';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -44,6 +45,7 @@ import { Shell } from '../../components/layout';
 import { useTheme, useTourismTypes } from '../../contexts';
 
 export default function MapPage() {
+  const { maps } = useConsent();
   const { theme } = useTheme();
   const [searchParams, setSearchParams] = useSearchParams();
   const [destinos, setDestinos] = useState<Destino[]>([]);
@@ -299,42 +301,44 @@ export default function MapPage() {
             </aside>
           )}
           <div className="map-canvas">
-            <MapContainer
-              center={[40, -3.5]}
-              zoom={
-                typeof window !== 'undefined' && window.matchMedia('(max-width: 600px)').matches
-                  ? 5
-                  : 6
-              }
-              zoomControl={false}
-              className="map"
-            >
-              <TileLayer
-                key={theme}
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                url={`https://{s}.basemaps.cartocdn.com/${theme === 'dark' ? 'dark_all' : 'light_all'}/{z}/{x}/{y}{r}.png`}
-                subdomains="abcd"
-                eventHandlers={{
-                  loading: () => {
-                    setTilesReady(false);
-                    setTilesFailed(false);
-                  },
-                  load: () => setTilesReady(true),
-                  tileerror: () => setTilesFailed(true),
-                }}
-              />
-              <ZoomControl position="bottomright" />
-              <MapSizeSync layoutKey={`${listOpen}-${filtersOpen}`} />
-              <MapViewport destinations={destinos} selected={active} />
-              <MapPoints destinations={destinos} selectedId={selected} onSelect={setSelected} />
-            </MapContainer>
-            {!tilesReady && !tilesFailed && (
+            <ExternalMapGate>
+              <MapContainer
+                center={[40, -3.5]}
+                zoom={
+                  typeof window !== 'undefined' && window.matchMedia('(max-width: 600px)').matches
+                    ? 5
+                    : 6
+                }
+                zoomControl={false}
+                className="map"
+              >
+                <TileLayer
+                  key={theme}
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                  url={`https://{s}.basemaps.cartocdn.com/${theme === 'dark' ? 'dark_all' : 'light_all'}/{z}/{x}/{y}{r}.png`}
+                  subdomains="abcd"
+                  eventHandlers={{
+                    loading: () => {
+                      setTilesReady(false);
+                      setTilesFailed(false);
+                    },
+                    load: () => setTilesReady(true),
+                    tileerror: () => setTilesFailed(true),
+                  }}
+                />
+                <ZoomControl position="bottomright" />
+                <MapSizeSync layoutKey={`${listOpen}-${filtersOpen}`} />
+                <MapViewport destinations={destinos} selected={active} />
+                <MapPoints destinations={destinos} selectedId={selected} onSelect={setSelected} />
+              </MapContainer>
+            </ExternalMapGate>
+            {maps && !tilesReady && !tilesFailed && (
               <div className="map-state" role="status">
                 <span />
                 <b>{t('Cargando cartografía')}</b>
               </div>
             )}
-            {tilesFailed && !tilesReady && (
+            {maps && tilesFailed && !tilesReady && (
               <div className="map-state map-state--error" role="alert">
                 <MapIcon />
                 <span>

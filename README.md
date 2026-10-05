@@ -149,3 +149,7 @@ Si en local no ves el panel, comprueba que el backend use la misma base de datos
 ### Performance and free-tier usage
 
 See [PERFORMANCE.md](PERFORMANCE.md) for public-data caching, Cloudinary image optimization, deployment settings and Neon usage recommendations.
+
+### Privacy and cookie choices
+
+The site includes Spanish/English cookie, privacy and legal notices, with optional analytics and external maps disabled until permission is given. Edit operator details in `shared/legal.json`; the address is still pending. See [PRIVACY_REVIEW.md](PRIVACY_REVIEW.md) for the storage inventory, verification results, policy maintenance and the outstanding information required before treating the notices as final.

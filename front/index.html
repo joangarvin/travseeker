@@ -3,10 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="theme-color" content="#111111" />
     <script>
       (() => {
-        const stored = localStorage.getItem('trav_theme');
+        let stored = null;
+        try { stored = localStorage.getItem('trav_theme'); } catch {}
         const theme = stored === 'dark' || stored === 'light' ? stored : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.dataset.theme = theme;
       })();
@@ -14,12 +16,6 @@
     <meta
       name="description"
       content="TravSeeker — descubre destinos españoles por presupuesto, temporada y afluencia."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
     />
     <link rel="icon" href="/favicon.svg" />
     <title>TravSeeker — encuentra tu próximo lugar</title>

@@ -1,0 +1,221 @@
+.privacy-banner {
+  position: fixed;
+  z-index: 1200;
+  bottom: 20px;
+  left: max(16px, calc((100vw - 1120px) / 2));
+  right: max(16px, calc((100vw - 1120px) / 2));
+  padding: 24px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow-2);
+  display: grid;
+  gap: 16px;
+}
+.privacy-banner h2 {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+}
+.privacy-banner p {
+  max-width: 90ch;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 6px 0;
+}
+.privacy-banner a,
+.legal-page a,
+.auth-legal a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.privacy-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.privacy-actions button,
+.privacy-save {
+  flex: 1;
+  min-height: 46px;
+  padding: 10px 16px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 700;
+  cursor: pointer;
+}
+.privacy-actions button:hover,
+.privacy-save:hover {
+  background: var(--surface-muted);
+}
+.privacy-save {
+  width: 100%;
+  margin-top: 12px;
+}
+.privacy-reopen {
+  position: fixed;
+  z-index: 1100;
+  bottom: 8px;
+  left: 8px;
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.75rem;
+  box-shadow: var(--shadow-1);
+}
+.privacy-dialog {
+  width: min(100%, 740px);
+}
+.privacy-category {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-block: 20px;
+  padding-block: 16px;
+  border-top: 1px solid var(--line);
+}
+div.privacy-category {
+  display: block;
+}
+.privacy-category h3,
+.privacy-category strong {
+  font-size: 1rem;
+}
+.privacy-category p,
+.privacy-category span > span {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-top: 8px;
+}
+.privacy-category input {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  margin-top: 4px;
+  accent-color: var(--brand);
+}
+.external-map-placeholder {
+  display: grid;
+  place-content: center;
+  gap: 16px;
+  padding: 32px;
+  min-height: 260px;
+  background: var(--surface-muted);
+  color: var(--ink);
+}
+.external-map-placeholder p {
+  max-width: 55ch;
+}
+.map-canvas > .external-map-placeholder {
+  height: 100%;
+}
+.legal-page {
+  max-width: 1000px;
+  margin: 48px auto 96px;
+  padding-inline: 24px;
+}
+.legal-page h1 {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.legal-page nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding-block: 24px;
+  border-bottom: 1px solid var(--line);
+}
+.legal-page nav button {
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  text-decoration: underline;
+  min-height: 32px;
+}
+.legal-page section {
+  margin-block: 36px;
+}
+.legal-page h2 {
+  font-size: 1.4rem;
+  margin-bottom: 16px;
+}
+.legal-page p {
+  max-width: 75ch;
+  line-height: 1.75;
+  margin-block: 12px;
+}
+.legal-table {
+  overflow-x: auto;
+}
+.legal-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.legal-table th,
+.legal-table td {
+  text-align: left;
+  padding: 14px;
+  border: 1px solid var(--line);
+  vertical-align: top;
+}
+.legal-table code {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  margin-block: 24px;
+  font-size: 0.875rem;
+}
+.auth-legal {
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--muted);
+  margin-block: 16px;
+}
+body:has(.privacy-banner) {
+  padding-bottom: 240px;
+}
+@media (max-width: 600px) {
+  .privacy-banner {
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    padding: 16px;
+    gap: 12px;
+    max-height: 65dvh;
+    overflow-y: auto;
+  }
+  .privacy-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .privacy-actions button:last-child:nth-child(3) {
+    grid-column: 1/-1;
+  }
+  .privacy-actions button {
+    padding: 10px 8px;
+    font-size: 0.8rem;
+  }
+  .legal-page {
+    margin-top: 32px;
+    padding-inline: 16px;
+  }
+  .legal-table th,
+  .legal-table td {
+    padding: 8px;
+    min-width: 140px;
+  }
+  body:has(.privacy-banner) {
+    padding-bottom: 330px;
+  }
+}

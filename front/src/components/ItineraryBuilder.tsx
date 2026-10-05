@@ -1,3 +1,4 @@
+import { useConsent } from '../features/privacy/CookieConsent';
 import { t, intlLocale, catalogName } from '../i18n';
 import { useEffect, useMemo, useRef, useState, type DragEvent } from 'react';
 import { Link } from 'react-router-dom';
@@ -135,6 +136,7 @@ function SegmentBar({ segment, loading }: { segment?: RouteSegment; loading: boo
 }
 
 export function ItineraryBuilder({ collection, canEdit = false, onSave }: ItineraryBuilderProps) {
+  const { maps } = useConsent();
   const savedItinerary = collection.itinerary ?? EMPTY_ITINERARY;
   const initialDays = savedItinerary.length
     ? normalizeDays(savedItinerary, collection.startDate)
@@ -188,7 +190,7 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
     return () => {
       active = false;
     };
-  }, [collection, routeSignature]);
+  }, [collection, routeSignature, maps]);
 
   const totalDistance = useMemo(
     () => segments.reduce((total, segment) => total + (segment.distanceKm || 0), 0),
