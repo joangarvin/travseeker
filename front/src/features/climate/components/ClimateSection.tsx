@@ -6,6 +6,7 @@ import type { ClimateMonth, ClimateResponse, TemperatureUnit } from '../../../ty
 import {
   buildClimateAlternatives,
   crowdLabel,
+  crowdLevel,
   metricLabel,
   monthSummary,
   safeStoredTemperatureUnit,
@@ -223,15 +224,29 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
           )}
 
           <div className="climate-ribbon-heading">
-            <p>
-              <strong>{t('Explora el año')}</strong>
-            </p>
-            <p>{t('Usa las flechas del teclado para cambiar de mes.')}</p>
+            <div>
+              <p>
+                <strong>{t('Explora el año')}</strong>
+              </p>
+              <p>
+                {t('Temperatura máxima y afluencia estimada de cada mes.')}{' '}
+                {t('Usa las flechas del teclado para cambiar de mes.')}
+              </p>
+            </div>
+            <ul className="climate-crowd-legend" aria-label={t('Niveles de afluencia')}>
+              {(['baja', 'media', 'alta'] as const).map((level) => (
+                <li key={level} className={`climate-crowd-legend__item--${level}`}>
+                  {t(level)}
+                </li>
+              ))}
+            </ul>
           </div>
           <div className="climate-months" role="group" aria-label={t('Mes del año')}>
             {orderedMonths.map((month, index) => {
               const isSelected = selected.month === month.month;
               const isRecommended = recommendedMonth === month.month;
+              const level = crowdLevel(month.crowd);
+              const crowdPercent = level ? Math.min(100, Math.max(0, Math.round(month.crowd!))) : 0;
               return (
                 <button
                   key={month.month}
@@ -239,11 +254,12 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
                     monthButtons.current[index] = node;
                   }}
                   type="button"
-                  aria-label={t('{0}, máxima {1}{2}{3}', {
+                  aria-label={t('{0}, máxima {1}, {2}{3}{4}', {
                     0: month.name,
                     1: temperatureLabel(month.temperatureMaxC, unit),
-                    2: isRecommended ? t(', recomendación principal') : '',
-                    3: isSelected ? t(', seleccionado') : '',
+                    2: crowdLabel(month.crowd, true),
+                    3: isRecommended ? t(', recomendación principal') : '',
+                    4: isSelected ? t(', seleccionado') : '',
                   })}
                   aria-pressed={isSelected}
                   tabIndex={isSelected ? 0 : -1}
@@ -256,6 +272,17 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
                   <strong aria-hidden="true">
                     {temperatureLabel(month.temperatureMaxC, unit).replace(` °${unit}`, '°')}
                   </strong>
+                  <span
+                    className={`climate-months__crowd climate-months__crowd--${level ?? 'none'}`}
+                    aria-hidden="true"
+                  >
+                    <span className="climate-months__crowd-track">
+                      <span style={{ blockSize: `${crowdPercent}%` }} />
+                    </span>
+                    <span className="climate-months__crowd-label">
+                      {level ? `${t(level)} · ${crowdPercent}%` : t('Sin datos')}
+                    </span>
+                  </span>
                   {isRecommended && (
                     <span className="climate-months__recommendation" aria-hidden="true">
                       <Star /> {t('Ideal')}

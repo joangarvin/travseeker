@@ -238,7 +238,8 @@
 .climate-ribbon-heading p {
   margin: 0;
 }
-.climate-ribbon-heading > p:last-child {
+.climate-ribbon-heading p + p {
+  margin-top: 4px;
   color: var(--muted);
   font-size: 0.875rem;
 }
@@ -285,6 +286,75 @@
   font-size: 1.25rem;
   font-variant-numeric: tabular-nums;
 }
+.climate-months__crowd {
+  --crowd-color: var(--line-strong);
+  display: grid;
+  gap: 6px;
+}
+.climate-months__crowd--baja {
+  --crowd-color: var(--success);
+}
+.climate-months__crowd--media {
+  --crowd-color: var(--warning);
+}
+.climate-months__crowd--alta {
+  --crowd-color: var(--danger);
+}
+.climate-months__crowd-track {
+  display: flex;
+  align-items: flex-end;
+  block-size: 44px;
+  background: var(--surface-muted);
+}
+.climate-months__crowd-track > span {
+  display: block;
+  inline-size: 100%;
+  min-block-size: 2px;
+  background: var(--crowd-color);
+}
+.climate-months__crowd-label {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.climate-months__crowd--none .climate-months__crowd-track > span {
+  display: none;
+}
+
+.climate-crowd-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.climate-crowd-legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-transform: capitalize;
+}
+.climate-crowd-legend li::before {
+  content: '';
+  inline-size: 10px;
+  block-size: 10px;
+  background: var(--crowd-color);
+}
+.climate-crowd-legend__item--baja {
+  --crowd-color: var(--success);
+}
+.climate-crowd-legend__item--media {
+  --crowd-color: var(--warning);
+}
+.climate-crowd-legend__item--alta {
+  --crowd-color: var(--danger);
+}
+
 .climate-months__recommendation {
   display: flex;
   align-items: center;
