@@ -300,7 +300,7 @@ export default function MapPage() {
               )}
             </aside>
           )}
-          <div className="map-canvas">
+          <div className="map-canvas" data-tour="map">
             <ExternalMapGate>
               <MapContainer
                 center={[40, -3.5]}

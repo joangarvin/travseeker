@@ -394,6 +394,7 @@ export default function DestinationPage() {
                 <Button
                   variant="secondary"
                   aria-pressed={compare.ids.includes(id)}
+                  data-tour="compare-destination"
                   onClick={toggleComparison}
                 >
                   <GitCompare aria-hidden="true" />
@@ -525,7 +526,7 @@ export default function DestinationPage() {
           <ClimateSection destinationId={destino.id} hasValidCoordinates={Boolean(coordinates)} />
         </section>
 
-        <div id="imprescindibles" className="destination-anchor">
+        <div id="imprescindibles" data-tour="essentials" className="destination-anchor">
           <EssentialRoute
             groups={destino.essentialGroups}
             legacyHtml={destino.imprescindibles}

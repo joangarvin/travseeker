@@ -136,7 +136,7 @@ export default function ComparePage() {
           )}
         </p>
       </PageHeading>
-      <section className="compare-picker">
+      <section className="compare-picker" data-tour="comparison">
         <div className="compare-picker__selected">
           {compare.ids.map((id) => {
             const item = items.find((d) => d.id === id) || catalog.find((d) => d.id === id);

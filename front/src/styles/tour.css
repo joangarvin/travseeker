@@ -70,3 +70,79 @@ body.menu-open .guided-tour {
     font-size: 0.8rem;
   }
 }
+
+/* Driver handles the spotlight geometry, scrolling and viewport-aware arrow. */
+.driver-popover.trav-tour-popover {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  padding: 24px;
+  max-width: min(360px, calc(100vw - 24px));
+  font-family: inherit;
+  box-shadow: var(--shadow-2);
+}
+.trav-tour-popover .driver-popover-title {
+  font-family: inherit;
+  font-size: 1.2rem;
+  line-height: 1.25;
+  padding-right: 24px;
+}
+.trav-tour-popover .driver-popover-description {
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+.trav-tour-popover .driver-popover-footer button {
+  background: var(--brand);
+  color: white;
+  border: 0;
+  border-radius: 24px;
+  padding: 12px 18px;
+  font: inherit;
+  text-shadow: none;
+  min-height: 44px;
+}
+.trav-tour-popover .driver-popover-close-btn {
+  width: 44px;
+  height: 44px;
+  color: var(--ink);
+  font-size: 24px;
+}
+.trav-tour-popover .driver-popover-progress-text {
+  color: var(--muted);
+}
+.trav-tour-popover .driver-popover-arrow {
+  color: var(--surface);
+}
+.driver-active-element {
+  outline: 3px solid var(--brand) !important;
+  outline-offset: 5px;
+}
+body.driver-active .privacy-reopen {
+  z-index: 1000000001;
+}
+.trav-tour-popover button:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .driver-popover.trav-tour-popover {
+    padding: 18px;
+    max-height: 42dvh;
+    overflow-y: auto;
+  }
+}
+@media (max-width: 600px) {
+  .driver-popover.trav-tour-popover {
+    position: fixed !important;
+    top: auto !important;
+    bottom: 54px !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: auto;
+  }
+  .trav-tour-popover .driver-popover-arrow {
+    display: none;
+  }
+}

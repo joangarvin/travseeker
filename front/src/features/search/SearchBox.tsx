@@ -20,6 +20,7 @@ export function SearchBox({
     <div className="search-box-group">
       <form
         className="search-box"
+        data-tour="search"
         role="search"
         aria-label={t('Buscar destinos')}
         onSubmit={(event) => {

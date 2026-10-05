@@ -28,6 +28,7 @@ export function DestinationCard({
       <Link
         to={`/destino/${destino.id}`}
         className="destination-card__image"
+        data-tour="destination"
         aria-label={t('Ver {0}', { 0: destino.nombre })}
       >
         <MediaImage src={imageUrl(destino.imagen)} alt="" loading={imageLoading} />
