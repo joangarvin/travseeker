@@ -8,7 +8,7 @@ import { useTourismTypes } from '../../../contexts';
 import type { Destino } from '../../../types';
 import { imageUrl, plain } from '../../../utils';
 import { tourismColorStyle, tourismDefinition, tourismValues } from '../../tourism/tourism';
-import { LEVEL_STEPS, destinationHook, destinationSignals } from '../destinationSignals';
+import { LEVEL_STEPS, destinationSignals } from '../destinationSignals';
 
 type DestinationHeroProps = {
   destination: Destino;
@@ -90,7 +90,6 @@ export function DestinationHero({
               <MapPin aria-hidden="true" /> {t(plain(destination.ubicacion)) || t('España')}
             </p>
             <h1>{name}</h1>
-            <p className="dest-hero__hook">{destinationHook(destination)}</p>
 
             {(!!types.length || rating) && (
               <div className="dest-hero__marks">

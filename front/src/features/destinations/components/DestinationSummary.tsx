@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { ArrowRight, ChevronDown, Map, Navigation } from 'lucide-react';
 import { t } from '../../../i18n';
 import { useActivities } from '../../../contexts/ActivityContext';
@@ -14,9 +14,12 @@ type DestinationSummaryProps = {
 
 export function DestinationSummary({ destination, mapUrl }: DestinationSummaryProps) {
   const { activities } = useActivities();
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
+  const descriptionId = useId();
   const [mapActive, setMapActive] = useState(false);
   const description = plain(destination.descripcion).replace(/\s+/g, ' ').trim();
-  const introduction = description.match(/^.+?[.!?](?=\s|$)/)?.[0] || excerptAtWord(description, 300);
+  const introduction =
+    description.match(/^.+?[.!?](?=\s|$)/)?.[0] || excerptAtWord(description, 300);
   const hasMore = introduction !== description;
   const coordinates = validCoordinates(destination.latitud, destination.longitud);
   const activityTypes = [...new Set(activityValues(destination.tipoTurismoSecundario))].map(
@@ -41,23 +44,31 @@ export function DestinationSummary({ destination, mapUrl }: DestinationSummaryPr
         <div>
           <header className="dest-summary__description">
             <h2 id="summary-title">{t('Sobre {0}', { 0: destination.nombre.trim() })}</h2>
-            <p>
-              {introduction || t('La descripción editorial todavía no está disponible.')}
-            </p>
+            <div id={descriptionId} className="dest-summary__text prose">
+              {descriptionExpanded ? (
+                <div dangerouslySetInnerHTML={{ __html: safeHtml(destination.descripcion) }} />
+              ) : (
+                <p>{introduction || t('La descripción editorial todavía no está disponible.')}</p>
+              )}
+            </div>
             {hasMore && (
-              <details className="dest-summary__more">
-                <summary>
-                  {t('Leer la descripción completa')} <ChevronDown aria-hidden="true" />
-                </summary>
-                <div
-                  className="prose"
-                  dangerouslySetInnerHTML={{ __html: safeHtml(destination.descripcion) }}
-                />
-              </details>
+              <button
+                type="button"
+                className="dest-summary__more"
+                aria-expanded={descriptionExpanded}
+                aria-controls={descriptionId}
+                onClick={() => setDescriptionExpanded((expanded) => !expanded)}
+              >
+                {t(descriptionExpanded ? 'Leer menos' : 'Leer la descripción completa')}
+                <ChevronDown aria-hidden="true" />
+              </button>
             )}
           </header>
           {activityTypes.length > 0 && (
-            <section className="dest-summary__activities" aria-labelledby="summary-activities-title">
+            <section
+              className="dest-summary__activities"
+              aria-labelledby="summary-activities-title"
+            >
               <h3 id="summary-activities-title">{t('Qué tipo de planes encontrarás')}</h3>
               <ul>
                 {activityTypes.map((activity) => (
@@ -72,7 +83,9 @@ export function DestinationSummary({ destination, mapUrl }: DestinationSummaryPr
         </div>
         <section className="dest-summary__location" aria-labelledby="summary-map-title">
           <h3 id="summary-map-title">{t('Dónde está')}</h3>
-          <p>{destination.nombre.trim()} · {destination.ubicacion}</p>
+          <p>
+            {destination.nombre.trim()} · {destination.ubicacion}
+          </p>
           {mapSource ? (
             <div className="dest-summary__map">
               <ExternalMapGate>
@@ -97,7 +110,9 @@ export function DestinationSummary({ destination, mapUrl }: DestinationSummaryPr
               </ExternalMapGate>
             </div>
           ) : (
-            <p className="dest-summary__no-map">{t('La ubicación en el mapa todavía no está disponible.')}</p>
+            <p className="dest-summary__no-map">
+              {t('La ubicación en el mapa todavía no está disponible.')}
+            </p>
           )}
           {coordinates && (
             <div className="dest-summary__map-actions">

@@ -28,36 +28,42 @@
   margin: 0 0 14px;
   line-height: 1.2;
 }
-.dest-summary__description > p {
+.dest-summary__description .dest-summary__text {
   max-width: 66ch;
   margin-bottom: 18px;
   color: var(--muted);
   font-size: 1rem;
   line-height: 1.65;
 }
-.dest-summary__more summary {
-  display: flex;
+.dest-summary__text p {
+  margin: 0 0 16px;
+}
+.dest-summary__text > :last-child,
+.dest-summary__text > div > :last-child {
+  margin-bottom: 0;
+}
+.dest-summary__more {
+  display: inline-flex;
   align-items: center;
   gap: 8px;
   min-height: 44px;
-  list-style: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
   cursor: pointer;
+  font: inherit;
   font-size: 0.875rem;
   font-weight: 800;
+  text-align: left;
 }
-.dest-summary__more summary::-webkit-details-marker {
-  display: none;
-}
-.dest-summary__more summary svg {
+.dest-summary__more svg {
   width: 18px;
   height: 18px;
+  flex: none;
 }
-.dest-summary__more[open] summary svg {
+.dest-summary__more[aria-expanded='true'] svg {
   transform: rotate(180deg);
-}
-.dest-summary__more .prose {
-  margin-top: 12px;
-  color: var(--muted);
 }
 .dest-summary__activities {
   margin-top: 28px;
