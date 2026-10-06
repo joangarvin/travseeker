@@ -112,7 +112,12 @@
     gap: 64px;
   }
   .dest-hero__shade {
-    background: linear-gradient(180deg, rgb(5 7 14 / 42%), rgb(5 7 14 / 65%) 35%, rgb(5 7 14 / 92%));
+    background: linear-gradient(
+      180deg,
+      rgb(5 7 14 / 42%),
+      rgb(5 7 14 / 65%) 35%,
+      rgb(5 7 14 / 92%)
+    );
   }
   .dest-hero__actions {
     display: grid;
@@ -254,5 +259,98 @@
   .dest-hero__seasons li {
     grid-template-columns: minmax(0, 1fr) minmax(52px, 0.8fr) 32px;
     gap: 8px;
+  }
+}
+
+/* Photo-first destination cover on phones; the desktop cover retains its layout. */
+@media (max-width: 680px) {
+  .dest-hero {
+    --hero-ink: var(--ink);
+    --hero-muted: var(--muted);
+    --hero-line: var(--line);
+    grid-template-rows: auto auto auto;
+    gap: 0;
+    padding: 0;
+    background: var(--canvas);
+    color: var(--ink);
+  }
+  .dest-hero__topline {
+    grid-row: 1;
+    padding: 4px 16px;
+  }
+  .dest-hero__media {
+    display: block;
+    position: relative;
+    grid-row: 2;
+    margin: 0;
+  }
+  .dest-hero__image {
+    position: static;
+    display: block;
+    width: 100%;
+    height: 240px;
+    z-index: auto;
+    object-fit: cover;
+  }
+  .dest-hero__shade {
+    display: none;
+  }
+  .dest-hero__photo-open {
+    display: inline-flex;
+  }
+  .dest-hero__layout {
+    grid-row: 3;
+    padding: 24px 16px;
+    gap: 24px;
+  }
+  .dest-hero__hook {
+    color: var(--muted);
+  }
+  .dest-hero__rating,
+  .dest-hero__jump a {
+    background: var(--surface);
+    backdrop-filter: none;
+  }
+  .dest-hero__rating svg {
+    color: var(--warning);
+  }
+  .dest-hero__jump {
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+    overflow: visible;
+  }
+  .dest-hero__jump svg {
+    color: var(--brand);
+  }
+  .dest-hero__card {
+    width: 100%;
+    background: var(--surface);
+    border-color: var(--line);
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+  .dest-hero__facts dt,
+  .dest-hero__seasons > p {
+    color: var(--muted);
+  }
+  .dest-hero__seasons li {
+    color: var(--ink);
+  }
+  .dest-hero__dots i,
+  .dest-hero__bar {
+    background: var(--surface-muted);
+  }
+  .dest-hero__dots i.is-on {
+    background: var(--brand);
+  }
+  .dest-hero__actions .dest-hero__icon:not([aria-pressed='true']) {
+    background: var(--canvas);
+    color: var(--ink);
+    border-color: var(--line);
+  }
+  .dest-hero :is(a, button):focus-visible {
+    outline-color: var(--focus);
   }
 }
