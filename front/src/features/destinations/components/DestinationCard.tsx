@@ -32,7 +32,7 @@ export function DestinationCard({
         aria-label={t('Ver {0}', { 0: destino.nombre })}
       >
         <MediaImage src={imageUrl(destino.imagen)} alt="" loading={imageLoading} />
-        <span>{String(index + 1).padStart(2, '0')}</span>
+        {index < 0 ? null : <span className="destination-card__index">{String(index + 1).padStart(2, '0')}</span>}
       </Link>
 
       <div className="destination-card__body">
@@ -44,17 +44,17 @@ export function DestinationCard({
         )}
         <div className="destination-card__eyebrow">
           <p className="destination-card__location">{plain(destino.ubicacion)}</p>
-          <TourismMark value={destino.tipoTurismoPrincipal} compact />
+          {index >= 0 ? <TourismMark value={destino.tipoTurismoPrincipal} compact /> : null}
         </div>
         <h3>
           <Link to={`/destino/${destino.id}`}>{destino.nombre.trim()}</Link>
         </h3>
         <div className="destination-card__facts">
           <span>
-            {t('Presupuesto')}: {t(plain(destino.presupuesto))}
+            {t('Presupuesto')} · {t(plain(destino.presupuesto))}
           </span>
           <span>
-            {t('Afluencia')}: {t(plain(destino.masificacion))}
+            {t('Afluencia')} · {t(plain(destino.masificacion))}
           </span>
         </div>
       </div>

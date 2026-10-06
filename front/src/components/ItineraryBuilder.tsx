@@ -1,7 +1,8 @@
 import { useConsent } from '../features/privacy/CookieConsent';
 import { t, intlLocale, catalogName } from '../i18n';
-import { useEffect, useMemo, useRef, useState, type DragEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useMemo, useRef, useState, type ReactNode, type DragEvent } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { plannedActivityLabel, movePlannedActivity } from '../utils/plannedActivities';
 import {
   ArrowDown,
   ArrowUp,
@@ -35,6 +36,10 @@ type ItineraryBuilderProps = {
   collection: CollectionDetail;
   canEdit?: boolean;
   onSave?: (itinerary: ItineraryDay[], endDate?: string) => Promise<void>;
+  onDirtyChange?: (dirty: boolean) => void;
+  onDraftChange?: (days: ItineraryDay[]) => void;
+  budget?: ReactNode;
+  focusDay?: { index: number };
 };
 
 const EMPTY_ITINERARY: ItineraryDay[] = [];
@@ -96,8 +101,7 @@ function destinationFor(collection: CollectionDetail, id: string): Destino | und
 }
 
 function activityName(destination: Destino | undefined, value: string): string {
-  const activity = destination?.activities?.find((activity) => activity.id === value);
-  return activity ? catalogName(activity) : t(value);
+  return plannedActivityLabel(value, destination?.activities || [], (item) => catalogName(item));
 }
 
 function SegmentBar({ segment, loading }: { segment?: RouteSegment; loading: boolean }) {
@@ -135,7 +139,15 @@ function SegmentBar({ segment, loading }: { segment?: RouteSegment; loading: boo
   );
 }
 
-export function ItineraryBuilder({ collection, canEdit = false, onSave }: ItineraryBuilderProps) {
+export function ItineraryBuilder({
+  collection,
+  canEdit = false,
+  onSave,
+  onDirtyChange,
+  onDraftChange,
+  budget,
+  focusDay,
+}: ItineraryBuilderProps) {
   const { maps } = useConsent();
   const savedItinerary = collection.itinerary ?? EMPTY_ITINERARY;
   const initialDays = savedItinerary.length
@@ -144,6 +156,21 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
       ? generateItinerary(collection)
       : [];
   const [days, setDays] = useState<ItineraryDay[]>(initialDays);
+  const [searchParams] = useSearchParams();
+  const requestedDay = Number(searchParams.get('day'));
+  const [selectedDay, setSelectedDay] = useState(
+    Number.isInteger(requestedDay) && requestedDay > 0 ? requestedDay - 1 : 0,
+  );
+  const [editingDay, setEditingDay] = useState<number | null>(null);
+  const [addingActivity, setAddingActivity] = useState<number | null>(null);
+  const [activityDraft, setActivityDraft] = useState('');
+  useEffect(() => {
+    if (focusDay !== undefined) {
+      setSelectedDay(focusDay.index);
+      setEditingDay(null);
+    }
+  }, [focusDay]);
+  const activeDay = Math.min(selectedDay, Math.max(0, days.length - 1));
   const [segments, setSegments] = useState<RouteSegment[]>([]);
   const [routesLoading, setRoutesLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -152,6 +179,10 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
   const draggedIndex = useRef<number | null>(null);
 
   useEffect(() => {
+    onDraftChange?.(days);
+  }, [days, onDraftChange]);
+  const destinationSignature = collection.items.map((item) => item.destino.id).join('|');
+  useEffect(() => {
     setDays(
       savedItinerary.length
         ? normalizeDays(savedItinerary, collection.startDate)
@@ -159,7 +190,7 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
           ? generateItinerary(collection)
           : [],
     );
-  }, [savedItinerary, collection.items, collection.startDate, collection.endDate, canEdit]);
+  }, [savedItinerary, destinationSignature, collection.startDate, collection.endDate, canEdit]);
 
   const routeSignature = days
     .map((day) => `${day.destinationId}:${day.baseMunicipioId || ''}`)
@@ -210,6 +241,9 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
     ? normalizeDays(savedItinerary, collection.startDate)
     : [];
   const dirty = JSON.stringify(days) !== JSON.stringify(savedDays);
+  useEffect(() => {
+    onDirtyChange?.(dirty);
+  }, [dirty, onDirtyChange]);
   const suggestedDraft = canEdit && !savedItinerary.length && days.length > 0;
   const hasDates = days.some((day) => resolveItineraryDate(day, collection));
 
@@ -218,8 +252,26 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
     const warnBeforeLeaving = (event: BeforeUnloadEvent) => {
       event.preventDefault();
     };
+    const guardNavigation = (event: MouseEvent) => {
+      const anchor = (event.target as Element)?.closest?.('a');
+      if (
+        !anchor ||
+        anchor.target === '_blank' ||
+        anchor.hasAttribute('download') ||
+        anchor.getAttribute('href')?.startsWith('#')
+      )
+        return;
+      if (!confirm(t('Hay cambios sin guardar. ¿Salir del viaje y descartarlos?'))) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    };
+    document.addEventListener('click', guardNavigation, true);
     window.addEventListener('beforeunload', warnBeforeLeaving);
-    return () => window.removeEventListener('beforeunload', warnBeforeLeaving);
+    return () => {
+      window.removeEventListener('beforeunload', warnBeforeLeaving);
+      document.removeEventListener('click', guardNavigation, true);
+    };
   }, [dirty]);
 
   const updateDay = (index: number, patch: Partial<ItineraryDay>) => {
@@ -234,6 +286,8 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
 
   const moveDay = (from: number, to: number) => {
     if (to < 0 || to >= days.length || from === to) return;
+    setSelectedDay(to);
+    setEditingDay(to);
     setFeedback('');
     setDays((current) => {
       const reordered = [...current];
@@ -255,6 +309,9 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
       (lastDestinationId ? destinationFor(collection, lastDestinationId) : undefined) ||
       collection.items[0]?.destino;
     if (!destination) return;
+    setSelectedDay(days.length);
+    setEditingDay(days.length);
+    setFeedback('');
     setDays((current) =>
       normalizeDays(
         [
@@ -322,7 +379,7 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
   }
 
   return (
-    <section className="itinerary-builder" aria-labelledby="itinerary-builder-title">
+    <section className="itinerary-builder trip-agenda" aria-labelledby="itinerary-builder-title">
       <div className="itinerary-builder__print-title print-only">
         <p>{t('TravSeeker · Itinerario')}</p>
         <h1>{collection.nombre}</h1>
@@ -330,7 +387,7 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
       </div>
       <header className="itinerary-builder__header">
         <div>
-          <p className="kicker">{t('La ruta completa')}</p>
+          <p className="kicker">{t('Tu plan de viaje')}</p>
           <h2 id="itinerary-builder-title">{t('Día a día')}</h2>
           <p>
             {canEdit
@@ -418,211 +475,431 @@ export function ItineraryBuilder({ collection, canEdit = false, onSave }: Itiner
         </Notice>
       )}
 
-      <ol className="itinerary-timeline">
-        {days.map((day, index) => {
-          const destination =
-            destinationFor(collection, day.destinationId) || collection.items[0].destino;
-          const municipios = destination.municipios || [];
-          const activities = destination.activities || [];
-          return (
-            <li key={`${day.dayNumber}-${day.destinationId}-${index}`}>
-              <article
-                className="itinerary-day"
-                draggable={canEdit}
-                onDragStart={() => {
-                  draggedIndex.current = index;
+      <div className="trip-agenda__layout">
+        <div className="trip-agenda__main">
+          <div className="trip-agenda__days no-print" aria-label={t('Seleccionar día')}>
+            {days.map((day, index) => (
+              <button
+                type="button"
+                key={index}
+                aria-pressed={activeDay === index}
+                onClick={() => {
+                  setSelectedDay(index);
+                  setEditingDay(null);
+                  setAddingActivity(null);
                 }}
-                onDragOver={(event) => canEdit && event.preventDefault()}
-                onDrop={(event) => canEdit && dropDay(event, index)}
               >
-                <div className="itinerary-day__marker" aria-hidden="true">
-                  <span>{String(day.dayNumber).padStart(2, '0')}</span>
-                </div>
-                <div className="itinerary-day__media">
-                  <MediaImage src={imageUrl(destination.imagen)} alt="" loading="lazy" />
-                  <span>{formatDayDate(day.date)}</span>
-                </div>
-                <div className="itinerary-day__content">
-                  <header>
-                    <div>
-                      <small>
-                        {t('Día')} {day.dayNumber}
-                      </small>
-                      <h3>
-                        <Link to={`/destino/${destination.id}`}>{destination.nombre}</Link>
-                      </h3>
+                <strong>
+                  {t('Día')} {index + 1} ·{' '}
+                  {destinationFor(collection, day.destinationId)?.nombre || t('Destino')}
+                </strong>
+                <small>{formatDayDate(day.date)}</small>
+                <small>
+                  {day.plannedActivities?.length || 0} {t('actividades')}
+                </small>
+              </button>
+            ))}
+          </div>
+          <ol className="itinerary-timeline">
+            {days.map((day, index) => {
+              const destination =
+                destinationFor(collection, day.destinationId) || collection.items[0].destino;
+              const municipios = destination.municipios || [];
+              const activities = destination.activities || [];
+              return (
+                <li
+                  className={
+                    index === activeDay ? 'trip-agenda__day is-active' : 'trip-agenda__day'
+                  }
+                  key={`${day.dayNumber}-${day.destinationId}-${index}`}
+                >
+                  <article
+                    className="itinerary-day"
+                    draggable={canEdit && editingDay === index}
+                    onDragStart={() => {
+                      draggedIndex.current = index;
+                    }}
+                    onDragOver={(event) => canEdit && event.preventDefault()}
+                    onDrop={(event) => canEdit && dropDay(event, index)}
+                  >
+                    <div className="itinerary-day__marker" aria-hidden="true">
+                      <span>{String(day.dayNumber).padStart(2, '0')}</span>
                     </div>
-                    {canEdit && (
-                      <div className="itinerary-day__order no-print">
-                        <GripVertical aria-hidden="true" />
-                        <button
-                          type="button"
-                          disabled={index === 0}
-                          onClick={() => moveDay(index, index - 1)}
-                          aria-label={t('Subir día {0}', { 0: day.dayNumber })}
-                        >
-                          <ArrowUp />
-                        </button>
-                        <button
-                          type="button"
-                          disabled={index === days.length - 1}
-                          onClick={() => moveDay(index, index + 1)}
-                          aria-label={t('Bajar día {0}', { 0: day.dayNumber })}
-                        >
-                          <ArrowDown />
-                        </button>
-                        <button
-                          type="button"
-                          disabled={days.length === 1}
-                          onClick={() =>
-                            setDays((current) =>
-                              normalizeDays(
-                                current.filter((_, dayIndex) => dayIndex !== index),
-                                collection.startDate,
-                              ),
-                            )
-                          }
-                          aria-label={t('Eliminar día {0}', { 0: day.dayNumber })}
-                        >
-                          <Trash2 />
-                        </button>
-                      </div>
-                    )}
-                  </header>
+                    <div className="itinerary-day__media">
+                      <MediaImage src={imageUrl(destination.imagen)} alt="" loading="lazy" />
+                      <span>{formatDayDate(day.date)}</span>
+                    </div>
+                    <div className="itinerary-day__content">
+                      <header>
+                        <div>
+                          <small>
+                            {t('Día')} {day.dayNumber} · {formatDayDate(day.date)}
+                          </small>
+                          <h3>
+                            <Link to={`/destino/${destination.id}`}>{destination.nombre}</Link>
+                          </h3>
+                        </div>
+                        {canEdit && editingDay === index && (
+                          <div className="itinerary-day__order no-print">
+                            <GripVertical aria-hidden="true" />
+                            <button
+                              type="button"
+                              disabled={index === 0}
+                              onClick={() => moveDay(index, index - 1)}
+                              aria-label={t('Subir día {0}', { 0: day.dayNumber })}
+                            >
+                              <ArrowUp />
+                            </button>
+                            <button
+                              type="button"
+                              disabled={index === days.length - 1}
+                              onClick={() => moveDay(index, index + 1)}
+                              aria-label={t('Bajar día {0}', { 0: day.dayNumber })}
+                            >
+                              <ArrowDown />
+                            </button>
+                            <button
+                              type="button"
+                              disabled={days.length === 1}
+                              onClick={() => {
+                                if (
+                                  (day.plannedActivities?.length || day.notes) &&
+                                  !confirm(t('¿Eliminar este día y sus actividades?'))
+                                )
+                                  return;
+                                setDays((current) =>
+                                  normalizeDays(
+                                    current.filter((_, dayIndex) => dayIndex !== index),
+                                    collection.startDate,
+                                  ),
+                                );
+                              }}
+                              aria-label={t('Eliminar día {0}', { 0: day.dayNumber })}
+                            >
+                              <Trash2 />
+                            </button>
+                          </div>
+                        )}
+                      </header>
 
-                  {canEdit ? (
-                    <div className="itinerary-day__fields no-print">
-                      <Field label={t('Destino')} htmlFor={`itinerary-destination-${index}`}>
-                        <select
-                          id={`itinerary-destination-${index}`}
-                          value={day.destinationId}
-                          onChange={(event) => {
-                            const nextDestination = destinationFor(collection, event.target.value);
-                            updateDay(index, {
-                              destinationId: event.target.value,
-                              baseMunicipioId: nextDestination?.municipios?.[0]?.id,
-                              plannedActivities: [],
-                            });
-                          }}
-                        >
-                          {collection.items.map((item) => (
-                            <option key={item.destino.id} value={item.destino.id}>
-                              {item.destino.nombre}
-                            </option>
-                          ))}
-                        </select>
-                      </Field>
-                      <Field label={t('Municipio base')} htmlFor={`itinerary-base-${index}`}>
-                        <select
-                          id={`itinerary-base-${index}`}
-                          value={day.baseMunicipioId || ''}
-                          onChange={(event) =>
-                            updateDay(index, { baseMunicipioId: event.target.value || undefined })
-                          }
-                        >
-                          <option value="">{t('Sin base concreta')}</option>
-                          {municipios.map((municipio) => (
-                            <option key={municipio.id} value={municipio.id}>
-                              {municipio.nombre}
-                            </option>
-                          ))}
-                        </select>
-                      </Field>
-                      <Field label={t('Notas del día')} htmlFor={`itinerary-notes-${index}`}>
-                        <textarea
-                          id={`itinerary-notes-${index}`}
-                          maxLength={1200}
-                          value={day.notes || ''}
-                          placeholder={t('Reservas, horarios, ideas…')}
-                          onChange={(event) => updateDay(index, { notes: event.target.value })}
-                        />
-                      </Field>
-                      {!!activities.length && (
-                        <fieldset className="itinerary-activities">
-                          <legend>{t('Actividades')}</legend>
-                          <div>
-                            {activities.map((activity) => {
-                              const selected =
-                                day.plannedActivities?.includes(activity.id) || false;
-                              return (
-                                <label key={activity.id}>
-                                  <input
-                                    type="checkbox"
-                                    checked={selected}
-                                    onChange={() =>
+                      <div className={`trip-agenda__activities ${canEdit ? 'no-print' : ''}`}>
+                        <h4>{t('Actividades del día')}</h4>
+                        {day.plannedActivities?.length ? (
+                          day.plannedActivities.map((value) => (
+                            <div className="trip-agenda__activity" key={value}>
+                              <MapPin aria-hidden="true" />
+                              <div>
+                                <Link
+                                  className="trip-agenda__activity-link"
+                                  to={`/destino/${encodeURIComponent(destination.id)}#actividad=${encodeURIComponent(value)}`}
+                                >
+                                  {activityName(destination, value)}{' '}
+                                  <span aria-hidden="true">↗</span>
+                                </Link>
+                                <small>
+                                  {t('Día')} {day.dayNumber} · {destination.nombre}
+                                </small>
+                              </div>
+                              {canEdit && (
+                                <div className="trip-agenda__activity-actions no-print">
+                                  <select
+                                    aria-label={t('Mover {0} a otro día', {
+                                      0: activityName(destination, value),
+                                    })}
+                                    value=""
+                                    onChange={(event) => {
+                                      const to = Number(event.target.value);
+                                      setDays((current) =>
+                                        movePlannedActivity(current, index, to, value),
+                                      );
+                                      setSelectedDay(to);
+                                      setFeedback('');
+                                    }}
+                                  >
+                                    <option value="" disabled>
+                                      {t('Mover a…')}
+                                    </option>
+                                    {days.map((target, targetIndex) =>
+                                      targetIndex !== index &&
+                                      target.destinationId === day.destinationId ? (
+                                        <option key={targetIndex} value={targetIndex}>
+                                          {t('Día')} {targetIndex + 1}
+                                        </option>
+                                      ) : null,
+                                    )}
+                                  </select>
+                                  <button
+                                    type="button"
+                                    aria-label={t('Quitar {0}', {
+                                      0: activityName(destination, value),
+                                    })}
+                                    onClick={() =>
                                       updateDay(index, {
-                                        plannedActivities: selected
-                                          ? day.plannedActivities?.filter(
-                                              (id) => id !== activity.id,
-                                            )
-                                          : [...(day.plannedActivities || []), activity.id],
+                                        plannedActivities: day.plannedActivities?.filter(
+                                          (item) => item !== value,
+                                        ),
                                       })
                                     }
-                                  />
-                                  <span>{catalogName(activity)}</span>
-                                </label>
-                              );
-                            })}
+                                  >
+                                    <Trash2 />
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          ))
+                        ) : (
+                          <p className="trip-agenda__empty">
+                            {t(
+                              'Todavía no hay actividades. Añade una idea o deja espacio para improvisar.',
+                            )}
+                          </p>
+                        )}
+                        {canEdit && (
+                          <div className="trip-agenda__day-actions no-print">
+                            <Button
+                              onClick={() => {
+                                setAddingActivity(addingActivity === index ? null : index);
+                                setActivityDraft('');
+                              }}
+                            >
+                              <Plus /> {t('Añadir actividad')}
+                            </Button>
+                            <Button
+                              variant="secondary"
+                              onClick={() => setEditingDay(editingDay === index ? null : index)}
+                            >
+                              {editingDay === index ? t('Cerrar edición') : t('Editar día')}
+                            </Button>
                           </div>
-                        </fieldset>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="itinerary-day__readonly">
-                      {day.baseMunicipioId && (
-                        <p>
-                          <MapPin /> {t('Base:')}{' '}
-                          {municipios.find((item) => item.id === day.baseMunicipioId)?.nombre}
-                        </p>
-                      )}
-                      {day.notes && <p>{day.notes}</p>}
-                      {!!day.plannedActivities?.length && (
-                        <div>
-                          {day.plannedActivities.map((activity) => (
-                            <span key={activity}>{activityName(destination, activity)}</span>
-                          ))}
+                        )}
+                        {canEdit && addingActivity === index && (
+                          <form
+                            className="trip-agenda__add no-print"
+                            onSubmit={(event) => {
+                              event.preventDefault();
+                              const value = activityDraft.trim();
+                              if (!value) return;
+                              updateDay(index, {
+                                plannedActivities: [
+                                  ...new Set([...(day.plannedActivities || []), value]),
+                                ],
+                              });
+                              setActivityDraft('');
+                              setAddingActivity(null);
+                            }}
+                          >
+                            <Field label={t('Actividad')} htmlFor={`activity-${index}`}>
+                              <input
+                                id={`activity-${index}`}
+                                autoFocus
+                                maxLength={100}
+                                required
+                                value={activityDraft}
+                                onChange={(event) => setActivityDraft(event.target.value)}
+                                placeholder={t('Una experiencia que quieres vivir…')}
+                              />
+                            </Field>
+                            {!!activities.length && (
+                              <Field label={t('Elegir del catálogo')} htmlFor={`catalog-${index}`}>
+                                <select
+                                  id={`catalog-${index}`}
+                                  value={
+                                    activities.some((item) => item.id === activityDraft)
+                                      ? activityDraft
+                                      : ''
+                                  }
+                                  onChange={(event) => setActivityDraft(event.target.value)}
+                                >
+                                  <option value="">{t('Seleccionar actividad')}</option>
+                                  {activities.map((item) => (
+                                    <option key={item.id} value={item.id}>
+                                      {catalogName(item)}
+                                    </option>
+                                  ))}
+                                </select>
+                              </Field>
+                            )}
+                            <Button type="submit">{t('Añadir al día')}</Button>
+                          </form>
+                        )}
+                      </div>
+                      {canEdit && editingDay === index ? (
+                        <div className="itinerary-day__fields no-print">
+                          <Field label={t('Destino')} htmlFor={`itinerary-destination-${index}`}>
+                            <select
+                              id={`itinerary-destination-${index}`}
+                              value={day.destinationId}
+                              onChange={(event) => {
+                                if (
+                                  (day.plannedActivities?.length || day.notes) &&
+                                  !confirm(
+                                    t(
+                                      'Cambiar de destino quitará las actividades de este día. ¿Continuar?',
+                                    ),
+                                  )
+                                )
+                                  return;
+                                const nextDestination = destinationFor(
+                                  collection,
+                                  event.target.value,
+                                );
+                                updateDay(index, {
+                                  destinationId: event.target.value,
+                                  baseMunicipioId: nextDestination?.municipios?.[0]?.id,
+                                  plannedActivities: [],
+                                });
+                              }}
+                            >
+                              {collection.items.map((item) => (
+                                <option key={item.destino.id} value={item.destino.id}>
+                                  {item.destino.nombre}
+                                </option>
+                              ))}
+                            </select>
+                          </Field>
+                          <Field label={t('Municipio base')} htmlFor={`itinerary-base-${index}`}>
+                            <select
+                              id={`itinerary-base-${index}`}
+                              value={day.baseMunicipioId || ''}
+                              onChange={(event) =>
+                                updateDay(index, {
+                                  baseMunicipioId: event.target.value || undefined,
+                                })
+                              }
+                            >
+                              <option value="">{t('Sin base concreta')}</option>
+                              {municipios.map((municipio) => (
+                                <option key={municipio.id} value={municipio.id}>
+                                  {municipio.nombre}
+                                </option>
+                              ))}
+                            </select>
+                          </Field>
+                          <Field label={t('Notas del día')} htmlFor={`itinerary-notes-${index}`}>
+                            <textarea
+                              id={`itinerary-notes-${index}`}
+                              maxLength={1200}
+                              value={day.notes || ''}
+                              placeholder={t('Reservas, horarios, ideas…')}
+                              onChange={(event) => updateDay(index, { notes: event.target.value })}
+                            />
+                          </Field>
+                          {!!activities.length && (
+                            <fieldset className="itinerary-activities">
+                              <legend>{t('Actividades')}</legend>
+                              <div>
+                                {activities.map((activity) => {
+                                  const selected =
+                                    day.plannedActivities?.includes(activity.id) || false;
+                                  return (
+                                    <label key={activity.id}>
+                                      <input
+                                        type="checkbox"
+                                        checked={selected}
+                                        onChange={() =>
+                                          updateDay(index, {
+                                            plannedActivities: selected
+                                              ? day.plannedActivities?.filter(
+                                                  (id) => id !== activity.id,
+                                                )
+                                              : [...(day.plannedActivities || []), activity.id],
+                                          })
+                                        }
+                                      />
+                                      <span>{catalogName(activity)}</span>
+                                    </label>
+                                  );
+                                })}
+                              </div>
+                            </fieldset>
+                          )}
+                        </div>
+                      ) : (
+                        <div className={`itinerary-day__readonly ${canEdit ? 'no-print' : ''}`}>
+                          {day.baseMunicipioId && (
+                            <p>
+                              <MapPin /> {t('Base:')}{' '}
+                              {municipios.find((item) => item.id === day.baseMunicipioId)?.nombre}
+                            </p>
+                          )}
+                          {canEdit ? (
+                            <Field label={t('Notas del día')} htmlFor={`agenda-notes-${index}`}>
+                              <textarea
+                                id={`agenda-notes-${index}`}
+                                maxLength={1200}
+                                value={day.notes || ''}
+                                placeholder={t('Reservas, horarios, ideas…')}
+                                onChange={(event) =>
+                                  updateDay(index, { notes: event.target.value })
+                                }
+                              />
+                            </Field>
+                          ) : (
+                            day.notes && <p>{day.notes}</p>
+                          )}
                         </div>
                       )}
-                    </div>
-                  )}
 
-                  {canEdit && (
-                    <div className="itinerary-day__print print-only">
-                      {day.baseMunicipioId && (
-                        <p>
-                          <MapPin /> {t('Base:')}{' '}
-                          {municipios.find((item) => item.id === day.baseMunicipioId)?.nombre}
-                        </p>
+                      {canEdit && (
+                        <div className="itinerary-day__print print-only">
+                          {day.baseMunicipioId && (
+                            <p>
+                              <MapPin /> {t('Base:')}{' '}
+                              {municipios.find((item) => item.id === day.baseMunicipioId)?.nombre}
+                            </p>
+                          )}
+                          {day.notes && <p>{day.notes}</p>}
+                          {!!day.plannedActivities?.length && (
+                            <p>
+                              {t('Actividades:')}{' '}
+                              {day.plannedActivities
+                                .map((activity) => activityName(destination, activity))
+                                .join(', ')}
+                            </p>
+                          )}
+                        </div>
                       )}
-                      {day.notes && <p>{day.notes}</p>}
-                      {!!day.plannedActivities?.length && (
-                        <p>
-                          {t('Actividades:')}{' '}
-                          {day.plannedActivities
-                            .map((activity) => activityName(destination, activity))
-                            .join(', ')}
-                        </p>
-                      )}
-                    </div>
-                  )}
 
-                  <a
-                    className="itinerary-day__calendar no-print"
-                    href={generateGoogleCalendarUrl(day, { ...collection, itinerary: days })}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <CalendarPlus /> {t('Añadir a Google Calendar')}
-                  </a>
-                </div>
-              </article>
-              {index < days.length - 1 && (
-                <SegmentBar segment={segments[index]} loading={routesLoading} />
-              )}
-            </li>
-          );
-        })}
-      </ol>
+                      <a
+                        className="itinerary-day__calendar no-print"
+                        href={generateGoogleCalendarUrl(day, { ...collection, itinerary: days })}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <CalendarPlus /> {t('Añadir a Google Calendar')}
+                      </a>
+                    </div>
+                  </article>
+                  {index === activeDay && index < days.length - 1 && (
+                    <SegmentBar segment={segments[index]} loading={routesLoading} />
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+        <aside className="trip-agenda__aside no-print">
+          <article className="trip-agenda__route">
+            <p className="kicker">{t('Tu ruta')}</p>
+            <h3>{collection.nombre}</h3>
+            {collection.items.map((item) => (
+              <Link key={item.id} to={`/destino/${item.destino.id}`}>
+                {item.destino.nombre}
+              </Link>
+            ))}
+          </article>
+          {budget}
+          <article className="trip-agenda__route">
+            <p className="kicker">{t('El grupo')}</p>
+            <h3>
+              {collection.travelerCount || 2} {t('viajeros')}
+            </h3>
+            <p>
+              {t('{0} colaboradores con acceso al plan.', { 0: collection.members?.length || 0 })}
+            </p>
+          </article>
+        </aside>
+      </div>
     </section>
   );
 }

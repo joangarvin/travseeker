@@ -84,7 +84,8 @@ export default function CollectionsPage() {
 
   const visibleCollections = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase('es');
-    const today = new Date().toISOString().slice(0, 10);
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     return collections.filter((collection) => {
       const matchesQuery =
         !normalizedQuery ||
@@ -94,7 +95,8 @@ export default function CollectionsPage() {
       const start = collection.startDate?.slice(0, 10);
       const matchesFilter =
         filter === 'all' ||
-        (filter === 'upcoming' && Boolean(start && start >= today)) ||
+        (filter === 'upcoming' &&
+          Boolean(start && (collection.endDate?.slice(0, 10) || start) >= today)) ||
         (filter === 'open' && !start) ||
         (filter === 'shared' &&
           (collection.visibility === 'shared' || collection.role !== 'owner'));
@@ -120,106 +122,128 @@ export default function CollectionsPage() {
 
   return (
     <Shell>
-      <PageHeading
-        className="trips-heading"
-        kicker={t('Planificación')}
-        title={t('Tus viajes')}
-        action={
-          <Button
-            disabled={!user.emailVerified}
-            aria-describedby={!user.emailVerified ? 'new-trip-verification-requirement' : undefined}
-            onClick={() => setIsCreateModalOpen(true)}
-          >
-            <Plus /> {t('Nuevo viaje')}
-          </Button>
-        }
-      >
-        <p>{t('Todo lo necesario para convertir una idea en una ruta compartida.')}</p>
-      </PageHeading>
-
-      {!user.emailVerified && (
-        <p id="new-trip-verification-requirement" className="trip-verification-requirement">
-          {t(
-            'Verifica tu correo para crear un viaje nuevo. Tus viajes actuales siguen disponibles.',
-          )}
-        </p>
-      )}
-
-      <section className="trips-toolbar" aria-label={t('Buscar y filtrar viajes')}>
-        <label className="trips-search" htmlFor="trip-search">
-          <Search aria-hidden="true" />
-          <span className="sr-only">{t('Buscar viajes')}</span>
-          <input
-            id="trip-search"
-            type="search"
-            placeholder={t('Buscar por nombre o descripción')}
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-          />
-        </label>
-        <div className="trip-filters" aria-label={t('Filtrar viajes')}>
-          {(
-            [
-              ['all', t('Todos')],
-              ['upcoming', t('Próximos')],
-              ['open', t('Sin fechas')],
-              ['shared', t('Compartidos')],
-            ] as const
-          ).map(([value, label]) => (
-            <button
-              key={value}
-              type="button"
-              aria-pressed={filter === value}
-              onClick={() => setFilter(value)}
+      <div className="trips-library">
+        <PageHeading
+          className="trips-heading"
+          kicker={t('Planificación')}
+          title={t('Tus viajes')}
+          action={
+            <Button
+              disabled={!user.emailVerified}
+              aria-describedby={
+                !user.emailVerified ? 'new-trip-verification-requirement' : undefined
+              }
+              onClick={() => setIsCreateModalOpen(true)}
             >
-              {t(label)}
-            </button>
-          ))}
-        </div>
-      </section>
+              <Plus /> {t('Nuevo viaje')}
+            </Button>
+          }
+        >
+          <p>{t('Tus rutas, tus ideas y los próximos días por descubrir.')}</p>
+        </PageHeading>
 
-      <section className="collections-grid" aria-live="polite">
-        {error && (
-          <Notice tone="error">
-            {error}.{' '}
-            <button type="button" onClick={() => void loadCollections()}>
-              {t('Reintentar')}
-            </button>
-          </Notice>
+        {!user.emailVerified && (
+          <p id="new-trip-verification-requirement" className="trip-verification-requirement">
+            {t(
+              'Verifica tu correo para crear un viaje nuevo. Tus viajes actuales siguen disponibles.',
+            )}
+          </p>
         )}
-        {isLoading ? (
-          <Loader label={t('Preparando tus viajes')} />
-        ) : visibleCollections.length ? (
-          visibleCollections.map((collection) => (
-            <CollectionCover key={collection.id} collection={collection} />
-          ))
-        ) : collections.length ? (
-          <Empty icon={<Search />} title={t('No hay viajes con esos filtros')}>
-            {t('Prueba otra búsqueda o vuelve a ver todos los viajes.')}
-          </Empty>
-        ) : (
-          <Empty
-            icon={<CalendarRange />}
-            title={t('Tu próxima ruta empieza aquí')}
-            action={
-              user.emailVerified ? (
-                <Button onClick={() => setIsCreateModalOpen(true)}>
-                  <Plus /> {t('Crear mi primer viaje')}
-                </Button>
-              ) : undefined
-            }
-          >
-            {t('Elige unas fechas, guarda destinos y organízalos día a día.')}
-          </Empty>
-        )}
-      </section>
 
-      {isCreateModalOpen && (
-        <CreateCollectionModal
-          onClose={() => setIsCreateModalOpen(false)}
-          onCreate={createCollection}
-        />
-      )}
+        <section className="trips-toolbar" aria-label={t('Buscar y filtrar viajes')}>
+          <label className="trips-search" htmlFor="trip-search">
+            <Search aria-hidden="true" />
+            <span className="sr-only">{t('Buscar viajes')}</span>
+            <input
+              id="trip-search"
+              type="search"
+              placeholder={t('Buscar por nombre o descripción')}
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+            />
+          </label>
+          <div className="trip-filters" aria-label={t('Filtrar viajes')}>
+            {(
+              [
+                ['all', t('Todos')],
+                ['upcoming', t('Próximos')],
+                ['open', t('Sin fechas')],
+                ['shared', t('Compartidos')],
+              ] as const
+            ).map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                aria-pressed={filter === value}
+                onClick={() => setFilter(value)}
+              >
+                {t(label)}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {!isLoading && (
+          <div className="trips-results" role="status">
+            <span>
+              {visibleCollections.length} {t('viajes encontrados')}
+            </span>
+            {(query || filter !== 'all') && (
+              <button
+                type="button"
+                onClick={() => {
+                  setQuery('');
+                  setFilter('all');
+                }}
+              >
+                {t('Limpiar filtros')}
+              </button>
+            )}
+          </div>
+        )}
+        <section className="collections-grid" aria-live="polite">
+          {error && (
+            <Notice tone="error">
+              {error}.{' '}
+              <button type="button" onClick={() => void loadCollections()}>
+                {t('Reintentar')}
+              </button>
+            </Notice>
+          )}
+          {isLoading ? (
+            <Loader label={t('Preparando tus viajes')} />
+          ) : visibleCollections.length ? (
+            visibleCollections.map((collection) => (
+              <CollectionCover key={collection.id} collection={collection} />
+            ))
+          ) : collections.length ? (
+            <Empty icon={<Search />} title={t('No hay viajes con esos filtros')}>
+              {t('Prueba otra búsqueda o vuelve a ver todos los viajes.')}
+            </Empty>
+          ) : (
+            <Empty
+              icon={<CalendarRange />}
+              title={t('Tu próxima ruta empieza aquí')}
+              action={
+                user.emailVerified ? (
+                  <Button onClick={() => setIsCreateModalOpen(true)}>
+                    <Plus /> {t('Crear mi primer viaje')}
+                  </Button>
+                ) : undefined
+              }
+            >
+              {t('Elige unas fechas, guarda destinos y organízalos día a día.')}
+            </Empty>
+          )}
+        </section>
+
+        {isCreateModalOpen && (
+          <CreateCollectionModal
+            onClose={() => setIsCreateModalOpen(false)}
+            onCreate={createCollection}
+          />
+        )}
+      </div>
     </Shell>
   );
 }

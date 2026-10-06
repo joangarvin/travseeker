@@ -126,6 +126,13 @@
   background: rgb(255 255 255 / 12%);
   color: color-mix(in srgb, var(--tone) 40%, white);
 }
+.base-hero__image-caption {
+  margin: 12px 0 0;
+  color: rgb(255 255 255 / 80%);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
 .base-hero__summary {
   max-width: 52ch;
   margin: 0;
@@ -230,16 +237,289 @@
   font-size: clamp(2.25rem, 4vw, 3rem);
   letter-spacing: -0.04em;
 }
-.base-hero__total a {
+.base-hero__total button {
   display: inline-flex;
   min-height: 44px;
   align-items: center;
-  color: inherit;
+  gap: 8px;
+  padding: 0 16px;
+  border: 1.5px solid var(--sun-ink);
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--sun-ink);
   font-family: Manrope, sans-serif;
   font-size: 0.875rem;
   font-weight: 800;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  transition:
+    background-color 0.2s var(--ease-out),
+    color 0.2s var(--ease-out);
+}
+.base-hero__total button svg {
+  width: 16px;
+  height: 16px;
+}
+.base-hero__total button[aria-expanded='true'] {
+  background: var(--sun-ink);
+  color: var(--sun);
+}
+@media (hover: hover) {
+  .base-hero__total button[aria-expanded='false']:hover {
+    background: color-mix(in srgb, var(--sun-ink) 10%, transparent);
+  }
+}
+
+/* Fixed dark palette: the panel sits inside the always-dark base hero. */
+.budget-estimator {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 20px clamp(20px, 3vw, 32px);
+  padding: clamp(18px, 2.4vw, 26px);
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: var(--r-3);
+  background: rgb(255 255 255 / 7%);
+  backdrop-filter: blur(14px);
+  animation: budget-open 0.28s var(--ease-out);
+}
+@keyframes budget-open {
+  from {
+    opacity: 0;
+    translate: 0 -8px;
+  }
+}
+.budget-estimator__head {
+  display: flex;
+  flex-wrap: wrap;
+  grid-column: 1 / -1;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+.budget-estimator__head h4 {
+  margin: 0;
+  color: #fff;
+  font-family: Manrope, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+.budget-estimator__head p {
+  margin: 0;
+  color: #aeb3bf;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.budget-estimator__controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: 16px 14px;
+}
+.budget-control {
+  display: grid;
+  min-width: 0;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.budget-control--wide {
+  grid-column: 1 / -1;
+}
+.budget-control__label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  color: #aeb3bf;
+  font-size: 0.8125rem;
+  font-weight: 800;
+}
+.budget-control__label svg {
+  width: 15px;
+  height: 15px;
+}
+.budget-stepper,
+.budget-options {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgb(255 255 255 / 16%);
+  border-radius: var(--r-pill);
+  background: rgb(0 0 0 / 25%);
+}
+.budget-stepper {
+  justify-content: space-between;
+}
+.budget-stepper button {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 12%);
+  color: #fff;
+}
+.budget-stepper button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+@media (hover: hover) {
+  .budget-stepper button:hover:not(:disabled) {
+    background: rgb(255 255 255 / 22%);
+  }
+}
+.budget-stepper svg {
+  width: 18px;
+  height: 18px;
+}
+.budget-stepper output {
+  color: #fff;
+  font-family: 'Bricolage Grotesque', Manrope, sans-serif;
+  font-size: 1.375rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.budget-options label {
+  position: relative;
+  display: flex;
+  flex: 1;
+}
+.budget-options input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.budget-options span {
+  display: grid;
+  width: 100%;
+  min-height: 42px;
+  place-items: center;
+  padding: 0 8px;
+  border-radius: var(--r-pill);
+  color: #c9cdd6;
+  font-size: 0.875rem;
+  font-weight: 800;
+  text-align: center;
+  transition:
+    background-color 0.2s var(--ease-out),
+    color 0.2s var(--ease-out);
+}
+.budget-options input:checked + span {
+  background: var(--sun);
+  color: var(--sun-ink);
+}
+@media (hover: hover) {
+  .budget-options input:not(:checked):hover + span {
+    background: rgb(255 255 255 / 10%);
+    color: #fff;
+  }
+}
+
+.budget-estimator__result {
+  display: grid;
+  min-width: 0;
+  align-content: start;
+  gap: 12px;
+}
+.budget-estimator [data-category='accommodation'] {
+  --tone: #8794ff;
+}
+.budget-estimator [data-category='food'] {
+  --tone: #f2803f;
+}
+.budget-estimator [data-category='transport'] {
+  --tone: #1fb5a6;
+}
+.budget-estimator [data-category='activities'] {
+  --tone: #e2508c;
+}
+.budget-breakdown {
+  display: flex;
+  height: 12px;
+  gap: 3px;
+}
+.budget-breakdown > span {
+  min-width: 6px;
+  border-radius: 6px;
+  background: var(--tone);
+  transition: flex-grow 0.3s var(--ease-out);
+}
+.budget-estimator__items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.budget-estimator__items li {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgb(255 255 255 / 12%);
+}
+.budget-estimator__icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--tone) 18%, transparent);
+  color: var(--tone);
+}
+.budget-estimator__icon svg {
+  width: 17px;
+  height: 17px;
+}
+.budget-estimator__items b {
+  display: block;
+  color: #fff;
+  font-size: 0.9375rem;
+  font-weight: 800;
+}
+.budget-estimator__items small {
+  display: block;
+  color: #aeb3bf;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.budget-estimator__items strong {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.budget-estimator__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+.budget-estimator__actions button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: var(--r-pill);
+  background: rgb(255 255 255 / 8%);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+@media (hover: hover) {
+  .budget-estimator__actions button:hover {
+    background: rgb(255 255 255 / 16%);
+  }
+}
+.budget-estimator__actions svg {
+  width: 16px;
+  height: 16px;
 }
 
 .base-strip__head {
@@ -408,12 +688,13 @@
   font-size: 0.875rem;
 }
 
-#budget-estimator-title {
-  scroll-margin-top: 160px;
-}
-
-.base-hero :is(a, summary):focus-visible {
+.base-hero :is(a, summary, .budget-estimator button):focus-visible,
+.budget-options input:focus-visible + span {
   outline: 3px solid var(--sun);
+  outline-offset: 3px;
+}
+.base-hero__total button:focus-visible {
+  outline: 3px solid var(--sun-ink);
   outline-offset: 3px;
 }
 .base-card:focus-visible,
@@ -444,6 +725,9 @@
   .base-hero__stats dd {
     font-size: 1.25rem;
   }
+  .budget-estimator {
+    grid-template-columns: minmax(0, 1fr);
+  }
   .base-strip__nav {
     display: none;
   }
@@ -460,8 +744,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .base-card {
+  .base-card,
+  .budget-breakdown > span {
     transition: none;
+  }
+  .budget-estimator {
+    animation: none;
   }
   .base-card:hover {
     translate: none;

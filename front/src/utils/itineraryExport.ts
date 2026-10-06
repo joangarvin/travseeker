@@ -1,3 +1,4 @@
+import { plannedActivityLabel } from './plannedActivities';
 import { t, catalogName } from '../i18n';
 import type { CollectionDetail, ItineraryDay } from '../types';
 
@@ -39,8 +40,9 @@ function dayDetails(day: ItineraryDay, collection: ExportableCollection): string
       (item) => item.destino.id === day.destinationId,
     )?.destino;
     const activities = day.plannedActivities.map((value) => {
-      const activity = destination?.activities?.find((item) => item.id === value);
-      return activity ? catalogName(activity) : t(value);
+      return plannedActivityLabel(value, destination?.activities || [], (item) =>
+        catalogName(item),
+      );
     });
     lines.push(t('Actividades: {0}', { 0: activities.join(', ') }));
   }

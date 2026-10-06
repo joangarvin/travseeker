@@ -1,7 +1,7 @@
 import { t } from '../../i18n';
 import type { Destino, Municipio } from '../../types';
 import { plain } from '../../utils';
-import { calculateBudget, parsePriceRange } from '../../utils/budgetCalculator';
+import { parsePriceRange } from '../../utils/budgetCalculator';
 
 export type BaseMode = 'train' | 'bus' | 'car' | 'plane';
 export type BaseProfile = 'coast' | 'nature' | 'heritage' | 'food' | 'urban' | 'relax';
@@ -11,16 +11,12 @@ export type BaseInsight = {
   municipio: Municipio;
   name: string;
   price: { min: number; max: number } | null;
-  tripTotal: number;
   modes: BaseMode[];
   minutes: string | null;
   profiles: BaseProfile[];
   summary: string;
   connections: string;
 };
-
-export const ESTIMATE_TRAVELERS = 2;
-export const ESTIMATE_NIGHTS = 4;
 
 const modeRules: [BaseMode, RegExp][] = [
   ['train', /\btren|renfe|ferrovi|feve|adif|cercanias/],
@@ -121,13 +117,6 @@ export function baseInsight(municipio: Municipio): BaseInsight {
     municipio,
     name: displayBaseName(municipio),
     price: hasPrice ? parsePriceRange(municipio.precios) : null,
-    tripTotal: Math.round(
-      calculateBudget({
-        travelers: ESTIMATE_TRAVELERS,
-        nights: ESTIMATE_NIGHTS,
-        preciosString: municipio.precios,
-      }).total,
-    ),
     modes: modeRules.filter(([, pattern]) => pattern.test(text)).map(([mode]) => mode),
     minutes: journeyMinutes(text),
     profiles: profileRules

@@ -111,6 +111,7 @@ export function DestinationSummary({ destination, mapUrl, onExplore }: Destinati
                 </li>
               ))}
             </ul>
+            <p className="dest-dna__basis">{t('Reparto de los {0} imprescindibles de esta guía.', { 0: total })}</p>
           </>
         )}
 

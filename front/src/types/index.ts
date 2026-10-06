@@ -123,6 +123,13 @@ export type Destino = EditorialFields & {
   longitud?: number | null;
   seasonCrowd?: number;
   matchReason?: string;
+  match?: {
+    affinity: number;
+    sharedTypeIds: string[];
+    budgetDelta: number | null;
+    crowdDelta: number | null;
+    distanceKm: number | null;
+  };
   searchMatch?: {
     kind: string;
     label: string;
@@ -177,6 +184,7 @@ export type Review = {
   rating: number;
   comment?: string | null;
   visitMonth?: number | null;
+  travelParty?: string | null;
   createdAt: string;
   status: 'pending' | 'published' | 'rejected' | 'flagged';
   adminResponse?: string | null;

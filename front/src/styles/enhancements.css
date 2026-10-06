@@ -601,7 +601,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  margin-bottom: 8px;
+  min-width: 0;
 }
 .destination-card__eyebrow .destination-card__location {
   margin: 0;
@@ -610,31 +610,7 @@
   flex: none;
 }
 .trip-moods__list button {
-  grid-template-columns: 56px 1fr auto;
-  min-height: 92px;
-}
-.trip-moods__list button::before {
-  content: '';
-  position: absolute;
-  inset: auto auto 0 56px;
-  width: calc(100% - 56px);
-  height: 3px;
-  background: var(--tourism-solid);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 180ms var(--ease-out);
-}
-.trip-moods__list button {
-  position: relative;
-}
-.trip-moods__list button:focus-visible::before {
-  transform: scaleX(1);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .trip-moods__list button:hover::before {
-    transform: scaleX(1);
-  }
+  min-height: 88px;
 }
 .trip-moods__icon {
   display: grid;
@@ -652,16 +628,20 @@
 }
 .trip-moods__copy {
   display: grid;
-  gap: 3px;
+  gap: 4px;
   color: var(--ink) !important;
+  min-width: 0;
 }
 .trip-moods__copy b {
-  font-family: 'Bricolage Grotesque';
-  font-size: clamp(1.2rem, 2vw, 2rem);
+  font-family: 'Bricolage Grotesque', Manrope, sans-serif;
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
 }
 .trip-moods__copy small {
   color: var(--muted);
-  font: 500 0.75rem Manrope;
+  font: 600 0.88rem/1.35 Manrope;
   letter-spacing: 0;
 }
 

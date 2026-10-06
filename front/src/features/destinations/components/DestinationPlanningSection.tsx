@@ -8,10 +8,12 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
   Clock3,
   ExternalLink,
   Landmark,
   Plane,
+  SlidersHorizontal,
   Star,
   Sun,
   TrainFront,
@@ -20,13 +22,12 @@ import {
   Waves,
   type LucideIcon,
 } from 'lucide-react';
-import { BudgetEstimator } from '../../../components/BudgetEstimator';
+import { BudgetEstimator, isDefaultTrip, tripLabel } from '../../../components/BudgetEstimator';
 import { MediaImage } from '../../../components/ui';
 import type { Destino } from '../../../types';
 import { imageUrl, openStreetMapUrl, validCoordinates } from '../../../utils';
+import { DEFAULT_TRIP, calculateBudget, type TripSettings } from '../../../utils/budgetCalculator';
 import {
-  ESTIMATE_NIGHTS,
-  ESTIMATE_TRAVELERS,
   badgeLabels,
   baseBadges,
   baseInsight,
@@ -105,6 +106,8 @@ export function DestinationPlanningSection({
   const heroRef = useRef<HTMLElement>(null);
   const stripRef = useRef<HTMLUListElement>(null);
   const [scrollEdges, setScrollEdges] = useState({ start: true, end: true });
+  const [trip, setTrip] = useState<TripSettings>(DEFAULT_TRIP);
+  const [budgetOpen, setBudgetOpen] = useState(false);
 
   const bases = useMemo(
     () =>
@@ -119,6 +122,16 @@ export function DestinationPlanningSection({
   );
   const recommendedId = recommendedBaseId(destination);
   const badges = useMemo(() => baseBadges(bases, recommendedId), [bases, recommendedId]);
+  const totals = useMemo(
+    () =>
+      new Map(
+        bases.map((base) => [
+          base.municipio.id,
+          Math.round(calculateBudget({ ...trip, preciosString: base.municipio.precios }).total),
+        ]),
+      ),
+    [bases, trip],
+  );
 
   const updateEdges = () => {
     const strip = stripRef.current;
@@ -144,10 +157,8 @@ export function DestinationPlanningSection({
   const isRecommended = selected.municipio.id === recommendedId;
   const coordinates = validCoordinates(selected.municipio.latitud, selected.municipio.longitud);
   const hasMoreConnections = selected.connections.length > selected.summary.length + 1;
-  const estimateLabel = t('{0} noches · {1} personas', {
-    0: ESTIMATE_NIGHTS,
-    1: ESTIMATE_TRAVELERS,
-  });
+  const estimateLabel = tripLabel(trip);
+  const selectedTotal = totals.get(selected.municipio.id) ?? 0;
 
   const choose = (id: string) => {
     onSelectMunicipio(id);
@@ -207,6 +218,7 @@ export function DestinationPlanningSection({
               </div>
             )}
             {selected.summary && <p className="base-hero__summary">{selected.summary}</p>}
+            {destination.imagen && <p className="base-hero__image-caption">{t('Imagen del destino: {0}', { 0: destination.nombre.trim() })}</p>}
             {(hasMoreConnections || coordinates) && (
               <div className="base-hero__links">
                 {hasMoreConnections && (
@@ -244,13 +256,37 @@ export function DestinationPlanningSection({
               </dd>
             </div>
             <div className="base-hero__total">
-              <dt>{t('Estimación · {0}', { 0: estimateLabel })}</dt>
+              <dt>
+                {isDefaultTrip(trip)
+                  ? t('Estimación · {0}', { 0: estimateLabel })
+                  : t('Tu estimación · {0}', { 0: estimateLabel })}
+              </dt>
               <dd>
-                <strong>{euro.format(selected.tripTotal)}</strong>
-                <a href="#budget-estimator-title">{t('Ajustar presupuesto')}</a>
+                <strong aria-live="polite">{euro.format(selectedTotal)}</strong>
+                <button
+                  type="button"
+                  aria-expanded={budgetOpen}
+                  aria-controls="base-budget"
+                  onClick={() => setBudgetOpen((open) => !open)}
+                >
+                  {budgetOpen ? (
+                    <ChevronUp aria-hidden="true" />
+                  ) : (
+                    <SlidersHorizontal aria-hidden="true" />
+                  )}
+                  {budgetOpen ? t('Cerrar') : t('Ajustar presupuesto')}
+                </button>
               </dd>
             </div>
           </dl>
+          {budgetOpen && (
+            <BudgetEstimator
+              id="base-budget"
+              trip={trip}
+              onChange={setTrip}
+              municipio={selected.municipio}
+            />
+          )}
         </article>
 
         {bases.length > 1 && (
@@ -280,7 +316,7 @@ export function DestinationPlanningSection({
               {bases.map((base) => {
                 const active = base === selected;
                 const badge = badges.get(base.municipio.id);
-                const difference = base.tripTotal - selected.tripTotal;
+                const difference = (totals.get(base.municipio.id) ?? 0) - selectedTotal;
                 return (
                   <li key={base.municipio.id}>
                     <button
@@ -326,12 +362,6 @@ export function DestinationPlanningSection({
             </p>
           </div>
         )}
-
-        <BudgetEstimator
-          municipios={destination.municipios || []}
-          defaultMunicipioId={selected.municipio.id}
-          showMunicipioControl={false}
-        />
       </div>
     </section>
   );

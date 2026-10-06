@@ -1,5 +1,5 @@
 import { t, intlLocale } from '../../i18n';
-import { ChevronDown, SlidersHorizontal } from 'lucide-react';
+import { SlidersHorizontal } from 'lucide-react';
 import type { SearchFilters } from '../../types';
 import { TourismMultiSelect } from '../tourism/TourismMultiSelect';
 import { tourismQueryValue, tourismValues } from '../tourism/tourism';
@@ -39,25 +39,50 @@ export function HomeFilterPanel({
 }: HomeFilterPanelProps) {
   return (
     <div className="home-filter-control">
-      <button
-        id="home-filter-trigger"
-        className={`filter-trigger ${isOpen ? 'is-open' : ''}`}
-        type="button"
-        onClick={onToggle}
-        aria-expanded={isOpen}
-        aria-controls="home-filter-panel"
-      >
-        <span className="filter-trigger__icon" aria-hidden>
-          <SlidersHorizontal />
-        </span>
-        <span>{t('Afinar búsqueda')}</span>
-        {activeCount > 0 && (
-          <b aria-label={t('{0} filtros activos', { 0: activeCount })}>
-            {activeCount} {activeCount === 1 ? t('filtro') : t('filtros')}
-          </b>
-        )}
-        <ChevronDown className="filter-trigger__chevron" aria-hidden />
-      </button>
+      <div className="home-filter-chips" role="group" aria-label={t('Atajos de filtro')}>
+        <button
+          id="home-filter-trigger"
+          className={`home-filter-chip ${isOpen ? 'is-open' : ''} ${activeCount > 0 ? 'is-active' : ''}`}
+          type="button"
+          onClick={onToggle}
+          aria-expanded={isOpen}
+          aria-controls="home-filter-panel"
+        >
+          <SlidersHorizontal aria-hidden />
+          {t('Filtros')}
+          {activeCount > 0 && <b>{activeCount}</b>}
+        </button>
+        <button
+          className="home-filter-chip"
+          type="button"
+          onClick={() => {
+            if (!isOpen) onToggle();
+            window.setTimeout(() => document.getElementById('home-budget')?.focus(), 80);
+          }}
+        >
+          {t('Presupuesto')}
+        </button>
+        <button
+          className="home-filter-chip"
+          type="button"
+          onClick={() => {
+            if (!isOpen) onToggle();
+            window.setTimeout(() => document.getElementById('home-crowd')?.focus(), 80);
+          }}
+        >
+          {t('Afluencia')}
+        </button>
+        <button
+          className="home-filter-chip"
+          type="button"
+          onClick={() => {
+            if (!isOpen) onToggle();
+            window.setTimeout(() => document.getElementById('home-month')?.focus(), 80);
+          }}
+        >
+          {t('Temporada')}
+        </button>
+      </div>
 
       {isOpen && (
         <form
@@ -97,6 +122,7 @@ export function HomeFilterPanel({
               <label>
                 {t('Mes')}
                 <select
+                  id="home-month"
                   value={filters.month || ''}
                   onChange={(event) => onUpdate('month', event.target.value)}
                 >
@@ -113,6 +139,7 @@ export function HomeFilterPanel({
               <label>
                 {t('Masificación')}
                 <select
+                  id="home-crowd"
                   value={filters.masificacion || ''}
                   onChange={(event) => onUpdate('masificacion', event.target.value)}
                 >
@@ -130,6 +157,7 @@ export function HomeFilterPanel({
               <label>
                 {t('Presupuesto')}
                 <select
+                  id="home-budget"
                   value={filters.presupuesto || ''}
                   onChange={(event) => onUpdate('presupuesto', event.target.value)}
                 >

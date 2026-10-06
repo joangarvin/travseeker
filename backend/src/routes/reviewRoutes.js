@@ -5,6 +5,7 @@ const { requireAuth } = require('../middleware/auth');
 const router = Router({ mergeParams: true });
 
 router.get('/', reviewController.list);
+router.get('/mine', requireAuth, reviewController.mine);
 router.post('/', requireAuth, reviewController.upsert);
 router.delete('/', requireAuth, reviewController.remove);
 

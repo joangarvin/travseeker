@@ -128,13 +128,20 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
+.dest-dna__basis {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
 .dest-dna h2 {
   max-width: 18ch;
   margin: 0;
   color: var(--dna-ink);
-  font-size: clamp(2rem, 3.2vw, 3rem);
+  font-size: clamp(2.5rem, 4.2vw, 3.5rem);
   line-height: 1.05;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
 .dest-dna__story > p {

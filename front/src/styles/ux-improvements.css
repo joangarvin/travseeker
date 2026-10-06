@@ -160,7 +160,8 @@
   color: var(--muted);
 }
 .card-feedback {
-  margin: 8px 0;
+  grid-column: 1 / -1;
+  margin: 0 18px 16px;
   font-size: 0.875rem;
   color: var(--danger);
 }

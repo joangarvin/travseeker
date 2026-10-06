@@ -2,7 +2,7 @@
   width: 100%;
   padding-block: clamp(56px, 6vw, 88px);
   padding-inline: clamp(16px, 4vw, 72px);
-  border-block-end: 1px solid var(--line);
+  background: var(--surface);
 }
 
 .essential-discovery__intro {
@@ -11,8 +11,9 @@
 }
 .essential-discovery__intro h2 {
   margin: 0 0 16px;
-  font-size: clamp(2.25rem, 5vw, 4.5rem);
+  font-size: clamp(2.5rem, 4.2vw, 3.5rem);
   line-height: 1;
+  letter-spacing: -0.03em;
 }
 .essential-discovery__lede {
   max-width: 65ch;
@@ -99,12 +100,24 @@
 :root[data-theme='dark'] .essential-card {
   border-color: var(--line);
 }
-.essential-card[data-tone='heritage'] { --tone: #e2508c; }
-.essential-card[data-tone='urban'] { --tone: #6f80ff; }
-.essential-card[data-tone='nature'] { --tone: #45b25a; }
-.essential-card[data-tone='routes'] { --tone: #9b8cf5; }
-.essential-card[data-tone='coast'] { --tone: #1fb5a6; }
-.essential-card[data-tone='food'] { --tone: #f2803f; }
+.essential-card[data-tone='heritage'] {
+  --tone: #e2508c;
+}
+.essential-card[data-tone='urban'] {
+  --tone: #6f80ff;
+}
+.essential-card[data-tone='nature'] {
+  --tone: #45b25a;
+}
+.essential-card[data-tone='routes'] {
+  --tone: #9b8cf5;
+}
+.essential-card[data-tone='coast'] {
+  --tone: #1fb5a6;
+}
+.essential-card[data-tone='food'] {
+  --tone: #f2803f;
+}
 
 @media (hover: hover) {
   .essential-card:hover {
@@ -135,7 +148,12 @@
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: linear-gradient(180deg, rgb(5 7 14 / 30%) 0%, rgb(5 7 14 / 0%) 28%, rgb(5 7 14 / 88%) 100%);
+  background: linear-gradient(
+    180deg,
+    rgb(5 7 14 / 30%) 0%,
+    rgb(5 7 14 / 0%) 28%,
+    rgb(5 7 14 / 88%) 100%
+  );
   transition: background-color 0.3s var(--ease-out);
 }
 .essential-card:has(.essential-card__detail) .essential-card__shade {
@@ -456,4 +474,11 @@
   .essential-card:hover .essential-card__cover {
     scale: none;
   }
+}
+.essential-card[id^='experience-'] {
+  scroll-margin-top: 160px;
+}
+.essential-card[id^='experience-']:focus {
+  outline: 3px solid var(--focus);
+  outline-offset: 5px;
 }

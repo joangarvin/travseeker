@@ -68,6 +68,13 @@ async function listReviews(destinoId) {
   return reviews;
 }
 
+async function getOwnReview(userId, destinoId) {
+  return prisma.review.findUnique({
+    where: { userId_destinoId: { userId, destinoId } },
+    select: REVIEW_SELECT,
+  });
+}
+
 function optionalRating(value, label) {
   if (value === undefined || value === null || value === '') return null;
   const rating = Number(value);
@@ -209,6 +216,7 @@ module.exports = {
   REVIEW_STATUSES,
   getReviewStats,
   listReviews,
+  getOwnReview,
   upsertReview,
   deleteReview,
   listReviewsForAdmin,

@@ -31,9 +31,10 @@
   }
   .destination-list {
     grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
   }
-  .nearby > div,
-  .reviews__grid {
+  .nearby__grid,
+  .related__grid {
     grid-template-columns: repeat(2, 1fr);
   }
   .about-values > div {
@@ -85,29 +86,46 @@
     padding: 32px 0 20px;
   }
   .home-hero h1 {
-    font-size: clamp(3.6rem, 19vw, 6rem);
+    font-size: clamp(3.2rem, 14vw, 5.2rem);
   }
   .search-box {
     grid-template-columns: 40px 1fr;
-    box-shadow: 5px 5px 0 var(--sun);
   }
   .search-box button {
     grid-column: 1 / 3;
     min-height: 48px;
     justify-content: center;
     margin: 0;
+    border-radius: 0;
   }
   .image-wall {
     grid-template: 1.4fr 0.8fr / 1fr 1fr;
-    min-height: 520px;
+    min-height: 480px;
+    gap: 10px;
+    padding: 0;
   }
   .image-wall__panel--1 {
     grid-row: auto;
     grid-column: 1 / 3;
   }
   .image-wall a span {
-    left: 14px;
-    bottom: 14px;
+    left: 12px;
+    bottom: 12px;
+  }
+  .trip-moods {
+    gap: 32px;
+    padding-block: 48px;
+  }
+  .trip-moods__intro h2 {
+    max-width: none;
+  }
+  .trip-moods__list button {
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    gap: 12px;
+    min-height: 76px;
+  }
+  .trip-moods__list button::before {
+    inset-inline-start: 48px;
   }
   .home-filter-panel__grid {
     grid-template-columns: 1fr;
@@ -130,7 +148,7 @@
   }
   .destination-list {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 16px;
   }
   .destination-card__image {
     aspect-ratio: 16 / 10;

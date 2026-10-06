@@ -16,6 +16,11 @@ const upsert = asyncHandler(async (req, res) => {
   res.status(201).json(review);
 });
 
+const mine = asyncHandler(async (req, res) => {
+  res.set('Cache-Control', 'private, no-store');
+  res.json(await reviewService.getOwnReview(req.user.id, req.params.destinoId));
+});
+
 const listForAdmin = asyncHandler(async (_req, res) => {
   res.json(await reviewService.listReviewsForAdmin());
 });
@@ -37,4 +42,4 @@ const remove = asyncHandler(async (req, res) => {
   res.json(result);
 });
 
-module.exports = { list, upsert, remove, listForAdmin, moderate, moderateBatch, removeBatch };
+module.exports = { list, mine, upsert, remove, listForAdmin, moderate, moderateBatch, removeBatch };

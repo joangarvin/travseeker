@@ -10,6 +10,7 @@ const {
 } = require("../constants/selects");
 const { normalizeMonth, rankForSeason } = require("../domain/season");
 const { rankDestinationSearch } = require("../domain/search");
+const { rankRelated } = require("../domain/related");
 const { parseTags } = require("../constants/scales");
 const {
   mapActivities,
@@ -252,34 +253,21 @@ async function getDestacados(limit = 6) {
   return destinos.map(mapTourismTypes);
 }
 
+const RELATED_SELECT = { ...LIST_SELECT, latitud: true, longitud: true };
+
 async function getRelacionados(id) {
   const destino = await prisma.destino.findFirst({
     where: publicDestinationByIdWhere(id),
-    select: { ubicacion: true, tipoTurismoPrincipal: true, presupuesto: true },
+    select: RELATED_SELECT,
   });
 
   if (!destino) return null;
 
-  const tourismMatches = parseTags(destino.tipoTurismoPrincipal).map(
-    (type) => ({
-      tipoTurismoPrincipal: { contains: type, mode: "insensitive" },
-    }),
-  );
-
-  const related = await prisma.destino.findMany({
-    where: {
-      id: { not: id },
-      editorialStatus: "published",
-      OR: [
-        { ubicacion: { contains: destino.ubicacion } },
-        ...tourismMatches,
-        { presupuesto: { contains: destino.presupuesto } },
-      ],
-    },
-    take: 3,
-    select: LIST_SELECT,
+  const candidates = await prisma.destino.findMany({
+    where: { id: { not: destino.id }, editorialStatus: "published" },
+    select: RELATED_SELECT,
   });
-  return related.map(mapTourismTypes);
+  return rankRelated(mapTourismTypes(destino), candidates.map(mapTourismTypes));
 }
 
 async function getMapaDestinos(query) {

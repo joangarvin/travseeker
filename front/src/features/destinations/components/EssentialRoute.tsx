@@ -1,5 +1,5 @@
 import { t } from '../../../i18n';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronDown, Plus } from 'lucide-react';
 import type { EssentialGroup, EssentialItem } from '../../../types';
@@ -22,6 +22,8 @@ type EssentialRouteProps = {
   loginState?: { returnTo: string };
   onAddToTrip?: (item: EssentialItem) => void;
   filter?: string;
+  activityTarget?: string;
+  activityFallback?: string;
   onFilterChange?: (key: string) => void;
 };
 
@@ -42,6 +44,8 @@ export function EssentialRoute({
   onAddToTrip,
   filter: controlledFilter,
   onFilterChange,
+  activityTarget,
+  activityFallback = 'imprescindibles',
 }: EssentialRouteProps) {
   const [ownFilter, setOwnFilter] = useState(ALL);
   const [showAll, setShowAll] = useState(false);
@@ -64,12 +68,52 @@ export function EssentialRoute({
     })),
   );
 
-  if (!entries.length && !plain(legacyHtml)) return null;
-
   const activeFilter = populatedGroups.some(({ key }) => key === filter) ? filter : ALL;
   const filtered =
     activeFilter === ALL ? entries : entries.filter((entry) => entry.groupKey === activeFilter);
   const visible = showAll ? filtered : filtered.slice(0, PREVIEW_SIZE);
+  const normalize = (value: string) =>
+    plain(value)
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLocaleLowerCase()
+      .replace(/\s+/g, ' ')
+      .trim();
+  const targetEntry = activityTarget
+    ? entries.find(
+        ({ item }) =>
+          item.id === activityTarget ||
+          [
+            item.title,
+            ...Object.values(item.translations || {}).map((fields) => fields?.title || ''),
+          ].some((title) => normalize(title) === normalize(activityTarget)),
+      )
+    : undefined;
+  const targetKey = targetEntry?.key;
+  useEffect(() => {
+    if (!activityTarget) return;
+    if (targetKey) {
+      (onFilterChange ?? setOwnFilter)(ALL);
+      setShowAll(true);
+      setExpandedKey(targetKey);
+    }
+  }, [activityTarget, targetKey, onFilterChange]);
+  useEffect(() => {
+    if (
+      !activityTarget ||
+      (targetKey && (!showAll || activeFilter !== ALL || expandedKey !== targetKey))
+    )
+      return;
+    const element =
+      document.getElementById(targetKey ? `experience-${targetKey}` : activityFallback) ||
+      document.getElementById('resumen');
+    if (!element) return;
+    const frame = requestAnimationFrame(() => {
+      element.scrollIntoView({ behavior: 'auto', block: 'start' });
+      if (targetKey) element.focus({ preventScroll: true });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [activityTarget, activityFallback, targetKey, showAll, activeFilter, expandedKey]);
   const labelIsUnique = (label: string) =>
     populatedGroups.filter(({ category }) => category.label === label).length === 1;
   const filters = [
@@ -86,6 +130,8 @@ export function EssentialRoute({
     setShowAll(false);
     setExpandedKey('');
   };
+
+  if (!entries.length && !plain(legacyHtml)) return null;
 
   return (
     <section className="essential-discovery" aria-labelledby="essential-discovery-title">
@@ -137,6 +183,8 @@ export function EssentialRoute({
               const addLabel = t('Añadir {0} al viaje', { 0: presentation.title });
               return (
                 <li
+                  id={`experience-${key}`}
+                  tabIndex={-1}
                   className={`essential-card${featured ? ' essential-card--featured' : ''}${media ? ' has-media' : ''}`}
                   data-tone={category.tone}
                   key={key}

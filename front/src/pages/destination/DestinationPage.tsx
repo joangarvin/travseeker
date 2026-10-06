@@ -28,7 +28,8 @@ import {
 import type { CollectionSummary, Destino, EssentialItem } from '../../types';
 import { Button, Loader, Notice } from '../../components/ui';
 import { PageMeta, Shell } from '../../components/layout';
-import { DestinationCard } from '../../features/destinations/components/DestinationCard';
+import { RelatedDestinations } from '../../features/destinations/components/RelatedDestinations';
+import { DestinationNav } from '../../features/destinations/components/DestinationNav';
 import {
   ALL_ESSENTIALS,
   EssentialRoute,
@@ -89,6 +90,7 @@ export default function DestinationPage() {
   const [favoriteError, setFavoriteError] = useState('');
   const [favoriteFeedback, setFavoriteFeedback] = useState('');
   const [tripFeedback, setTripFeedback] = useState('');
+  const [addedTripUrl, setAddedTripUrl] = useState<string | undefined>();
   const [compareError, setCompareError] = useState('');
   const [sharePending, setSharePending] = useState(false);
   const [shareError, setShareError] = useState('');
@@ -364,7 +366,12 @@ export default function DestinationPage() {
           <>
             {favoriteError && <Notice tone="error">{favoriteError}</Notice>}
             {favoriteFeedback && <Notice tone="success">{favoriteFeedback}</Notice>}
-            {tripFeedback && <Notice tone="success">{tripFeedback}</Notice>}
+            {tripFeedback && (
+              <Notice tone="success">
+                {tripFeedback}{' '}
+                {addedTripUrl && <Link to={addedTripUrl}>{t('Ver el día en tu viaje')}</Link>}
+              </Notice>
+            )}
             {compareError && <Notice tone="error">{compareError}</Notice>}
             {shareError && <Notice tone="error">{shareError}</Notice>}
             {shareFeedback && <Notice tone="success">{shareFeedback}</Notice>}
@@ -372,18 +379,7 @@ export default function DestinationPage() {
         }
       />
 
-      <nav className="destination-nav" aria-label={t('En esta guía')}>
-        <div>
-          <a href="#resumen">{t('Resumen')}</a>
-          <a href="#cuando-ir">{t('Cuándo ir')}</a>
-          {(destino.essentialGroups?.some((group) => group.items?.length) ||
-            plain(destino.imprescindibles)) && (
-            <a href="#imprescindibles">{t('Imprescindibles')}</a>
-          )}
-          {!!destino.municipios?.length && <a href="#bases">{t('Bases')}</a>}
-          <a href="#opiniones">{t('Opiniones')}</a>
-        </div>
-      </nav>
+      <DestinationNav key={id} destination={destino} />
 
       <div className="destination-guide">
         <DestinationSummary
@@ -404,6 +400,17 @@ export default function DestinationPage() {
         <div id="imprescindibles" data-tour="essentials" className="destination-anchor">
           <EssentialRoute
             groups={destino.essentialGroups}
+            activityTarget={
+              new URLSearchParams(location.hash.slice(1)).get('actividad') || undefined
+            }
+            activityFallback={
+              destino.activities?.some(
+                (activity) =>
+                  activity.id === new URLSearchParams(location.hash.slice(1)).get('actividad'),
+              )
+                ? 'resumen'
+                : 'imprescindibles'
+            }
             filter={essentialFilter}
             onFilterChange={setEssentialFilter}
             legacyHtml={destino.imprescindibles}
@@ -422,12 +429,13 @@ export default function DestinationPage() {
         />
 
         {!!destino.places?.length && (
-          <section className="nearby" aria-labelledby="nearby-title" data-reveal>
+          <section id="alrededor" className="nearby" aria-labelledby="nearby-title" data-reveal>
             <div className="destination-section-heading">
               <p className="kicker">{t('Amplía el viaje')}</p>
               <h2 id="nearby-title">{t('Lugares alrededor')}</h2>
+              <p>{t('Paradas cercanas para alargar el viaje sin cambiar de base.')}</p>
             </div>
-            <div className="nearby__list">
+            <div className="nearby__grid">
               {destino.places.map((place) => {
                 const placeCoordinates = validCoordinates(place.latitud, place.longitud);
                 const website = safeExternalUrl(place.website);
@@ -436,8 +444,8 @@ export default function DestinationPage() {
                     ? haversineDistanceKm(coordinates, placeCoordinates)
                     : null;
                 return (
-                  <article id={`place-${place.id}`} key={place.id}>
-                    <div className="nearby__meta">
+                  <article className="nearby-card" id={`place-${place.id}`} key={place.id}>
+                    <div className="nearby-card__meta">
                       <span>{t(place.categoria)}</span>
                       {distance != null && (
                         <span>
@@ -445,11 +453,9 @@ export default function DestinationPage() {
                         </span>
                       )}
                     </div>
-                    <div>
-                      <h3>{place.nombre}</h3>
-                      {place.descripcion && <p>{place.descripcion}</p>}
-                    </div>
-                    <div className="nearby__actions">
+                    <h3>{place.nombre}</h3>
+                    {place.descripcion && <p>{place.descripcion}</p>}
+                    <div className="nearby-card__actions">
                       {placeCoordinates && (
                         <a
                           href={openStreetMapUrl(placeCoordinates, 15)}
@@ -473,41 +479,21 @@ export default function DestinationPage() {
         )}
 
         <DestinationReviews
+          key={`${id}:${user?.id || 'guest'}`}
+          destinationName={destino.nombre.trim()}
           reviewState={reviewState}
           authenticated={Boolean(user)}
+          emailVerified={Boolean(user?.emailVerified)}
           loginState={loginState}
         />
 
-        <section className="related" aria-labelledby="related-title">
-          <div className="destination-section-heading">
-            <p className="kicker">{t('Sigue explorando')}</p>
-            <h2 id="related-title">{t('Otros destinos que pueden encajar')}</h2>
-          </div>
-          {relatedError ? (
-            <Notice
-              tone="error"
-              action={
-                <button type="button" onClick={() => void loadRelated()}>
-                  {t('Reintentar')}
-                </button>
-              }
-            >
-              {relatedError}
-            </Notice>
-          ) : relatedLoading ? (
-            <Loader label={t('Buscando destinos relacionados')} />
-          ) : related.length ? (
-            <div className="destination-list">
-              {related.slice(0, 3).map((item, index) => (
-                <DestinationCard key={item.id} destino={item} index={index} imageLoading="lazy" />
-              ))}
-            </div>
-          ) : (
-            <p className="destination-empty-copy">
-              {t('No hay recomendaciones relacionadas publicadas por ahora.')}
-            </p>
-          )}
-        </section>
+        <RelatedDestinations
+          destination={destino}
+          items={related}
+          loading={relatedLoading}
+          error={relatedError}
+          onRetry={() => void loadRelated()}
+        />
       </div>
 
       {tripDialogItem !== undefined && token && (
@@ -521,8 +507,9 @@ export default function DestinationPage() {
           defaultMunicipioId={selectedBaseMunicipioId}
           onRetryCollections={() => void loadCollections()}
           onClose={() => setTripDialogItem(undefined)}
-          onAdded={(message) => {
+          onAdded={(message, tripUrl) => {
             setTripFeedback(message);
+            setAddedTripUrl(tripUrl);
             void loadCollections();
           }}
         />

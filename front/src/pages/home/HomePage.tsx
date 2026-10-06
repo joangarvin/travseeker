@@ -299,37 +299,55 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="trip-moods" data-reveal>
-        <div>
-          <h2>{t('¿Qué quieres que pase?')}</h2>
+      <section className="trip-moods" data-reveal aria-labelledby="trip-moods-title">
+        <div className="trip-moods__intro">
+          <p className="kicker">{t('Tipo de viaje')}</p>
+          <h2 id="trip-moods-title">{t('¿Qué quieres que pase?')}</h2>
+          <p>
+            {t('Elige el tipo. Luego afinas presupuesto y afluencia en los filtros.')}
+          </p>
         </div>
         <div className="trip-moods__list">
-          {moodOptions.map((mode) => (
-            <button
-              type="button"
-              className={`tourism--${mode.key}`}
-              style={tourismColorStyle(mode.colorValue)}
-              key={mode.key}
-              onClick={() => {
-                const next = { ...filters, tipoTurismo: mode.label };
-                void search(next);
-                document.getElementById('results')?.scrollIntoView({
-                  behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-                    ? 'auto'
-                    : 'smooth',
-                });
-              }}
-            >
-              <span className="trip-moods__icon">
-                <mode.Icon />
-              </span>
-              <span className="trip-moods__copy">
-                <b>{mode.displayLabel || t(mode.label)}</b>
-                <small>{mode.description}</small>
-              </span>
-              <ArrowRight />
-            </button>
-          ))}
+          {moodOptions.map((mode) => {
+            const count = catalog.find((type) => type.name === mode.label)?.destinationsCount;
+            return (
+              <button
+                type="button"
+                className={`tourism--${mode.key}`}
+                style={tourismColorStyle(mode.colorValue)}
+                key={mode.key}
+                onClick={() => {
+                  const next = { ...filters, tipoTurismo: mode.label };
+                  void search(next);
+                  document.getElementById('results')?.scrollIntoView({
+                    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                      ? 'auto'
+                      : 'smooth',
+                  });
+                }}
+              >
+                <span className="trip-moods__icon">
+                  <mode.Icon />
+                </span>
+                <span className="trip-moods__copy">
+                  <b>{mode.displayLabel || t(mode.label)}</b>
+                  <small>{mode.description}</small>
+                </span>
+                <span className="trip-moods__meta">
+                  {count != null && (
+                    <span className="trip-moods__count">
+                      {count}
+                      <span className="sr-only">
+                        {' '}
+                        {count === 1 ? t('destino') : t('destinos')}
+                      </span>
+                    </span>
+                  )}
+                  <ArrowRight aria-hidden="true" />
+                </span>
+              </button>
+            );
+          })}
         </div>
       </section>
 
@@ -376,7 +394,7 @@ export default function Home() {
             {visibleResults.length ? (
               <div className="destination-list">
                 {visibleResults.map((destino, index) => (
-                  <DestinationCard key={destino.id} destino={destino} index={index} />
+                  <DestinationCard key={destino.id} destino={destino} index={-1} />
                 ))}
               </div>
             ) : (

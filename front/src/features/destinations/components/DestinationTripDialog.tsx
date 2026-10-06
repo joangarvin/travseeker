@@ -1,3 +1,4 @@
+import { addTripDays } from '../../../utils/tripDuration';
 import { t, intlLocale } from '../../../i18n';
 import { useEffect, useMemo, useState } from 'react';
 import { CalendarPlus, Check, ChevronLeft, MapPin, Plus, Route } from 'lucide-react';
@@ -17,7 +18,7 @@ type DestinationTripDialogProps = {
   defaultMunicipioId?: string;
   onRetryCollections: () => void;
   onClose: () => void;
-  onAdded: (message: string) => void;
+  onAdded: (message: string, tripUrl?: string) => void;
 };
 
 const dateFormatter = new Intl.DateTimeFormat(intlLocale, {
@@ -121,6 +122,14 @@ export function DestinationTripDialog({
               {
                 dayNumber: selectedCollection.itinerary.length + 1,
                 destinationId: destination.id,
+                ...(selectedCollection.startDate
+                  ? {
+                      date: addTripDays(
+                        selectedCollection.startDate.slice(0, 10),
+                        selectedCollection.itinerary.length,
+                      ),
+                    }
+                  : {}),
                 ...(defaultMunicipioId ? { baseMunicipioId: defaultMunicipioId } : {}),
                 plannedActivities: [activityName],
               },
@@ -138,7 +147,24 @@ export function DestinationTripDialog({
 
       await api(
         `/colecciones/${selectedCollection.id}`,
-        { method: 'PATCH', body: JSON.stringify({ itinerary }) },
+        {
+          method: 'PATCH',
+          body: JSON.stringify({
+            itinerary,
+            ...(selectedDayNumber === 'new' &&
+            selectedCollection.startDate &&
+            selectedCollection.endDate &&
+            addTripDays(selectedCollection.startDate.slice(0, 10), itinerary.length - 1) >
+              selectedCollection.endDate.slice(0, 10)
+              ? {
+                  endDate: addTripDays(
+                    selectedCollection.startDate.slice(0, 10),
+                    itinerary.length - 1,
+                  ),
+                }
+              : {}),
+          }),
+        },
         token,
       );
       onAdded(
@@ -150,6 +176,7 @@ export function DestinationTripDialog({
               : t('al día {0}', { 0: selectedDayNumber }),
           2: selectedCollection.nombre,
         }),
+        `/colecciones/${selectedCollection.id}?day=${selectedDayNumber === 'new' ? itinerary.length : selectedDayNumber}`,
       );
       onClose();
     } catch (cause) {

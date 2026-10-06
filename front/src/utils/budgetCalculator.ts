@@ -3,6 +3,20 @@ import { stripHtmlToText } from './sanitizeContent';
 export type TravelStyle = 'economy' | 'moderate' | 'premium';
 export type TravelSeason = 'low' | 'mid' | 'high';
 
+export type TripSettings = {
+  travelers: number;
+  nights: number;
+  style: TravelStyle;
+  season: TravelSeason;
+};
+
+export const DEFAULT_TRIP: TripSettings = {
+  travelers: 2,
+  nights: 4,
+  style: 'moderate',
+  season: 'mid',
+};
+
 export type BudgetInput = {
   travelers?: number;
   nights?: number;
@@ -142,6 +156,8 @@ export function calculateTripBudget(input: TripBudgetInput = {}): Budget {
     activities,
     total,
     perPerson: total / travelers,
-    nightlyHotelRate: nightlyRates.length ? nightlyRates.reduce((sum, rate) => sum + rate, 0) / nightlyRates.length : 0,
+    nightlyHotelRate: nightlyRates.length
+      ? nightlyRates.reduce((sum, rate) => sum + rate, 0) / nightlyRates.length
+      : 0,
   };
 }

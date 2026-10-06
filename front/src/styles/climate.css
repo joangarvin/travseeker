@@ -12,7 +12,10 @@
 }
 
 .climate-section__heading h2 {
-  margin-bottom: 0;
+  margin: 0;
+  font-size: clamp(2.5rem, 4.2vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
 }
 
 .climate-section__lede {
