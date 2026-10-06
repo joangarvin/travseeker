@@ -20,7 +20,7 @@ export default function AuthPage() {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const requestedReturnTo = (location.state as { returnTo?: string } | null)?.returnTo;
-  const returnTo = requestedReturnTo?.startsWith('/') ? requestedReturnTo : '/favoritos';
+  const returnTo = requestedReturnTo?.startsWith('/') ? requestedReturnTo : '/';
 
   useEffect(() => {
     if (user) {
