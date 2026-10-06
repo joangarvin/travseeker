@@ -288,13 +288,7 @@ export default function DestinationPage() {
   const average = reviewStats.average || 0;
   const destinationMapUrl = coordinates ? openStreetMapUrl(coordinates) : null;
   const loginState = { returnTo: location.pathname + location.search };
-  const exploreEssentials = (groupKeys: string[]) => {
-    setEssentialFilter(groupKeys.length === 1 ? groupKeys[0] : ALL_ESSENTIALS);
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    document
-      .getElementById('imprescindibles')
-      ?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
-  };
+
 
   return (
     <Shell>
@@ -385,7 +379,6 @@ export default function DestinationPage() {
         <DestinationSummary
           destination={destino}
           mapUrl={destinationMapUrl}
-          onExplore={exploreEssentials}
         />
 
         <section

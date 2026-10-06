@@ -13,7 +13,7 @@ export function SearchBox({
   value,
   onChange,
   onSubmit,
-  placeholder = t('Destino, municipio, actividad o plan'),
+  placeholder = t('Buscar destinos'),
   loading = false,
 }: SearchBoxProps) {
   return (

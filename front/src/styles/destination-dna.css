@@ -1,367 +1,200 @@
-/* «¿Encaja contigo?» follows the active theme. */
-.dest-dna {
-  --dna-bg: var(--surface);
-  --dna-ink: var(--ink);
-  --dna-muted: var(--muted);
-  --dna-strong: color-mix(in srgb, var(--ink) 82%, transparent);
-  --dna-line: color-mix(in srgb, var(--ink) 10%, transparent);
-  --dna-soft: color-mix(in srgb, var(--ink) 5%, transparent);
-  --dna-accent: var(--brand);
-  --dna-link: var(--brand);
-  --dna-image-opacity: 0.08;
-  position: relative;
-  isolation: isolate;
-  width: 100%;
-  overflow: hidden;
-  padding-block: clamp(64px, 6vw, 96px);
-  padding-inline: clamp(16px, 4vw, 72px);
-  border-block: 1px solid var(--dna-line);
-  background: var(--dna-bg);
-  color: var(--dna-ink);
+/* Editorial summary: description and activity types beside a map of the area. */
+.dest-summary {
+  padding: 56px clamp(20px, 4vw, 72px);
+  background: var(--surface);
+  border-block: 1px solid var(--line);
+  color: var(--ink);
 }
-:root[data-theme='dark'] .dest-dna {
-  --dna-bg: #0b0d14;
-  --dna-ink: #fff;
-  --dna-muted: #aeb3bf;
-  --dna-strong: #c9cdd6;
-  --dna-line: rgb(255 255 255 / 9%);
-  --dna-soft: rgb(255 255 255 / 7%);
-  --dna-accent: #ffd23f;
-  --dna-link: #b9c3ff;
-  --dna-image-opacity: 0.2;
-}
-.dest-dna__image {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: var(--dna-image-opacity);
-  filter: saturate(0.6);
-}
-.dest-dna::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(
-    90deg,
-    var(--dna-bg) 30%,
-    color-mix(in srgb, var(--dna-bg) 72%, transparent)
-  );
-}
-
-.dest-dna [data-tone='heritage'] {
-  --dna: #e2508c;
-  --dna-text: #b52a65;
-}
-.dest-dna [data-tone='urban'] {
-  --dna: #6f80ff;
-  --dna-text: #3a4bd6;
-}
-.dest-dna [data-tone='nature'] {
-  --dna: #45b25a;
-  --dna-text: #23793a;
-}
-.dest-dna [data-tone='routes'] {
-  --dna: #9b8cf5;
-  --dna-text: #6a55d8;
-}
-.dest-dna [data-tone='coast'] {
-  --dna: #1fb5a6;
-  --dna-text: #0d7a70;
-}
-.dest-dna [data-tone='food'] {
-  --dna: #f2803f;
-  --dna-text: #b5521a;
-}
-.dest-dna [data-tone='explore'] {
-  --dna: #a8adb9;
-  --dna-text: #5f6470;
-}
-:root[data-theme='dark'] .dest-dna [data-tone='heritage'] {
-  --dna: #ff7aae;
-  --dna-text: #ff7aae;
-}
-:root[data-theme='dark'] .dest-dna [data-tone='urban'] {
-  --dna: #8e9cff;
-  --dna-text: #8e9cff;
-}
-:root[data-theme='dark'] .dest-dna [data-tone='nature'] {
-  --dna: #5fcf74;
-  --dna-text: #5fcf74;
-}
-:root[data-theme='dark'] .dest-dna [data-tone='routes'] {
-  --dna: #b3a6ff;
-  --dna-text: #b3a6ff;
-}
-:root[data-theme='dark'] .dest-dna [data-tone='coast'] {
-  --dna: #3fd1c1;
-  --dna-text: #3fd1c1;
-}
-:root[data-theme='dark'] .dest-dna [data-tone='food'] {
-  --dna: #ff9a5c;
-  --dna-text: #ff9a5c;
-}
-:root[data-theme='dark'] .dest-dna [data-tone='explore'] {
-  --dna: #8b90a0;
-  --dna-text: #aeb3bf;
-}
-
-.dest-dna__inner {
-  max-width: 1360px;
-  margin-inline: auto;
-}
-.dest-dna__top {
+.dest-summary__layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(32px, 5vw, 72px);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: clamp(28px, 4vw, 56px);
+  max-width: var(--max);
+  margin-inline: auto;
   align-items: start;
-  margin-bottom: clamp(32px, 4vw, 48px);
 }
-.dest-dna__kicker {
-  margin: 0 0 12px;
-  color: var(--dna-accent);
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+.dest-summary__layout > * {
+  min-width: 0;
 }
-.dest-dna__basis {
-  margin: 16px 0 0;
-  color: var(--muted);
-  font-size: 0.8125rem;
-  line-height: 1.5;
-}
-
-.dest-dna h2 {
-  max-width: 18ch;
-  margin: 0;
-  color: var(--dna-ink);
-  font-size: clamp(2.5rem, 4.2vw, 3.5rem);
-  line-height: 1.05;
+.dest-summary h2 {
+  margin: 0 0 18px;
+  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+  line-height: 1.15;
   letter-spacing: -0.03em;
-  text-wrap: balance;
+  overflow-wrap: anywhere;
 }
-.dest-dna__story > p {
-  max-width: 60ch;
-  margin: 0 0 16px;
-  color: var(--dna-strong);
-  font-size: 1.0625rem;
+.dest-summary h3 {
+  font-size: 1.4rem;
+  margin: 0 0 14px;
+  line-height: 1.2;
+}
+.dest-summary__description > p {
+  max-width: 66ch;
+  margin-bottom: 18px;
+  color: var(--muted);
+  font-size: 1rem;
   line-height: 1.65;
 }
-.dest-dna__links {
-  display: grid;
-  justify-items: start;
-  gap: 4px;
-}
-.dest-dna__links > a,
-.dest-dna__more > summary {
-  display: inline-flex;
-  min-height: 44px;
+.dest-summary__more summary {
+  display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--dna-ink);
-  font-weight: 800;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  cursor: pointer;
-}
-.dest-dna__more > summary {
+  min-height: 44px;
   list-style: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 800;
 }
-.dest-dna__more > summary::-webkit-details-marker {
+.dest-summary__more summary::-webkit-details-marker {
   display: none;
 }
-.dest-dna__links svg {
+.dest-summary__more summary svg {
   width: 18px;
   height: 18px;
 }
-.dest-dna__more > summary svg {
-  transition: transform 200ms var(--ease-out, ease);
-}
-.dest-dna__more[open] > summary svg {
+.dest-summary__more[open] summary svg {
   transform: rotate(180deg);
 }
-.dest-dna__more .prose {
-  margin-block: 8px 12px;
-  color: var(--dna-strong);
+.dest-summary__more .prose {
+  margin-top: 12px;
+  color: var(--muted);
 }
-.dest-dna__more .prose a {
-  color: var(--dna-link);
+.dest-summary__activities {
+  margin-top: 28px;
 }
-
-.dest-dna__bar {
+.dest-summary__activities ul {
   display: flex;
-  height: clamp(40px, 5vw, 64px);
-  gap: 4px;
-  margin-bottom: 20px;
-}
-.dest-dna__bar > span {
-  min-width: 10px;
-  border-radius: 12px;
-  background: var(--dna);
-}
-
-.dest-dna__mix {
-  display: grid;
-  grid-template-columns: repeat(var(--dna-columns, 4), minmax(0, 1fr));
-  gap: 12px;
-  margin: 0 -14px;
-  padding: 0;
+  flex-wrap: wrap;
+  gap: 10px;
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
-.dest-dna__mix button {
-  display: grid;
-  width: 100%;
-  height: 100%;
-  align-content: start;
-  gap: 6px;
-  padding: 14px;
-  border: 1px solid transparent;
-  border-radius: 16px;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  text-align: start;
-  cursor: pointer;
-  transition:
-    background-color 160ms ease,
-    border-color 160ms ease;
-}
-@media (hover: hover) {
-  .dest-dna__mix button:hover {
-    border-color: var(--dna-line);
-    background: var(--dna-soft);
-  }
-  .dest-dna__mix button:hover .dest-dna__go svg {
-    transform: translateX(3px);
-  }
-}
-.dest-dna__mix button:focus-visible {
-  outline: 2px solid var(--dna-ink);
-  outline-offset: 2px;
-}
-.dest-dna__mix strong {
-  color: var(--dna-text);
-  font-family: 'Bricolage Grotesque', Manrope, sans-serif;
-  font-size: clamp(1.75rem, 3vw, 2.75rem);
-  line-height: 1;
-}
-.dest-dna__label {
+.dest-summary__activities li {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-weight: 800;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--canvas);
+  font-size: 0.8125rem;
+  font-weight: 750;
+  overflow-wrap: anywhere;
 }
-.dest-dna__label svg {
-  flex: none;
+.dest-summary__activities li svg {
   width: 17px;
   height: 17px;
-  color: var(--dna);
+  flex: none;
+  color: var(--brand);
 }
-.dest-dna__examples {
-  display: -webkit-box;
-  overflow: hidden;
-  color: var(--dna-muted);
+.dest-summary__location > p {
+  color: var(--muted);
   font-size: 0.875rem;
-  line-height: 1.4;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  margin-bottom: 12px;
 }
-.dest-dna__go {
+.dest-summary__map {
+  position: relative;
+  height: 350px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--canvas);
+}
+.dest-summary__map iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none;
+}
+.dest-summary__map iframe.is-active {
+  pointer-events: auto;
+}
+.dest-summary__map-toggle {
+  position: absolute;
+  left: 12px;
+  bottom: 44px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 4px;
-  color: var(--dna-ink);
-  font-size: 0.8125rem;
-  font-weight: 800;
-  opacity: 0.85;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 800 0.75rem Manrope;
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgb(0 0 0 / 12%);
 }
-.dest-dna__go svg {
-  width: 15px;
-  height: 15px;
-  transition: transform 160ms ease;
+.dest-summary__map-toggle svg {
+  width: 16px;
+  height: 16px;
 }
-.dest-dna__extras {
+.dest-summary__map .external-map-placeholder {
+  height: 100%;
+  overflow: auto;
+  padding: 24px;
+  border: 0;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+}
+.dest-summary__map .external-map-placeholder p {
+  font-size: 0.875rem;
+}
+.dest-summary__map-actions {
+  display: flex;
   align-items: center;
-  gap: 10px 16px;
-  margin-top: 28px;
-  padding-top: 24px;
-  border-top: 1px solid var(--dna-line);
-}
-.dest-dna__extras > p {
-  margin: 0;
-  color: var(--dna-muted);
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.dest-dna__extras ul {
-  display: flex;
+  justify-content: space-between;
+  gap: 12px;
   flex-wrap: wrap;
+  margin-top: 12px;
+}
+.dest-summary__map-actions > a {
+  display: inline-flex;
+  align-items: center;
   gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.dest-dna__extras li {
-  display: inline-flex;
-  min-height: 34px;
-  align-items: center;
-  gap: 6px;
-  padding: 0 12px;
-  border: 1px solid var(--dna-line);
-  border-radius: var(--r-pill, 999px);
-  background: var(--dna-soft);
+  min-height: 44px;
   font-size: 0.875rem;
   font-weight: 750;
 }
-.dest-dna__extras li svg {
-  width: 15px;
-  height: 15px;
-  color: var(--dna-accent);
+.dest-summary__map-actions svg {
+  width: 18px;
+  height: 18px;
 }
-
-@media (max-width: 900px) {
-  .dest-dna__top {
+.dest-summary__directions {
+  background: var(--sun);
+  border-color: var(--sun);
+  color: var(--sun-ink);
+}
+.dest-summary__directions:hover {
+  background: #ffe459;
+  color: #171200;
+  border-color: #ffe459;
+}
+.dest-summary__no-map {
+  padding: 24px;
+  background: var(--canvas);
+  border-radius: 16px;
+}
+@media (max-width: 760px) {
+  .dest-summary {
+    padding: 32px 20px 40px;
+  }
+  .dest-summary__layout {
     grid-template-columns: minmax(0, 1fr);
-    gap: 20px;
+    gap: 28px;
   }
-  .dest-dna__mix {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 4px;
+  .dest-summary h3 {
+    font-size: 1.3rem;
   }
-  .dest-dna__mix > li:first-child {
-    grid-column: 1 / -1;
+  .dest-summary__map {
+    height: 260px;
   }
-}
-
-@media (max-width: 680px) {
-  .dest-dna {
-    padding: 56px 20px;
-  }
-  .dest-dna h2 {
-    font-size: clamp(1.75rem, 8vw, 2.25rem);
-  }
-  .dest-dna__bar {
-    gap: 3px;
-  }
-  .dest-dna__bar > span {
-    min-width: 6px;
-    border-radius: 8px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .dest-dna__more > summary svg,
-  .dest-dna__go svg,
-  .dest-dna__mix button {
-    transition: none;
+  .dest-summary__activities ul {
+    gap: 8px;
   }
 }

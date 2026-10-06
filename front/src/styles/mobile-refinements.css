@@ -47,6 +47,43 @@
   .home-filter-chip {
     min-height: 44px;
   }
+  .home-hero .search-box {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 0;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .home-hero .search-box > svg {
+    grid-area: 1 / 1;
+    z-index: 1;
+  }
+  .home-hero .search-box input {
+    grid-area: 1 / 1 / 2 / 3;
+    width: 100%;
+    height: 56px;
+    padding: 0 14px 0 42px;
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    background: var(--surface);
+  }
+  .home-hero .search-box button {
+    margin-top: 10px;
+    min-height: 48px;
+    border-radius: 14px;
+    background: var(--brand);
+    color: white;
+  }
+  .home-hero .search-box__help {
+    margin-left: 0;
+  }
+  .destination-guide .related__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .related-option__footer {
+    flex-wrap: wrap;
+  }
   .home-filter-panel {
     padding: 18px 14px;
   }
