@@ -393,7 +393,7 @@ export default function Home() {
           <>
             {visibleResults.length ? (
               <div className="destination-list">
-                {visibleResults.map((destino, index) => (
+                {visibleResults.map((destino) => (
                   <DestinationCard key={destino.id} destino={destino} index={-1} />
                 ))}
               </div>
