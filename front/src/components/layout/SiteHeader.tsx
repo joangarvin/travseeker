@@ -151,6 +151,10 @@ export function SiteHeader() {
             )}
           </nav>
           <div className="mobile-menu__secondary">
+            <div className="mobile-menu__language">
+              <span>{t('Idioma')}</span>
+              <LanguageSwitcher />
+            </div>
             {user ? (
               <>
                 <Link className="button button--secondary" to="/perfil">

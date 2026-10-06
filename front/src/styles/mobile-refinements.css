@@ -1,0 +1,221 @@
+/* Mobile composition for Discover, destination guides and trip planning. */
+.mobile-menu__language {
+  display: none;
+}
+
+@media screen and (max-width: 760px) {
+  .header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+  }
+  .header__actions {
+    grid-column: 2;
+  }
+  .header__actions > .language-switcher,
+  .header__actions > .account-short {
+    display: none;
+  }
+  .header .brand > span:last-child {
+    display: inline;
+  }
+  .mobile-menu__language {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .mobile-menu__language select {
+    width: 8rem;
+    max-width: none;
+    font-size: 1rem;
+  }
+  /* Avoid Safari zooming the layout when a field receives focus. */
+  :is(.home-hero, .destination-guide, .trip-workspace, .trips-library, .modal)
+    :is(input:not([type='checkbox']):not([type='radio']), select, textarea) {
+    min-width: 0;
+    font-size: 1rem;
+  }
+  .home-hero__copy {
+    padding-block: 16px 8px;
+  }
+  .home-hero h1 {
+    font-size: clamp(2.5rem, 11.5vw, 4rem);
+    letter-spacing: -0.04em;
+  }
+  .home-filter-chip {
+    min-height: 44px;
+  }
+  .home-filter-panel {
+    padding: 18px 14px;
+  }
+  .results-section__load-more {
+    width: 100%;
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+  }
+  .image-wall {
+    min-height: 0;
+    height: clamp(320px, 100vw, 440px);
+  }
+  .image-wall a span {
+    font-size: 0.8125rem;
+    padding: 8px;
+  }
+  /* Large mobile sections remain readable throughout scrolling and anchor jumps. */
+  .motion-ready [data-reveal],
+  [data-reveal-state='pending'],
+  [data-reveal-state='visible'] {
+    opacity: 1;
+    transform: none;
+  }
+  .dest-hero {
+    gap: 64px;
+  }
+  .dest-hero__shade {
+    background: linear-gradient(180deg, rgb(5 7 14 / 42%), rgb(5 7 14 / 65%) 35%, rgb(5 7 14 / 92%));
+  }
+  .dest-hero__actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(44px, 1fr));
+    justify-content: start;
+    gap: 12px;
+  }
+  .dest-hero__actions > .button--primary {
+    grid-column: 1 / -1;
+    width: 100%;
+    max-width: 100%;
+    min-height: 48px;
+  }
+  .dest-hero__actions > .dest-hero__icon {
+    justify-self: center;
+  }
+  .destination-nav a {
+    min-height: 48px;
+  }
+  .budget-estimator__controls {
+    gap: 20px 12px;
+  }
+  .budget-stepper button,
+  .trip-budget--compact .budget-stepper button {
+    width: 44px;
+    height: 44px;
+    flex: none;
+  }
+  .budget-options span,
+  .trip-budget .budget-options span,
+  .trip-budget--compact .budget-options span {
+    min-height: 44px;
+    font-size: 0.8125rem;
+    padding-inline: 4px;
+  }
+  .budget-estimator__items li {
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 8px 12px;
+  }
+  .budget-estimator__items li > strong {
+    grid-column: 2;
+  }
+  .budget-estimator__items small {
+    line-height: 1.5;
+  }
+  .trip-workspace .trip-workspace-header--cover {
+    padding: 22px 18px;
+  }
+  .trip-workspace .collection-view-switch--three {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    overflow: visible;
+    padding: 5px;
+  }
+  .trip-workspace .collection-view-switch--three button {
+    min-width: 0;
+    min-height: 48px;
+    padding: 8px 5px;
+    font-size: 0.8125rem;
+    white-space: normal;
+    line-height: 1.3;
+  }
+  .trip-workspace .collection-view-switch--three svg {
+    display: none;
+  }
+  /* Keep day content unobscured: the desktop sticky toolbar is too tall here. */
+  .trip-agenda .itinerary-builder__toolbar {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 12px;
+    backdrop-filter: none;
+  }
+  .trip-agenda .itinerary-builder__toolbar .button {
+    min-width: 0;
+    padding-inline: 8px;
+    font-size: 0.8125rem;
+    gap: 6px;
+  }
+  .trip-agenda .itinerary-builder__toolbar .button:nth-child(3),
+  .trip-agenda .itinerary-builder__toolbar > span {
+    grid-column: 1 / -1;
+  }
+  .trip-agenda .itinerary-builder__toolbar > span {
+    margin: 0;
+  }
+  .trip-agenda__days small,
+  .trip-agenda__activity small {
+    font-size: 0.8125rem;
+  }
+  .trip-agenda__activity-actions {
+    padding-left: 0;
+    justify-content: flex-end;
+  }
+  .trip-agenda__activity-actions select {
+    min-height: 44px;
+    max-width: 180px;
+  }
+  .trip-workspace .itinerary-summary > span {
+    padding: 10px 14px;
+    font-size: 0.8125rem;
+  }
+  .trips-library .trip-filters button {
+    min-height: 44px;
+    font-size: 0.8125rem;
+  }
+  .trip-budget__calculator .budget-estimator__controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .guided-tour {
+    bottom: 52px;
+    padding: 14px;
+    border-radius: 16px;
+  }
+  .guided-tour h2 {
+    margin-bottom: 8px;
+    font-size: 1rem;
+  }
+  .guided-tour p {
+    display: none;
+  }
+  .guided-tour__actions {
+    margin-top: 12px;
+  }
+  body:has(.guided-tour) {
+    padding-bottom: 190px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .budget-estimator__controls,
+  .trip-budget__calculator .budget-estimator__controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .dest-hero__seasons li {
+    grid-template-columns: minmax(0, 1fr) minmax(52px, 0.8fr) 32px;
+    gap: 8px;
+  }
+}
