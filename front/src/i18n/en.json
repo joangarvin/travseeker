@@ -1748,5 +1748,20 @@
   "Planes elegidos: {0}": "Selected activities: {0}",
   "Ver foto completa": "View full photo",
   "Fotografía principal del destino · Imagen completa, sin recorte": "Main destination photo · Full image, without cropping",
-  "Leer menos": "Read less"
+  "Leer menos": "Read less",
+  "Mejorar ruta": "Improve route",
+  "Deshacer ruta": "Undo route",
+  "Ruta mejorada:": "Improved route:",
+  "Misma base · sin traslado entre días": "Same base · no transfer between days",
+  "Hemos añadido días para incluir todos los destinos. Al guardar se actualizará la fecha final del viaje.": "We added days to include every destination. Saving will update the trip end date.",
+  "Estancias consecutivas y paradas ordenadas por proximidad. Revisa la propuesta antes de guardar.": "Consecutive stays and stops ordered by proximity. Review the proposal before saving.",
+  "Faltan coordenadas en algunas paradas. Selecciona una base con ubicación para poder mejorar la ruta.": "Some stops are missing coordinates. Select a base with a location to improve the route.",
+  "No hemos encontrado una ruta más corta manteniendo el punto de partida y las estancias.": "We could not find a shorter route while keeping the departure and stays.",
+  "Estimación en línea recta. Conservamos actividades, notas y bases; las fechas siguen el nuevo orden.": "Straight-line estimate. Activities, notes and bases are preserved; dates follow the new order.",
+  "Se ha recuperado el itinerario anterior.": "The previous itinerary has been restored.",
+  "Agrupamos las noches en cada destino y ordenamos las paradas por proximidad, manteniendo el primer destino como salida. Revísalo antes de guardar.": "We group nights at each destination and order stops by proximity, keeping the first destination as the departure. Review before saving.",
+  "La propuesta necesita más días que las fechas actuales. Al guardar se actualizará la fecha final del viaje.": "The proposal needs more days than the current dates allow. Saving will update the trip end date.",
+  "Crear nueva propuesta": "Create a new proposal",
+  "Crear propuesta": "Create proposal",
+  "Se reemplazarán las actividades y notas del itinerario. Para conservarlas, utiliza Mejorar ruta. Puedes deshacer antes de guardar.": "Itinerary activities and notes will be replaced. Use Improve route to preserve them. You can undo before saving."
 }

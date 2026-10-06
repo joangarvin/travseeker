@@ -28,9 +28,10 @@ import {
   generateGoogleCalendarUrl,
   resolveItineraryDate,
 } from '../utils/itineraryExport';
-import { Button, Empty, Field, MediaImage, Notice } from './ui';
+import { Button, Dialog, Empty, Field, MediaImage, Notice } from './ui';
 import { imageUrl } from '../utils';
 import { addTripDays, getTripDuration } from '../utils/tripDuration';
+import { planItinerary, optimizeItinerary, itineraryDistance } from '../utils/itineraryPlanner';
 
 type ItineraryBuilderProps = {
   collection: CollectionDetail;
@@ -64,17 +65,13 @@ export function generateItinerary(collection: CollectionDetail): ItineraryDay[] 
     endDate: collection.endDate,
     destinationCount: collection.items.length,
   }).days;
-  const start = isoDate(collection.startDate);
-  return Array.from({ length: count }, (_, index) => {
-    const destination = collection.items[index % collection.items.length].destino;
-    return {
-      dayNumber: index + 1,
-      date: start ? addTripDays(start, index) : undefined,
-      destinationId: destination.id,
-      baseMunicipioId: destination.municipios?.[0]?.id,
-      plannedActivities: [],
-    };
-  });
+  return normalizeDays(
+    planItinerary(
+      collection.items.map((item) => item.destino),
+      count,
+    ),
+    collection.startDate,
+  );
 }
 
 function formatDayDate(value?: string): string {
@@ -112,6 +109,12 @@ function SegmentBar({ segment, loading }: { segment?: RouteSegment; loading: boo
       </div>
     );
   }
+  if (segment?.source === 'stay')
+    return (
+      <div className="route-segment">
+        <MapPin /> {t('Misma base · sin traslado entre días')}
+      </div>
+    );
   if (!segment || segment.source === 'unavailable') {
     return (
       <div className="route-segment route-segment--unavailable">
@@ -175,6 +178,8 @@ export function ItineraryBuilder({
   const [routesLoading, setRoutesLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState('');
+  const [generationOpen, setGenerationOpen] = useState(false);
+  const [previousRoute, setPreviousRoute] = useState<ItineraryDay[] | null>(null);
   const [feedbackTone, setFeedbackTone] = useState<'info' | 'error' | 'success'>('info');
   const draggedIndex = useRef<number | null>(null);
 
@@ -183,6 +188,7 @@ export function ItineraryBuilder({
   }, [days, onDraftChange]);
   const destinationSignature = collection.items.map((item) => item.destino.id).join('|');
   useEffect(() => {
+    setPreviousRoute(null);
     setDays(
       savedItinerary.length
         ? normalizeDays(savedItinerary, collection.startDate)
@@ -244,6 +250,12 @@ export function ItineraryBuilder({
   useEffect(() => {
     onDirtyChange?.(dirty);
   }, [dirty, onDirtyChange]);
+  const extendsDates = Boolean(
+    collection.startDate &&
+    collection.endDate &&
+    days.length >
+      getTripDuration({ startDate: collection.startDate, endDate: collection.endDate }).days,
+  );
   const suggestedDraft = canEdit && !savedItinerary.length && days.length > 0;
   const hasDates = days.some((day) => resolveItineraryDate(day, collection));
 
@@ -328,11 +340,75 @@ export function ItineraryBuilder({
     );
   };
 
+  const applyRoute = (next: ItineraryDay[]) => {
+    setPreviousRoute(days);
+    setDays(normalizeDays(next, collection.startDate));
+    setSelectedDay(0);
+    setEditingDay(null);
+    setAddingActivity(null);
+    setFeedbackTone('info');
+  };
+
   const autoGenerate = () => {
-    if (dirty && !confirm(t('¿Regenerar el itinerario? Se reemplazarán los cambios sin guardar.')))
+    setGenerationOpen(false);
+    const next = generateItinerary(collection);
+    applyRoute(next);
+    const duration = getTripDuration({
+      startDate: collection.startDate,
+      endDate: collection.endDate,
+      destinationCount: collection.items.length,
+    });
+    setFeedback(
+      next.length > duration.days
+        ? t(
+            'Hemos añadido días para incluir todos los destinos. Al guardar se actualizará la fecha final del viaje.',
+          )
+        : t(
+            'Estancias consecutivas y paradas ordenadas por proximidad. Revisa la propuesta antes de guardar.',
+          ),
+    );
+  };
+
+  const improveRoute = () => {
+    const destinations = collection.items.map((item) => item.destino);
+    const before = itineraryDistance(days, destinations);
+    if (before === undefined) {
+      setFeedbackTone('info');
+      setFeedback(
+        t(
+          'Faltan coordenadas en algunas paradas. Selecciona una base con ubicación para poder mejorar la ruta.',
+        ),
+      );
       return;
-    setFeedback('');
-    setDays(generateItinerary(collection));
+    }
+    const next = optimizeItinerary(days, destinations);
+    const after = itineraryDistance(next, destinations)!;
+    if (before - after < 0.001) {
+      setFeedbackTone('info');
+      setFeedback(
+        t(
+          'No hemos encontrado una ruta más corta manteniendo el punto de partida y las estancias.',
+        ),
+      );
+      return;
+    }
+    applyRoute(
+      collection.startDate ? next : next.map((day, index) => ({ ...day, date: days[index]?.date })),
+    );
+    setFeedback(
+      `${t('Ruta mejorada:')} ≈${Math.round(before)} → ≈${Math.round(after)} km. ${t('Estimación en línea recta. Conservamos actividades, notas y bases; las fechas siguen el nuevo orden.')}`,
+    );
+  };
+
+  const undoRoute = () => {
+    if (!previousRoute) return;
+    setDays(previousRoute);
+    setPreviousRoute(null);
+    setSelectedDay(0);
+    setEditingDay(null);
+    setAddingActivity(null);
+    setFeedbackTone('info');
+    setFeedback(t('Se ha recuperado el itinerario anterior.'));
   };
 
   const save = async () => {
@@ -343,6 +419,7 @@ export function ItineraryBuilder({
       const start = isoDate(collection.startDate);
       const alignedEndDate = start && days.length ? addTripDays(start, days.length - 1) : undefined;
       await onSave(days, alignedEndDate);
+      setPreviousRoute(null);
       setFeedback(t('Itinerario guardado'));
       setFeedbackTone('success');
     } catch (cause) {
@@ -380,6 +457,22 @@ export function ItineraryBuilder({
 
   return (
     <section className="itinerary-builder trip-agenda" aria-labelledby="itinerary-builder-title">
+      {generationOpen && (
+        <Dialog
+          title={t('Crear nueva propuesta')}
+          description={t(
+            'Se reemplazarán las actividades y notas del itinerario. Para conservarlas, utiliza Mejorar ruta. Puedes deshacer antes de guardar.',
+          )}
+          onClose={() => setGenerationOpen(false)}
+        >
+          <div className="form-actions">
+            <Button variant="secondary" onClick={() => setGenerationOpen(false)}>
+              {t('Cancelar')}
+            </Button>
+            <Button onClick={autoGenerate}>{t('Crear propuesta')}</Button>
+          </div>
+        </Dialog>
+      )}
       <div className="itinerary-builder__print-title print-only">
         <p>{t('TravSeeker · Itinerario')}</p>
         <h1>{collection.nombre}</h1>
@@ -421,7 +514,10 @@ export function ItineraryBuilder({
             {routesLoading ? '…' : totalDuration ? formatDuration(totalDuration) : t('Sin dato')}
           </b>{' '}
           {hasPartialRoute
-            ? t('{0}/{1} tramos por carretera', { 0: exactRouteCount, 1: segments.length })
+            ? t('{0}/{1} tramos por carretera', {
+                0: exactRouteCount,
+                1: segments.filter((segment) => segment.source !== 'stay').length,
+              })
             : t('en carretera')}
         </span>
       </div>
@@ -443,16 +539,34 @@ export function ItineraryBuilder({
         <Notice tone="info">
           <strong>{t('Propuesta sin guardar.')}</strong>{' '}
           {t(
-            'Hemos repartido los destinos para darte un punto de partida. Revísalo y guarda cuando tenga sentido para tu viaje.',
+            'Agrupamos las noches en cada destino y ordenamos las paradas por proximidad, manteniendo el primer destino como salida. Revísalo antes de guardar.',
           )}
         </Notice>
       )}
 
+      {canEdit && extendsDates && (
+        <Notice tone="info">
+          {t(
+            'La propuesta necesita más días que las fechas actuales. Al guardar se actualizará la fecha final del viaje.',
+          )}
+        </Notice>
+      )}
       {canEdit && (
         <div className="itinerary-builder__toolbar no-print">
-          <Button variant="secondary" onClick={autoGenerate}>
+          <Button
+            variant="secondary"
+            onClick={() => (days.length ? setGenerationOpen(true) : autoGenerate())}
+          >
             <Route /> {t('Autogenerar')}
           </Button>
+          <Button variant="secondary" disabled={days.length < 3} onClick={improveRoute}>
+            <Route /> {t('Mejorar ruta')}
+          </Button>
+          {previousRoute && (
+            <Button variant="secondary" onClick={undoRoute}>
+              {t('Deshacer ruta')}
+            </Button>
+          )}
           <Button variant="secondary" onClick={addDay}>
             <Plus /> {t('Añadir día')}
           </Button>
@@ -882,11 +996,15 @@ export function ItineraryBuilder({
           <article className="trip-agenda__route">
             <p className="kicker">{t('Tu ruta')}</p>
             <h3>{collection.nombre}</h3>
-            {collection.items.map((item) => (
-              <Link key={item.id} to={`/destino/${item.destino.id}`}>
-                {item.destino.nombre}
-              </Link>
-            ))}
+            {days
+              .filter(
+                (day, index) => index === 0 || days[index - 1].destinationId !== day.destinationId,
+              )
+              .map((day, index) => (
+                <Link key={`${day.destinationId}-${index}`} to={`/destino/${day.destinationId}`}>
+                  {destinationFor(collection, day.destinationId)?.nombre || day.destinationId}
+                </Link>
+              ))}
           </article>
           {budget}
           <article className="trip-agenda__route">

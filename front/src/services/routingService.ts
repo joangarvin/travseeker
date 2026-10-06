@@ -9,7 +9,7 @@ export type Coordinates = {
 export type RouteSegment = {
   distanceKm?: number;
   durationMinutes?: number;
-  source: 'osrm' | 'haversine' | 'unavailable';
+  source: 'osrm' | 'haversine' | 'unavailable' | 'stay';
 };
 
 const memoryCache = new Map<string, RouteSegment>();
@@ -85,13 +85,13 @@ function cacheKey(from: Coordinates, to: Coordinates): string {
 
 function readCache(key: string): RouteSegment | undefined {
   const inMemory = memoryCache.get(key);
-  if (inMemory) return inMemory;
+  if (inMemory?.source === 'osrm') return inMemory;
   try {
     const cached = localStorage.getItem(`${CACHE_PREFIX}${key}`);
     if (!cached) return undefined;
     const parsed = JSON.parse(cached) as CachedRouteSegment | RouteSegment;
     if ('cachedAt' in parsed && 'value' in parsed) {
-      if (Date.now() - parsed.cachedAt > CACHE_TTL_MS) {
+      if (parsed.value.source !== 'osrm' || Date.now() - parsed.cachedAt > CACHE_TTL_MS) {
         localStorage.removeItem(`${CACHE_PREFIX}${key}`);
         return undefined;
       }
@@ -121,7 +121,9 @@ export async function calculateRouteSegment(
   from?: Coordinates,
   to?: Coordinates,
 ): Promise<RouteSegment> {
-  if (!from || !to) return { source: 'unavailable' };
+  if (!validCoordinates(from) || !validCoordinates(to)) return { source: 'unavailable' };
+  if (from.latitud === to.latitud && from.longitud === to.longitud)
+    return { source: 'stay', distanceKm: 0, durationMinutes: 0 };
   if (!hasConsent('maps')) return fallbackSegment(from, to);
   const key = cacheKey(from, to);
   const cached = readCache(key);
@@ -147,7 +149,16 @@ export async function calculateRouteSegment(
       routes?: Array<{ distance?: number; duration?: number }>;
     };
     const route = data.routes?.[0];
-    if (data.code !== 'Ok' || !route?.distance || !route.duration)
+    if (
+      data.code !== 'Ok' ||
+      !route ||
+      typeof route.distance !== 'number' ||
+      !Number.isFinite(route.distance) ||
+      route.distance < 0 ||
+      typeof route.duration !== 'number' ||
+      !Number.isFinite(route.duration) ||
+      route.duration < 0
+    )
       throw new Error('Route unavailable');
     const segment: RouteSegment = {
       distanceKm: route.distance / 1000,
@@ -158,7 +169,6 @@ export async function calculateRouteSegment(
     return segment;
   } catch {
     const segment = fallbackSegment(from, to);
-    if (hasConsent('maps')) writeCache(key, segment);
     return segment;
   } finally {
     unsubscribe();
