@@ -1,7 +1,9 @@
 import { createRequestCache, isPublicDataPath, withAbort } from './publicRequestCache';
 import { t } from '../i18n';
 import { locale, serverMessage } from '../i18n';
-export const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+// Production uses the Vercel proxy so session cookies belong to the website.
+// Calling Render directly makes them third-party cookies, which Safari blocks.
+export const API_BASE_URL = import.meta.env.PROD ? '/api' : import.meta.env.VITE_API_URL || '/api';
 export const COOKIE_SESSION_MARKER = '__trav_cookie_session__';
 
 const publicRequests = createRequestCache();

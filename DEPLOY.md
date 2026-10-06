@@ -9,9 +9,9 @@ Usuario
    │
    ▼
 ┌─────────────────────┐     HTTPS      ┌─────────────────────┐
-│  Frontend (estático) │  ──────────►  │  Backend (Node.js)   │
+│  Frontend + /api     │  ──────────►  │  Backend (Node.js)   │
 │  Vercel / Netlify    │   API calls   │  Railway / Render    │
-│  tudominio.com       │               │  api.tudominio.com   │
+│  travseeker.com      │               │  Render             │
 └─────────────────────┘                └──────────┬──────────┘
                                                   │
                                                   ▼
@@ -138,21 +138,30 @@ node seed.js   # opcional: datos iniciales de destinos
 
 | Variable | Valor |
 |----------|--------|
-| `VITE_API_URL` | URL del backend (sin barra final) |
+| `VITE_API_URL` | Omitir o `/api`; producción usa siempre el proxy `/api` |
 
 ### SPA routing (React Router)
 
-Crea `front/vercel.json` para evitar 404 al recargar rutas:
+`front/vercel.json` envía primero `/api` a Render y después aplica el fallback de React Router:
 
 ```json
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://travseeker-api.onrender.com/api/:path*"
+    },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
 ```
 
-Para Netlify, crea `front/public/_redirects`:
+El navegador llama a `https://travseeker.com/api/...` y Vercel reenvía las peticiones a Render. Así la cookie HttpOnly pertenece al dominio de la web. Las llamadas directas desde la web a `onrender.com` dependen de cookies de terceros y pueden fallar en Safari. Si cambia la URL de Render, actualiza el destino del proxy.
+
+Para Netlify, crea `front/public/_redirects` con el proxy antes del fallback:
 
 ```
+/api/*    https://travseeker-api.onrender.com/api/:splat   200
 /*    /index.html   200
 ```
 
@@ -162,7 +171,8 @@ Para Netlify, crea `front/public/_redirects`:
 
 1. Actualiza `APP_URL` y `FRONTEND_URL` en el backend con la URL real del front.
 2. Redeploy del backend.
-3. Prueba `https://tu-api.../api/health` → `{ "ok": true }`.
+3. Prueba `https://travseeker.com/api/health` → JSON con `ok: true` (no el HTML del frontend).
+4. Cierra sesión y vuelve a entrar en Safari. Comprueba que `/api/auth/me` y `/api/favoritos` responden 200 desde el dominio de la web.
 
 ---
 
@@ -215,7 +225,7 @@ CLOUDINARY_FOLDER=travseeker
 
 | Variable | Prod | Descripción |
 |----------|------|-------------|
-| `VITE_API_URL` | Sí | URL del backend |
+| `VITE_API_URL` | No | Override en desarrollo; producción usa `/api` |
 
 ---
 
@@ -268,7 +278,7 @@ En local no hace falta `VITE_API_URL`: Vite hace proxy de `/api` al backend.
 
 **CORS** → `FRONTEND_URL` debe coincidir exactamente con la URL del front.
 
-**API a localhost en prod** → Falta `VITE_API_URL` en Vercel. Redeploy.
+**401 tras iniciar sesión en Safari** → Comprueba que las llamadas usan `/api` bajo el dominio de la web, que el proxy de `vercel.json` apunta al backend correcto y que el frontend se ha vuelto a desplegar. `VITE_API_URL` no cambia la ruta en producción.
 
 **404 al recargar rutas** → Falta `vercel.json` o `_redirects`.
 

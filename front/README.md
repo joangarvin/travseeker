@@ -12,7 +12,7 @@ npm run lint
 npm run build
 ```
 
-The development server proxies `/api` to the backend at `http://127.0.0.1:3001`. For a separate production API, set `VITE_API_URL`. Frontend utility tests use Node's native TypeScript stripping (Node 22.18+ or a newer supported release).
+The development server proxies `/api` to the backend at `http://127.0.0.1:3001`; `VITE_API_URL` can override it in development. Production always uses `/api`, which `vercel.json` proxies to Render before the SPA fallback. This keeps authentication cookies on the website's origin, including in Safari. If the backend moves, update the proxy destination. Frontend utility tests use Node's native TypeScript stripping (Node 22.18+ or a newer supported release).
 
 From the repository root, `npm run check` runs both test suites, frontend lint, and the production build.
 

@@ -50,13 +50,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [refresh]);
 
   const authenticate = async (path: string, payload: Record<string, string>) => {
-    const result = await api<{ user: User }>(path, {
+    await api<{ user: User }>(path, {
       method: 'POST',
       body: JSON.stringify(payload),
     });
 
+    // Confirm the browser can send the new session before showing a logged-in user.
+    const authenticatedUser = await api<User>('/auth/me');
     setToken(COOKIE_SESSION_MARKER);
-    setUser(result.user);
+    setUser(authenticatedUser);
   };
 
   const value = useMemo<AuthContextValue>(
