@@ -1,0 +1,561 @@
+{
+  "checkedAt": "2026-10-07",
+  "scope": "Enriquecimiento patrimonial y turístico de ocho municipios existentes: Carmona, Osuna, Arcos de la Frontera, Priego de Córdoba, Zafra, Pedraza, Sepúlveda y Peñafiel. Incluye dos actividades por municipio y una ficha de alojamiento y restauración con direcciones verificadas en fuentes primarias.",
+  "photoPolicy": "Este lote no incorpora fotografías; conserva enlaces a fuentes oficiales y propios establecimientos.",
+  "municipalities": [
+    {
+      "id": "5975b9c3-558f-44d6-a561-ea36b5882cc4",
+      "nombre": "CARMONA",
+      "fields": {
+        "descripcion": "Carmona reúne un conjunto patrimonial de origen antiguo y medieval, con murallas, alcázares y un importante yacimiento funerario romano.",
+        "website": "https://turismo.carmona.org/",
+        "ubicacion": "Carmona, Sevilla, Andalucía"
+      },
+      "sources": [
+        "https://turismo.carmona.org/",
+        "https://turismo.carmona.org/alcazar-puerta-de-sevilla/",
+        "https://turismo.carmona.org/necropolis/",
+        "https://paradores.es/es/parador-de-carmona",
+        "https://paradores.es/es/reservas/parador/025",
+        "https://paradores.es/es/restaurante-del-parador-de-carmona"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "9eed9150-5c27-41c1-ae62-d2f0bb158e5c",
+          "website": "https://turismo.carmona.org/alcazar-puerta-de-sevilla/",
+          "address": "Plaza de Blas Infante, s/n, 41410 Carmona, Sevilla",
+          "descripcion": "Recorrer el conjunto defensivo de la Puerta de Sevilla y sus espacios restaurados, con una panorámica del casco urbano desde sus torres.",
+          "category": "Patrimonio",
+          "sources": [
+            "https://turismo.carmona.org/alcazar-puerta-de-sevilla/"
+          ]
+        },
+        {
+          "essentialItemId": "25937542-8646-4c49-a067-90cb3684a31b",
+          "website": "https://turismo.carmona.org/necropolis/",
+          "address": "Avenida Jorge Bonsor, 9, 41410 Carmona, Sevilla",
+          "descripcion": "Conocer el conjunto arqueológico formado por la necrópolis romana y el anfiteatro, además de su centro de interpretación.",
+          "category": "Arqueología",
+          "sources": [
+            "https://turismo.carmona.org/necropolis/"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Parador de Carmona",
+          "address": "Alcázar, s/n, 41410 Carmona, Sevilla",
+          "website": "https://paradores.es/es/parador-de-carmona",
+          "bookingUrl": "https://paradores.es/es/reservas/parador/025",
+          "descripcion": "Alojamiento en un edificio histórico del casco antiguo, con reserva directa en la web oficial.",
+          "sources": [
+            "https://paradores.es/es/parador-de-carmona",
+            "https://paradores.es/es/reservas/parador/025"
+          ]
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante del Parador de Carmona",
+          "address": "Alcázar, s/n, 41410 Carmona, Sevilla",
+          "website": "https://paradores.es/es/restaurante-del-parador-de-carmona",
+          "bookingUrl": "https://paradores.es/es/restaurante-del-parador-de-carmona",
+          "descripcion": "Restaurante de cocina tradicional andaluza en el Parador; la página oficial facilita los canales directos para consultar y reservar.",
+          "cuisine": "Cocina tradicional andaluza",
+          "sources": [
+            "https://paradores.es/es/restaurante-del-parador-de-carmona"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4a7b4e46-e623-4478-bec9-9580dda45d51",
+      "nombre": "OSUNA",
+      "fields": {
+        "descripcion": "Osuna conserva una destacada zona monumental en la que conviven edificios religiosos, universitarios y palacios de la antigua villa ducal.",
+        "website": "https://cultura.osuna.es/",
+        "ubicacion": "Osuna, Sevilla, Andalucía"
+      },
+      "sources": [
+        "https://cultura.osuna.es/",
+        "https://www.colegiatadeosuna.es/",
+        "https://cultura.osuna.es/?p=1203",
+        "https://www.casonacalderon.es/",
+        "https://www.casonacalderon.es/contacto.html",
+        "https://www.andalucia.org/listing/morenita/5761102/"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "47dcc141-e20f-4bfb-ae11-a794f92c0a32",
+          "website": "https://www.colegiatadeosuna.es/",
+          "address": "Plaza de la Encarnación, s/n, 41640 Osuna, Sevilla",
+          "descripcion": "Visitar la Colegiata de Nuestra Señora de la Asunción y consultar en su web oficial las modalidades disponibles y la compra de entradas.",
+          "category": "Patrimonio",
+          "sources": [
+            "https://www.colegiatadeosuna.es/",
+            "https://cultura.osuna.es/"
+          ]
+        },
+        {
+          "essentialItemId": "cfc68722-43df-4dda-b8c6-29194a50760c",
+          "website": "https://cultura.osuna.es/?p=1203",
+          "descripcion": "Conocer la Antigua Universidad de Osuna, edificio histórico de la zona monumental; consulta al Ayuntamiento la disponibilidad de visita.",
+          "category": "Patrimonio",
+          "sources": [
+            "https://cultura.osuna.es/?p=1203",
+            "https://cultura.osuna.es/"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "La Casona de Calderón Gastronomic & Boutique Hotel",
+          "address": "Plaza Cervantes, 16, 41640 Osuna, Sevilla",
+          "website": "https://www.casonacalderon.es/",
+          "bookingUrl": "https://www.casonacalderon.es/",
+          "descripcion": "Hotel boutique en una casa histórica del centro de Osuna; su web oficial ofrece reserva directa y datos de contacto.",
+          "sources": [
+            "https://www.casonacalderon.es/",
+            "https://www.casonacalderon.es/contacto.html"
+          ]
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Morenita",
+          "address": "Plaza Cervantes, 16, 41640 Osuna, Sevilla",
+          "website": "https://www.casonacalderon.es/",
+          "bookingUrl": "https://www.casonacalderon.es/contacto.html",
+          "descripcion": "Restaurante de cocina mediterránea ubicado en La Casona de Calderón; consulta disponibilidad y reservas en sus canales oficiales.",
+          "cuisine": "Cocina mediterránea",
+          "sources": [
+            "https://www.andalucia.org/listing/morenita/5761102/",
+            "https://www.casonacalderon.es/",
+            "https://www.casonacalderon.es/contacto.html"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "79159e6a-dbf8-493d-8929-d7588f565879",
+      "nombre": "ARCOS DE LA FRONTERA",
+      "fields": {
+        "descripcion": "El casco histórico de Arcos se encarama sobre la peña y combina calles de trazado histórico, miradores y arquitectura monumental vinculada a la antigua villa fronteriza.",
+        "website": "https://www.turismoarcos.es/",
+        "ubicacion": "Arcos de la Frontera, Cádiz, Andalucía",
+        "consejos": "El Castillo Ducal es de propiedad particular y la oficina municipal anuncia visitas puntuales; comprueba fecha y reserva con Turismo de Arcos antes de desplazarte."
+      },
+      "sources": [
+        "https://www.turismoarcos.es/",
+        "https://www.turismoarcos.es/arcos-en-1-dia/",
+        "https://www.turismoarcos.es/castillo-ducal/",
+        "https://www.turismoarcos.es/events/visita-castillo-de-arcos-4/",
+        "https://paradores.es/es/parador-de-arcos-de-la-frontera",
+        "https://paradores.es/es/restaurante-del-parador-de-arcos-de-la-frontera"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "d04bab32-75d6-4aa8-862e-9240d7cad275",
+          "website": "https://www.turismoarcos.es/arcos-en-1-dia/",
+          "descripcion": "Pasear por el casco histórico sobre la peña y detenerse en el Balcón de la Peña Nueva, siguiendo la ruta sugerida por la oficina municipal de turismo.",
+          "category": "Paseo urbano",
+          "sources": [
+            "https://www.turismoarcos.es/arcos-en-1-dia/",
+            "https://www.turismoarcos.es/rincones-y-miradores/"
+          ]
+        },
+        {
+          "nombre": "Visita guiada al Castillo Ducal",
+          "website": "https://www.turismoarcos.es/castillo-ducal/",
+          "address": "Plaza del Cabildo, s/n, 11630 Arcos de la Frontera, Cádiz",
+          "descripcion": "Conocer el Castillo Ducal en una visita guiada municipal. La propiedad es particular y las visitas se anuncian en fechas concretas; consulta calendario y reserva con la Oficina de Turismo.",
+          "category": "Patrimonio",
+          "sources": [
+            "https://www.turismoarcos.es/castillo-ducal/",
+            "https://www.turismoarcos.es/events/visita-castillo-de-arcos-4/"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Parador de Arcos de la Frontera",
+          "address": "Plaza del Cabildo, s/n, 11630 Arcos de la Frontera, Cádiz",
+          "website": "https://paradores.es/es/parador-de-arcos-de-la-frontera",
+          "bookingUrl": "https://paradores.es/es/parador-de-arcos-de-la-frontera",
+          "descripcion": "Hotel en el casco histórico, junto a la Plaza del Cabildo, con reserva directa en Paradores.",
+          "sources": [
+            "https://paradores.es/es/parador-de-arcos-de-la-frontera"
+          ]
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante del Parador de Arcos de la Frontera",
+          "address": "Plaza del Cabildo, s/n, 11630 Arcos de la Frontera, Cádiz",
+          "website": "https://paradores.es/es/restaurante-del-parador-de-arcos-de-la-frontera",
+          "bookingUrl": "https://paradores.es/es/restaurante-del-parador-de-arcos-de-la-frontera",
+          "descripcion": "Restaurante de cocina gaditana en la Casa del Corregidor, con atención directa para consultas y reservas en su página oficial.",
+          "cuisine": "Cocina gaditana",
+          "sources": [
+            "https://paradores.es/es/restaurante-del-parador-de-arcos-de-la-frontera"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2cb2b6c7-2f19-44d5-bf7d-6181e6b179e4",
+      "nombre": "PRIEGO DE CÓRDOBA",
+      "fields": {
+        "descripcion": "Priego de Córdoba destaca por el Barrio de la Villa, sus miradores y un patrimonio barroco que incluye templos y espacios interiores de gran riqueza ornamental.",
+        "website": "https://turismodepriego.com/",
+        "ubicacion": "Priego de Córdoba, Córdoba, Andalucía"
+      },
+      "sources": [
+        "https://turismodepriego.com/",
+        "https://turismodepriego.com/lugares/barrio-de-la-villa-y-balcon-del-adarve/",
+        "https://turismodepriego.com/lugares/iglesia-de-nuestra-senora-de-la-asuncion/",
+        "https://turismodepriego.com/lugares/hotel-patria-chica/",
+        "https://turismodepriego.com/lugares/restaurante-hotel-patria-chica/",
+        "https://hotelpatriachica.com/",
+        "https://hotelpatriachica.com/aviso.aspx"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "eda5f9e0-9548-48fe-a40e-afd2347df874",
+          "website": "https://turismodepriego.com/lugares/barrio-de-la-villa-y-balcon-del-adarve/",
+          "descripcion": "Recorrer las callejuelas blancas del Barrio de la Villa desde la Plaza de Santa Ana hasta el Balcón del Adarve, siguiendo el paseo recomendado por turismo local.",
+          "category": "Paseo urbano",
+          "sources": [
+            "https://turismodepriego.com/lugares/barrio-de-la-villa-y-balcon-del-adarve/"
+          ]
+        },
+        {
+          "essentialItemId": "0aab3d82-a180-478c-a529-a3a0d5ea4327",
+          "website": "https://turismodepriego.com/lugares/iglesia-de-nuestra-senora-de-la-asuncion/",
+          "descripcion": "Visitar la Iglesia de Nuestra Señora de la Asunción y contemplar su Sagrario barroco, uno de los espacios destacados del templo.",
+          "category": "Patrimonio religioso",
+          "sources": [
+            "https://turismodepriego.com/lugares/iglesia-de-nuestra-senora-de-la-asuncion/"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Patria Chica",
+          "address": "Carrera de las Monjas, 47, 14800 Priego de Córdoba, Córdoba",
+          "website": "https://hotelpatriachica.com/",
+          "bookingUrl": "https://hotelpatriachica.com/",
+          "descripcion": "Hotel boutique en una casa histórica del centro; la web oficial permite contactar para consultar disponibilidad y reservar.",
+          "sources": [
+            "https://hotelpatriachica.com/",
+            "https://hotelpatriachica.com/aviso.aspx",
+            "https://turismodepriego.com/lugares/hotel-patria-chica/"
+          ]
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante Hotel Patria Chica",
+          "address": "Carrera de las Monjas, 47, 14800 Priego de Córdoba, Córdoba",
+          "website": "https://hotelpatriachica.com/",
+          "bookingUrl": "https://hotelpatriachica.com/",
+          "descripcion": "Restaurante del Hotel Patria Chica; consulta su web o contacto oficial para disponibilidad y reservas.",
+          "cuisine": "Cocina de temporada",
+          "sources": [
+            "https://turismodepriego.com/lugares/restaurante-hotel-patria-chica/",
+            "https://hotelpatriachica.com/",
+            "https://hotelpatriachica.com/aviso.aspx"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "7f02b268-aadb-4fc0-ac98-6ad2d84c0982",
+      "nombre": "ZAFRA",
+      "fields": {
+        "descripcion": "Zafra combina plazas porticadas, puertas históricas y el antiguo alcázar de los Duques de Feria, junto con espacios museísticos ligados a la historia local.",
+        "website": "https://turismo.zafra.es/",
+        "ubicacion": "Zafra, Badajoz, Extremadura"
+      },
+      "sources": [
+        "https://turismo.zafra.es/",
+        "https://turismo.zafra.es/directory/plaza-grande/",
+        "https://turismo.zafra.es/directory/alcazar-de-los-duques-de-feria/",
+        "https://museosantaclara.zafra.es/",
+        "https://museosantaclara.zafra.es/la-visita-al-museo",
+        "https://paradores.es/es/parador-de-zafra",
+        "https://paradores.es/es/reservas/parador/092",
+        "https://paradores.es/es/restaurante-del-parador-de-zafra"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "5e6cae60-b183-4ee3-a459-44fc3f0e5100",
+          "website": "https://turismo.zafra.es/directory/plaza-grande/",
+          "descripcion": "Recorrer las plazas Grande y Chica y el entorno del Alcázar, siguiendo el conjunto histórico descrito por la oficina municipal de turismo.",
+          "category": "Paseo urbano",
+          "sources": [
+            "https://turismo.zafra.es/directory/plaza-grande/",
+            "https://turismo.zafra.es/directory/plaza-chica/",
+            "https://turismo.zafra.es/directory/alcazar-de-los-duques-de-feria/"
+          ]
+        },
+        {
+          "nombre": "Visitar el Museo Santa Clara",
+          "website": "https://museosantaclara.zafra.es/la-visita-al-museo",
+          "address": "Calle Sevilla, 30, 06300 Zafra, Badajoz",
+          "descripcion": "Visitar el museo público dedicado a la historia conventual, la nobleza y la ciudad. La información oficial distingue el museo de las zonas de clausura del convento.",
+          "category": "Museo",
+          "sources": [
+            "https://museosantaclara.zafra.es/",
+            "https://museosantaclara.zafra.es/la-visita-al-museo"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Parador de Zafra",
+          "address": "Plaza Corazón de María, 7, 06300 Zafra, Badajoz",
+          "website": "https://paradores.es/es/parador-de-zafra",
+          "bookingUrl": "https://paradores.es/es/reservas/parador/092",
+          "descripcion": "Alojamiento en el antiguo Alcázar de los Duques de Feria, en el centro de Zafra; reserva directa disponible en Paradores.",
+          "sources": [
+            "https://paradores.es/es/parador-de-zafra",
+            "https://paradores.es/es/reservas/parador/092"
+          ]
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante del Parador de Zafra",
+          "address": "Plaza Corazón de María, 7, 06300 Zafra, Badajoz",
+          "website": "https://paradores.es/es/restaurante-del-parador-de-zafra",
+          "bookingUrl": "https://paradores.es/es/reservas/restaurantes",
+          "descripcion": "Restaurante de cocina extremeña dentro del Parador; la página oficial ofrece datos de contacto y canal de reserva.",
+          "cuisine": "Cocina tradicional extremeña",
+          "sources": [
+            "https://paradores.es/es/restaurante-del-parador-de-zafra",
+            "https://paradores.es/es/reservas/restaurantes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "127bd9fe-f613-4d8c-8958-d03b92e5c28e",
+      "nombre": "PEDRAZA",
+      "fields": {
+        "descripcion": "Pedraza conserva una villa amurallada de trazado medieval, con calles de piedra, plaza porticada y una antigua cárcel integrada en el acceso a la población.",
+        "website": "https://www.segoviaturismo.es/lugares/pedraza",
+        "ubicacion": "Pedraza, Segovia, Castilla y León"
+      },
+      "sources": [
+        "https://www.segoviaturismo.es/lugares/pedraza",
+        "https://www.segoviaturismo.es/index.php/actividades/carcel-villa",
+        "https://www.turismocastillayleon.com/es/patrimonio-cultura/museo-carcel-villa-pedraza",
+        "https://hosteriadelarco.es/contacto/",
+        "https://casataberna.com/",
+        "https://casataberna.com/contact/",
+        "https://casataberna.com/reservar/"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "80c6e99e-642f-44d1-ad65-f417610db19a",
+          "website": "https://www.segoviaturismo.es/lugares/pedraza",
+          "descripcion": "Pasear por la villa medieval, su Calle Real y Plaza Mayor, dentro del recinto amurallado.",
+          "category": "Paseo urbano",
+          "sources": [
+            "https://www.segoviaturismo.es/lugares/pedraza"
+          ]
+        },
+        {
+          "nombre": "Visitar la Cárcel de la Villa de Pedraza",
+          "website": "https://www.segoviaturismo.es/index.php/actividades/carcel-villa",
+          "address": "Carretera de Pedraza a Arcones, s/n, 40172 Pedraza, Segovia",
+          "descripcion": "Conocer el museo de la antigua cárcel, situado junto al arco de entrada a la villa, y su historia como prisión medieval.",
+          "category": "Museo",
+          "sources": [
+            "https://www.segoviaturismo.es/index.php/actividades/carcel-villa",
+            "https://www.turismocastillayleon.com/es/patrimonio-cultura/museo-carcel-villa-pedraza"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hostería del Arco",
+          "address": "Calle del Monte, 1, 40172 Pedraza, Segovia",
+          "website": "https://hosteriadelarco.es/contacto/",
+          "bookingUrl": "https://hosteriadelarco.es/contacto/",
+          "descripcion": "Alojamiento en el centro de Pedraza; su web oficial incluye contacto y acceso para reservar habitación.",
+          "sources": [
+            "https://hosteriadelarco.es/contacto/"
+          ]
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Casa Taberna",
+          "address": "Plaza Mayor, 3, 40172 Pedraza, Segovia",
+          "website": "https://casataberna.com/",
+          "bookingUrl": "https://casataberna.com/reservar/",
+          "descripcion": "Restaurante de cocina tradicional y brasas en una casona histórica de la Plaza Mayor; la web oficial habilita reservas.",
+          "cuisine": "Cocina castellana y brasas",
+          "sources": [
+            "https://casataberna.com/",
+            "https://casataberna.com/taberna-y-restaurante/",
+            "https://casataberna.com/reservar/",
+            "https://casataberna.com/contact/"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3eef6ac1-f046-49c6-93e5-624f854e3df6",
+      "nombre": "SEPÚLVEDA",
+      "fields": {
+        "descripcion": "Sepúlveda se asienta junto a las Hoces del Duratón y conserva un conjunto histórico con iglesias románicas, museos y espacios de interpretación del territorio.",
+        "website": "https://www.turismosepulveda.es/",
+        "ubicacion": "Sepúlveda, Segovia, Castilla y León"
+      },
+      "sources": [
+        "https://www.turismosepulveda.es/",
+        "https://www.turismosepulveda.es/sepulveda/museos/65-museo-de-los-fueros",
+        "https://patrimonionatural.org/casas-del-parque/casas-del-parque/casa-del-parque-hoces-del-rio-duraton",
+        "https://patrimonionatural.org/actividades/visitas-guiadas-a-la-casa-del-parque",
+        "https://hotelsepulveda.es/",
+        "https://hotelsepulveda.es/reservas/",
+        "https://hotelsepulveda.es/contacto/",
+        "https://asadorelpanadero.es/",
+        "https://asadorelpanadero.es/reservas/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Visitar el Museo de los Fueros",
+          "website": "https://www.turismosepulveda.es/sepulveda/museos/65-museo-de-los-fueros",
+          "descripcion": "Recorrer el museo instalado en la iglesia de los Santos Justo y Pastor para conocer la historia de Sepúlveda y su Comunidad de Villa y Tierra a través del Fuero.",
+          "category": "Museo",
+          "sources": [
+            "https://www.turismosepulveda.es/sepulveda/museos/65-museo-de-los-fueros",
+            "https://www.turismosepulveda.es/oficina-de-turismo"
+          ]
+        },
+        {
+          "nombre": "Conocer la Casa del Parque de las Hoces del Duratón",
+          "website": "https://patrimonionatural.org/casas-del-parque/casas-del-parque/casa-del-parque-hoces-del-rio-duraton",
+          "address": "Calle Conde de Sepúlveda, 34, 40300 Sepúlveda, Segovia",
+          "descripcion": "Visitar el centro de recepción del parque natural, ubicado en la antigua iglesia de Santiago; consulta con el centro la disponibilidad de visitas guiadas y actividades.",
+          "category": "Naturaleza e interpretación",
+          "sources": [
+            "https://patrimonionatural.org/casas-del-parque/casas-del-parque/casa-del-parque-hoces-del-rio-duraton",
+            "https://patrimonionatural.org/actividades/visitas-guiadas-a-la-casa-del-parque"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hospedería de los Templarios",
+          "address": "Plaza de España, 19-20, 40300 Sepúlveda, Segovia",
+          "website": "https://hotelsepulveda.es/",
+          "bookingUrl": "https://hotelsepulveda.es/reservas/",
+          "descripcion": "Hotel rural en el centro histórico; su web propia permite consultar disponibilidad y reservar directamente.",
+          "sources": [
+            "https://hotelsepulveda.es/",
+            "https://hotelsepulveda.es/reservas/",
+            "https://hotelsepulveda.es/contacto/"
+          ]
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Asador El Panadero",
+          "address": "Calle Conde de Sepúlveda, 4, 40300 Sepúlveda, Segovia",
+          "website": "https://asadorelpanadero.es/",
+          "bookingUrl": "https://asadorelpanadero.es/reservas/",
+          "descripcion": "Asador tradicional de la villa; su página oficial ofrece los datos de contacto y el formulario/canal de reservas.",
+          "cuisine": "Asados castellanos",
+          "sources": [
+            "https://asadorelpanadero.es/",
+            "https://asadorelpanadero.es/el-asador/",
+            "https://asadorelpanadero.es/reservas/"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8715964f-1ac2-4d12-aebe-25d5964ff4a5",
+      "nombre": "PEÑAFIEL",
+      "fields": {
+        "descripcion": "Peñafiel domina la Ribera del Duero desde su castillo y reúne un patrimonio urbano que incluye la singular Plaza del Coso y sus balcones de madera.",
+        "website": "https://penafiel.es/turismopenafiel/",
+        "ubicacion": "Peñafiel, Valladolid, Castilla y León"
+      },
+      "sources": [
+        "https://penafiel.es/turismopenafiel/",
+        "https://penafiel.es/turismopenafiel/castillo.php",
+        "https://penafiel.es/turismopenafiel/recurso.php?id=3",
+        "https://www.hotelpesquera.com/hotel/",
+        "https://www.hotelpesquera.com/origen-es/",
+        "https://www.hotelpesquera.com/"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "fdb8b88d-edd0-4bf5-a1c0-af264d6ab3c9",
+          "website": "https://penafiel.es/turismopenafiel/castillo.php",
+          "address": "Castillo de Peñafiel, 47300 Peñafiel, Valladolid",
+          "descripcion": "Visitar el castillo y el Museo Provincial del Vino instalado en su patio sur; el turismo municipal presenta ambos como una visita conjunta.",
+          "category": "Patrimonio y museo",
+          "sources": [
+            "https://penafiel.es/turismopenafiel/castillo.php"
+          ]
+        },
+        {
+          "nombre": "Pasear por la Plaza del Coso",
+          "website": "https://penafiel.es/turismopenafiel/recurso.php?id=3",
+          "address": "Plaza del Coso, 31-32, 47300 Peñafiel, Valladolid",
+          "descripcion": "Recorrer esta plaza medieval rodeada de casas con balcones de madera; consulta en turismo local la visita guiada y el audiovisual Cosovisión.",
+          "category": "Patrimonio",
+          "sources": [
+            "https://penafiel.es/turismopenafiel/recurso.php?id=3"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel AF Pesquera",
+          "address": "Paseo de la Estación, 1, 47300 Peñafiel, Valladolid",
+          "website": "https://www.hotelpesquera.com/hotel/",
+          "bookingUrl": "https://www.hotelpesquera.com/hotel/",
+          "descripcion": "Hotel boutique a los pies del castillo; la web propia ofrece consulta de disponibilidad y reserva directa.",
+          "sources": [
+            "https://www.hotelpesquera.com/hotel/",
+            "https://www.hotelpesquera.com/"
+          ]
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Origen-es",
+          "address": "Paseo de la Estación, 1, 47300 Peñafiel, Valladolid",
+          "website": "https://www.hotelpesquera.com/origen-es/",
+          "bookingUrl": "https://www.hotelpesquera.com/origen-es/",
+          "descripcion": "Restaurante gastronómico del Hotel AF Pesquera, centrado en parrilla y productos de proximidad; consulta su canal oficial para reservar.",
+          "cuisine": "Cocina de producto y parrilla",
+          "sources": [
+            "https://www.hotelpesquera.com/origen-es/",
+            "https://www.hotelpesquera.com/"
+          ]
+        }
+      ]
+    }
+  ],
+  "catalogCorrections": [
+    {
+      "essentialItemId": "cfc68722-43df-4dda-b8c6-29194a50760c",
+      "expectedTitle": "Visitar la Universidad de Osuna (Palacio de los Cepeda).",
+      "title": "Visitar la Antigua Universidad de Osuna.",
+      "reason": "La Antigua Universidad y el Palacio de los Cepeda son edificios diferentes; se retira la identificación incorrecta del título existente.",
+      "sources": [
+        "https://cultura.osuna.es/?p=1203",
+        "https://osuna.es/es/turismo/que-ver/monumentos/palacios/antiguo-palacio-de-los-cepeda/"
+      ]
+    }
+  ]
+}

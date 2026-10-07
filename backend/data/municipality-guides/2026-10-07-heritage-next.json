@@ -1,0 +1,523 @@
+{
+  "checkedAt": "2026-10-07",
+  "scope": "Ocho municipios existentes de interés patrimonial con actividades contrastadas en fuentes oficiales y establecimientos con web y canal de contacto o reserva propios.",
+  "photoPolicy": "No se incorporan fotografías.",
+  "municipalities": [
+    {
+      "id": "f3c5a46f-e263-4f2f-9d8c-39fc4fce9d5b",
+      "nombre": "ALBARRACÍN",
+      "fields": {
+        "descripcion": "Albarracín conserva un casco histórico medieval de trazado empinado y un recinto fortificado que domina el valle del Guadalaviar. Sus calles, murallas y el antiguo alcázar permiten recorrer distintas etapas de la historia de la ciudad.",
+        "website": "https://www.turismodearagon.com/ficha/albarracin/",
+        "ubicacion": "Albarracín, Teruel, Aragón"
+      },
+      "sources": [
+        "https://www.turismodearagon.com/ficha/albarracin/",
+        "https://www.spain.info/es/destino/albarracin/",
+        "https://patrimonioculturaldearagon.es/patrimonio/recinto-fortificado/",
+        "https://www.albarracin.es/museo-albarracin/"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "f91d24e1-8196-4602-b0f0-aa32707cc2a7",
+          "website": "https://www.turismodearagon.com/ficha/albarracin/",
+          "descripcion": "Recorrer el casco histórico de Albarracín, con sus calles estrechas, casas de tonos rojizos y Plaza Mayor, para conocer el conjunto urbano medieval.",
+          "sources": [
+            "https://www.turismodearagon.com/ficha/albarracin/",
+            "https://www.spain.info/es/destino/albarracin/"
+          ],
+          "category": "Patrimonio"
+        },
+        {
+          "essentialItemId": "5ba06bc4-7eec-4386-bbff-2a21bd820973",
+          "website": "https://patrimonioculturaldearagon.es/patrimonio/recinto-fortificado/",
+          "descripcion": "Visitar el recinto fortificado y la Torre del Andador, elementos defensivos que permiten comprender la expansión histórica de Albarracín.",
+          "sources": [
+            "https://patrimonioculturaldearagon.es/patrimonio/recinto-fortificado/",
+            "https://www.spain.info/es/destino/albarracin/"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Albarrán",
+          "address": "Calle Medio, 26, 44100 Albarracín, Teruel",
+          "website": "https://hotelalbarran.es/",
+          "descripcion": "Hotel familiar en una casa de arquitectura tradicional, en la parte baja de Albarracín. Consulta habitaciones y disponibilidad en su web oficial.",
+          "sources": [
+            "https://hotelalbarran.es/",
+            "https://hotelalbarran.es/contacto/"
+          ],
+          "bookingUrl": "https://hotelalbarran.es/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "La Zahora",
+          "address": "Carrera de Huertos, 4, 44100 Albarracín, Teruel",
+          "website": "https://lazahoraalbarracin.es/",
+          "descripcion": "Restaurante de Albarracín que combina cocina internacional con productos de la zona y ofrece información de contacto para reservas en su sitio oficial.",
+          "sources": [
+            "https://lazahoraalbarracin.es/contacto/",
+            "https://www.albarracin.es/directory-restaurantes/listing/la-zahora/"
+          ],
+          "cuisine": "Cocina de fusión con productos locales",
+          "bookingUrl": "https://lazahoraalbarracin.es/contacto/"
+        }
+      ]
+    },
+    {
+      "id": "eb15ce65-bd3e-4617-9785-98cd04728efb",
+      "nombre": "TERUEL",
+      "fields": {
+        "descripcion": "Teruel reúne arquitectura mudéjar, modernismo y la tradición de los Amantes. Sus torres históricas y el conjunto de San Pedro permiten conocer el patrimonio medieval de la ciudad.",
+        "website": "https://turismo.teruel.es/",
+        "ubicacion": "Teruel, Aragón"
+      },
+      "sources": [
+        "https://turismo.teruel.es/",
+        "https://turismo.teruel.es/que-hacer/monumentos-y-museos/",
+        "https://turismo.teruel.es/imprescindibles-mudejar-patrimonio-de-la-humanidad-los-amantes-de-teruel-el-modernismo-y-dinopolis/"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "c2a582e2-07c2-4a3d-91b5-c7b34b810cc6",
+          "website": "https://turismo.teruel.es/que-hacer/monumentos-y-museos/",
+          "descripcion": "Admirar el arte mudéjar de Teruel en sus torres y en la Catedral de Santa María de Mediavilla, cuya techumbre es uno de los elementos destacados del conjunto.",
+          "sources": [
+            "https://turismo.teruel.es/que-hacer/monumentos-y-museos/",
+            "https://turismo.teruel.es/imprescindibles-mudejar-patrimonio-de-la-humanidad-los-amantes-de-teruel-el-modernismo-y-dinopolis/"
+          ],
+          "category": "Patrimonio"
+        },
+        {
+          "essentialItemId": "1c388941-9a23-4304-8df5-b4c2bc93b621",
+          "website": "https://turismo.teruel.es/que-hacer/monumentos-y-museos/",
+          "address": "Calle Matías Abad, 3, 44001 Teruel",
+          "descripcion": "Conocer el Mausoleo de los Amantes, la iglesia de San Pedro y los espacios interpretativos dedicados a la historia de Isabel de Segura y Diego de Marcilla.",
+          "sources": [
+            "https://turismo.teruel.es/que-hacer/monumentos-y-museos/",
+            "https://turismo.teruel.es/imprescindibles-mudejar-patrimonio-de-la-humanidad-los-amantes-de-teruel-el-modernismo-y-dinopolis/"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Reina Cristina",
+          "address": "Paseo del Óvalo, 1, 44001 Teruel",
+          "website": "https://www.gargallo-hotels.com/teruel/hotel-reina-cristina",
+          "descripcion": "Hotel en el centro de Teruel, próximo al casco histórico. Consulta disponibilidad y servicios en la web oficial.",
+          "sources": [
+            "https://turismo.teruel.es/alojamientos/?verify_token=1",
+            "https://www.gargallo-hotels.com/teruel/hotel-reina-cristina"
+          ],
+          "bookingUrl": "https://www.gargallo-hotels.com/teruel/hotel-reina-cristina"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante Yain",
+          "address": "Plaza de la Judería, 9, 44001 Teruel",
+          "website": "https://www.yain.es/",
+          "descripcion": "Restaurante de cocina de temporada con información de contacto y reservas en su web oficial.",
+          "sources": [
+            "https://www.yain.es/contacto.html"
+          ],
+          "cuisine": "Cocina de temporada",
+          "bookingUrl": "https://www.yain.es/contacto.html"
+        }
+      ]
+    },
+    {
+      "id": "beb87110-2d26-4489-b11b-210b56567c5f",
+      "nombre": "SORIA",
+      "fields": {
+        "descripcion": "Soria combina arquitectura románica y gótica con un paisaje ligado al río Duero. La ermita de San Saturio y la concatedral de San Pedro muestran dos enclaves destacados de su patrimonio histórico.",
+        "website": "https://www.turismosoria.es/",
+        "ubicacion": "Soria, Castilla y León"
+      },
+      "sources": [
+        "https://www.turismosoria.es/",
+        "https://www.turismosoria.es/que-ver/monumentos/",
+        "https://www.turismosoria.es/que-ver/monumentos/ermita-de-san-saturio/",
+        "https://www.turismosoria.es/que-ver/monumentos/concatedral-de-san-pedro-y-claustro/"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "5d14d5e0-dc43-489a-9346-87d1debd730c",
+          "website": "https://www.turismosoria.es/que-ver/monumentos/ermita-de-san-saturio/",
+          "descripcion": "Visitar la ermita de San Saturio, situada sobre un roquedal junto al Duero, y conocer sus espacios religiosos y expositivos.",
+          "sources": [
+            "https://www.turismosoria.es/que-ver/monumentos/ermita-de-san-saturio/"
+          ],
+          "category": "Patrimonio"
+        },
+        {
+          "essentialItemId": "b2fb8628-c203-48e7-864d-8a86957f6e35",
+          "website": "https://www.turismosoria.es/que-ver/monumentos/concatedral-de-san-pedro-y-claustro/",
+          "descripcion": "Recorrer la concatedral de San Pedro y su claustro románico, donde conviven elementos góticos y románicos en un conjunto declarado Bien de Interés Cultural.",
+          "sources": [
+            "https://www.turismosoria.es/que-ver/monumentos/concatedral-de-san-pedro-y-claustro/"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Alfonso VIII",
+          "address": "Calle Alfonso VIII, 10, 42003 Soria",
+          "website": "https://hotelalfonsosoria.es/",
+          "descripcion": "Hotel en el centro histórico de Soria, con reservas directas desde su sitio oficial.",
+          "sources": [
+            "https://hotelalfonsosoria.es/",
+            "https://hotelalfonsosoria.es/aviso-legal/"
+          ],
+          "bookingUrl": "https://hotelalfonsosoria.es/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "El Fogón del Salvador",
+          "address": "Plaza del Salvador, 1, 42002 Soria",
+          "website": "https://fogonsalvador.com/",
+          "descripcion": "Asador en el centro de Soria con cocina castellana y reservas por los canales del restaurante.",
+          "sources": [
+            "https://fogonsalvador.com/",
+            "https://fogonsalvador.com/contacto/"
+          ],
+          "cuisine": "Cocina castellana y asador",
+          "bookingUrl": "https://fogonsalvador.com/contacto/"
+        }
+      ]
+    },
+    {
+      "id": "0a850c50-a8c5-41ab-a396-c8fed1613f15",
+      "nombre": "ANTEQUERA",
+      "fields": {
+        "descripcion": "Antequera reúne patrimonio prehistórico y monumental en el centro de Andalucía. El Sitio de los Dólmenes y el recinto de la Alcazaba permiten acercarse a su historia desde la Prehistoria hasta el periodo andalusí.",
+        "website": "https://turismo.antequera.es/",
+        "ubicacion": "Antequera, Málaga, Andalucía"
+      },
+      "sources": [
+        "https://turismo.antequera.es/",
+        "https://turismo.antequera.es/puntos-de-interes/dolmenes/",
+        "https://turismo.antequera.es/puntos-de-interes/alcazaba/",
+        "https://turismo.antequera.es/donde-dormir/hoteles-en-antequera/",
+        "https://turismo.antequera.es/gastronomia/restaurantes-con-distincion/"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "980b78fb-7969-4939-94d4-ca16e8c97dc2",
+          "website": "https://turismo.antequera.es/puntos-de-interes/dolmenes/",
+          "address": "Carretera de Málaga, 5, 29200 Antequera, Málaga",
+          "descripcion": "Visitar el Sitio de los Dólmenes, con los monumentos megalíticos de Menga, Viera y El Romeral y su contexto paisajístico y arqueológico.",
+          "sources": [
+            "https://turismo.antequera.es/puntos-de-interes/dolmenes/",
+            "https://turismo.antequera.es/puntos-de-interes/museo-de-sitio-de-los-dolmenes-de-antequera/"
+          ],
+          "category": "Patrimonio"
+        },
+        {
+          "essentialItemId": "18e545e4-852e-439c-af7d-40590cb75c31",
+          "website": "https://turismo.antequera.es/puntos-de-interes/alcazaba/",
+          "address": "Plaza de los Escribanos, Antequera, Málaga",
+          "descripcion": "Explorar el recinto monumental de la Alcazaba y la Real Colegiata de Santa María, conjunto que conserva vestigios de distintas etapas históricas.",
+          "sources": [
+            "https://turismo.antequera.es/puntos-de-interes/alcazaba/"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Antequera Hills",
+          "address": "Avenida José María González, s/n, 29200 Antequera, Málaga",
+          "website": "https://www.hotelantequerahills.com/es/",
+          "descripcion": "Hotel de Antequera con reservas online en su sitio oficial. Consulta fechas, habitaciones y condiciones en el canal del establecimiento.",
+          "sources": [
+            "https://www.hotelantequerahills.com/es/",
+            "https://www.hotelantequerahills.com/es/reservas/",
+            "https://turismo.antequera.es/donde-dormir/hoteles-en-antequera/"
+          ],
+          "bookingUrl": "https://www.hotelantequerahills.com/es/reservas/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Arte de Cozina",
+          "address": "Calle Calzada, 27-29, 29200 Antequera, Málaga",
+          "website": "https://www.artedecozina.com/",
+          "descripcion": "Restaurante y hostería que recupera recetas de la comarca y trabaja con productos locales y de temporada; consulta y reserva en su web.",
+          "sources": [
+            "https://www.artedecozina.com/",
+            "https://www.artedecozina.com/contacto/",
+            "https://turismo.antequera.es/restaurants/arte-cozina/"
+          ],
+          "cuisine": "Cocina tradicional antequerana",
+          "bookingUrl": "https://www.artedecozina.com/contacto/"
+        }
+      ]
+    },
+    {
+      "id": "302189ac-0f4c-425a-be80-5c1cf216b432",
+      "nombre": "GUADALUPE",
+      "fields": {
+        "descripcion": "Guadalupe creció en torno al Real Monasterio de Santa María, declarado Patrimonio Mundial. El caserío histórico y el antiguo camino de peregrinos hacia la ermita del Humilladero amplían la visita por la Puebla y el paisaje de Las Villuercas.",
+        "website": "https://www.guadalupeturismo.com/",
+        "ubicacion": "Guadalupe, Cáceres, Extremadura"
+      },
+      "sources": [
+        "https://www.guadalupeturismo.com/",
+        "https://www.spain.info/es/destino/guadalupe/",
+        "https://www.spain.info/es/lugares-interes/real-monasterio-santa-maria/",
+        "https://www.guadalupeturismo.com/rutas/ruta-del-humilladero-altamira/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Visitar el Real Monasterio de Santa María de Guadalupe",
+          "address": "Plaza Su Majestad Juan Carlos I, s/n, 10140 Guadalupe, Cáceres",
+          "website": "https://www.monasterioguadalupe.com/",
+          "descripcion": "Conocer el conjunto gótico-mudéjar del monasterio, su basílica, claustros y museos. Consulta la visita y posibles cambios directamente con el monasterio.",
+          "sources": [
+            "https://www.spain.info/es/lugares-interes/real-monasterio-santa-maria/",
+            "https://www.guadalupeturismo.com/",
+            "https://www.monasterioguadalupe.com/"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "3031c918-de6b-4a63-8a83-5c16d96cfeda"
+        },
+        {
+          "nombre": "Recorrer la ruta del Humilladero y Altamira",
+          "address": "Salida desde la Plaza de Santa María de Guadalupe, 10140 Guadalupe, Cáceres",
+          "website": "https://www.guadalupeturismo.com/rutas/ruta-del-humilladero-altamira/",
+          "descripcion": "Seguir el antiguo camino de peregrinos hasta la ermita del Humilladero, del siglo XV, y continuar por el entorno de Altamira con vistas de la Puebla y su paisaje.",
+          "sources": [
+            "https://www.guadalupeturismo.com/rutas/ruta-del-humilladero-altamira/"
+          ],
+          "category": "Naturaleza"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Hispanidad",
+          "address": "Avenida Conde de Barcelona, 1, 10140 Guadalupe, Cáceres",
+          "website": "https://www.hotelhispanidad.es/",
+          "descripcion": "Hotel junto al centro histórico de Guadalupe, con disponibilidad y reservas directas desde su web oficial.",
+          "sources": [
+            "https://www.hotelhispanidad.es/",
+            "https://www.hotelhispanidad.es/es/location"
+          ],
+          "bookingUrl": "https://www.hotelhispanidad.es/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante Altamira",
+          "address": "Calle Cruz, 4, 10140 Guadalupe, Cáceres",
+          "website": "https://altamira.me/",
+          "descripcion": "Restaurante de cocina extremeña con formulario de reservas en su web oficial.",
+          "sources": [
+            "https://altamira.me/",
+            "https://altamira.me/reservas/"
+          ],
+          "cuisine": "Cocina extremeña",
+          "bookingUrl": "https://altamira.me/reservas/"
+        }
+      ]
+    },
+    {
+      "id": "d1c14acf-d5bd-435c-a97d-cd8ef555fe3b",
+      "nombre": "ALCALÁ DE HENARES",
+      "fields": {
+        "descripcion": "Alcalá de Henares es una ciudad universitaria histórica vinculada a Miguel de Cervantes. La Universidad cisneriana y la casa-museo dedicada al escritor permiten recorrer dos referentes de su patrimonio cultural.",
+        "website": "https://www.turismoalcala.es/",
+        "ubicacion": "Alcalá de Henares, Comunidad de Madrid"
+      },
+      "sources": [
+        "https://www.turismoalcala.es/",
+        "https://www.turismoalcala.es/turismo/monumento-colegio-mayor-de-san-ildefonso-universidad-de-alcala/",
+        "https://www.comunidad.madrid/centros/museo-casa-natal-cervantes"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "b36f4b6e-2a0a-4b80-8883-0b4b5a389766",
+          "website": "https://www.turismoalcala.es/turismo/monumento-colegio-mayor-de-san-ildefonso-universidad-de-alcala/",
+          "address": "Plaza de San Diego, s/n, 28801 Alcalá de Henares",
+          "descripcion": "Visitar el Colegio Mayor de San Ildefonso, su Paraninfo y la Capilla Universitaria, núcleo histórico de la Universidad de Alcalá.",
+          "sources": [
+            "https://www.turismoalcala.es/turismo/monumento-colegio-mayor-de-san-ildefonso-universidad-de-alcala/",
+            "https://cultura.uah.es/es/evento/Servicio-de-Visitas-Guiadas-00004/"
+          ],
+          "category": "Patrimonio"
+        },
+        {
+          "essentialItemId": "5b2b29a8-d782-4761-b602-f129d71bdb1e",
+          "website": "https://www.comunidad.madrid/centros/museo-casa-natal-cervantes",
+          "address": "Calle Mayor, 48, 28801 Alcalá de Henares",
+          "descripcion": "Recorrer la casa-museo que recrea la vivienda de los siglos XVI y XVII y presenta aspectos de la vida cotidiana en tiempos de Cervantes.",
+          "sources": [
+            "https://www.comunidad.madrid/centros/museo-casa-natal-cervantes"
+          ],
+          "category": "Museos"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Miguel de Cervantes",
+          "address": "Calle Imagen, 12, 28801 Alcalá de Henares",
+          "website": "https://www.hcervantes.es/",
+          "descripcion": "Hotel en el casco histórico, a poca distancia a pie de la Calle Mayor y de los principales espacios cervantinos. Consulta disponibilidad en su web oficial.",
+          "sources": [
+            "https://www.hcervantes.es/",
+            "https://www.hcervantes.es/situacion/"
+          ],
+          "bookingUrl": "https://www.hcervantes.es/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Fino Bar Restaurante",
+          "address": "Calle Carmen Calzado, 15, 28801 Alcalá de Henares",
+          "website": "https://finobar.es/",
+          "descripcion": "Restaurante del centro de Alcalá con reservas directas desde su web oficial.",
+          "sources": [
+            "https://finobar.es/reservas/"
+          ],
+          "cuisine": "Cocina mediterránea",
+          "bookingUrl": "https://finobar.es/reservas/"
+        }
+      ]
+    },
+    {
+      "id": "b1e8b935-68c2-4dbf-9c52-2a4d1cd61997",
+      "nombre": "ARANJUEZ",
+      "fields": {
+        "descripcion": "Aranjuez combina el Palacio Real con jardines históricos diseñados a lo largo de varios reinados. El Jardín del Príncipe, junto al Tajo, reúne trazados paisajistas, fuentes y elementos ornamentales de distintas épocas.",
+        "website": "https://visita.aranjuez.es/",
+        "ubicacion": "Aranjuez, Comunidad de Madrid"
+      },
+      "sources": [
+        "https://visita.aranjuez.es/",
+        "https://www.patrimonionacional.es/visita/palacio-real-de-aranjuez",
+        "https://www.patrimonionacional.es/visita/jardines-de-aranjuez",
+        "https://visita.aranjuez.es/espacio/jardin-del-principe/"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "a20cc38f-b867-4ddd-a3ad-6786749eb729",
+          "website": "https://www.patrimonionacional.es/visita/palacio-real-de-aranjuez",
+          "address": "Avenida de Palacio, 28300 Aranjuez, Madrid",
+          "descripcion": "Explorar el Palacio Real y sus jardines históricos, un conjunto que reúne espacios palaciegos y jardines ligados a la historia de la monarquía española.",
+          "sources": [
+            "https://www.patrimonionacional.es/visita/palacio-real-de-aranjuez",
+            "https://www.patrimonionacional.es/visita/jardines-de-aranjuez"
+          ],
+          "category": "Patrimonio"
+        },
+        {
+          "nombre": "Visitar el Museo de Falúas Reales",
+          "address": "Jardín del Príncipe, acceso por calle de Colmenar s/n, 28300 Aranjuez, Madrid",
+          "website": "https://www.patrimonionacional.es/visita/palacio-real-de-aranjuez",
+          "descripcion": "Conocer la colección de falúas reales conservadas en el Museo situado en el Jardín del Príncipe, vinculada a los paseos de la corte por el río Tajo.",
+          "sources": [
+            "https://www.patrimonionacional.es/visita/palacio-real-de-aranjuez",
+            "https://visita.aranjuez.es/espacio/jardin-del-principe/"
+          ],
+          "category": "Museos"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "NH Collection Palacio de Aranjuez",
+          "address": "Calle San Antonio, 22, 28300 Aranjuez, Madrid",
+          "website": "https://www.nh-collection.com/es/hotel/nh-collection-palacio-de-aranjuez",
+          "descripcion": "Hotel ubicado en un edificio histórico del centro de Aranjuez, frente al Palacio Real. Consulta precios y disponibilidad en el canal oficial.",
+          "sources": [
+            "https://www.nh-collection.com/es/hotel/nh-collection-palacio-de-aranjuez"
+          ],
+          "bookingUrl": "https://www.nh-collection.com/es/hotel/nh-collection-palacio-de-aranjuez"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Casa Delapio",
+          "address": "Avenida Plaza de Toros, 7, 28300 Aranjuez, Madrid",
+          "website": "https://www.casadelapio.es/",
+          "descripcion": "Restaurante de Aranjuez con propuesta de tapas y productos de temporada; dispone de formulario propio para reservar mesa.",
+          "sources": [
+            "https://www.casadelapio.es/nuestra-identidad",
+            "https://www.casadelapio.es/reservas"
+          ],
+          "cuisine": "Cocina de temporada y tapas",
+          "bookingUrl": "https://www.casadelapio.es/reservas"
+        }
+      ]
+    },
+    {
+      "id": "79e5cbe3-2684-40c7-ab76-0e00a289ea0a",
+      "nombre": "SAN LORENZO DE EL ESCORIAL",
+      "fields": {
+        "descripcion": "San Lorenzo de El Escorial conserva un conjunto monumental ligado a Felipe II y al Siglo de Oro. El monasterio y la Casita del Príncipe muestran distintos usos y estilos de la arquitectura real en el entorno de la Sierra de Guadarrama.",
+        "website": "https://sanlorenzoturismo.es/",
+        "ubicacion": "San Lorenzo de El Escorial, Comunidad de Madrid"
+      },
+      "sources": [
+        "https://sanlorenzoturismo.es/",
+        "https://www.sanlorenzoturismo.es/visitar/casita-del-infante-o-de-arriba/",
+        "https://www.patrimonionacional.es/visita/real-monasterio-de-san-lorenzo-de-el-escorial"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "b13f1952-799b-43e4-babb-0255e486a821",
+          "website": "https://www.patrimonionacional.es/visita/real-monasterio-de-san-lorenzo-de-el-escorial",
+          "descripcion": "Visitar el Real Monasterio, conjunto que reúne palacio, basílica, panteón, biblioteca y museos vinculados a la historia del Siglo de Oro.",
+          "sources": [
+            "https://www.patrimonionacional.es/visita/real-monasterio-de-san-lorenzo-de-el-escorial"
+          ],
+          "category": "Patrimonio"
+        },
+        {
+          "nombre": "Visitar la Casita del Infante",
+          "website": "https://www.sanlorenzoturismo.es/visitar/casita-del-infante-o-de-arriba/",
+          "descripcion": "Conocer esta residencia real de recreo del siglo XVIII en una visita guiada; consulta la disponibilidad y las condiciones de acceso con Patrimonio Nacional.",
+          "sources": [
+            "https://www.sanlorenzoturismo.es/visitar/casita-del-infante-o-de-arriba/",
+            "https://www.patrimonionacional.es/visita/real-monasterio-de-san-lorenzo-de-el-escorial",
+            "https://tickets.patrimonionacional.es/es/tickets/casita-del-infante-el-escorial"
+          ],
+          "category": "Patrimonio",
+          "address": "Paseo Carlos III, 145, 28200 San Lorenzo de El Escorial, Madrid"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hospedium Hotel Los Lanceros",
+          "address": "Calle Calvario, 47, 28200 San Lorenzo de El Escorial, Madrid",
+          "website": "https://loslanceros.com/",
+          "descripcion": "Hotel a pocos minutos a pie del monasterio, con disponibilidad y reservas en su web oficial.",
+          "sources": [
+            "https://loslanceros.com/",
+            "https://www.sanlorenzoturismo.es/en/accommodation/hotel-los-lanceros/"
+          ],
+          "bookingUrl": "https://loslanceros.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Charolés",
+          "address": "Calle Floridablanca, 24, 28200 San Lorenzo de El Escorial, Madrid",
+          "website": "https://www.charolesrestaurante.com/",
+          "descripcion": "Restaurante de cocina tradicional en el centro de San Lorenzo, con información de contacto y reservas en su web.",
+          "sources": [
+            "https://www.charolesrestaurante.com/",
+            "https://www.charolesrestaurante.com/direccion"
+          ],
+          "cuisine": "Cocina tradicional",
+          "bookingUrl": "https://www.charolesrestaurante.com/direccion"
+        }
+      ]
+    }
+  ]
+}

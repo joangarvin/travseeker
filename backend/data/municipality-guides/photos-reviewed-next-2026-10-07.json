@@ -1,0 +1,517 @@
+{
+  "checkedAt": "2026-10-07T20:33:59.459Z",
+  "photos": [
+    {
+      "id": "f362949c-ac51-480a-bfab-1200cb38222f",
+      "nombre": "RIBADEO",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Ribadeo_%28246665755%29.jpg",
+      "uploadUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Ribadeo_%28246665755%29.jpg",
+      "sha1": "53deb568431bf5bef3d8cc82898f4e2b3c909c4b",
+      "imagenAlt": "Ribadeo: vista desde A Ponte dos Santos hacia la ría y el paisaje costero.",
+      "imageAttribution": {
+        "author": "José Antonio Gil Martínez",
+        "title": "Ribadeo (246665755).jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ribadeo%20(246665755).jpg",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "dbf013da-3d74-4a74-a452-57b35a2e9834",
+      "nombre": "LUGO",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Lugo_panoramica.JPG",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1d/Lugo_panoramica.JPG/1920px-Lugo_panoramica.JPG",
+      "sha1": "aa1cd662b27541a00da6d56430154ad132ab232e",
+      "imagenAlt": "Panorámica de Lugo desde Penarrubia, con las torres de la catedral en el centro.",
+      "imageAttribution": {
+        "author": "Brass hat",
+        "title": "Lugo panoramica.JPG",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lugo%20panoramica.JPG",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "9ce12f5e-66f8-49d4-b8b6-43bd60f60a17",
+      "nombre": "PONTEVEDRA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/5/58/Casco_Antiguo_de_Pontevedra%2C_Panorama_de_la_Plaza_de_Alonso_de_Fonseca.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/58/Casco_Antiguo_de_Pontevedra%2C_Panorama_de_la_Plaza_de_Alonso_de_Fonseca.jpg/1920px-Casco_Antiguo_de_Pontevedra%2C_Panorama_de_la_Plaza_de_Alonso_de_Fonseca.jpg",
+      "sha1": "065a2a084e541e4542a9f94b54427841c2c5c286",
+      "imagenAlt": "Panorámica de la plaza de Alonso de Fonseca en el casco antiguo de Pontevedra.",
+      "imageAttribution": {
+        "author": "D.Rovchak",
+        "title": "Casco Antiguo de Pontevedra, Panorama de la Plaza de Alonso de Fonseca.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Casco%20Antiguo%20de%20Pontevedra,%20Panorama%20de%20la%20Plaza%20de%20Alonso%20de%20Fonseca.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "d6354b24-dd1f-46ec-8529-0b8191480ef7",
+      "nombre": "AVILÉS",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7e/Avil%C3%A9s_%2C_Asturias_%2C_Espa%C3%B1a_._-_panoramio.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Avil%C3%A9s_%2C_Asturias_%2C_Espa%C3%B1a_._-_panoramio.jpg/1920px-Avil%C3%A9s_%2C_Asturias_%2C_Espa%C3%B1a_._-_panoramio.jpg",
+      "sha1": "b54040b5ec801372bdc313e06538bcfed047e3f1",
+      "imagenAlt": "Vista panorámica de Avilés, Asturias.",
+      "imageAttribution": {
+        "author": "McBodes",
+        "title": "Avilés , Asturias , España . - panoramio.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Avil%C3%A9s%20,%20Asturias%20,%20Espa%C3%B1a%20.%20-%20panoramio.jpg",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "fa8b4e30-e5ef-4818-a3b8-4ab14b086091",
+      "nombre": "CUDILLERO",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/ee/Panor%C3%A1mica_de_Cuideiru.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Panor%C3%A1mica_de_Cuideiru.jpg/1920px-Panor%C3%A1mica_de_Cuideiru.jpg",
+      "sha1": "2a10037a655deee1200597878415bcb53e934de0",
+      "imagenAlt": "Panorámica de Cudillero y su paisaje costero.",
+      "imageAttribution": {
+        "author": "Javier Mendia García",
+        "title": "Panorámica de Cuideiru.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Panor%C3%A1mica%20de%20Cuideiru.jpg",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "c0873985-863c-4493-8dd5-09f66481068d",
+      "nombre": "LLANES",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/5/56/Desde_el_Puerto_de_Llanes%2C_Asturias_-_panoramio.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Desde_el_Puerto_de_Llanes%2C_Asturias_-_panoramio.jpg/1920px-Desde_el_Puerto_de_Llanes%2C_Asturias_-_panoramio.jpg",
+      "sha1": "a208a5839514fc4bb52cce5012749d6fa7164248",
+      "imagenAlt": "Vista del puerto de Llanes y la costa asturiana.",
+      "imageAttribution": {
+        "author": "McBodes",
+        "title": "Desde el Puerto de Llanes, Asturias - panoramio.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Desde%20el%20Puerto%20de%20Llanes,%20Asturias%20-%20panoramio.jpg",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "8ea75626-7e42-4ad8-89bb-b65ced176d90",
+      "nombre": "SANTILLANA DEL MAR",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/8/82/Santillana_del_Mar_nucleo.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/82/Santillana_del_Mar_nucleo.jpg/1920px-Santillana_del_Mar_nucleo.jpg",
+      "sha1": "f8b974c39eb7b5f84785fa4da546184010c7ef7f",
+      "imagenAlt": "Vista general del núcleo de Santillana del Mar.",
+      "imageAttribution": {
+        "author": "Luis Fermín TURIEL PEREDO",
+        "title": "Santillana del Mar nucleo.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Santillana%20del%20Mar%20nucleo.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "482f4360-41e4-4559-90f0-351bcaf5a365",
+      "nombre": "COMILLAS",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/1/10/Comillas_city_and_statue_panorama_2009.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Comillas_city_and_statue_panorama_2009.jpg/1920px-Comillas_city_and_statue_panorama_2009.jpg",
+      "sha1": "c8c94be8dd70b175c8be64a11245bc054ba2912e",
+      "imagenAlt": "Panorámica de Comillas, Cantabria.",
+      "imageAttribution": {
+        "author": "Sandstein",
+        "title": "Comillas city and statue panorama 2009.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Comillas%20city%20and%20statue%20panorama%202009.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "769ab451-66cb-4720-b2b4-e68380420619",
+      "nombre": "POTES",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a3/Potes%2C_centro.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a3/Potes%2C_centro.jpg/1920px-Potes%2C_centro.jpg",
+      "sha1": "49c79af80f1bc276c08aa576bac2989950af75ed",
+      "imagenAlt": "Panorámica del centro de Potes, con la Torre del Infantado y la plaza Capitán Palacios.",
+      "imageAttribution": {
+        "author": "Luis Fermín TURIEL PEREDO",
+        "title": "Potes, centro.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Potes,%20centro.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "c1dd7710-9cfb-430f-bcec-a08d8e480a33",
+      "nombre": "HONDARRIBIA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/5/52/Hondarribia%2C_Euskal_Herria.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/Hondarribia%2C_Euskal_Herria.jpg/1920px-Hondarribia%2C_Euskal_Herria.jpg",
+      "sha1": "896a233a1bd82e708289d576fd2e43476b1cc679",
+      "imagenAlt": "Vista panorámica de Hondarribia, Gipuzkoa.",
+      "imageAttribution": {
+        "author": "Jakes Larre",
+        "title": "Hondarribia, Euskal Herria.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hondarribia,%20Euskal%20Herria.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "f3c5a46f-e263-4f2f-9d8c-39fc4fce9d5b",
+      "nombre": "ALBARRACÍN",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Albarrac%C3%ADn%2C_Teruel%2C_Espa%C3%B1a%2C_2014-01-10%2C_DD_022-025_PAN.JPG",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Albarrac%C3%ADn%2C_Teruel%2C_Espa%C3%B1a%2C_2014-01-10%2C_DD_022-025_PAN.JPG/1920px-Albarrac%C3%ADn%2C_Teruel%2C_Espa%C3%B1a%2C_2014-01-10%2C_DD_022-025_PAN.JPG",
+      "sha1": "338eb173da2ea8c87cdfd703912a6dde298bb1b3",
+      "imagenAlt": "Panorámica de Albarracín, su casco medieval y las murallas.",
+      "imageAttribution": {
+        "author": "Diego Delso",
+        "title": "Albarracín, Teruel, España, 2014-01-10, DD 022-025 PAN.JPG",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Albarrac%C3%ADn,%20Teruel,%20Espa%C3%B1a,%202014-01-10,%20DD%20022-025%20PAN.JPG",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "eb15ce65-bd3e-4617-9785-98cd04728efb",
+      "nombre": "TERUEL",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/4/43/Vista_de_Teruel_desde_la_torre_de_la_iglesia_del_Salvador%2C_Espa%C3%B1a%2C_2014-01-10%2C_DD_80.JPG",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/Vista_de_Teruel_desde_la_torre_de_la_iglesia_del_Salvador%2C_Espa%C3%B1a%2C_2014-01-10%2C_DD_80.JPG/1920px-Vista_de_Teruel_desde_la_torre_de_la_iglesia_del_Salvador%2C_Espa%C3%B1a%2C_2014-01-10%2C_DD_80.JPG",
+      "sha1": "33f1116069f636ff8ae38d27b65d3adb8cd25a31",
+      "imagenAlt": "Vista panorámica de Teruel desde la torre de la iglesia del Salvador.",
+      "imageAttribution": {
+        "author": "Diego Delso",
+        "title": "Vista de Teruel desde la torre de la iglesia del Salvador, España, 2014-01-10, DD 80.JPG",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vista%20de%20Teruel%20desde%20la%20torre%20de%20la%20iglesia%20del%20Salvador,%20Espa%C3%B1a,%202014-01-10,%20DD%2080.JPG",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "beb87110-2d26-4489-b11b-210b56567c5f",
+      "nombre": "SORIA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/8/81/Panor%C3%A1mica_de_Soria_desde_la_parte_m%C3%A1s_alta_de_la_ciudad_2_-_panoramio.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/81/Panor%C3%A1mica_de_Soria_desde_la_parte_m%C3%A1s_alta_de_la_ciudad_2_-_panoramio.jpg/1920px-Panor%C3%A1mica_de_Soria_desde_la_parte_m%C3%A1s_alta_de_la_ciudad_2_-_panoramio.jpg",
+      "sha1": "bf210572c97c980ee207df775d90780a7d653c23",
+      "imagenAlt": "Panorámica de Soria desde la parte alta de la ciudad.",
+      "imageAttribution": {
+        "author": "EmuleAdicto",
+        "title": "Panorámica de Soria desde la parte más alta de la ciudad 2 - panoramio.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Panor%C3%A1mica%20de%20Soria%20desde%20la%20parte%20m%C3%A1s%20alta%20de%20la%20ciudad%202%20-%20panoramio.jpg",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "0a850c50-a8c5-41ab-a396-c8fed1613f15",
+      "nombre": "ANTEQUERA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/2/28/Antequera_-_panorama.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/Antequera_-_panorama.jpg/1920px-Antequera_-_panorama.jpg",
+      "sha1": "46a8738a7cc7a68ca7e9253567a25f56700ddc8c",
+      "imagenAlt": "Panorámica de Antequera desde las inmediaciones de la Puerta de Granada.",
+      "imageAttribution": {
+        "author": "Tiia Monto",
+        "title": "Antequera - panorama.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Antequera%20-%20panorama.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "302189ac-0f4c-425a-be80-5c1cf216b432",
+      "nombre": "GUADALUPE",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9d/Guadalupe%2C_C%C3%A1ceres%2C_Spain_-_panoramio_%281%29.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/Guadalupe%2C_C%C3%A1ceres%2C_Spain_-_panoramio_%281%29.jpg/1920px-Guadalupe%2C_C%C3%A1ceres%2C_Spain_-_panoramio_%281%29.jpg",
+      "sha1": "f87eac07271faf5b4bfc30ccbf19a2a4ebd8364b",
+      "imagenAlt": "Vista del conjunto urbano de Guadalupe, Cáceres.",
+      "imageAttribution": {
+        "author": "Ben Bender",
+        "title": "Guadalupe, Cáceres, Spain - panoramio (1).jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Guadalupe,%20C%C3%A1ceres,%20Spain%20-%20panoramio%20(1).jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "d1c14acf-d5bd-435c-a97d-cd8ef555fe3b",
+      "nombre": "ALCALÁ DE HENARES",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Alcal%C3%A1_de_Henares_%28RPS_08-11-2014%29_Plaza_de_Cervantes.png",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Alcal%C3%A1_de_Henares_%28RPS_08-11-2014%29_Plaza_de_Cervantes.png/1920px-Alcal%C3%A1_de_Henares_%28RPS_08-11-2014%29_Plaza_de_Cervantes.png",
+      "sha1": "79901988b8f95ba2364d712761d021f3b5e25276",
+      "imagenAlt": "Vista panorámica de la Plaza de Cervantes en Alcalá de Henares.",
+      "imageAttribution": {
+        "author": "Raimundo Pastor",
+        "title": "Alcalá de Henares (RPS 08-11-2014) Plaza de Cervantes.png",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alcal%C3%A1%20de%20Henares%20(RPS%2008-11-2014)%20Plaza%20de%20Cervantes.png",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "b1e8b935-68c2-4dbf-9c52-2a4d1cd61997",
+      "nombre": "ARANJUEZ",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Panor%C3%A1mica_de_Aranjuez_-_panoramio_%281%29.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f0/Panor%C3%A1mica_de_Aranjuez_-_panoramio_%281%29.jpg/1920px-Panor%C3%A1mica_de_Aranjuez_-_panoramio_%281%29.jpg",
+      "sha1": "3a613c7cd6c712bc61a9dc1cc93fc03065ccee44",
+      "imagenAlt": "Panorámica de Aranjuez y su paisaje urbano.",
+      "imageAttribution": {
+        "author": "isol",
+        "title": "Panorámica de Aranjuez - panoramio (1).jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Panor%C3%A1mica%20de%20Aranjuez%20-%20panoramio%20(1).jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "79e5cbe3-2684-40c7-ab76-0e00a289ea0a",
+      "nombre": "SAN LORENZO DE EL ESCORIAL",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/6/61/El_Escorial_desde_Abantos.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/61/El_Escorial_desde_Abantos.jpg/1920px-El_Escorial_desde_Abantos.jpg",
+      "sha1": "90d54832d77e3b9af678dfc7be1353bb6eab30e6",
+      "imagenAlt": "Vista de San Lorenzo de El Escorial y El Escorial desde el monte Abantos.",
+      "imageAttribution": {
+        "author": "Rodelar",
+        "title": "El Escorial desde Abantos.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:El%20Escorial%20desde%20Abantos.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "c63af472-fef8-4b80-91e2-84e5eebf3a78",
+      "nombre": "MORELLA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/7/77/Vista_panor%C3%A1mica_de_Morella_desde_el_castillo.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Vista_panor%C3%A1mica_de_Morella_desde_el_castillo.jpg/1920px-Vista_panor%C3%A1mica_de_Morella_desde_el_castillo.jpg",
+      "sha1": "6be92a594cc88eadcb58a090cd0970fbfac7f830",
+      "imagenAlt": "Panorámica de Morella desde un mirador.",
+      "imageAttribution": {
+        "author": "Rastrojo",
+        "title": "Vista panorámica de Morella desde el castillo.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vista%20panor%C3%A1mica%20de%20Morella%20desde%20el%20castillo.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "378694c9-28c0-468d-a3ec-091b438c1fe9",
+      "nombre": "OLITE",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Olite._Vista_a%C3%A9rea_desde_el_castillo.JPG",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Olite._Vista_a%C3%A9rea_desde_el_castillo.JPG/1920px-Olite._Vista_a%C3%A9rea_desde_el_castillo.JPG",
+      "sha1": "c79fd68d80b63b3889f649daf3183c956230d1b5",
+      "imagenAlt": "Panorámica de Olite desde un mirador.",
+      "imageAttribution": {
+        "author": "Lancastermerrin88",
+        "title": "Olite. Vista aérea desde el castillo.JPG",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Olite.%20Vista%20a%C3%A9rea%20desde%20el%20castillo.JPG",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "59bfd5ce-3a69-4b98-b703-0c38c67e9ad2",
+      "nombre": "LAGUARDIA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/94/Laguardia_vista_panor%C3%A1mica.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/Laguardia_vista_panor%C3%A1mica.jpg/1920px-Laguardia_vista_panor%C3%A1mica.jpg",
+      "sha1": "08f726a7cf1eb7c51db1d05b758356613a4245c2",
+      "imagenAlt": "Panorámica de Laguardia desde un mirador.",
+      "imageAttribution": {
+        "author": "Txo",
+        "title": "Laguardia vista panorámica.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Laguardia%20vista%20panor%C3%A1mica.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "45009d18-f7ea-4073-b1c6-00302ccd7a70",
+      "nombre": "JACA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Panoramic_view_of_Jaca.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/Panoramic_view_of_Jaca.jpg/1920px-Panoramic_view_of_Jaca.jpg",
+      "sha1": "185e96d34ee4855f30b1547d06e4e34decd7cf55",
+      "imagenAlt": "Panorámica de Jaca desde un mirador.",
+      "imageAttribution": {
+        "author": "Shougissime",
+        "title": "Panoramic view of Jaca.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Panoramic%20view%20of%20Jaca.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "7d1b7dc8-a65d-4dee-bedb-3751440b2ddb",
+      "nombre": "ALQUÉZAR",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Alquezar_panorama.JPG",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/Alquezar_panorama.JPG/1920px-Alquezar_panorama.JPG",
+      "sha1": "9469ba81db32bc51654cbc94ff7bebb54dea21bc",
+      "imagenAlt": "Panorámica de Alquézar desde un mirador.",
+      "imageAttribution": {
+        "author": "Cruccone",
+        "title": "Alquezar panorama.JPG",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alquezar%20panorama.JPG",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "de54c9d5-81dc-4d70-8d4f-98cfeff38ad9",
+      "nombre": "VEJER DE LA FRONTERA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/4/40/Vista_de_Vejer_de_la_Frontera%2C_C%C3%A1diz%2C_Espa%C3%B1a%2C_2015-12-09%2C_DD_14-19_PAN.JPG",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Vista_de_Vejer_de_la_Frontera%2C_C%C3%A1diz%2C_Espa%C3%B1a%2C_2015-12-09%2C_DD_14-19_PAN.JPG/1920px-Vista_de_Vejer_de_la_Frontera%2C_C%C3%A1diz%2C_Espa%C3%B1a%2C_2015-12-09%2C_DD_14-19_PAN.JPG",
+      "sha1": "d00b82b88abc1d6eca20d325909781dc74255363",
+      "imagenAlt": "Panorámica de Vejer De La Frontera desde un mirador.",
+      "imageAttribution": {
+        "author": "Diego Delso",
+        "title": "Vista de Vejer de la Frontera, Cádiz, España, 2015-12-09, DD 14-19 PAN.JPG",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vista%20de%20Vejer%20de%20la%20Frontera,%20C%C3%A1diz,%20Espa%C3%B1a,%202015-12-09,%20DD%2014-19%20PAN.JPG",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "5975b9c3-558f-44d6-a561-ea36b5882cc4",
+      "nombre": "CARMONA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/0/03/Carmona_-_View_from_Puerta_de_Sevilla.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/Carmona_-_View_from_Puerta_de_Sevilla.jpg/1920px-Carmona_-_View_from_Puerta_de_Sevilla.jpg",
+      "sha1": "c5399a0cf97f93fe6f2fc2c773d4126ad07f7010",
+      "imagenAlt": "Panorámica de Carmona desde un mirador.",
+      "imageAttribution": {
+        "author": "Benjamin Smith",
+        "title": "Carmona - View from Puerta de Sevilla.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Carmona%20-%20View%20from%20Puerta%20de%20Sevilla.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "4a7b4e46-e623-4478-bec9-9580dda45d51",
+      "nombre": "OSUNA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/d/da/Vista_de_Osuna.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/da/Vista_de_Osuna.jpg/1920px-Vista_de_Osuna.jpg",
+      "sha1": "12325e40e280bfde157b731c92c8c1b46dc4abcc",
+      "imagenAlt": "Panorámica de Osuna desde un mirador.",
+      "imageAttribution": {
+        "author": "CarlosVdeHabsburgo",
+        "title": "Vista de Osuna.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vista%20de%20Osuna.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "79159e6a-dbf8-493d-8929-d7588f565879",
+      "nombre": "ARCOS DE LA FRONTERA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/2/23/Panorama_of_Arcos_de_la_Frontera_%287077362901%29.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Panorama_of_Arcos_de_la_Frontera_%287077362901%29.jpg/1920px-Panorama_of_Arcos_de_la_Frontera_%287077362901%29.jpg",
+      "sha1": "c4a0197e9dad227145c9e3e3577df9b55b523473",
+      "imagenAlt": "Panorámica de Arcos De La Frontera desde un mirador.",
+      "imageAttribution": {
+        "author": "Michal Osmenda",
+        "title": "Panorama of Arcos de la Frontera (7077362901).jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Panorama%20of%20Arcos%20de%20la%20Frontera%20(7077362901).jpg",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "2cb2b6c7-2f19-44d5-bf7d-6181e6b179e4",
+      "nombre": "PRIEGO DE CÓRDOBA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/6/62/PriegoDeCordobaVistaAdarve.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/62/PriegoDeCordobaVistaAdarve.jpg/1920px-PriegoDeCordobaVistaAdarve.jpg",
+      "sha1": "6f57c809242c386fc0661d9a242f976091168b0c",
+      "imagenAlt": "Panorámica de Priego De Córdoba desde un mirador.",
+      "imageAttribution": {
+        "author": "Mussklprozz",
+        "title": "PriegoDeCordobaVistaAdarve.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:PriegoDeCordobaVistaAdarve.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "7f02b268-aadb-4fc0-ac98-6ad2d84c0982",
+      "nombre": "ZAFRA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/3/36/Zafra%2C_Badajoz%2C_Spain_-_panoramio_%288%29.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Zafra%2C_Badajoz%2C_Spain_-_panoramio_%288%29.jpg/1920px-Zafra%2C_Badajoz%2C_Spain_-_panoramio_%288%29.jpg",
+      "sha1": "03e94b0a0091cc2ae603cc61d20626149c86445a",
+      "imagenAlt": "Panorámica de Zafra desde un mirador.",
+      "imageAttribution": {
+        "author": "Ben Bender",
+        "title": "Zafra, Badajoz, Spain - panoramio (8).jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Zafra,%20Badajoz,%20Spain%20-%20panoramio%20(8).jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "127bd9fe-f613-4d8c-8958-d03b92e5c28e",
+      "nombre": "PEDRAZA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d3/40172_Pedraza%2C_Segovia%2C_Spain_-_panoramio.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/40172_Pedraza%2C_Segovia%2C_Spain_-_panoramio.jpg/1920px-40172_Pedraza%2C_Segovia%2C_Spain_-_panoramio.jpg",
+      "sha1": "9226af9b990cb83075a07670a37eb4fa08a07303",
+      "imagenAlt": "Panorámica de Pedraza desde un mirador.",
+      "imageAttribution": {
+        "author": "Michal Gorski",
+        "title": "40172 Pedraza, Segovia, Spain - panoramio.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:40172%20Pedraza,%20Segovia,%20Spain%20-%20panoramio.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "3eef6ac1-f046-49c6-93e5-624f854e3df6",
+      "nombre": "SEPÚLVEDA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/3/31/PanoramasDeSep%C3%BAlveda20120909185158P1160330.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/PanoramasDeSep%C3%BAlveda20120909185158P1160330.jpg/1920px-PanoramasDeSep%C3%BAlveda20120909185158P1160330.jpg",
+      "sha1": "f2b47a3ae0bfc5638441b7831e5d94cd13f6c4f8",
+      "imagenAlt": "Panorámica de Sepúlveda desde un mirador.",
+      "imageAttribution": {
+        "author": "Rowanwindwhistler",
+        "title": "PanoramasDeSepúlveda20120909185158P1160330.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:PanoramasDeSep%C3%BAlveda20120909185158P1160330.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    },
+    {
+      "id": "8715964f-1ac2-4d12-aebe-25d5964ff4a5",
+      "nombre": "PEÑAFIEL",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Panor%C3%A1mica_del_Castillo_de_Pe%C3%B1afiel.jpg",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ec/Panor%C3%A1mica_del_Castillo_de_Pe%C3%B1afiel.jpg/1920px-Panor%C3%A1mica_del_Castillo_de_Pe%C3%B1afiel.jpg",
+      "sha1": "b6ba8efafd3e15dcb7bdd16e620ab948d33c541d",
+      "imagenAlt": "Panorámica de Peñafiel desde un mirador.",
+      "imageAttribution": {
+        "author": "Ignasilm",
+        "title": "Panorámica del Castillo de Peñafiel.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Panor%C3%A1mica%20del%20Castillo%20de%20Pe%C3%B1afiel.jpg",
+        "license": "CC BY-SA 3.0 es",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/es/deed.en",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      }
+    }
+  ]
+}

@@ -1,0 +1,372 @@
+{
+  "checkedAt": "2026-10-07",
+  "scope": "Villas patrimoniales de interés turístico; fuentes municipales y establecimientos verificados",
+  "photoPolicy": "Las fotografías municipales se importan desde un plan de Wikimedia Commons revisado por separado.",
+  "municipalities": [
+    {
+      "id": "c63af472-fef8-4b80-91e2-84e5eebf3a78",
+      "nombre": "MORELLA",
+      "fields": {
+        "descripcion": "Morella se levanta sobre una loma de Els Ports, con un castillo que domina las montañas y un casco medieval rodeado de murallas. Sus calles reúnen arquitectura gótica y cocina del interior de Castellón.",
+        "website": "https://www.morella.net/morellaturistica/",
+        "ubicacion": "Morella, Castellón, España"
+      },
+      "sources": [
+        "https://www.morella.net/morellaturistica/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Explorar Morella y su castillo",
+          "descripcion": "Recorrido por las calles del recinto medieval y la fortaleza situada sobre la roca, con vistas a la comarca de Els Ports.",
+          "category": "Patrimonio",
+          "website": "https://www.morella.net/morellaturistica/descubre-morella/monumentos/el-castillo/",
+          "sources": [
+            "https://www.morella.net/morellaturistica/descubre-morella/monumentos/el-castillo/"
+          ],
+          "essentialItemId": "b3fde2da-2415-4b0b-8e4e-9ad7427f3541"
+        },
+        {
+          "nombre": "Visitar la Basílica de Santa María la Mayor",
+          "descripcion": "Visita al templo gótico, sus portadas y la escalera del coro, uno de los elementos singulares de su interior.",
+          "category": "Patrimonio",
+          "website": "https://www.morella.net/morellaturistica/descubre-morella/monumentos/la-basilica/",
+          "sources": [
+            "https://www.morella.net/morellaturistica/descubre-morella/monumentos/la-basilica/"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Cardenal Ram",
+          "descripcion": "Hotel en el núcleo histórico de Morella, junto a las calles porticadas de la ciudad.",
+          "address": "Costera de la Suner, 1, 12300 Morella, Castellón",
+          "website": "https://www.hotelcardenalram.es/",
+          "sources": [
+            "https://www.hotelcardenalram.es/"
+          ],
+          "bookingUrl": "https://www.hotelcardenalram.es/",
+          "phone": "+34 964 160 046"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Daluan",
+          "descripcion": "Restaurante de cocina tradicional renovada, con productos de temporada y una selección de vinos.",
+          "address": "Callejón Cárcel, 4, 12300 Morella, Castellón",
+          "website": "https://www.daluan.es/daluan",
+          "sources": [
+            "https://www.daluan.es/daluan"
+          ],
+          "cuisine": "Cocina tradicional renovada",
+          "phone": "+34 964 160 071"
+        }
+      ]
+    },
+    {
+      "id": "378694c9-28c0-468d-a3ec-091b438c1fe9",
+      "nombre": "OLITE",
+      "fields": {
+        "descripcion": "Olite conserva calles medievales y un conjunto palaciego que fue residencia de los reyes de Navarra. El Palacio Real, las iglesias y las plazas permiten recorrer a pie su casco histórico.",
+        "website": "https://www.visitnavarra.es/es/olite/",
+        "ubicacion": "Olite, Navarra, España"
+      },
+      "sources": [
+        "https://www.visitnavarra.es/es/olite/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Visitar el Palacio Real de Olite",
+          "descripcion": "Recorrido por patios, galerías y torres del palacio medieval; la web oficial ofrece las modalidades de visita y las entradas.",
+          "category": "Patrimonio",
+          "website": "https://palaciorealolite.com/",
+          "sources": [
+            "https://palaciorealolite.com/"
+          ],
+          "essentialItemId": "6e4daa58-3afe-4710-9fda-8b234cf5be67"
+        },
+        {
+          "nombre": "Pasear por el casco antiguo de Olite",
+          "descripcion": "Paseo por las rúas empedradas, las plazas y los exteriores de las iglesias del casco histórico.",
+          "category": "Patrimonio",
+          "website": "https://www.visitnavarra.es/es/olite/",
+          "sources": [
+            "https://www.visitnavarra.es/es/olite/"
+          ],
+          "essentialItemId": "f6e8051b-1acf-443c-a584-75dd91bcfd70"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Merindad de Olite",
+          "descripcion": "Alojamiento en el casco histórico, junto al conjunto palaciego y sobre restos de la antigua muralla.",
+          "address": "Rúa de la Judería, 11, 31390 Olite, Navarra",
+          "website": "https://hotelmerindaddeolite.com/",
+          "sources": [
+            "https://hotelmerindaddeolite.com/"
+          ],
+          "bookingUrl": "https://hotelmerindaddeolite.com/",
+          "phone": "+34 948 740 735"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante Merindad de Olite",
+          "descripcion": "Cocina de temporada con productos navarros, en el casco antiguo de Olite. Las reservas se gestionan por teléfono.",
+          "address": "Rúa de la Judería, 11, 31390 Olite, Navarra",
+          "website": "https://restaurantemerindaddeolite.com/",
+          "sources": [
+            "https://restaurantemerindaddeolite.com/"
+          ],
+          "cuisine": "Cocina navarra de temporada",
+          "phone": "+34 948 740 735"
+        }
+      ]
+    },
+    {
+      "id": "59bfd5ce-3a69-4b98-b703-0c38c67e9ad2",
+      "nombre": "LAGUARDIA",
+      "fields": {
+        "descripcion": "Laguardia es una villa amurallada de Rioja Alavesa, rodeada de viñedos. Su centro reúne calles medievales, miradores y la iglesia de Santa María de los Reyes, conocida por su pórtico policromado.",
+        "website": "https://www.laguardia-alava.com/es/",
+        "ubicacion": "Laguardia, Álava, España"
+      },
+      "sources": [
+        "https://www.laguardia-alava.com/es/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Pasear por el recinto amurallado de Laguardia",
+          "descripcion": "Recorrido por las calles del núcleo medieval y sus puertas, con vistas al paisaje de Rioja Alavesa.",
+          "category": "Patrimonio",
+          "website": "https://laguardia-alava.com/es/historia/edad-media/fortificacioin-de-la-villa",
+          "sources": [
+            "https://laguardia-alava.com/es/historia/edad-media/fortificacioin-de-la-villa"
+          ],
+          "essentialItemId": "8c7c6ed7-1b8e-4092-aac7-e3af67b78402"
+        },
+        {
+          "nombre": "Visitar Santa María de los Reyes",
+          "descripcion": "Conocer la iglesia y su pórtico policromado mediante las visitas organizadas por la oficina de turismo.",
+          "category": "Patrimonio",
+          "website": "https://www.laguardia-alava.com/es/arte/santa-maria-de-los-reyes",
+          "sources": [
+            "https://www.laguardia-alava.com/es/arte/santa-maria-de-los-reyes"
+          ],
+          "essentialItemId": "6367149c-e229-449e-88bc-45ea9efbae70"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hospedería de los Parajes",
+          "descripcion": "Hotel en el centro de Laguardia, con habitaciones en un edificio histórico y un calado subterráneo.",
+          "address": "Calle Mayor, 46-48, 01300 Laguardia, Álava",
+          "website": "https://www.hospederiadelosparajes.com/habitaciones",
+          "sources": [
+            "https://hospederiadelosparajes.com/habitaciones",
+            "https://www.hospederiadelosparajes.com/restaurantes"
+          ],
+          "bookingUrl": "https://www.hospederiadelosparajes.com/habitaciones",
+          "phone": "+34 945 621 130"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante Los Parajes",
+          "descripcion": "Cocina moderna con raíces locales y carta de vinos, en la Hospedería de los Parajes.",
+          "address": "Calle Mayor, 46-48, 01300 Laguardia, Álava",
+          "website": "https://www.hospederiadelosparajes.com/restaurantes",
+          "sources": [
+            "https://www.hospederiadelosparajes.com/restaurantes"
+          ],
+          "bookingUrl": "https://www.hospederiadelosparajes.com/restaurantes",
+          "cuisine": "Cocina local contemporánea",
+          "phone": "+34 945 621 130"
+        }
+      ]
+    },
+    {
+      "id": "45009d18-f7ea-4073-b1c6-00302ccd7a70",
+      "nombre": "JACA",
+      "fields": {
+        "descripcion": "Jaca combina patrimonio románico y militar con su papel como puerta de entrada al Pirineo aragonés. La catedral y la Ciudadela son dos visitas centrales de su recorrido urbano.",
+        "website": "https://www.jaca.es/turismo/",
+        "ubicacion": "Jaca, Huesca, España"
+      },
+      "sources": [
+        "https://www.jaca.es/turismo/monumentosymuseos/la-ciudadela-de-jaca.html",
+        "https://www.diocesisdejaca.org/catedral/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Visitar la Ciudadela de Jaca",
+          "descripcion": "Conocer la fortaleza pentagonal del castillo de San Pedro y los espacios incluidos en sus visitas.",
+          "category": "Patrimonio",
+          "website": "https://ciudadeladejaca.es/visita-guiada/",
+          "sources": [
+            "https://ciudadeladejaca.es/visita-guiada/"
+          ],
+          "essentialItemId": "0eb9b91e-5262-4404-b916-cde6916aebc5"
+        },
+        {
+          "nombre": "Conocer la Catedral de San Pedro de Jaca",
+          "descripcion": "Visita al templo románico vinculado al Camino de Santiago y a la historia de la ciudad.",
+          "category": "Patrimonio",
+          "website": "https://www.diocesisdejaca.org/catedral/",
+          "sources": [
+            "https://www.diocesisdejaca.org/catedral/"
+          ],
+          "essentialItemId": "16d594cc-832a-432d-81d2-6a837fe1857f"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Gran Hotel de Jaca",
+          "descripcion": "Hotel en el centro de Jaca, junto al Paseo de la Constitución, como base para recorrer la ciudad y el Pirineo.",
+          "address": "Paseo de la Constitución, 1, 22700 Jaca, Huesca",
+          "website": "https://www.granhoteljaca.com/es/",
+          "sources": [
+            "https://www.granhoteljaca.com/es/",
+            "https://www.granhoteljaca.com/es/contacto-y-ubicacion/"
+          ],
+          "bookingUrl": "https://www.granhoteljaca.com/es/",
+          "phone": "+34 974 360 900"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante Asador Biarritz",
+          "descripcion": "Restaurante de cocina tradicional y casera, especializado en carnes a la brasa.",
+          "address": "Avenida Primer Viernes de Mayo, 12, 22700 Jaca, Huesca",
+          "website": "https://www.restaurantebiarritz.com/",
+          "sources": [
+            "https://www.restaurantebiarritz.com/"
+          ],
+          "bookingUrl": "https://www.restaurantebiarritz.com/",
+          "cuisine": "Cocina tradicional y carnes a la brasa",
+          "phone": "+34 974 361 632"
+        }
+      ]
+    },
+    {
+      "id": "7d1b7dc8-a65d-4dee-bedb-3751440b2ddb",
+      "nombre": "ALQUÉZAR",
+      "fields": {
+        "descripcion": "Alquézar es una villa medieval situada sobre el cañón del río Vero, en el Somontano. Su caserío de piedra y la colegiata se combinan con rutas por el paisaje de la sierra de Guara.",
+        "website": "https://turismoalquezar.es/",
+        "ubicacion": "Alquézar, Huesca, España"
+      },
+      "sources": [
+        "https://www.turismodearagon.com/ficha/alquezar/",
+        "https://turismoalquezar.es/que-ver/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Explorar el pueblo medieval de Alquézar",
+          "descripcion": "Paseo por las calles de la villa y los miradores del entorno del castillo-colegiata.",
+          "category": "Patrimonio",
+          "website": "https://turismoalquezar.es/que-ver/",
+          "sources": [
+            "https://turismoalquezar.es/que-ver/"
+          ],
+          "essentialItemId": "633712cb-d683-4747-813b-d726a3abf07d"
+        },
+        {
+          "nombre": "Visitar la Colegiata de Santa María la Mayor de Alquézar",
+          "descripcion": "Visita a la iglesia y al claustro, con pinturas murales y capiteles que explican la historia del antiguo recinto fortificado.",
+          "category": "Patrimonio",
+          "website": "https://turismoalquezar.es/colegiata/",
+          "sources": [
+            "https://turismoalquezar.es/colegiata/"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Villa de Alquézar",
+          "descripcion": "Alojamiento en el casco de Alquézar, con spa y piscina para una estancia junto a la sierra de Guara.",
+          "address": "Calle Pedro Arnal Cavero, 12, 22145 Alquézar, Huesca",
+          "website": "https://villadealquezar.com/",
+          "sources": [
+            "https://villadealquezar.com/contacto/"
+          ],
+          "bookingUrl": "https://villadealquezar.com/",
+          "phone": "+34 974 318 416"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Casa Pardina",
+          "descripcion": "Restaurante en el casco histórico con cocina aragonesa y productos del Somontano.",
+          "address": "Calle Medio, 13, 22145 Alquézar, Huesca",
+          "website": "https://casapardina.com/",
+          "sources": [
+            "https://casapardina.com/contacto/"
+          ],
+          "bookingUrl": "https://casapardina.com/",
+          "cuisine": "Cocina aragonesa",
+          "phone": "+34 974 318 425"
+        }
+      ]
+    },
+    {
+      "id": "de54c9d5-81dc-4d70-8d4f-98cfeff38ad9",
+      "nombre": "VEJER DE LA FRONTERA",
+      "fields": {
+        "descripcion": "Vejer de la Frontera reúne un casco histórico de casas blancas y murallas en lo alto de una colina. Su término municipal también ofrece rutas rurales, como las de Santa Lucía, y costa atlántica.",
+        "website": "https://turismovejer.es/",
+        "ubicacion": "Vejer de la Frontera, Cádiz, España"
+      },
+      "sources": [
+        "https://turismovejer.es/wp-content/uploads/2024/10/Vejer-Rural-2022.pdf"
+      ],
+      "actividades": [
+        {
+          "nombre": "Explorar el casco histórico de Vejer",
+          "descripcion": "Paseo por las calles blancas del recinto histórico, sus puertas y miradores hacia la campiña de La Janda.",
+          "category": "Patrimonio",
+          "website": "https://turismovejer.es/wp-content/uploads/2024/10/GUIA-VEJER-OK.pdf",
+          "sources": [
+            "https://turismovejer.es/wp-content/uploads/2024/10/GUIA-VEJER-OK.pdf"
+          ],
+          "essentialItemId": "a081fff0-336c-40cb-a2bc-923c6cd14721"
+        },
+        {
+          "nombre": "Recorrer los molinos de agua de Santa Lucía",
+          "descripcion": "Ruta desde Santa Lucía por el entorno de los antiguos molinos y los restos del acueducto, con vistas a Vejer. Consultar la ficha oficial y las condiciones del recorrido antes de salir.",
+          "category": "Senderismo",
+          "website": "https://turismovejer.es/wp-content/uploads/2024/10/Vejer-Rural-2022.pdf",
+          "sources": [
+            "https://turismovejer.es/wp-content/uploads/2024/10/Vejer-Rural-2022.pdf"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "La Casa del Califa",
+          "descripcion": "Hotel distribuido entre edificios históricos y patios del centro de Vejer, con una terraza panorámica.",
+          "address": "Plaza de España, 16, 11150 Vejer de la Frontera, Cádiz",
+          "website": "https://lacasadelcalifa.com/",
+          "sources": [
+            "https://lacasadelcalifa.com/"
+          ],
+          "bookingUrl": "https://lacasadelcalifa.com/",
+          "phone": "+34 956 447 730"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "El Jardín del Califa",
+          "descripcion": "Restaurante de cocina de Marruecos y Oriente Medio, en un edificio histórico con patio de palmeras.",
+          "address": "Plaza de España, 12, 11150 Vejer de la Frontera, Cádiz",
+          "website": "https://jardindelcalifa.com/",
+          "sources": [
+            "https://jardindelcalifa.com/"
+          ],
+          "bookingUrl": "https://jardindelcalifa.com/",
+          "cuisine": "Marroquí y de Oriente Medio",
+          "phone": "+34 956 451 706"
+        }
+      ]
+    }
+  ]
+}

@@ -24,6 +24,33 @@ const batch = fs.existsSync(output)
         "CC BY, CC BY-SA, CC0 o dominio público verificado; fuente, autor, licencia y cambios visibles en la ficha.",
       municipalities: [],
     };
+async function uploadReviewedFile(url, options) {
+  // Wikimedia may rate-limit Cloudinary's shared download IP while the reviewed
+  // file remains available to this importer. Keep the same verified source.
+  const response = await fetch(url, {
+    redirect: "error",
+    signal: AbortSignal.timeout(30000),
+    headers: { "User-Agent": "TravSeeker/1.0 (reviewed municipal photographs)" },
+  });
+  if (!response.ok) throw new Error(`Descarga de imagen: HTTP ${response.status}`);
+  const mime = response.headers.get("content-type")?.split(";")[0];
+  if (!["image/jpeg", "image/png", "image/webp"].includes(mime))
+    throw new Error("El archivo revisado no es una fotografía compatible.");
+  const limit = 25 * 1024 * 1024;
+  let length = 0;
+  const chunks = [];
+  for await (const chunk of response.body) {
+    length += chunk.length;
+    if (length > limit) throw new Error("Fotografía superior a 25 MB.");
+    chunks.push(chunk);
+  }
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(options, (error, result) =>
+      error ? reject(error) : resolve(result),
+    );
+    stream.end(Buffer.concat(chunks));
+  });
+}
 async function run() {
   if (apply && !isConfigured)
     throw new Error("Cloudinary no está configurado.");
@@ -109,8 +136,19 @@ async function run() {
       result = await cloudinary.uploader.upload(photo.uploadUrl, options);
     } catch (error) {
       // The original is the same reviewed photograph; thumbnail endpoints may rate-limit.
-      if (photo.uploadUrl === photo.originalUrl) throw error;
-      result = await cloudinary.uploader.upload(photo.originalUrl, options);
+      try {
+        if (photo.uploadUrl === photo.originalUrl) throw error;
+        result = await cloudinary.uploader.upload(photo.originalUrl, options);
+      } catch (originalError) {
+        if (!/429|Too Many Requests/i.test(originalError.message || ""))
+          throw originalError;
+        try {
+          result = await uploadReviewedFile(photo.uploadUrl, options);
+        } catch (downloadError) {
+          if (photo.uploadUrl === photo.originalUrl) throw downloadError;
+          result = await uploadReviewedFile(photo.originalUrl, options);
+        }
+      }
     }
     batch.municipalities.push({
       id: photo.id,

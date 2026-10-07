@@ -1,0 +1,666 @@
+{
+  "checkedAt": "2026-10-07",
+  "scope": "Enriquecimiento verificado de 10 municipios del norte peninsular: dos actividades por municipio, un hotel y un restaurante, con actividades esenciales reutilizadas cuando el encaje es exacto.",
+  "municipalities": [
+    {
+      "id": "f362949c-ac51-480a-bfab-1200cb38222f",
+      "nombre": "RIBADEO",
+      "fields": {
+        "descripcion": "Ribadeo reúne patrimonio marinero, arquitectura indiana y paisajes de ría y costa. Su casco histórico y el barrio de San Roque permiten recorrer la huella urbana de la emigración, mientras que la isla Pancha abre la vista al Cantábrico.",
+        "website": "https://turismoribadeo.gal/",
+        "ubicacion": "Ribadeo, Lugo, Galicia, España"
+      },
+      "sources": [
+        "https://turismoribadeo.gal/",
+        "https://turismoribadeo.gal/descubre-ribadeo/esenciales/",
+        "https://turismoribadeo.gal/descubre-ribadeo/legado-indiano/",
+        "https://turismoribadeo.gal/organiza-tu-viaje/itinerarios-dias/",
+        "https://turismoribadeo.gal/organiza-tu-viaje/donde-comer/",
+        "https://turismoribadeo.gal/en/plan-your-trip/where-to-stay/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Conocer Ribadeo y su casco indiano",
+          "descripcion": "Recorrido por el casco histórico y el barrio de San Roque para descubrir palacetes, arquitectura indiana y espacios ligados a la historia marinera de la villa.",
+          "category": "Patrimonio",
+          "website": "https://turismoribadeo.gal/descubre-ribadeo/legado-indiano/",
+          "sources": [
+            "https://turismoribadeo.gal/descubre-ribadeo/esenciales/",
+            "https://turismoribadeo.gal/descubre-ribadeo/legado-indiano/"
+          ],
+          "essentialItemId": "d71ef305-3a43-4230-a877-b230b4d2ddcd"
+        },
+        {
+          "nombre": "Visitar el Faro de Illa Pancha",
+          "descripcion": "Acercarse al entorno del faro y sus miradores para contemplar la desembocadura de la ría y la costa cantábrica; consulta las condiciones de acceso antes de ir.",
+          "category": "Naturaleza",
+          "website": "https://turismoribadeo.gal/organiza-tu-viaje/itinerarios-dias/",
+          "sources": [
+            "https://turismoribadeo.gal/organiza-tu-viaje/itinerarios-dias/"
+          ],
+          "essentialItemId": "7f4d1315-92fd-4ea1-884c-0de51fe3ebb6"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "O Cabazo",
+          "address": "Rúa Río do Amalló, 1, 27700 Ribadeo, Lugo",
+          "website": "https://hotelocabazo.com/",
+          "descripcion": "Hotel en una zona residencial tranquila, a pocos minutos a pie del centro; su web oficial ofrece consulta y reserva de habitaciones.",
+          "sources": [
+            "https://hotelocabazo.com/en/home-english/",
+            "https://turismoribadeo.gal/en/plan-your-trip/where-to-stay/"
+          ],
+          "bookingUrl": "https://hotelocabazo.com/",
+          "phone": "+34 982 128 517"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "A Mirandilla",
+          "address": "Avenida de Ribadeo, 5, Rinlo, 27715 Ribadeo, Lugo",
+          "website": "https://amirandilladerinlo.com/",
+          "descripcion": "Restaurante de Rinlo incluido en la guía turística municipal de Ribadeo; la web del establecimiento ofrece información propia.",
+          "sources": [
+            "https://turismoribadeo.gal/organiza-tu-viaje/donde-comer/",
+            "https://amirandilladerinlo.com/"
+          ],
+          "cuisine": "Cocina marinera",
+          "phone": "+34 982 123 100"
+        }
+      ]
+    },
+    {
+      "id": "dbf013da-3d74-4a74-a452-57b35a2e9834",
+      "nombre": "LUGO",
+      "fields": {
+        "descripcion": "Lugo conserva un conjunto romano excepcional alrededor de su muralla completa, declarado Patrimonio Mundial. El centro histórico combina el paseo sobre la muralla con plazas, la catedral y vestigios romanos junto al Miño.",
+        "website": "https://www.turismo.gal/que-visitar/cidades/lugo?langId=es_ES",
+        "ubicacion": "Lugo, Galicia, España"
+      },
+      "sources": [
+        "https://www.turismo.gal/que-visitar/cidades/lugo?langId=es_ES",
+        "https://www.turismo.gal/que-visitar/destacados/muralla-romana-de-lugo?langId=es_ES&langid=es_es",
+        "https://www.turismo.gal/que-facer/mananciais-de-galicia/auga-e-natureza-en-lugo?langId=es_ES",
+        "https://www.hotelmendeznunez.com/",
+        "https://paprica.es/",
+        "https://paprica.es/aviso-legal/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Caminar por la Muralla de Lugo",
+          "descripcion": "Recorrido a pie por el adarve de la muralla romana, que conserva el perímetro completo y ofrece vistas del casco histórico.",
+          "category": "Patrimonio",
+          "website": "https://www.turismo.gal/que-visitar/destacados/muralla-romana-de-lugo?langId=es_ES&langid=es_es",
+          "sources": [
+            "https://www.turismo.gal/que-visitar/destacados/muralla-romana-de-lugo?langId=es_ES&langid=es_es"
+          ],
+          "essentialItemId": "092cce80-abc6-4e49-8b3e-232e0630d776"
+        },
+        {
+          "nombre": "Pasear por las riberas del río Miño en Lugo",
+          "descripcion": "Paseo por las riberas del Miño, dentro del entorno de la Reserva de la Biosfera Terras do Miño y a poca distancia de los principales monumentos romanos.",
+          "category": "Naturaleza",
+          "website": "https://www.turismo.gal/que-facer/mananciais-de-galicia/auga-e-natureza-en-lugo?langId=es_ES",
+          "sources": [
+            "https://www.turismo.gal/que-facer/mananciais-de-galicia/auga-e-natureza-en-lugo?langId=es_ES"
+          ],
+          "essentialItemId": "e72d583f-1f0d-4a17-8888-108e38012cea"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Méndez Núñez",
+          "address": "Rúa da Raíña, 1, 27001 Lugo",
+          "website": "https://www.hotelmendeznunez.com/",
+          "descripcion": "Hotel situado dentro de la muralla romana, en el centro histórico de Lugo. Consulta disponibilidad mediante su web oficial.",
+          "sources": [
+            "https://www.hotelmendeznunez.com/"
+          ],
+          "bookingUrl": "https://www.hotelmendeznunez.com/",
+          "phone": "+34 982 230 711"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Paprica",
+          "address": "Rúa Nóreas, 10, 27001 Lugo",
+          "website": "https://paprica.es/",
+          "descripcion": "Restaurante de cocina de temporada que presenta su propuesta y habilita reservas desde su web oficial.",
+          "sources": [
+            "https://paprica.es/",
+            "https://paprica.es/aviso-legal/"
+          ],
+          "cuisine": "Cocina de temporada",
+          "bookingUrl": "https://paprica.es/"
+        }
+      ]
+    },
+    {
+      "id": "9ce12f5e-66f8-49d4-b8b6-43bd60f60a17",
+      "nombre": "PONTEVEDRA",
+      "fields": {
+        "descripcion": "Pontevedra se recorre a pie entre plazas, soportales y templos del casco histórico. La basílica de Santa María y el santuario de la Peregrina muestran dos etapas y estilos distintos del patrimonio de la ciudad.",
+        "website": "https://www.visit-pontevedra.com/",
+        "ubicacion": "Pontevedra, Galicia, España"
+      },
+      "sources": [
+        "https://www.visit-pontevedra.com/",
+        "https://www.visit-pontevedra.com/que-ver/imprescindibles/",
+        "https://www.hotelcomerciopontevedra.com/",
+        "https://oeirado.com/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Conocer la Capilla de la Peregrina",
+          "descripcion": "Visita al santuario de planta singular dedicado a la Virgen Peregrina, emblema de la ciudad y ligado al Camino Portugués.",
+          "category": "Patrimonio",
+          "website": "https://www.visit-pontevedra.com/que-ver/imprescindibles/",
+          "address": "Praza da Peregrina, s/n, 36001 Pontevedra",
+          "sources": [
+            "https://www.visit-pontevedra.com/que-ver/imprescindibles/"
+          ],
+          "essentialItemId": "47d5dda3-ca0d-41f8-8d88-cddfc53c817d"
+        },
+        {
+          "nombre": "Explorar la Basílica de Santa María la Mayor",
+          "descripcion": "Visita a la basílica gótica tardía con fachada plateresca, vinculada históricamente al gremio de mareantes de Pontevedra.",
+          "category": "Patrimonio",
+          "website": "https://www.visit-pontevedra.com/que-ver/imprescindibles/",
+          "address": "Avenida de Santa María, s/n, 36002 Pontevedra",
+          "sources": [
+            "https://www.visit-pontevedra.com/que-ver/imprescindibles/"
+          ],
+          "essentialItemId": "a03c1b54-b7a7-432c-88e7-d26bfe0ef4d9"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Cityexpress Hotel Comercio",
+          "address": "Calle Augusto González Besada, 5, 36001 Pontevedra",
+          "website": "https://www.hotelcomerciopontevedra.com/",
+          "descripcion": "Hotel de habitaciones en el centro de Pontevedra con reserva online desde su sitio oficial.",
+          "sources": [
+            "https://www.hotelcomerciopontevedra.com/"
+          ],
+          "bookingUrl": "https://www.hotelcomerciopontevedra.com/",
+          "phone": "+34 986 851 217"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "O Eirado",
+          "address": "Praza da Leña, 3, 36002 Pontevedra",
+          "website": "https://oeirado.com/",
+          "descripcion": "Restaurante en la plaza de la Leña, en el casco histórico, con reserva directa a través de su página oficial.",
+          "sources": [
+            "https://oeirado.com/"
+          ],
+          "cuisine": "Cocina gallega de producto",
+          "bookingUrl": "https://oeirado.com/",
+          "phone": "+34 986 860 225"
+        }
+      ]
+    },
+    {
+      "id": "d6354b24-dd1f-46ec-8529-0b8191480ef7",
+      "nombre": "AVILÉS",
+      "fields": {
+        "descripcion": "Avilés combina una ría de tradición portuaria con un casco histórico de soportales, plazas y palacios. El Centro Niemeyer aporta una referencia contemporánea junto al agua, mientras la calle Galiana conserva su trazado histórico.",
+        "website": "https://aviles.es/es/conoce-aviles-turismo",
+        "ubicacion": "Avilés, Asturias, España"
+      },
+      "sources": [
+        "https://aviles.es/es/conoce-aviles-turismo",
+        "https://aviles.es/-/centru-niemeyer",
+        "https://aviles.es/web/guest/calle-galiana",
+        "https://www.palaciodeaviles.com/",
+        "https://www.palaciodeaviles.com/restaurantes"
+      ],
+      "actividades": [
+        {
+          "nombre": "Conocer el Centro Niemeyer",
+          "descripcion": "Recorrido por el complejo cultural junto a la ría, con programación de exposiciones y artes escénicas; consulta las visitas disponibles en su web.",
+          "category": "Cultura",
+          "website": "https://aviles.es/-/centru-niemeyer",
+          "address": "Avenida del Zinc, s/n, 33490 Avilés",
+          "sources": [
+            "https://aviles.es/-/centru-niemeyer"
+          ],
+          "essentialItemId": "05f8e5ea-7d1d-4961-b241-28b786d4d250"
+        },
+        {
+          "nombre": "Pasear por la Calle Galiana",
+          "descripcion": "Recorrido por una de las calles históricas más características de Avilés, conocida por sus soportales y edificios tradicionales.",
+          "category": "Patrimonio",
+          "website": "https://aviles.es/web/guest/calle-galiana",
+          "sources": [
+            "https://aviles.es/web/guest/calle-galiana"
+          ],
+          "essentialItemId": "5a5527db-0053-4338-b738-11b0c8d6a277"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Palacio de Avilés",
+          "address": "Plaza de España, 9, 33402 Avilés",
+          "website": "https://www.palaciodeaviles.com/",
+          "descripcion": "Hotel en un palacio barroco del siglo XVII, en la plaza de España; su página oficial ofrece consulta de disponibilidad y reserva.",
+          "sources": [
+            "https://www.palaciodeaviles.com/"
+          ],
+          "bookingUrl": "https://www.palaciodeaviles.com/",
+          "phone": "+34 985 129 080"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurantes del Palacio de Avilés",
+          "address": "Plaza de España, 9, 33402 Avilés",
+          "website": "https://www.palaciodeaviles.com/restaurantes",
+          "descripcion": "Restaurantes del hotel ubicados en el casco histórico; la página oficial describe sus espacios gastronómicos.",
+          "sources": [
+            "https://www.palaciodeaviles.com/restaurantes"
+          ],
+          "cuisine": "Cocina asturiana y de autor",
+          "bookingUrl": "https://www.palaciodeaviles.com/restaurantes",
+          "phone": "+34 985 129 080"
+        }
+      ]
+    },
+    {
+      "id": "fa8b4e30-e5ef-4818-a3b8-4ab14b086091",
+      "nombre": "CUDILLERO",
+      "fields": {
+        "descripcion": "Cudillero conserva una villa marinera en forma de anfiteatro, con callejuelas empinadas y miradores sobre el puerto. El concejo también ofrece un litoral de acantilados y el faro de Cabo Vidio, en Oviñana.",
+        "website": "https://www.turismocudillero.com/",
+        "ubicacion": "Cudillero, Asturias, España",
+        "consejos": "La ruta de miradores incluye pendientes y escaleras; la oficina turística aconseja calzado cómodo."
+      },
+      "sources": [
+        "https://www.turismocudillero.com/",
+        "https://www.turismocudillero.com/vistas/ruta-de-miradores-en-cudillero/",
+        "https://www.turismocudillero.com/faros/faro-de-cabo-vidio/",
+        "https://elpescadorcudillero.es/",
+        "https://reservas.elpescadorcudillero.es/book",
+        "https://www.cudillero.es/hosteleria"
+      ],
+      "actividades": [
+        {
+          "nombre": "Hacer la Ruta de los Miradores",
+          "descripcion": "Recorrido por miradores del casco marinero, entre ellos El Pico, Cimadevilla, la Garita-Atalaya y el Faro. El trazado incluye cuestas y escaleras; se recomienda llevar calzado cómodo.",
+          "category": "Naturaleza",
+          "website": "https://www.turismocudillero.com/vistas/ruta-de-miradores-en-cudillero/",
+          "sources": [
+            "https://www.turismocudillero.com/vistas/ruta-de-miradores-en-cudillero/"
+          ],
+          "essentialItemId": "cab9aaf1-3594-446c-ab3f-1a8fcf66d5b3"
+        },
+        {
+          "nombre": "Recorrer el Cabo Vidio",
+          "descripcion": "Paseo por el entorno del faro de Cabo Vidio, en Oviñana, con miradores hacia los acantilados del concejo de Cudillero.",
+          "category": "Naturaleza",
+          "website": "https://www.turismocudillero.com/faros/faro-de-cabo-vidio/",
+          "sources": [
+            "https://www.turismocudillero.com/faros/faro-de-cabo-vidio/",
+            "https://www.turismocudillero.com/acantilados-cabovidio-cudillero-asturias/"
+          ],
+          "essentialItemId": "3b563bed-6705-4a9a-bcf7-2553516116f2"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Restaurante El Pescador",
+          "address": "Tolombredo de Arriba, s/n, 33150 Cudillero, Asturias",
+          "website": "https://elpescadorcudillero.es/",
+          "descripcion": "Hotel boutique familiar con reserva directa de habitaciones desde la web oficial.",
+          "sources": [
+            "https://elpescadorcudillero.es/",
+            "https://elpescadorcudillero.es/habitaciones"
+          ],
+          "bookingUrl": "https://elpescadorcudillero.es/",
+          "phone": "+34 985 590 937"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante El Pescador",
+          "address": "Tolombredo de Arriba, s/n, 33150 Cudillero, Asturias",
+          "website": "https://elpescadorcudillero.es/",
+          "descripcion": "Restaurante marinero que indica pescado fresco y permite reservar mesa mediante su sistema oficial.",
+          "sources": [
+            "https://elpescadorcudillero.es/",
+            "https://reservas.elpescadorcudillero.es/book"
+          ],
+          "cuisine": "Cocina marinera",
+          "bookingUrl": "https://reservas.elpescadorcudillero.es/book",
+          "phone": "+34 985 590 937"
+        }
+      ]
+    },
+    {
+      "id": "c0873985-863c-4493-8dd5-09f66481068d",
+      "nombre": "LLANES",
+      "fields": {
+        "descripcion": "Llanes reúne casco histórico, puerto y paseos sobre el litoral oriental asturiano. Desde el centro urbano parten recorridos costeros señalizados que enlazan playas, acantilados y pequeñas localidades marineras.",
+        "website": "https://www.turismoasturias.es/",
+        "ubicacion": "Llanes, Asturias, España"
+      },
+      "sources": [
+        "https://www.turismoasturias.es/pt/senderismo/rutas/senderistas/pendueles-llanes",
+        "https://www.turismoasturias.es/senderismo/rutas/familias/llanes-playa-de-las-camaras-celoriu",
+        "https://www.hotelmontemarllanes.com/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Hacer la Senda Costera de Llanes",
+          "descripcion": "Ruta litoral entre Pendueles y Llanes, con acantilados, playas y miradores; el itinerario oficial indica distancia, desnivel y opciones de regreso en transporte público.",
+          "category": "Naturaleza",
+          "website": "https://www.turismoasturias.es/senderismo/rutas/senderistas/pendueles-llanes",
+          "sources": [
+            "https://www.turismoasturias.es/senderismo/rutas/senderistas/pendueles-llanes"
+          ],
+          "essentialItemId": "3501a9c4-1299-4921-b8c6-620785ed47a3"
+        },
+        {
+          "nombre": "Explorar Llanes",
+          "descripcion": "Paseo por el núcleo histórico de Llanes y su entorno costero, entre el puerto, el paseo de San Pedro y las playas próximas.",
+          "category": "Patrimonio",
+          "website": "https://www.turismoasturias.es/senderismo/rutas/familias/llanes-playa-de-las-camaras-celoriu",
+          "sources": [
+            "https://www.turismoasturias.es/senderismo/rutas/familias/llanes-playa-de-las-camaras-celoriu"
+          ],
+          "essentialItemId": "1f9d6cad-0899-40e2-a0c8-50740de59431"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Montemar Llanes",
+          "address": "Calle José Enrique Rozas Guijarro, 8, 33500 Llanes, Asturias",
+          "website": "https://www.hotelmontemarllanes.com/",
+          "descripcion": "Hotel céntrico a pocos pasos del casco histórico, el paseo de San Pedro y la playa del Sablón; ofrece reserva directa en su web.",
+          "sources": [
+            "https://www.hotelmontemarllanes.com/"
+          ],
+          "bookingUrl": "https://www.hotelmontemarllanes.com/",
+          "phone": "+34 985 400 100"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "El Cenador del Convento",
+          "address": "Calle José Enrique Rozas Guijarro, 8, 33500 Llanes, Asturias",
+          "website": "https://www.hotelmontemarllanes.com/",
+          "descripcion": "Restaurante del Hotel Montemar, con terraza-jardín y comedor en una antigua capilla; la web del hotel informa sobre el espacio y contacto.",
+          "sources": [
+            "https://www.hotelmontemarllanes.com/"
+          ],
+          "cuisine": "Cocina asturiana",
+          "phone": "+34 985 400 100"
+        }
+      ]
+    },
+    {
+      "id": "8ea75626-7e42-4ad8-89bb-b65ced176d90",
+      "nombre": "SANTILLANA DEL MAR",
+      "fields": {
+        "descripcion": "Santillana del Mar conserva un conjunto histórico de calles empedradas y casonas junto a la Colegiata de Santa Juliana. A poca distancia, el Museo de Altamira permite acercarse al arte rupestre y a la vida del Paleolítico.",
+        "website": "https://santillanadelmarturismo.com/",
+        "ubicacion": "Santillana del Mar, Cantabria, España"
+      },
+      "sources": [
+        "https://santillanadelmarturismo.com/",
+        "https://www.cultura.gob.es/mnaltamira/cueva-altamira.html",
+        "https://www.cultura.gob.es/mnaltamira/dam/jcr%3A21f457c0-bdb7-40e2-9339-a64e214d072e/folleto-brochure-altamira-nuestros-museos.pdf",
+        "https://www.hotelsantillana.es/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Pasear por Santillana del Mar",
+          "descripcion": "Recorrido a pie por las calles empedradas del conjunto histórico y sus plazas, entre casonas tradicionales y la Colegiata.",
+          "category": "Patrimonio",
+          "website": "https://santillanadelmarturismo.com/",
+          "sources": [
+            "https://santillanadelmarturismo.com/",
+            "https://santillanadelmarturismo.com/patrimonio-historico-en-santillana/colegiata-de-santa-juliana/",
+            "https://turismodecantabria.com/contenidoDinamico/FolletosTuristicosFicheros/7C8F3702-CC2F-29BF-B59F-6298CF1FBC76.pdf"
+          ],
+          "essentialItemId": "0314d049-0ed8-4dcc-b16f-75ec2890061f"
+        },
+        {
+          "nombre": "Visitar el Museo y Neocueva de Altamira",
+          "descripcion": "La exposición permanente y la Neocueva explican la vida de las comunidades paleolíticas y el arte rupestre de Altamira. Consulta entradas y condiciones en la web del museo.",
+          "category": "Museos",
+          "website": "https://www.cultura.gob.es/mnaltamira/cueva-altamira.html",
+          "address": "Avenida Marcelino Sanz de Sautuola, s/n, 39330 Santillana del Mar",
+          "sources": [
+            "https://www.cultura.gob.es/mnaltamira/cueva-altamira.html",
+            "https://www.cultura.gob.es/mnaltamira/dam/jcr%3A21f457c0-bdb7-40e2-9339-a64e214d072e/folleto-brochure-altamira-nuestros-museos.pdf"
+          ],
+          "essentialItemId": "4f8d50e5-02af-440e-afd0-f446762a9ece"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Santillana",
+          "address": "Calle El Cruce, s/n, 39330 Santillana del Mar, Cantabria",
+          "website": "https://www.hotelsantillana.es/",
+          "descripcion": "Hotel en el centro de la villa, en una casona montañesa; su web oficial ofrece contacto para consultas y reservas.",
+          "sources": [
+            "https://www.hotelsantillana.es/"
+          ],
+          "phone": "+34 942 818 011"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante Hotel Santillana",
+          "address": "Calle El Cruce, s/n, 39330 Santillana del Mar, Cantabria",
+          "website": "https://www.hotelsantillana.es/",
+          "descripcion": "Restaurante de cocina casera y tradicional, principalmente para grupos y con reserva previa según indica el establecimiento.",
+          "sources": [
+            "https://www.hotelsantillana.es/"
+          ],
+          "cuisine": "Cocina tradicional",
+          "phone": "+34 942 818 011"
+        }
+      ]
+    },
+    {
+      "id": "482f4360-41e4-4559-90f0-351bcaf5a365",
+      "nombre": "COMILLAS",
+      "fields": {
+        "descripcion": "Comillas destaca por su arquitectura monumental, con obras modernistas y edificios ligados a la historia del marqués de Comillas. La localidad se abre también al litoral a través de su playa urbana y el puerto pesquero.",
+        "website": "https://www.turismocomillas.com/",
+        "ubicacion": "Comillas, Cantabria, España"
+      },
+      "sources": [
+        "https://www.turismocomillas.com/",
+        "https://consellantonigaudi.cat/es/edificios/el-capricho-de-gaudi/",
+        "https://www.turismocomillas.com/es/playa-de-comillas/p-13",
+        "https://www.abbahoteles.com/es/abba-comillas-hotel/hotel",
+        "https://www.elcantabricocomillas.es/",
+        "https://www.elcantabricocomillas.es/contacto/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Explorar Comillas y su patrimonio monumental",
+          "descripcion": "Recorrido por la villa para descubrir El Capricho de Gaudí, el Palacio de Sobrellano y la Universidad Pontificia, conjunto destacado de la arquitectura local.",
+          "category": "Patrimonio",
+          "website": "https://consellantonigaudi.cat/es/edificios/el-capricho-de-gaudi/",
+          "sources": [
+            "https://consellantonigaudi.cat/es/edificios/el-capricho-de-gaudi/",
+            "https://www.turismocomillas.com/"
+          ],
+          "essentialItemId": "00b7f8d5-007c-4eab-805b-647ca985a6f4"
+        },
+        {
+          "nombre": "Pasear por la Playa de Comillas",
+          "descripcion": "Arenal urbano de arena dorada junto al casco histórico, con paseo marítimo y servicios de playa descritos por el portal turístico local.",
+          "category": "Naturaleza",
+          "website": "https://www.turismocomillas.com/es/playa-de-comillas/p-13",
+          "sources": [
+            "https://www.turismocomillas.com/es/playa-de-comillas/p-13"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "abba Comillas hotel",
+          "address": "Urbanización Rovacías, s/n, 39520 Comillas, Cantabria",
+          "website": "https://www.abbahoteles.com/es/abba-comillas-hotel/hotel",
+          "descripcion": "Hotel en un entorno natural a pocos minutos del centro histórico; la cadena ofrece reserva desde su web oficial.",
+          "sources": [
+            "https://www.abbahoteles.com/es/abba-comillas-hotel/hotel"
+          ],
+          "bookingUrl": "https://www.abbahoteles.com/es/abba-comillas-hotel/hotel",
+          "phone": "+34 942 720 470"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "El Cantábrico Comillas",
+          "address": "Paseo El Muelle, 21, 39520 Comillas, Cantabria",
+          "website": "https://www.elcantabricocomillas.es/",
+          "descripcion": "Restaurante y terraza junto al puerto de Comillas, con pescados y mariscos; el establecimiento publica el teléfono de reservas.",
+          "sources": [
+            "https://www.elcantabricocomillas.es/",
+            "https://www.elcantabricocomillas.es/contacto/"
+          ],
+          "cuisine": "Cocina marinera",
+          "phone": "+34 942 720 700"
+        }
+      ]
+    },
+    {
+      "id": "769ab451-66cb-4720-b2b4-e68380420619",
+      "nombre": "POTES",
+      "fields": {
+        "descripcion": "Potes se encuentra en la confluencia de los ríos Deva y Quiviesa, en el corazón de Liébana. Sus calles conservan torres y puentes históricos, con la Torre del Infantado como uno de sus principales hitos patrimoniales.",
+        "website": "https://www.potes.es/",
+        "ubicacion": "Potes, Cantabria, España"
+      },
+      "sources": [
+        "https://www.potes.es/",
+        "https://www.spain.info/es/lugares-interes/torre-infantado/",
+        "https://turismodecantabria.com/contenidoDinamico/FolletosTuristicosFicheros/B38D1A87-66D5-58A4-9882-62578BF70A28.pdf",
+        "https://lacasadelcapitanpotes.com/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Visitar la Torre del Infantado",
+          "descripcion": "Visitar la torre medieval situada en el centro de Potes, que alberga una exposición sobre los Beatos y la historia de Liébana. Consulta las modalidades de acceso antes de ir.",
+          "category": "Patrimonio",
+          "website": "https://www.spain.info/es/lugares-interes/torre-infantado/",
+          "sources": [
+            "https://www.spain.info/es/lugares-interes/torre-infantado/"
+          ]
+        },
+        {
+          "nombre": "Recorrer el casco histórico de Potes",
+          "descripcion": "Paseo por las calles y puentes de la villa, entre torres, plazas y la confluencia de los ríos Deva y Quiviesa.",
+          "category": "Patrimonio",
+          "website": "https://www.potes.es/",
+          "sources": [
+            "https://www.potes.es/",
+            "https://turismodecantabria.com/contenidoDinamico/FolletosTuristicosFicheros/B38D1A87-66D5-58A4-9882-62578BF70A28.pdf"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "La Casa del Capitán",
+          "address": "Calle Cervantes, 3, 39570 Potes, Cantabria",
+          "website": "https://lacasadelcapitanpotes.com/",
+          "descripcion": "Apartamentos boutique en el centro histórico de Potes. El establecimiento informa que las reservas se gestionan por teléfono.",
+          "sources": [
+            "https://lacasadelcapitanpotes.com/"
+          ],
+          "phone": "+34 679 243 560"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "El Cenador del Capitán",
+          "address": "Calle Cervantes, 3, 39570 Potes, Cantabria",
+          "website": "https://elcenadordelcapitan.com/",
+          "descripcion": "Restaurante vinculado al alojamiento La Casa del Capitán; consulta su propuesta y contacto en el canal oficial.",
+          "sources": [
+            "https://lacasadelcapitanpotes.com/"
+          ],
+          "cuisine": "Cocina lebaniega",
+          "bookingUrl": "https://elcenadordelcapitan.com/",
+          "phone": "+34 722 187 196"
+        }
+      ]
+    },
+    {
+      "id": "c1dd7710-9cfb-430f-bcec-a08d8e480a33",
+      "nombre": "HONDARRIBIA",
+      "fields": {
+        "descripcion": "Hondarribia combina un casco medieval amurallado con el barrio pesquero de La Marina, conocido por sus casas de colores. En las laderas de Jaizkibel, el santuario de Guadalupe ofrece otro recorrido patrimonial y vistas del estuario del Bidasoa.",
+        "website": "https://hondarribiaturismo.com/",
+        "ubicacion": "Hondarribia, Gipuzkoa, País Vasco, España"
+      },
+      "sources": [
+        "https://hondarribiaturismo.com/el-casco-antiguo-de-hondarribia/",
+        "https://turismo.euskadi.eus/es/localidades/hondarribia/webtur00-content/es/",
+        "https://www.bidasoaturismo.com/?lang=es",
+        "https://www.hoteljauregui.com/hotel-jauregui.html",
+        "https://restaurantehondar.com/el-restaurante/",
+        "https://www.euskadi.eus/en/restaurants/hondar-jatetxea/web01-ejeduki/en/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Explorar Hondarribia: casco histórico y barrio de La Marina",
+          "descripcion": "Paseo entre las calles adoquinadas del recinto amurallado y el antiguo barrio de pescadores, cuyas casas conservan balcones y contraventanas de colores.",
+          "category": "Patrimonio",
+          "website": "https://hondarribiaturismo.com/el-casco-antiguo-de-hondarribia/",
+          "sources": [
+            "https://hondarribiaturismo.com/el-casco-antiguo-de-hondarribia/",
+            "https://www.bidasoaturismo.com/?lang=es"
+          ],
+          "essentialItemId": "09936d33-292a-43e2-b562-600d30165a03"
+        },
+        {
+          "nombre": "Subir al Santuario de Guadalupe",
+          "descripcion": "Visita al santuario de Nuestra Señora de Guadalupe en Jaizkibel, en un entorno elevado con vistas hacia la bahía y el estuario del Bidasoa.",
+          "category": "Patrimonio",
+          "website": "https://turismo.euskadi.eus/es/localidades/hondarribia/webtur00-content/es/",
+          "sources": [
+            "https://turismo.euskadi.eus/es/localidades/hondarribia/webtur00-content/es/"
+          ],
+          "essentialItemId": "4c9a5cf4-f681-41ea-8200-28bcfb29f9da"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Jauregui",
+          "address": "Calle Zuloaga, 5, 20280 Hondarribia, Gipuzkoa",
+          "website": "https://www.hoteljauregui.com/hotel-jauregui.html",
+          "descripcion": "Hotel en el centro de Hondarribia; su sitio oficial facilita información de estancia y reserva.",
+          "sources": [
+            "https://www.hoteljauregui.com/hotel-jauregui.html",
+            "https://www.hoteljauregui.com/reservar.html"
+          ],
+          "bookingUrl": "https://www.hoteljauregui.com/reservar.html",
+          "phone": "+34 943 641 400"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Hondar Jatetxea",
+          "address": "Calle Zuloaga, 20, 20280 Hondarribia, Gipuzkoa",
+          "website": "https://restaurantehondar.com/",
+          "descripcion": "Restaurante en el centro, cerca del puerto, con cocina tradicional y datos de contacto y reservas en su web oficial.",
+          "sources": [
+            "https://restaurantehondar.com/el-restaurante/",
+            "https://www.euskadi.eus/en/restaurants/hondar-jatetxea/web01-ejeduki/en/"
+          ],
+          "cuisine": "Cocina vasca",
+          "phone": "+34 943 642 793"
+        }
+      ]
+    }
+  ]
+}
