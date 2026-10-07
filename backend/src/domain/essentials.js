@@ -319,6 +319,8 @@ function normalizeEssentialGroups(value) {
           reservationRequired = item.reservationRequired;
         }
         return {
+          ...(typeof item?.id === "string" && /^[a-zA-Z0-9-]{1,80}$/.test(item.id) ? { id: item.id } : {}),
+          catalogActivityId: cleanPlainText(item?.catalogActivityId, 80) || null,
           ...translationData(item, "essentialItem"),
           title: itemTitle,
           description: cleanPlainText(item?.description, 700) || null,

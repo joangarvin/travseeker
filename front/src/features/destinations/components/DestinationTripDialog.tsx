@@ -15,6 +15,7 @@ type DestinationTripDialogProps = {
   collectionsError: string;
   token: string;
   plannedItem?: EssentialItem | null;
+  plannedActivityValue?: string;
   defaultMunicipioId?: string;
   onRetryCollections: () => void;
   onClose: () => void;
@@ -43,6 +44,7 @@ export function DestinationTripDialog({
   collectionsError,
   token,
   plannedItem,
+  plannedActivityValue,
   defaultMunicipioId,
   onRetryCollections,
   onClose,
@@ -68,7 +70,7 @@ export function DestinationTripDialog({
 
   const chooseCollection = async (collection: CollectionSummary) => {
     setError('');
-    if (!plannedItem) {
+    if (!plannedItem && !defaultMunicipioId) {
       setPending(true);
       try {
         await api(
@@ -103,7 +105,7 @@ export function DestinationTripDialog({
   };
 
   const addEssentialToDay = async () => {
-    if (!selectedCollection || !plannedItem) return;
+    if (!selectedCollection || (!plannedItem && !defaultMunicipioId)) return;
     setPending(true);
     setError('');
     let destinationWasAdded = false;
@@ -114,7 +116,14 @@ export function DestinationTripDialog({
         token,
       );
       destinationWasAdded = true;
-      const activityName = plain(plannedItem.title) || t('Experiencia imprescindible');
+      const activityName = plannedItem
+        ? plain(plannedItem.title) || t('Experiencia imprescindible')
+        : undefined;
+      const activityValue = activityName ? plannedActivityValue || activityName : undefined;
+      const addedName =
+        activityName ||
+        destination.municipios?.find((municipio) => municipio.id === defaultMunicipioId)?.nombre ||
+        t('Base seleccionada');
       const itinerary =
         selectedDayNumber === 'new'
           ? [
@@ -131,16 +140,25 @@ export function DestinationTripDialog({
                     }
                   : {}),
                 ...(defaultMunicipioId ? { baseMunicipioId: defaultMunicipioId } : {}),
-                plannedActivities: [activityName],
+                plannedActivities: activityValue ? [activityValue] : [],
               },
             ]
           : selectedCollection.itinerary.map((day) =>
               day.dayNumber === selectedDayNumber
                 ? {
                     ...day,
-                    plannedActivities: [
-                      ...new Set([...(day.plannedActivities || []), activityName]),
-                    ],
+                    ...(activityValue
+                      ? {
+                          plannedActivities: [
+                            ...new Set([
+                              ...(day.plannedActivities || []),
+                              day.plannedActivities?.includes(activityName!)
+                                ? activityName!
+                                : activityValue,
+                            ]),
+                          ],
+                        }
+                      : { baseMunicipioId: defaultMunicipioId }),
                   }
                 : day,
             );
@@ -169,7 +187,7 @@ export function DestinationTripDialog({
       );
       onAdded(
         t('{0} se ha añadido {1} de {2}.', {
-          0: activityName,
+          0: addedName,
           1:
             selectedDayNumber === 'new'
               ? t('a un día nuevo')
@@ -233,7 +251,7 @@ export function DestinationTripDialog({
         </Notice>
       ) : detailLoading ? (
         <Loader label={t('Abriendo el itinerario')} />
-      ) : selectedCollection && plannedItem ? (
+      ) : selectedCollection && (plannedItem || defaultMunicipioId) ? (
         <div className="trip-dialog__day-step">
           <button
             className="trip-dialog__back"

@@ -755,3 +755,39 @@
     translate: none;
   }
 }
+
+/* A base contains two independent actions: select it and explore its municipality. */
+.base-strip__list > .base-card-shell {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  overflow: hidden;
+}
+.base-card-shell[data-selected='true'] {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 22%, transparent);
+}
+.base-card-shell > .base-card {
+  flex: 1;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  min-width: 0;
+}
+.base-card-shell > .base-card:hover {
+  translate: none;
+}
+.base-card-shell > .base-card__guide-link {
+  margin: 0 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  overflow-wrap: anywhere;
+  text-align: start;
+}
+.base-card-shell > :focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: -4px;
+}

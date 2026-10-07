@@ -112,6 +112,7 @@ function normalizeMunicipioPayload(payload) {
   }
   return {
     ...translationData(payload, "municipality"),
+    ...require("./municipalityCatalog").guideFields(payload),
     nombre,
     precios: stripHtmlToText(payload.precios),
     conexiones: stripHtmlToText(payload.conexiones),

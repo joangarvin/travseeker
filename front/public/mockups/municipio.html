@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ficha de municipio · Propuestas TravSeeker</title>
+    <link rel="stylesheet" href="/src/styles/fonts.css" />
+    <link rel="stylesheet" href="/src/styles/tokens.css" />
+    <link rel="stylesheet" href="/mockups/municipio.css" />
+  </head>
+  <body>
+    <a class="skip" href="#contenido">Saltar a la ficha</a>
+    <header class="lab">
+      <div><b>Ficha de municipio</b><span>Exploración visual · Sitges</span></div>
+      <nav aria-label="Propuestas">
+        <button data-view="guia">1 · Guía del municipio</button
+        ><button data-view="base">2 · Tu base de viaje</button
+        ><button data-view="mapa">3 · Lugares en el mapa</button>
+      </nav>
+      <div class="lab-tools">
+        <button data-mobile aria-pressed="false">Vista móvil</button
+        ><button data-theme aria-label="Cambiar tema">Tema oscuro</button>
+      </div>
+    </header>
+    <p class="lab-caption" id="direction"></p>
+    <div class="site" id="site">
+      <header class="site-head">
+        <a class="brand" href="/?lang=es"><span>T</span>TravSeeker</a
+        ><span class="site-context">Guías de municipios</span
+        ><button class="saved-link" data-action="saved">
+          Guardados <span id="saved-count">0</span>
+        </button>
+      </header>
+      <main id="contenido"></main>
+      <footer class="demo-footer">
+        Prototipo interactivo. Lugares, precios y tiempos de ejemplo; alojamientos y restaurantes
+        ficticios. Fotografía de referencia del destino. El mapa es esquemático y no sirve para
+        navegar.
+      </footer>
+    </div>
+    <dialog id="dialog" aria-labelledby="dialog-title">
+      <button class="close" data-close aria-label="Cerrar">×</button>
+      <div id="dialog-content"></div>
+    </dialog>
+    <div id="status" class="toast" role="status" aria-live="polite"></div>
+    <script src="/mockups/municipio.js"></script>
+  </body>
+</html>

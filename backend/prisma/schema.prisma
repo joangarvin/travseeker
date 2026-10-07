@@ -191,6 +191,10 @@ model EssentialGroup {
 }
 
 model EssentialItem {
+  catalogActivityId String?
+  catalogActivity Experience? @relation("FeaturedActivity", fields: [catalogActivityId], references: [id], onDelete: SetNull)
+  @@index([catalogActivityId])
+  municipalityExperience Experience?
   translations Json @default("{}")
   id                  String   @id @default(uuid())
   groupId             String
@@ -230,6 +234,16 @@ model Municipio {
   createdById     String?
   reviewedById    String?
 
+  descripcion String @default("")
+  imagen String @default("")
+  imagenAlt String @default("")
+  ubicacion String @default("")
+  website String @default("")
+  mejorEpoca String @default("")
+  consejos String @default("")
+  activityLinks MunicipioExperience[]
+  hotelLinks MunicipioHotel[]
+  restaurantLinks MunicipioRestaurant[]
   destinoLinks DestinoMunicipio[]
   createdBy    User?              @relation("MunicipioCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
   reviewedBy   User?              @relation("MunicipioReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
@@ -446,4 +460,105 @@ model Favorito {
   @@unique([userId, destinoId])
   @@index([userId])
   @@index([destinoId])
+}
+
+model Experience {
+  translations Json @default("{}")
+  featuredItems EssentialItem[] @relation("FeaturedActivity")
+  essentialItemId String? @unique
+  essentialItem EssentialItem? @relation(fields: [essentialItemId], references: [id], onDelete: SetNull)
+  id String @id @default(uuid())
+  nombre String @default("")
+  descripcion String @default("")
+  imagen String @default("")
+  imagenAlt String @default("")
+  address String @default("")
+  website String @default("")
+  bookingUrl String @default("")
+  phone String @default("")
+  price String @default("")
+  duration String @default("")
+  bestTime String @default("")
+  category String @default("")
+  latitud Float?
+  longitud Float?
+  isPublished Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  municipioLinks MunicipioExperience[]
+  @@index([isPublished, nombre])
+}
+
+model MunicipioExperience {
+  municipioId String
+  recordId String
+  sortOrder Int @default(0)
+  municipio Municipio @relation(fields: [municipioId], references: [id], onDelete: Cascade)
+  record Experience @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  @@id([municipioId, recordId])
+  @@index([recordId])
+}
+
+model Hotel {
+  id String @id @default(uuid())
+  nombre String @default("")
+  descripcion String @default("")
+  imagen String @default("")
+  imagenAlt String @default("")
+  address String @default("")
+  website String @default("")
+  bookingUrl String @default("")
+  phone String @default("")
+  price String @default("")
+  stars String @default("")
+  amenities String @default("")
+  latitud Float?
+  longitud Float?
+  isPublished Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  municipioLinks MunicipioHotel[]
+  @@index([isPublished, nombre])
+}
+
+model MunicipioHotel {
+  municipioId String
+  recordId String
+  sortOrder Int @default(0)
+  municipio Municipio @relation(fields: [municipioId], references: [id], onDelete: Cascade)
+  record Hotel @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  @@id([municipioId, recordId])
+  @@index([recordId])
+}
+
+model Restaurant {
+  id String @id @default(uuid())
+  nombre String @default("")
+  descripcion String @default("")
+  imagen String @default("")
+  imagenAlt String @default("")
+  address String @default("")
+  website String @default("")
+  bookingUrl String @default("")
+  phone String @default("")
+  price String @default("")
+  cuisine String @default("")
+  openingHours String @default("")
+  latitud Float?
+  longitud Float?
+  isPublished Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  municipioLinks MunicipioRestaurant[]
+  @@index([isPublished, nombre])
+}
+
+model MunicipioRestaurant {
+  municipioId String
+  recordId String
+  sortOrder Int @default(0)
+  municipio Municipio @relation(fields: [municipioId], references: [id], onDelete: Cascade)
+  record Restaurant @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  @@id([municipioId, recordId])
+  @@index([recordId])
 }

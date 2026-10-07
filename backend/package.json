@@ -25,7 +25,9 @@
     "alerts:dry-run": "node scripts/process-alerts.js --dry-run",
     "db:migrate-translations": "node scripts/migrate-translations.js",
     "db:translate-english": "node scripts/backfill-english.js",
-    "db:audit-translations": "node scripts/audit-translations.js"
+    "db:audit-translations": "node scripts/audit-translations.js",
+    "db:migrate-unified-activities": "node scripts/migrate-unified-activities.js",
+    "db:migrate-municipality-guides": "node scripts/migrate-municipality-guides.js"
   },
   "keywords": [],
   "author": "",

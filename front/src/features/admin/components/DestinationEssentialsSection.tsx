@@ -1,8 +1,10 @@
 import { LocalizedField } from './LocalizedField';
 import { t, locale } from '../../../i18n';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ArrowDown, ArrowUp, ChevronDown, ListPlus, Plus, Trash2 } from 'lucide-react';
-import { Button, Empty, Field } from '../../../components/ui';
+import { api } from '../../../services/api';
+import type { MunicipalityRecord } from '../../../types';
+import { Button, Empty, Field, Notice } from '../../../components/ui';
 import { EssentialIconGlyph, inferEssentialIcon } from '../../essentials/essentialIcons';
 import type { EssentialGroup, EssentialItem, Place } from '../../../types';
 import type { DestinationUpdater } from './DestinationEditorSections';
@@ -109,6 +111,32 @@ export function DestinationEssentialsSection({
   update,
   onRequestPlace,
 }: DestinationEssentialsSectionProps) {
+  const [catalogOpen, setCatalogOpen] = useState(false);
+  const [catalog, setCatalog] = useState<MunicipalityRecord[]>([]);
+  const [catalogQuery, setCatalogQuery] = useState('');
+  const [catalogId, setCatalogId] = useState('');
+  const [catalogGroup, setCatalogGroup] = useState('');
+  const [catalogError, setCatalogError] = useState('');
+  const [catalogBusy, setCatalogBusy] = useState(false);
+  useEffect(() => {
+    if (!catalogOpen) return;
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => {
+      api<MunicipalityRecord[]>(
+        `/admin/fichas/actividades?unified=1&q=${encodeURIComponent(catalogQuery)}`,
+        { signal: controller.signal },
+        token,
+      )
+        .then(setCatalog)
+        .catch((cause) => {
+          if (!controller.signal.aborted) setCatalogError(cause.message);
+        });
+    }, 250);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [catalogOpen, catalogQuery, token]);
   const [openGroups, setOpenGroups] = useState<Set<string>>(new Set());
   const [removed, setRemoved] = useState<{
     restore: (current: EssentialGroup[]) => EssentialGroup[];
@@ -136,6 +164,54 @@ export function DestinationEssentialsSection({
     setOpenGroups((current) => new Set(current).add(group.id));
   };
 
+  const addCatalogActivity = async () => {
+    const selected = catalog.find((row) => row.id === catalogId);
+    if (!selected) return;
+    setCatalogBusy(true);
+    setCatalogError('');
+    try {
+      const record = selected.id.startsWith('source_')
+        ? await api<MunicipalityRecord>(
+            '/admin/fichas/actividades',
+            { method: 'POST', body: JSON.stringify({ essentialItemId: selected.essentialItemId }) },
+            token,
+          )
+        : selected;
+      if (
+        groups.some((group) =>
+          group.items.some(
+            (item) => item.catalogActivityId === record.id || item.id === record.essentialItemId,
+          ),
+        )
+      )
+        throw new Error('Esta actividad ya es un imprescindible del destino.');
+      const item: EssentialItem = {
+        ...newItem(record.nombre),
+        catalogActivityId: record.id,
+        description: record.descripcion || '',
+        imageUrl: record.imagen || null,
+        imageAlt: record.imagenAlt || record.nombre,
+        duration: record.duration || null,
+        bestTime: record.bestTime || null,
+        officialUrl: record.website || null,
+      };
+      const target = groups.find((group) => group.id === catalogGroup);
+      const nextGroup = target || { ...newGroup('Actividades imprescindibles'), items: [] };
+      setGroups(
+        target
+          ? groups.map((group) =>
+              group.id === target.id ? { ...group, items: [...group.items, item] } : group,
+            )
+          : [...groups, { ...nextGroup, items: [item] }],
+      );
+      setOpenGroups((current) => new Set(current).add(nextGroup.id));
+      setCatalogId('');
+    } catch (cause) {
+      setCatalogError(cause instanceof Error ? cause.message : 'No se pudo añadir la actividad');
+    } finally {
+      setCatalogBusy(false);
+    }
+  };
   return (
     <section className="editor-section" aria-labelledby="editor-essentials">
       <SectionHeading
@@ -166,6 +242,53 @@ export function DestinationEssentialsSection({
         </Button>
       </div>
 
+      <Button type="button" variant="secondary" onClick={() => setCatalogOpen((value) => !value)}>
+        Elegir del catálogo de actividades
+      </Button>
+      {catalogOpen && (
+        <div className="municipality-source-picker">
+          <p>
+            Destaca una actividad existente sin duplicar su ficha. Guarda el destino para confirmar
+            la selección.
+          </p>
+          {catalogError && <Notice tone="error">{catalogError}</Notice>}
+          <label>
+            Buscar actividad
+            <input value={catalogQuery} onChange={(event) => setCatalogQuery(event.target.value)} />
+          </label>
+          <label>
+            Actividad
+            <select value={catalogId} onChange={(event) => setCatalogId(event.target.value)}>
+              <option value="">Selecciona una actividad</option>
+              {catalog.map((row) => (
+                <option key={row.id} value={row.id}>
+                  {row.nombre}
+                  {row.isPublished ? '' : ' · Borrador'}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Tema
+            <select value={catalogGroup} onChange={(event) => setCatalogGroup(event.target.value)}>
+              <option value="">Nuevo tema de actividades</option>
+              {groups.map((group) => (
+                <option key={group.id} value={group.id}>
+                  {group.title}
+                </option>
+              ))}
+            </select>
+          </label>
+          <Button
+            type="button"
+            loading={catalogBusy}
+            disabled={!catalogId}
+            onClick={() => void addCatalogActivity()}
+          >
+            Marcar como imprescindible
+          </Button>
+        </div>
+      )}
       {removed && (
         <div className="essential-editor__undo" role="status">
           <span>{t('Elemento eliminado.')}</span>

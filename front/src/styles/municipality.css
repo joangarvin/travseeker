@@ -1,0 +1,769 @@
+.municipality-page {
+  --municipality-yellow: #ffd51f;
+  color: var(--ink);
+}
+.municipality-page--empty {
+  max-width: 1100px;
+  margin: 60px auto;
+  padding: 24px;
+}
+.municipality-cover {
+  position: relative;
+  isolation: isolate;
+  min-height: 570px;
+  background: #151923;
+  color: #fff;
+  display: grid;
+  align-items: end;
+}
+.municipality-cover__photo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+.municipality-cover__photo > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.municipality-cover__photo:after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(5, 10, 24, 0.55), rgba(5, 10, 24, 0.18)),
+    linear-gradient(0deg, rgba(5, 10, 24, 0.85), transparent 80%);
+}
+.municipality-cover__photo > button {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 18, 25, 0.7);
+  color: white;
+  border: 1px solid #ffffff60;
+  border-radius: 30px;
+  padding: 12px 16px;
+  min-height: 44px;
+}
+.municipality-cover__content {
+  width: 100%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 48px;
+  padding: 40px clamp(20px, 4vw, 72px) 48px;
+  align-items: end;
+}
+.municipality-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 13px;
+  margin-bottom: 60px;
+  align-items: center;
+  color: #eee;
+}
+.municipality-breadcrumb a {
+  color: inherit;
+}
+.municipality-cover h1 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(56px, 8vw, 112px);
+  letter-spacing: -0.065em;
+  line-height: 1;
+  margin: 14px 0 20px;
+  overflow-wrap: anywhere;
+}
+.municipality-cover .eyebrow {
+  color: #ffd51f;
+}
+.municipality-cover__location {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+}
+.municipality-cover__tag {
+  display: inline-block;
+  padding: 8px 15px;
+  background: #ffffff22;
+  border: 1px solid #ffffff50;
+  border-radius: 25px;
+  margin: 16px 0 0;
+  max-width: 100%;
+}
+.municipality-cover__planning {
+  padding: 24px;
+  border: 1px solid #ffffff50;
+  border-radius: 20px;
+  background: #ffffff14;
+  backdrop-filter: blur(18px);
+}
+.municipality-cover__planning h2 {
+  font-size: 24px;
+  margin: 0 0 18px;
+}
+.municipality-cover__planning a:not(.button) {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid #ffffff30;
+  color: inherit;
+  text-decoration: none;
+}
+.municipality-cover__planning a > span {
+  flex: 1;
+}
+.municipality-cover__planning a > strong {
+  font-size: 16px;
+  color: #ffd51f;
+}
+.municipality-cover__planning > .button {
+  margin-top: 22px;
+  width: 100%;
+  background: #ffd51f;
+  color: #151923;
+  border-color: #ffd51f;
+}
+.municipality-section-nav {
+  display: flex;
+  gap: 28px;
+  overflow-x: auto;
+  max-width: none;
+  margin: auto;
+  padding: 20px clamp(20px, 4vw, 72px);
+  border-bottom: 1px solid var(--line);
+  scrollbar-width: thin;
+}
+.municipality-section-nav a {
+  white-space: nowrap;
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.municipality-page__body {
+  max-width: none;
+  margin: auto;
+  padding: 48px clamp(20px, 4vw, 72px) 70px;
+}
+.municipality-page section[id] {
+  scroll-margin-top: 120px;
+}
+.municipality-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 80px;
+  padding-bottom: 54px;
+}
+.municipality-page__body h2 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(28px, 3.5vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  margin: 12px 0 24px;
+}
+.municipality-description {
+  font-size: 18px;
+  line-height: 1.75;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  color: var(--muted);
+}
+.municipality-text-action {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-weight: 700;
+  padding: 12px 0;
+  min-height: 44px;
+}
+.municipality-text-action[aria-expanded='true'] svg {
+  transform: rotate(180deg);
+}
+.municipality-facts {
+  margin: 0;
+}
+.municipality-facts > div,
+.municipality-detail dl > div {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+.municipality-facts dt,
+.municipality-detail dt {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.municipality-facts dd,
+.municipality-detail dd {
+  margin: 0;
+  line-height: 1.6;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.municipality-records {
+  padding: 48px 0;
+  border-top: 1px solid var(--line);
+}
+.municipality-records > header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+.municipality-records > header h2 {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 0;
+}
+.municipality-records > header > span {
+  white-space: nowrap;
+  color: var(--muted);
+}
+.municipality-records__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+.municipality-record {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.municipality-record > img,
+.municipality-record__placeholder {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+}
+.municipality-record__placeholder {
+  background: var(--bg-soft, var(--surface));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--muted);
+}
+.municipality-record__placeholder > svg {
+  width: 32px;
+  height: 32px;
+}
+.municipality-record__content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.municipality-record__category {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--brand);
+  font-weight: 800;
+  margin: 0 0 12px;
+}
+.municipality-record h3 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 25px;
+  line-height: 1.15;
+  margin: 0 0 14px;
+  overflow-wrap: anywhere;
+}
+.municipality-record h3 button {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  text-align: left;
+  width: 100%;
+  min-height: 44px;
+  font: inherit;
+}
+.municipality-record h3 svg {
+  flex-shrink: 0;
+  width: 20px;
+}
+.municipality-record__excerpt {
+  color: var(--muted);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0 0 16px;
+}
+.municipality-record__facts {
+  display: flex;
+  gap: 10px 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: auto;
+  font-size: 13px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.municipality-record__facts span {
+  display: flex;
+  gap: 6px;
+  align-items: start;
+}
+.municipality-record__facts svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.municipality-record__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+.municipality-record__actions .button {
+  padding: 10px 14px;
+  min-height: 44px;
+  font-size: 13px;
+}
+.municipality-section-empty {
+  padding: 36px;
+  border: 1px dashed var(--line);
+  border-radius: 18px;
+  color: var(--muted);
+}
+.municipality-section-empty h3 {
+  color: var(--ink);
+  margin: 15px 0 8px;
+  font-size: 20px;
+}
+.municipality-location {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 48px;
+  border-top: 1px solid var(--line);
+  padding: 50px 0;
+  line-height: 1.65;
+}
+.municipality-location__map {
+  min-height: 330px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.municipality-location__map iframe {
+  height: 100%;
+  min-height: 330px;
+  width: 100%;
+  border: 0;
+}
+.municipality-parent {
+  border-top: 1px solid var(--line);
+  padding-top: 36px;
+}
+.municipality-parent a {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ink);
+  font-weight: 700;
+}
+.municipality-photo-dialog {
+  max-width: 1100px !important;
+  width: 95vw;
+}
+.municipality-photo-dialog img {
+  max-height: 75vh;
+  object-fit: contain;
+  width: 100%;
+}
+.municipality-detail > img {
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.municipality-detail > p {
+  white-space: pre-line;
+  line-height: 1.7;
+}
+.base-card__guide-link {
+  display: block;
+  padding: 12px 16px;
+  min-height: 44px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--brand);
+  text-align: center;
+}
+.municipality-editor-nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 24px 0;
+}
+.municipality-editor-nav button {
+  border: 1px solid var(--line);
+  color: var(--ink);
+  background: var(--surface);
+  padding: 10px 15px;
+  border-radius: 25px;
+  min-height: 44px;
+}
+.municipality-editor-nav button[aria-pressed='true'] {
+  background: var(--brand);
+  color: white;
+}
+.municipality-catalog-editor {
+  padding: 18px 0;
+}
+.municipality-catalog-editor header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.municipality-catalog-editor__tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 18px 0;
+}
+.municipality-catalog-editor__tools > label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex: 1;
+  min-width: 160px;
+}
+.municipality-catalog-editor__tools input {
+  width: 100%;
+  min-width: 0;
+}
+.municipality-catalog-editor__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.municipality-catalog-editor__list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.municipality-catalog-editor__list li > label {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+}
+.municipality-catalog-editor__list input[type='checkbox'] {
+  width: 20px;
+  flex-shrink: 0;
+}
+.municipality-catalog-editor__list small {
+  display: block;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.municipality-catalog-editor__list li > div {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.municipality-catalog-editor__list button {
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  min-height: 44px;
+  min-width: 44px;
+}
+.municipality-catalog-editor__list button svg {
+  width: 18px;
+  height: 18px;
+}
+.municipality-record-form {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 20px 0;
+  min-width: 0;
+}
+.municipality-record-form legend {
+  font-size: 20px;
+  font-weight: 800;
+}
+.municipality-record-form textarea {
+  width: 100%;
+  resize: vertical;
+}
+.municipality-page button:focus-visible,
+.municipality-page a:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 4px;
+}
+@media (max-width: 900px) {
+  .municipality-cover__content {
+    gap: 24px;
+    grid-template-columns: minmax(0, 1fr) 300px;
+  }
+  .municipality-records__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .municipality-intro {
+    gap: 35px;
+  }
+  .municipality-location {
+    gap: 24px;
+  }
+}
+@media (max-width: 640px) {
+  .municipality-cover {
+    display: block;
+    min-height: 0;
+    background: var(--canvas);
+    color: var(--ink);
+  }
+  .municipality-cover__photo {
+    position: relative;
+    height: 270px;
+    z-index: auto;
+  }
+  .municipality-cover__photo:after {
+    display: none;
+  }
+  .municipality-cover__photo > button {
+    top: auto;
+    bottom: 16px;
+    right: 16px;
+  }
+  .municipality-cover__content {
+    display: block;
+    padding: 24px 20px 28px;
+  }
+  .municipality-breadcrumb {
+    margin-bottom: 24px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .municipality-cover .eyebrow {
+    color: var(--brand);
+  }
+  .municipality-cover h1 {
+    font-size: 56px;
+  }
+  .municipality-cover__location {
+    font-size: 15px;
+  }
+  .municipality-cover__tag {
+    border-color: var(--line);
+    background: var(--surface);
+    font-size: 13px;
+  }
+  .municipality-cover__planning {
+    margin-top: 26px;
+    background: var(--surface);
+    border-color: var(--line);
+    padding: 20px;
+    backdrop-filter: none;
+  }
+  .municipality-cover__planning h2 {
+    font-size: 22px;
+  }
+  .municipality-cover__planning a:not(.button) {
+    border-color: var(--line);
+  }
+  .municipality-cover__planning a > strong {
+    color: var(--brand);
+  }
+  .municipality-section-nav {
+    padding: 10px 20px;
+    gap: 22px;
+    font-size: 13px;
+  }
+  .municipality-page__body {
+    padding: 32px 20px 50px;
+  }
+  .municipality-intro,
+  .municipality-location {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .municipality-description {
+    font-size: 16px;
+    line-height: 1.75;
+  }
+  .municipality-records {
+    padding: 32px 0;
+  }
+  .municipality-records__grid {
+    grid-template-columns: 1fr;
+  }
+  .municipality-records > header {
+    align-items: start;
+  }
+  .municipality-records > header > span {
+    font-size: 12px;
+    padding-top: 10px;
+  }
+  .municipality-records > header h2 {
+    gap: 10px;
+  }
+  .municipality-records > header h2 svg {
+    width: 22px;
+  }
+  .municipality-record > img {
+    height: 230px;
+  }
+  .municipality-location {
+    padding: 32px 0;
+  }
+  .municipality-catalog-editor__list li {
+    flex-wrap: wrap;
+  }
+  .municipality-cover--no-photo {
+    border-top: 4px solid var(--brand);
+  }
+}
+
+.municipality-photo-credit {
+  font-size: 12px;
+  opacity: 0.8;
+  margin: 0 0 20px;
+}
+.municipality-source-picker {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  margin: 20px 0;
+}
+.municipality-source-picker select {
+  width: 100%;
+  max-width: 100%;
+  margin: 12px 0;
+  white-space: normal;
+}
+.municipality-source-picker label {
+  display: block;
+}
+
+.municipality-guide-fields {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.municipality-page .eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  color: var(--brand);
+}
+.municipality-cover .eyebrow {
+  color: #ffd51f;
+}
+.modal:has(.municipality-editor-nav) > .modal__heading {
+  display: block;
+  padding-right: 36px;
+}
+.modal:has(.municipality-editor-nav) > .modal__heading h2 {
+  margin: 0 0 12px;
+}
+.modal:has(.municipality-editor-nav) > .modal__heading p {
+  margin: 0;
+  line-height: 1.6;
+}
+.municipality-guide-fields input:focus-visible,
+.municipality-guide-fields textarea:focus-visible,
+.municipality-guide-fields button:focus-visible,
+.municipality-guide-fields select:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 3px;
+}
+@media (max-width: 640px) {
+  .municipality-cover .eyebrow {
+    color: var(--brand);
+  }
+  .municipality-editor-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .municipality-editor-nav button {
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+  .modal:has(.municipality-editor-nav) {
+    padding: 24px 20px;
+  }
+  .municipality-catalog-editor__tools > label {
+    flex-basis: 100%;
+  }
+  .municipality-catalog-editor__tools input {
+    font-size: 16px;
+  }
+  .municipality-catalog-editor header {
+    align-items: start;
+  }
+  .municipality-catalog-editor header > span {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .municipality-record-form {
+    padding: 14px;
+  }
+  .municipality-record-form textarea {
+    font-size: 16px;
+  }
+}
+
+.municipality-catalog-editor__list li > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.municipality-catalog-editor header {
+  flex-wrap: wrap;
+}
+.municipality-catalog-editor input:focus-visible,
+.municipality-catalog-editor textarea:focus-visible,
+.municipality-catalog-editor select:focus-visible,
+.municipality-catalog-editor button:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 3px;
+}
+@media (max-width: 640px) {
+  .municipality-catalog-editor__list li {
+    flex-wrap: wrap;
+  }
+  .municipality-source-picker select {
+    width: 100%;
+    min-width: 0;
+  }
+}

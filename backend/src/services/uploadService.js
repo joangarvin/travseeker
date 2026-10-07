@@ -88,6 +88,11 @@ async function uploadAvatar(userId, buffer, previousUrl) {
   };
 }
 
+async function uploadMunicipalityImage(buffer) {
+  const result = await uploadBuffer(buffer, { folder: `${env.cloudinary.folder}/municipios`, publicId: randomUUID() });
+  return { url: result.secure_url, publicId: result.public_id };
+}
+
 async function uploadDestinoCover(buffer, destinoId) {
   const folder = `${env.cloudinary.folder}/destinos`;
   const publicId = destinoId ? String(destinoId) : `tmp-${Date.now()}`;
@@ -135,6 +140,7 @@ async function deleteEssentialImages(urls) {
 
 module.exports = {
   uploadAvatar,
+  uploadMunicipalityImage,
   uploadDestinoCover,
   uploadEssentialImage,
   deleteEssentialImages,

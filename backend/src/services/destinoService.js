@@ -27,7 +27,7 @@ const searchCandidates = cachedPublic("searchCandidates", (where) => prisma.dest
 }));
 
 function prepareSearchResults(destinations, query) {
-  const searched = rankDestinationSearch(destinations, query.q, query.lang);
+  const searched = rankDestinationSearch(destinations.map(mapDestinationRelations), query.q, query.lang);
   const prepared = searched.map(mapDestinationRelations);
   const seasonal = rankForSeason(prepared, {
     month: normalizeMonth(query.month),
@@ -131,7 +131,7 @@ function textSearchWhere(query, structuredWhere) {
               {
                 items: {
                   some: {
-                    OR: [{ title: contains }, { description: contains }],
+                    OR: [{ title: contains }, { description: contains }, { catalogActivity: { OR: [{ nombre: contains }, { descripcion: contains }, { essentialItem: { OR: [{ title: contains }, { description: contains }] } }] } }],
                   },
                 },
               },
@@ -212,7 +212,7 @@ async function getDestinoById(id) {
         include: {
           items: {
             orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
-            include: { place: true },
+            include: { place: true, catalogActivity: { include: { essentialItem: { include: { group: { select: { destino: { select: { editorialStatus: true } } } } } } } } },
           },
         },
       },
@@ -230,6 +230,7 @@ async function getDestinoById(id) {
   });
   if (!destino) return null;
   destino.essentialGroups?.forEach((group) => {
+    group.items = group.items.filter(item => !item.catalogActivity || (item.catalogActivity.isPublished && (!item.catalogActivity.essentialItem || item.catalogActivity.essentialItem.group.destino.editorialStatus === "published")));
     group.items?.forEach((item) => {
       if (
         item.place?.editorialStatus !== "published" ||

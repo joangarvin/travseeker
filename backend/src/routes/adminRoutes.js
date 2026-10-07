@@ -9,6 +9,7 @@ const { requireAuth, requireAdmin } = require("../middleware/auth");
 const router = Router();
 
 router.use(requireAuth, requireAdmin);
+router.use("/fichas", require("./municipalityCatalogRoutes"));
 
 router.get("/counts", editorialController.adminCounts);
 router.get("/editorial/:resource/:id", editorialController.record);
@@ -33,6 +34,20 @@ router.post("/tourism-types", tourismTypeController.create);
 router.put("/tourism-types/:tourismTypeId", tourismTypeController.update);
 router.delete("/tourism-types/:tourismTypeId", tourismTypeController.remove);
 
+router.get(
+  "/municipios/:municipioId",
+  require("../utils/asyncHandler").asyncHandler(async (req, res) => {
+    const {
+      guideInclude,
+      flattenGuide,
+    } = require("../domain/municipalityCatalog");
+    const row = await require("../config/database").prisma.municipio.findUnique(
+      { where: { id: req.params.municipioId }, include: guideInclude },
+    );
+    if (!row) return res.status(404).json({ error: "Municipio no encontrado" });
+    res.json(flattenGuide(row));
+  }),
+);
 router.get("/municipios", adminController.listMunicipios);
 router.post("/municipios", adminController.createMunicipio);
 router.put("/municipios/:municipioId", adminController.updateMunicipio);

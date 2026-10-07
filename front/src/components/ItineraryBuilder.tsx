@@ -2,7 +2,12 @@ import { useConsent } from '../features/privacy/CookieConsent';
 import { t, intlLocale, catalogName } from '../i18n';
 import { useEffect, useMemo, useRef, useState, type ReactNode, type DragEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { plannedActivityLabel, movePlannedActivity } from '../utils/plannedActivities';
+import {
+  plannedActivityLabel,
+  tripActivityCatalog,
+  plannedActivityHref,
+  movePlannedActivity,
+} from '../utils/plannedActivities';
 import {
   ArrowDown,
   ArrowUp,
@@ -98,7 +103,7 @@ function destinationFor(collection: CollectionDetail, id: string): Destino | und
 }
 
 function activityName(destination: Destino | undefined, value: string): string {
-  return plannedActivityLabel(value, destination?.activities || [], (item) => catalogName(item));
+  return plannedActivityLabel(value, tripActivityCatalog(destination), (item) => catalogName(item));
 }
 
 function SegmentBar({ segment, loading }: { segment?: RouteSegment; loading: boolean }) {
@@ -619,7 +624,7 @@ export function ItineraryBuilder({
               const destination =
                 destinationFor(collection, day.destinationId) || collection.items[0].destino;
               const municipios = destination.municipios || [];
-              const activities = destination.activities || [];
+              const activities = tripActivityCatalog(destination);
               return (
                 <li
                   className={
@@ -705,7 +710,7 @@ export function ItineraryBuilder({
                               <div>
                                 <Link
                                   className="trip-agenda__activity-link"
-                                  to={`/destino/${encodeURIComponent(destination.id)}#actividad=${encodeURIComponent(value)}`}
+                                  to={plannedActivityHref(destination, value)}
                                 >
                                   {activityName(destination, value)}{' '}
                                   <span aria-hidden="true">↗</span>
@@ -904,7 +909,9 @@ export function ItineraryBuilder({
                               <div>
                                 {activities.map((activity) => {
                                   const selected =
-                                    day.plannedActivities?.includes(activity.id) || false;
+                                    day.plannedActivities?.includes(activity.id) ||
+                                    day.plannedActivities?.includes(activity.name) ||
+                                    false;
                                   return (
                                     <label key={activity.id}>
                                       <input
@@ -914,7 +921,8 @@ export function ItineraryBuilder({
                                           updateDay(index, {
                                             plannedActivities: selected
                                               ? day.plannedActivities?.filter(
-                                                  (id) => id !== activity.id,
+                                                  (id) =>
+                                                    id !== activity.id && id !== activity.name,
                                                 )
                                               : [...(day.plannedActivities || []), activity.id],
                                           })

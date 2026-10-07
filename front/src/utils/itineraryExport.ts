@@ -1,4 +1,4 @@
-import { plannedActivityLabel } from './plannedActivities';
+import { plannedActivityLabel, tripActivityCatalog } from './plannedActivities';
 import { t, catalogName } from '../i18n';
 import type { CollectionDetail, ItineraryDay } from '../types';
 
@@ -40,7 +40,7 @@ function dayDetails(day: ItineraryDay, collection: ExportableCollection): string
       (item) => item.destino.id === day.destinationId,
     )?.destino;
     const activities = day.plannedActivities.map((value) => {
-      return plannedActivityLabel(value, destination?.activities || [], (item) =>
+      return plannedActivityLabel(value, tripActivityCatalog(destination), (item) =>
         catalogName(item),
       );
     });

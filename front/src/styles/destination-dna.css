@@ -9,7 +9,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   gap: clamp(28px, 4vw, 56px);
-  max-width: var(--max);
+  max-width: none;
   margin-inline: auto;
   align-items: start;
 }

@@ -41,7 +41,7 @@ function buildMunicipalityMerges(municipalities) {
       Math.abs(a.latitud - b.latitud) > 0.05 || Math.abs(a.longitud - b.longitud) > 0.05))) {
       throw new Error(`Revisión geográfica necesaria: ${group[0].nombre}`);
     }
-    const fields = ['precios', 'conexiones', 'tipoTurismo'];
+    const fields = ['precios', 'conexiones', 'tipoTurismo', 'descripcion', 'imagen', 'imagenAlt', 'ubicacion', 'website', 'mejorEpoca', 'consejos'];
     const score = m => fields.filter(f => hasValue(m[f])).length;
     const sorted = [...group].sort((a, b) =>
       Number(b.editorialStatus === 'published') - Number(a.editorialStatus === 'published') ||

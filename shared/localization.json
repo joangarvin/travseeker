@@ -23,7 +23,12 @@
       "nombre": 200,
       "precios": 2000,
       "conexiones": 10000,
-      "tipoTurismo": 1000
+      "tipoTurismo": 1000,
+      "descripcion": 12000,
+      "ubicacion": 1000,
+      "mejorEpoca": 6000,
+      "consejos": 6000,
+      "imagenAlt": 1000
     },
     "place": {
       "nombre": 100,

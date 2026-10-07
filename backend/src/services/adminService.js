@@ -1,3 +1,8 @@
+const {
+  guideInclude,
+  flattenGuide,
+  municipalityAssociations,
+} = require("../domain/municipalityCatalog");
 const { pagination, catalogWhere } = require("../domain/pagination");
 const { prisma } = require("../config/database");
 const { parseTags } = require("../constants/scales");
@@ -104,7 +109,7 @@ const destinationRelations = {
     include: {
       items: {
         orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
-        include: { place: true },
+        include: { place: true, catalogActivity: { include: { essentialItem: true } } },
       },
     },
   },
@@ -157,6 +162,24 @@ async function syncDestinationEssentials(
     }
   }
 
+  const sharedIds = essentialGroups.flatMap(group => group.items.map(item => item.catalogActivityId).filter(Boolean));
+  if (new Set(sharedIds).size !== sharedIds.length) throw Object.assign(new Error("Una actividad ya está marcada como imprescindible en este destino"), { status: 400 });
+  const ids = essentialGroups.flatMap(group => group.items.map(item => item.id).filter(Boolean));
+  const foreignItems = await transaction.essentialItem.count({ where: { id: { in: ids }, group: { destinoId: { not: destinoId } } } });
+  if (foreignItems) throw Object.assign(new Error("Una actividad pertenece a otro destino. Reutilízala desde el catálogo."), { status: 400 });
+  const linked = await transaction.experience.findMany({ where: { essentialItemId: { in: ids } }, select: { id: true, essentialItemId: true } });
+  for (const group of essentialGroups) for (const item of group.items) {
+    if (!item.catalogActivityId) continue;
+    const activity = await transaction.experience.findUnique({ where: { id: item.catalogActivityId }, include: { essentialItem: true } });
+    if (!activity) throw Object.assign(new Error("La actividad seleccionada ya no existe"), { status: 400 });
+    const shared = require("../domain/municipalityCatalog").catalogRecord(activity);
+    Object.assign(item, { title: shared.nombre, description: shared.descripcion || null, imageUrl: shared.imagen || null, imageAlt: shared.imagenAlt || null, duration: shared.duration || null, bestTime: shared.bestTime || null, officialUrl: shared.website || null });
+  }
+  const sourceRecords = await transaction.experience.findMany({ where: { essentialItem: { group: { destinoId } } }, include: { essentialItem: true } });
+  for (const sourceRecord of sourceRecords) {
+    const shared = require("../domain/municipalityCatalog").catalogRecord(sourceRecord);
+    await transaction.experience.update({ where: { id: sourceRecord.id }, data: { nombre: shared.nombre, descripcion: shared.descripcion, imagen: shared.imagen, imagenAlt: shared.imagenAlt, duration: shared.duration, bestTime: shared.bestTime, website: shared.website, translations: shared.translations } });
+  }
   await transaction.essentialGroup.deleteMany({ where: { destinoId } });
   for (const group of essentialGroups) {
     await transaction.essentialGroup.create({
@@ -170,6 +193,7 @@ async function syncDestinationEssentials(
       },
     });
   }
+  for (const record of linked) await transaction.experience.update({ where: { id: record.id }, data: { essentialItemId: record.essentialItemId } });
 }
 
 async function listDestinos(query = {}) {
@@ -328,11 +352,12 @@ async function listMunicipios(query = {}) {
     ...paging,
     orderBy: [{ nombre: "asc" }, { id: "asc" }],
     include: {
+      ...guideInclude,
       _count: { select: { destinoLinks: true } },
     },
   });
   const items = rows.map(({ _count, ...m }) => ({
-    ...cleanMunicipalityFields(m),
+    ...flattenGuide(cleanMunicipalityFields(m)),
     destinosCount: _count.destinoLinks,
   }));
   return query.meta === "1"
@@ -342,12 +367,17 @@ async function listMunicipios(query = {}) {
 
 async function createMunicipio(payload, createdById) {
   const data = normalizeMunicipioPayload(payload);
-  const created = await prisma.municipio.create({
-    data: { ...data, editorialStatus: "pending", createdById },
-    include: { _count: { select: { destinoLinks: true } } },
+  const created = await prisma.$transaction(async (tx) => {
+    const links = await municipalityAssociations(tx, payload);
+    // Create does not need deleteMany on a relation that has no records yet.
+    for (const link of Object.values(links)) delete link.deleteMany;
+    return tx.municipio.create({
+      data: { ...data, ...links, editorialStatus: "pending", createdById },
+      include: { ...guideInclude, _count: { select: { destinoLinks: true } } },
+    });
   });
   return {
-    ...cleanMunicipalityFields(created),
+    ...flattenGuide(cleanMunicipalityFields(created)),
     id: created.id,
     nombre: created.nombre,
     precios: created.precios,
@@ -361,13 +391,15 @@ async function createMunicipio(payload, createdById) {
 
 async function updateMunicipio(id, payload) {
   const data = normalizeMunicipioPayload(payload);
-  const updated = await prisma.municipio.update({
-    where: { id },
-    data,
-    include: { _count: { select: { destinoLinks: true } } },
-  });
+  const updated = await prisma.$transaction(async (tx) =>
+    tx.municipio.update({
+      where: { id },
+      data: { ...data, ...(await municipalityAssociations(tx, payload)) },
+      include: { ...guideInclude, _count: { select: { destinoLinks: true } } },
+    }),
+  );
   return {
-    ...cleanMunicipalityFields(updated),
+    ...flattenGuide(cleanMunicipalityFields(updated)),
     id: updated.id,
     nombre: updated.nombre,
     precios: updated.precios,
@@ -484,6 +516,7 @@ module.exports = {
   createPlace,
   updatePlace,
   deletePlace,
+  syncDestinationEssentials,
   syncDestinationActivities,
   syncDestinationTourismTypes,
 };

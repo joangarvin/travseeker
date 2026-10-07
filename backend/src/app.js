@@ -59,6 +59,7 @@ app.use("/api/colecciones", collectionRoutes);
 app.use("/api/recomendaciones", recommendationRoutes);
 app.use("/api/destinos/:destinoId/reviews", reviewRoutes);
 app.use("/api/destinos", destinoRoutes);
+app.use("/api/municipios", require("./routes/municipalityRoutes"));
 app.use("/api/activities", activityRoutes);
 app.use("/api/tourism-types", tourismTypeRoutes);
 app.use("/api/admin", adminRoutes);

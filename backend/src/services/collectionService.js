@@ -1,3 +1,4 @@
+const { flattenGuide, publicGuideInclude } = require("../domain/municipalityCatalog");
 const { prisma } = require("../config/database");
 const { randomBytes } = require("crypto");
 const { LIST_SELECT } = require("../constants/selects");
@@ -18,6 +19,7 @@ const COLLECTION_DESTINATION_SELECT = {
     select: {
       municipio: {
         select: {
+          activityLinks: publicGuideInclude.activityLinks,
           id: true,
           nombre: true,
           translations: true,
@@ -38,7 +40,7 @@ const COLLECTION_DESTINATION_SELECT = {
 
 function mapCollectionDestination(destino) {
   const municipios = (destino.municipioLinks || [])
-    .map((link) => cleanMunicipalityFields(link.municipio))
+    .map((link) => flattenGuide(cleanMunicipalityFields(link.municipio)))
     .filter(Boolean);
   const activities = (destino.activityLinks || [])
     .map((link) => link.activity)

@@ -40,7 +40,14 @@ async function main() {
       await client.query(`INSERT INTO "DestinoMunicipio" ("destinoId", "municipioId")
         SELECT "destinoId", $1 FROM "DestinoMunicipio" WHERE "municipioId" = ANY($2::text[])
         ON CONFLICT DO NOTHING`, [plan.canonicalId, plan.duplicateIds]);
+      for (const table of ['MunicipioExperience', 'MunicipioHotel', 'MunicipioRestaurant']) {
+        // Fixed identifiers only. Keep reusable records and move their associations.
+        await client.query(`INSERT INTO "${table}" ("municipioId", "recordId", "sortOrder") SELECT $1, "recordId", "sortOrder" FROM "${table}" WHERE "municipioId" = ANY($2::text[]) ON CONFLICT DO NOTHING`, [plan.canonicalId, plan.duplicateIds]);
+      }
       const d = plan.data;
+      for (const field of ['descripcion', 'imagen', 'imagenAlt', 'ubicacion', 'website', 'mejorEpoca', 'consejos']) {
+        if (d[field] != null) await client.query(`UPDATE "Municipio" SET "${field}"=$2 WHERE id=$1`, [plan.canonicalId, d[field]]);
+      }
       await client.query(`UPDATE "Municipio" SET nombre=$2, precios=$3, conexiones=$4, "tipoTurismo"=$5,
         latitud=$6, longitud=$7, translations=$8::jsonb WHERE id=$1`,
       [plan.canonicalId, d.nombre, d.precios, d.conexiones, d.tipoTurismo, d.latitud, d.longitud, JSON.stringify(d.translations)]);

@@ -1,5 +1,15 @@
 import { t } from '../../../i18n';
-import { Building2, ClipboardCheck, Compass, MapPin, MessageSquare, Signpost } from 'lucide-react';
+import {
+  Building2,
+  ClipboardCheck,
+  Compass,
+  MapPin,
+  MessageSquare,
+  Signpost,
+  Sparkles,
+  BedDouble,
+  Utensils,
+} from 'lucide-react';
 import type { AdminTab } from '../types';
 
 type AdminNavigationProps = {
@@ -17,7 +27,15 @@ const tabs = [
   },
   { id: 'destinos', label: t('Destinos'), Icon: MapPin },
   { id: 'tipos-viaje', label: t('Tipos de viaje'), mobileLabel: t('Tipos'), Icon: Signpost },
-  { id: 'actividades', label: t('Actividades'), Icon: Compass },
+  {
+    id: 'actividades',
+    label: t('Tipos de actividad'),
+    mobileLabel: t('Tipos actividad'),
+    Icon: Compass,
+  },
+  { id: 'catalogo-actividades', label: t('Actividades'), Icon: Sparkles },
+  { id: 'hoteles', label: t('Hoteles'), Icon: BedDouble },
+  { id: 'restaurantes', label: t('Restaurantes'), Icon: Utensils },
   { id: 'municipios', label: t('Municipios'), Icon: Building2 },
   { id: 'reviews', label: t('Reseñas'), Icon: MessageSquare },
   { id: 'places', label: t('Lugares'), Icon: MapPin },

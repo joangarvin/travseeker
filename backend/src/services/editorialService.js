@@ -203,6 +203,10 @@ async function getAdminCounts() {
     "tourism-types": "tourismType",
     places: "place",
     reviews: "review",
+    imprescindibles: "essentialItem",
+    experiencias: "experience",
+    hoteles: "hotel",
+    restaurantes: "restaurant",
   };
   const entries = await Promise.all(
     Object.entries(models).map(async ([key, model]) => [
@@ -212,6 +216,7 @@ async function getAdminCounts() {
   );
   return {
     ...Object.fromEntries(entries),
+    activityCatalog: await prisma.experience.count() + await prisma.essentialItem.count({ where: require("./unifiedActivityService").unlinkedSources }),
     editorial: (await getPendingCounts()).total,
   };
 }

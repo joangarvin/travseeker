@@ -27,3 +27,33 @@ export function movePlannedActivity<
         : day,
   );
 }
+
+/** Concrete municipal plans open their own guide; legacy values keep the destination link. */
+export function plannedActivityHref(
+  destination: {
+    id: string;
+    municipios?: { id: string; actividades?: { id: string; nombre: string }[] }[];
+  },
+  value: string,
+) {
+  for (const municipality of destination.municipios || []) {
+    const record = municipality.actividades?.find(
+      (activity) => activity.id === value || activity.nombre === value,
+    );
+    if (record)
+      return `/municipio/${encodeURIComponent(municipality.id)}#ficha-${encodeURIComponent(record.id)}`;
+  }
+  return `/destino/${encodeURIComponent(destination.id)}#actividad=${encodeURIComponent(value)}`;
+}
+
+export function tripActivityCatalog(destination?: {
+  activities?: { id: string; name: string; displayName?: string }[];
+  municipios?: { actividades?: { id: string; nombre: string }[] }[];
+}) {
+  return [
+    ...(destination?.activities || []),
+    ...(destination?.municipios || []).flatMap((municipality) =>
+      (municipality.actividades || []).map((record) => ({ id: record.id, name: record.nombre })),
+    ),
+  ];
+}

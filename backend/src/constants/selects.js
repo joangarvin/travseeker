@@ -58,7 +58,8 @@ const SEARCH_RELATIONS = {
       title: true,
       translations: true,
       items: {
-        select: { title: true, description: true, translations: true },
+        where: { OR: [{ catalogActivityId: null }, { catalogActivity: { isPublished: true, OR: [{ essentialItemId: null }, { essentialItem: { group: { destino: { editorialStatus: "published" } } } }] } }] },
+        select: { title: true, description: true, translations: true, catalogActivity: { include: { essentialItem: true } } },
       },
     },
   },

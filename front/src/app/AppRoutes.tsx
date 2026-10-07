@@ -9,6 +9,7 @@ import { PageMeta } from '../components/layout/PageMeta';
 const LegalPage = lazy(() => import('../pages/legal/LegalPage'));
 const HomePage = lazy(() => import('../pages/home/HomePage'));
 const DestinationPage = lazy(() => import('../pages/destination/DestinationPage'));
+const MunicipalityPage = lazy(() => import('../pages/municipality/MunicipalityPage'));
 const MapPage = lazy(() => import('../pages/map/MapPage'));
 const ComparePage = lazy(() => import('../pages/compare/ComparePage'));
 const AboutPage = lazy(() => import('../pages/about/AboutPage'));
@@ -45,7 +46,7 @@ function NotFoundPage() {
 export function AppRoutes() {
   const location = useLocation();
   const isDestinationRoute =
-    location.pathname.startsWith('/destino/') ||
+    location.pathname.startsWith('/destino/') || location.pathname.startsWith('/municipio/') ||
     ['/cookies', '/privacidad', '/aviso-legal'].includes(location.pathname);
   const canonical =
     typeof window === 'undefined' ? undefined : `${window.location.origin}${location.pathname}`;
@@ -105,6 +106,7 @@ export function AppRoutes() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/destino/:id" element={<DestinationPage />} />
+          <Route path="/municipio/:id" element={<MunicipalityPage />} />
           <Route path="/mapa" element={<MapPage />} />
           <Route path="/comparar" element={<ComparePage />} />
           <Route path="/favoritos" element={<FavoritesPage />} />

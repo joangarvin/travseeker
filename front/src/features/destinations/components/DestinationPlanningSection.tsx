@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { intlLocale, t } from '../../../i18n';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -218,7 +219,11 @@ export function DestinationPlanningSection({
               </div>
             )}
             {selected.summary && <p className="base-hero__summary">{selected.summary}</p>}
-            {destination.imagen && <p className="base-hero__image-caption">{t('Imagen del destino: {0}', { 0: destination.nombre.trim() })}</p>}
+            {destination.imagen && (
+              <p className="base-hero__image-caption">
+                {t('Imagen del destino: {0}', { 0: destination.nombre.trim() })}
+              </p>
+            )}
             {(hasMoreConnections || coordinates) && (
               <div className="base-hero__links">
                 {hasMoreConnections && (
@@ -318,7 +323,7 @@ export function DestinationPlanningSection({
                 const badge = badges.get(base.municipio.id);
                 const difference = (totals.get(base.municipio.id) ?? 0) - selectedTotal;
                 return (
-                  <li key={base.municipio.id}>
+                  <li key={base.municipio.id} className="base-card-shell" data-selected={active}>
                     <button
                       type="button"
                       className="base-card"
@@ -351,6 +356,9 @@ export function DestinationPlanningSection({
                       </span>
                       <ModeList modes={base.modes} />
                     </button>
+                    <Link className="base-card__guide-link" to={`/municipio/${base.municipio.id}`}>
+                      Explorar {base.name} →
+                    </Link>
                   </li>
                 );
               })}

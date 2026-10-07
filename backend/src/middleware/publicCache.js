@@ -3,6 +3,7 @@ const { publicCache } = require("../cache/publicData");
 // Only these routes return the same public information to every visitor.
 function isPublicDataPath(path) {
   return (
+    /^\/api\/municipios\/[^/]+\/?$/.test(path) ||
     /^\/api\/(?:destacados|stats|mapa|activities|tourism-types)\/?$/.test(
       path,
     ) ||

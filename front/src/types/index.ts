@@ -38,6 +38,20 @@ export type Municipio = EditorialFields & {
   latitud?: number | null;
   longitud?: number | null;
   destinosCount?: number;
+  descripcion?: string;
+  imagen?: string;
+  imagenAlt?: string;
+  ubicacion?: string;
+  website?: string;
+  mejorEpoca?: string;
+  consejos?: string;
+  actividades?: MunicipalityRecord[];
+  hoteles?: MunicipalityRecord[];
+  restaurantes?: MunicipalityRecord[];
+  actividadesIds?: string[];
+  hotelesIds?: string[];
+  restaurantesIds?: string[];
+  destinos?: Pick<Destino, 'id' | 'nombre' | 'imagen' | 'ubicacion'>[];
 };
 export type Place = EditorialFields & {
   id: string;
@@ -52,6 +66,7 @@ export type Place = EditorialFields & {
 };
 
 export type EssentialItem = {
+  catalogActivityId?: string | null;
   translations?: Translations;
   id: string;
   title: string;
@@ -266,4 +281,29 @@ export type FilterOptions = {
   locationLabels?: Record<string, string>;
   locations: string[];
   activities: string[];
+};
+
+export type MunicipalityCatalog = 'actividades' | 'hoteles' | 'restaurantes';
+export type MunicipalityRecord = {
+  essentialItemId?: string | null;
+  id: string;
+  nombre: string;
+  descripcion: string;
+  imagen: string;
+  imagenAlt: string;
+  address: string;
+  website: string;
+  bookingUrl: string;
+  phone: string;
+  price: string;
+  latitud?: number | null;
+  longitud?: number | null;
+  isPublished: boolean;
+  duration?: string;
+  bestTime?: string;
+  category?: string;
+  stars?: string;
+  amenities?: string;
+  cuisine?: string;
+  openingHours?: string;
 };

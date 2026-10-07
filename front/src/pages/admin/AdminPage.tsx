@@ -30,6 +30,7 @@ import type {
   AdminTab,
   EditorialResource,
 } from '../../features/admin/types';
+import { MunicipalityCatalogEditor } from '../../features/admin/components/MunicipalityCatalogEditor';
 import { DestinationEditor } from '../../features/admin/components/DestinationEditor';
 import {
   EMPTY_DESTINATION,
@@ -64,13 +65,27 @@ export default function AdminPage() {
     'tipos-viaje',
     'actividades',
     'municipios',
+    'catalogo-actividades',
+    'hoteles',
+    'restaurantes',
     'reviews',
     'places',
   ];
-  const activeTab = tabNames.includes(params.get('tab') as AdminTab)
-    ? (params.get('tab') as AdminTab)
+  const requestedTab = ['imprescindibles', 'experiencias'].includes(params.get('tab') || '')
+    ? 'catalogo-actividades'
+    : params.get('tab');
+  const activeTab = tabNames.includes(requestedTab as AdminTab)
+    ? (requestedTab as AdminTab)
     : 'editorial';
+  const [catalogEditing, setCatalogEditing] = useState(false);
   const setActiveTab = (tab: AdminTab) => {
+    if (catalogEditing) {
+      setFeedback({
+        tone: 'error',
+        text: 'Guarda o cancela la ficha que estás editando antes de cambiar de sección.',
+      });
+      return;
+    }
     setOffset(0);
     setCatalogStatus('all');
     setFeedback(null);
@@ -274,7 +289,7 @@ export default function AdminPage() {
   const loadMunicipalityOptions = () =>
     api<Municipio[]>('/admin/municipios?options=1', {}, token).then(setMunicipalityOptions);
 
-  const openDestination = async (destination: Destino) => {
+  const openDestination = async (destination: Destino, section?: string) => {
     setIsDestinationLoading(true);
     setFeedback(null);
 
@@ -288,6 +303,7 @@ export default function AdminPage() {
         (current) => {
           const next = new URLSearchParams(current);
           next.set('edit', record.id);
+          if (section) next.set('section', section);
           return next;
         },
         { replace: true },
@@ -868,17 +884,16 @@ export default function AdminPage() {
     municipios: serverCounts.municipios ?? municipalities.length,
     reviews: serverCounts.reviews ?? reviews.length,
     places: serverCounts.places ?? places.length,
+    'catalogo-actividades': serverCounts.activityCatalog ?? 0,
+    hoteles: serverCounts.hoteles ?? 0,
+    restaurantes: serverCounts.restaurantes ?? 0,
   };
 
   return (
     <Shell footer={false}>
       <div className="admin-heading">
         <PageHeading title={t('Administración')}>
-          <p>
-            {t(
-              'Gestiona destinos, tipos de viaje, actividades, municipios, lugares y reseñas sin tocar código.',
-            )}
-          </p>
+          <p>{t('Gestiona destinos, municipios, actividades, hoteles, restaurantes y reseñas.')}</p>
         </PageHeading>
       </div>
 
@@ -915,6 +930,28 @@ export default function AdminPage() {
           )}
           {isLoading && <p role="status">{t('Cargando…')}</p>}
           <>
+            {['catalogo-actividades', 'hoteles', 'restaurantes'].includes(activeTab) && token && (
+              <MunicipalityCatalogEditor
+                standalone
+                revision={editorialRevision}
+                onManageHighlights={(id) => void openDestination({ id } as Destino, 'essentials')}
+                kind={
+                  activeTab === 'catalogo-actividades'
+                    ? 'actividades'
+                    : activeTab === 'hoteles'
+                      ? 'hoteles'
+                      : 'restaurantes'
+                }
+                token={token}
+                ids={[]}
+                onChange={() => {}}
+                onEditingChange={setCatalogEditing}
+                onSaved={() => {
+                  setFeedback(null);
+                  void refreshCounts();
+                }}
+              />
+            )}
             {activeTab === 'editorial' && (
               <EditorialReviewPanel
                 revision={editorialRevision}
@@ -1071,6 +1108,7 @@ export default function AdminPage() {
 
       {municipalityForm && (
         <MunicipalityEditorModal
+          token={token!}
           error={feedback?.tone === 'error' ? feedback.text : undefined}
           form={municipalityForm}
           isSaving={isSaving}

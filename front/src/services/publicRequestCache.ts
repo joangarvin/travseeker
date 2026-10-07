@@ -2,6 +2,7 @@
 export function isPublicDataPath(path: string) {
   const pathname = path.split('?')[0];
   return (
+    /^\/municipios\/[^/]+\/?$/.test(pathname) ||
     /^\/(?:destacados|stats|mapa|activities|tourism-types)\/?$/.test(pathname) ||
     /^\/destinos(?:\/[^/]+(?:\/(?:relacionados|climate))?)?\/?$/.test(pathname)
   );
