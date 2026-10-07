@@ -65,8 +65,22 @@ La búsqueda admite `limit` (1–100), `offset` y `meta=1`. Con `meta=1` devuelv
 npm run db:push          # Sincronizar schema Prisma
 npm run db:seed          # Importar destinos desde CSV
 npm run db:coords        # Rellenar coordenadas del mapa
+npm run db:merge-municipios # Revisar duplicados (sin modificar datos)
+npm run db:merge-municipios -- --apply # Fusionar con copia previa y verificar enlaces
 npm run db:promote-admin -- otro@email.com   # Dar rol admin a un usuario
 ```
+
+La fusión de municipios conserva la ficha publicada más completa, priorizando los
+campos rellenados y el texto de conexiones más detallado. Completa los campos
+vacíos con las otras versiones y conserva traducciones. Cuando hay valores
+distintos, mantiene los de la ficha elegida; las alternativas quedan en la copia
+previa de `backend/backups/` (excluida de Git). También corrige las variantes
+auditadas Mondoñero/Mondoñedo y Santillana de Mar/Santillana del Mar.
+El script reasigna los enlaces de destinos y los municipios base de itinerarios
+en una transacción, verifica los enlaces antes de confirmar y rechaza coordenadas
+incompatibles. El nombre por sí solo no acredita la identidad geográfica: revisa
+la vista previa antes de aplicarlo a nuevas importaciones. Este script no impide
+que el administrador o una importación creen nuevos duplicados.
 
 ## Cuenta administrador
 
