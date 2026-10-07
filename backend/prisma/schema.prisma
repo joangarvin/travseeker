@@ -237,6 +237,7 @@ model Municipio {
   descripcion String @default("")
   imagen String @default("")
   imagenAlt String @default("")
+  imageAttribution Json @default("{}")
   ubicacion String @default("")
   website String @default("")
   mejorEpoca String @default("")

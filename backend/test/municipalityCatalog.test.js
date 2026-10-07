@@ -37,3 +37,42 @@ test('linked essential activities always use the original record content', () =>
   const guide = flattenGuide({ nombre: 'Sitges', activityLinks: [{ record: { id: 'record', nombre: 'Plan' } }], hotelLinks: [] });
   assert.deepEqual(guide.actividadesIds, ['record']); assert.deepEqual(guide.hoteles, []); assert.equal(guide.activityLinks, undefined);
 });
+
+test("municipality image attribution accepts safe credits and preserves omitted values", () => {
+  assert.deepEqual(guideFields({}), {});
+  assert.deepEqual(guideFields({ imageAttribution: {} }), {
+    imageAttribution: {},
+  });
+  assert.deepEqual(
+    guideFields({
+      imageAttribution: {
+        author: "A. Photographer",
+        title: "Coast at sunset",
+        sourceUrl: "https://commons.wikimedia.org/wiki/File:Coast.jpg",
+        license: "CC BY-SA 4.0",
+        licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+        changes: "",
+      },
+    }),
+    {
+      imageAttribution: {
+        author: "A. Photographer",
+        title: "Coast at sunset",
+        sourceUrl: "https://commons.wikimedia.org/wiki/File:Coast.jpg",
+        license: "CC BY-SA 4.0",
+        licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+        changes: "",
+      },
+    },
+  );
+  for (const imageAttribution of [
+    null,
+    [],
+    { author: 3 },
+    { sourceUrl: "javascript:alert(1)" },
+    { licenseUrl: "data:text/html,hello" },
+    { attributionHtml: "<img src=x>" },
+  ]) {
+    assert.throws(() => guideFields({ imageAttribution }), { status: 400 });
+  }
+});

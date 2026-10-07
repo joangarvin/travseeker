@@ -115,6 +115,36 @@ function guideFields(payload) {
   }
   for (const field of ["imagen", "website"])
     if (Object.hasOwn(payload, field)) data[field] = url(payload[field]);
+  if (Object.hasOwn(payload, "imageAttribution")) {
+    const attribution = payload.imageAttribution;
+    if (
+      attribution == null ||
+      typeof attribution !== "object" ||
+      Array.isArray(attribution)
+    )
+      fail("Atribución de imagen no válida");
+    const fields = [
+      "author",
+      "title",
+      "sourceUrl",
+      "license",
+      "licenseUrl",
+      "changes",
+    ];
+    if (Object.keys(attribution).some((key) => !fields.includes(key)))
+      fail("Atribución de imagen no válida");
+    const normalized = {};
+    for (const field of fields) {
+      if (!Object.hasOwn(attribution, field)) continue;
+      if (typeof attribution[field] !== "string")
+        fail("Atribución de imagen no válida");
+      normalized[field] =
+        field === "sourceUrl" || field === "licenseUrl"
+          ? url(attribution[field])
+          : text(attribution[field], 1000);
+    }
+    data.imageAttribution = normalized;
+  }
   return data;
 }
 function associationIds(value) {

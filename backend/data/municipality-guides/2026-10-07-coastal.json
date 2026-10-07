@@ -1,0 +1,875 @@
+{
+  "checkedAt": "2026-10-07",
+  "scope": "Municipios costeros prioritarios: Costa Brava y Mallorca",
+  "photoPolicy": "No se incluyen imágenes en esta tanda.",
+  "municipalities": [
+    {
+      "id": "79203376-492f-4f86-94e7-efa03fe563a0",
+      "nombre": "TOSSA DE MAR",
+      "fields": {
+        "descripcion": "Tossa de Mar reúne una costa de calas y caminos junto al mar con un núcleo medieval amurallado frente a la bahía, además de una larga tradición marinera.",
+        "website": "https://visittossa.com/en/",
+        "ubicacion": "Tossa De Mar, España"
+      },
+      "sources": [
+        "https://visittossa.com/en/",
+        "https://visittossa.com/en/experiences/essentials-tossa-de-mar/"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "d89a52dc-b05d-40ce-ae06-113af4f91d30",
+          "website": "https://visittossa.com/en/cultural-heritage/tossa-throughout-time/the-walled-vila-vella/",
+          "descripcion": "Visitar Tossa de Mar y recorrer la Vila Vella amurallada.",
+          "sources": [
+            "https://visittossa.com/en/cultural-heritage/tossa-throughout-time/the-walled-vila-vella/",
+            "https://visittossa.com/en/experiences/essentials-tossa-de-mar/"
+          ]
+        },
+        {
+          "nombre": "Faro de Tossa de Mar",
+          "address": "Passeig de Vila Vella, s/n, 17320 Tossa de Mar",
+          "website": "https://visittossa.com/en/cultural-heritage/art-and-culture/tossas-lighthouse/",
+          "descripcion": "Centro de interpretación en el faro situado sobre el cabo de Tossa, con vistas a la costa y una exposición sobre la señalización marítima.",
+          "sources": [
+            "https://visittossa.com/en/cultural-heritage/art-and-culture/tossas-lighthouse/"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Diana",
+          "address": "Plaça d’Espanya, 6, 17320 Tossa de Mar",
+          "website": "https://www.hotelesdante.com/en/hotel-diana/",
+          "descripcion": "Hotel boutique frente a la playa, en el centro histórico y junto a las murallas de Vila Vella.",
+          "sources": [
+            "https://www.hotelesdante.com/en/hotel-diana/",
+            "https://www.hotelesdante.com/en/hotel-diana/location/"
+          ],
+          "bookingUrl": "https://www.hotelesdante.com/en/hotel-diana/",
+          "phone": "+34 972 341 886"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Can Carlus",
+          "address": "Carrer del Portal, 20, 17320 Tossa de Mar",
+          "website": "https://www.cancarlus.com/",
+          "descripcion": "Restaurante familiar junto a la muralla, especializado en pescado, marisco, arroces y cocina marinera tradicional.",
+          "sources": [
+            "https://www.cancarlus.com/",
+            "https://visittossa.com/on-menjar/?_sft_categories_menjar=cuina-tradicional-tossenca"
+          ],
+          "cuisine": "Marinera",
+          "bookingUrl": "https://www.cancarlus.com/",
+          "phone": "+34 606 022 147"
+        }
+      ]
+    },
+    {
+      "id": "2869d3d7-b4d6-459d-9b0e-8677557b153b",
+      "nombre": "CADAQUÉS",
+      "fields": {
+        "descripcion": "Cadaqués combina casas blancas y calles empedradas junto a una bahía de tradición pesquera con el paisaje protegido del Cap de Creus y la huella artística de Salvador Dalí.",
+        "website": "https://www.visitcadaques.org/?lang=es",
+        "ubicacion": "Cadaqués, España"
+      },
+      "sources": [
+        "https://www.visitcadaques.org/?lang=es",
+        "https://www.visitcadaques.org/?lang=es&sec=serveis&sub=efcb109cba48c82ca398d278130f3a99"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "4d69128f-402f-4423-ae58-f449948fb63c",
+          "website": "https://www.salvador-dali.org/en/dali-foundation/get-to-know-the-foundation/our-headquarters/",
+          "descripcion": "Conocer la Casa-Museo Salvador Dalí en Port Lligat (Cadaqués).",
+          "sources": [
+            "https://www.salvador-dali.org/en/dali-foundation/get-to-know-the-foundation/our-headquarters/",
+            "https://www.visitcadaques.org/?lang=es&sec=cultura&sub=museus"
+          ]
+        },
+        {
+          "essentialItemId": "2688f23c-c4c2-4963-833e-7b0dd69e6a49",
+          "website": "https://www.visitcadaques.org/?lang=es&sec=natura&sub=cap_creus",
+          "descripcion": "Hacer senderismo en el Parque Natural del Cap de Creus (Cadaqués).",
+          "sources": [
+            "https://www.visitcadaques.org/?lang=es&sec=natura&sub=cap_creus",
+            "https://www.visitcadaques.org/?lang=es&platges=&sec=natura"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Playa Sol",
+          "address": "Riba es Pianc, 3, 17488 Cadaqués",
+          "website": "https://www.playasol.com/",
+          "descripcion": "Hotel junto a la pequeña playa de Es Pianc, con jardín y piscina; el establecimiento ofrece reserva directa en su web.",
+          "sources": [
+            "https://playasol.com/es/informacion.html?lang=es",
+            "https://www.visitcadaques.org/?id_serv=4bfce4a44e8908f98f3b84e5f204ce53&lang=es&sec=serveis&sub=b109eee761fc55f3a675930d0b909d8e"
+          ],
+          "bookingUrl": "https://www.playasol.com/",
+          "phone": "+34 972 258 100"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Compartir",
+          "address": "Riera de Sant Vicenç, s/n, 17488 Cadaqués",
+          "website": "https://www.compartircadaques.com/",
+          "descripcion": "Restaurante de cocina contemporánea de temporada en una casa del centro; ofrece carta y menú degustación para compartir.",
+          "sources": [
+            "https://www.compartircadaques.com/mapa-web-es",
+            "https://www.visitcadaques.org/?lang=es&sec=serveis"
+          ],
+          "cuisine": "Contemporánea",
+          "bookingUrl": "https://www.compartircadaques.com/",
+          "phone": "+34 972 258 482"
+        }
+      ]
+    },
+    {
+      "id": "264c070e-e545-4936-8afe-8bf9c23d6bd5",
+      "nombre": "FIGUERES",
+      "fields": {
+        "descripcion": "Figueres es la ciudad natal de Salvador Dalí y concentra museos dedicados al artista y a la vida cotidiana, junto con un patrimonio urbano y militar que refleja su historia.",
+        "website": "https://visitfigueres.cat/es/",
+        "ubicacion": "Figueres, España"
+      },
+      "sources": [
+        "https://visitfigueres.cat/es/",
+        "https://www.figueres.cat/actualitat/noticies/figueres-crea-una-guia-completa-amb-l-oferta-turistica-de-la-ciutat-i-el-seu-entorn-per-la-gent-que-la-visita-23483/47950"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "959b2541-3cce-4ca2-9aab-2a9efa615f13",
+          "website": "https://visitfigueres.cat/es/museo/teatre-museu-dali/",
+          "descripcion": "Visitar el Teatro-Museo Dalí (Figueres).",
+          "sources": [
+            "https://visitfigueres.cat/es/museo/teatre-museu-dali/",
+            "https://en.visitfigueres.cat/what-to-do/dali-theatre-museum/"
+          ],
+          "bookingUrl": "https://tickets.salvador-dali.org/"
+        },
+        {
+          "essentialItemId": "a8cda887-1c49-4960-8719-4639c409c632",
+          "website": "https://visitfigueres.cat/museu/museu-del-joguet-de-catalunya/",
+          "descripcion": "Visitar el Museo del Juguete de Cataluña (Figueres).",
+          "sources": [
+            "https://visitfigueres.cat/museu/museu-del-joguet-de-catalunya/",
+            "https://visitfigueres.cat/es/museo/museu-del-joguet-de-catalunya/"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Duran",
+          "address": "Carrer de Lasauca, 5, 17600 Figueres",
+          "website": "https://hotelduran.com/es/",
+          "descripcion": "Hotel céntrico con tradición vinculada a Figueres y Salvador Dalí; dispone de reserva online directa.",
+          "sources": ["https://hotelduran.com/es/"],
+          "bookingUrl": "https://hotelduran.com/es/",
+          "phone": "+34 972 501 250"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "El Motel",
+          "address": "Avinguda Salvador Dalí, 170, 17600 Figueres",
+          "website": "https://www.elmotelrestaurant.com/",
+          "descripcion": "Restaurante familiar de cocina catalana y de temporada, abierto en Figueres desde 1961.",
+          "sources": [
+            "https://www.elmotelrestaurant.com/es/reserva.html",
+            "https://visitfigueres.cat/wp-content/uploads/2025/06/Guia-Rest-25_compressed.pdf"
+          ],
+          "cuisine": "Catalana",
+          "bookingUrl": "https://www.elmotelrestaurant.com/es/reserva.html",
+          "phone": "+34 972 500 562"
+        }
+      ]
+    },
+    {
+      "id": "4aab1d59-dd56-454e-956b-67f5db9fedbd",
+      "nombre": "BESALÚ",
+      "fields": {
+        "descripcion": "Besalú conserva un conjunto medieval compacto junto al río Fluvià, con un puente fortificado emblemático y vestigios de la antigua comunidad judía.",
+        "website": "https://besalu.cat/la-vila-2/turisme/",
+        "ubicacion": "Besalú, España"
+      },
+      "sources": [
+        "https://besalu.cat/la-vila-2/turisme/",
+        "https://www.visitbesalu.com/turisme"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "c46b68fb-b3b6-4e00-a874-a6e566b48c1e",
+          "website": "https://besalu.cat/la-vila-2/turisme/",
+          "descripcion": "Cruzar el puente románico de Besalú y recorrer su judería.",
+          "sources": [
+            "https://besalu.cat/la-vila-2/turisme/",
+            "https://www.visitbesalu.com/turisme"
+          ]
+        },
+        {
+          "nombre": "Iglesia románica del antiguo monasterio de Sant Pere",
+          "address": "Plaça del Prat de Sant Pere, 17850 Besalú",
+          "website": "https://www.visitbesalu.com/turisme",
+          "descripcion": "Visitar la iglesia románica del antiguo monasterio benedictino de Sant Pere y observar los capiteles de su girola.",
+          "sources": [
+            "https://www.visitbesalu.com/turisme",
+            "https://patrimoni.gencat.cat/ca/coleccio/besalu"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel 3 Arcs",
+          "address": "Carrer Ganganell, 15, 17850 Besalú",
+          "website": "https://www.hotel3arcs.com/en/",
+          "descripcion": "Hotel pequeño en el casco histórico de Besalú, con reserva directa desde su página oficial.",
+          "sources": [
+            "https://www.hotel3arcs.com/en/",
+            "https://www.hotel3arcs.com/en/location-and-contact/"
+          ],
+          "bookingUrl": "https://www.hotel3arcs.com/en/",
+          "phone": "+34 972 591 678"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurant Pont Vell",
+          "address": "Carrer del Pont Vell, 24, 17850 Besalú",
+          "website": "https://www.restaurantpontvell.com/",
+          "descripcion": "Restaurante familiar junto al puente románico, con cocina de temporada que combina tradición y propuestas actuales.",
+          "sources": [
+            "https://www.restaurantpontvell.com/",
+            "https://www.visitbesalu.com/restaurants"
+          ],
+          "cuisine": "Catalana",
+          "bookingUrl": "https://restaurantpontvell.myrestoo.net/",
+          "phone": "+34 972 591 027"
+        }
+      ]
+    },
+    {
+      "id": "4b0767ae-f041-478a-b5aa-124c42aae47a",
+      "nombre": "ROSES",
+      "fields": {
+        "descripcion": "Roses combina una bahía mediterránea con el patrimonio de la Ciutadella y fortificaciones costeras, en un entorno de calas y caminos del Cap de Creus.",
+        "website": "https://visit.roses.cat/es/",
+        "ubicacion": "Roses, España"
+      },
+      "sources": [
+        "https://visit.roses.cat/es/",
+        "https://visit.roses.cat/ca/descobreix/rutes.html"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "722a2f47-6a40-439f-8230-efc3750161c1",
+          "website": "https://visit.roses.cat/ca/descobreix/llocs-dinteres/la-ciutadella/la-ciutadella.html",
+          "descripcion": "Visitar la Ciudadela de Roses, con restos griegos, romanos y medievales.",
+          "sources": [
+            "https://visit.roses.cat/ca/descobreix/llocs-dinteres/la-ciutadella/la-ciutadella.html"
+          ]
+        },
+        {
+          "essentialItemId": "32d0ef3a-dbdd-499a-97dc-071c86441e06",
+          "website": "https://visit.roses.cat/ca/descobreix/rutes.html",
+          "descripcion": "Recorrer Roses y su paseo marítimo.",
+          "sources": ["https://visit.roses.cat/ca/descobreix/rutes.html"]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Vistabella",
+          "address": "Avinguda Díaz Pacheco, 26, Cala Canyelles Petites, 17480 Roses",
+          "website": "https://www.hotelvistabella.com/en",
+          "descripcion": "Hotel de cinco estrellas sobre la cala de Canyelles Petites, con spa, terrazas y reserva directa en su web.",
+          "sources": [
+            "https://www.hotelvistabella.com/en",
+            "https://www.hotelvistabella.com/es/contacto",
+            "https://visit.roses.cat/ca/allotjaments/hotels/hotel-vistabella.html"
+          ],
+          "bookingUrl": "https://www.hotelvistabella.com/en",
+          "phone": "+34 972 256 200"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Can Cervera",
+          "address": "Carrer d’en Mairó, 56, 17480 Roses",
+          "website": "https://www.rcancervera.com/",
+          "descripcion": "Restaurante familiar de cocina mediterránea e internacional, con pescado fresco y carnes a la piedra.",
+          "sources": [
+            "https://visitroses.cat/en/discover/gastronomy/restaurants/can-cervera.html",
+            "https://visit.roses.cat/ca/descobreix/gastronomia-i-vins-do-emporda/restaurants/can-cervera.html"
+          ],
+          "cuisine": "Mediterránea",
+          "bookingUrl": "https://www.rcancervera.com/",
+          "phone": "+34 972 151 250"
+        }
+      ]
+    },
+    {
+      "id": "2635964d-b73c-416a-805f-3b08d98e85ae",
+      "nombre": "BLANES",
+      "fields": {
+        "descripcion": "Blanes marca el inicio de la Costa Brava y combina playas y calas con jardines botánicos, miradores y una activa tradición marinera.",
+        "website": "https://www.blanescostabrava.cat/en/",
+        "ubicacion": "Blanes, España"
+      },
+      "sources": [
+        "https://www.blanescostabrava.cat/en/",
+        "https://www.blanescostabrava.cat/en/what-to-do/"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "f6ae9c37-13d3-486a-b9b6-2f3b00391083",
+          "website": "https://www.blanescostabrava.cat/en/oci/marimurtra-botanical-garden/",
+          "descripcion": "Visitar el Jardín Botánico Marimurtra (Blanes), con especies exóticas y vistas a los acantilados.",
+          "sources": [
+            "https://www.blanescostabrava.cat/en/oci/marimurtra-botanical-garden/",
+            "https://marimurtra.cat/en/"
+          ],
+          "bookingUrl": "https://marimurtra.cat/en/"
+        },
+        {
+          "nombre": "Sa Palomera",
+          "address": "Passeig de la Marina, 17300 Blanes",
+          "website": "https://www.blanescostabrava.cat/en/blanes-is-nature/",
+          "descripcion": "Sube al mirador de esta gran roca que separa la bahía de Blanes y la playa de S’Abanell y señala el comienzo de la Costa Brava.",
+          "sources": [
+            "https://www.blanescostabrava.cat/en/blanes-is-nature/",
+            "https://www.blanescostabrava.cat/en/what-to-do/"
+          ],
+          "category": "Naturaleza"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Horitzó by Pierre & Vacances",
+          "address": "Passeig Marítim de s’Abanell, 11, 17300 Blanes",
+          "website": "https://www.hotelhoritzo.com/",
+          "descripcion": "Hotel frente a la playa de s’Abanell, con habitaciones con vistas al mar y spa.",
+          "sources": [
+            "https://www.blanescostabrava.cat/en/on-dormir/hotel-horitzo-spa/",
+            "https://www.hotelhoritzo.com/"
+          ],
+          "bookingUrl": "https://www.hotelhoritzo.com/",
+          "phone": "+34 972 330 400"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Blanc Restaurant & Lounge Club",
+          "address": "Carrer del Mirador de s’Auguer, 26, 17300 Blanes",
+          "website": "https://www.esblancblanes.com/",
+          "descripcion": "Restaurante frente al mar junto a Sa Palomera, con tapas, cocina mediterránea y producto local.",
+          "sources": [
+            "https://www.blanescostabrava.cat/en/restaurants/blanc-restaurant-lounge-club/",
+            "https://www.covermanager.com/legal/load_legal_dynamic/restaurate-esblanc/spanish/use_conditions/0/0"
+          ],
+          "cuisine": "Mediterránea",
+          "bookingUrl": "https://restaurante.covermanager.com/es-blanc/",
+          "phone": "+34 972 330 049"
+        }
+      ]
+    },
+    {
+      "id": "db843dcb-61f5-4174-9262-540281caf398",
+      "nombre": "LLORET DE MAR",
+      "fields": {
+        "descripcion": "Lloret de Mar suma playas y calas de la Costa Brava a un patrimonio cultural con jardines históricos, castillo y espacios que narran su relación con el mar.",
+        "website": "https://lloretdemar.org/en/",
+        "ubicacion": "Lloret De Mar, España"
+      },
+      "sources": [
+        "https://lloretdemar.org/en/",
+        "https://lloretdemar.org/en/what-to-do-in-lloret/lloret-de-mar-in-the-daytime/culture/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Jardines de Santa Clotilde",
+          "address": "Passeig dels Jardins, s/n, 17310 Lloret de Mar",
+          "website": "https://lloretdemar.org/es/cultura/jardines-de-santa-clotilde/",
+          "descripcion": "Jardines de estilo noucentista sobre un acantilado, con escalinatas, esculturas y vistas al Mediterráneo.",
+          "sources": [
+            "https://lloretdemar.org/es/cultura/jardines-de-santa-clotilde/",
+            "https://www.spain.info/es/lugares-interes/santa-clotilde/"
+          ],
+          "category": "Naturaleza"
+        },
+        {
+          "essentialItemId": "76a9ab34-7331-470f-9ae6-8d3dbe16df30",
+          "website": "https://patrimoni.lloret.cat/en/moll-open-museum-of-lloret/castle-of-sant-joan",
+          "descripcion": "Visitar Lloret de Mar y su Castillo de Sant Joan.",
+          "sources": [
+            "https://patrimoni.lloret.cat/en/moll-open-museum-of-lloret/castle-of-sant-joan"
+          ],
+          "bookingUrl": "https://patrimoni.lloret.cat/en/moll-open-museum-of-lloret/castle-of-sant-joan"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Anabel",
+          "address": "Carrer del Poeta Felicià Serra Mont, 10, 17310 Lloret de Mar",
+          "website": "https://www.hotelanabel.com/en/",
+          "descripcion": "Hotel de gestión familiar en el centro de Lloret, con spa y reserva directa en su web oficial.",
+          "sources": [
+            "https://www.hotelanabel.com/es/contacto",
+            "https://www.hotelanabel.com/en/faqs"
+          ],
+          "bookingUrl": "https://www.hotelanabel.com/en/",
+          "phone": "+34 972 366 200"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "La Parrilla",
+          "address": "Carrer de Santa Llúcia, 13, 17310 Lloret de Mar",
+          "website": "https://www.restaurantparrilla.com/",
+          "descripcion": "Restaurante de cocina mediterránea en el centro de Lloret; el establecimiento recomienda reservar con antelación.",
+          "sources": ["https://www.restaurantparrilla.com/"],
+          "cuisine": "Mediterránea",
+          "phone": "+34 972 369 636"
+        }
+      ]
+    },
+    {
+      "id": "1f4f7875-3b02-4724-ace1-eb36cc3d7fe0",
+      "nombre": "BEGUR",
+      "fields": {
+        "descripcion": "Begur combina un núcleo histórico con casas indianas y un castillo en lo alto, además de calas y caminos costeros repartidos por su litoral.",
+        "website": "https://visitbegur.cat/en/",
+        "ubicacion": "Begur, España"
+      },
+      "sources": [
+        "https://visitbegur.cat/en/",
+        "https://visitbegur.cat/planifica/"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "e5886277-cb54-400e-be49-7767f81fcab4",
+          "website": "https://visitbegur.cat/planifica/",
+          "descripcion": "Explorar las calas de Begur, como Aiguablava, Sa Tuna y Aiguafreda.",
+          "sources": [
+            "https://visitbegur.cat/planifica/",
+            "https://visitbegur.cat/en/"
+          ]
+        },
+        {
+          "nombre": "Mirador del Castell de Begur",
+          "address": "Aparcament des Garrigar, 17255 Begur",
+          "website": "https://visitbegur.cat/turisme-actiu/mirador-castell-de-begur/",
+          "descripcion": "Sube a pie hasta los restos del castillo medieval para contemplar una panorámica de 360 grados del pueblo, el Empordà y la costa.",
+          "sources": [
+            "https://visitbegur.cat/turisme-actiu/mirador-castell-de-begur/",
+            "https://visitbegur.cat/wp-content/uploads/2021/07/Fulleto-miradors-cat-ang.pdf"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Aiguaclara",
+          "address": "Carrer de Sant Miquel, 2, 17255 Begur",
+          "website": "https://hotelaiguaclarabegur.com/en/hotel-in-begur/",
+          "descripcion": "Hotel boutique en una casa indiana del siglo XIX en el centro histórico; permite reservar directamente en su web.",
+          "sources": [
+            "https://hotelaiguaclarabegur.com/en/hotel-in-begur/",
+            "https://visitbegur.cat/en/"
+          ],
+          "bookingUrl": "https://hotelaiguaclarabegur.com/en/hotel-in-begur/",
+          "phone": "+34 619 253 692"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurant Turandot",
+          "address": "Avinguda Onze de Setembre, 27, 17255 Begur",
+          "website": "https://turandot.es/",
+          "descripcion": "Restaurante de cocina de temporada y producto de proximidad en una casa del pueblo.",
+          "sources": [
+            "https://turandot.es/",
+            "https://visitbegur.cat/wp-content/uploads/2026/03/Restaurants-Begur-Abril-26-.pdf"
+          ],
+          "cuisine": "Catalana",
+          "bookingUrl": "https://turandot.es/",
+          "phone": "+34 972 622 608"
+        }
+      ]
+    },
+    {
+      "id": "ca66659d-d6e1-4d1c-a8e2-4ea2cc773d01",
+      "nombre": "CALELLA DE PALAFRUGELL",
+      "fields": {
+        "descripcion": "Calella de Palafrugell mantiene el perfil de antiguo pueblo marinero, con playas pequeñas, casas porticadas en Port Bo y jardines históricos junto al mar.",
+        "website": "https://visitpalafrugell.cat/en/",
+        "ubicacion": "Calella De Palafrugell, España"
+      },
+      "sources": [
+        "https://visitpalafrugell.cat/en/",
+        "https://visitpalafrugell.cat/en/geolocation/"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "f707fa57-540f-42af-90e8-c8a132ee1d5b",
+          "website": "https://visitpalafrugell.cat/les-voltes-i-el-port-bo/",
+          "descripcion": "Pasear por Calella de Palafrugell y su frente marítimo porticado.",
+          "sources": ["https://visitpalafrugell.cat/les-voltes-i-el-port-bo/"]
+        },
+        {
+          "nombre": "Jardines de Cap Roig",
+          "address": "Camí del Rus, s/n, 17210 Calella de Palafrugell",
+          "website": "https://fundacionlacaixa.org/es/jardins-cap-roig-reservas",
+          "descripcion": "Pasea por los jardines botánicos y el recinto paisajístico de Cap Roig, formado junto a una casa histórica sobre la costa.",
+          "sources": [
+            "https://fundacionlacaixa.org/es/jardins-cap-roig-reservas",
+            "https://visitpalafrugell.cat/cultura/espais-culturals/jardins-de-cap-roig/"
+          ],
+          "category": "Naturaleza"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Sant Roc",
+          "address": "Plaça de l’Atlàntic, 2, 17210 Calella de Palafrugell",
+          "website": "https://www.santroc.com/en",
+          "descripcion": "Hotel y restaurante sobre un acantilado con vistas a la bahía de Calella; reserva directa disponible en su web.",
+          "sources": [
+            "https://www.santroc.com/en",
+            "https://www.santroc.com/es/contacto"
+          ],
+          "bookingUrl": "https://www.santroc.com/en",
+          "phone": "+34 972 614 250"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Tragamar",
+          "address": "Passatge Jimmy Rena, s/n, Platja del Canadell, 17210 Calella de Palafrugell",
+          "website": "https://grupotragaluz.com/restaurantes/tragamar/",
+          "descripcion": "Restaurante frente a la playa de Canadell, especializado en arroces y cocina marinera.",
+          "sources": [
+            "https://grupotragaluz.com/restaurantes/tragamar/",
+            "https://promocioeconomica.palafrugell.cat/ca/empresa/directori-d-empreses?categoria=3344&empresa=Restaurant+Tragamar&id=3586&sector=3313"
+          ],
+          "cuisine": "Marinera",
+          "bookingUrl": "https://grupotragaluz.com/restaurantes/tragamar/",
+          "phone": "+34 972 307 005"
+        }
+      ]
+    },
+    {
+      "id": "e794fa0b-00ed-4944-b3c3-2852bc1eb08e",
+      "nombre": "SÓLLER",
+      "fields": {
+        "descripcion": "Sóller ocupa un valle de cítricos entre la Serra de Tramuntana y el mar; su plaza modernista, el tren histórico y el puerto enlazan paisaje y vida local.",
+        "website": "https://soller.es/en/",
+        "ubicacion": "Sóller, España"
+      },
+      "sources": [
+        "https://soller.es/en/",
+        "https://soller.es/en/how-to-arrive/"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "02f5286a-839b-4024-9c55-6884102cea4b",
+          "website": "https://soller.es/es/como-llegar/",
+          "descripcion": "Hacer la ruta en el Tren de Sóller.",
+          "sources": [
+            "https://soller.es/es/como-llegar/",
+            "https://www.trendesoller.com/"
+          ]
+        },
+        {
+          "essentialItemId": "b5894e0f-af30-4265-a74e-b5e0dd5d3dc4",
+          "website": "https://soller.es/en/",
+          "descripcion": "Explorar Sóller y Puerto de Sóller.",
+          "sources": [
+            "https://soller.es/en/",
+            "https://visitsoller.com/gastronomia/restaurantes/"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Espléndido",
+          "address": "Passeig Es Traves, 5, 07108 Port de Sóller",
+          "website": "https://esplendidohotel.com/",
+          "descripcion": "Hotel junto al paseo marítimo del Port de Sóller, entre la playa y la Serra de Tramuntana, con reserva directa.",
+          "sources": ["https://esplendidohotel.com/"],
+          "bookingUrl": "https://esplendidohotel.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Ca’n Boqueta",
+          "address": "Gran Via, 43, 07100 Sóller",
+          "website": "https://www.canboqueta.com/",
+          "descripcion": "Restaurante en una casa mallorquina tradicional, con cocina de temporada y producto local.",
+          "sources": [
+            "https://www.canboqueta.com/",
+            "https://visitsoller.com/gastronomia/restaurantes/"
+          ],
+          "cuisine": "Mallorquina",
+          "bookingUrl": "https://www.canboqueta.com/",
+          "phone": "+34 971 638 398"
+        }
+      ]
+    },
+    {
+      "id": "a63d255b-028c-4d7f-a8f8-c0b234e8b8e4",
+      "nombre": "VALLDEMOSSA",
+      "fields": {
+        "descripcion": "Valldemossa conserva un entramado de calles de piedra en la Tramuntana y es conocida por la Cartuja donde vivieron Chopin y George Sand durante el invierno de 1838–1839.",
+        "website": "https://www.visitvalldemossa.es/en/",
+        "ubicacion": "Valldemossa, España"
+      },
+      "sources": [
+        "https://www.visitvalldemossa.es/en/",
+        "https://www.illesbalears.travel/es/mallorca/municipis/valldemossa"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "26b8a52a-e172-48ff-b3e9-b672f665bebe",
+          "website": "https://cartoixadevalldemossa.com/es/visit/",
+          "descripcion": "Visitar la Cartuja de Valldemossa.",
+          "sources": [
+            "https://cartoixadevalldemossa.com/es/visit/",
+            "https://www.illesbalears.travel/es/mallorca/conjunto-monumental-reial-cartoixa-de-valldemossa"
+          ],
+          "bookingUrl": "https://cartoixadevalldemossa.com/es/visit/"
+        },
+        {
+          "essentialItemId": "63cfeb2c-af1d-4a26-bb6f-466a4732128e",
+          "website": "https://www.visitvalldemossa.es/en/",
+          "descripcion": "Recorrer el pueblo de Valldemossa.",
+          "sources": [
+            "https://www.visitvalldemossa.es/en/",
+            "https://www.illesbalears.travel/es/mallorca/municipis/valldemossa"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Valldemossa Hotel",
+          "address": "Carretera Vieja de Valldemossa, s/n, 07170 Valldemossa",
+          "website": "https://www.valldemossahotel.com/en/",
+          "descripcion": "Hotel de montaña en una finca histórica a las afueras del pueblo, con alojamiento y propuesta gastronómica propia.",
+          "sources": [
+            "https://www.valldemossahotel.com/en/",
+            "https://www.visitvalldemossa.es/alojamientos/hotel-valldemossa/"
+          ],
+          "bookingUrl": "https://www.valldemossahotel.com/en/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Hostal Can Marió",
+          "address": "Carrer Uetam, 8, 07170 Valldemossa",
+          "website": "https://www.visitvalldemossa.es/es/restaurantes/hostal-can-mario/",
+          "descripcion": "Restaurante familiar de cocina casera con especialidades tradicionales mallorquinas.",
+          "sources": [
+            "https://www.visitvalldemossa.es/es/restaurantes/hostal-can-mario/"
+          ],
+          "cuisine": "Mallorquina",
+          "phone": "+34 971 612 122"
+        }
+      ]
+    },
+    {
+      "id": "2faaf592-a060-4322-a08a-5d55f8def2e1",
+      "nombre": "DEIÀ",
+      "fields": {
+        "descripcion": "Deià es un pequeño pueblo de montaña de la Tramuntana entre olivares y mar, con un paisaje cultural ligado a artistas, caminos costeros y la finca histórica de Son Marroig.",
+        "website": "https://www.visitdeia.cat/",
+        "ubicacion": "Deià, España"
+      },
+      "sources": [
+        "https://www.visitdeia.cat/",
+        "https://www.illesbalears.travel/ca/mallorca/municipis/deia"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "ca328377-848b-46fb-b617-a286bf2fc3a4",
+          "website": "https://www.visitdeia.cat/",
+          "descripcion": "Visitar Deià.",
+          "sources": [
+            "https://www.visitdeia.cat/",
+            "https://www.visitdeia.cat/municipi/"
+          ]
+        },
+        {
+          "nombre": "Museo y jardines de Son Marroig",
+          "address": "Carretera Valldemossa–Deià, PK 65.500, 07179 Deià",
+          "website": "https://sonmarroig.com/contacto/",
+          "descripcion": "Visitar la casa museo de Son Marroig y conocer la residencia histórica del Archiduque Luis Salvador y sus colecciones.",
+          "sources": [
+            "https://sonmarroig.com/contacto/",
+            "https://illesbalears.travel/es/mallorca/museo-son-marroig"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Es Molí",
+          "address": "Carretera Valldemossa–Deià, s/n, 07179 Deià",
+          "website": "https://esmoli.com/en/",
+          "descripcion": "Hotel con jardines y vistas en la Serra de Tramuntana, a corta distancia a pie del centro de Deià.",
+          "sources": [
+            "https://esmoli.com/en/contact",
+            "https://www.visitdeia.cat/serveis/"
+          ],
+          "bookingUrl": "https://esmoli.com/en/",
+          "phone": "+34 971 639 000"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurant Nama",
+          "address": "Carrer Arxiduc Lluís Salvador, 22, 07179 Deià",
+          "website": "https://www.restaurantnama.com/",
+          "descripcion": "Restaurante de cocina contemporánea del sudeste asiático con terrazas y vistas a la Tramuntana.",
+          "sources": [
+            "https://www.restaurantnama.com/",
+            "https://www.visitdeia.cat/serveis/"
+          ],
+          "cuisine": "Fusión",
+          "phone": "+34 971 636 102"
+        }
+      ]
+    },
+    {
+      "id": "12ac28e3-ba20-4760-81c8-30bb154a8db6",
+      "nombre": "ALCÚDIA",
+      "fields": {
+        "descripcion": "Alcúdia reúne un casco histórico rodeado de murallas medievales con el yacimiento de la ciudad romana de Pol·lèntia y el paisaje de las bahías del norte de Mallorca.",
+        "website": "https://alcudiamallorca.com/en/",
+        "ubicacion": "Alcúdia, España"
+      },
+      "sources": [
+        "https://alcudiamallorca.com/en/",
+        "https://alcudiamallorca.com/en/culture-and-history"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "414c5bb1-a647-45a3-af51-9f6debfc277f",
+          "website": "https://www.illesbalears.travel/en/mallorca/walls-muralles-dalcudia",
+          "descripcion": "Pasear por la muralla de Alcúdia.",
+          "sources": [
+            "https://www.illesbalears.travel/en/mallorca/walls-muralles-dalcudia",
+            "https://alcudiamallorca.com/en/culture-and-history"
+          ]
+        },
+        {
+          "nombre": "Ciudad romana de Pol·lèntia",
+          "address": "Avinguda Prínceps d’Espanya, s/n, 07400 Alcúdia",
+          "website": "https://www.alcudia.net/Pollentia/es/la-ciutat-romana/",
+          "descripcion": "Recorre las áreas excavadas de la antigua ciudad romana, entre ellas el foro, el barrio residencial de la Portella y el teatro.",
+          "sources": [
+            "https://www.illesbalears.travel/es/mallorca/yacimiento-arqueologico-ciutat-romana-de-pollentia",
+            "https://www.alcudia.net/Pollentia/es/la-ciutat-romana/"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Bordoy Mostatxins",
+          "address": "Carrer del Lledoner, 17, 07400 Alcúdia",
+          "website": "https://www.bordoyhotels.com/en/hotel-mostatxins/hotel",
+          "descripcion": "Hotel boutique en dos edificios históricos del casco antiguo; la web oficial ofrece disponibilidad y reserva.",
+          "sources": [
+            "https://www.bordoyhotels.com/en/hotel-mostatxins/hotel",
+            "https://www.bordoyhotels.com/en/hotel-mostatxins/location-and-contact"
+          ],
+          "bookingUrl": "https://www.bordoyhotels.com/en/hotel-mostatxins/hotel",
+          "phone": "+34 971 549 639"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Maca de Castro",
+          "address": "Carrer de Juno, s/n, 07400 Alcúdia",
+          "website": "https://macadecastro.com/en/",
+          "descripcion": "Restaurante de cocina contemporánea mallorquina centrada en productos locales y de temporada.",
+          "sources": [
+            "https://macadecastro.com/en/",
+            "https://macadecastro.com/en/contact/"
+          ],
+          "cuisine": "Mallorquina",
+          "phone": "+34 971 892 391"
+        }
+      ]
+    },
+    {
+      "id": "095a9d1c-6748-4866-9b87-2de524d48e52",
+      "nombre": "POLLENÇA",
+      "fields": {
+        "descripcion": "Pollença combina un casco antiguo de piedra a los pies de la Tramuntana con rutas a miradores, una larga bahía y el núcleo costero de Port de Pollença.",
+        "website": "https://pollensa.com/?phpLang=en",
+        "ubicacion": "Pollença, España"
+      },
+      "sources": [
+        "https://pollensa.com/?phpLang=en",
+        "https://pollensa.com/en/discover-pollenca/towns/pollenca-history-and-heritage"
+      ],
+      "actividades": [
+        {
+          "essentialItemId": "165ff62f-74a9-463b-8ecd-3b875ca5afa7",
+          "website": "https://pollensa.com/en/discover-pollenca/places-of-interest/el-calvari",
+          "descripcion": "Caminar los 365 escalones de El Calvari (Pollença).",
+          "sources": [
+            "https://pollensa.com/en/discover-pollenca/places-of-interest/el-calvari",
+            "https://pollensa.com/en/discover-pollenca/towns/pollenca-history-and-heritage"
+          ]
+        },
+        {
+          "nombre": "Pont Romà de Pollença",
+          "address": "Carrer del Pont Romà, 07460 Pollença",
+          "website": "https://pollensa.com/en/discover-pollenca/places-of-interest/roman-bridge",
+          "descripcion": "Cruza el puente de piedra sobre el torrente de Sant Jordi, uno de los hitos históricos del municipio.",
+          "sources": [
+            "https://pollensa.com/en/discover-pollenca/places-of-interest/roman-bridge",
+            "https://pollensa.com/en/discover-pollenca/towns/pollenca-history-and-heritage"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Illa d’Or",
+          "address": "Passeig Colom, 265, 07470 Port de Pollença",
+          "website": "https://www.hotelillador.com/es/",
+          "descripcion": "Hotel junto al mar en el paseo Pine Walk, con reserva directa y opciones gastronómicas propias.",
+          "sources": [
+            "https://www.hotelillador.com/es/",
+            "https://www.hotelillador.com/es/contacto",
+            "https://pollensa.com/es/alojamiento/illa-dor"
+          ],
+          "bookingUrl": "https://www.hotelillador.com/es/",
+          "phone": "+34 971 865 100"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Celler La Parra",
+          "address": "Carrer de Joan XXIII, 84, 07470 Port de Pollença",
+          "website": "https://cellerlaparra.com/en/",
+          "descripcion": "Restaurante familiar de cocina mallorquina tradicional en Port de Pollença, abierto desde 1962.",
+          "sources": [
+            "https://cellerlaparra.com/en/",
+            "https://cellerlaparra.com/ca/contacte/",
+            "https://pollensa.com/es/que-hacer/donde-comer/la-parra-celler-restaurant"
+          ],
+          "cuisine": "Mallorquina",
+          "bookingUrl": "https://cellerlaparra.com/en/",
+          "phone": "+34 971 865 041"
+        }
+      ]
+    }
+  ]
+}

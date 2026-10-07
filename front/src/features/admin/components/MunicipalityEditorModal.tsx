@@ -118,9 +118,50 @@ export function MunicipalityEditorModal({
               endpoint="/upload/municipio"
               label="Foto del municipio"
               value={form.imagen}
-              onChange={(imagen) => onChange({ ...form, imagen })}
-              onRemove={() => onChange({ ...form, imagen: '' })}
+              onChange={(imagen) =>
+                onChange({
+                  ...form,
+                  imagen,
+                  ...(imagen !== form.imagen ? { imageAttribution: {} } : {}),
+                })
+              }
+              onRemove={() => onChange({ ...form, imagen: '', imageAttribution: {} })}
             />
+            <div className="municipality-image-credit-fields">
+              <h3>Atribución de la foto</h3>
+              <p>Indica autoría, fuente y licencia de la imagen de portada.</p>
+              {(['author', 'title', 'sourceUrl', 'license', 'licenseUrl', 'changes'] as const).map(
+                (field) => {
+                  const labels = {
+                    author: 'Autor',
+                    title: 'Título de la imagen',
+                    sourceUrl: 'Enlace a la fuente',
+                    license: 'Licencia',
+                    licenseUrl: 'Enlace a la licencia',
+                    changes: 'Cambios realizados',
+                  };
+                  const value = form.imageAttribution?.[field] || '';
+                  return (
+                    <Field key={field} label={labels[field]} htmlFor={`mun-credit-${field}`}>
+                      <input
+                        id={`mun-credit-${field}`}
+                        type={field === 'sourceUrl' || field === 'licenseUrl' ? 'url' : 'text'}
+                        value={value}
+                        onChange={(event) =>
+                          onChange({
+                            ...form,
+                            imageAttribution: {
+                              ...form.imageAttribution,
+                              [field]: event.target.value,
+                            },
+                          })
+                        }
+                      />
+                    </Field>
+                  );
+                },
+              )}
+            </div>
             {(['descripcion', 'imagenAlt', 'ubicacion', 'mejorEpoca', 'consejos'] as const).map(
               (field) => (
                 <LocalizedField

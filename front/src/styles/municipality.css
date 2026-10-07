@@ -58,6 +58,31 @@
   padding: 40px clamp(20px, 4vw, 72px) 48px;
   align-items: end;
 }
+.municipality-image-attribution {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+  gap: 6px 14px;
+  margin: 8px 0 14px;
+  color: inherit;
+  font-size: 12px;
+  line-height: 1.5;
+  text-shadow: 0 1px 4px #000;
+  overflow-wrap: anywhere;
+}
+.municipality-image-attribution > * + *::before {
+  content: '·';
+  margin-right: 14px;
+  opacity: 0.7;
+}
+.municipality-image-attribution a {
+  color: inherit;
+  text-underline-offset: 2px;
+}
+.municipality-photo-dialog .municipality-image-attribution {
+  color: var(--ink);
+  text-shadow: none;
+}
 .municipality-breadcrumb {
   display: flex;
   flex-wrap: wrap;
@@ -401,6 +426,20 @@
   object-fit: contain;
   width: 100%;
 }
+.municipality-image-credit-fields {
+  margin: 20px 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.municipality-image-credit-fields h3 {
+  margin: 0 0 6px;
+}
+.municipality-image-credit-fields > p {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 13px;
+}
 .municipality-detail > img {
   width: 100%;
   max-height: 320px;
@@ -568,6 +607,10 @@
   .municipality-cover__content {
     display: block;
     padding: 24px 20px 28px;
+  }
+  .municipality-cover .municipality-image-attribution {
+    color: var(--muted);
+    text-shadow: none;
   }
   .municipality-breadcrumb {
     margin-bottom: 24px;

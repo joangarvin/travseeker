@@ -29,6 +29,15 @@ export type EditorialFields = {
   reviewedBy?: EditorialActor | null;
 };
 
+export type ImageAttribution = {
+  author?: string;
+  title?: string;
+  sourceUrl?: string;
+  license?: string;
+  licenseUrl?: string;
+  changes?: string;
+};
+
 export type Municipio = EditorialFields & {
   id: string;
   nombre: string;
@@ -41,6 +50,7 @@ export type Municipio = EditorialFields & {
   descripcion?: string;
   imagen?: string;
   imagenAlt?: string;
+  imageAttribution?: ImageAttribution;
   ubicacion?: string;
   website?: string;
   mejorEpoca?: string;

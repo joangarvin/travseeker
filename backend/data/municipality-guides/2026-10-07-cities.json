@@ -1,0 +1,2084 @@
+{
+  "checkedAt": "2026-10-07",
+  "scope": "Lotes disponibles resueltos a municipios y actividades esenciales existentes",
+  "photoPolicy": "No se incorporan fotos de terceros sin licencia o permiso verificado.",
+  "municipalities": [
+    {
+      "id": "9ff8789c-873a-4d59-99ea-2b6e2049a5ed",
+      "nombre": "MADRID",
+      "fields": {
+        "descripcion": "Madrid combina grandes museos, palacios y barrios históricos con una vida cultural activa. El Paseo del Arte y el Palacio Real ofrecen dos recorridos distintos por el patrimonio de la capital.",
+        "website": "https://www.esmadrid.com/",
+        "ubicacion": "Madrid, España"
+      },
+      "sources": ["https://www.esmadrid.com/"],
+      "actividades": [
+        {
+          "nombre": "Visitar el Museo del Prado",
+          "address": "Paseo del Prado, s/n, 28014 Madrid",
+          "website": "https://www.esmadrid.com/informacion-turistica/museo-del-prado",
+          "descripcion": "Recorrido por una colección de pintura con obras de Velázquez, Goya, El Greco y artistas de otras escuelas europeas.",
+          "sources": [
+            "https://www.esmadrid.com/informacion-turistica/museo-del-prado"
+          ],
+          "category": "Museos",
+          "essentialItemId": "4c3dfb3e-47ad-4536-8622-88b8329533a7"
+        },
+        {
+          "nombre": "Visitar el Palacio Real de Madrid",
+          "address": "Plaza de Oriente, Madrid",
+          "website": "https://www.patrimonionacional.es/visita/palacio-real-de-madrid",
+          "descripcion": "Visita a los salones y espacios históricos del Palacio Real; consulta horarios, accesos y entradas en Patrimonio Nacional.",
+          "sources": [
+            "https://www.patrimonionacional.es/visita/palacio-real-de-madrid"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "a00b35b1-f90c-47ba-a702-a589bcf10bb9"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Only YOU Boutique Hotel Madrid",
+          "address": "Calle Barquillo, 21, 28004 Madrid",
+          "website": "https://www.onlyyouhotels.com/hoteles/only-you-boutique-hotel-madrid/",
+          "descripcion": "Hotel boutique en el centro de Madrid. Consulta habitaciones y disponibilidad en el canal oficial.",
+          "sources": [
+            "https://www.onlyyouhotels.com/en/hotels/only-you-boutique-hotel-madrid/location/",
+            "https://www.esmadrid.com/alojamientos/only-you-boutique-hotel-madrid"
+          ],
+          "phone": "+34 910 05 22 22",
+          "bookingUrl": "https://www.onlyyouhotels.com/hoteles/only-you-boutique-hotel-madrid/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Casa Lucio",
+          "address": "Cava Baja, 35, 28005 Madrid",
+          "website": "https://casalucio.es/",
+          "descripcion": "Casa de comidas de cocina tradicional madrileña; ofrece información y reservas en su web oficial.",
+          "sources": ["https://casalucio.es/"],
+          "cuisine": "Cocina tradicional española",
+          "bookingUrl": "https://casalucio.es/"
+        }
+      ]
+    },
+    {
+      "id": "56e85aa9-f43c-4542-bc7d-efceb09300b7",
+      "nombre": "MÁLAGA",
+      "fields": {
+        "descripcion": "Málaga reúne patrimonio andalusí, museos y vida junto al mar. La Alcazaba y el Museo Picasso permiten acercarse a dos etapas distintas de la historia y la cultura de la ciudad.",
+        "website": "https://visita.malaga.eu/",
+        "ubicacion": "Málaga, España"
+      },
+      "sources": [
+        "https://visita.malaga.eu/",
+        "https://www.malaga.eu/la-ciudad/instalaciones-y-espacios/detalle-de-la-instalacion/?id=130"
+      ],
+      "actividades": [
+        {
+          "nombre": "Visitar la Alcazaba de Málaga",
+          "address": "Calle Alcazabilla, 2, 29012 Málaga",
+          "website": "https://alcazabaygibralfaro.malaga.eu/es/index.html",
+          "descripcion": "Recorre la fortaleza palaciega de origen musulmán y sus espacios históricos; la web municipal publica horarios y entradas.",
+          "sources": [
+            "https://alcazabaygibralfaro.malaga.eu/es/index.html",
+            "https://www.malaga.eu/la-ciudad/instalaciones-y-espacios/detalle-de-la-instalacion/?id=130"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "c566bd44-76a5-4cb9-8b03-03dd12e21629"
+        },
+        {
+          "nombre": "Visitar el Museo Picasso Málaga",
+          "address": "Palacio de Buenavista, calle San Agustín, 8, 29015 Málaga",
+          "website": "https://www.museopicassomalaga.org/",
+          "descripcion": "Visita a la colección del museo dedicado a Pablo Picasso, en el Palacio de Buenavista del centro histórico.",
+          "sources": ["https://www.museopicassomalaga.org/en/visita"],
+          "category": "Museos",
+          "essentialItemId": "2a1d0b82-c5a1-4aaa-96ae-60005c0b2f4c"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Gran Hotel Miramar",
+          "address": "Paseo de Reding, 22–24, 29016 Málaga",
+          "website": "https://www.granhotelmiramarmalaga.com/es/hotel-malaga/",
+          "descripcion": "Hotel en el paseo marítimo de Málaga, con información de estancia y contacto en su web oficial.",
+          "sources": [
+            "https://www.granhotelmiramarmalaga.com/es/hotel-malaga/"
+          ],
+          "phone": "+34 952 603 000",
+          "bookingUrl": "https://www.granhotelmiramarmalaga.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "El Pimpi",
+          "address": "Calle Granada, 62, 29015 Málaga",
+          "website": "https://www.elpimpi.com/",
+          "descripcion": "Bodega histórica donde probar gastronomía local y vinos de la tierra; consulta reservas y horarios en su web.",
+          "sources": ["https://www.elpimpi.com/"],
+          "cuisine": "Gastronomía malagueña",
+          "bookingUrl": "https://www.elpimpi.com/",
+          "phone": "+34 952 225 403"
+        }
+      ]
+    },
+    {
+      "id": "a5f36a08-1a73-4331-801c-1c2a1a469a1e",
+      "nombre": "VALÈNCIA",
+      "fields": {
+        "descripcion": "Valencia combina un centro histórico de origen medieval con arquitectura contemporánea, jardines y playas. La Lonja de la Seda y la Ciudad de las Artes y las Ciencias muestran dos caras de la ciudad.",
+        "website": "https://www.visitvalencia.com/",
+        "ubicacion": "Valencia, España"
+      },
+      "sources": ["https://www.visitvalencia.com/"],
+      "actividades": [
+        {
+          "nombre": "Visitar la Lonja de la Seda",
+          "address": "Lonja, 2, 46001 Valencia",
+          "website": "https://www.visitvalencia.com/que-hacer-valencia/cultura-valenciana/monumentos-en-valencia/lonja-seda",
+          "descripcion": "Conoce este edificio gótico civil declarado Patrimonio Mundial, frente al Mercado Central.",
+          "sources": [
+            "https://www.visitvalencia.com/que-hacer-valencia/cultura-valenciana/monumentos-en-valencia/lonja-seda"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "7db6d4a5-db70-4fa5-be09-28a5f48f97bc"
+        },
+        {
+          "nombre": "Recorrer la Ciudad de las Artes y las Ciencias",
+          "address": "Avenida del Professor López Piñero, 7, 46013 Valencia",
+          "website": "https://www.visitvalencia.com/que-ver-valencia/ciudad-de-las-artes-y-las-ciencias/que-ver",
+          "descripcion": "Paseo por el complejo de edificios culturales, científicos y de ocio diseñado por Santiago Calatrava.",
+          "sources": [
+            "https://www.visitvalencia.com/que-ver-valencia/ciudad-de-las-artes-y-las-ciencias/que-ver"
+          ],
+          "category": "Cultura",
+          "essentialItemId": "35f503da-f215-4bfb-94a9-1dba7bb7dac3"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Only YOU Hotel Valencia",
+          "address": "Plaza Rodrigo Botet, 5, 46002 Valencia",
+          "website": "https://www.onlyyouhotels.com/hoteles/only-you-hotel-valencia/",
+          "descripcion": "Hotel en el centro de Valencia, a poca distancia de la plaza del Ayuntamiento y varios monumentos históricos.",
+          "sources": [
+            "https://www.onlyyouhotels.com/en/hotels/only-you-hotel-valencia/location/",
+            "https://www.onlyyouhotels.com/en/about-only-you-hotels/contact/"
+          ],
+          "phone": "+34 963 98 10 00",
+          "bookingUrl": "https://www.onlyyouhotels.com/hoteles/only-you-hotel-valencia/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Casa Carmela",
+          "address": "Carrer d’Isabel de Villena, 155, 46011 Valencia",
+          "website": "https://www.casa-carmela.com/es/",
+          "descripcion": "Restaurante valenciano junto a la playa de la Malvarrosa, conocido por sus arroces; las reservas se tramitan en su web.",
+          "sources": [
+            "https://www.casa-carmela.com/es/aviso-legal/",
+            "https://www.casa-carmela.com/es/reservar/"
+          ],
+          "cuisine": "Arroces valencianos",
+          "bookingUrl": "https://www.casa-carmela.com/es/reservar/",
+          "phone": "+34 963 710 073"
+        }
+      ]
+    },
+    {
+      "id": "e3a3ae0a-385b-45db-93ad-a8689f2766c4",
+      "nombre": "TOLEDO",
+      "fields": {
+        "descripcion": "Toledo conserva un casco histórico declarado Patrimonio Mundial, con monumentos cristianos, judíos y andalusíes en un paisaje rodeado por el Tajo. La Catedral y la mezquita del Cristo de la Luz permiten recorrer distintas etapas de la ciudad.",
+        "website": "https://turismo.toledo.es/",
+        "ubicacion": "Toledo, España"
+      },
+      "sources": ["https://turismo.toledo.es/"],
+      "actividades": [
+        {
+          "nombre": "Visitar la Catedral Primada de Toledo",
+          "address": "Calle Cardenal Cisneros, 1, 45002 Toledo",
+          "website": "https://turismo.toledo.es/recursos/museos-y-monumentos/id1450-santa-iglesia-catedral-primada-de-toledo.html",
+          "descripcion": "Recorrido por la Catedral Primada, con espacios como la Sacristía Mayor, el Coro y la Capilla Mayor.",
+          "sources": [
+            "https://turismo.toledo.es/recursos/museos-y-monumentos/id1450-santa-iglesia-catedral-primada-de-toledo.html"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "f8e7bf31-8614-43c1-b617-1ec6e0438c1e"
+        },
+        {
+          "nombre": "Visitar la mezquita del Cristo de la Luz",
+          "address": "Calle Cristo de la Luz, 22, Toledo",
+          "website": "https://turismo.toledo.es/recursos/id1457-mezquita-del-cristo-de-la-luz.html",
+          "descripcion": "Conoce este pequeño oratorio califal del siglo X y la posterior ampliación mudéjar.",
+          "sources": [
+            "https://turismo.toledo.es/recursos/id1457-mezquita-del-cristo-de-la-luz.html"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "20370f31-c297-49e0-a66e-1f075122dd05"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Boutique Adolfo",
+          "address": "Plaza de Zocodover, 14, 45001 Toledo",
+          "website": "https://www.hotelboutiqueadolfo.com/",
+          "descripcion": "Hotel boutique en la plaza de Zocodover; consulta habitaciones y reservas en su web oficial.",
+          "sources": [
+            "https://turismo.toledo.es/recursos/restaurantes-y-bares-en-el-casco-historico/id32846-restaurante-cafe-el-espanol-hotel-boutique-adolfo.html"
+          ],
+          "bookingUrl": "https://www.hotelboutiqueadolfo.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante Café El Español (Hotel Boutique Adolfo)",
+          "address": "Plaza de Zocodover, 14, 45001 Toledo",
+          "website": "https://www.hotelboutiqueadolfo.com/",
+          "descripcion": "Restaurante de cocina tradicional y saludable en la primera planta del Hotel Boutique Adolfo.",
+          "sources": [
+            "https://turismo.toledo.es/recursos/restaurantes-y-bares-en-el-casco-historico/id32846-restaurante-cafe-el-espanol-hotel-boutique-adolfo.html"
+          ],
+          "cuisine": "Cocina toledana y tradicional",
+          "phone": "+34 925 252 919"
+        }
+      ]
+    },
+    {
+      "id": "0caa35a7-bf63-46fe-9b54-951afa7164df",
+      "nombre": "SEGOVIA",
+      "fields": {
+        "descripcion": "Segovia reúne arquitectura romana y medieval en un casco histórico declarado Patrimonio Mundial. El Acueducto, el Alcázar y las calles que los conectan permiten descubrir la ciudad a pie.",
+        "website": "https://www.turismodesegovia.com/es",
+        "ubicacion": "Segovia, España"
+      },
+      "sources": ["https://www.turismodesegovia.com/es"],
+      "actividades": [
+        {
+          "nombre": "Visitar el Acueducto de Segovia",
+          "address": "Plaza del Azoguejo, Segovia",
+          "website": "https://www.turismodesegovia.com/es/acueducto/arquitectura-civil/obras-de-ingenieria/acueducto",
+          "descripcion": "Admira la obra hidráulica romana que atraviesa el centro de Segovia y constituye uno de sus principales símbolos.",
+          "sources": [
+            "https://www.turismodesegovia.com/es/acueducto/arquitectura-civil/obras-de-ingenieria/acueducto"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "b037faf7-91d1-4584-9910-afb5d5892c05"
+        },
+        {
+          "nombre": "Visitar el Real Alcázar de Segovia",
+          "address": "Plaza Reina Victoria Eugenia, s/n, Segovia",
+          "website": "https://www.turismodesegovia.com/es/monumentos/edificios-militares/real-alcazar",
+          "descripcion": "Recorre el castillo medieval que fue residencia real, fortaleza y prisión, situado entre los ríos Eresma y Clamores.",
+          "sources": [
+            "https://www.turismodesegovia.com/es/monumentos/edificios-militares/real-alcazar"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "b038d976-64f6-49ee-9c31-740be16f623a"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel San Antonio el Real",
+          "address": "Calle San Antonio el Real, 8, 40004 Segovia",
+          "website": "https://www.sanantonioelreal.es/",
+          "descripcion": "Hotel en un antiguo conjunto monástico de Segovia, con información de habitaciones y reservas en su web oficial.",
+          "sources": ["https://www.sanantonioelreal.es/en/restaurant/"],
+          "bookingUrl": "https://www.sanantonioelreal.es/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Claustro de San Antonio el Real",
+          "address": "Calle San Antonio el Real, 8, 40004 Segovia",
+          "website": "https://www.sanantonioelreal.es/en/restaurant/",
+          "descripcion": "Restaurante del hotel con cocina mediterránea de temporada en el claustro histórico del antiguo monasterio.",
+          "sources": ["https://www.sanantonioelreal.es/en/restaurant/"],
+          "cuisine": "Mediterránea",
+          "phone": "+34 921 413 455"
+        }
+      ]
+    },
+    {
+      "id": "e51eadb8-a1da-492a-8581-a6c6bf930a3b",
+      "nombre": "BILBAO",
+      "fields": {
+        "descripcion": "Bilbao combina arquitectura contemporánea junto a la ría con un casco histórico de calles peatonales y plazas. El Museo Guggenheim y el Casco Viejo ofrecen dos formas complementarias de conocer la ciudad.",
+        "website": "https://www.bilbaoturismo.net/BilbaoTurismo/es/inicio",
+        "ubicacion": "Bilbao, España"
+      },
+      "sources": ["https://www.bilbaoturismo.net/BilbaoTurismo/es/inicio"],
+      "actividades": [
+        {
+          "nombre": "Visitar el Museo Guggenheim Bilbao",
+          "address": "Avenida Abandoibarra, 2, 48009 Bilbao",
+          "website": "https://www.guggenheim-bilbao.eus/",
+          "descripcion": "Recorrido por el museo de arte moderno y contemporáneo junto a la ría; consulta horarios y entradas en la web oficial.",
+          "sources": [
+            "https://www.guggenheim-bilbao.eus/en/useful-information"
+          ],
+          "category": "Museos",
+          "essentialItemId": "02ea4e87-96f5-4a1f-ae87-02f7ce3808b5"
+        },
+        {
+          "nombre": "Pasear por el Casco Viejo de Bilbao",
+          "address": "Casco Viejo, Bilbao",
+          "website": "https://www.bilbaoturismo.net/BilbaoTurismo/es/espacio-casco-viejo",
+          "descripcion": "Paseo por las Siete Calles, sus plazas, comercios tradicionales y edificios patrimoniales junto a la ría.",
+          "sources": [
+            "https://www.bilbaoturismo.net/BilbaoTurismo/es/espacio-casco-viejo"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "0a62d5ef-7255-4da7-b9b2-7e667bdc1df6"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Tayko Bilbao",
+          "address": "Erribera Kalea, 13, 48005 Bilbao",
+          "website": "https://taykohotels.com/en/bilbao/",
+          "descripcion": "Hotel en un edificio histórico del Casco Viejo, junto a la ría y al puente de la Merced.",
+          "sources": [
+            "https://taykohotels.com/en/bilbao/contacto/",
+            "https://turismo.euskadi.eus/en/accomodation/tayko-bilbao/webtur00-content/en/"
+          ],
+          "phone": "+34 944 652 070",
+          "bookingUrl": "https://taykohotels.com/en/bilbao/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Nerua Guggenheim Bilbao",
+          "address": "Avenida Abandoibarra, 2, 48001 Bilbao",
+          "website": "https://www.neruaguggenheimbilbao.com/",
+          "descripcion": "Restaurante junto al Guggenheim con una propuesta de cocina vasca contemporánea; consulta y gestiona reservas en su web.",
+          "sources": ["https://www.neruaguggenheimbilbao.com/reservas/"],
+          "cuisine": "Cocina vasca contemporánea",
+          "bookingUrl": "https://www.neruaguggenheimbilbao.com/reservas/",
+          "phone": "+34 944 000 430"
+        }
+      ]
+    },
+    {
+      "id": "37b9a8ed-2749-4531-a48b-0464933d3b09",
+      "nombre": "DONOSTIA (SAN SEBASTIÁN)",
+      "fields": {
+        "descripcion": "San Sebastián combina una bahía urbana rodeada de playas y montes con una destacada tradición gastronómica. La Concha y el funicular histórico de Igeldo ofrecen dos formas distintas de disfrutar de su paisaje costero.",
+        "website": "https://sansebastianturismoa.eus/en/",
+        "ubicacion": "San Sebastián, España"
+      },
+      "sources": ["https://sansebastianturismoa.eus/en/"],
+      "actividades": [
+        {
+          "nombre": "Paseo y baño en la playa de La Concha",
+          "address": "Bahía de La Concha, San Sebastián",
+          "website": "https://sansebastianturismoa.eus/en/to-do/let-s-go-to-the-beach/la-concha-beach/",
+          "descripcion": "Recorrer el paseo marítimo o disfrutar de la playa urbana frente a la isla de Santa Clara.",
+          "sources": [
+            "https://sansebastianturismoa.eus/en/to-do/let-s-go-to-the-beach/la-concha-beach/"
+          ],
+          "category": "Naturaleza",
+          "essentialItemId": "a9a6eeef-1228-4076-8f14-3b25cc49825a"
+        },
+        {
+          "nombre": "Monte Igeldo y su funicular",
+          "address": "Paseo de Igeldo, 183, 20008 San Sebastián",
+          "website": "https://sansebastianturismoa.eus/en/to-do/hills/mount-igeldo/",
+          "descripcion": "Subir en el funicular de 1912 para disfrutar de las vistas de la bahía y del parque de atracciones histórico.",
+          "sources": [
+            "https://sansebastianturismoa.eus/en/to-do/hills/mount-igeldo/",
+            "https://accessibility.sansebastianturismoa.eus/en/to-do/what-to-visit/mount-igueldo-amusement-park/"
+          ],
+          "essentialItemId": "39ad122e-7eda-4122-98e7-95bd7b7e45bf"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Arbaso",
+          "address": "Calle Hondarribia, 24, 20005 Donostia / San Sebastián",
+          "website": "https://www.hotelarbaso.com/es/",
+          "descripcion": "Hotel céntrico frente a la Catedral del Buen Pastor, con el restaurante Narru en la planta baja.",
+          "sources": [
+            "https://turismo.euskadi.eus/es/alojamientos/hotel-boutique-arbaso/webtur00-content/es/",
+            "https://www.hotelarbaso.com/en/contact-arbaso/"
+          ],
+          "bookingUrl": "https://www.hotelarbaso.com/es/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Arzak",
+          "address": "Avda. Alcalde Elósegui, 273, 20015 Donostia / San Sebastián",
+          "website": "https://www.arzak.es/",
+          "descripcion": "Restaurante de cocina vasca de autor; consulta la información y reservas en su web oficial.",
+          "sources": ["https://www.arzak.es/en/contact-us/"],
+          "cuisine": "Vasca",
+          "bookingUrl": "https://www.arzak.es/"
+        }
+      ]
+    },
+    {
+      "id": "c2662536-5624-433a-8637-f5fcb921e868",
+      "nombre": "GIRONA",
+      "fields": {
+        "descripcion": "Girona conserva un casco histórico que permite recorrer más de dos mil años de historia. La Catedral, las murallas y el barrio judío forman un conjunto de calles y monumentos especialmente reconocible.",
+        "website": "https://girona.cat/turisme/eng/",
+        "ubicacion": "Girona, España"
+      },
+      "sources": ["https://girona.cat/turisme/eng/monuments.php"],
+      "actividades": [
+        {
+          "nombre": "Visitar la Catedral de Girona",
+          "address": "Plaça de la Catedral, 17004 Girona",
+          "website": "https://girona.cat/turisme/fra/monuments_catedral.php",
+          "descripcion": "Conocer la catedral y su gran nave gótica, junto con espacios de distintas épocas arquitectónicas.",
+          "sources": ["https://girona.cat/turisme/fra/monuments_catedral.php"],
+          "category": "Patrimonio",
+          "essentialItemId": "d1a78a0c-7165-46df-a4dc-86ec4862b7b8"
+        },
+        {
+          "nombre": "Paseo por el barrio judío (Call)",
+          "address": "Força Vella, Girona",
+          "website": "https://www.girona.cat/web/turisme/esp/monuments_call.php",
+          "descripcion": "Recorrer el laberinto de callejones y patios medievales del Call, uno de los espacios emblemáticos de Girona.",
+          "sources": [
+            "https://www.girona.cat/web/turisme/esp/monuments_call.php"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "763106cd-cc43-42f3-b3af-a6754f999015"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Carlemany",
+          "address": "Plaça Miquel Santaló, 17002 Girona",
+          "website": "https://www.hotelcarlemanygirona.com/en/Hotel",
+          "descripcion": "Hotel de cuatro estrellas situado en el centro comercial de Girona, con reserva e información en su web.",
+          "sources": [
+            "https://www.girona.cat/turisme/cat/allotjaments2.php?idReg=301&nom=Hotel-Carlemany&nomTipus=Hotels",
+            "https://www.hotelcarlemanygirona.com/en/contact/"
+          ],
+          "bookingUrl": "https://www.hotelcarlemanygirona.com/en/Hotel"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "El Celler de Can Roca",
+          "address": "Carrer de Can Sunyer, 48, 17007 Girona",
+          "website": "https://cellercanroca.com/el-celler-de-can-roca/",
+          "descripcion": "Restaurante de los hermanos Roca con cocina en evolución; consulta su canal oficial para información y reservas.",
+          "sources": ["https://cellercanroca.com/el-celler-de-can-roca/"],
+          "cuisine": "Catalana contemporánea",
+          "bookingUrl": "https://cellercanroca.com/"
+        }
+      ]
+    },
+    {
+      "id": "ad567bf2-f7a9-4710-9fea-9d96e41cf3ca",
+      "nombre": "TARRAGONA",
+      "fields": {
+        "descripcion": "Tarragona reúne el legado romano de Tarraco, declarado Patrimonio Mundial, y un casco histórico que culmina en la Catedral. Sus monumentos arqueológicos y la cercanía del Mediterráneo definen la visita.",
+        "website": "https://www.tarragonaturisme.cat/en/",
+        "ubicacion": "Tarragona, España"
+      },
+      "sources": ["https://www.tarragonaturisme.cat/en/museums-and-monuments"],
+      "actividades": [
+        {
+          "nombre": "Anfiteatro romano de Tarraco",
+          "address": "Parc de l'Amfiteatre romà, 43003 Tarragona",
+          "website": "https://www.tarragonaturisme.cat/es/monumento/anfiteatro-romano-mht",
+          "descripcion": "Visita el anfiteatro romano junto al mar, integrado en el conjunto arqueológico de Tarraco.",
+          "sources": [
+            "https://www.tarragonaturisme.cat/es/monumento/anfiteatro-romano-mht"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "7d5b6e03-d1d9-40b0-a1f5-d4de5a908efe"
+        },
+        {
+          "nombre": "Catedral y Museo Diocesano",
+          "address": "Pla de la Seu, 43003 Tarragona",
+          "website": "https://www.tarragonaturisme.cat/en/monument/cathedral-and-diocesan-museum",
+          "descripcion": "Visita la catedral medieval, el claustro y el Museo Diocesano en la parte alta de la ciudad.",
+          "sources": [
+            "https://www.tarragonaturisme.cat/en/monument/cathedral-and-diocesan-museum"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Astari",
+          "address": "Via Augusta, 95, 43003 Tarragona",
+          "website": "https://www.hotelastari.com/",
+          "descripcion": "Hotel con piscina y terraza, situado cerca del centro histórico; consulta disponibilidad en la web oficial.",
+          "sources": [
+            "https://www.hotelastari.com/es/contacto/",
+            "https://www.tarragonaturisme.cat/es/alojamientos/astari"
+          ],
+          "bookingUrl": "https://www.hotelastari.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "El Llagut",
+          "address": "Carrer de Natzaret, 10, 43003 Tarragona",
+          "website": "https://www.elllagut.com/",
+          "descripcion": "Pequeña taberna marinera en la Part Alta, con producto de proximidad y de temporada.",
+          "sources": [
+            "https://www.elllagut.com/",
+            "https://www.tarragonaturisme.cat/ca/restaurant/el-llagut"
+          ],
+          "cuisine": "Marinera",
+          "bookingUrl": "https://www.elllagut.com/"
+        }
+      ]
+    },
+    {
+      "id": "3d24bbf1-0354-4336-bc19-cb93bfc71a6c",
+      "nombre": "ZARAGOZA",
+      "fields": {
+        "descripcion": "Zaragoza muestra capas romanas, islámicas y cristianas junto al río Ebro. La Basílica del Pilar y el Palacio de la Aljafería destacan entre sus monumentos y ofrecen una introducción a la historia artística de la ciudad.",
+        "website": "https://www.zaragoza.es/sede/portal/turismo/",
+        "ubicacion": "Zaragoza, España"
+      },
+      "sources": ["https://www.zaragoza.es/sede/portal/turismo/"],
+      "actividades": [
+        {
+          "nombre": "Basílica de Nuestra Señora del Pilar",
+          "address": "Plaza Nuestra Señora del Pilar, s/n, Zaragoza",
+          "website": "https://www.zaragoza.es/sede/portal/turismo/",
+          "descripcion": "Visita uno de los principales santuarios marianos y monumentos barrocos de Aragón, a orillas del Ebro.",
+          "sources": [
+            "https://sites.feriazaragoza.es/visitantes/sobre-zaragoza/turismo"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "97813a88-4ca3-41b9-ae6c-aea60d016f07"
+        },
+        {
+          "nombre": "Palacio de la Aljafería",
+          "address": "Calle de los Diputados, s/n, 50071 Zaragoza",
+          "website": "https://www.zaragoza.es/sede/portal/turismo/post/palacio-de-aljaferia",
+          "descripcion": "Recorre este palacio del siglo XI y sus patios y espacios de arquitectura hispanomusulmana.",
+          "sources": [
+            "https://www.zaragoza.es/sede/portal/museos/servicio/equipamiento/13020"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "71e74690-8b5e-49e8-87ca-a1947aae4af3"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Palafox",
+          "address": "Calle del Marqués de Casa Jiménez, s/n, 50004 Zaragoza",
+          "website": "https://www.palafoxhoteles.com/hotel-palafox/",
+          "descripcion": "Hotel en el centro de Zaragoza con información de habitaciones y contacto para reservas en su canal oficial.",
+          "sources": [
+            "https://www.palafoxhoteles.com/hotel-palafox/ubicacion/",
+            "https://www.zaragoza.es/sede/portal/turismo/servicio/restaurante/16"
+          ],
+          "bookingUrl": "https://www.palafoxhoteles.com/hotel-palafox/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Casa Lac",
+          "address": "Calle Mártires, 12, 50003 Zaragoza",
+          "website": "https://restaurantecasalac.es/en/",
+          "descripcion": "Restaurante de cocina de tradición aragonesa con toques de innovación.",
+          "sources": [
+            "https://restaurantecasalac.es/en/",
+            "https://www.zaragoza.es/sede/portal/turismo/servicio/restaurante/24279"
+          ],
+          "cuisine": "Aragonesa",
+          "bookingUrl": "https://restaurantecasalac.es/en/"
+        }
+      ]
+    },
+    {
+      "id": "efa6dbe3-8303-400b-85f9-bd6eaf25323e",
+      "nombre": "SANTIAGO DE COMPOSTELA",
+      "fields": {
+        "descripcion": "Santiago de Compostela es el destino histórico de los Caminos y una ciudad monumental articulada en torno a su Catedral. El patrimonio religioso y las calles de piedra del centro histórico acompañan la llegada de peregrinos y visitantes.",
+        "website": "https://www.santiagoturismo.com/",
+        "ubicacion": "Santiago de Compostela, España"
+      },
+      "sources": [
+        "https://visitas.catedraldesantiago.es/",
+        "https://www.santiagoturismo.com/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Visita a la Catedral de Santiago",
+          "address": "Praza do Obradoiro, s/n, 15704 Santiago de Compostela",
+          "website": "https://catedraldesantiago.es/visitas/",
+          "descripcion": "Conoce la basílica y, mediante visita reservada, el museo y otros espacios de la Catedral.",
+          "sources": [
+            "https://catedraldesantiago.es/visitas/",
+            "https://visitas.catedraldesantiago.es/"
+          ],
+          "category": "Patrimonio",
+          "bookingUrl": "https://visitas.catedraldesantiago.es/",
+          "essentialItemId": "e845fc9a-199a-47c3-b8f9-fb22aa73dc21"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Costa Vella",
+          "address": "Rúa da Porta da Pena, 17, 15704 Santiago de Compostela",
+          "website": "https://www.costavella.com/",
+          "descripcion": "Hotel con jardín en el centro histórico y reserva online en su web oficial.",
+          "sources": [
+            "https://www.costavella.com/contacto",
+            "https://www.costavella.com/en"
+          ],
+          "bookingUrl": "https://www.costavella.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Casa Marcelo",
+          "address": "Rúa das Hortas, 1, Santiago de Compostela",
+          "website": "https://www.casamarcelo.net/en",
+          "descripcion": "Restaurante de cocina creativa con información de horarios y contacto en su web oficial.",
+          "sources": ["https://www.casamarcelo.net/en"],
+          "cuisine": "Contemporánea",
+          "bookingUrl": "https://www.casamarcelo.net/en"
+        }
+      ]
+    },
+    {
+      "id": "eb8d68d8-2092-4695-a1b6-06c27077bd43",
+      "nombre": "RONDA",
+      "fields": {
+        "descripcion": "Ronda se asienta sobre el Tajo, cuyo profundo desfiladero divide el casco antiguo de la ciudad moderna. El Puente Nuevo, los miradores y los palacios históricos permiten descubrir su paisaje e historia urbana.",
+        "website": "https://info.turismoderonda.es/",
+        "ubicacion": "Ronda, España"
+      },
+      "sources": [
+        "https://info.turismoderonda.es/",
+        "https://info.turismoderonda.es/patrimonio-cultural/monumentos/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Puente Nuevo e interpretación del Tajo",
+          "address": "Plaza de España, s/n, 29400 Ronda",
+          "website": "https://info.turismoderonda.es/patrimonio-cultural/puente-nuevo-sobre-el-tajo/",
+          "descripcion": "Contempla el puente del siglo XVIII y conoce su historia y el entorno del desfiladero en el centro de interpretación.",
+          "sources": [
+            "https://info.turismoderonda.es/patrimonio-cultural/puente-nuevo-sobre-el-tajo/",
+            "https://info.turismoderonda.es/wp-content/uploads/2024/09/PUENTE-NUEVO-ING.pdf"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "4998a506-70ca-44cb-bd2b-f5a7192a02aa"
+        },
+        {
+          "nombre": "Palacio de Mondragón",
+          "address": "Plaza Mondragón, s/n, 29400 Ronda",
+          "website": "https://info.turismoderonda.es/patrimonio-cultural/palacio-de-mondragon/",
+          "descripcion": "Visita el palacio histórico, sus patios y jardines en el casco antiguo de Ronda.",
+          "sources": [
+            "https://info.turismoderonda.es/patrimonio-cultural/palacio-de-mondragon/"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Parador de Ronda",
+          "address": "Plaza de España, s/n, 29400 Ronda",
+          "website": "https://paradores.es/es/parador-de-ronda",
+          "descripcion": "Hotel junto al Puente Nuevo con vistas al Tajo y alojamiento en el centro histórico.",
+          "sources": [
+            "https://paradores.es/es/parador-de-ronda",
+            "https://paradores.es/es/restaurante-del-parador-de-ronda?page=4"
+          ],
+          "bookingUrl": "https://paradores.es/es/parador-de-ronda"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante del Parador de Ronda",
+          "address": "Plaza de España, s/n, 29400 Ronda",
+          "website": "https://paradores.es/es/restaurante-del-parador-de-ronda?page=4",
+          "descripcion": "Cocina andaluza y especialidades de la serranía rondeña junto al Puente Nuevo.",
+          "sources": [
+            "https://paradores.es/es/restaurante-del-parador-de-ronda?page=4"
+          ],
+          "cuisine": "Andaluza",
+          "bookingUrl": "https://paradores.es/es/restaurante-del-parador-de-ronda?page=4"
+        }
+      ]
+    },
+    {
+      "id": "d64d3cf6-17d5-4b80-bdd5-9157cdc125ce",
+      "nombre": "CÁDIZ",
+      "fields": {
+        "descripcion": "Cádiz combina un casco histórico rodeado por el mar con torres mirador, plazas y playas urbanas. La Torre Tavira y la cámara oscura ofrecen una perspectiva singular de los tejados y la bahía.",
+        "website": "https://www.cadizturismo.com/en/",
+        "ubicacion": "Cádiz, España"
+      },
+      "sources": ["https://www.cadizturismo.com/en/rutas/las-torres-gemelas"],
+      "actividades": [
+        {
+          "nombre": "Torre Tavira y cámara oscura",
+          "address": "Calle Marqués del Real Tesoro, 10, 11001 Cádiz",
+          "website": "https://www.cadizturismo.com/en/empresa/torre-tavira-camara-oscura",
+          "descripcion": "Sube a una de las antiguas torres vigía para disfrutar de vistas de Cádiz y una demostración de cámara oscura.",
+          "sources": [
+            "https://www.cadizturismo.com/en/empresa/torre-tavira-camara-oscura",
+            "https://www.cadizturismo.com/en/rutas/las-torres-gemelas"
+          ],
+          "category": "Patrimonio",
+          "bookingUrl": "https://www.torretavira.com/"
+        },
+        {
+          "nombre": "Ruta turística accesible por Cádiz",
+          "address": "Centro histórico, Cádiz",
+          "website": "https://www.cadizturismo.com/en/experiencias/un-paraiso-para-todos",
+          "descripcion": "Recorrido peatonal por lugares emblemáticos como La Viña, la Catedral, el Mercado Central, La Caleta y el Parque Genovés.",
+          "sources": [
+            "https://www.cadizturismo.com/en/experiencias/un-paraiso-para-todos"
+          ],
+          "category": "Cultura"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Playa Victoria",
+          "address": "Glorieta Ana Orantes, 4, 11010 Cádiz",
+          "website": "https://www.palafoxhoteles.com/es/hoteles-en-cadiz/hotel-playa-victoria",
+          "descripcion": "Hotel frente a la Playa de la Victoria, con acceso directo a la arena y habitaciones con terraza.",
+          "sources": [
+            "https://turismo.cadiz.es/en/node/30675",
+            "https://www.palafoxhoteles.com/en/contact/"
+          ],
+          "bookingUrl": "https://www.palafoxhoteles.com/es/hoteles-en-cadiz/hotel-playa-victoria"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "El Faro de Cádiz",
+          "address": "Calle San Félix, 15, 11002 Cádiz",
+          "website": "https://www.elfarodecadiz.com/",
+          "descripcion": "Restaurante gaditano especializado en cocina marinera; consulta su web oficial para información y reservas.",
+          "sources": [
+            "https://www.elfarodecadiz.com/img/carta-el-faro-de-cadiz-en-casa.pdf",
+            "https://tienda.elfarodecadiz.com/"
+          ],
+          "cuisine": "Marinera",
+          "bookingUrl": "https://www.elfarodecadiz.com/"
+        }
+      ]
+    },
+    {
+      "id": "fa9ff2a4-6ecd-4857-a833-c19a7ebb1609",
+      "nombre": "PALMA DE MALLORCA",
+      "fields": {
+        "descripcion": "Palma reúne un casco histórico de trazado medieval, arquitectura gótica y una animada escena cultural junto al mar. La Catedral y el castillo circular de Bellver permiten conocer su patrimonio y contemplar la bahía.",
+        "website": "https://www.visitpalma.com/en/",
+        "ubicacion": "Palma, España"
+      },
+      "sources": ["https://www.visitpalma.com/en/"],
+      "actividades": [
+        {
+          "nombre": "Visita a la Catedral de Mallorca (La Seu)",
+          "address": "Plaça de la Seu, s/n, 07001 Palma",
+          "website": "https://catedraldemallorca.org/visitas/",
+          "descripcion": "Conoce la catedral gótica de Palma y su museo; consulta en su web las opciones y horarios de visita.",
+          "sources": [
+            "https://catedraldemallorca.org/visitas/",
+            "https://catedraldemallorca.org/visitas/horarios/"
+          ],
+          "category": "Patrimonio",
+          "bookingUrl": "https://catedraldemallorca.org/visitas/",
+          "essentialItemId": "bce3f8b1-16bf-4136-be44-f82cd003e870"
+        },
+        {
+          "nombre": "Castillo de Bellver",
+          "address": "Camilo José Cela, s/n, 07014 Palma",
+          "website": "https://www.visitpalma.com/en/discover/pln523/bellver-castle-the-best-views-of-palma",
+          "descripcion": "Visita el castillo gótico circular y el Museo de Historia de la Ciudad, con vistas panorámicas de la bahía.",
+          "sources": [
+            "https://www.visitpalma.com/en/discover/pln523/bellver-castle-the-best-views-of-palma"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "c46a512f-1554-442c-a636-c18d7f0689b5"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Saratoga",
+          "address": "Passeig de Mallorca, 6, 07012 Palma",
+          "website": "https://www.hotelsaratoga.com/en/",
+          "descripcion": "Hotel urbano de cuatro estrellas superior en el centro de Palma, cerca del paseo marítimo y del casco histórico.",
+          "sources": [
+            "https://www.visit-palma.com/en/hotel-saratoga",
+            "https://www.hotelsaratoga.com/en/"
+          ],
+          "bookingUrl": "https://www.hotelsaratoga.com/en/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Celler Sa Premsa",
+          "address": "Plaça Obispo Berenguer de Palou, 8, 07003 Palma",
+          "website": "https://www.cellersapremsa.com/",
+          "descripcion": "Restaurante de cocina tradicional mallorquina en el centro de Palma, con reserva e información de carta en su web.",
+          "sources": ["https://www.cellersapremsa.com/"],
+          "cuisine": "Mallorquina",
+          "bookingUrl": "https://www.cellersapremsa.com/"
+        }
+      ]
+    },
+    {
+      "id": "8a2564a3-751b-40bf-b144-d74e6f5186d4",
+      "nombre": "SANTANDER",
+      "fields": {
+        "descripcion": "Santander combina una bahía urbana, playas y patrimonio cultural. La península de la Magdalena y el Centro Botín permiten alternar paseos junto al mar con visitas culturales.",
+        "website": "https://turismo.santander.es/",
+        "ubicacion": "Santander, España"
+      },
+      "sources": ["https://turismo.santander.es/"],
+      "actividades": [
+        {
+          "nombre": "Visitar el Palacio de la Magdalena",
+          "address": "Península de la Magdalena, s/n, Santander",
+          "website": "https://turismo.santander.es/",
+          "descripcion": "Descubre el antiguo palacio de verano de Alfonso XIII y Victoria Eugenia, en el punto más alto de la península de la Magdalena.",
+          "sources": ["https://turismo.santander.es/"],
+          "category": "Patrimonio",
+          "essentialItemId": "6f7fcb84-63a4-474d-8bd1-be87c5886cad"
+        },
+        {
+          "nombre": "Visitar el Centro Botín",
+          "address": "Muelle de Albareda, s/n, Santander",
+          "website": "https://www.centrobotin.org/",
+          "descripcion": "Acércate a las exposiciones y actividades culturales del Centro Botín, junto a los Jardines de Pereda.",
+          "sources": [
+            "https://turismo.santander.es/sites/default/files/2021-05/GUIA-DE-SANTANDER.pdf",
+            "https://www.centrobotin.org/"
+          ],
+          "category": "Museos",
+          "essentialItemId": "f6170613-8d2a-4d9c-bb31-a3ab81a8e5d1"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Eurostars Hotel Real",
+          "address": "Paseo Pérez Galdós, 28, 39005 Santander",
+          "website": "https://www.eurostarshotelreal.com/",
+          "descripcion": "Hotel histórico con vistas a la bahía de Santander; consulta habitaciones y disponibilidad en el canal oficial.",
+          "sources": [
+            "https://turismo.santander.es/sites/default/files/2023-04/GUIA%20DE%20ALOJAMIENTOS%20SANTANDER%202023_0.pdf",
+            "https://www.eurostarshotelreal.com/"
+          ],
+          "phone": "+34 942 272 550",
+          "bookingUrl": "https://www.eurostarshotelreal.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Cañadío Santander",
+          "address": "Calle Gómez Oreña, 15, 39003 Santander",
+          "website": "https://www.restaurantecanadio.com/",
+          "descripcion": "Restaurante céntrico de cocina tradicional con un toque actual y barra de tapas.",
+          "sources": [
+            "https://turismo.santander.es/conoce-la-ciudad/gastronomia/canadio",
+            "https://www.restaurantecanadio.com/reservas-santander/"
+          ],
+          "cuisine": "Cocina tradicional",
+          "bookingUrl": "https://www.restaurantecanadio.com/reservas-santander/",
+          "phone": "+34 942 314 149"
+        }
+      ]
+    },
+    {
+      "id": "f19e6d3c-7171-4ee8-92e2-7400098b727f",
+      "nombre": "OVIEDO",
+      "fields": {
+        "descripcion": "Oviedo reúne arquitectura prerrománica, un casco histórico peatonal y una intensa tradición gastronómica. La Catedral de San Salvador y San Julián de los Prados muestran distintos momentos de su patrimonio.",
+        "website": "https://www.turismoasturias.es/",
+        "ubicacion": "Oviedo, España"
+      },
+      "sources": ["https://www.turismoasturias.es/"],
+      "actividades": [
+        {
+          "nombre": "Visitar la Catedral de San Salvador",
+          "address": "Plaza Alfonso II el Casto, s/n, Oviedo",
+          "website": "https://www.turismoasturias.es/en/descubre/cultura/patrimonio-religioso/catedral-de-el-salvador",
+          "descripcion": "Recorre la catedral de Oviedo y sus espacios históricos, uno de los principales monumentos de la capital asturiana.",
+          "sources": [
+            "https://www.turismoasturias.es/en/descubre/cultura/patrimonio-religioso/catedral-de-el-salvador"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "f7a4fd54-1f62-4bb2-afa8-7337435b59a5"
+        },
+        {
+          "nombre": "Visitar San Julián de los Prados",
+          "address": "Calle Selgas, s/n, Oviedo",
+          "website": "https://www.turismoasturias.es/descubre/cultura/prerromanico/iglesia-de-san-julian-de-los-prados",
+          "descripcion": "Conoce esta iglesia prerrománica vinculada al proyecto urbanístico del reinado de Alfonso II.",
+          "sources": [
+            "https://www.turismoasturias.es/descubre/cultura/prerromanico/iglesia-de-san-julian-de-los-prados"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "7b29681f-8efb-444b-82d5-d0d039c799df"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Fruela",
+          "address": "Calle Fruela, 3, 33007 Oviedo",
+          "website": "https://www.hotelfruela.com/",
+          "descripcion": "Hotel en el centro de Oviedo con reserva directa desde su web oficial.",
+          "sources": [
+            "https://www.hotelfruela.com/es/ficha.php?alojamiento=Fruela&idioma=es&pestana="
+          ],
+          "phone": "+34 985 208 120",
+          "bookingUrl": "https://www.hotelfruela.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Casa Fermín",
+          "address": "Calle San Francisco, 8, 33003 Oviedo",
+          "website": "https://casafermin.com/",
+          "descripcion": "Restaurante de cocina asturiana fundado en 1924; consulta su propuesta y contacto en la web oficial.",
+          "sources": [
+            "https://casafermin.com/",
+            "https://casafermin.com/wp-content/uploads/2025/12/Carta-diciembre-2025.pdf"
+          ],
+          "cuisine": "Cocina asturiana",
+          "phone": "+34 985 216 452"
+        }
+      ]
+    },
+    {
+      "id": "4cbb5aa4-8650-4a26-98a0-2246cdfc2893",
+      "nombre": "GIJÓN",
+      "fields": {
+        "descripcion": "Gijón combina barrios marineros, playas urbanas y arquitectura cultural. Cimavilla conserva el origen portuario de la ciudad, mientras que Laboral Ciudad de la Cultura ofrece una visita a un gran conjunto arquitectónico contemporáneo.",
+        "website": "https://www.turismogijon.com/",
+        "ubicacion": "Gijón, España"
+      },
+      "sources": [
+        "https://www.turismogijon.com/",
+        "https://gijonturismoprofesional.es/es/visita-gijon/la-ciudad-de-la-cultura"
+      ],
+      "actividades": [
+        {
+          "nombre": "Recorrer Cimavilla",
+          "address": "Cimavilla, Gijón",
+          "website": "https://www.turismogijon.com/es/cimadevilla",
+          "descripcion": "Pasea por el barrio histórico y marinero, el cerro de Santa Catalina y el entorno del puerto.",
+          "sources": ["https://www.turismogijon.com/es/cimadevilla"],
+          "category": "Patrimonio"
+        },
+        {
+          "nombre": "Visitar Laboral Ciudad de la Cultura",
+          "address": "Calle Luis Moya Blanco, 261, Gijón",
+          "website": "https://www.laboralciudaddelacultura.com/",
+          "descripcion": "Conoce el conjunto cultural de Laboral mediante sus visitas guiadas y actividades programadas.",
+          "sources": [
+            "https://gijonturismoprofesional.es/es/visita-gijon/la-ciudad-de-la-cultura"
+          ],
+          "category": "Cultura",
+          "essentialItemId": "1b5d0ab3-9ab2-4da4-bd26-66449c1b3c1d"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Gijón",
+          "address": "Calle Pedro Duro, 6, 33206 Gijón",
+          "website": "https://hotelgijon.com/",
+          "descripcion": "Hotel céntrico a pocos minutos de la playa de Poniente y del puerto deportivo.",
+          "sources": ["https://www.gijon.es/es/directorio/hotel-gijon"],
+          "phone": "+34 985 356 036",
+          "bookingUrl": "https://hotelgijon.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Sidrería Casa Trabanco",
+          "address": "Carretera de Lavandera, 3255, 33350 Gijón",
+          "website": "https://www.casatrabanco.com/",
+          "descripcion": "Sidrería y restaurante en un entorno de manzanos, con cocina asturiana y sidra de elaboración propia.",
+          "sources": ["https://www.casatrabanco.com/contacto/"],
+          "cuisine": "Cocina asturiana",
+          "phone": "+34 985 136 462"
+        }
+      ]
+    },
+    {
+      "id": "751d8e02-24df-4a0b-b0e1-2c2b22fe26e2",
+      "nombre": "BURGOS",
+      "fields": {
+        "descripcion": "Burgos reúne patrimonio medieval y espacios históricos ligados al Camino de Santiago. La Catedral y la Cartuja de Miraflores permiten conocer dos conjuntos monumentales destacados de la ciudad.",
+        "website": "https://turismoburgos.org/",
+        "ubicacion": "Burgos, España"
+      },
+      "sources": ["https://turismoburgos.org/"],
+      "actividades": [
+        {
+          "nombre": "Visitar la Catedral de Burgos",
+          "address": "Plaza de Santa María, s/n, Burgos",
+          "website": "https://catedraldeburgos.es/visitas",
+          "descripcion": "Recorre la Catedral de Santa María, declarada Patrimonio Mundial, y consulta las condiciones de visita en su web oficial.",
+          "sources": ["https://catedraldeburgos.es/visitas"],
+          "category": "Patrimonio",
+          "essentialItemId": "36e47dbf-f438-4413-9047-d8b9016733ad"
+        },
+        {
+          "nombre": "Visitar la Cartuja de Miraflores",
+          "address": "Carretera de la Cartuja, s/n, Burgos",
+          "website": "https://www.cartuja.org/",
+          "descripcion": "Conoce el monasterio cartujo y su patrimonio artístico en las afueras de Burgos.",
+          "sources": ["https://www.cartuja.org/"],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "abba Burgos hotel",
+          "address": "Calle Fernán González, 72, 09003 Burgos",
+          "website": "https://www.abbahoteles.com/es/abba-burgos-hotel/",
+          "descripcion": "Hotel en el centro histórico de Burgos, con información y reserva directa en su web oficial.",
+          "sources": [
+            "https://www.abbahoteles.com/es/abba-burgos-hotel/situacion",
+            "https://www.turismocastillayleon.com/en/services/sleep/hotels/abba-burgos"
+          ],
+          "bookingUrl": "https://www.abbahoteles.com/es/abba-burgos-hotel/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Casa Ojeda",
+          "address": "Calle Vitoria, 5, 09004 Burgos",
+          "website": "https://www.grupojeda.com/",
+          "descripcion": "Restaurante burgalés de cocina tradicional con información de contacto publicada por el grupo y el portal turístico regional.",
+          "sources": [
+            "https://www.turismocastillayleon.com/es/servicios/comer/restaurantes/casa-ojeda",
+            "https://www.grupojeda.com/contactar/"
+          ],
+          "cuisine": "Cocina burgalesa",
+          "phone": "+34 947 209 052"
+        }
+      ]
+    },
+    {
+      "id": "f6222103-b692-4994-9836-b22d45a064ea",
+      "nombre": "LEÓN",
+      "fields": {
+        "descripcion": "León combina arquitectura gótica, huellas romanas y una importante tradición jacobea. La Catedral y la Real Colegiata de San Isidoro son dos paradas esenciales para recorrer su patrimonio histórico.",
+        "website": "https://leon.es/",
+        "ubicacion": "León, España"
+      },
+      "sources": ["https://leon.es/"],
+      "actividades": [
+        {
+          "nombre": "Visitar la Catedral de León",
+          "address": "Plaza de Regla, s/n, 24003 León",
+          "website": "https://www.catedraldeleon.org/",
+          "descripcion": "Visita la catedral gótica y su claustro; comprueba horarios y condiciones antes de acudir.",
+          "sources": [
+            "https://leon.es/wp-content/uploads/2026/03/Horarios-ciudad-de-Leon-a-partir-del-1-de-abril-y-Semana-Santa-26-.pdf"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "a897e6c4-65f3-494d-9959-3704a7fb791a"
+        },
+        {
+          "nombre": "Visitar San Isidoro de León",
+          "address": "Plaza de San Isidoro, 4, 24003 León",
+          "website": "https://www.museosanisidorodeleon.com/",
+          "descripcion": "Recorre el museo de San Isidoro y el Panteón Real en el conjunto colegial leonés.",
+          "sources": [
+            "https://leon.es/que-ver/monumentos-de-leon/san-isidoro/",
+            "https://leon.es/wp-content/uploads/2026/03/Horarios-ciudad-de-Leon-a-partir-del-1-de-abril-y-Semana-Santa-26-.pdf"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "1977324f-d055-414e-bc7c-2305ce2e54a5"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Infantas de León",
+          "address": "Calle Antonio González de Lama, 3, 24007 León",
+          "website": "https://www.hotelinfantasdeleon.com/",
+          "descripcion": "Hotel en el centro de León, a pocos minutos a pie de la Catedral.",
+          "sources": [
+            "https://leon.es/prepara-tu-viaje/dormir-en-leon/hoteles/hotel-infantas-de-leon/"
+          ],
+          "phone": "+34 987 272 317",
+          "bookingUrl": "https://www.hotelinfantasdeleon.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante Hotel Infantas de León",
+          "address": "Calle Antonio González de Lama, 3, 24007 León",
+          "website": "https://www.hotelinfantasdeleon.com/restaurante",
+          "descripcion": "Restaurante del hotel con carta propia; consulta sus opciones directamente con el establecimiento.",
+          "sources": [
+            "https://leon.es/restaurantes/",
+            "https://leon.es/prepara-tu-viaje/dormir-en-leon/hoteles/hotel-infantas-de-leon/"
+          ],
+          "cuisine": "Cocina regional"
+        }
+      ]
+    },
+    {
+      "id": "dd6687a4-6c9b-494d-807e-680f91e8dbef",
+      "nombre": "CUENCA",
+      "fields": {
+        "descripcion": "Cuenca se asienta entre las hoces del Júcar y el Huécar y conserva un casco histórico declarado Patrimonio Mundial. Las Casas Colgadas y el puente de San Pablo reúnen arquitectura, paisaje y cultura.",
+        "website": "https://www.visitacuenca.es/",
+        "ubicacion": "Cuenca, España"
+      },
+      "sources": ["https://www.visitacuenca.es/"],
+      "actividades": [
+        {
+          "nombre": "Visitar las Casas Colgadas",
+          "address": "Calle Canónigos, s/n, 16001 Cuenca",
+          "website": "https://www.visitacuenca.es/content/descubre-ciudad-y-paisaje-urbano/casas-colgadas",
+          "descripcion": "Admira el conjunto de casas históricas en voladizo sobre la hoz del Huécar; algunas albergan el Museo de Arte Abstracto Español.",
+          "sources": [
+            "https://www.visitacuenca.es/content/descubre-ciudad-y-paisaje-urbano/casas-colgadas"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "85f92f75-f65c-4b6f-8e57-8640e2371aab"
+        },
+        {
+          "nombre": "Cruzar el Puente de San Pablo",
+          "address": "Puente de San Pablo, Cuenca",
+          "website": "https://visitacuenca.es/es/content/descubre-ciudad-y-paisaje-urbano/puente-de-san-pablo",
+          "descripcion": "Pasea por el puente peatonal de hierro sobre la hoz del Huécar y contempla el casco antiguo y las Casas Colgadas.",
+          "sources": [
+            "https://visitacuenca.es/es/content/descubre-ciudad-y-paisaje-urbano/puente-de-san-pablo"
+          ],
+          "category": "Paisaje",
+          "essentialItemId": "191eb6ac-cdb1-470d-9609-d2e58aa82f8e"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Posada de San José",
+          "address": "Ronda de Julián Romero, s/n, 16001 Cuenca",
+          "website": "https://www.posadasanjose.com/",
+          "descripcion": "Hotel y restaurante en un edificio histórico del casco antiguo de Cuenca; consulta disponibilidad directamente en su web.",
+          "sources": [
+            "https://www.visitacuenca.es/content/posada-de-san-jose",
+            "https://www.posadasanjose.com/"
+          ],
+          "bookingUrl": "https://www.posadasanjose.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante Posada de San José",
+          "address": "Ronda de Julián Romero, s/n, 16001 Cuenca",
+          "website": "https://www.posadasanjose.com/",
+          "descripcion": "Restaurante dentro de la Posada de San José, en el casco antiguo de Cuenca.",
+          "sources": [
+            "https://www.visitacuenca.es/content/posada-de-san-jose",
+            "https://www.posadasanjose.com/"
+          ],
+          "cuisine": "Cocina regional"
+        }
+      ]
+    },
+    {
+      "id": "58a8aa8c-fd94-4ec8-bafc-7a5ffb1f1394",
+      "nombre": "CÁCERES",
+      "fields": {
+        "descripcion": "Cáceres conserva una ciudad monumental de palacios, plazas y calles medievales dentro de sus murallas. El casco histórico y el Museo de Cáceres permiten explorar su patrimonio y sus colecciones arqueológicas.",
+        "website": "https://turismo.caceres.es/",
+        "ubicacion": "Cáceres, España"
+      },
+      "sources": [
+        "https://turismo.caceres.es/",
+        "https://cacereshistorica.caceres.es/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Recorrer la Ciudad Monumental de Cáceres",
+          "address": "Plaza Mayor, Cáceres",
+          "website": "https://turismo.caceres.es/",
+          "descripcion": "Pasea por las plazas y calles históricas del recinto declarado Patrimonio Mundial.",
+          "sources": ["https://turismo.caceres.es/"],
+          "category": "Patrimonio",
+          "essentialItemId": "7d600193-9dbd-47c6-a3b1-569d008f9f63"
+        },
+        {
+          "nombre": "Visitar el Palacio de las Veletas y el Museo de Cáceres",
+          "address": "Plaza de las Veletas, 1, 10003 Cáceres",
+          "website": "https://cacereshistorica.caceres.es/patrimonio-historico/edificios-historicos/arquitectura-civil/palacio-de-las-veletas/",
+          "descripcion": "Conoce el palacio histórico que alberga el Museo de Cáceres y conserva un aljibe de época almohade.",
+          "sources": [
+            "https://cacereshistorica.caceres.es/patrimonio-historico/edificios-historicos/arquitectura-civil/palacio-de-las-veletas/",
+            "https://directoriomuseos.mcu.es/dirmuseos/generaPDF.do?id=331&tipoPDF=fichaDetalle"
+          ],
+          "category": "Museos",
+          "essentialItemId": "a08cd698-75d8-4ccd-9c4d-038f43f19633"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Atrio Restaurante Hotel",
+          "address": "Plaza de San Mateo, 1, 10003 Cáceres",
+          "website": "https://atriocaceres.com/",
+          "descripcion": "Hotel integrado en el casco histórico de Cáceres; consulta alojamiento y disponibilidad en su web oficial.",
+          "sources": [
+            "https://atriocaceres.com/el-restaurante/",
+            "https://www.relaischateaux.com/us/details/atrio-restaurante-hotel/"
+          ],
+          "phone": "+34 927 242 928",
+          "bookingUrl": "https://atriocaceres.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante Atrio",
+          "address": "Plaza de San Mateo, 1, 10003 Cáceres",
+          "website": "https://atriocaceres.com/el-restaurante/",
+          "descripcion": "Restaurante de cocina contemporánea con atención al producto y a la tradición extremeña.",
+          "sources": ["https://atriocaceres.com/el-restaurante/"],
+          "cuisine": "Cocina extremeña contemporánea",
+          "bookingUrl": "https://atriocaceres.com/el-restaurante/"
+        }
+      ]
+    },
+    {
+      "id": "6109cb93-24f4-4ed9-93b1-b3900ab47638",
+      "nombre": "MÉRIDA",
+      "fields": {
+        "descripcion": "Mérida conserva un destacado conjunto arqueológico romano junto a monumentos visigodos y medievales. El Teatro y el Anfiteatro, junto con el Templo de Diana, ayudan a recorrer la antigua Augusta Emerita.",
+        "website": "https://turismomerida.org/",
+        "ubicacion": "Mérida, España"
+      },
+      "sources": [
+        "https://turismomerida.org/",
+        "https://teatroromanomerida.com/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Visitar el Teatro y Anfiteatro romanos",
+          "address": "Plaza Margarita Xirgu, s/n, 06800 Mérida",
+          "website": "https://teatroromanomerida.com/",
+          "descripcion": "Recorre el conjunto de espectáculos romanos de Mérida, incluido en el conjunto arqueológico Patrimonio Mundial.",
+          "sources": [
+            "https://teatroromanomerida.com/",
+            "https://turismomerida.org/que-ver/anfiteatro-romano/"
+          ],
+          "category": "Arqueología"
+        },
+        {
+          "nombre": "Visitar el Templo de Diana",
+          "address": "Calle Sagasta, s/n, 06800 Mérida",
+          "website": "https://turismomerida.org/que-ver/templo-diana/",
+          "descripcion": "Conoce el templo romano y su centro de interpretación, integrado en el casco histórico de Mérida.",
+          "sources": ["https://turismomerida.org/que-ver/templo-diana/"],
+          "category": "Arqueología"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Parador de Mérida",
+          "address": "Plaza de la Constitución, 3, 06800 Mérida",
+          "website": "https://www.paradores.es/es/parador-de-merida",
+          "descripcion": "Alojamiento en el antiguo convento de Jesús Nazareno, con reserva directa en la web de Paradores.",
+          "sources": [
+            "https://turismomerida.org/donde-dormir/",
+            "https://www.paradores.es/es/parador-de-merida"
+          ],
+          "phone": "+34 924 313 800",
+          "bookingUrl": "https://www.paradores.es/es/parador-de-merida"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante del Parador de Mérida",
+          "address": "Plaza de la Constitución, 3, 06800 Mérida",
+          "website": "https://www.paradores.es/es/restaurante-del-parador-de-merida",
+          "descripcion": "Restaurante del Parador con propuesta gastronómica regional; consulta horarios y reservas en el canal oficial.",
+          "sources": [
+            "https://stg.paradores.es/es/restaurante-del-parador-de-merida",
+            "https://turismomerida.org/donde-dormir/"
+          ],
+          "cuisine": "Cocina regional"
+        }
+      ]
+    },
+    {
+      "id": "98cd5513-17d4-4e4b-acd3-76c22c352716",
+      "nombre": "ALICANTE",
+      "fields": {
+        "descripcion": "Alicante combina un frente marítimo mediterráneo con un casco urbano de barrios históricos y museos. El Castillo de Santa Bárbara y el MARQ ofrecen dos perspectivas sobre la historia y la arqueología local.",
+        "website": "https://www.turismoalicante.es/",
+        "ubicacion": "Alicante, España"
+      },
+      "sources": ["https://www.turismoalicante.es/"],
+      "actividades": [
+        {
+          "nombre": "Visitar el Castillo de Santa Bárbara",
+          "address": "Monte Benacantil, s/n, 03002 Alicante",
+          "website": "https://www.alicante.es/es/equipamientos/castillo-santa-barbara",
+          "descripcion": "Explora la fortaleza que domina la ciudad y la bahía desde el monte Benacantil.",
+          "sources": [
+            "https://www.alicante.es/es/equipamientos/castillo-santa-barbara",
+            "https://www.turismoalicante.es/es/experiencias-en-alicante/alicante-y-el-castillo-de-santa-barbara"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "476e3df3-062f-484d-9677-5baf94524aad"
+        },
+        {
+          "nombre": "Visitar el MARQ",
+          "address": "Plaza Doctor Gómez Ulla, s/n, 03013 Alicante",
+          "website": "https://www.marqalicante.com/",
+          "descripcion": "Recorre las colecciones arqueológicas del Museo Arqueológico de Alicante y sus exposiciones.",
+          "sources": ["https://www.marqalicante.com/"],
+          "category": "Museos",
+          "essentialItemId": "ebd55e76-5185-4055-9722-895f6b65f992"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Meliá Alicante",
+          "address": "Plaza del Puerto, 3, 03001 Alicante",
+          "website": "https://www.melia.com/es/hoteles/espana/alicante/melia-alicante",
+          "descripcion": "Hotel junto al puerto y la playa del Postiguet, con reserva directa en la web oficial de Meliá.",
+          "sources": [
+            "https://www.melia.com/es/hoteles/espana/alicante/melia-alicante",
+            "https://alicantecruisetourism.com/nuestros-asociados/hotel-melia-alicante/"
+          ],
+          "phone": "+34 965 205 000",
+          "bookingUrl": "https://www.melia.com/es/hoteles/espana/alicante/melia-alicante"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Nou Manolín",
+          "address": "Calle Villegas, 3, 03001 Alicante",
+          "website": "https://grupogastronou.com/nou-manolin/",
+          "descripcion": "Restaurante de cocina alicantina con arroces, producto del mar y barra tradicional.",
+          "sources": [
+            "https://grupogastronou.com/nou-manolin/",
+            "https://www.visitaralicante.es/nou-manolin/"
+          ],
+          "cuisine": "Cocina alicantina",
+          "bookingUrl": "https://grupogastronou.com/nou-manolin/"
+        }
+      ]
+    },
+    {
+      "id": "3e1ac802-60d3-469c-85d2-3eec47a15d1f",
+      "nombre": "BENIDORM",
+      "fields": {
+        "descripcion": "Benidorm reúne playas urbanas, miradores sobre el Mediterráneo y espacios naturales costeros. El Balcón del Mediterráneo y el entorno de Serra Gelada muestran sus paisajes más característicos.",
+        "website": "https://www.visitbenidorm.es/",
+        "ubicacion": "Benidorm, España"
+      },
+      "sources": ["https://www.visitbenidorm.es/"],
+      "actividades": [
+        {
+          "nombre": "Pasear por el Balcón del Mediterráneo",
+          "address": "Plaza del Castell, Benidorm",
+          "website": "https://www.visitbenidorm.es/",
+          "descripcion": "Asómate al mirador situado entre las playas de Levante y Poniente, con vistas abiertas al Mediterráneo.",
+          "sources": ["https://www.visitbenidorm.es/"],
+          "category": "Paisaje"
+        },
+        {
+          "nombre": "Explorar el Parque Natural de Serra Gelada",
+          "address": "Accesos desde Benidorm y l’Alfàs del Pi",
+          "website": "https://www.parquesnaturales.gva.es/es/web/pn-serra-gelada",
+          "descripcion": "Recorre senderos y miradores del parque natural litoral; comprueba avisos de acceso y condiciones antes de la visita.",
+          "sources": [
+            "https://www.parquesnaturales.gva.es/es/web/pn-serra-gelada"
+          ],
+          "category": "Naturaleza"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Nadal Benidorm",
+          "address": "Avenida Madrid, 41, 03500 Benidorm",
+          "website": "https://www.hotelnadalbenidorm.com/es/",
+          "descripcion": "Hotel frente a la playa de Levante; consulta habitaciones y reservas en su web oficial.",
+          "sources": [
+            "https://www.hotelnadalbenidorm.com/es/",
+            "https://www.hotelnadalbenidorm.com/en/restaurant/"
+          ],
+          "phone": "+34 965 851 941",
+          "bookingUrl": "https://www.hotelnadalbenidorm.com/es/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante del Hotel Nadal",
+          "address": "Avenida Madrid, 41, 03500 Benidorm",
+          "website": "https://www.hotelnadalbenidorm.com/en/restaurant/",
+          "descripcion": "Restaurante frente al mar especializado en arroces, fideuà y paellas; reserva por teléfono con el establecimiento.",
+          "sources": ["https://www.hotelnadalbenidorm.com/en/restaurant/"],
+          "cuisine": "Mediterránea y arroces",
+          "phone": "+34 965 851 941"
+        }
+      ]
+    },
+    {
+      "id": "8fada48e-4c60-4beb-bb40-242779f80e2b",
+      "nombre": "PEÑISCOLA",
+      "fields": {
+        "descripcion": "Peñíscola combina un casco antiguo amurallado sobre el mar con playas y espacios naturales litorales. El Castillo del Papa Luna y la Sierra de Irta ofrecen visitas complementarias entre patrimonio y naturaleza.",
+        "website": "https://peniscola.es/",
+        "ubicacion": "Peñíscola, España"
+      },
+      "sources": ["https://peniscola.es/"],
+      "actividades": [
+        {
+          "nombre": "Visitar el Castillo del Papa Luna",
+          "address": "Calle Castillo, s/n, 12598 Peñíscola",
+          "website": "https://peniscola.es/que-hacer/rutas-y-visitas/",
+          "descripcion": "Recorre el castillo templario situado sobre el peñón y las calles del casco antiguo de Peñíscola.",
+          "sources": [
+            "https://peniscola.es/que-hacer/rutas-y-visitas/",
+            "https://peniscola.es/que-hacer/turismo-familiar-en-peniscola/"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "396dbf26-c430-4697-ae1d-2cc53a458f39"
+        },
+        {
+          "nombre": "Recorrer el Parque Natural de la Sierra de Irta",
+          "address": "Parque Natural de la Sierra de Irta, Peñíscola",
+          "website": "https://parquesnaturales.gva.es/es/web/pn-serra-d-irta",
+          "descripcion": "Explora los senderos costeros y el paisaje protegido de la Sierra de Irta, al sur de Peñíscola.",
+          "sources": ["https://parquesnaturales.gva.es/es/web/pn-serra-d-irta"],
+          "category": "Naturaleza"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Gran Hotel Peñíscola",
+          "address": "Avenida Papa Luna, 132–136, 12598 Peñíscola",
+          "website": "https://www.granhotelpeniscola.com/",
+          "descripcion": "Hotel en primera línea de la playa Norte de Peñíscola, con información y reservas en su web oficial.",
+          "sources": [
+            "https://peniscola.es/va/prepara-el-teu-viatge/allotjaments/hotels/",
+            "https://www.granhotelpeniscola.com/wp-content/uploads/2022/01/directorio-de-servicios-ingles-2020.pdf"
+          ],
+          "bookingUrl": "https://www.granhotelpeniscola.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante Casa Jaime",
+          "address": "Avenida Papa Luna, 5, 12598 Peñíscola",
+          "website": "https://xn--casajaimepeiscola-pxb.com/",
+          "descripcion": "Restaurante de cocina marinera y arroces con una trayectoria iniciada en 1967.",
+          "sources": [
+            "https://xn--casajaimepeiscola-pxb.com/",
+            "https://peniscola.es/wp-content/uploads/2024/10/Guia-SICTED-Peniscola.pdf"
+          ],
+          "cuisine": "Cocina marinera",
+          "bookingUrl": "https://www.casajaime.net/"
+        }
+      ]
+    },
+    {
+      "id": "d877469f-42f1-4702-93fa-bd086a320757",
+      "nombre": "JEREZ DE LA FRONTERA",
+      "fields": {
+        "descripcion": "Jerez de la Frontera combina patrimonio andalusí, bodegas de vinos de Jerez y una reconocida tradición ecuestre y flamenca. El Alcázar y la Real Escuela ofrecen dos visitas para acercarse a la historia y las tradiciones de la ciudad.",
+        "website": "https://www.turismojerez.com/en/",
+        "ubicacion": "Jerez de la Frontera, España"
+      },
+      "sources": ["https://www.turismojerez.com/en/"],
+      "actividades": [
+        {
+          "nombre": "Visitar Jerez de la Frontera: Alcázar, Catedral y Real Escuela Andaluza del Arte Ecuestre",
+          "address": "Alameda Vieja, s/n, 11403 Jerez de la Frontera",
+          "website": "https://www.turismojerez.com/alcazar-de-jerez/",
+          "descripcion": "Recorrido por el Alcázar y la Catedral de Jerez, con visita a la Real Escuela Andaluza del Arte Ecuestre.",
+          "sources": [
+            "https://www.turismojerez.com/alcazar-de-jerez/",
+            "https://www.jerez.es/webs-municipales/conjunto-monumental-del-alcazar",
+            "https://www.turismojerez.com/en/discover-jerez/equestrian/visits-and-shows",
+            "https://www.turismojerez.com/en/detail-tab/palacio-duque-de-abrantes-real-escuela-andaluza-del-arte-ecuestre"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "bf86fa48-cabc-471d-a433-672e0141d554"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Jerez & Spa",
+          "address": "Avenida Alcalde Álvaro Domecq, 47, 11407 Jerez de la Frontera",
+          "website": "https://www.jerezhotel.com/",
+          "descripcion": "Hotel con spa y piscina, ubicado en una zona residencial de Jerez; consulta disponibilidad en su web oficial.",
+          "sources": [
+            "https://en.andalucia.org/listing/hotel-jerez-%26-spa/1728101/"
+          ],
+          "bookingUrl": "https://www.jerezhotel.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Bar Juanito",
+          "address": "Calle Pescadería Vieja, 8–10, 11403 Jerez de la Frontera",
+          "website": "https://bar-juanito.com/",
+          "descripcion": "Restaurante de cocina tradicional jerezana y tapas en el casco histórico.",
+          "sources": [
+            "https://www.turismojerez.com/detalle-fichas/bar-juanito",
+            "https://www.turismojerez.com/en/discover-jerez/gastronomy/restaurants-and-bars"
+          ],
+          "cuisine": "Jerezana",
+          "phone": "+34 956 33 48 38"
+        }
+      ]
+    },
+    {
+      "id": "11750c3d-a088-4442-8e6e-be87e4797ca5",
+      "nombre": "MARBELLA",
+      "fields": {
+        "descripcion": "Marbella combina un casco antiguo de calles blancas y restos de muralla con playas y paseos junto al Mediterráneo. Sus plazas históricas y el patrimonio romano cercano muestran distintas etapas de la ciudad.",
+        "website": "https://turismo.marbella.es/",
+        "ubicacion": "Marbella, España"
+      },
+      "sources": [
+        "https://turismo.marbella.es/vive/cultura/patrimonio-historico/casco-historico/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Paseo por el casco histórico",
+          "address": "Casco antiguo, Marbella",
+          "website": "https://turismo.marbella.es/vive/cultura/patrimonio-historico/casco-historico/",
+          "descripcion": "Recorre las calles peatonales del centro histórico, la Plaza de los Naranjos y los vestigios de la muralla árabe.",
+          "sources": [
+            "https://turismo.marbella.es/vive/cultura/patrimonio-historico/casco-historico/",
+            "https://turismo.marbella.es/servicios/ruta-fotografica-de-marbella/casco-antiguo-de-marbella.html"
+          ],
+          "category": "Patrimonio"
+        },
+        {
+          "nombre": "Villa Romana de Río Verde",
+          "address": "Urbanización Río Verde, Marbella",
+          "website": "https://turismo.marbella.es/vive/cultura/patrimonio-historico/arqueologia.html",
+          "descripcion": "Conoce los restos de una villa romana costera y sus mosaicos en el yacimiento de Río Verde.",
+          "sources": [
+            "https://turismo.marbella.es/vive/cultura/patrimonio-historico/arqueologia.html"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Baviera",
+          "address": "Calle del Calvario, 4, 29601 Marbella",
+          "website": "https://www.hotelbaviera.es/",
+          "descripcion": "Hotel urbano en el centro de Marbella, entre el casco histórico y la zona comercial, con reserva directa en su web.",
+          "sources": [
+            "https://www.hotelbaviera.es/",
+            "https://www.hotelbaviera.es/en/rooms.html"
+          ],
+          "bookingUrl": "https://www.hotelbaviera.es/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "La Fonda Heritage Restaurant",
+          "address": "Plaza Santo Cristo, 9–10, 29601 Marbella",
+          "website": "https://www.lafondahotel.com/",
+          "descripcion": "Restaurante de cocina de temporada andaluza y mediterránea en el centro histórico.",
+          "sources": [
+            "https://turismo.marbella.es/vive/gastronomia/restaurantes-destacados/la-fonda-heritage-restaurante.html"
+          ],
+          "cuisine": "Andaluza y mediterránea",
+          "phone": "+34 952 12 38 40"
+        }
+      ]
+    },
+    {
+      "id": "fe1ec00c-e06a-45e4-9e8b-e4ac2bffdc34",
+      "nombre": "ESTEPONA",
+      "fields": {
+        "descripcion": "Estepona combina un centro histórico de calles floridas con un paseo marítimo y espacios verdes. El casco antiguo y el Orquidario permiten disfrutar de la arquitectura local y de una colección botánica subtropical.",
+        "website": "https://estepona.travel/en",
+        "ubicacion": "Estepona, España"
+      },
+      "sources": ["https://estepona.travel/en/holidays-in-estepona"],
+      "actividades": [
+        {
+          "nombre": "Centro histórico y Plaza de las Flores",
+          "address": "Centro histórico, Estepona",
+          "website": "https://estepona.travel/en/old-town",
+          "descripcion": "Recorre las calles peatonales decoradas con macetas, la Plaza de las Flores y los monumentos del centro.",
+          "sources": ["https://estepona.travel/en/old-town"],
+          "category": "Patrimonio"
+        },
+        {
+          "nombre": "Parque Botánico-Orquidario",
+          "address": "Calle Terraza, 86, Estepona",
+          "website": "https://turismo.estepona.es/lugares/parque-botanico-orquidario/",
+          "descripcion": "Visita el jardín botánico cubierto por cúpulas de cristal, con orquídeas, jardín vertical y cascada.",
+          "sources": [
+            "https://turismo.estepona.es/lugares/parque-botanico-orquidario/",
+            "https://www.estepona.eu/en/p/el-orquidario-de-estepona"
+          ],
+          "category": "Naturaleza"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Estepona Plaza",
+          "address": "Plaza Ortiz, 8, 29680 Estepona",
+          "website": "https://hotelesteponaplaza.com/",
+          "descripcion": "Hotel céntrico junto al casco histórico y la playa de La Cala, con reserva en su web oficial.",
+          "sources": [
+            "https://hotelesteponaplaza.com/?lang=en",
+            "https://esteponaplaza.com/contacto/"
+          ],
+          "bookingUrl": "https://hotelesteponaplaza.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Trocadero Estepona",
+          "address": "Calle Terral, 2, Estepona",
+          "website": "https://www.trocaderoestepona.com/",
+          "descripcion": "Restaurante junto al mar con terraza y decoración de inspiración mexicana.",
+          "sources": [
+            "https://estepona.travel/en/where-to-eat/trocadero-estepona"
+          ],
+          "cuisine": "Mediterránea"
+        }
+      ]
+    },
+    {
+      "id": "c7f1a1a6-ec61-4414-afb3-6ac60cda8bd3",
+      "nombre": "TARIFA",
+      "fields": {
+        "descripcion": "Tarifa mira al Estrecho de Gibraltar desde un casco histórico amurallado y una costa abierta al Atlántico. El castillo de Guzmán el Bueno y la Puerta de Jerez ayudan a conocer su pasado defensivo y su trazado medieval.",
+        "website": "https://turismodetarifa.com/",
+        "ubicacion": "Tarifa, España"
+      },
+      "sources": ["https://turismodetarifa.com/"],
+      "actividades": [
+        {
+          "nombre": "Castillo de Guzmán el Bueno",
+          "address": "Calle Guzmán el Bueno, s/n, 11380 Tarifa",
+          "website": "https://turismodetarifa.com/en/what-to-visit/castle-of-guzman-el-bueno/",
+          "descripcion": "Visita la fortaleza califal y sus posteriores elementos defensivos en el casco histórico, junto al mar.",
+          "sources": [
+            "https://turismodetarifa.com/en/what-to-visit/castle-of-guzman-el-bueno/",
+            "https://www.juntadeandalucia.es/cultura/agendaculturaldeandalucia/evento/visitas-al-castillo-de-guzman-el-bueno-tarifa-cadiz"
+          ],
+          "category": "Patrimonio"
+        },
+        {
+          "nombre": "Puerta de Jerez y casco antiguo",
+          "address": "Puerta de Jerez, Tarifa",
+          "website": "https://turismodetarifa.com/en/what-to-visit/jerez-gate/",
+          "descripcion": "Pasea por la puerta medieval que se conserva del recinto amurallado y continúa por las calles tradicionales del centro.",
+          "sources": [
+            "https://turismodetarifa.com/en/what-to-visit/jerez-gate/"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "La Residencia Puerto Hotel & Spa",
+          "address": "Calle Alcalde Juan Núñez, 9, 11380 Tarifa",
+          "website": "https://laresidenciatarifa.com/en/",
+          "descripcion": "Hotel y spa en el puerto de Tarifa, con piscina panorámica y reserva en su canal oficial.",
+          "sources": ["https://laresidenciatarifa.com/en/contact/"],
+          "bookingUrl": "https://laresidenciatarifa.com/en/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "El Lola",
+          "address": "Calle Guzmán el Bueno, 5, 11380 Tarifa",
+          "website": "https://www.ellolatarifa.com/",
+          "descripcion": "Bar de tapas de cocina local en el casco histórico; la web del establecimiento indica que no acepta reservas.",
+          "sources": [
+            "https://turismodetarifa.com/gastronomia/el-lola/",
+            "https://www.ellolatarifa.com/e-carta/"
+          ],
+          "cuisine": "Tapas"
+        }
+      ]
+    },
+    {
+      "id": "2e7f310d-322f-471d-8af3-e203c08e3e28",
+      "nombre": "ALMERÍA",
+      "fields": {
+        "descripcion": "Almería conserva un patrimonio de raíces andalusíes junto al Mediterráneo. La Alcazaba domina el casco antiguo y la Catedral-fortaleza completa una visita por los monumentos más representativos de la ciudad.",
+        "website": "https://www.turismodealmeria.org/en/",
+        "ubicacion": "Almería, España"
+      },
+      "sources": ["https://www.turismodealmeria.org/en/cultural-tourism/"],
+      "actividades": [
+        {
+          "nombre": "Conjunto Monumental de la Alcazaba",
+          "address": "Calle Almanzor, s/n, 04002 Almería",
+          "website": "https://www.museosdeandalucia.es/web/conjuntomonumentallaalcazabaalmeria/informacion-general",
+          "descripcion": "Explora la fortaleza-palacio andalusí, sus recintos, murallas y jardines; la entrada general es gratuita según la información oficial.",
+          "sources": [
+            "https://www.museosdeandalucia.es/web/conjuntomonumentallaalcazabaalmeria/informacion-general"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "589f0a7e-8925-4373-83a3-58a98b3906d4"
+        },
+        {
+          "nombre": "Catedral de la Encarnación de Almería",
+          "address": "Plaza de la Catedral, 8, 04002 Almería",
+          "website": "https://catedralalmeria.com/horarios-y-tarifas-de-la-visita/",
+          "descripcion": "Visita la catedral-fortaleza y sus espacios históricos; consulta horarios y entradas en la web de la Catedral.",
+          "sources": [
+            "https://catedralalmeria.com/horarios-y-tarifas-de-la-visita/",
+            "https://www.turismodealmeria.org/wp-content/uploads/2025/02/Ruta-monumental-alcazaba-catedral-EN.pdf"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Catedral Almería",
+          "address": "Plaza de la Catedral, 8, 04002 Almería",
+          "website": "https://www.hotelcatedral.net/EN/home.html",
+          "descripcion": "Hotel en una casa histórica frente a la Catedral, con reserva directa en la web oficial.",
+          "sources": [
+            "https://www.hotelcatedral.net/EN/home.html",
+            "https://www.hotelcatedral.net/templates/cadenas/air/images/hotels/HCATEAL0/homr/aviso_legal.pdf"
+          ],
+          "bookingUrl": "https://www.hotelcatedral.net/EN/home.html"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Taberna Casa Puga",
+          "address": "Calle Jovellanos, 7, 04003 Almería",
+          "website": "https://barcasapuga.com/",
+          "descripcion": "Taberna histórica del casco antiguo especializada en tapas tradicionales almerienses.",
+          "sources": [
+            "https://barcasapuga.com/",
+            "https://www.turismodealmeria.org/en/restauracion/taberna-casa-puga/"
+          ],
+          "cuisine": "Tapas almerienses"
+        }
+      ]
+    },
+    {
+      "id": "9354d56c-54a8-4b1a-85ff-1a27d4bd2d1f",
+      "nombre": "HUELVA",
+      "fields": {
+        "descripcion": "Huelva conserva un importante legado británico ligado a la minería y al puerto, junto con espacios que recuerdan los viajes colombinos. El muelle de Riotinto y la ruta del patrimonio cultural acercan la historia de la ría y la ciudad.",
+        "website": "https://turismo.huelva.es/",
+        "ubicacion": "Huelva, España"
+      },
+      "sources": [
+        "https://turismo.huelva.es/",
+        "https://turismo.huelva.es/rutas-y-monumentos/ruta-legado-britanico/muelle-de-la-compania-de-rio-tinto/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Muelle de la Compañía de Riotinto",
+          "address": "Avenida Francisco Montenegro, Huelva",
+          "website": "https://turismo.huelva.es/rutas-y-monumentos/ruta-legado-britanico/muelle-de-la-compania-de-rio-tinto/",
+          "descripcion": "Pasea por el antiguo muelle minero rehabilitado, declarado Bien de Interés Cultural, junto a las marismas de la ría.",
+          "sources": [
+            "https://turismo.huelva.es/rutas-y-monumentos/ruta-legado-britanico/muelle-de-la-compania-de-rio-tinto/"
+          ],
+          "category": "Patrimonio"
+        },
+        {
+          "nombre": "Casa Colón",
+          "address": "Plaza del Punto, 6, 21003 Huelva",
+          "website": "https://turismo.huelva.es/",
+          "descripcion": "Conoce el antiguo Hotel Colón, edificio ligado a la historia minera británica y hoy espacio cultural de la ciudad.",
+          "sources": [
+            "https://turismo.huelva.es/",
+            "https://www.turismohuelva.org/en/tourism-products/Culture/"
+          ],
+          "category": "Cultura"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Costa de la Luz",
+          "address": "Calle José María Amo, 8–10, 21001 Huelva",
+          "website": "https://www.hotelcostadelaluzhuelva.com/",
+          "descripcion": "Hotel en el centro de Huelva; consulta disponibilidad y condiciones directamente en la web oficial.",
+          "sources": [
+            "https://www.turismohuelva.org/export/sites/Turismo/.galleries/guias-turisticas/guia-profesional-interactiva.pdf",
+            "https://semanasanta.huelva.es/donde-alojarse/"
+          ],
+          "bookingUrl": "https://www.hotelcostadelaluzhuelva.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Restaurante Azabache",
+          "address": "Calle Vázquez López, 22, 21001 Huelva",
+          "website": "https://www.restauranteazabache.es/",
+          "descripcion": "Restaurante de cocina andaluza y productos de temporada, con información para reservas por teléfono.",
+          "sources": [
+            "https://www.restauranteazabache.es/contacto",
+            "https://www.restauranteazabache.es/restaurante"
+          ],
+          "cuisine": "Andaluza",
+          "phone": "+34 959 257 528"
+        }
+      ]
+    },
+    {
+      "id": "35bafcf4-84c3-4eb4-a131-b61358a5fff5",
+      "nombre": "LOGROÑO",
+      "fields": {
+        "descripcion": "Logroño combina el Camino de Santiago con la cultura del vino de Rioja y un casco antiguo de plazas, iglesias y calles de tapeo. La Concatedral de La Redonda y las murallas del Revellín resumen parte de su patrimonio histórico.",
+        "website": "https://visitalogrono.com/en/",
+        "ubicacion": "Logroño, España"
+      },
+      "sources": [
+        "https://logrono.es/tema-turismo",
+        "https://visitalogrono.com/en/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Concatedral de Santa María de La Redonda",
+          "address": "Calle Portales, 14, 26001 Logroño",
+          "website": "https://laredonda.org/visitas/prepara-tu-visita/",
+          "descripcion": "Visita el templo del casco antiguo y recorre sus espacios con audioguía; las visitas para grupos requieren reserva.",
+          "sources": [
+            "https://laredonda.org/visitas/prepara-tu-visita/",
+            "https://visitalogrono.com/-/concatedral-de-santa-maria-de-la-redonda"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "61979d42-2fe0-401a-858c-237557e58ae9"
+        },
+        {
+          "nombre": "Murallas y Cubo del Revellín",
+          "address": "Calle Once de Junio, 6, 26001 Logroño",
+          "website": "https://lariojaturismo.com/en/lugar-de-interes/las-murallas-de-logroo-y-el-cubo-del-revellin/be60b906-6cff-403b-984f-585529653182",
+          "descripcion": "Conoce los restos de las murallas del siglo XVI y el Cubo del Revellín, parte del recinto defensivo de la ciudad.",
+          "sources": [
+            "https://lariojaturismo.com/en/lugar-de-interes/las-murallas-de-logroo-y-el-cubo-del-revellin/be60b906-6cff-403b-984f-585529653182",
+            "https://logrono.es/comercio-y-turismo"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Ciudad de Logroño",
+          "address": "Calle Menéndez Pelayo, 7, 26002 Logroño",
+          "website": "https://www.ciudadlogrono.com/en/",
+          "descripcion": "Hotel céntrico a poca distancia del casco histórico y de la calle Laurel, con reservas online oficiales.",
+          "sources": ["https://www.ciudadlogrono.com/en/"],
+          "bookingUrl": "https://www.ciudadlogrono.com/en/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Martirio Limón Laurel",
+          "address": "Calle del Laurel, 16, 26001 Logroño",
+          "website": "https://grupomartiriolimon.es/restaurantes/martirio-limon-laurel/",
+          "descripcion": "Restaurante a la carta en la calle Laurel con tapas y cocina mediterránea contemporánea.",
+          "sources": [
+            "https://grupomartiriolimon.es/restaurantes/martirio-limon-laurel/"
+          ],
+          "cuisine": "Mediterránea contemporánea"
+        }
+      ]
+    },
+    {
+      "id": "f7a69899-da9f-4c2a-8e21-cbcc07ae86f7",
+      "nombre": "PAMPLONA",
+      "fields": {
+        "descripcion": "Pamplona reúne un casco antiguo de origen medieval, fortificaciones renacentistas y una cultura gastronómica marcada por los pintxos. La Catedral de Santa María y la Ciudadela permiten recorrer dos etapas clave de la historia urbana.",
+        "website": "https://www.pamplona.es/en/turismo",
+        "ubicacion": "Pamplona, España"
+      },
+      "sources": [
+        "https://www.visitnavarra.es/en/pamplona",
+        "https://www.pamplona.es/en/turismo"
+      ],
+      "actividades": [
+        {
+          "nombre": "Catedral de Santa María la Real",
+          "address": "Calle Dormitalería, s/n, 31001 Pamplona",
+          "website": "https://www.pamplona.es/en/turismo/catedral",
+          "descripcion": "Visita la catedral gótica y su claustro, considerado uno de los conjuntos destacados del gótico europeo.",
+          "sources": ["https://www.pamplona.es/en/turismo/catedral"],
+          "category": "Patrimonio",
+          "essentialItemId": "82634128-3150-489f-9f8c-403b824bed5e"
+        },
+        {
+          "nombre": "Ciudadela de Pamplona",
+          "address": "Avenida del Ejército, 1, 31002 Pamplona",
+          "website": "https://www.pamplona.es/en/turismo/ciudadela",
+          "descripcion": "Pasea por esta fortaleza renacentista pentagonal y sus jardines, hoy convertidos en parque y espacio expositivo.",
+          "sources": ["https://www.pamplona.es/en/turismo/ciudadela"],
+          "category": "Patrimonio",
+          "essentialItemId": "b703b73c-a1c6-45e0-ae8c-88090d87098a"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Tres Reyes Pamplona",
+          "address": "Jardines de la Taconera, s/n, 31001 Pamplona",
+          "website": "https://www.tresreyeshoteles.com/tres-reyes-pamplona/",
+          "descripcion": "Hotel junto al casco antiguo y los jardines de la Taconera; reservas e información en su web oficial.",
+          "sources": [
+            "https://www.tresreyeshoteles.com/tres-reyes-pamplona/contacto/",
+            "https://www.pamplona.es/entidades/hotel-tres-reyes-pamplona"
+          ],
+          "bookingUrl": "https://www.tresreyeshoteles.com/tres-reyes-pamplona/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Casa Otano",
+          "address": "Calle San Nicolás, 5, 31001 Pamplona",
+          "website": "https://restaurantecasaotano.com/",
+          "descripcion": "Restaurante de cocina navarra en el casco antiguo, con carta y reservas desde su web oficial.",
+          "sources": ["https://restaurantecasaotano.com/aviso-legal/"],
+          "cuisine": "Navarra",
+          "bookingUrl": "https://restaurantecasaotano.com/"
+        }
+      ]
+    },
+    {
+      "id": "1b1cbdb4-7f11-4abd-bbd4-1ca56e9876a9",
+      "nombre": "VITORIA-GASTEIZ",
+      "fields": {
+        "descripcion": "Vitoria-Gasteiz combina un casco medieval de forma almendrada con una extensa red de parques. La Catedral de Santa María permite conocer la historia de la ciudad, mientras que el Anillo Verde ofrece rutas al aire libre.",
+        "website": "https://www.vitoria-gasteiz.org/turismo",
+        "ubicacion": "Vitoria-Gasteiz, España"
+      },
+      "sources": [
+        "https://www.vitoria-gasteiz.org/wb021/was/contenidoAction.do?idioma=en&uid=u42a28001_1259b4eec2f__7f7d"
+      ],
+      "actividades": [
+        {
+          "nombre": "Visita a la Catedral de Santa María",
+          "address": "Cantón de Santa María, 3, 01001 Vitoria-Gasteiz",
+          "website": "https://www.catedralvitoria.eus/en/",
+          "descripcion": "Conoce la historia del templo medieval y participa en visitas guiadas a la catedral, torre y muralla.",
+          "sources": [
+            "https://www.vitoria-gasteiz.org/wb021/was/contenidoAction.do?idioma=en&uid=a810c37_125fceffe0c__7ff0",
+            "https://www.catedralvitoria.eus/en/"
+          ],
+          "category": "Patrimonio",
+          "bookingUrl": "https://www.catedralvitoria.eus/en/",
+          "essentialItemId": "0bc8e838-089b-4c09-83ac-2d649f7ad0b2"
+        },
+        {
+          "nombre": "Ruta por el Anillo Verde",
+          "address": "Vitoria-Gasteiz",
+          "website": "https://www.vitoria-gasteiz.org/wb021/was/contenidoAction.do?idioma=en&uid=u42a28001_1259b4eec2f__7f7d",
+          "descripcion": "Explora los parques y espacios naturales que rodean la ciudad a pie o en bicicleta.",
+          "sources": [
+            "https://www.vitoria-gasteiz.org/wb021/was/contenidoAction.do?idioma=en&uid=u42a28001_1259b4eec2f__7f7d",
+            "https://tourism.euskadi.eus/en/circuits/ten-reasons-you-will-want-to-come-back-vitoria-gasteiz/webtur00-content/en/"
+          ],
+          "category": "Naturaleza",
+          "essentialItemId": "ded23b0a-4754-4993-9ad5-5da41d4f1027"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Silken Ciudad de Vitoria",
+          "address": "Portal de Castilla, 8, 01008 Vitoria-Gasteiz",
+          "website": "https://www.hoteles-silken.com/es/hotel-ciudad-vitoria/",
+          "descripcion": "Hotel de cuatro estrellas en el centro de Vitoria-Gasteiz con reserva en su web oficial.",
+          "sources": [
+            "https://www.hoteles-silken.com/es/hotel-ciudad-vitoria/",
+            "https://turismo.euskadi.eus/en/accomodation/silken-ciudad-de-vitoria-hotel/webtur00-content/en/"
+          ],
+          "bookingUrl": "https://www.hoteles-silken.com/es/hotel-ciudad-vitoria/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Sagartoki",
+          "address": "Calle Prado, 18, 01005 Vitoria-Gasteiz",
+          "website": "https://www.sagartoki.com/",
+          "descripcion": "Restaurante y bar de pintxos con cocina vasca, carnes y pescados a la brasa.",
+          "sources": [
+            "https://www.sagartoki.com/en/contact/",
+            "https://tourism.euskadi.eus/en/restaurants/sagartoki-restaurant/webtur00-content/en/"
+          ],
+          "cuisine": "Vasca",
+          "bookingUrl": "https://www.sagartoki.com/en/contact/",
+          "phone": "+34 945 28 86 76"
+        }
+      ]
+    },
+    {
+      "id": "41478293-76a9-4738-a8af-e76f6cd75b27",
+      "nombre": "A CORUÑA",
+      "fields": {
+        "descripcion": "A Coruña combina un frente atlántico de playas y paseos con un casco histórico lleno de plazas y galerías. La Torre de Hércules, faro romano aún en funcionamiento, y la Ciudad Vieja muestran dos de sus rasgos más distintivos.",
+        "website": "https://www.visitcoruna.com/",
+        "ubicacion": "A Coruña, España"
+      },
+      "sources": [
+        "https://www.visitcoruna.com/turismo/gl/que-facer-na-coruna/o-imprescindible"
+      ],
+      "actividades": [
+        {
+          "nombre": "Torre de Hércules",
+          "address": "Calle Doctor Vázquez Iglesias, 1, 15002 A Coruña",
+          "website": "https://www.coruna.gal/tourism/en/what-to-do-in-a-coruna/art-and-culture/equipamientos/detalle-equipamiento/the-tower-ofhercules/entidad/1149055943813?argIdioma=en",
+          "descripcion": "Visita el faro romano en activo y su entorno, declarado Patrimonio Mundial; las entradas se compran en el canal municipal.",
+          "sources": [
+            "https://www.coruna.gal/tourism/en/what-to-do-in-a-coruna/art-and-culture/equipamientos/detalle-equipamiento/the-tower-ofhercules/entidad/1149055943813?argIdioma=en",
+            "https://www.visitcoruna.com/turismo/gl/que-facer-na-coruna/o-imprescindible"
+          ],
+          "category": "Patrimonio",
+          "bookingUrl": "https://ticketing.coruna.gal/torre/visita/",
+          "essentialItemId": "edd4b825-264d-4aec-bd6b-53b8cf35918b"
+        },
+        {
+          "nombre": "Ciudad Vieja y Plaza de María Pita",
+          "address": "Plaza de María Pita, 15001 A Coruña",
+          "website": "https://www.visitcoruna.com/turismo/gl/que-facer-na-coruna/o-imprescindible",
+          "descripcion": "Recorre las calles históricas de la Ciudad Vieja y la plaza presidida por la estatua de María Pita y el Palacio Municipal.",
+          "sources": [
+            "https://www.visitcoruna.com/turismo/gl/que-facer-na-coruna/o-imprescindible"
+          ],
+          "category": "Cultura",
+          "essentialItemId": "8764cc5d-58c1-4281-8029-cc8f941238f8"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Riazor",
+          "address": "Avenida Pedro Barrié de la Maza, 29, 15004 A Coruña",
+          "website": "https://www.riazorhotel.com/",
+          "descripcion": "Hotel frente a la playa de Riazor con reservas en su web oficial.",
+          "sources": [
+            "https://www.riazorhotel.com/contacto",
+            "https://www.riazorhotel.com/en/"
+          ],
+          "bookingUrl": "https://www.riazorhotel.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Casa Pardo",
+          "address": "Calle Novoa Santos, 15-B, 15006 A Coruña",
+          "website": "https://www.casapardo-domus.com/",
+          "descripcion": "Restaurante gallego registrado en el directorio oficial de Turismo de Galicia.",
+          "sources": [
+            "https://www.turismo.gal/recurso/-/detalle/905/casa-pardo?ctre=142&langId=es_ES&tp=24"
+          ],
+          "cuisine": "Gallega",
+          "phone": "+34 981 287 178"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1230 @@
+{
+  "checkedAt": "2026-10-07",
+  "photos": [
+    {
+      "id": "7be04aab-673f-4b1e-8367-18e1924d79a9",
+      "nombre": "Barcelona",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Evening_light_over_Barcelona.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/Evening_light_over_Barcelona.jpg/1920px-Evening_light_over_Barcelona.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "575cc6b4dafb2fb872e1190b93e84c9d8367a148",
+      "width": 5995,
+      "height": 2799,
+      "imageAttribution": {
+        "author": "M McBey",
+        "title": "Evening light over Barcelona.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Evening_light_over_Barcelona.jpg",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de Barcelona"
+    },
+    {
+      "id": "e51eadb8-a1da-492a-8581-a6c6bf930a3b",
+      "nombre": "BILBAO",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/5/56/Bilbao_panorama_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Bilbao_panorama_2.jpg/1920px-Bilbao_panorama_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "a56229d84d6e60d437b6dbe7a5e032a879fac68d",
+      "width": 8415,
+      "height": 2330,
+      "imageAttribution": {
+        "author": "Tiia Monto",
+        "title": "Bilbao panorama 2.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bilbao_panorama_2.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de BILBAO"
+    },
+    {
+      "id": "d64d3cf6-17d5-4b80-bdd5-9157cdc125ce",
+      "nombre": "CÁDIZ",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6b/C%C3%A1diz_Panorama_from_Mirador_Campo_del_Sur_to_the_east.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/C%C3%A1diz_Panorama_from_Mirador_Campo_del_Sur_to_the_east.jpg/1920px-C%C3%A1diz_Panorama_from_Mirador_Campo_del_Sur_to_the_east.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "e9229a5eb215a7f3f914afb00f0699d2dd1e6a4a",
+      "width": 6008,
+      "height": 4008,
+      "imageAttribution": {
+        "author": "Ymblanter",
+        "title": "Cádiz Panorama from Mirador Campo del Sur to the east.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:C%C3%A1diz_Panorama_from_Mirador_Campo_del_Sur_to_the_east.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de CÁDIZ"
+    },
+    {
+      "id": "c2662536-5624-433a-8637-f5fcb921e868",
+      "nombre": "GIRONA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Girona_des_de_l_aire_edited.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cd/Girona_des_de_l_aire_edited.jpg/1920px-Girona_des_de_l_aire_edited.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "74651024d0e640bfc4d92afb95ca6e8fb7c094e8",
+      "width": 2500,
+      "height": 1666,
+      "imageAttribution": {
+        "author": "Patronat de Turisme Costa Brava Pirineu de Girona",
+        "title": "Girona des de l aire edited.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Girona_des_de_l_aire_edited.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de GIRONA"
+    },
+    {
+      "id": "026414a4-3655-496c-b991-29d1e4d62032",
+      "nombre": "Granada",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/5/56/Granada_%2825987961022%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Granada_%2825987961022%29.jpg/1920px-Granada_%2825987961022%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "b0c4b996bd30d57a4ba26236d8653f463b0d70a7",
+      "width": 4608,
+      "height": 3456,
+      "imageAttribution": {
+        "author": "Brett Hodnett",
+        "title": "Granada (25987961022).jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Granada_(25987961022).jpg",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de Granada"
+    },
+    {
+      "id": "9ff8789c-873a-4d59-99ea-2b6e2049a5ed",
+      "nombre": "MADRID",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/1/14/Madrid_-_Sky_Bar_360%C2%BA_%28Hotel_Riu_Plaza_Espa%C3%B1a%29%2C_vistas_19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Madrid_-_Sky_Bar_360%C2%BA_%28Hotel_Riu_Plaza_Espa%C3%B1a%29%2C_vistas_19.jpg/1920px-Madrid_-_Sky_Bar_360%C2%BA_%28Hotel_Riu_Plaza_Espa%C3%B1a%29%2C_vistas_19.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "ddfcbd99d75ed13c79c9e78c3dbb4ed60f407f2a",
+      "width": 4422,
+      "height": 2328,
+      "imageAttribution": {
+        "author": "Zarateman",
+        "title": "Madrid - Sky Bar 360º (Hotel Riu Plaza España), vistas 19.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Madrid_-_Sky_Bar_360%C2%BA_(Hotel_Riu_Plaza_Espa%C3%B1a),_vistas_19.jpg",
+        "license": "CC0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de MADRID"
+    },
+    {
+      "id": "56e85aa9-f43c-4542-bc7d-efceb09300b7",
+      "nombre": "MÁLAGA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/94/Da_Gibralfaro_%28cropped%292.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/Da_Gibralfaro_%28cropped%292.jpg/1920px-Da_Gibralfaro_%28cropped%292.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "23b779b3b39e92d21a69f86c3f3bb25da69c7d43",
+      "width": 5084,
+      "height": 2264,
+      "imageAttribution": {
+        "author": "Kiban",
+        "title": "Da Gibralfaro (cropped)2.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Da_Gibralfaro_(cropped)2.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de MÁLAGA"
+    },
+    {
+      "id": "fa9ff2a4-6ecd-4857-a833-c19a7ebb1609",
+      "nombre": "PALMA DE MALLORCA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e7/Kathedrale_von_Palma.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Kathedrale_von_Palma.jpg/1920px-Kathedrale_von_Palma.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "335e2fb9cdd28fc585834b68bc20e97db2bced75",
+      "width": 14699,
+      "height": 8355,
+      "imageAttribution": {
+        "author": "Thomas Wolf, www.foto-tw.de",
+        "title": "Kathedrale von Palma.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Kathedrale_von_Palma.jpg",
+        "license": "CC BY-SA 3.0 de",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de PALMA DE MALLORCA"
+    },
+    {
+      "id": "eb8d68d8-2092-4695-a1b6-06c27077bd43",
+      "nombre": "RONDA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/0/00/Ronda_aerial.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Ronda_aerial.jpg/1920px-Ronda_aerial.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "0b3b3d0737a186d0a31acb28d7de57f877c853c2",
+      "width": 4730,
+      "height": 3175,
+      "imageAttribution": {
+        "author": "kallerna",
+        "title": "Ronda aerial.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ronda_aerial.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de RONDA"
+    },
+    {
+      "id": "37b9a8ed-2749-4531-a48b-0464933d3b09",
+      "nombre": "DONOSTIA (SAN SEBASTIÁN)",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f4/San_Sebasti%C3%A1n_-_Ayuntamiento_10.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/San_Sebasti%C3%A1n_-_Ayuntamiento_10.jpg/1920px-San_Sebasti%C3%A1n_-_Ayuntamiento_10.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "b605156f3ed809aea26c08956c041466cbfe4f19",
+      "width": 1931,
+      "height": 1356,
+      "imageAttribution": {
+        "author": "Zarateman",
+        "title": "San Sebastián - Ayuntamiento 10.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:San_Sebasti%C3%A1n_-_Ayuntamiento_10.jpg",
+        "license": "CC0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de DONOSTIA (SAN SEBASTIÁN)"
+    },
+    {
+      "id": "efa6dbe3-8303-400b-85f9-bd6eaf25323e",
+      "nombre": "SANTIAGO DE COMPOSTELA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Santiago_Cathedral_2021_-_west_panorama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Santiago_Cathedral_2021_-_west_panorama.jpg/1920px-Santiago_Cathedral_2021_-_west_panorama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "dd0990cdf40c5eedf6bc5a2d8c05b040dee2b398",
+      "width": 8112,
+      "height": 5408,
+      "imageAttribution": {
+        "author": "Fernando Pascullo",
+        "title": "Santiago Cathedral 2021 - west panorama.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Santiago_Cathedral_2021_-_west_panorama.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de SANTIAGO DE COMPOSTELA"
+    },
+    {
+      "id": "0caa35a7-bf63-46fe-9b54-951afa7164df",
+      "nombre": "SEGOVIA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cc/Segovia_-_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cc/Segovia_-_02.jpg/1920px-Segovia_-_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "c8ef2b58d7e4775d2503bbb3d15454d3147f2f04",
+      "width": 5181,
+      "height": 2590,
+      "imageAttribution": {
+        "author": "Carlos Delgado",
+        "title": "Segovia - 02.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Segovia_-_02.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de SEGOVIA"
+    },
+    {
+      "id": "01eae620-6bc8-4ab3-ad36-c7bf2bebf3bf",
+      "nombre": "Sevilla",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2b/Sevilla_Cathedral_-_Southeast.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2b/Sevilla_Cathedral_-_Southeast.jpg/1920px-Sevilla_Cathedral_-_Southeast.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "94d4bed61da1d126f1e847758e0edad0aa69e693",
+      "width": 3900,
+      "height": 2908,
+      "imageAttribution": {
+        "author": "Ingo Mehling",
+        "title": "Sevilla Cathedral - Southeast.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sevilla_Cathedral_-_Southeast.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de Sevilla"
+    },
+    {
+      "id": "c06ac0e3-d4ba-4dd2-8a1f-4b9939586a00",
+      "nombre": "Sitges",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/1/19/Sitges_-_Ansicht_4.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/Sitges_-_Ansicht_4.jpg/1920px-Sitges_-_Ansicht_4.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "4ef29fff161bd448221dd944d7f5396b6c8bd479",
+      "width": 2816,
+      "height": 2112,
+      "imageAttribution": {
+        "author": "Werner Lang (Wela49)",
+        "title": "Sitges - Ansicht 4.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sitges_-_Ansicht_4.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de Sitges"
+    },
+    {
+      "id": "ad567bf2-f7a9-4710-9fea-9d96e41cf3ca",
+      "nombre": "TARRAGONA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Roman_circus_of_Tarraco_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Roman_circus_of_Tarraco_01.jpg/1920px-Roman_circus_of_Tarraco_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "7339a038be3131da08455b3b1dbcff51b27ee3a6",
+      "width": 2288,
+      "height": 1712,
+      "imageAttribution": {
+        "author": "Bernard Gagnon",
+        "title": "Roman circus of Tarraco 01.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Roman_circus_of_Tarraco_01.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de TARRAGONA"
+    },
+    {
+      "id": "e3a3ae0a-385b-45db-93ad-a8689f2766c4",
+      "nombre": "TOLEDO",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/6/65/Toledo_%2837737041515%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/65/Toledo_%2837737041515%29.jpg/1920px-Toledo_%2837737041515%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "a9cd67ed22fd2b091859f943e25b7bcb4ef3f19a",
+      "width": 4608,
+      "height": 3456,
+      "imageAttribution": {
+        "author": "Dmitry Dzhus from London",
+        "title": "Toledo (37737041515).jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Toledo_(37737041515).jpg",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de TOLEDO"
+    },
+    {
+      "id": "a5f36a08-1a73-4331-801c-1c2a1a469a1e",
+      "nombre": "VALÈNCIA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6e/Valencia_Skyline.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Valencia_Skyline.jpg/1920px-Valencia_Skyline.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "a4132bcc4990325faa400888d41245ba847abf0e",
+      "width": 4032,
+      "height": 2268,
+      "imageAttribution": {
+        "author": "Mukeber",
+        "title": "Valencia Skyline.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Valencia_Skyline.jpg",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de VALÈNCIA"
+    },
+    {
+      "id": "8b618f4a-0d2f-42e3-842a-4c42275df21b",
+      "nombre": "Vilanova i la Geltrú",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/0/02/Pla%C3%A7a_de_la_Vila_amb_l%27ajuntament.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://upload.wikimedia.org/wikipedia/commons/0/02/Pla%C3%A7a_de_la_Vila_amb_l%27ajuntament.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "sha1": "abbf83fe862aff67c63a47a085825894877be863",
+      "width": 1600,
+      "height": 1200,
+      "imageAttribution": {
+        "author": "Tanooo",
+        "title": "Plaça de la Vila amb l'ajuntament.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pla%C3%A7a_de_la_Vila_amb_l%27ajuntament.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de Vilanova i la Geltrú"
+    },
+    {
+      "id": "3d24bbf1-0354-4336-bc19-cb93bfc71a6c",
+      "nombre": "ZARAGOZA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Zaragoza_-_Bas%C3%ADlica_del_Pilar_y_r%C3%ADo_Ebro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Zaragoza_-_Bas%C3%ADlica_del_Pilar_y_r%C3%ADo_Ebro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "sha1": "0685ac3600b43a7236deb77c7bdf67ce0819d6bd",
+      "width": 1120,
+      "height": 546,
+      "imageAttribution": {
+        "author": "Turol Jones, un artista de cojones from Villanueva del Cascajal, República Independiente de Mi Casa",
+        "title": "Zaragoza - Basílica del Pilar y río Ebro.jpg",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Zaragoza_-_Bas%C3%ADlica_del_Pilar_y_r%C3%ADo_Ebro.jpg",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "changes": "Versión reducida para la web; encuadre adaptado a la pantalla."
+      },
+      "imagenAlt": "Fotografía de ZARAGOZA"
+    },
+    {
+      "id": "f19e6d3c-7171-4ee8-92e2-7400098b727f",
+      "nombre": "OVIEDO",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/1/12/Catedral_de_Oviedo_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/Catedral_de_Oviedo_03.jpg/1280px-Catedral_de_Oviedo_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "81a66c88f5046f1856ce849d44628eefd4d7e0d8",
+      "width": 4128,
+      "height": 3096,
+      "imageAttribution": {
+        "author": "Simon Burchell",
+        "title": "Catedral de Oviedo 03",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Catedral_de_Oviedo_03.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de OVIEDO"
+    },
+    {
+      "id": "751d8e02-24df-4a0b-b0e1-2c2b22fe26e2",
+      "nombre": "BURGOS",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/98/Burgos_city_view_facing_south_east.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/98/Burgos_city_view_facing_south_east.jpg/1280px-Burgos_city_view_facing_south_east.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "e93f7158da27b62af15e392429840ba58172d110",
+      "width": 5184,
+      "height": 3456,
+      "imageAttribution": {
+        "author": "Jardoz",
+        "title": "Burgos city view facing south east",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Burgos_city_view_facing_south_east.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de BURGOS"
+    },
+    {
+      "id": "6109cb93-24f4-4ed9-93b1-b3900ab47638",
+      "nombre": "MÉRIDA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/3/39/Temple_of_Diana_in_M%C3%A9rida_%28cropped_2%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/39/Temple_of_Diana_in_M%C3%A9rida_%28cropped_2%29.jpg/1280px-Temple_of_Diana_in_M%C3%A9rida_%28cropped_2%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "f9d98084deff9af11a3d734c58a231b8549a32bf",
+      "width": 3033,
+      "height": 2742,
+      "imageAttribution": {
+        "author": "Fernando",
+        "title": "Temple of Diana in Mérida (cropped 2)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Temple_of_Diana_in_M%C3%A9rida_(cropped_2).jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de MÉRIDA"
+    },
+    {
+      "id": "3e1ac802-60d3-469c-85d2-3eec47a15d1f",
+      "nombre": "BENIDORM",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/90/Benidorm-pano-160410.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Benidorm-pano-160410.jpg/1280px-Benidorm-pano-160410.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "97d243b1717aa1f2bd1cfa78d0043056b8633d7e",
+      "width": 1920,
+      "height": 1087,
+      "imageAttribution": {
+        "author": "FDV",
+        "title": "Benidorm-pano-160410",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Benidorm-pano-160410.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de BENIDORM"
+    },
+    {
+      "id": "11750c3d-a088-4442-8e6e-be87e4797ca5",
+      "nombre": "MARBELLA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Captivating_Views_of_Old_Town_Marbella.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b1/Captivating_Views_of_Old_Town_Marbella.jpg/1280px-Captivating_Views_of_Old_Town_Marbella.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "ee43e6aed99de4124ff167eb55567017438601ae",
+      "width": 1920,
+      "height": 1536,
+      "imageAttribution": {
+        "author": "Milan Trninic (www.wedesignmarbella.com)",
+        "title": "Captivating Views of Old Town Marbella",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Captivating_Views_of_Old_Town_Marbella.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de MARBELLA"
+    },
+    {
+      "id": "fe1ec00c-e06a-45e4-9e8b-e4ac2bffdc34",
+      "nombre": "ESTEPONA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Estepona_aerial.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cb/Estepona_aerial.jpg/1280px-Estepona_aerial.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "841e35482669ea585c1d855661b4cdfe368af301",
+      "width": 5040,
+      "height": 3040,
+      "imageAttribution": {
+        "author": "kallerna",
+        "title": "Estepona aerial",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Estepona_aerial.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de ESTEPONA"
+    },
+    {
+      "id": "2e7f310d-322f-471d-8af3-e203c08e3e28",
+      "nombre": "ALMERÍA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/2/22/Alcazaba_1%2C_Almeria%2C_Spain.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Alcazaba_1%2C_Almeria%2C_Spain.jpg/1280px-Alcazaba_1%2C_Almeria%2C_Spain.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "45bd77a036962be1c9c821e4c2f30ed1c2e7c26e",
+      "width": 4559,
+      "height": 2374,
+      "imageAttribution": {
+        "author": "Jebulon",
+        "title": "Alcazaba 1, Almeria, Spain",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alcazaba_1,_Almeria,_Spain.jpg",
+        "license": "CC0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de ALMERÍA"
+    },
+    {
+      "id": "9354d56c-54a8-4b1a-85ff-1a27d4bd2d1f",
+      "nombre": "HUELVA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/3/36/Huelva_%28Spain%29_%2841302627111%29_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Huelva_%28Spain%29_%2841302627111%29_%28cropped%29.jpg/1280px-Huelva_%28Spain%29_%2841302627111%29_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "e8bf8328017e6e4e544a353c956a4829afcb12a2",
+      "width": 5158,
+      "height": 2636,
+      "imageAttribution": {
+        "author": "Jose A.",
+        "title": "Huelva (Spain) (41302627111) (cropped)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Huelva_(Spain)_(41302627111)_(cropped).jpg",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de HUELVA"
+    },
+    {
+      "id": "35bafcf4-84c3-4eb4-a131-b61358a5fff5",
+      "nombre": "LOGROÑO",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e2/Old_Town_Plaza_-_Logrono_-_La_Rioja_-_Spain_%2814576256386%29_edited.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Old_Town_Plaza_-_Logrono_-_La_Rioja_-_Spain_%2814576256386%29_edited.jpg/1280px-Old_Town_Plaza_-_Logrono_-_La_Rioja_-_Spain_%2814576256386%29_edited.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "f0de8a02d901f8cc8e5ae8f7ffd225bb2eb80fde",
+      "width": 3647,
+      "height": 2736,
+      "imageAttribution": {
+        "author": "Adam Jones from Kelowna, BC, Canada",
+        "title": "Old Town Plaza - Logrono - La Rioja - Spain (14576256386) edited",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Old_Town_Plaza_-_Logrono_-_La_Rioja_-_Spain_(14576256386)_edited.jpg",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de LOGROÑO"
+    },
+    {
+      "id": "f7a69899-da9f-4c2a-8e21-cbcc07ae86f7",
+      "nombre": "PAMPLONA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Monumento_a_los_Fueros_%28Pamplona%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Monumento_a_los_Fueros_%28Pamplona%29.jpg/1280px-Monumento_a_los_Fueros_%28Pamplona%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "73b6a2bb322c865976ac64fdd7ed1f4faf35af26",
+      "width": 2696,
+      "height": 2696,
+      "imageAttribution": {
+        "author": "José Luis Filpo Cabana",
+        "title": "Monumento a los Fueros (Pamplona)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Monumento_a_los_Fueros_(Pamplona).jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de PAMPLONA"
+    },
+    {
+      "id": "1b1cbdb4-7f11-4abd-bbd4-1ca56e9876a9",
+      "nombre": "VITORIA-GASTEIZ",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/d/de/Vitoria_-_Plaza_de_la_Virgen_Blanca%2C_Escultura_vegetal_Vitoria_Gasteiz_%21.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/Vitoria_-_Plaza_de_la_Virgen_Blanca%2C_Escultura_vegetal_Vitoria_Gasteiz_%21.jpg/1280px-Vitoria_-_Plaza_de_la_Virgen_Blanca%2C_Escultura_vegetal_Vitoria_Gasteiz_%21.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "68f2037d2b03760aeb635b0a1afa4fad728ed291",
+      "width": 2044,
+      "height": 1188,
+      "imageAttribution": {
+        "author": "Zarateman",
+        "title": "Vitoria - Plaza de la Virgen Blanca, Escultura vegetal Vitoria Gasteiz !",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vitoria_-_Plaza_de_la_Virgen_Blanca,_Escultura_vegetal_Vitoria_Gasteiz_%21.jpg",
+        "license": "CC0",
+        "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de VITORIA-GASTEIZ"
+    },
+    {
+      "id": "41478293-76a9-4738-a8af-e76f6cd75b27",
+      "nombre": "A CORUÑA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/4/45/Ayuntamiento%2C_La_Coru%C3%B1a%2C_Espa%C3%B1a%2C_2015-09-25%2C_DD_44.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/45/Ayuntamiento%2C_La_Coru%C3%B1a%2C_Espa%C3%B1a%2C_2015-09-25%2C_DD_44.jpg/1280px-Ayuntamiento%2C_La_Coru%C3%B1a%2C_Espa%C3%B1a%2C_2015-09-25%2C_DD_44.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "ba379a3a5d37f5455d3cd359b1d410aedb1b44c7",
+      "width": 7227,
+      "height": 4895,
+      "imageAttribution": {
+        "author": "Diego Delso",
+        "title": "Ayuntamiento, La Coruña, España, 2015-09-25, DD 44",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ayuntamiento,_La_Coru%C3%B1a,_Espa%C3%B1a,_2015-09-25,_DD_44.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de A CORUÑA"
+    },
+    {
+      "id": "2869d3d7-b4d6-459d-9b0e-8677557b153b",
+      "nombre": "CADAQUÉS",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Cadaques_Pueblo_Marinero.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/Cadaques_Pueblo_Marinero.JPG/1280px-Cadaques_Pueblo_Marinero.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "9e21b37659d46e5293a5352a3746aca7850e97fb",
+      "width": 5974,
+      "height": 3272,
+      "imageAttribution": {
+        "author": "Anthiro 57",
+        "title": "Cadaques Pueblo Marinero",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cadaques_Pueblo_Marinero.JPG",
+        "license": "CC BY-SA 3.0 es",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/es/deed.en",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de CADAQUÉS"
+    },
+    {
+      "id": "264c070e-e545-4936-8afe-8bf9c23d6bd5",
+      "nombre": "FIGUERES",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/1/12/MSodaiguiSTPereFigueres1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/MSodaiguiSTPereFigueres1.jpg/1280px-MSodaiguiSTPereFigueres1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "cfb40b408da8e61cc5e72265ba94005353baf1c2",
+      "width": 3088,
+      "height": 2056,
+      "imageAttribution": {
+        "author": "Martine SODAIGUI",
+        "title": "MSodaiguiSTPereFigueres1",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:MSodaiguiSTPereFigueres1.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de FIGUERES"
+    },
+    {
+      "id": "4aab1d59-dd56-454e-956b-67f5db9fedbd",
+      "nombre": "BESALÚ",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Pont_Besal%C3%BA_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Pont_Besal%C3%BA_1.jpg/1280px-Pont_Besal%C3%BA_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "2fd497b41dfaf139f186c0e44b56933ca43c1618",
+      "width": 3888,
+      "height": 2592,
+      "imageAttribution": {
+        "author": "Mikipons",
+        "title": "Pont Besalú 1",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pont_Besal%C3%BA_1.jpg",
+        "license": "CC BY-SA 3.0 es",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/es/deed.en",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de BESALÚ"
+    },
+    {
+      "id": "2faaf592-a060-4322-a08a-5d55f8def2e1",
+      "nombre": "DEIÀ",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Deia_%28part_of%29_majorca_spain_arp.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4f/Deia_%28part_of%29_majorca_spain_arp.jpg/1280px-Deia_%28part_of%29_majorca_spain_arp.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "13e8576a901d53f5f0838835ecf74c0bca8b0bab",
+      "width": 1600,
+      "height": 1200,
+      "imageAttribution": {
+        "author": "Photographed by Adrian Pingstone",
+        "title": "Deia (part of) majorca spain arp",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Deia_(part_of)_majorca_spain_arp.jpg",
+        "license": "Public domain",
+        "licenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de DEIÀ",
+      "publicDomainVerified": true
+    },
+    {
+      "id": "12ac28e3-ba20-4760-81c8-30bb154a8db6",
+      "nombre": "ALCÚDIA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/5/55/Alcudia_6745.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Alcudia_6745.jpg/1280px-Alcudia_6745.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "aa942d24cfd2db2af878348e433c77bacf2e8a08",
+      "width": 1949,
+      "height": 1299,
+      "imageAttribution": {
+        "author": "Mike Lehmann, Mike Switzerland 15:53, 5 November 2006 (UTC)",
+        "title": "Alcudia 6745",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alcudia_6745.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de ALCÚDIA"
+    },
+    {
+      "id": "095a9d1c-6748-4866-9b87-2de524d48e52",
+      "nombre": "POLLENÇA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/1/14/Pollen%C3%A7a_from_near_the_top_of_the_Valvari_Steps.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Pollen%C3%A7a_from_near_the_top_of_the_Valvari_Steps.jpg/1280px-Pollen%C3%A7a_from_near_the_top_of_the_Valvari_Steps.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "4aa5165d2802516a5b15eb3631cb248509c404cf",
+      "width": 4000,
+      "height": 3000,
+      "imageAttribution": {
+        "author": "Sam Wilson (taken with Panasonic Lumix DMC-FT1 )",
+        "title": "Pollença from near the top of the Valvari Steps",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pollen%C3%A7a_from_near_the_top_of_the_Valvari_Steps.jpg",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de POLLENÇA"
+    },
+    {
+      "id": "8f78b7d2-790f-407f-857d-89a493eb6b4a",
+      "nombre": "IBIZA (IBIZA)",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9d/ForbysIbizaTown_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9d/ForbysIbizaTown_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "sha1": "2a6533977b49e57c11c9d3fef67fd96de4e30f73",
+      "width": 1280,
+      "height": 960,
+      "imageAttribution": {
+        "author": "Forbfruit at German Wikipedia",
+        "title": "ForbysIbizaTown 03",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:ForbysIbizaTown_03.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de IBIZA (IBIZA)"
+    },
+    {
+      "id": "7e91c413-f640-4461-ac51-64c770144738",
+      "nombre": "SANT JOSEP DE TALAIA (IBIZA)",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7b/The_Center_of_San_Jose_Ibiza_19_may_2011_%281%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7b/The_Center_of_San_Jose_Ibiza_19_may_2011_%281%29.JPG/1280px-The_Center_of_San_Jose_Ibiza_19_may_2011_%281%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "c85096e001599c3302dc53e67d000f2a17f457b1",
+      "width": 4000,
+      "height": 3000,
+      "imageAttribution": {
+        "author": "stavros1",
+        "title": "The Center of San Jose Ibiza 19 may 2011 (1)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Center_of_San_Jose_Ibiza_19_may_2011_(1).JPG",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de SANT JOSEP DE TALAIA (IBIZA)"
+    },
+    {
+      "id": "82ca0a8c-4934-4095-855b-fa6e0c12304d",
+      "nombre": "SANT ANTONI DE PORTMANY (IBIZA)",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Sant-Antoni-Bahia.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/Sant-Antoni-Bahia.JPG/1280px-Sant-Antoni-Bahia.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "1cfc7c51c0a5a94b60f17cdc9298c60b422f1d51",
+      "width": 2304,
+      "height": 1728,
+      "imageAttribution": {
+        "author": "JanManu",
+        "title": "Sant-Antoni-Bahia",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sant-Antoni-Bahia.JPG",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de SANT ANTONI DE PORTMANY (IBIZA)"
+    },
+    {
+      "id": "6ba828b4-b86c-4bb0-9854-5db7a0038f37",
+      "nombre": "SANTA EULÀRIA DES RÍU (IBIZA)",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3c/DlointheBaleares.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3c/DlointheBaleares.JPG/1280px-DlointheBaleares.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "f50f150c91012bf909e3467f39b7c8b247655cc9",
+      "width": 4608,
+      "height": 3456,
+      "imageAttribution": {
+        "author": "Kayman2016",
+        "title": "DlointheBaleares",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:DlointheBaleares.JPG",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de SANTA EULÀRIA DES RÍU (IBIZA)"
+    },
+    {
+      "id": "bbe9e63d-b9d9-45ab-a228-6061ce096820",
+      "nombre": "ADEJE",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Adeje.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Adeje.jpg/1280px-Adeje.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "324950e2975b28c6becb5943c245668ae38a888d",
+      "width": 1991,
+      "height": 1335,
+      "imageAttribution": {
+        "author": "Grombo",
+        "title": "Adeje",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Adeje.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de ADEJE"
+    },
+    {
+      "id": "b8ebc428-c530-44d7-9c64-f96343ce017f",
+      "nombre": "LAS PALMAS DE GRAN CANARIA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Canteras_EM1B2907_%2840642755393%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/Canteras_EM1B2907_%2840642755393%29.jpg/1280px-Canteras_EM1B2907_%2840642755393%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "ced079b5675b4e670383b1a386b474c48a946d6a",
+      "width": 7302,
+      "height": 5477,
+      "imageAttribution": {
+        "author": "Bengt Nyman from Vaxholm, Sweden",
+        "title": "Canteras EM1B2907 (40642755393)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Canteras_EM1B2907_(40642755393).jpg",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de LAS PALMAS DE GRAN CANARIA"
+    },
+    {
+      "id": "bc737ca0-02ae-4df0-a1a8-722b1d64c1bf",
+      "nombre": "ARRECIFE (LANZAROTE)",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Arrecife%2C_en_Lanzarote_%28Las_Palmas%2C_Espa%C3%B1a%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5b/Arrecife%2C_en_Lanzarote_%28Las_Palmas%2C_Espa%C3%B1a%29.jpg/1280px-Arrecife%2C_en_Lanzarote_%28Las_Palmas%2C_Espa%C3%B1a%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "3f934d6095524d4ae1609218d409b2edc496bfb6",
+      "width": 5477,
+      "height": 3082,
+      "imageAttribution": {
+        "author": "Holger Uwe Schmitt",
+        "title": "Arrecife, en Lanzarote (Las Palmas, España)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Arrecife,_en_Lanzarote_(Las_Palmas,_Espa%C3%B1a).jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de ARRECIFE (LANZAROTE)"
+    },
+    {
+      "id": "8a2564a3-751b-40bf-b144-d74e6f5186d4",
+      "nombre": "SANTANDER",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c7/El_Palacio_de_la_Magdalena_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/El_Palacio_de_la_Magdalena_%282%29.jpg/1280px-El_Palacio_de_la_Magdalena_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "ec87ed5a579a576a0cc86702035f197e65c4f080",
+      "width": 4019,
+      "height": 2204,
+      "imageAttribution": {
+        "author": "Noreenlam",
+        "title": "El Palacio de la Magdalena (2)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:El_Palacio_de_la_Magdalena_(2).jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de SANTANDER"
+    },
+    {
+      "id": "dd6687a4-6c9b-494d-807e-680f91e8dbef",
+      "nombre": "CUENCA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/4/41/Casas_Colgadas_de_Cuenca_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/Casas_Colgadas_de_Cuenca_%28cropped%29.jpg/1280px-Casas_Colgadas_de_Cuenca_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "92908ce677728b816555d8f0bca6710314d7001d",
+      "width": 2559,
+      "height": 1918,
+      "imageAttribution": {
+        "author": "Claussmoon",
+        "title": "Casas Colgadas de Cuenca (cropped)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Casas_Colgadas_de_Cuenca_(cropped).jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de CUENCA"
+    },
+    {
+      "id": "58a8aa8c-fd94-4ec8-bafc-7a5ffb1f1394",
+      "nombre": "CÁCERES",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e7/Caceres_13_1_%286624238327%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Caceres_13_1_%286624238327%29.jpg/1280px-Caceres_13_1_%286624238327%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "99537cc1820186259ece1c16b58c7b0ae9acc8c9",
+      "width": 3715,
+      "height": 2788,
+      "imageAttribution": {
+        "author": "Javier Losa",
+        "title": "Caceres 13 1 (6624238327)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Caceres_13_1_(6624238327).jpg",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de CÁCERES"
+    },
+    {
+      "id": "d877469f-42f1-4702-93fa-bd086a320757",
+      "nombre": "JEREZ DE LA FRONTERA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/1/12/%28Jerez_de_la_Frontera%29_DSC_0560_%286271831479%29_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/%28Jerez_de_la_Frontera%29_DSC_0560_%286271831479%29_%28cropped%29.jpg/1280px-%28Jerez_de_la_Frontera%29_DSC_0560_%286271831479%29_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "67d33c9d4f432fd025ad0b9e7508d2624e44a446",
+      "width": 3072,
+      "height": 1118,
+      "imageAttribution": {
+        "author": "Annie and Andrew",
+        "title": "(Jerez de la Frontera) DSC 0560 (6271831479) (cropped)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:(Jerez_de_la_Frontera)_DSC_0560_(6271831479)_(cropped).jpg",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de JEREZ DE LA FRONTERA"
+    },
+    {
+      "id": "79203376-492f-4f86-94e7-efa03fe563a0",
+      "nombre": "TOSSA DE MAR",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/0/07/Tossa_de_Mar_-_center.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Tossa_de_Mar_-_center.jpg/1280px-Tossa_de_Mar_-_center.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "49db921d3c99080af3f7f0480f6c0e6d7c823d3c",
+      "width": 4032,
+      "height": 3024,
+      "imageAttribution": {
+        "author": "Sylvestre",
+        "title": "Tossa de Mar - center",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tossa_de_Mar_-_center.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de TOSSA DE MAR"
+    },
+    {
+      "id": "4b0767ae-f041-478a-b5aa-124c42aae47a",
+      "nombre": "ROSES",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/5/55/Roses_mit_Sporthafen.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Roses_mit_Sporthafen.jpg/1280px-Roses_mit_Sporthafen.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "6b0954e6a0ba8003bedb82c44224000daa33a90f",
+      "width": 2080,
+      "height": 1464,
+      "imageAttribution": {
+        "author": "Gordito1869",
+        "title": "Roses mit Sporthafen",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Roses_mit_Sporthafen.jpg",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de ROSES"
+    },
+    {
+      "id": "db843dcb-61f5-4174-9262-540281caf398",
+      "nombre": "LLORET DE MAR",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/0/04/Lloret_de_Mar_-_Panorama_of_main_beach.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/04/Lloret_de_Mar_-_Panorama_of_main_beach.jpg/1280px-Lloret_de_Mar_-_Panorama_of_main_beach.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "3526d5fb699fcb06c9acc37004621af722bf295c",
+      "width": 4267,
+      "height": 2400,
+      "imageAttribution": {
+        "author": "Victor Gleim",
+        "title": "Lloret de Mar - Panorama of main beach",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lloret_de_Mar_-_Panorama_of_main_beach.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de LLORET DE MAR"
+    },
+    {
+      "id": "ca66659d-d6e1-4d1c-a8e2-4ea2cc773d01",
+      "nombre": "CALELLA DE PALAFRUGELL",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Calella_de_Palafrugell_%2826023087965%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/Calella_de_Palafrugell_%2826023087965%29.jpg/1280px-Calella_de_Palafrugell_%2826023087965%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "5639417e9cf4d0ee0e068c777bd969c9fe7a0904",
+      "width": 1950,
+      "height": 1300,
+      "imageAttribution": {
+        "author": "Jorge Franganillo",
+        "title": "Calella de Palafrugell (26023087965)",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Calella_de_Palafrugell_(26023087965).jpg",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de CALELLA DE PALAFRUGELL"
+    },
+    {
+      "id": "4cbb5aa4-8650-4a26-98a0-2246cdfc2893",
+      "nombre": "GIJÓN",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/4/40/Panorama_of_Gij%C3%B3n_at_sunset2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Panorama_of_Gij%C3%B3n_at_sunset2.jpg/1920px-Panorama_of_Gij%C3%B3n_at_sunset2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "575f020069c08e078485acfaf9b0c21f92787ca4",
+      "width": 10742,
+      "height": 5482,
+      "imageAttribution": {
+        "author": "David Álvarez López",
+        "title": "Panorama of Gijón",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Panorama_of_Gij%C3%B3n_at_sunset2.jpg",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de GIJÓN"
+    },
+    {
+      "id": "98cd5513-17d4-4e4b-acd3-76c22c352716",
+      "nombre": "ALICANTE",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Alicante_panorama_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/Alicante_panorama_1.jpg/1920px-Alicante_panorama_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "ef5a52b127e60a24f6424ccf4cdfba31e86ba73c",
+      "width": 9510,
+      "height": 3500,
+      "imageAttribution": {
+        "author": "kallerna",
+        "title": "Panoramic view of Alicante from Castell de la Santa Bàrbara.",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alicante_panorama_1.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de ALICANTE"
+    },
+    {
+      "id": "f6222103-b692-4994-9836-b22d45a064ea",
+      "nombre": "LEÓN",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Panor%C3%A1mica_de_la_Plaza_Mayor_de_Le%C3%B3n_%28Espa%C3%B1a%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Panor%C3%A1mica_de_la_Plaza_Mayor_de_Le%C3%B3n_%28Espa%C3%B1a%29.JPG/1920px-Panor%C3%A1mica_de_la_Plaza_Mayor_de_Le%C3%B3n_%28Espa%C3%B1a%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "5d3bf806c1229f229042fc6e8940ca2bbb52b7d4",
+      "width": 3072,
+      "height": 2304,
+      "imageAttribution": {
+        "author": "Lancastermerrin88",
+        "title": "Panorámica de la Plaza Mayor de León (España).",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Panor%C3%A1mica_de_la_Plaza_Mayor_de_Le%C3%B3n_(Espa%C3%B1a).JPG",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de LEÓN"
+    },
+    {
+      "id": "c1fa6148-cc9d-4c59-87d4-ff7e5fa5c44a",
+      "nombre": "MAÓ",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c2/Port_Mahon_Minorca_from_Ses_Piques_I_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/Port_Mahon_Minorca_from_Ses_Piques_I_-_panoramio.jpg/1920px-Port_Mahon_Minorca_from_Ses_Piques_I_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "46c194bcff7e7cd0a57c93dfbab25b6c49c535c3",
+      "width": 2560,
+      "height": 1920,
+      "imageAttribution": {
+        "author": "Santiago Lap",
+        "title": "Port Mahon Minorca from Ses Piques I",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Port_Mahon_Minorca_from_Ses_Piques_I_-_panoramio.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de MAÓ"
+    },
+    {
+      "id": "5d4bab6c-4012-439a-b58f-59f8111aed30",
+      "nombre": "CIUTADELLA DE MENORCA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/91/Port_de_Ciutadella.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/Port_de_Ciutadella.JPG/1920px-Port_de_Ciutadella.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "2197f7051bc69839868829f3b04d701938085666",
+      "width": 2304,
+      "height": 1536,
+      "imageAttribution": {
+        "author": "Peer",
+        "title": "Foto del port de Ciutadella (Menorca) amb el port i la Catedral al fons.",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Port_de_Ciutadella.JPG",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de CIUTADELLA DE MENORCA"
+    },
+    {
+      "id": "a63d255b-028c-4d7f-a8f8-c0b234e8b8e4",
+      "nombre": "VALLDEMOSSA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/7/75/Valldemossa_view.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/Valldemossa_view.jpg/1920px-Valldemossa_view.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "b7e4f381ff1d222750946a9fbd74ad31d3419e41",
+      "width": 3739,
+      "height": 2503,
+      "imageAttribution": {
+        "author": "Abrget47j",
+        "title": "Valldemossa village in Mallorca, Spain",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Valldemossa_view.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de VALLDEMOSSA"
+    },
+    {
+      "id": "e794fa0b-00ed-4944-b3c3-2852bc1eb08e",
+      "nombre": "SÓLLER",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e7/Panorama_Soller_and_Ofre.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Panorama_Soller_and_Ofre.jpg/1920px-Panorama_Soller_and_Ofre.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "dd7d22584ab7231eda8bb0b847b5392dfeb6399b",
+      "width": 8087,
+      "height": 3296,
+      "imageAttribution": {
+        "author": "Heuschrecke (Dmitry Tonkonog and Ksenia Fedosova)",
+        "title": "Panoramic view of Soller town and Ofre mountain, Mallorca",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Panorama_Soller_and_Ofre.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de SÓLLER"
+    },
+    {
+      "id": "637c60e8-fa1a-476a-a957-cf080a611802",
+      "nombre": "PUERTO DEL ROSARIO (FUERTEVENTURA)",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Puerto_del_Rosario_-_Calle_Leon_Y_Castillo-Avenida_de_los_Reyes_de_Espa%C3%B1a-Avenida_de_Ruperto_Gonz%C3%A1les_Negrin_-_Fuente_de_la_explanada_01_ies.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/Puerto_del_Rosario_-_Calle_Leon_Y_Castillo-Avenida_de_los_Reyes_de_Espa%C3%B1a-Avenida_de_Ruperto_Gonz%C3%A1les_Negrin_-_Fuente_de_la_explanada_01_ies.jpg/1920px-Puerto_del_Rosario_-_Calle_Leon_Y_Castillo-Avenida_de_los_Reyes_de_Espa%C3%B1a-Avenida_de_Ruperto_Gonz%C3%A1les_Negrin_-_Fuente_de_la_explanada_01_ies.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "5f68896daf130dcb565d76721e65c17aab749f32",
+      "width": 5616,
+      "height": 3744,
+      "imageAttribution": {
+        "author": "Frank Vincentz",
+        "title": "Fuente de la explanada roundabout in Puerto del Rosario, Fuerteventura",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Puerto_del_Rosario_-_Calle_Leon_Y_Castillo-Avenida_de_los_Reyes_de_Espa%C3%B1a-Avenida_de_Ruperto_Gonz%C3%A1les_Negrin_-_Fuente_de_la_explanada_01_ies.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de PUERTO DEL ROSARIO (FUERTEVENTURA)"
+    },
+    {
+      "id": "8fada48e-4c60-4beb-bb40-242779f80e2b",
+      "nombre": "PEÑISCOLA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/1/16/Vista_panor%C3%A1mica_de_Pe%C3%B1%C3%ADscola_desde_el_castillo.jpg?utm_campaign=index&utm_content=original&utm_source=commons.wikimedia.org",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/16/Vista_panor%C3%A1mica_de_Pe%C3%B1%C3%ADscola_desde_el_castillo.jpg/1920px-Vista_panor%C3%A1mica_de_Pe%C3%B1%C3%ADscola_desde_el_castillo.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "4f4c40e668acd7a53fb2aff11cc5b0e2dbc6f03b",
+      "width": 5248,
+      "height": 1480,
+      "imageAttribution": {
+        "author": "Rastrojo",
+        "title": "Panoramic view of Peñíscola from the castle, including the harbour, south beach, historic centre, newer town and north beach.",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vista_panor%C3%A1mica_de_Pe%C3%B1%C3%ADscola_desde_el_castillo.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de PEÑISCOLA"
+    },
+    {
+      "id": "2635964d-b73c-416a-805f-3b08d98e85ae",
+      "nombre": "BLANES",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/4/45/BLANES_COSTA_BRAVA_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/45/BLANES_COSTA_BRAVA_-_panoramio.jpg/1920px-BLANES_COSTA_BRAVA_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "5dbd1d0c925f857632029c337fa084ae06b4a260",
+      "width": 5184,
+      "height": 3456,
+      "imageAttribution": {
+        "author": "Manuel pino",
+        "title": "Blanes Costa Brava",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:BLANES_COSTA_BRAVA_-_panoramio.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de BLANES"
+    },
+    {
+      "id": "1f4f7875-3b02-4724-ace1-eb36cc3d7fe0",
+      "nombre": "BEGUR",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Begur-Castell-20180719_200758.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Begur-Castell-20180719_200758.jpg/1280px-Begur-Castell-20180719_200758.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "114338d8851f5925731fe378d7e4b3be3a807791",
+      "width": 4032,
+      "height": 3024,
+      "imageAttribution": {
+        "author": "Myriam Thyes",
+        "title": "Begur-Castell-20180719 200758",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Begur-Castell-20180719_200758.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de BEGUR"
+    },
+    {
+      "id": "656a7853-2f0a-4461-85a7-34ec33a7211b",
+      "nombre": "CORRALEJO (FUERTEVENTURA)",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Corralejo_panorama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/Corralejo_panorama.jpg/1280px-Corralejo_panorama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "fb2580aeffb7b941d62d0eb75ba5cab91070d465",
+      "width": 31232,
+      "height": 6512,
+      "imageAttribution": {
+        "author": "Motopark",
+        "title": "Corralejo panorama",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Corralejo_panorama.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de CORRALEJO (FUERTEVENTURA)"
+    },
+    {
+      "id": "c7f1a1a6-ec61-4414-afb3-6ac60cda8bd3",
+      "nombre": "TARIFA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/e/eb/2009_Tarifa_panorama-view_of_the_town.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/eb/2009_Tarifa_panorama-view_of_the_town.jpg/1280px-2009_Tarifa_panorama-view_of_the_town.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "70090bc3374ceb94471ea5fd0af89612e6f96c23",
+      "width": 9936,
+      "height": 3220,
+      "imageAttribution": {
+        "author": "Łukasz Ciesielski - Guma89",
+        "title": "2009 Tarifa panorama-view of the town",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:2009_Tarifa_panorama-view_of_the_town.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de TARIFA"
+    },
+    {
+      "id": "cddc4268-8bdf-4e27-8fd0-ca0a43d80b6d",
+      "nombre": "TEGUISE (LANZAROTE)",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/94/Teguise_-_Plaza_General_Franco_-_Ayuntamiento-Convento_01_ies.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/Teguise_-_Plaza_General_Franco_-_Ayuntamiento-Convento_01_ies.jpg/1280px-Teguise_-_Plaza_General_Franco_-_Ayuntamiento-Convento_01_ies.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "648414d4f2c548b1c07224034a7de43d404b8fea",
+      "width": 3888,
+      "height": 2592,
+      "imageAttribution": {
+        "author": "Frank Vincentz",
+        "title": "Teguise - Plaza General Franco - Ayuntamiento-Convento 01 ies",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Teguise_-_Plaza_General_Franco_-_Ayuntamiento-Convento_01_ies.jpg",
+        "license": "CC BY-SA 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de TEGUISE (LANZAROTE)"
+    },
+    {
+      "id": "8ce1d96d-0636-4993-8762-59b62339381c",
+      "nombre": "PUERTO DE LA CRUZ",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Puerto_de_la_Cruz_2021_%E2%80%93_view_towards_east_of_town.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9e/Puerto_de_la_Cruz_2021_%E2%80%93_view_towards_east_of_town.jpg/1280px-Puerto_de_la_Cruz_2021_%E2%80%93_view_towards_east_of_town.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "ffc4e1aa64a14b2f2d4ab73aae69ee604bbed2e1",
+      "width": 7813,
+      "height": 4226,
+      "imageAttribution": {
+        "author": "Cayambe",
+        "title": "Puerto de la Cruz 2021 – view towards east of town",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Puerto_de_la_Cruz_2021_%E2%80%93_view_towards_east_of_town.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de PUERTO DE LA CRUZ"
+    },
+    {
+      "id": "b912998d-a6ab-44a6-801e-11ed4f7e8592",
+      "nombre": "SAN CRISTÓBAL DE LA LAGUNA",
+      "originalUrl": "https://upload.wikimedia.org/wikipedia/commons/3/35/La_Laguna_panorama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "uploadUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/La_Laguna_panorama.jpg/1280px-La_Laguna_panorama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "sha1": "fff153ded682efac235a220b54ffdc19cef554c1",
+      "width": 4608,
+      "height": 3456,
+      "imageAttribution": {
+        "author": "Zitumassin",
+        "title": "La Laguna panorama",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:La_Laguna_panorama.jpg",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "changes": "Redimensionada para la web; encuadre adaptado a la portada."
+      },
+      "imagenAlt": "Fotografía de SAN CRISTÓBAL DE LA LAGUNA"
+    }
+  ]
+}

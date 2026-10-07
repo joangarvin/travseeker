@@ -1,0 +1,692 @@
+{
+  "checkedAt": "2026-10-07",
+  "scope": "Island municipalities researched from official tourism and first-party business sources.",
+  "photoPolicy": "No images added; all content sourced from official tourism authorities or business websites.",
+  "municipalities": [
+    {
+      "id": "8f78b7d2-790f-407f-857d-89a493eb6b4a",
+      "nombre": "IBIZA (IBIZA)",
+      "fields": {
+        "descripcion": "Ibiza combina la ciudad amurallada de Dalt Vila y su patrimonio púnico con playas y vida portuaria mediterránea.",
+        "website": "https://ibiza.travel/en/descargas/ibiza-en-1-d/",
+        "ubicacion": "IBIZA, España"
+      },
+      "sources": ["https://ibiza.travel/en/descargas/ibiza-en-1-d/"],
+      "actividades": [
+        {
+          "nombre": "Recorrer Dalt Vila",
+          "descripcion": "Paseo por el recinto amurallado renacentista, sus baluartes y calles históricas.",
+          "sources": ["https://ibiza.travel/en/descargas/folleto-rutas-2/"],
+          "category": "Patrimonio",
+          "essentialItemId": "73c456a9-98b0-4a04-bebb-778c63217e41"
+        },
+        {
+          "nombre": "Visitar la necrópolis de Puig des Molins",
+          "descripcion": "Conocer la necrópolis púnica y sus hipogeos, integrada en el conjunto Patrimonio Mundial de Ibiza.",
+          "sources": ["https://ibiza.travel/en/descargas/ibiza-en-1-d/"],
+          "category": "Patrimonio",
+          "essentialItemId": "f983a3bb-f7fa-4d79-b880-1a5cd689e049"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Mirador de Dalt Vila",
+          "address": "Plaza de España, 4, Dalt Vila, 07800 Ibiza",
+          "website": "https://www.hotelmiradoribiza.com/en",
+          "descripcion": "Hotel boutique dentro del recinto histórico de Dalt Vila.",
+          "sources": ["https://www.hotelmiradoribiza.com/en/how-to-get-there"],
+          "bookingUrl": "https://www.hotelmiradoribiza.com/en"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Ca n’Alfredo",
+          "address": "Passeig de Vara de Rey, 16, 07800 Eivissa",
+          "website": "https://www.canalfredo.com/",
+          "descripcion": "Restaurante emblemático de Ibiza con pescados, mariscos y arroces.",
+          "sources": [
+            "https://eatibizacity.com/en/local/ca-nalfredo/",
+            "https://ca.ibiza.travel/listing/ca-n%E2%80%99alfredo/26903107/"
+          ],
+          "cuisine": "Restaurante emblemático de Ibiza con pescados, mariscos y arroces.",
+          "bookingUrl": "https://ca.ibiza.travel/listing/ca-n%E2%80%99alfredo/26903107/"
+        }
+      ]
+    },
+    {
+      "id": "7e91c413-f640-4461-ac51-64c770144738",
+      "nombre": "SANT JOSEP DE TALAIA (IBIZA)",
+      "fields": {
+        "descripcion": "Sant Josep reúne calas y paisajes protegidos, con el patrimonio fenicio de Sa Caleta y vistas a Es Vedrà.",
+        "website": "https://ibiza.travel/en/descargas/ibiza-en-1-d/",
+        "ubicacion": "SANT JOSEP DE TALAIA, España"
+      },
+      "sources": ["https://ibiza.travel/en/descargas/ibiza-en-1-d/"],
+      "actividades": [
+        {
+          "nombre": "Explorar el Parque Natural de Ses Salines",
+          "descripcion": "Recorrido por salinas, dunas y costa protegida; el centro de interpretación explica sus valores naturales.",
+          "sources": ["https://ibiza.travel/en/descargas/ibiza-informaci/"],
+          "category": "Naturaleza"
+        },
+        {
+          "nombre": "Visitar el asentamiento fenicio de Sa Caleta",
+          "descripcion": "Conocer el yacimiento fenicio declarado Patrimonio Mundial y sus rutas patrimoniales.",
+          "sources": [
+            "https://ibiza.travel/ca/descargas/rutes-patrimonials-sant-josep/rutas-patrimonales-sa-caleta-ses-paisses-de-cala-dhort-6/"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Can Salia",
+          "address": "Carrer des Caló, 108, 07829 Sant Josep de sa Talaia",
+          "website": "https://www.cansaliahotel.com/",
+          "descripcion": "Hotel boutique en Cala de Bou, dentro del municipio de Sant Josep.",
+          "sources": ["https://www.cansaliahotel.com/"],
+          "bookingUrl": "https://www.cansaliahotel.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Ses Boques",
+          "address": "Playa de Ses Boques, s/n, 07839 Sant Josep de sa Talaia",
+          "website": "https://sesboques.com/en/",
+          "descripcion": "Pescado fresco y producto local en un entorno costero; dispone de reservas en su web.",
+          "sources": [
+            "https://sesboques.com/",
+            "https://www.covermanager.com/legal/load_legal_dynamic/restaurante-sesboques/czech/use_conditions/0/0"
+          ],
+          "cuisine": "Pescado fresco y producto local en un entorno costero; dispone de reservas en su web.",
+          "bookingUrl": "https://sesboques.com/en/"
+        }
+      ]
+    },
+    {
+      "id": "82ca0a8c-4934-4095-855b-fa6e0c12304d",
+      "nombre": "SANT ANTONI DE PORTMANY (IBIZA)",
+      "fields": {
+        "descripcion": "Sant Antoni combina calas de la bahía con los atardeceres de Ses Variades y rutas por el interior rural.",
+        "website": "https://visit.santantoni.net/en/",
+        "ubicacion": "SANT ANTONI DE PORTMANY, España"
+      },
+      "sources": ["https://visit.santantoni.net/en/"],
+      "actividades": [
+        {
+          "nombre": "Bañarse en Cala Salada y Cala Saladeta",
+          "descripcion": "Disfrutar de dos calas de aguas claras reconocidas por el turismo local.",
+          "sources": ["https://ibiza.travel/en/descargas/ibiza-en-1-d/"],
+          "category": "Naturaleza",
+          "essentialItemId": "3931a1d0-638c-47ad-8b0c-5ea3a5aa8f43"
+        },
+        {
+          "nombre": "Contemplar el atardecer en Ses Variades",
+          "descripcion": "Paseo por la costa de Ses Variades, punto de encuentro estival para ver la puesta de sol.",
+          "sources": ["https://ibiza.travel/en/descargas/ibiza-en-1-d/"],
+          "category": "Naturaleza"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Es Mitjorn",
+          "address": "Carrer Metge Mateu Gasull, 2, 07820 Sant Antoni de Portmany",
+          "website": "https://www.esmitjorn.com/en",
+          "descripcion": "Hotel familiar céntrico, cerca del puerto y del paseo marítimo.",
+          "sources": ["https://www.esmitjorn.com/en/contact"],
+          "bookingUrl": "https://www.esmitjorn.com/en"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Villa Mercedes",
+          "address": "Passeig de la Mar, 14, 07820 Sant Antoni de Portmany",
+          "website": "https://villamercedesibiza.com/",
+          "descripcion": "Cocina mediterránea en una villa histórica frente al puerto deportivo.",
+          "sources": [
+            "https://visit.santantoni.net/gastronomia/restaurantes/villa-mercedes/"
+          ],
+          "cuisine": "Cocina mediterránea en una villa histórica frente al puerto deportivo.",
+          "bookingUrl": "https://villamercedesibiza.com/"
+        }
+      ]
+    },
+    {
+      "id": "6ba828b4-b86c-4bb0-9854-5db7a0038f37",
+      "nombre": "SANTA EULÀRIA DES RÍU (IBIZA)",
+      "fields": {
+        "descripcion": "Santa Eulària destaca por el conjunto fortificado del Puig de Missa, sus museos y calas de ambiente familiar.",
+        "website": "https://ibiza.travel/en/descargas/ibiza-en-1-d/",
+        "ubicacion": "SANTA EULÀRIA DES RÍU, España"
+      },
+      "sources": ["https://ibiza.travel/en/descargas/ibiza-en-1-d/"],
+      "actividades": [
+        {
+          "nombre": "Visitar el conjunto del Puig de Missa y Can Ros",
+          "descripcion": "Visitar la iglesia fortificada del Puig de Missa y el Museo Etnográfico de Can Ros, ubicado junto a la iglesia.",
+          "sources": ["https://ibiza.travel/en/descargas/ibiza-en-1-d/"],
+          "category": "Patrimonio",
+          "essentialItemId": "7cdf1f52-a758-4223-b9f9-c8585721bb18"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Tres Torres",
+          "address": "Bahía Ses Estaques, 07840 Santa Eulària des Riu",
+          "website": "https://www.hoteltrestorresibiza.com/",
+          "descripcion": "Hotel junto a la marina y a pocos metros de las playas.",
+          "sources": ["https://www.hoteltrestorresibiza.com/en/location/"],
+          "bookingUrl": "https://www.hoteltrestorresibiza.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Can Caus",
+          "address": "Carretera de San Miguel, km 3,5, 07814 Santa Gertrudis de Fruitera",
+          "website": "https://www.cancaus.com/",
+          "descripcion": "Restaurante-grill centrado en productos tradicionales de Ibiza.",
+          "sources": ["https://www.cancaus.com/"],
+          "cuisine": "Restaurante-grill centrado en productos tradicionales de Ibiza.",
+          "bookingUrl": "https://www.cancaus.com/"
+        }
+      ]
+    },
+    {
+      "id": "c1fa6148-cc9d-4c59-87d4-ff7e5fa5c44a",
+      "nombre": "MAÓ",
+      "fields": {
+        "descripcion": "Maó reúne un casco urbano de arquitectura histórica y el gran puerto natural, con miradores y edificios religiosos.",
+        "website": "https://www.menorca.es/documents/documents/16081doc4.pdf",
+        "ubicacion": "MAÓ, España"
+      },
+      "sources": ["https://www.menorca.es/documents/documents/16081doc4.pdf"],
+      "actividades": [
+        {
+          "nombre": "Descubrir Maó, su puerto y centro histórico",
+          "descripcion": "Recorrer el puerto natural y el centro histórico de Maó, con sus miradores, edificios señoriales e iglesias.",
+          "sources": [
+            "https://www.menorca.es/documents/documents/16081doc4.pdf"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "f7b214f7-d7de-4d3c-8a95-7a92a8c019db"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Hevresac",
+          "address": "Carrer de San Fernando, 1, 07701 Maó",
+          "website": "https://www.hotelhevresac.com/es/",
+          "descripcion": "Hotel urbano en un edificio histórico del centro de Maó.",
+          "sources": [
+            "https://www.hotelhevresac.com/en/availability-and-booking.html"
+          ],
+          "bookingUrl": "https://www.hotelhevresac.com/es/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Da Costa",
+          "address": "Moll de Llevant, 295, 07701 Maó",
+          "website": "https://www.dacostamenorca.com/",
+          "descripcion": "Restaurante italiano con pasta fresca y vistas al puerto.",
+          "sources": ["https://www.dacostamenorca.com/"],
+          "cuisine": "Restaurante italiano con pasta fresca y vistas al puerto.",
+          "bookingUrl": "https://www.dacostamenorca.com/"
+        }
+      ]
+    },
+    {
+      "id": "5d4bab6c-4012-439a-b58f-59f8111aed30",
+      "nombre": "CIUTADELLA DE MENORCA",
+      "fields": {
+        "descripcion": "Ciutadella conserva un casco histórico señorial y monumentos talayóticos en el entorno rural del municipio.",
+        "website": "https://www.menorca.es/es/Ciutadella/10995",
+        "ubicacion": "CIUTADELLA DE MENORCA, España"
+      },
+      "sources": ["https://www.menorca.es/es/Ciutadella/10995"],
+      "actividades": [
+        {
+          "nombre": "Explorar Ciutadella",
+          "descripcion": "Pasear por el centro histórico y el puerto de la antigua capital menorquina.",
+          "sources": ["https://www.menorca.es/es/Ciutadella/10995"],
+          "category": "Patrimonio",
+          "essentialItemId": "f667ac53-46d8-4574-9594-ab9849814c59"
+        },
+        {
+          "nombre": "Visitar la Naveta des Tudons",
+          "descripcion": "Conocer uno de los monumentos funerarios prehistóricos más representativos de Menorca.",
+          "sources": ["https://www.menorca.es/en/Naveta_des_Tudons/15065"],
+          "category": "Patrimonio",
+          "essentialItemId": "d32530a4-c5de-47c1-be30-21708d108d9e"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel S'Esparteria",
+          "address": "Carrer de Sant Joan Bosco, 20, 07760 Ciutadella de Menorca",
+          "website": "https://www.hotelsesparteriamenorca.com/en/",
+          "descripcion": "Hotel boutique en el centro de Ciutadella.",
+          "sources": ["https://www.hotelsesparteriamenorca.com/en/contact/"],
+          "bookingUrl": "https://www.hotelsesparteriamenorca.com/en/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Cafè Balear",
+          "address": "Passeig des Moll, 15, 07760 Ciutadella de Menorca",
+          "website": "https://baleargrup.com/en/cafe-balear/",
+          "descripcion": "Cocina marinera con pescado y marisco fresco de la isla.",
+          "sources": ["https://baleargrup.com/en/cafe-balear/"],
+          "cuisine": "Cocina marinera con pescado y marisco fresco de la isla.",
+          "bookingUrl": "https://baleargrup.com/en/cafe-balear/"
+        }
+      ]
+    },
+    {
+      "id": "8ce1d96d-0636-4993-8762-59b62339381c",
+      "nombre": "PUERTO DE LA CRUZ",
+      "fields": {
+        "descripcion": "Puerto de la Cruz combina espacios de baño diseñados por César Manrique con jardines botánicos y un casco marinero.",
+        "website": "https://visitpuertodelacruz.es/",
+        "ubicacion": "PUERTO DE LA CRUZ, España"
+      },
+      "sources": ["https://visitpuertodelacruz.es/"],
+      "actividades": [
+        {
+          "nombre": "Relajarse en el Lago Martiánez",
+          "descripcion": "Complejo municipal de piscinas y lago artificial diseñado por César Manrique.",
+          "sources": ["https://lagomartianez.es/en/tickets/"],
+          "category": "Ocio",
+          "essentialItemId": "0308035c-ab4e-446b-8321-3a429f81d42d"
+        },
+        {
+          "nombre": "Visitar el Jardín Botánico",
+          "descripcion": "Recorrer las colecciones de plantas tropicales y subtropicales del jardín histórico.",
+          "sources": ["https://visitpuertodelacruz.es/"],
+          "category": "Naturaleza",
+          "essentialItemId": "f9eba072-21a4-4eeb-8b09-1a5c0159bcd5"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Alua Tenerife",
+          "address": "Calle Antonio Ruiz Álvarez, 7, 38400 Puerto de la Cruz",
+          "website": "https://www.webtenerife.com/alojamiento/hoteles/alua-tenerife/",
+          "descripcion": "Hotel con piscinas, gimnasio y restaurante buffet.",
+          "sources": [
+            "https://www.webtenerife.com/alojamiento/hoteles/alua-tenerife/"
+          ],
+          "bookingUrl": "https://www.webtenerife.com/alojamiento/hoteles/alua-tenerife/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "La Cofradía de Pescadores",
+          "address": "Calle Las Lonjas, 5, 38400 Puerto de la Cruz",
+          "website": "https://www.lacofradiadepescadores.es/en-en/contactus.html",
+          "descripcion": "Restaurante de pescado y marisco en el antiguo puerto pesquero.",
+          "sources": [
+            "https://www.lacofradiadepescadores.es/en-en/contactus.html"
+          ],
+          "cuisine": "Restaurante de pescado y marisco en el antiguo puerto pesquero.",
+          "bookingUrl": "https://www.lacofradiadepescadores.es/en-en/contactus.html"
+        }
+      ]
+    },
+    {
+      "id": "bbe9e63d-b9d9-45ab-a228-6061ce096820",
+      "nombre": "ADEJE",
+      "fields": {
+        "descripcion": "Adeje combina un casco histórico de origen tradicional con el sendero protegido del Barranco del Infierno.",
+        "website": "https://www.adeje.es/turismo/",
+        "ubicacion": "ADEJE, España"
+      },
+      "sources": ["https://www.adeje.es/turismo/"],
+      "actividades": [
+        {
+          "nombre": "Recorrer el Barranco del Infierno",
+          "descripcion": "Sendero de 6,5 km ida y vuelta por una reserva natural; el acceso requiere reserva previa.",
+          "sources": [
+            "https://www.adeje.es/transicion-ecologica-gestion-del-territorio-desarrollo-y-empleo/medioambiente/parajes-naturales/243-barranco-del-infierno"
+          ],
+          "category": "Naturaleza",
+          "essentialItemId": "455b0ac8-bdf1-4d32-8578-f0b84d3787b7"
+        },
+        {
+          "nombre": "Visitar el casco histórico de Adeje",
+          "descripcion": "Paseo por el núcleo tradicional y sus calles y plazas históricas.",
+          "sources": ["https://www.adeje.es/turismo/"],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Coral Ocean View",
+          "address": "Calle Venezuela, 10, 38660 Adeje",
+          "website": "https://www.webtenerife.com/alojamiento/hoteles/coral-ocean-view/",
+          "descripcion": "Hotel adults-only con zona wellness y restaurantes.",
+          "sources": [
+            "https://www.webtenerife.com/alojamiento/hoteles/coral-ocean-view/"
+          ],
+          "bookingUrl": "https://www.webtenerife.com/alojamiento/hoteles/coral-ocean-view/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "La Rambla",
+          "address": "Calle Grande, 7, Adeje, Tenerife",
+          "website": "https://rtelarambla.es/",
+          "descripcion": "Cocina mediterránea y canaria; acepta reservas en su web.",
+          "sources": ["https://rtelarambla.es/"],
+          "cuisine": "Cocina mediterránea y canaria; acepta reservas en su web.",
+          "bookingUrl": "https://rtelarambla.es/"
+        }
+      ]
+    },
+    {
+      "id": "b912998d-a6ab-44a6-801e-11ed4f7e8592",
+      "nombre": "SAN CRISTÓBAL DE LA LAGUNA",
+      "fields": {
+        "descripcion": "La Laguna es una ciudad Patrimonio Mundial de trazado histórico, iglesias y arquitectura civil de los siglos XVI al XVIII.",
+        "website": "https://turismo.aytolalaguna.es/",
+        "ubicacion": "SAN CRISTÓBAL DE LA LAGUNA, España"
+      },
+      "sources": ["https://turismo.aytolalaguna.es/"],
+      "actividades": [
+        {
+          "nombre": "Recorrer el casco histórico de La Laguna",
+          "descripcion": "Ruta a pie por el corazón patrimonial de la ciudad, sus edificios y calles históricas.",
+          "sources": ["https://turismo.aytolalaguna.es/"],
+          "category": "Patrimonio",
+          "essentialItemId": "ba3446ce-0b89-454e-ae47-423f7bb716b6"
+        },
+        {
+          "nombre": "Visitar la Catedral de Nuestra Señora de los Remedios",
+          "descripcion": "Conocer la catedral neoclásica y neogótica en la plaza de Los Remedios.",
+          "sources": [
+            "https://www.webtenerife.co.uk/tenerife/the-island/municipalities/laguna/places-interest/catedral-de-la-laguna/"
+          ],
+          "category": "Patrimonio",
+          "address": "Plaza de los Remedios, 38201 La Laguna"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "La Laguna Gran Hotel",
+          "address": "Calle Nava y Grimón, 18, 38201 La Laguna",
+          "website": "https://www.webtenerife.com/alojamiento/hoteles/la-laguna-gran-hotel/",
+          "descripcion": "Hotel céntrico con restaurante, cafetería y vinoteca.",
+          "sources": [
+            "https://www.webtenerife.com/alojamiento/hoteles/la-laguna-gran-hotel/"
+          ],
+          "bookingUrl": "https://www.webtenerife.com/alojamiento/hoteles/la-laguna-gran-hotel/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Sabores La Laguna",
+          "address": "Plaza de San Francisco, 15, 38201 La Laguna",
+          "website": "https://www.saboreslalaguna.com/en/",
+          "descripcion": "Cocina venezolana con arepas, cachapas y platos tradicionales.",
+          "sources": ["https://www.saboreslalaguna.com/en/"],
+          "cuisine": "Cocina venezolana con arepas, cachapas y platos tradicionales.",
+          "bookingUrl": "https://www.saboreslalaguna.com/en/"
+        }
+      ]
+    },
+    {
+      "id": "b8ebc428-c530-44d7-9c64-f96343ce017f",
+      "nombre": "LAS PALMAS DE GRAN CANARIA",
+      "fields": {
+        "descripcion": "Las Palmas combina el barrio histórico de Vegueta con la playa urbana de Las Canteras y una activa vida cultural.",
+        "website": "https://www.grancanaria.com/turismo/isla-de-gran-canaria/municipios-de-gran-canaria/las-palmas-de-gran-canaria/recorrervegueta/",
+        "ubicacion": "LAS PALMAS DE GRAN CANARIA, España"
+      },
+      "sources": [
+        "https://www.grancanaria.com/turismo/isla-de-gran-canaria/municipios-de-gran-canaria/las-palmas-de-gran-canaria/recorrervegueta/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Pasear por Vegueta",
+          "descripcion": "Recorrer el barrio fundacional, sus calles empedradas y plazas históricas.",
+          "sources": [
+            "https://www.grancanaria.com/turismo/isla-de-gran-canaria/municipios-de-gran-canaria/las-palmas-de-gran-canaria/recorrervegueta/"
+          ],
+          "category": "Patrimonio",
+          "essentialItemId": "642c7240-eae1-4d8d-96a8-860d006ca921"
+        },
+        {
+          "nombre": "Disfrutar de la Playa de Las Canteras",
+          "descripcion": "Paseo y baño en la playa urbana resguardada por una barra natural.",
+          "sources": ["https://www.visitcanaryislands.org/vegueta"],
+          "category": "Playas",
+          "essentialItemId": "a20c77c1-f29d-485a-824e-34f3e84fb3b0"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Catalina Plaza Hotel Sostenible",
+          "address": "Calle Luis Morote, 16, 35007 Las Palmas de Gran Canaria",
+          "website": "https://www.hotelcatalinaplaza.com/EN/home.html",
+          "descripcion": "Hotel sostenible cerca del parque Santa Catalina.",
+          "sources": [
+            "https://www.grancanaria.com/turismo/en/create-your-own-holiday/where-to-stay/alojamiento/?color=darkblue&id_alojamiento=449&idioma=1&tipo_descripcion=12"
+          ],
+          "bookingUrl": "https://www.hotelcatalinaplaza.com/EN/home.html"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "El Monje de Santa Ana",
+          "address": "Plaza de Santa Ana, 2, Vegueta, Las Palmas de Gran Canaria",
+          "website": "https://elmonjelpa.es/reservas/",
+          "descripcion": "Restaurante en el casco histórico de Vegueta; reservas telefónicas.",
+          "sources": ["https://elmonjelpa.es/reservas/"],
+          "cuisine": "Restaurante en el casco histórico de Vegueta; reservas telefónicas.",
+          "bookingUrl": "https://elmonjelpa.es/reservas/"
+        }
+      ]
+    },
+    {
+      "id": "bc737ca0-02ae-4df0-a1a8-722b1d64c1bf",
+      "nombre": "ARRECIFE (LANZAROTE)",
+      "fields": {
+        "descripcion": "Arrecife conserva su carácter marinero en el Charco de San Ginés y sus fortificaciones históricas junto al puerto.",
+        "website": "https://turismolanzarote.com/en/arrecife/",
+        "ubicacion": "ARRECIFE, España"
+      },
+      "sources": ["https://turismolanzarote.com/en/arrecife/"],
+      "actividades": [
+        {
+          "nombre": "Pasear por el Charco de San Ginés",
+          "descripcion": "Recorrer la laguna salada y el antiguo barrio pesquero, hoy centro de paseo y restauración.",
+          "sources": ["https://turismolanzarote.com/en/arrecife/"],
+          "category": "Patrimonio"
+        },
+        {
+          "nombre": "Visitar el Castillo de San José y el MIAC",
+          "descripcion": "Conocer la fortaleza del siglo XVIII que alberga el Museo Internacional de Arte Contemporáneo.",
+          "sources": [
+            "https://cactlanzarote.com/en/visit/castillo-de-san-jose"
+          ],
+          "category": "Museos"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Lancelot Playa",
+          "address": "Avenida Mancomunidad, 9, 35500 Arrecife",
+          "website": "https://hotellancelot.com/",
+          "descripcion": "Hotel frente a la playa de El Reducto, con reserva en web oficial.",
+          "sources": ["https://hotellancelot.com/en/contacto/"],
+          "bookingUrl": "https://hotellancelot.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Alarz Restaurante",
+          "address": "Parque Islas Canarias, s/n, 35500 Arrecife",
+          "website": "https://restaurantealarz.es/es",
+          "descripcion": "Cocina de temporada con producto local; dispone de reservas.",
+          "sources": ["https://restaurantealarz.es/es"],
+          "cuisine": "Cocina de temporada con producto local; dispone de reservas.",
+          "bookingUrl": "https://restaurantealarz.es/es"
+        }
+      ]
+    },
+    {
+      "id": "cddc4268-8bdf-4e27-8fd0-ca0a43d80b6d",
+      "nombre": "TEGUISE (LANZAROTE)",
+      "fields": {
+        "descripcion": "La Villa de Teguise, antigua capital de Lanzarote, mantiene un casco histórico de calles empedradas y el castillo de Santa Bárbara.",
+        "website": "https://turismolanzarote.com/teguise/",
+        "ubicacion": "TEGUISE, España"
+      },
+      "sources": ["https://turismolanzarote.com/teguise/"],
+      "actividades": [
+        {
+          "nombre": "Pasear por el casco histórico de Teguise",
+          "descripcion": "Recorrer las calles empedradas y plazas de la antigua capital insular.",
+          "sources": ["https://turismolanzarote.com/teguise/"],
+          "category": "Patrimonio"
+        },
+        {
+          "nombre": "Visitar el Museo de la Piratería en el Castillo de Santa Bárbara",
+          "descripcion": "Visitar el museo en el Castillo de Santa Bárbara. La web municipal indica apertura de domingo a jueves, de 10:00 a 15:00; comprueba el horario antes de desplazarte.",
+          "sources": [
+            "https://museodelapirateria.com/en/contacto/",
+            "https://turismolanzarote.com/museo/museo-de-la-pirateria/"
+          ],
+          "category": "Museos",
+          "address": "Castillo de Santa Bárbara, Montaña de Guanapay, s/n, Villa de Teguise",
+          "website": "https://museodelapirateria.com/"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Palacio Ico",
+          "address": "Calle El Rayo, 2, 35530 Teguise",
+          "website": "https://www.hotelpalacioico.com/",
+          "descripcion": "Hotel emblemático en edificio histórico restaurado.",
+          "sources": ["https://www.restaurantepalacioico.com/el-hotel"],
+          "bookingUrl": "https://www.hotelpalacioico.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "La Cantina de Teguise",
+          "address": "Calle León y Castillo, 8, 35530 Teguise",
+          "website": "https://cantinateguise.com/",
+          "descripcion": "Tapas y tablas con productos locales en una casa histórica.",
+          "sources": [
+            "https://turismolanzarote.com/wp-content/uploads/2020/01/AAFF-gu%C3%ADa-expositores-2019_baja.pdf"
+          ],
+          "cuisine": "Tapas y tablas con productos locales en una casa histórica.",
+          "bookingUrl": "https://cantinateguise.com/"
+        }
+      ]
+    },
+    {
+      "id": "656a7853-2f0a-4461-85a7-34ec33a7211b",
+      "nombre": "CORRALEJO (FUERTEVENTURA)",
+      "fields": {
+        "descripcion": "Corralejo combina un núcleo marinero con el paisaje de dunas y playas del parque natural del noreste de Fuerteventura.",
+        "website": "https://www.visitcorralejo.com/home",
+        "ubicacion": "CORRALEJO, España"
+      },
+      "sources": ["https://www.visitcorralejo.com/home"],
+      "actividades": [
+        {
+          "nombre": "Explorar las Dunas de Corralejo",
+          "descripcion": "Recorrer el campo dunar y los paisajes volcánicos del parque natural.",
+          "sources": [
+            "https://www.visitfuerteventura.com/en/experiences/what-you-cant-miss-in-fuerteventura/"
+          ],
+          "category": "Naturaleza",
+          "essentialItemId": "dbcb06e6-582b-4a18-ae4b-9219f2107926"
+        },
+        {
+          "nombre": "Hacer una excursión a la Isla de Lobos",
+          "descripcion": "Visitar el islote protegido accesible en barco desde Corralejo.",
+          "sources": [
+            "https://www.visitfuerteventura.com/en/experiences/what-you-cant-miss-in-fuerteventura/"
+          ],
+          "category": "Naturaleza",
+          "essentialItemId": "c88e5204-2e64-4f71-b322-012843d90614"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Fuentepark Apartments",
+          "address": "Calle Anguila, 1, 35660 Corralejo",
+          "website": "https://www.fuentepark.com/en/",
+          "descripcion": "Apartamentos con canal oficial de reservas.",
+          "sources": ["https://www.fuentepark.com/en/contact.html"],
+          "bookingUrl": "https://www.fuentepark.com/en/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "La Marquesina",
+          "address": "Avenida Marítima, Corralejo, Fuerteventura",
+          "website": "https://restaurantelamarquesina.es/",
+          "descripcion": "Restaurante marinero de cocina canaria y producto del Atlántico.",
+          "sources": ["https://restaurantelamarquesina.es/"],
+          "cuisine": "Restaurante marinero de cocina canaria y producto del Atlántico.",
+          "bookingUrl": "https://restaurantelamarquesina.es/"
+        }
+      ]
+    },
+    {
+      "id": "637c60e8-fa1a-476a-a957-cf080a611802",
+      "nombre": "PUERTO DEL ROSARIO (FUERTEVENTURA)",
+      "fields": {
+        "descripcion": "Puerto del Rosario ofrece un recorrido urbano entre la Casa Museo Unamuno, el puerto y el parque escultórico.",
+        "website": "https://www.puertodelrosario.org/ayuntamiento/areas-tematicas/turismo/",
+        "ubicacion": "PUERTO DEL ROSARIO, España"
+      },
+      "sources": [
+        "https://www.puertodelrosario.org/ayuntamiento/areas-tematicas/turismo/"
+      ],
+      "actividades": [
+        {
+          "nombre": "Visitar la Casa Museo Unamuno",
+          "descripcion": "Conocer la vivienda donde residió el escritor durante su destierro en Fuerteventura.",
+          "sources": [
+            "https://www.visitfuerteventura.com/museos-y-visitas-de-interes/fuerteventura/casa-museo-unamuno/"
+          ],
+          "category": "Museos"
+        },
+        {
+          "nombre": "Recorrer el parque escultórico de Puerto del Rosario",
+          "descripcion": "Paseo por la ciudad para descubrir el conjunto de esculturas al aire libre.",
+          "sources": [
+            "https://www.visitfuerteventura.com/rutas-gastronomicas/ruta-cosmopolita-y-de-diseno/"
+          ],
+          "category": "Arte"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel El Mirador de Fuerteventura",
+          "address": "Paraje Carretera Playa Blanca, 45, 35600 Puerto del Rosario",
+          "website": "https://www.hotelelmiradorftv.com/",
+          "descripcion": "Hotel histórico con vistas sobre Puerto del Rosario.",
+          "sources": ["https://www.hotelelmiradorftv.com/"],
+          "bookingUrl": "https://www.hotelelmiradorftv.com/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Cinco Sentidos",
+          "address": "Calle Tenesor, 48, Puerto del Rosario",
+          "website": "https://arrocesytapas.es/",
+          "descripcion": "Arroces y tapas con propuesta de cocina local y contemporánea.",
+          "sources": ["https://arrocesytapas.es/"],
+          "cuisine": "Arroces y tapas con propuesta de cocina local y contemporánea.",
+          "bookingUrl": "https://arrocesytapas.es/"
+        }
+      ]
+    }
+  ]
+}

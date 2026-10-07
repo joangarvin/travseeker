@@ -6,7 +6,10 @@ const { prisma, pool } = require("../src/config/database");
 const {
   saveCatalogRecord,
 } = require("../src/services/municipalityCatalogService");
-const { catalogRecord } = require("../src/domain/municipalityCatalog");
+const {
+  catalogRecord,
+  guideFields,
+} = require("../src/domain/municipalityCatalog");
 const apply = process.argv.includes("--apply");
 const file =
   process.argv.find((arg) => arg.endsWith(".json")) ||
@@ -24,7 +27,10 @@ function fillEmpty(current, supplied) {
         !["sources", "essentialItemId"].includes(key) &&
         value != null &&
         value !== "" &&
-        (current[key] == null || current[key] === ""),
+        (current[key] == null ||
+          current[key] === "" ||
+          (key === "imageAttribution" &&
+            Object.keys(current[key]).length === 0)),
     ),
   );
 }
@@ -40,16 +46,23 @@ async function run() {
           entry.nombre.toLocaleLowerCase("es")
         )
           throw new Error("Municipio incorrecto: " + entry.nombre);
+        const fields = guideFields(entry.fields);
+        // Credits must describe the stored image, never a replacement we skipped.
+        if (municipality.imagen && municipality.imagen !== fields.imagen) {
+          delete fields.imageAttribution;
+          delete fields.imagenAlt;
+        }
+        const fieldPatch = fillEmpty(municipality, fields);
         const item = {
           id: entry.id,
           nombre: entry.nombre,
-          fields: Object.keys(fillEmpty(municipality, entry.fields)),
+          fields: Object.keys(fieldPatch),
           records: [],
         };
         if (apply && item.fields.length)
           await tx.municipio.update({
             where: { id: entry.id },
-            data: fillEmpty(municipality, entry.fields),
+            data: fieldPatch,
           });
         for (const kind of ["actividades", "hoteles", "restaurantes"]) {
           const model =

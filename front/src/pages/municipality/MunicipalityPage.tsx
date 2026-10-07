@@ -154,6 +154,30 @@ export default function MunicipalityPage() {
   const coverAlt = municipality.imagen
     ? municipality.imagenAlt || municipalityName
     : `Imagen del destino: ${municipality.destinos?.[0]?.nombre}`;
+  const imageAttribution = municipality.imagen ? municipality.imageAttribution : undefined;
+  const hasAttribution = Object.values(imageAttribution || {}).some(
+    (value) => typeof value === 'string' && value.trim(),
+  );
+  const attribution = hasAttribution && imageAttribution && (
+    <p className="municipality-image-attribution">
+      {imageAttribution.author && <span>{imageAttribution.author}</span>}
+      {imageAttribution.title && <span>{imageAttribution.title}</span>}
+      {imageAttribution.sourceUrl && (
+        <a href={imageAttribution.sourceUrl} target="_blank" rel="noreferrer">
+          Fuente
+        </a>
+      )}
+      {imageAttribution.license &&
+        (imageAttribution.licenseUrl ? (
+          <a href={imageAttribution.licenseUrl} target="_blank" rel="noreferrer">
+            {imageAttribution.license}
+          </a>
+        ) : (
+          <span>{imageAttribution.license}</span>
+        ))}
+      {imageAttribution.changes && <span>{imageAttribution.changes}</span>}
+    </p>
+  );
   return (
     <Shell>
       <PageMeta
@@ -198,6 +222,7 @@ export default function MunicipalityPage() {
               {!municipality.imagen && coverImage && (
                 <p className="municipality-photo-credit">{coverAlt}</p>
               )}
+              {attribution}
               <p className="eyebrow">TU GUÍA LOCAL</p>
               <h1>{municipalityName}</h1>
               {municipality.ubicacion && (
@@ -407,17 +432,15 @@ export default function MunicipalityPage() {
               <h2>Cómo llegar</h2>
               <p>{municipality.ubicacion || municipalityName}</p>
               {municipality.conexiones && <p>{municipality.conexiones}</p>}
-              {coordinates && (
-                <a
-                  className="button button--primary"
-                  target="_blank"
-                  rel="noreferrer"
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${coordinates.latitude},${coordinates.longitude}`}
-                >
-                  <Navigation />
-                  Calcular cómo llegar
-                </a>
-              )}
+              <a
+                className="button button--primary"
+                target="_blank"
+                rel="noreferrer"
+                href={`https://www.google.com/maps/dir/?api=1&destination=${coordinates ? `${coordinates.latitude},${coordinates.longitude}` : encodeURIComponent(municipality.ubicacion || `${municipalityName}, España`)}`}
+              >
+                <Navigation />
+                Calcular cómo llegar
+              </a>
               {municipality.consejos && (
                 <>
                   <h3>Antes de ir</h3>
@@ -464,6 +487,7 @@ export default function MunicipalityPage() {
           onClose={() => setPhotoOpen(false)}
         >
           <img src={imageUrl(coverImage)} alt={coverAlt} />
+          {attribution}
         </Dialog>
       )}
       {detail && (
