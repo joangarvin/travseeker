@@ -1,0 +1,300 @@
+{
+  "checkedAt": "2026-10-07",
+  "scope": "Primera tanda: Garraf y municipios con alto interés turístico",
+  "photoPolicy": "No se incorporan fotos de terceros sin licencia o permiso verificado.",
+  "municipalities": [
+    {
+      "id": "c06ac0e3-d4ba-4dd2-8a1f-4b9939586a00",
+      "nombre": "Sitges",
+      "fields": {
+        "descripcion": "Sitges combina playas mediterráneas y un casco antiguo junto al mar. El patrimonio modernista, los museos y las casas de los americanos permiten conocer distintas etapas de su historia, con el macizo del Garraf como entorno natural.",
+        "website": "https://www.sitgesanytime.com/es/",
+        "ubicacion": "Sitges, España"
+      },
+      "sources": ["https://www.sitgesanytime.com/es/"],
+      "actividades": [
+        {
+          "essentialItemId": "113a2b35-ae87-4bf2-927b-30fcae2357de",
+          "website": "https://www.sitgesanytime.com/es/experiencias/ruta-por-el-casco-antiguo-de-sitges/",
+          "descripcion": "Recorrido por el casco antiguo de Sitges, con su patrimonio junto al mar y los espacios de Maricel.",
+          "sources": [
+            "https://www.sitgesanytime.com/es/experiencias/ruta-por-el-casco-antiguo-de-sitges/"
+          ]
+        },
+        {
+          "essentialItemId": "87b9a5d6-11f5-4426-9da0-2c31c7547986",
+          "website": "https://www.sitgesanytime.com/es/experiencias/ruta-por-el-casco-antiguo-de-sitges/",
+          "descripcion": "Conocer la iglesia de Sant Bartomeu i Santa Tecla y su entorno en el núcleo histórico de Sitges.",
+          "sources": [
+            "https://www.sitgesanytime.com/es/experiencias/ruta-por-el-casco-antiguo-de-sitges/"
+          ]
+        },
+        {
+          "nombre": "Ruta de las casas de los americanos de Sitges",
+          "address": "Centro histórico, Sitges",
+          "website": "https://www.sitgesanytime.com/es/actualidad/agenda/pln330/la-ruta-de-les-cases-dels-americanos",
+          "descripcion": "Paseo para conocer las casas vinculadas a los americanos en calles como Illa de Cuba, Francesc Gumà y Jesús.",
+          "sources": [
+            "https://www.sitgesanytime.com/es/actualidad/agenda/pln330/la-ruta-de-les-cases-dels-americanos"
+          ],
+          "category": "Patrimonio"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Sitges",
+          "address": "Av. Nostra Senyora del Vinyet, 63, 08870 Sitges",
+          "website": "https://www.hotelsitges.es/",
+          "descripcion": "Alojamiento en la zona del Vinyet. Consulta en su web las habitaciones, condiciones y disponibilidad.",
+          "sources": ["https://www.hotelsitges.es/en/contact/"],
+          "phone": "+34 938 94 13 91",
+          "bookingUrl": "https://www.hotelsitges.es/"
+        },
+        {
+          "nombre": "Sabàtic Sitges",
+          "address": "Av. Sofia, 65, 08870 Sitges",
+          "website": "https://hotelsabaticsitges.com/",
+          "descripcion": "Hotel con propuestas de bienestar, gastronomía y actividades propias. La disponibilidad se consulta en su canal oficial.",
+          "sources": ["https://hotelsabaticsitges.com/"],
+          "bookingUrl": "https://www.marriott.com/es/hotels/bcnks-sabatic-sitges-autograph-collection/overview/"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "El Cable",
+          "address": "Carrer Barcelona, 1, 08870 Sitges",
+          "website": "https://elcable.cat/",
+          "descripcion": "Bar de tapas en el centro de Sitges. Consulta la oferta actual en su web.",
+          "sources": ["https://elcable.cat/"],
+          "cuisine": "Tapas"
+        },
+        {
+          "nombre": "La Nansa",
+          "address": "Carrer de la Carreta, 24, 08870 Sitges",
+          "website": "https://restaurantlanansa.com/",
+          "descripcion": "Restaurante de cocina marinera con productos de proximidad. Consulta las reservas y los horarios actuales con el establecimiento.",
+          "sources": ["https://restaurantlanansa.com/ca/contacte/"],
+          "cuisine": "Marinera",
+          "bookingUrl": "https://restaurantlanansa.com/ca/contacte/",
+          "phone": "+34 938 941 927"
+        }
+      ]
+    },
+    {
+      "id": "8b618f4a-0d2f-42e3-842a-4c42275df21b",
+      "nombre": "Vilanova i la Geltrú",
+      "fields": {
+        "descripcion": "Vilanova i la Geltrú reúne playas, tradición marinera y patrimonio cultural. El Museu del Ferrocarril y el Espai Far ofrecen dos formas distintas de conocer su relación con los transportes y el mar.",
+        "website": "https://www.vilanovaturisme.cat/",
+        "ubicacion": "Vilanova i la Geltrú, España"
+      },
+      "sources": ["https://www.vilanovaturisme.cat/"],
+      "actividades": [
+        {
+          "essentialItemId": "7130de59-f1f7-4d5a-a470-0a43e81f30e1",
+          "website": "https://www.vilanovaturisme.cat/museu_del_ferrocarril_de_catalunya",
+          "descripcion": "Visita al museo dedicado a la historia del ferrocarril, junto a la estación de Vilanova.",
+          "sources": [
+            "https://www.vilanovaturisme.cat/museu_del_ferrocarril_de_catalunya"
+          ],
+          "address": "Plaça d’Eduard Maristany, s/n, Vilanova i la Geltrú"
+        },
+        {
+          "nombre": "Visitar el Espai Far",
+          "address": "Pujada del Far de Sant Cristòfol, 2, Vilanova i la Geltrú",
+          "website": "https://www.vilanovaturisme.cat/espai_far",
+          "descripcion": "Espacio museístico dedicado al patrimonio marinero de Vilanova, en el entorno del faro de Sant Cristòfol.",
+          "sources": ["https://www.vilanovaturisme.cat/espai_far"],
+          "category": "Museos"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Ceferino",
+          "address": "Passeig Ribes Roges, 2–3, 08800 Vilanova i la Geltrú",
+          "website": "https://hotelceferino.com/",
+          "descripcion": "Hotel situado en el paseo de Ribes Roges. Consulta las habitaciones y las reservas en su web oficial.",
+          "sources": [
+            "https://hotelceferino.com/contacto/",
+            "https://www.vilanovaturisme.cat/hotel_ceferino"
+          ],
+          "phone": "+34 938 151 719",
+          "bookingUrl": "https://engine.prod.witbooking.com/hotel/hotelceferino"
+        },
+        {
+          "nombre": "Hotel Cèsar",
+          "address": "Carrer d’Isaac Peral, 4–8, 08800 Vilanova i la Geltrú",
+          "website": "https://www.hotelcesar.net/",
+          "descripcion": "Alojamiento en la zona de Ribes Roges, con el restaurante La Fitorra en el propio establecimiento.",
+          "sources": ["https://www.hotelcesar.net/contacto/"],
+          "bookingUrl": "https://www.hotelcesar.net/",
+          "phone": "+34 93 815 11 25",
+          "latitud": 41.2144,
+          "longitud": 1.723
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "El Dinou",
+          "address": "Carrer Comerç, 2, 1r pis, Vilanova i la Geltrú",
+          "website": "https://www.eldinou.cat/es/",
+          "descripcion": "Restaurante con propuesta de cocina de mercado y productos de proximidad.",
+          "sources": ["https://www.eldinou.cat/es/donde-estamos/"],
+          "bookingUrl": "https://www.eldinou.cat/es/",
+          "cuisine": "Cocina de mercado",
+          "phone": "+34 938 143 302"
+        },
+        {
+          "nombre": "La Fitorra",
+          "address": "Carrer d’Isaac Peral, 4–8, Vilanova i la Geltrú",
+          "website": "https://www.hotelcesar.net/",
+          "descripcion": "Restaurante del Hotel Cèsar, con propuesta mediterránea y arroces.",
+          "sources": ["https://www.hotelcesar.net/contacto/"],
+          "cuisine": "Mediterránea",
+          "phone": "+34 93 815 11 25"
+        }
+      ]
+    },
+    {
+      "id": "7be04aab-673f-4b1e-8367-18e1924d79a9",
+      "nombre": "Barcelona",
+      "fields": {
+        "descripcion": "Barcelona combina barrios históricos, arquitectura modernista y vida mediterránea. La obra de Gaudí, los museos y el frente marítimo permiten preparar recorridos urbanos de perfiles muy diferentes.",
+        "website": "https://www.barcelonaturisme.com/",
+        "ubicacion": "Barcelona, España"
+      },
+      "sources": ["https://www.barcelonaturisme.com/"],
+      "actividades": [
+        {
+          "essentialItemId": "d194095f-cbea-4083-b686-66bba5638425",
+          "website": "https://sagradafamilia.org/",
+          "descripcion": "Visita a la basílica diseñada por Antoni Gaudí. Consulta las entradas y condiciones de acceso en la web oficial.",
+          "sources": ["https://sagradafamilia.org/"],
+          "address": "Carrer de Mallorca, 401, Barcelona"
+        },
+        {
+          "essentialItemId": "a80b7137-f706-4a88-9235-7a9b2f9042b3",
+          "website": "https://parkguell.barcelona/",
+          "descripcion": "Recorrido por el parque de Gaudí y su arquitectura paisajística. Consulta la disponibilidad de entradas en su canal oficial.",
+          "sources": ["https://parkguell.barcelona/"],
+          "address": "Carrer d’Olot, Barcelona"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Barcelona Universal",
+          "address": "Av. del Paral·lel, 76–80, 08001 Barcelona",
+          "website": "https://www.hotelbarcelonauniversal.com/en",
+          "descripcion": "Hotel en la avenida del Paral·lel, con reserva y disponibilidad en su web oficial.",
+          "sources": ["https://www.hotelbarcelonauniversal.com/en"],
+          "bookingUrl": "https://www.hotelbarcelonauniversal.com/en",
+          "phone": "+34 93 567 74 47"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "7 Portes",
+          "address": "Passeig d’Isabel II, 14, 08003 Barcelona",
+          "website": "https://7portes.com/en/",
+          "descripcion": "Restaurante de cocina catalana y mediterránea con arroces y otros platos tradicionales.",
+          "sources": ["https://7portes.com/en/"],
+          "cuisine": "Catalana y mediterránea",
+          "bookingUrl": "https://7portes.com/en/",
+          "phone": "+34 93 319 30 33"
+        }
+      ]
+    },
+    {
+      "id": "026414a4-3655-496c-b991-29d1e4d62032",
+      "nombre": "Granada",
+      "fields": {
+        "descripcion": "Granada conserva un patrimonio nazarí y cristiano que se aprecia en la Alhambra y en sus barrios históricos. El Albaicín ofrece callejuelas, cármenes y miradores desde los que descubrir el paisaje de la ciudad.",
+        "website": "https://turismo.granada.org/",
+        "ubicacion": "Granada, España"
+      },
+      "sources": ["https://turismo.granada.org/"],
+      "actividades": [
+        {
+          "essentialItemId": "0f242601-5217-4099-beb3-22fe1b6d0f5b",
+          "website": "https://www.alhambra-patronato.es/visitar",
+          "descripcion": "Visita al conjunto monumental de la Alhambra y el Generalife. Consulta las modalidades de entrada y las condiciones en el Patronato.",
+          "sources": ["https://www.alhambra-patronato.es/visitar"]
+        },
+        {
+          "essentialItemId": "ea91e7fe-e424-4665-881d-eca3b4133c69",
+          "website": "https://turismo.granada.org/es/barrio-turistico/albaicin",
+          "descripcion": "Paseo por el Albaicín para conocer sus calles históricas, cármenes y miradores.",
+          "sources": [
+            "https://turismo.granada.org/es/barrio-turistico/albaicin"
+          ]
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Gran Hotel Luna de Granada",
+          "address": "Plaza del Guitarrista Manuel Cano, 2, 18004 Granada",
+          "website": "https://www.delunahotels.com/granada/hoteles/gran-hotel-luna-de-granada",
+          "descripcion": "Hotel con información de habitaciones y reserva en el canal oficial de la cadena.",
+          "sources": [
+            "https://www.delunahotels.com/granada/hoteles/gran-hotel-luna-de-granada/contacto"
+          ],
+          "bookingUrl": "https://www.delunahotels.com/granada/hoteles/gran-hotel-luna-de-granada"
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "Chikito",
+          "address": "Plaza del Campillo, 9, Granada",
+          "website": "https://restaurantechikito.com/",
+          "descripcion": "Restaurante en la plaza del Campillo. Consulta su oferta y condiciones actuales directamente con el establecimiento.",
+          "sources": ["https://restaurantechikito.com/localizacion/"]
+        }
+      ]
+    },
+    {
+      "id": "01eae620-6bc8-4ab3-ad36-c7bf2bebf3bf",
+      "nombre": "Sevilla",
+      "fields": {
+        "descripcion": "Sevilla reúne un conjunto monumental de distintas etapas históricas, con palacios, patios y una intensa vida cultural. El Real Alcázar y la Catedral con la Giralda son dos puntos de partida para conocer su centro histórico.",
+        "website": "https://visitasevilla.es/",
+        "ubicacion": "Sevilla, España"
+      },
+      "sources": ["https://visitasevilla.es/"],
+      "actividades": [
+        {
+          "essentialItemId": "94b09c4a-78de-4bc5-82aa-3c036d01b5de",
+          "website": "https://www.alcazarsevilla.org/",
+          "descripcion": "Visita al Real Alcázar y sus jardines. Consulta las modalidades de entrada y el acceso en la web oficial.",
+          "sources": ["https://www.alcazarsevilla.org/"]
+        },
+        {
+          "essentialItemId": "657493f6-f8ac-4b3e-9dfc-b2a982ea1bd5",
+          "website": "https://www.catedraldesevilla.es/",
+          "descripcion": "Visita a la Catedral de Sevilla y la Giralda. Consulta en el canal oficial las condiciones de entrada.",
+          "sources": ["https://www.catedraldesevilla.es/"],
+          "address": "Plaza del Triunfo, Sevilla"
+        }
+      ],
+      "hoteles": [
+        {
+          "nombre": "Hotel Sevilla",
+          "address": "Plaza de Fernando de Herrera, 3, 41003 Sevilla",
+          "website": "https://www.hotelsevillaweb.es/",
+          "descripcion": "Hotel en la plaza de Fernando de Herrera. Consulta sus habitaciones y disponibilidad en la web oficial.",
+          "sources": ["https://www.hotelsevillaweb.es/en/seville.html"]
+        }
+      ],
+      "restaurantes": [
+        {
+          "nombre": "El Rinconcillo",
+          "address": "Calle Gerona, 40, Sevilla",
+          "website": "https://www.elrinconcillo.es/",
+          "descripcion": "Establecimiento de cocina andaluza con información de contacto y reservas en su web oficial.",
+          "sources": ["https://www.elrinconcillo.es/contacto/"],
+          "cuisine": "Andaluza",
+          "bookingUrl": "https://www.elrinconcillo.es/contacto/"
+        }
+      ]
+    }
+  ]
+}

@@ -517,10 +517,11 @@ export default function MunicipalityPage() {
                   Consultar reserva ↗
                 </a>
               )}
-              {validCoordinates(detail.record.latitud, detail.record.longitud) && (
+              {(validCoordinates(detail.record.latitud, detail.record.longitud) ||
+                detail.record.address) && (
                 <a
                   className="button button--secondary"
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${detail.record.latitud},${detail.record.longitud}`}
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${validCoordinates(detail.record.latitud, detail.record.longitud) ? `${detail.record.latitud},${detail.record.longitud}` : encodeURIComponent(`${detail.record.nombre}, ${detail.record.address}, ${municipalityName}`)}`}
                   target="_blank"
                   rel="noreferrer"
                 >
