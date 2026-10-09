@@ -53,7 +53,17 @@ export function SiteHeader() {
     <>
       <header className="header">
         <Link to="/" className="brand" aria-label={t('TravSeeker, inicio')}>
-          <span className="brand__mark">T</span>
+          <img
+            className="brand__mark"
+            src={
+              theme === 'dark'
+                ? '/brand/travseeker-logo-white.svg'
+                : '/brand/travseeker-logo.svg'
+            }
+            width="40"
+            height="36"
+            alt=""
+          />
           <span>TravSeeker</span>
         </Link>
 

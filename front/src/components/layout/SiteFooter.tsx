@@ -3,8 +3,10 @@ import { useGuidedTour } from '../../features/tour/GuidedTour';
 import { locale } from '../../i18n';
 import { t } from '../../i18n';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../../contexts';
 
 export function SiteFooter() {
+  const { theme } = useTheme();
   const { restart } = useGuidedTour();
   const { openSettings } = usePrivacySettings();
   return (
@@ -34,7 +36,19 @@ export function SiteFooter() {
         </button>
       </nav>
       <div className="footer__bottom">
-        <span>TravSeeker © {new Date().getFullYear()}</span>
+        <span className="footer__brand">
+          <img
+            src={
+              theme === 'dark'
+                ? '/brand/travseeker-logo-black.svg'
+                : '/brand/travseeker-logo-white.svg'
+            }
+            width="28"
+            height="25"
+            alt=""
+          />
+          TravSeeker © {new Date().getFullYear()}
+        </span>
         <span>{t('España · Sin posiciones patrocinadas')}</span>
       </div>
     </footer>

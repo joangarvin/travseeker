@@ -23,14 +23,20 @@
   letter-spacing: -0.04em;
 }
 .brand__mark {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  background: var(--ink);
-  color: var(--canvas);
-  font-size: 0.9rem;
-  border-radius: 50% 50% 50% 8px;
+  display: block;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 36px;
+  object-fit: contain;
+}
+.footer__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.footer__brand img {
+  flex: 0 0 auto;
+  object-fit: contain;
 }
 .nav {
   justify-self: center;
