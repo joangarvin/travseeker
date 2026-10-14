@@ -10,7 +10,7 @@ router.get(
   "/:id",
   asyncHandler(async (req, res) => {
     const row = await prisma.municipio.findFirst({
-      where: { id: req.params.id, editorialStatus: "published" },
+      where: { id: req.params.id, editorialStatus: "published", guideEnabled: true },
       include: {
         ...publicGuideInclude,
         destinoLinks: {

@@ -28,7 +28,8 @@
     "db:audit-translations": "node scripts/audit-translations.js",
     "db:migrate-unified-activities": "node scripts/migrate-unified-activities.js",
     "db:migrate-municipality-guides": "node scripts/migrate-municipality-guides.js",
-    "db:migrate-municipality-image-attribution": "node scripts/migrate-municipality-image-attribution.js"
+    "db:migrate-municipality-image-attribution": "node scripts/migrate-municipality-image-attribution.js",
+    "db:migrate-municipality-guide-access": "node scripts/migrate-municipality-guide-access.js"
   },
   "keywords": [],
   "author": "",

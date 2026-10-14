@@ -465,6 +465,34 @@
   flex-wrap: wrap;
   margin: 24px 0;
 }
+.base-card__guide-link--pending {
+  color: var(--muted);
+}
+.municipality-guide-access {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  margin-bottom: 20px;
+}
+.municipality-guide-access label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.municipality-guide-access input[type='checkbox'] {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--brand);
+}
+.municipality-guide-access p {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
 .municipality-editor-nav button {
   border: 1px solid var(--line);
   color: var(--ink);

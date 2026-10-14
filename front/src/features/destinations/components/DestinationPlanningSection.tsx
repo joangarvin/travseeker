@@ -356,9 +356,15 @@ export function DestinationPlanningSection({
                       </span>
                       <ModeList modes={base.modes} />
                     </button>
-                    <Link className="base-card__guide-link" to={`/municipio/${base.municipio.id}`}>
-                      Explorar {base.name} →
-                    </Link>
+                    {base.municipio.guideEnabled === true ? (
+                      <Link className="base-card__guide-link" to={`/municipio/${base.municipio.id}`}>
+                        {t('Explorar {0}', { 0: base.name })} →
+                      </Link>
+                    ) : (
+                      <span className="base-card__guide-link base-card__guide-link--pending">
+                        {t('Próximamente')}
+                      </span>
+                    )}
                   </li>
                 );
               })}

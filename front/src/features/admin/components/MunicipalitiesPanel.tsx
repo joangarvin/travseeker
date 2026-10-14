@@ -53,6 +53,11 @@ export function MunicipalitiesPanel({
             <div>
               <EditorialStatusBadge status={municipality.editorialStatus} />
               <span>
+                {municipality.guideEnabled === true
+                  ? t('Ficha habilitada')
+                  : t('Ficha: próximamente')}
+              </span>
+              <span>
                 {municipality.destinosCount || 0} {t('destinos asociados')}
               </span>
               <h2>{municipality.nombre}</h2>

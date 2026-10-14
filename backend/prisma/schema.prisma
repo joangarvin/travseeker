@@ -235,6 +235,7 @@ model Municipio {
   reviewedById    String?
 
   descripcion String @default("")
+  guideEnabled Boolean @default(false)
   imagen String @default("")
   imagenAlt String @default("")
   imageAttribution Json @default("{}")

@@ -100,6 +100,11 @@ function normalizeCatalog(payload, kind) {
 }
 function guideFields(payload) {
   const data = {};
+  if (Object.hasOwn(payload, "guideEnabled")) {
+    if (typeof payload.guideEnabled !== "boolean")
+      fail("El acceso a la ficha debe ser verdadero o falso");
+    data.guideEnabled = payload.guideEnabled;
+  }
   for (const field of [
     "descripcion",
     "imagenAlt",

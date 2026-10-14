@@ -41,7 +41,7 @@ test('new trip day dates stay stable across month boundaries and daylight saving
 test('municipal plans open their own record and legacy activities keep their destination target', () => {
   const destination = {
     id: 'destination',
-    municipios: [{ id: 'town', actividades: [{ id: 'record', nombre: 'Paseo' }] }],
+    municipios: [{ id: 'town', guideEnabled: true, actividades: [{ id: 'record', nombre: 'Paseo' }] }],
   };
   assert.equal(plannedActivityHref(destination, 'Paseo'), '/municipio/town#ficha-record');
   assert.equal(plannedActivityHref(destination, 'record'), '/municipio/town#ficha-record');
@@ -49,6 +49,16 @@ test('municipal plans open their own record and legacy activities keep their des
     plannedActivityHref(destination, 'Senderismo'),
     '/destino/destination#actividad=Senderismo',
   );
+});
+
+test('disabled or unknown municipality access never creates a guide link from a trip', () => {
+  for (const guideEnabled of [false, undefined]) {
+    const destination = {
+      id: 'destination',
+      municipios: [{ id: 'town', guideEnabled, actividades: [{ id: 'record', nombre: 'Paseo' }] }],
+    };
+    assert.equal(plannedActivityHref(destination, 'record'), '/destino/destination#actividad=record');
+  }
 });
 
 test('municipal activity IDs resolve consistently for trips and exports alongside category IDs', () => {

@@ -17,6 +17,14 @@ test('omitted guide fields preserve existing content, explicit blanks clear it',
   assert.deepEqual(guideFields({ descripcion: '', imagen: '' }), { descripcion: '', imagen: '' });
   assert.throws(() => guideFields({ website: 'javascript:alert(1)' }), { status: 400 });
 });
+
+test('guide access requires explicit booleans and omitted access preserves the saved state', () => {
+  assert.deepEqual(guideFields({}), {});
+  assert.deepEqual(guideFields({ guideEnabled: false }), { guideEnabled: false });
+  assert.deepEqual(guideFields({ guideEnabled: true }), { guideEnabled: true });
+  for (const guideEnabled of ['false', 'true', 0, 1, null])
+    assert.throws(() => guideFields({ guideEnabled }), { status: 400 });
+});
 test('associations deduplicate IDs and preserve omitted relations', async () => {
   assert.deepEqual(associationIds(['a', 'a', 'b']), ['a', 'b']);
   assert.throws(() => associationIds('a'), { status: 400 });

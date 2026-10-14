@@ -1,5 +1,12 @@
 # Guías municipales verificadas
 
+El acceso público a cada ficha se controla con `Municipio.guideEnabled`,
+desactivado por defecto. Administración → Municipios → Información y foto permite
+habilitarlo cuando la ficha esté lista. También requiere publicación editorial.
+El importador de contenido no habilita el acceso automáticamente. Para instalar
+el campo en bases gestionadas con `db:push`, ejecutar
+`npm run db:migrate-municipality-guide-access` y `npx prisma generate` desde `backend`.
+
 Los lotes del 7 de octubre de 2026 completan 100 municipios prioritarios:
 `priority` (5), `cities` (35), `coastal` (14), `islands` (14),
 `north-next` (10), `villages-next` (6), `heritage-next` (8) y

@@ -51,6 +51,7 @@ export type Municipio = EditorialFields & {
   imagen?: string;
   imagenAlt?: string;
   imageAttribution?: ImageAttribution;
+  guideEnabled?: boolean;
   ubicacion?: string;
   website?: string;
   mejorEpoca?: string;

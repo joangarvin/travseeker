@@ -22,6 +22,7 @@ const COLLECTION_DESTINATION_SELECT = {
           activityLinks: publicGuideInclude.activityLinks,
           id: true,
           nombre: true,
+          guideEnabled: true,
           translations: true,
           precios: true,
           conexiones: true,

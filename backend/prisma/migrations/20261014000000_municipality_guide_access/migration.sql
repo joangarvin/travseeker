@@ -1,0 +1,2 @@
+ALTER TABLE "Municipio"
+ADD COLUMN IF NOT EXISTS "guideEnabled" BOOLEAN NOT NULL DEFAULT false;

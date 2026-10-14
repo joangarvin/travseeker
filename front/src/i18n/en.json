@@ -1,4 +1,10 @@
 {
+  "Próximamente": "Coming soon",
+  "Explorar {0}": "Explore {0}",
+  "Ficha habilitada": "Guide enabled",
+  "Ficha: próximamente": "Guide: coming soon",
+  "Permitir acceso público a la ficha": "Allow public access to the guide",
+  "Si está desactivado, el botón mostrará «Próximamente» y la ficha no se podrá abrir. El municipio debe estar publicado para permitir el acceso.": "When disabled, the button shows ‘Coming soon’ and the guide cannot be opened. The town must also be published to allow access.",
   "Viajó en {0}": "Visited in {0}",
   "En pareja": "As a couple",
   "En familia": "With family",

@@ -25,6 +25,7 @@ export const EMPTY_DESTINATION: Partial<Destino> = {
 };
 
 export const EMPTY_MUNICIPALITY: Partial<Municipio> = {
+  guideEnabled: false,
   nombre: '',
   precios: '',
   conexiones: '',

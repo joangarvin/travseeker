@@ -32,11 +32,12 @@ export function movePlannedActivity<
 export function plannedActivityHref(
   destination: {
     id: string;
-    municipios?: { id: string; actividades?: { id: string; nombre: string }[] }[];
+    municipios?: { id: string; guideEnabled?: boolean; actividades?: { id: string; nombre: string }[] }[];
   },
   value: string,
 ) {
   for (const municipality of destination.municipios || []) {
+    if (municipality.guideEnabled !== true) continue;
     const record = municipality.actividades?.find(
       (activity) => activity.id === value || activity.nombre === value,
     );
