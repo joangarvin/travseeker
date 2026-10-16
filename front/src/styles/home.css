@@ -397,7 +397,7 @@
 }
 
 .results-section {
-  padding: clamp(64px, 8vw, 120px) clamp(16px, 3vw, 48px) clamp(40px, 4vw, 72px);
+  padding: clamp(28px, 4vw, 56px) clamp(16px, 3vw, 40px);
 }
 
 .section-head,
@@ -434,9 +434,17 @@
 }
 
 .results-section .section-head h2 {
-  font-size: clamp(2.2rem, 4vw, 3rem);
+  font-size: clamp(2.5rem, 4.2vw, 3.5rem);
   letter-spacing: -0.03em;
   line-height: 1;
+}
+
+.results-section .section-head > p:last-child {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.5;
 }
 
 .results-section .section-head > a {

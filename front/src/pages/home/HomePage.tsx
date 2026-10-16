@@ -359,6 +359,9 @@ export default function Home() {
                   : t('{0} lugares encajan', { 0: resultCount })
                 : t('Sitios que merecen el viaje')}
             </h2>
+            <p>
+            {t('Escoge uno, o compara varios destinos para decidir mejor.')}
+            </p>
           </div>
           <Link to={`/mapa${queryString(appliedFilters)}`}>
             {t('Abrir en el mapa')} <Map />
