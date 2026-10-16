@@ -178,7 +178,6 @@ export function DestinationPlanningSection({
   return (
     <section id="bases" className="municipalities" aria-labelledby="bases-title">
       <div className="destination-section-heading">
-        <p className="kicker">{t('Dónde hacer base')}</p>
         <h2 id="bases-title">{t('Elige dónde dormir')}</h2>
         <p>
           {bases.length > 1

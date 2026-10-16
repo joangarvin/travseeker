@@ -424,7 +424,6 @@ export default function DestinationPage() {
         {!!destino.places?.length && (
           <section id="alrededor" className="nearby" aria-labelledby="nearby-title" data-reveal>
             <div className="destination-section-heading">
-              <p className="kicker">{t('Amplía el viaje')}</p>
               <h2 id="nearby-title">{t('Lugares alrededor')}</h2>
               <p>{t('Paradas cercanas para alargar el viaje sin cambiar de base.')}</p>
             </div>

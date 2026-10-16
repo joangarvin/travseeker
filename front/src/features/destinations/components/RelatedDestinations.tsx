@@ -57,7 +57,6 @@ export function RelatedDestinations({
   return (
     <section id="alternativas" className="related" aria-labelledby="related-title">
       <div className="destination-section-heading">
-        <p className="kicker">{t('Sigue explorando')}</p>
         <h2 id="related-title">{t('Otros destinos que pueden encajar')}</h2>
         <p>
           {t(

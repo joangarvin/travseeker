@@ -125,7 +125,6 @@ export default function CollectionsPage() {
       <div className="trips-library">
         <PageHeading
           className="trips-heading"
-          kicker={t('Planificación')}
           title={t('Tus viajes')}
           action={
             <Button

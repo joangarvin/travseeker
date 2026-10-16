@@ -122,7 +122,6 @@ export default function MapPage() {
       <section className="map-workspace">
         <header className="map-toolbar">
           <div className="map-toolbar__title">
-            <p className="kicker">{t('Exploración visual')}</p>
             <h1>{t('El mapa')}</h1>
             <span>{loading ? 'Buscando…' : t('{0} destinos', { 0: destinos.length })}</span>
           </div>

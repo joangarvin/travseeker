@@ -176,7 +176,6 @@ export default function ProfilePage() {
   return (
     <Shell>
       <PageHeading
-        kicker={t('Cuenta')}
         title={user.nombre ? t('Hola, {0}', { 0: user.nombre }) : t('Tu perfil')}
         action={
           <Button variant="quiet" onClick={auth.logout}>

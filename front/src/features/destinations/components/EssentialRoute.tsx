@@ -136,7 +136,6 @@ export function EssentialRoute({
   return (
     <section className="essential-discovery" aria-labelledby="essential-discovery-title">
       <header className="essential-discovery__intro">
-        <p className="kicker">{t('Selección sobre el terreno')}</p>
         <h2 id="essential-discovery-title">{t('Lo imprescindible')}</h2>
         <p className="essential-discovery__lede">
           {populatedGroups.length > 1

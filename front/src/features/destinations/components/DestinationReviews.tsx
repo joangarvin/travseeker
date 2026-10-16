@@ -255,7 +255,6 @@ export function DestinationReviews({
     <section id="opiniones" className="reviews" aria-labelledby="reviews-title">
       <header className="reviews__heading">
         <div className="destination-section-heading">
-          <p className="kicker">{t('Experiencias reales')}</p>
           <h2 id="reviews-title">{t('Opiniones de viajeros')}</h2>
         </div>
         {(count > 0 || reviewsError || reviewsLoading || formOpen) && action}

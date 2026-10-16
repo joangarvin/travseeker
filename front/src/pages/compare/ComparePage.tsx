@@ -169,7 +169,7 @@ export default function ComparePage() {
           : t('Menor afluencia estimada: {0}', { 0: names });
   return (
     <Shell>
-      <PageHeading kicker={t('Decide con los datos delante')} title={t('Comparar destinos')}>
+      <PageHeading title={t('Comparar destinos')}>
         <p>{t('Compara presupuesto, afluencia y actividades. Elige qué te importa más.')}</p>
       </PageHeading>
       <div className="compare-workspace">

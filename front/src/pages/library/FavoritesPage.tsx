@@ -65,7 +65,7 @@ export default function FavoritesPage() {
 
   return (
     <Shell>
-      <PageHeading kicker={t('Tu biblioteca')} title={t('Destinos guardados')}>
+      <PageHeading title={t('Destinos guardados')}>
         <p>
           {favorites.length
             ? t('{0} lugares esperando su momento.', { 0: favorites.length })
