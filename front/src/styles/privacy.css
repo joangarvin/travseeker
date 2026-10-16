@@ -52,25 +52,7 @@
   width: 100%;
   margin-top: 12px;
 }
-.privacy-reopen {
-  position: fixed;
-  z-index: 1100;
-  bottom: 8px;
-  left: 8px;
-  min-height: 36px;
-  padding: 6px 12px;
-  border: 1px solid var(--line-strong);
-  background: var(--surface);
-  color: var(--ink);
-  font-size: 0.75rem;
-  box-shadow: var(--shadow-1);
-}
-@media (max-width: 760px) {
-  /* The mobile menu and footer expose the same settings without covering content. */
-  .privacy-reopen {
-    display: none;
-  }
-}
+
 .privacy-dialog {
   width: min(100%, 740px);
 }

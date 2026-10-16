@@ -93,11 +93,6 @@ export function PrivacyProvider({ children }: { children: ReactNode }) {
           {actions}
         </section>
       )}
-      {consent && !open && (
-        <button className="privacy-reopen" type="button" onClick={openSettings}>
-          {t('Privacidad y cookies')}
-        </button>
-      )}
       <span className="sr-only" role="status">
         {notice}
       </span>

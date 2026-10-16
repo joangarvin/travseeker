@@ -119,9 +119,7 @@ body.menu-open .guided-tour {
   outline: 3px solid var(--brand) !important;
   outline-offset: 5px;
 }
-body.driver-active .privacy-reopen {
-  z-index: 1000000001;
-}
+
 .trav-tour-popover button:focus-visible {
   outline: 3px solid var(--ink);
   outline-offset: 3px;
