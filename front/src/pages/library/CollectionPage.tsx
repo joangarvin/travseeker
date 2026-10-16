@@ -1,5 +1,8 @@
+import { ParticipantAvatars } from '../../features/collections/components/ParticipantAvatars';
+import { TripOverview } from '../../features/collections/components/TripOverview';
+import { useCollectionSharing } from '../../features/collections/hooks/useCollectionSharing';
 import { t, intlLocale } from '../../i18n';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   Calendar,
@@ -17,7 +20,7 @@ import { Button, Loader, MediaImage, Notice } from '../../components/ui';
 import { useAuth } from '../../contexts';
 import { api } from '../../services/api';
 import type { CollectionDetail, ItineraryDay } from '../../types';
-import { imageUrl, responsiveImageUrl } from '../../utils';
+import { imageUrl } from '../../utils';
 import { TripDestinations } from '../../features/collections/components/TripDestinations';
 import { addTripDays, getTripDuration } from '../../utils/tripDuration';
 import { CollectionBudgetSummary, type TripBudgetScenario } from '../../components/BudgetEstimator';
@@ -64,22 +67,35 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
     setSettingsOpen(true);
   };
   const endpoint = publicView ? `/colecciones/public/${shareToken}` : `/colecciones/${id}`;
+  const collectionRequest = useRef<AbortController | null>(null);
 
-  const loadCollection = async () => {
+  const loadCollection = useCallback(async () => {
+    collectionRequest.current?.abort();
+    const controller = new AbortController();
+    collectionRequest.current = controller;
     setIsLoading(true);
+    setError('');
     try {
-      setError('');
-      setCollection(await api<CollectionDetail>(endpoint, {}, publicView ? null : token));
+      const record = await api<CollectionDetail>(
+        endpoint,
+        { signal: controller.signal },
+        publicView ? null : token,
+      );
+      if (!controller.signal.aborted) setCollection(record);
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : t('No se pudo abrir el viaje'));
+      if (!controller.signal.aborted) {
+        setCollection(null);
+        setError(cause instanceof Error ? cause.message : t('No se pudo abrir el viaje'));
+      }
     } finally {
-      setIsLoading(false);
+      if (!controller.signal.aborted) setIsLoading(false);
     }
-  };
+  }, [endpoint, publicView, token]);
 
   useEffect(() => {
     void loadCollection();
-  }, [endpoint, token]);
+    return () => collectionRequest.current?.abort();
+  }, [loadCollection]);
 
   const removeDestination = async (destinationId: string) => {
     if (!token || !id) return;
@@ -99,85 +115,8 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
     }
   };
 
-  const shareCollection = async (regenerate = false) => {
-    if (!token || !id) throw new Error(t('No se pudo identificar el viaje'));
-    setActionPending(true);
-    try {
-      const result = await api<{ shareToken: string }>(
-        `/colecciones/${id}/share`,
-        { method: 'POST', body: JSON.stringify({ regenerate }) },
-        token,
-      );
-      setCollection((current) =>
-        current ? { ...current, visibility: 'shared', shareToken: result.shareToken } : current,
-      );
-      return result.shareToken;
-    } catch (cause) {
-      throw cause instanceof Error ? cause : new Error(t('No se pudo compartir el viaje'));
-    } finally {
-      setActionPending(false);
-    }
-  };
-
-  const stopSharing = async () => {
-    if (!token || !id) throw new Error(t('No se pudo identificar el viaje'));
-    setActionPending(true);
-    try {
-      await api(`/colecciones/${id}/share`, { method: 'DELETE' }, token);
-      setCollection((current) =>
-        current ? { ...current, visibility: 'private', shareToken: null } : current,
-      );
-    } finally {
-      setActionPending(false);
-    }
-  };
-
-  const addMember = async (email: string, role: 'editor' | 'viewer') => {
-    if (!token || !id) throw new Error(t('No se pudo identificar el viaje'));
-    const member = await api<NonNullable<CollectionDetail['members']>[number]>(
-      `/colecciones/${id}/members`,
-      { method: 'POST', body: JSON.stringify({ email, role }) },
-      token,
-    );
-    setCollection((current) =>
-      current
-        ? {
-            ...current,
-            members: [
-              ...(current.members || []).filter((item) => item.user.id !== member.user.id),
-              member,
-            ],
-          }
-        : current,
-    );
-  };
-
-  const updateMember = async (memberId: string, role: 'editor' | 'viewer') => {
-    if (!token || !id) throw new Error(t('No se pudo identificar el viaje'));
-    const member = await api<NonNullable<CollectionDetail['members']>[number]>(
-      `/colecciones/${id}/members/${memberId}`,
-      { method: 'PATCH', body: JSON.stringify({ role }) },
-      token,
-    );
-    setCollection((current) =>
-      current
-        ? {
-            ...current,
-            members: (current.members || []).map((item) => (item.id === memberId ? member : item)),
-          }
-        : current,
-    );
-  };
-
-  const removeMember = async (memberId: string) => {
-    if (!token || !id) throw new Error(t('No se pudo identificar el viaje'));
-    await api(`/colecciones/${id}/members/${memberId}`, { method: 'DELETE' }, token);
-    setCollection((current) =>
-      current
-        ? { ...current, members: (current.members || []).filter((item) => item.id !== memberId) }
-        : current,
-    );
-  };
+  const { shareCollection, stopSharing, addMember, updateMember, removeMember } =
+    useCollectionSharing({ id, token, setCollection, setActionPending });
 
   const saveSettings = async (input: TripSettingsInput) => {
     if (!token || !id) throw new Error(t('No se pudo identificar el viaje'));
@@ -298,7 +237,12 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
         <section className="status-page">
           <div>
             <h1>{t('Viaje no disponible')}</h1>
-            <Notice tone="error">{error || t('Este viaje no está disponible.')}</Notice>
+            <Notice
+              tone="error"
+              action={<Button onClick={() => void loadCollection()}>{t('Reintentar')}</Button>}
+            >
+              {error || t('Este viaje no está disponible.')}
+            </Notice>
           </div>
         </section>
       </Shell>
@@ -491,41 +435,6 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
   );
 }
 
-function ParticipantAvatars({ collection }: { collection: CollectionDetail }) {
-  const people = [collection.owner, ...(collection.members || []).map((member) => member.user)]
-    .filter(Boolean)
-    .slice(0, 4) as Array<{ id: string; nombre?: string | null; avatarUrl?: string | null }>;
-  const total = (collection.members?.length || 0) + 1;
-  return (
-    <div className="trip-participants" aria-label={t('{0} participantes', { 0: total })}>
-      <div className="trip-participants__avatars" aria-hidden="true">
-        {people.map((person) =>
-          person.avatarUrl ? (
-            <img
-              key={person.id}
-              className="trip-avatar"
-              src={responsiveImageUrl(imageUrl(person.avatarUrl), 96)}
-              loading="lazy"
-              decoding="async"
-              alt=""
-            />
-          ) : (
-            <span key={person.id} className="trip-avatar trip-avatar--initials">
-              {(person.nombre || '?').slice(0, 2).toUpperCase()}
-            </span>
-          ),
-        )}
-        {total > 4 && <span className="trip-avatar trip-avatar--initials">+{total - 4}</span>}
-      </div>
-      <span>
-        {total === 1
-          ? t('Solo tú tienes acceso')
-          : t('{0} personas organizando este viaje', { 0: total })}
-      </span>
-    </div>
-  );
-}
-
 function formatTripDates(startDate?: string | null, endDate?: string | null) {
   if (!startDate) return t('Fechas abiertas');
   const formatter = new Intl.DateTimeFormat(intlLocale, {
@@ -538,173 +447,4 @@ function formatTripDates(startDate?: string | null, endDate?: string | null) {
   if (!endDate) return t('Desde el {0}', { 0: start });
   const end = formatter.format(new Date(`${endDate.slice(0, 10)}T00:00:00.000Z`));
   return `${start} — ${end}`;
-}
-
-function TripOverview({
-  collection,
-  canEdit,
-  isOwner,
-  onOpenSettings,
-  onChangeView,
-  onOpenDay,
-  onShare,
-  budget,
-}: {
-  collection: CollectionDetail;
-  canEdit: boolean;
-  isOwner: boolean;
-  onOpenSettings: () => void;
-  onChangeView: (view: 'overview' | 'destinations' | 'itinerary') => void;
-  onOpenDay: (day: number) => void;
-  onShare: () => void;
-  budget: ReactNode;
-}) {
-  const activities = collection.itinerary.reduce(
-    (sum, day) => sum + (day.plannedActivities?.length || 0),
-    0,
-  );
-  const emptyDays = collection.itinerary
-    .map((day, index) => ({ day, index }))
-    .filter(({ day }) => !day.plannedActivities?.length);
-  const duration = getTripDuration({
-    startDate: collection.startDate,
-    endDate: collection.endDate,
-    itineraryLength: collection.itinerary.length,
-    destinationCount: collection.items.length,
-  });
-  const cover = collection.items[0]?.destino;
-  return (
-    <div className="trip-summary">
-      <section className="trip-summary__hero">
-        {cover && <MediaImage src={imageUrl(cover.imagen)} alt="" loading="lazy" />}
-        <div>
-          <p className="kicker">{t('Tu viaje, de un vistazo')}</p>
-          <h2>
-            {collection.items.length
-              ? collection.items.map((item) => item.destino.nombre).join(' → ')
-              : t('Tu próxima aventura empieza aquí')}
-          </h2>
-          <p>
-            {collection.descripcion || t('Dale forma a la ruta y deja espacio para descubrir.')}
-          </p>
-          <Button onClick={() => onChangeView('itinerary')}>
-            <Route />
-            {t('Continuar en la agenda')}
-          </Button>
-        </div>
-      </section>
-      <div className="trip-summary__facts">
-        {[
-          {
-            label: t('Duración'),
-            value: `${duration.days} ${t('días')} · ${duration.nights} ${t('noches')}`,
-          },
-          { label: t('Destinos'), value: collection.items.length },
-          { label: t('Actividades'), value: activities },
-          { label: t('Viajeros'), value: collection.travelerCount || 2 },
-        ].map((fact) => (
-          <article key={fact.label}>
-            <small>{fact.label}</small>
-            <strong>{fact.value}</strong>
-          </article>
-        ))}
-      </div>
-      <div className="trip-summary__grid">
-        <section className="trip-summary__card">
-          <p className="kicker">{t('Lo que queda por preparar')}</p>
-          <h3>
-            {emptyDays.length || !collection.startDate || !collection.itinerary.length
-              ? t('El siguiente paso')
-              : t('Tu plan está listo')}
-          </h3>
-          {!collection.startDate && (
-            <div className="trip-summary__task">
-              <span>{t('Elegir las fechas del viaje')}</span>
-              {isOwner && (
-                <Button variant="secondary" onClick={onOpenSettings}>
-                  {t('Elegir fechas')}
-                </Button>
-              )}
-            </div>
-          )}
-          {!collection.items.length && (
-            <Link className="button button--primary" to="/">
-              {t('Descubrir destinos')}
-            </Link>
-          )}
-          {!collection.itinerary.length && collection.items.length > 0 && (
-            <Button onClick={() => onChangeView('itinerary')}>{t('Preparar itinerario')}</Button>
-          )}
-          {emptyDays.map(({ day, index }) => (
-            <div className="trip-summary__task" key={index}>
-              <span>
-                {t('Día')} {day.dayNumber} ·{' '}
-                {
-                  collection.items.find((item) => item.destino.id === day.destinationId)?.destino
-                    .nombre
-                }
-                <small>{t('Sin actividades todavía')}</small>
-              </span>
-              <Button variant="secondary" onClick={() => onOpenDay(index)}>
-                {canEdit ? t('Planificar día') : t('Ver día')}
-              </Button>
-            </div>
-          ))}
-          {!emptyDays.length && collection.startDate && collection.itinerary.length > 0 && (
-            <p>
-              {t(
-                'Las fechas y las actividades están preparadas. Puedes seguir ajustando la agenda.',
-              )}
-            </p>
-          )}
-        </section>
-        <section className="trip-summary__card">
-          <p className="kicker">{t('Tu ruta')}</p>
-          <h3>{t('Parada a parada')}</h3>
-          <ol className="trip-summary__route">
-            {collection.itinerary.map((day, index) => (
-              <li key={index}>
-                <button type="button" onClick={() => onOpenDay(index)}>
-                  <span>{String(index + 1).padStart(2, '0')}</span>
-                  <div>
-                    <strong>
-                      {collection.items.find((item) => item.destino.id === day.destinationId)
-                        ?.destino.nombre || t('Destino')}
-                    </strong>
-                    <small>
-                      {day.plannedActivities?.length || 0} {t('actividades')}
-                    </small>
-                  </div>
-                </button>
-              </li>
-            ))}
-          </ol>
-          {!collection.itinerary.length && <p>{t('Todavía sin paradas')}</p>}
-        </section>
-        <section className="trip-summary__card">
-          <p className="kicker">{t('El grupo')}</p>
-          <h3>
-            {collection.travelerCount || 2} {t('viajeros')}
-          </h3>
-          <ParticipantAvatars collection={collection} />
-          <p>
-            {collection.members?.length || 0} {t('colaboradores')}
-          </p>
-          {isOwner && (
-            <div className="trip-destination__actions">
-              <Button variant="secondary" onClick={onOpenSettings}>
-                {t('Editar viajeros')}
-              </Button>
-              <Button onClick={onShare}>
-                <Share2 />
-                {t('Gestionar acceso')}
-              </Button>
-            </div>
-          )}
-          <p className="muted">{t('Compartir es opcional. Puedes mantener tu viaje privado.')}</p>
-        </section>
-      </div>
-      {budget}
-    </div>
-  );
 }

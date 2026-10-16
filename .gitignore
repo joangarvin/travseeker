@@ -6,3 +6,10 @@ node_modules/
 *.log
 dist/
 backend/backups/
+
+# Resultados generados de pruebas e informes locales
+front/output/
+artifacts/
+
+# Sesiones locales de comprobación en navegador
+.playwright-cli/

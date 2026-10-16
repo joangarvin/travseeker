@@ -1,6 +1,7 @@
+const { slugify } = require("../src/utils/slugify");
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { slugify, validatePayload } = require("../src/services/activityService");
+const { validatePayload } = require("../src/services/activityService");
 
 test("genera identificadores legibles para actividades con acentos", () => {
   assert.equal(slugify("Observación de aves"), "observacion-de-aves");

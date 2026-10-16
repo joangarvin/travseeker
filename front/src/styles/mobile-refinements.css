@@ -72,8 +72,8 @@
     margin-top: 10px;
     min-height: 48px;
     border-radius: 14px;
-    background: var(--brand);
-    color: white;
+    background: var(--brand-solid);
+    color: var(--brand-on-solid);
   }
   .home-hero .search-box__help {
     margin-left: 0;

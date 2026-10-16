@@ -1,3 +1,4 @@
+const { slugify } = require("../utils/slugify");
 const { cachedPublic } = require("../cache/publicData");
 const { translationData } = require("../domain/localization");
 const { prisma } = require("../config/database");
@@ -7,16 +8,6 @@ const {
   parseTags,
   serializeTags,
 } = require("../constants/scales");
-
-function slugify(value) {
-  return String(value || "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLocaleLowerCase("es")
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
 
 function validatePayload(payload) {
   const name = normalizeActivity(String(payload.name || "").trim()).slice(
@@ -203,11 +194,13 @@ async function deleteActivity(id) {
 }
 
 module.exports = {
-  listPublicActivities: cachedPublic("activityService.listPublicActivities", listPublicActivities),
+  listPublicActivities: cachedPublic(
+    "activityService.listPublicActivities",
+    listPublicActivities,
+  ),
   listAdminActivities,
   createActivity,
   updateActivity,
   deleteActivity,
-  slugify,
   validatePayload,
 };

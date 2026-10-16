@@ -7,7 +7,7 @@ const {
   parseTags,
   serializeTags,
 } = require("../constants/scales");
-const { slugify } = require("./activityService");
+const { slugify } = require("../utils/slugify");
 
 function validatePayload(payload) {
   const name = String(payload.name || "")

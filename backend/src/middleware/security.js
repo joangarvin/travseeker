@@ -78,11 +78,17 @@ function gzipJson(req, res, next) {
   return next();
 }
 
-const authRateLimit = createRateLimiter({
+const authWriteRateLimit = createRateLimiter({
   windowMs: 15 * 60 * 1000,
   max: 80,
   message: 'Demasiadas solicitudes de acceso. Espera unos minutos e inténtalo de nuevo.',
 });
+
+function authRateLimit(req, res, next) {
+  // Reading the current session must not consume attempts reserved for signing in.
+  if (req.method === 'GET' && req.path === '/me') return next();
+  return authWriteRateLimit(req, res, next);
+}
 
 const uploadRateLimit = createRateLimiter({
   windowMs: 15 * 60 * 1000,

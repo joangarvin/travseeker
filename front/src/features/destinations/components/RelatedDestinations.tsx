@@ -5,7 +5,7 @@ import { Loader, MediaImage, Notice } from '../../../components/ui';
 import { distanceLabel, imageUrl, plain } from '../../../utils';
 import type { Destino } from '../../../types';
 
-function matchReasons(source: Destino, item: Destino) {
+function matchReasons(item: Destino) {
   const reasons: string[] = [];
   const shared = (item.tourismTypes || [])
     .filter((type) => item.match?.sharedTypeIds.includes(type.id))
@@ -30,8 +30,7 @@ function matchReasons(source: Destino, item: Destino) {
   if (crowd) {
     const crowdLabel = t(crowd).toLocaleLowerCase();
     const crowdDelta = item.match?.crowdDelta;
-    if (crowdDelta === 0)
-      reasons.push(t('Igual de tranquilo · afluencia {0}', { 0: crowdLabel }));
+    if (crowdDelta === 0) reasons.push(t('Igual de tranquilo · afluencia {0}', { 0: crowdLabel }));
     else if (crowdDelta != null && crowdDelta < 0)
       reasons.push(t('Más tranquilo · afluencia {0}', { 0: crowdLabel }));
     else if (crowdDelta != null && crowdDelta > 0)
@@ -87,7 +86,7 @@ export function RelatedDestinations({
       ) : (
         <div className="related__grid">
           {items.slice(0, 3).map((item) => {
-            const reasons = matchReasons(destination, item);
+            const reasons = matchReasons(item);
             const params = new URLSearchParams({ ids: [destination.id, item.id].join(',') });
             const km = item.match?.distanceKm;
             const affinity = item.match?.affinity;

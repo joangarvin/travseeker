@@ -32,3 +32,9 @@ From the repository root, `npm run check` runs both test suites, frontend lint, 
 Keep state near the feature that owns it. Extract a component or hook when it has an independent responsibility; avoid wrappers that only relocate a few lines. Keep API field names consistent with backend contracts. Explain business rules and compatibility exceptions rather than narrating obvious code.
 
 See [the repository review](../REFACTORING_REVIEW.md) for the changes made and remaining maintenance priorities.
+
+## Guía de lectura
+
+La [guía del código](../GUIA_DEL_CODIGO.md) explica en español cómo seguir una pantalla y dónde vive cada responsabilidad. La administración separa carga, reseñas y taxonomías en `src/features/admin/hooks`; los viajes separan resumen, participantes y permisos para compartir en `src/features/collections`. La agenda se compone en `ItineraryBuilder.tsx`, con estado, cálculos y editores dentro de `src/features/itinerary`.
+
+`npm run check:unused` desde la raíz detecta archivos de código sin referencias. La compilación rechaza variables, importaciones y parámetros locales sin uso. `front/output/` y `artifacts/` contienen resultados generados y están excluidos de nuevos cambios de Git.

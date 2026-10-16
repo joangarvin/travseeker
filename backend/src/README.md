@@ -18,6 +18,8 @@ Código fuente de la API. Sigue una arquitectura en capas: rutas → controlador
 | `middleware/` | Autenticación JWT y manejo global de errores. [README](./middleware/README.md) |
 | `routes/` | Definición de rutas de la API. [README](./routes/README.md) |
 | `services/` | Lógica de negocio y consultas a la base de datos. [README](./services/README.md) |
+| `domain/` | Validaciones, permisos y cálculos sin acceso a base de datos: colecciones, búsqueda, recomendaciones, traducciones y flujo editorial. |
+| `cache/` | Caché de datos públicos e invalidación. |
 | `utils/` | Utilidades compartidas (JWT, contraseñas, filtros SQL). [README](./utils/README.md) |
 
 ## Flujo de una petición

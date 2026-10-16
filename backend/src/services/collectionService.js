@@ -1,4 +1,14 @@
-const { flattenGuide, publicGuideInclude } = require("../domain/municipalityCatalog");
+const {
+  cleanCollectionText,
+  optionalDate,
+  optionalTravelerCount,
+  validateTripRange,
+  normalizeCollectionItem,
+} = require("../domain/collectionPayload");
+const {
+  flattenGuide,
+  publicGuideInclude,
+} = require("../domain/municipalityCatalog");
 const { prisma } = require("../config/database");
 const { randomBytes } = require("crypto");
 const { LIST_SELECT } = require("../constants/selects");
@@ -53,59 +63,6 @@ function mapCollectionDestination(destino) {
     activities,
     activityIds: activities.map((activity) => activity.id),
   };
-}
-
-function clean(str, max) {
-  if (typeof str !== "string") return null;
-  const t = str.trim();
-  return t ? t.slice(0, max) : null;
-}
-
-function optionalDate(value, field) {
-  if (value === undefined) return undefined;
-  if (value === null || value === "") return null;
-  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-    const error = new Error(`${field} debe tener formato AAAA-MM-DD`);
-    error.status = 400;
-    throw error;
-  }
-  const parsed = new Date(`${value}T00:00:00.000Z`);
-  if (
-    Number.isNaN(parsed.getTime()) ||
-    parsed.toISOString().slice(0, 10) !== value
-  ) {
-    const error = new Error(`${field} no es válida`);
-    error.status = 400;
-    throw error;
-  }
-  return parsed;
-}
-
-function optionalTravelerCount(value) {
-  if (value === undefined) return undefined;
-  const count = Number(value);
-  if (!Number.isInteger(count) || count < 1 || count > 50) {
-    const error = new Error("El número de viajeros debe estar entre 1 y 50");
-    error.status = 400;
-    throw error;
-  }
-  return count;
-}
-
-function validateTripRange(startDate, endDate) {
-  if (!startDate || !endDate) return;
-  if (endDate < startDate) {
-    const error = new Error("La fecha de fin no puede ser anterior al inicio");
-    error.status = 400;
-    throw error;
-  }
-  const days =
-    Math.floor((endDate.getTime() - startDate.getTime()) / 86400000) + 1;
-  if (days > 366) {
-    const error = new Error("El viaje no puede superar 366 días");
-    error.status = 400;
-    throw error;
-  }
 }
 
 async function getAccess(userId, collectionId, required = "viewer") {
@@ -237,7 +194,7 @@ async function createCollection(
     throw error;
   }
 
-  const cleanName = clean(nombre, 80);
+  const cleanName = cleanCollectionText(nombre, 80);
   if (!cleanName) {
     const error = new Error("El nombre de la colección es obligatorio");
     error.status = 400;
@@ -252,7 +209,7 @@ async function createCollection(
     data: {
       userId,
       nombre: cleanName,
-      descripcion: clean(descripcion, 280),
+      descripcion: cleanCollectionText(descripcion, 280),
       color: color || "emerald",
       startDate: parsedStart ?? null,
       endDate: parsedEnd ?? null,
@@ -271,7 +228,7 @@ async function updateCollection(
 
   const data = {};
   if (nombre !== undefined) {
-    const cleanName = clean(nombre, 80);
+    const cleanName = cleanCollectionText(nombre, 80);
     if (!cleanName) {
       const error = new Error("El nombre no puede estar vacío");
       error.status = 400;
@@ -279,7 +236,8 @@ async function updateCollection(
     }
     data.nombre = cleanName;
   }
-  if (descripcion !== undefined) data.descripcion = clean(descripcion, 280);
+  if (descripcion !== undefined)
+    data.descripcion = cleanCollectionText(descripcion, 280);
   if (color !== undefined) data.color = color;
   const parsedStart = optionalDate(startDate, "La fecha de inicio");
   const parsedEnd = optionalDate(endDate, "La fecha de fin");
@@ -419,7 +377,7 @@ async function addItem(userId, collectionId, destinoId, notas) {
     throw error;
   }
 
-  const cleanNotes = clean(notas, 500);
+  const cleanNotes = cleanCollectionText(notas, 500);
   const item = await prisma.collectionItem.upsert({
     where: { collectionId_destinoId: { collectionId, destinoId } },
     update: cleanNotes !== null ? { notas: cleanNotes } : {},
@@ -435,37 +393,7 @@ async function addItem(userId, collectionId, destinoId, notas) {
 
 async function updateItem(userId, collectionId, destinoId, payload) {
   await getAccess(userId, collectionId, "editor");
-  const data = {};
-  if (payload.notas !== undefined) data.notas = clean(payload.notas, 500);
-  if (payload.dayIndex !== undefined) {
-    const day =
-      payload.dayIndex === null || payload.dayIndex === ""
-        ? null
-        : Number(payload.dayIndex);
-    if (day !== null && (!Number.isInteger(day) || day < 1 || day > 365)) {
-      const error = new Error("El día debe estar entre 1 y 365");
-      error.status = 400;
-      throw error;
-    }
-    data.dayIndex = day;
-  }
-  if (payload.status !== undefined) {
-    if (!["idea", "confirmed", "booked"].includes(payload.status)) {
-      const error = new Error("Estado no válido");
-      error.status = 400;
-      throw error;
-    }
-    data.status = payload.status;
-  }
-  if (payload.sortOrder !== undefined) {
-    const order = Number(payload.sortOrder);
-    if (!Number.isInteger(order) || order < 0 || order > 9999) {
-      const error = new Error("Posición no válida");
-      error.status = 400;
-      throw error;
-    }
-    data.sortOrder = order;
-  }
+  const data = normalizeCollectionItem(payload);
   const item = await prisma.collectionItem.update({
     where: { collectionId_destinoId: { collectionId, destinoId } },
     data,

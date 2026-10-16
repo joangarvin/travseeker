@@ -33,6 +33,16 @@ export function AccessibilityEffects() {
     let activeOverlay: HTMLElement | null = null;
     const returnFocus = new Map<HTMLElement, HTMLElement | null>();
     const originalOverflow = document.body.style.overflow;
+    let lastFocusedElement =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+    const rememberFocus = (event: FocusEvent) => {
+      if (!(event.target instanceof HTMLElement)) return;
+      // A dialog can autofocus before the observer sees it. Preserve its opener.
+      if (event.target.closest(OVERLAY_SELECTOR) === activeOverlay) {
+        lastFocusedElement = event.target;
+      }
+    };
 
     const inspectOverlays = () => {
       const overlays = document.querySelectorAll<HTMLElement>(OVERLAY_SELECTOR);
@@ -41,11 +51,14 @@ export function AccessibilityEffects() {
       if (nextOverlay && nextOverlay !== activeOverlay) {
         const previousOverlay = activeOverlay;
         const restoredFocus = previousOverlay ? returnFocus.get(previousOverlay) : null;
-        if (!returnFocus.has(nextOverlay))
+        if (!returnFocus.has(nextOverlay)) {
+          const focused =
+            document.activeElement instanceof HTMLElement ? document.activeElement : null;
           returnFocus.set(
             nextOverlay,
-            document.activeElement instanceof HTMLElement ? document.activeElement : null,
+            focused && !nextOverlay.contains(focused) ? focused : lastFocusedElement,
           );
+        }
         document.body.style.overflow = 'hidden';
         activeOverlay = nextOverlay;
         queueMicrotask(() => {
@@ -100,10 +113,12 @@ export function AccessibilityEffects() {
 
     const observer = new MutationObserver(inspectOverlays);
     observer.observe(document.body, { childList: true, subtree: true });
+    document.addEventListener('focusin', rememberFocus, true);
     document.addEventListener('keydown', handleKeyDown, true);
 
     return () => {
       observer.disconnect();
+      document.removeEventListener('focusin', rememberFocus, true);
       document.removeEventListener('keydown', handleKeyDown, true);
       document.body.style.overflow = originalOverflow;
     };

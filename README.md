@@ -15,11 +15,13 @@ Aplicación web full-stack para descubrir destinos turísticos en España con in
 ```
 TravSeeker/
 ├── Logo/          → Recursos gráficos originales de la marca
-├── backend/       → API REST y base de datos
-└── front/         → Interfaz web React
+├── backend/       → API REST, reglas de negocio y base de datos
+├── front/         → Interfaz web React
+├── shared/        → Configuración compartida de idiomas y textos legales
+└── scripts/       → Comprobaciones del repositorio
 ```
 
-Cada carpeta tiene su propio `README.md` con la descripción de archivos y subcarpetas.
+Empieza por la [guía del código](./GUIA_DEL_CODIGO.md) para seguir una pantalla desde React hasta la base de datos. Cada carpeta principal tiene su propio `README.md`.
 
 ## Documentación por carpeta
 
@@ -45,10 +47,11 @@ Cada carpeta tiene su propio `README.md` con la descripción de archivos y subca
 - [Guía del frontend](./front/README.md)
 - [Idiomas y edición de traducciones](./MULTILINGUAL.md)
 - [Revisión de legibilidad y refactorización](./REFACTORING_REVIEW.md)
+- [Revisión funcional y de navegador](./REVISION_NAVEGADOR.md)
 
 ## Comprobaciones
 
-Desde la raíz, `npm test` ejecuta los tests del backend y frontend. `npm run check` añade lint y el build de producción del frontend. Los tests del frontend requieren Node con soporte nativo para TypeScript (22.18+ o una versión posterior compatible).
+Desde la raíz, `npm test` ejecuta los tests del backend y frontend. `npm run check` comprueba además archivos sin referencias, lint y el build de producción del frontend. Los tests del frontend requieren Node con soporte nativo para TypeScript (22.18+ o una versión posterior compatible).
 
 ## Arranque local
 

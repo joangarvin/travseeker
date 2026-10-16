@@ -1,3 +1,56 @@
+# Revisión de legibilidad — 16 de octubre de 2026
+
+La [guía del código](./GUIA_DEL_CODIGO.md) es el punto de entrada para leer el proyecto en español. La [revisión funcional ampliada](./REVISION_NAVEGADOR.md) documenta las pruebas posteriores con API y PostgreSQL reales y las correcciones encontradas.
+
+## Alcance
+
+Se ha recorrido el inventario de archivos versionados, el grafo de importaciones de frontend y backend, los puntos de entrada, scripts y pruebas, las referencias a recursos públicos y las comprobaciones existentes. Las extracciones se concentran en los archivos que mezclaban responsabilidades. No se ha cambiado el esquema ni ejecutado migraciones o escrituras en la base de datos.
+
+La detección de archivos sin referencias es estática; no sustituye una auditoría exhaustiva de cada export, selector CSS o combinación de datos reales. Los módulos que solo registran efectos pueden devolver `null` y seguir siendo necesarios.
+
+## Cambios
+
+| Archivo | Antes | Después | Separación realizada |
+| --- | ---: | ---: | --- |
+| `front/src/pages/admin/AdminPage.tsx` | 1169 líneas | 819 líneas | Carga y cancelación de peticiones, moderación de reseñas y edición de taxonomías pasan a tres hooks de la funcionalidad. |
+| `front/src/pages/library/CollectionPage.tsx` | 710 | 450 | Resumen, participantes y acciones para compartir tienen archivos propios. |
+| `front/src/components/ItineraryBuilder.tsx` | 1033 | 476 | Borrador y guardado, trayectos, formato, actividades y campos del día se separan dentro de `features/itinerary`. |
+| `backend/src/services/recommendationService.js` | 178 | 62 | El servicio obtiene datos; `domain/recommendations.js` calcula puntuaciones y explicaciones con nombres explícitos. |
+| `backend/src/services/collectionService.js` | 622 | 550 | Fechas, viajeros y cambios de paradas se validan en `domain/collectionPayload.js`. |
+
+También se ha movido `slugify` a una utilidad compartida, se han retirado dos memorizaciones que devolvían la misma lista, un parámetro sin uso y una notificación editorial duplicada. La carga de reseñas y taxonomías comprueba ahora si su petición fue cancelada antes de actualizar el estado.
+
+## Archivos retirados
+
+540 archivos versionados, unos 265 MiB:
+
+- 524 capturas e informes generados en `front/output/playwright`.
+- 3 capturas generadas en `artifacts`.
+- 8 archivos de prototipos antiguos en `front/public/mockups`, sin enlaces desde la aplicación.
+- 3 recursos públicos sin referencias: `favicon.svg` y variantes PNG negra y blanca del logo. Se conservan los SVG usados por la web y el PNG del icono activo.
+- 2 componentes sin consumidores: `FormattedContent.tsx` y `GoliMascot.tsx`. Se conservan las ilustraciones originales en `Logo`.
+
+Se conserva el informe de enriquecimiento de municipios y la captura no versionada que existía al comenzar. No se han retirado migraciones, datos originales ni licencias. Las nuevas salidas generadas y las sesiones de navegador están ignoradas por Git.
+
+## Comprobaciones
+
+- `npm run check`: 141 pruebas de backend y 39 de frontend, detección de archivos sin referencias, ESLint y compilación TypeScript/Vite correctos.
+- 11 pruebas nuevas cubren validación de viajes y puntuación de recomendaciones, incluidos valores límite, datos incompletos y selección de contenido publicado.
+- Comparación adicional de 160 combinaciones de recomendaciones contra el servicio anterior: mismas puntuaciones, motivos y orden.
+- Navegador Chromium con API simulada: creación de actividad; publicación de reseña; restauración del estado de una reseña ante un error; adición de actividad y notas a un día; guardado y comprobación después de recargar; apertura del editor de campos; adición de colaborador; activación y desactivación de enlace público; vista pública sin controles de edición.
+- Comprobación de que el detector encuentra también un ciclo de módulos sin consumidores externos.
+- TypeScript rechaza ahora variables, importaciones y parámetros locales sin uso.
+
+Las comprobaciones de navegador usan datos ficticios: acreditan los flujos de interfaz comprobados, no la persistencia en una base de datos real ni todas las combinaciones de permisos.
+
+## Criterio de mantenimiento
+
+El tamaño por sí solo no obliga a dividir un archivo. Las extracciones realizadas separan responsabilidades reconocibles y conservan contratos y comportamiento. Los estilos mantienen su orden de importación y cascada. Para localizar una tarea concreta, sigue los recorridos de la guía antes de crear nuevas capas o componentes compartidos.
+
+---
+
+El texto siguiente conserva la revisión histórica del 5 de septiembre de 2026; sus cifras y prioridades corresponden a aquel estado del proyecto.
+
 # Readability and maintainability review
 
 Reviewed 2026-09-05 against the local checkout. This is a source-code and automated-check review, not a production performance or security audit.

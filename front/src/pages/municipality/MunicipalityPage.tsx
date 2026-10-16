@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useId, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { t } from '../../i18n';
 import {
   ArrowRight,
   BedDouble,
@@ -132,14 +133,21 @@ export default function MunicipalityPage() {
   if (error || !municipality)
     return (
       <Shell>
+        <PageMeta
+          title={`${t('Guía no disponible')} — TravSeeker`}
+          description={t('No se pudo cargar la guía del municipio.')}
+        />
         <section className="municipality-page municipality-page--empty">
+          <h1>{t('Guía no disponible')}</h1>
           <Notice
             tone="error"
-            action={<Button onClick={() => setRetry((value) => value + 1)}>Reintentar</Button>}
+            action={
+              <Button onClick={() => setRetry((value) => value + 1)}>{t('Reintentar')}</Button>
+            }
           >
-            {error || 'Municipio no encontrado'}
+            {error || t('Municipio no encontrado')}
           </Notice>
-          <Link to="/">Volver a descubrir</Link>
+          <Link to="/">{t('Volver a descubrir')}</Link>
         </section>
       </Shell>
     );
