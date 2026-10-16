@@ -314,8 +314,7 @@
   gap: 32px;
   align-items: start;
   padding: clamp(28px, 4vw, 56px) clamp(16px, 3vw, 40px);
-    background: var(--surface);
-
+  background: var(--surface);
 }
 
 .trip-moods__intro h2 {
@@ -362,12 +361,9 @@
   color: white;
 }
 
-.trip-moods__list button:is(:hover, :focus-visible) :is(
-    .trip-moods__copy,
-    .trip-moods__copy small,
-    .trip-moods__meta,
-    .trip-moods__meta svg
-  ) {
+.trip-moods__list
+  button:is(:hover, :focus-visible)
+  :is(.trip-moods__copy, .trip-moods__copy small, .trip-moods__meta, .trip-moods__meta svg) {
   color: white !important;
 }
 
@@ -439,8 +435,8 @@
   line-height: 1;
 }
 
-.results-section .section-head > p:last-child {
-  margin: 0;
+.results-section .section-head > div > p:last-child {
+  margin: 12px 0 0;
   color: var(--muted);
   font-size: 1.05rem;
   font-weight: 600;
@@ -757,7 +753,10 @@
 
 .destination-card h3 {
   margin: 0;
-  font: 700 clamp(1.2rem, 1.6vw, 1.35rem) / 1.1 'Bricolage Grotesque', Manrope, sans-serif;
+  font:
+    700 clamp(1.2rem, 1.6vw, 1.35rem) / 1.1 'Bricolage Grotesque',
+    Manrope,
+    sans-serif;
 }
 
 .destination-card h3 a {
@@ -797,74 +796,4 @@
   border-color: var(--brand);
   background: var(--brand);
   color: #fff;
-}
-
-.decision-band {
-  display: grid;
-  grid-template-columns: minmax(280px, 0.82fr) repeat(3, 1fr);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  background: var(--surface);
-}
-
-.decision-band > header {
-  display: grid;
-  align-content: center;
-  min-height: 196px;
-  padding: 32px clamp(24px, 4vw, 64px);
-  background: var(--brand);
-  color: white;
-}
-
-.decision-band > header .kicker {
-  margin-bottom: 12px;
-  color: var(--sun);
-}
-
-.decision-band > header h2 {
-  max-width: 330px;
-  margin: 0;
-  font-size: clamp(1.8rem, 2.6vw, 2.8rem);
-}
-
-.decision-band > div {
-  position: relative;
-  display: grid;
-  grid-template-columns: 48px 1fr;
-  align-content: center;
-  gap: 3px 16px;
-  min-height: 196px;
-  padding: 28px clamp(20px, 3vw, 48px);
-  border-right: 1px solid var(--line);
-}
-
-.decision-band > div:last-child {
-  border: 0;
-}
-
-.decision-band > div > svg {
-  grid-row: 1 / 4;
-  display: grid;
-  place-self: start center;
-  width: 28px;
-  height: 28px;
-  color: var(--brand);
-}
-
-.decision-band span {
-  color: var(--muted);
-  font-size: 0.74rem;
-}
-
-.decision-band b {
-  font-size: 1rem;
-}
-
-.decision-band > div p {
-  grid-column: 2;
-  max-width: 300px;
-  margin: 8px 0 0;
-  color: var(--muted);
-  font-size: 0.76rem;
-  line-height: 1.55;
 }

@@ -47,7 +47,6 @@
 }
 
 /* Editorial pages get one authored opening moment. */
-.home-hero__copy > .kicker,
 .home-hero__copy > h1,
 .home-hero__lead,
 .home-hero__copy > .search-box-group,
@@ -385,7 +384,6 @@ button[aria-busy='true']:not([data-loading])::after {
   .nav b,
   .modal-backdrop,
   .modal,
-  .home-hero__copy > .kicker,
   .home-hero__copy > h1,
   .home-hero__lead,
   .home-hero__copy > .search-box-group,

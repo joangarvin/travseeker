@@ -18,9 +18,6 @@
   border-bottom: 1px solid var(--line);
   background: var(--canvas);
 }
-.map-toolbar .kicker {
-  margin: 0 0 4px;
-}
 .map-toolbar h1 {
   display: inline;
   margin: 0 12px 0 0;

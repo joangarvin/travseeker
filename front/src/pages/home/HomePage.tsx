@@ -301,9 +301,7 @@ export default function Home() {
       <section className="trip-moods" data-reveal aria-labelledby="trip-moods-title">
         <div className="trip-moods__intro">
           <h2 id="trip-moods-title">{t('¿Qué quieres que pase?')}</h2>
-          <p>
-            {t('Elige el tipo de viaje que te gusta')}
-          </p>
+          <p>{t('Elige el tipo de viaje que te gusta')}</p>
         </div>
         <div className="trip-moods__list">
           {moodOptions.map((mode) => {
@@ -335,10 +333,7 @@ export default function Home() {
                   {count != null && (
                     <span className="trip-moods__count">
                       {count}
-                      <span className="sr-only">
-                        {' '}
-                        {count === 1 ? t('destino') : t('destinos')}
-                      </span>
+                      <span className="sr-only"> {count === 1 ? t('destino') : t('destinos')}</span>
                     </span>
                   )}
                   <ArrowRight aria-hidden="true" />
@@ -352,16 +347,14 @@ export default function Home() {
       <section id="results" className="results-section" data-reveal>
         <header className="section-head">
           <div>
-            <h2>
+            <h2 aria-live="polite" aria-atomic="true">
               {activeCount
                 ? resultCount === 1
                   ? t('1 lugar encaja')
                   : t('{0} lugares encajan', { 0: resultCount })
                 : t('Sitios que merecen el viaje')}
             </h2>
-            <p>
-            {t('Escoge uno, o compara varios destinos para decidir mejor.')}
-            </p>
+            <p>{t('Escoge uno, o compara varios destinos para decidir mejor.')}</p>
           </div>
           <Link to={`/mapa${queryString(appliedFilters)}`}>
             {t('Abrir en el mapa')} <Map />

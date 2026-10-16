@@ -1771,5 +1771,8 @@
   "Crear propuesta": "Create proposal",
   "Se reemplazarán las actividades y notas del itinerario. Para conservarlas, utiliza Mejorar ruta. Puedes deshacer antes de guardar.": "Itinerary activities and notes will be replaced. Use Improve route to preserve them. You can undo before saving.",
   "Guía no disponible": "Guide unavailable",
-  "No se pudo cargar la guía del municipio.": "The town guide could not be loaded."
+  "No se pudo cargar la guía del municipio.": "The town guide could not be loaded.",
+  "Compara afluencia, presupuesto y temporada. El viaje empieza tomando una buena decisión.": "Compare crowds, budget and season. Your trip starts with a good decision.",
+  "Elige el tipo de viaje que te gusta": "Choose your kind of trip",
+  "Escoge uno, o compara varios destinos para decidir mejor.": "Pick one, or compare several destinations to help you decide."
 }

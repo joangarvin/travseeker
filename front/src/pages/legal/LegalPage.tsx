@@ -205,8 +205,8 @@ export default function LegalPage() {
               </p>
               <p>
                 {say(
-                  'Puedes retirar el permiso desde Privacidad y cookies, siempre accesible, con la misma facilidad que al concederlo. La retirada detiene nuevas mediciones y mapas, y borra la caché local de rutas; no puede retirar datos ya enviados. Si el navegador bloquea el almacenamiento, la decisión solo se mantiene en la pestaña actual.',
-                  'You can withdraw permission through the always-available Privacy and cookies control, as easily as granting it. Withdrawal stops new measurement and maps and clears the local route cache; it cannot recall data already sent. If browser storage is blocked, the choice lasts only in the current tab.',
+                  'Puedes cambiar o retirar el permiso desde Preferencias de cookies, en el pie de página, o desde Privacidad y cookies, en el menú móvil. La retirada detiene nuevas mediciones y mapas, y borra la caché local de rutas; no puede retirar datos ya enviados. Si el navegador bloquea el almacenamiento, la decisión solo se mantiene en la pestaña actual.',
+                  'You can change or withdraw permission through Cookie preferences in the footer, or Privacy and cookies in the mobile menu. Withdrawal stops new measurement and maps and clears the local route cache; it cannot recall data already sent. If browser storage is blocked, the choice lasts only in the current tab.',
                 )}
               </p>
               <button className="button button--quiet" onClick={openSettings}>
