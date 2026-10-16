@@ -310,12 +310,11 @@
 
 .trip-moods {
   display: grid;
-  grid-template-columns: 0.85fr 1.15fr;
-  gap: 56px;
-  align-items: start;
-  padding: clamp(64px, 8vw, 96px) clamp(16px, 4vw, 72px);
-  max-width: 1320px;
-  margin-inline: auto;
+  grid-template-columns: minmax(380px, 0.92fr) minmax(540px, 1.08fr);
+  gap: clamp(20px, 3vw, 48px);
+  align-items: stretch;
+  min-height: calc(100dvh - 72px);
+  padding: clamp(28px, 4vw, 56px) clamp(16px, 3vw, 40px);
 }
 
 .trip-moods__intro {

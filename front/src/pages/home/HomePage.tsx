@@ -234,7 +234,6 @@ export default function Home() {
     <Shell>
       <section className="home-hero">
         <div className="home-hero__copy">
-          <p className="kicker">{t('Guía de viajeros')}</p>
           <h1>
             TravSeeker,
             <br />
@@ -244,7 +243,7 @@ export default function Home() {
           </h1>
           <p className="home-hero__lead">
             {t(
-              'Compara afluencia, presupuesto y mejor momento. El viaje empieza tomando una buena decisión.',
+              'Compara afluencia, presupuesto y temporada. El viaje empieza tomando una buena decisión.',
             )}
           </p>
           <SearchBox
@@ -301,10 +300,9 @@ export default function Home() {
 
       <section className="trip-moods" data-reveal aria-labelledby="trip-moods-title">
         <div className="trip-moods__intro">
-          <p className="kicker">{t('Tipo de viaje')}</p>
           <h2 id="trip-moods-title">{t('¿Qué quieres que pase?')}</h2>
           <p>
-            {t('Elige el tipo. Luego afinas presupuesto y afluencia en los filtros.')}
+            {t('Elige el tipo de viaje que te gusta')}
           </p>
         </div>
         <div className="trip-moods__list">
@@ -354,9 +352,6 @@ export default function Home() {
       <section id="results" className="results-section" data-reveal>
         <header className="section-head">
           <div>
-            <p className="kicker" role="status" aria-live="polite">
-              {activeCount ? t('Tu búsqueda') : t('La selección completa')}
-            </p>
             <h2>
               {activeCount
                 ? resultCount === 1
@@ -424,31 +419,6 @@ export default function Home() {
             )}
           </>
         )}
-      </section>
-
-      <section className="decision-band" aria-labelledby="decision-band-title" data-reveal>
-        <header>
-          <p className="kicker">{t('La brújula de TravSeeker')}</p>
-          <h2 id="decision-band-title">{t('Tres señales antes de elegir')}</h2>
-        </header>
-        <div>
-          <CalendarDays />
-          <span>{t('Cuándo ir')}</span>
-          <b>{t('Temporadas comparadas')}</b>
-          <p>{t('Lectura mes a mes para encontrar el momento adecuado.')}</p>
-        </div>
-        <div>
-          <Users />
-          <span>{t('Cuánta gente')}</span>
-          <b>{t('Afluencia estimada')}</b>
-          <p>{t('Una escala comprensible para anticipar los periodos con más presión.')}</p>
-        </div>
-        <div>
-          <Sparkles />
-          <span>{t('Por qué merece la pena')}</span>
-          <b>{t('Selección independiente')}</b>
-          <p>{t('Los resultados no dependen de posiciones pagadas.')}</p>
-        </div>
       </section>
     </Shell>
   );
