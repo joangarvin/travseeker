@@ -314,6 +314,8 @@
   gap: 32px;
   align-items: start;
   padding: clamp(28px, 4vw, 56px) clamp(16px, 3vw, 40px);
+    background: var(--surface);
+
 }
 
 .trip-moods__intro h2 {
@@ -396,7 +398,6 @@
 
 .results-section {
   padding: clamp(64px, 8vw, 120px) clamp(16px, 3vw, 48px) clamp(40px, 4vw, 72px);
-  background: var(--surface);
 }
 
 .section-head,
