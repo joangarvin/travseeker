@@ -220,7 +220,7 @@ export default function AdminPage() {
   const loadMunicipalityOptions = () =>
     api<Municipio[]>('/admin/municipios?options=1', {}, token).then(setMunicipalityOptions);
 
-  const openDestination = async (destination: Destino, section?: string) => {
+  const openDestination = async (destination: Pick<Destino, 'id'>, section?: string) => {
     setIsDestinationLoading(true);
     setFeedback(null);
 
@@ -252,7 +252,7 @@ export default function AdminPage() {
   const requestedEditor = params.get('edit');
   useEffect(() => {
     if (requestedEditor && !destinationForm && token && user?.role === 'admin') {
-      void openDestination({ id: requestedEditor } as Destino);
+      void openDestination({ id: requestedEditor });
     }
   }, [requestedEditor, token, user?.role]);
   const closeDestination = () => {
@@ -270,22 +270,28 @@ export default function AdminPage() {
 
   const editEditorialItem = async (item: EditorialItem) => {
     if (item.resource === 'destinos') {
-      await openDestination({ id: item.id } as Destino);
+      await openDestination({ id: item.id });
       return;
     }
     setFeedback(null);
     try {
-      const record = await api<Municipio & Place & Activity & TourismType & { destinoId: string }>(
-        `/admin/editorial/${item.resource}/${item.id}`,
-        {},
-        token,
-      );
-      if (item.resource === 'municipios') setMunicipalityForm(record);
-      if (item.resource === 'activities') setActivityForm(record);
-      if (item.resource === 'tourism-types') setTravelTypeForm(record);
-      if (item.resource === 'places') {
-        setSelectedDestinationId(record.destinoId);
-        setPlaceForm(record);
+      const endpoint = `/admin/editorial/${item.resource}/${item.id}`;
+      switch (item.resource) {
+        case 'municipios':
+          setMunicipalityForm(await api<Municipio>(endpoint, {}, token));
+          break;
+        case 'activities':
+          setActivityForm(await api<Activity>(endpoint, {}, token));
+          break;
+        case 'tourism-types':
+          setTravelTypeForm(await api<TourismType>(endpoint, {}, token));
+          break;
+        case 'places': {
+          const place = await api<Place & { destinoId: string }>(endpoint, {}, token);
+          setSelectedDestinationId(place.destinoId);
+          setPlaceForm(place);
+          break;
+        }
       }
     } catch (cause) {
       setFeedback({
@@ -568,7 +574,7 @@ export default function AdminPage() {
                   onClick={() => {
                     setFeedback(null);
                     if (requestedEditor && !destinationForm)
-                      void openDestination({ id: requestedEditor } as Destino);
+                      void openDestination({ id: requestedEditor });
                     else void loadAdminData();
                     if (activeTab === 'places') void loadPlaces();
                   }}
@@ -584,7 +590,7 @@ export default function AdminPage() {
               <MunicipalityCatalogEditor
                 standalone
                 revision={editorialRevision}
-                onManageHighlights={(id) => void openDestination({ id } as Destino, 'essentials')}
+                onManageHighlights={(id) => void openDestination({ id }, 'essentials')}
                 kind={
                   activeTab === 'catalogo-actividades'
                     ? 'actividades'

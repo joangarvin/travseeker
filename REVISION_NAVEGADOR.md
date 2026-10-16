@@ -60,29 +60,13 @@ Los recorridos de interfaz adicionales comprueban:
 - Un tipo de viaje creado desde su formulario también persiste después de recargar.
 - Los catálogos de actividades y tipos de viaje no desbordan el documento a 320 píxeles.
 
-## Evidencias
+## Limpieza de resultados temporales
 
-Las capturas y resultados estructurados se conservan en `front/output/playwright/revision-ampliada/`, excluido de Git por ser salida generada.
-
-- [Matriz de páginas públicas](front/output/playwright/revision-ampliada/public-matrix.json)
-- [Integración con la API real](front/output/playwright/revision-ampliada/api-integration.json)
-- [Persistencia del itinerario](front/output/playwright/revision-ampliada/itinerary-persistence.json)
-- [Recuperación tras fallo de red](front/output/playwright/revision-ampliada/network-retry.json)
-- [Permisos en la interfaz móvil](front/output/playwright/revision-ampliada/role-ui.json)
-- [Foco de los diálogos](front/output/playwright/revision-ampliada/keyboard-focus.json)
-- [Contraste calculado](front/output/playwright/revision-ampliada/contrast.json)
-- [Lectura de sesión y límite de acceso](front/output/playwright/revision-ampliada/session-rate-limit.json)
-
-Capturas representativas:
-
-- [Viaje persistido](front/output/playwright/revision-ampliada/owner-persistencia.png)
-- [Error de carga con reintento](front/output/playwright/revision-ampliada/viaje-error-despues.png)
-- [Administración a 320 píxeles](front/output/playwright/revision-ampliada/admin-activity-real-320.png)
-- [Contraste corregido en modo oscuro](front/output/playwright/revision-ampliada/search-contrast-dark-390.png)
+Tras verificar los resultados se eliminaron las capturas, los archivos JSON de comprobación, los registros de sesiones y los scripts temporales utilizados en esta revisión. Este documento conserva los casos ejecutados, sus resultados y sus límites; no depende de archivos generados locales.
 
 ## Comprobación del código y límites
 
-`npm run check` pasa con **144 pruebas de backend y 39 de frontend**, detección de archivos sin referencias, ESLint y compilación TypeScript/Vite. Las comprobaciones de navegador y API descritas arriba son adicionales a esas 183 pruebas. También pasa `git diff --check`.
+`npm run check` pasa con **148 pruebas de backend y 39 de frontend**, detección de archivos sin referencias, ESLint y compilación TypeScript/Vite. Las comprobaciones de navegador y API descritas arriba son adicionales a esas 187 pruebas. También pasa `git diff --check`.
 
 Se verificaron los recorridos descritos en Chromium; no se certifica cobertura de Safari, Firefox, todas las combinaciones de datos o todos los requisitos de accesibilidad. La revisión no incluye entregabilidad de correo, pagos, carga masiva ni disponibilidad de proveedores externos. Los mapas externos quedaron desactivados por las preferencias de privacidad del navegador de pruebas.
 

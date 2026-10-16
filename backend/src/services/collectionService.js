@@ -6,64 +6,19 @@ const {
   normalizeCollectionItem,
 } = require("../domain/collectionPayload");
 const {
-  flattenGuide,
-  publicGuideInclude,
-} = require("../domain/municipalityCatalog");
+  COLLECTION_DESTINATION_SELECT,
+  mapCollectionSummary,
+  mapPrivateCollection,
+  mapPublicCollection,
+} = require("../domain/collectionResponses");
 const { prisma } = require("../config/database");
 const { randomBytes } = require("crypto");
-const { LIST_SELECT } = require("../constants/selects");
 const { canAccess } = require("../domain/collectionAccess");
 const { buildCollectionOrder } = require("../domain/collectionOrder");
-const { cleanMunicipalityFields } = require("../utils/sanitizeContent");
 const {
   normalizeItinerary,
   reconcileItineraryDates,
 } = require("../domain/itinerary");
-
-const COLLECTION_DESTINATION_SELECT = {
-  ...LIST_SELECT,
-  latitud: true,
-  longitud: true,
-  municipioLinks: {
-    where: { municipio: { editorialStatus: "published" } },
-    select: {
-      municipio: {
-        select: {
-          activityLinks: publicGuideInclude.activityLinks,
-          id: true,
-          nombre: true,
-          guideEnabled: true,
-          translations: true,
-          precios: true,
-          conexiones: true,
-          tipoTurismo: true,
-          latitud: true,
-          longitud: true,
-        },
-      },
-    },
-  },
-  activityLinks: {
-    where: { activity: { isActive: true, editorialStatus: "published" } },
-    include: { activity: true },
-  },
-};
-
-function mapCollectionDestination(destino) {
-  const municipios = (destino.municipioLinks || [])
-    .map((link) => flattenGuide(cleanMunicipalityFields(link.municipio)))
-    .filter(Boolean);
-  const activities = (destino.activityLinks || [])
-    .map((link) => link.activity)
-    .filter(Boolean);
-  const { municipioLinks, activityLinks, ...rest } = destino;
-  return {
-    ...rest,
-    municipios,
-    activities,
-    activityIds: activities.map((activity) => activity.id),
-  };
-}
 
 async function getAccess(userId, collectionId, required = "viewer") {
   const collection = await prisma.collection.findFirst({
@@ -100,23 +55,9 @@ async function listCollections(userId) {
     },
   });
 
-  return collections.map((c) => ({
-    id: c.id,
-    nombre: c.nombre,
-    descripcion: c.descripcion,
-    color: c.color,
-    visibility: c.visibility,
-    startDate: c.startDate,
-    endDate: c.endDate,
-    travelerCount: c.travelerCount,
-    itineraryDays: Array.isArray(c.itinerary) ? c.itinerary.length : 0,
-    memberCount: c._count.members,
-    role: c.userId === userId ? "owner" : c.members[0]?.role || "viewer",
-    createdAt: c.createdAt,
-    updatedAt: c.updatedAt,
-    count: c._count.items,
-    covers: c.items.map((i) => i.destino.imagen),
-  }));
+  return collections.map((collection) =>
+    mapCollectionSummary(collection, userId),
+  );
 }
 
 async function getCollection(userId, id) {
@@ -147,37 +88,7 @@ async function getCollection(userId, id) {
     throw error;
   }
 
-  return {
-    id: collection.id,
-    nombre: collection.nombre,
-    descripcion: collection.descripcion,
-    color: collection.color,
-    visibility: collection.visibility,
-    shareToken: collection.shareToken,
-    startDate: collection.startDate,
-    endDate: collection.endDate,
-    travelerCount: collection.travelerCount,
-    itinerary: Array.isArray(collection.itinerary) ? collection.itinerary : [],
-    role: access.role,
-    owner: collection.user,
-    members: collection.members.map((member) => ({
-      id: member.id,
-      role: member.role,
-      user: member.user,
-    })),
-    createdAt: collection.createdAt,
-    updatedAt: collection.updatedAt,
-    items: collection.items.map((i) => ({
-      id: i.id,
-      destinoId: i.destinoId,
-      notas: i.notas,
-      dayIndex: i.dayIndex,
-      status: i.status,
-      sortOrder: i.sortOrder,
-      createdAt: i.createdAt,
-      destino: mapCollectionDestination(i.destino),
-    })),
-  };
+  return mapPrivateCollection(collection, access.role);
 }
 
 async function createCollection(
@@ -334,28 +245,7 @@ async function getPublicCollection(shareToken) {
     error.status = 404;
     throw error;
   }
-  return {
-    nombre: collection.nombre,
-    descripcion: collection.descripcion,
-    color: collection.color,
-    startDate: collection.startDate,
-    endDate: collection.endDate,
-    travelerCount: collection.travelerCount,
-    itinerary: Array.isArray(collection.itinerary) ? collection.itinerary : [],
-    owner: collection.user,
-    members: collection.members.map((member) => ({
-      id: member.id,
-      role: member.role,
-      user: member.user,
-    })),
-    items: collection.items.map((item) => ({
-      id: item.id,
-      dayIndex: item.dayIndex,
-      status: item.status,
-      sortOrder: item.sortOrder,
-      destino: mapCollectionDestination(item.destino),
-    })),
-  };
+  return mapPublicCollection(collection);
 }
 
 async function deleteCollection(userId, id) {
@@ -460,11 +350,11 @@ async function getCollectionsForDestino(userId, destinoId) {
     include: { items: { where: { destinoId }, select: { id: true } } },
   });
 
-  return collections.map((c) => ({
-    id: c.id,
-    nombre: c.nombre,
-    color: c.color,
-    contains: c.items.length > 0,
+  return collections.map((collection) => ({
+    id: collection.id,
+    nombre: collection.nombre,
+    color: collection.color,
+    contains: collection.items.length > 0,
   }));
 }
 

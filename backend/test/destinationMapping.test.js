@@ -88,3 +88,39 @@ test("partial list mapping does not add unrelated fields and null remains null",
   assert.equal("municipios" in mapped, false);
   assert.equal("activities" in mapped, false);
 });
+
+test("shared activities replace presentation fields and translations without mutating the source", () => {
+  const destination = {
+    essentialGroups: [
+      {
+        id: "group",
+        items: [
+          { id: "local", title: "Local", catalogActivity: null },
+          {
+            id: "linked",
+            title: "Old title",
+            catalogActivity: {
+              nombre: "Shared walk",
+              descripcion: "Shared description",
+              imagen: "",
+              translations: { en: { nombre: "Walk", descripcion: "A walk" } },
+            },
+          },
+        ],
+      },
+    ],
+  };
+  const original = structuredClone(destination);
+  const [local, linked] =
+    mapDestinationRelations(destination).essentialGroups[0].items;
+  assert.deepEqual(local, { id: "local", title: "Local" });
+  assert.equal(linked.id, "linked");
+  assert.equal(linked.title, "Shared walk");
+  assert.equal(linked.description, "Shared description");
+  assert.equal(linked.imageUrl, null);
+  assert.equal(linked.duration, null);
+  assert.equal(linked.translations.en.title, "Walk");
+  assert.equal(linked.translations.en.description, "A walk");
+  assert.equal(Object.hasOwn(linked, "catalogActivity"), false);
+  assert.deepEqual(destination, original);
+});

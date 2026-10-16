@@ -64,7 +64,7 @@ Los nombres españoles de campos de la API, como `tipoTurismoPrincipal`, se cons
 
 Los algoritmos de proximidad y optimización siguen en `front/src/utils/itineraryPlanner.ts`. El cliente de rutas está en `front/src/services/routingService.ts`.
 
-En la API, `collectionService.js` coordina acceso y persistencia. `domain/collectionPayload.js` valida fechas, viajeros y cambios de paradas. Los permisos, el orden y la agenda tienen sus propios módulos de dominio.
+En la API, `collectionService.js` coordina acceso y persistencia. `domain/collectionPayload.js` valida fechas, viajeros y cambios de paradas. `domain/collectionResponses.js` define las respuestas de listado, detalle privado y enlace público. Los permisos, el orden y la agenda tienen sus propios módulos de dominio.
 
 ## Recomendaciones
 

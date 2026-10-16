@@ -1,3 +1,4 @@
+const { catalogRecord } = require("./municipalityCatalog");
 const { serializeTags } = require("../constants/scales");
 const { cleanMunicipalityFields } = require("../utils/sanitizeContent");
 
@@ -47,15 +48,49 @@ function mapMunicipalities(destino) {
   return { ...rest, municipios };
 }
 
+function mapEssentialTranslations(translations) {
+  return Object.fromEntries(
+    Object.entries(translations || {}).map(([locale, fields]) => [
+      locale,
+      {
+        title: fields.nombre,
+        description: fields.descripcion,
+        imageAlt: fields.imagenAlt,
+      },
+    ]),
+  );
+}
+
+function mapEssentialItem(item) {
+  const { catalogActivity, ...rest } = item;
+  if (!catalogActivity) return rest;
+
+  const activity = catalogRecord(catalogActivity);
+  return {
+    ...rest,
+    title: activity.nombre,
+    description: activity.descripcion,
+    imageUrl: activity.imagen || null,
+    imageAlt: activity.imagenAlt || null,
+    duration: activity.duration || null,
+    bestTime: activity.bestTime || null,
+    officialUrl: activity.website || null,
+    translations: mapEssentialTranslations(activity.translations),
+  };
+}
+
 // Public responses expose only the relations selected by the caller.
 function mapDestinationRelations(destination) {
-  if (destination?.essentialGroups) destination = { ...destination, essentialGroups: destination.essentialGroups.map(group => ({ ...group, items: group.items?.map(item => {
-    const { catalogActivity, ...rest } = item;
-    if (!catalogActivity) return rest;
-    const shared = require("./municipalityCatalog").catalogRecord(catalogActivity);
-    return { ...rest, title: shared.nombre, description: shared.descripcion, imageUrl: shared.imagen || null, imageAlt: shared.imagenAlt || null, duration: shared.duration || null, bestTime: shared.bestTime || null, officialUrl: shared.website || null, translations: Object.fromEntries(Object.entries(shared.translations || {}).map(([locale, fields]) => [locale, { title: fields.nombre, description: fields.descripcion, imageAlt: fields.imagenAlt }])) };
-  }) })) };
-  return mapTourismTypes(mapActivities(mapMunicipalities(destination)));
+  const mapped = destination?.essentialGroups
+    ? {
+        ...destination,
+        essentialGroups: destination.essentialGroups.map((group) => ({
+          ...group,
+          items: group.items?.map(mapEssentialItem),
+        })),
+      }
+    : destination;
+  return mapTourismTypes(mapActivities(mapMunicipalities(mapped)));
 }
 
 // Editors must retain legacy tags until the destination has catalog relations.

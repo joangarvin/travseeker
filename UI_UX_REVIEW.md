@@ -1,5 +1,7 @@
 # TravSeeker UI/UX review — 4 October 2026
 
+Historical review: findings refer to 4 October. See [the current browser review](./REVISION_NAVEGADOR.md) for later fixes and verification.
+
 Method: two independent assessments (A: public_ux_review; B: ui_evidence), plus a browser review of admin by the primary agent. Assessment A finished before the detector findings were used in synthesis.
 
 The visual identity is coherent and worth keeping. The most urgent work is reliable task completion: preserve edits, make failures visible, fix shared comparisons and make administrative browsing complete. A full visual redesign would not address those problems.
