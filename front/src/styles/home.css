@@ -310,19 +310,13 @@
 
 .trip-moods {
   display: grid;
-  grid-template-columns: minmax(380px, 0.92fr) minmax(540px, 1.08fr);
-  gap: clamp(20px, 3vw, 48px);
-  align-items: stretch;
-  min-height: calc(100dvh - 72px);
+  grid-template-columns: minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
   padding: clamp(28px, 4vw, 56px) clamp(16px, 3vw, 40px);
 }
 
-.trip-moods__intro {
-  max-width: 36ch;
-}
-
 .trip-moods__intro h2 {
-  max-width: 12ch;
   margin: 0 0 12px;
   font-size: clamp(2.5rem, 4.2vw, 3.5rem);
   letter-spacing: -0.03em;
@@ -339,7 +333,10 @@
 
 .trip-moods__list {
   display: grid;
-  border-top: 1px solid var(--line);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 48px;
+  row-gap: 12px;
+  align-content: start;
 }
 
 .trip-moods__list button {
@@ -348,29 +345,32 @@
   grid-template-columns: 56px minmax(0, 1fr) auto;
   gap: 16px;
   align-items: center;
-  min-height: 88px;
-  padding: 10px 0;
-  border: 0;
-  border-bottom: 1px solid var(--line);
+  min-height: 112px;
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-4);
   background: transparent;
   text-align: left;
   width: 100%;
 }
 
-.trip-moods__list button::before {
-  content: '';
-  position: absolute;
-  inset: auto 0 0 56px;
-  height: 3px;
-  background: var(--tourism-solid, var(--brand));
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 180ms var(--ease-out);
+.trip-moods__list button:is(:hover, :focus-visible) {
+  border-color: var(--tourism-solid, var(--brand-solid));
+  background: var(--tourism-solid, var(--brand-solid));
+  color: white;
 }
 
-.trip-moods__list button:focus-visible::before,
-.trip-moods__list button:hover::before {
-  transform: scaleX(1);
+.trip-moods__list button:is(:hover, :focus-visible) :is(
+    .trip-moods__copy,
+    .trip-moods__copy small,
+    .trip-moods__meta,
+    .trip-moods__meta svg
+  ) {
+  color: white !important;
+}
+
+.trip-moods__list button:is(:hover, :focus-visible) .trip-moods__icon {
+  background: rgb(255 255 255 / 16%);
 }
 
 .trip-moods__meta {

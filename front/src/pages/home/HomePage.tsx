@@ -1,7 +1,7 @@
 import { t } from '../../i18n';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowRight, CalendarDays, Map, Sparkles, Users } from 'lucide-react';
+import { ArrowRight, Map, Sparkles } from 'lucide-react';
 import { api } from '../../services/api';
 import { imageUrl, queryString } from '../../utils';
 import type { Destino, FilterOptions, SearchFilters } from '../../types';

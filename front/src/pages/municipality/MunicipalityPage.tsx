@@ -2,6 +2,7 @@ import { useCallback, useEffect, useId, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { t } from '../../i18n';
 import {
+  ArrowDown,
   ArrowRight,
   BedDouble,
   Camera,
@@ -247,11 +248,11 @@ export default function MunicipalityPage() {
               <h2>Tu próxima parada</h2>
               <div>
                 {sections.map(({ kind, title, Icon }) => (
-                  <a key={kind} href={`#${kind}`}>
+                  <a className="cover-action" key={kind} href={`#${kind}`}>
                     <Icon />
                     <span>{title}</span>
                     <strong>{municipality[kind]?.length || 0}</strong>
-                    <ArrowRight />
+                    <ArrowDown aria-hidden="true" />
                   </a>
                 ))}
               </div>

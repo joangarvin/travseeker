@@ -16,9 +16,6 @@
   .image-wall {
     min-height: 620px;
   }
-  .trip-moods {
-    grid-template-columns: 1fr;
-  }
   .decision-band {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -112,20 +109,13 @@
     left: 12px;
     bottom: 12px;
   }
-  .trip-moods {
-    gap: 32px;
-    padding-block: 48px;
-  }
-  .trip-moods__intro h2 {
-    max-width: none;
+  .trip-moods__list {
+    grid-template-columns: 1fr;
   }
   .trip-moods__list button {
     grid-template-columns: 48px minmax(0, 1fr) auto;
     gap: 12px;
-    min-height: 76px;
-  }
-  .trip-moods__list button::before {
-    inset-inline-start: 48px;
+    min-height: 88px;
   }
   .home-filter-panel__grid {
     grid-template-columns: 1fr;

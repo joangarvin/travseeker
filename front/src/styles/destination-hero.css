@@ -129,7 +129,9 @@
   gap: 8px;
 }
 .dest-hero__marks {
-  margin-bottom: 14px;
+  align-items: center;
+  gap: 12px 20px;
+  margin-bottom: 20px;
 }
 .dest-hero__type,
 .dest-hero__rating {
@@ -137,20 +139,17 @@
   min-height: 32px;
   align-items: center;
   gap: 6px;
-  padding: 0 12px 0 9px;
-  border-radius: var(--r-pill);
+  padding: 0;
   font-size: 0.8125rem;
-  font-weight: 800;
+  font-weight: 600;
 }
 .dest-hero__type {
-  background: var(--tourism-custom, #5f6470);
-  color: var(--tourism-custom-ink, #fff);
+  color: var(--hero-muted);
 }
 .dest-hero__rating {
-  border: 1px solid var(--hero-line);
-  background: rgb(255 255 255 / 10%);
+  min-height: 44px;
   color: var(--hero-ink);
-  backdrop-filter: blur(8px);
+  text-underline-offset: 4px;
 }
 .dest-hero__rating span {
   color: var(--hero-muted);
@@ -166,28 +165,43 @@
   fill: currentColor;
 }
 
+.dest-hero__jump {
+  gap: 12px;
+}
 .dest-hero__jump a {
   display: inline-flex;
-  min-height: 44px;
+  justify-content: space-between;
+  min-height: 62px;
   align-items: center;
-  gap: 8px;
-  padding: 0 16px;
-  border: 1px solid var(--hero-line);
-  border-radius: var(--r-pill);
-  background: rgb(255 255 255 / 10%);
-  color: var(--hero-ink);
-  font-size: 0.875rem;
+  gap: 16px;
+  padding: 0 0 0 18px;
+  max-width: 100%;
+  border: 1px solid var(--media-action-text);
+  border-radius: var(--r-4);
+  background: #fff;
+  color: var(--media-action-text);
+  font-size: 1rem;
+  line-height: 1.4;
   font-weight: 750;
-  backdrop-filter: blur(8px);
-  transition: background-color 0.2s var(--ease-out);
+  text-decoration: none;
+  overflow: hidden;
 }
-.dest-hero__jump a:hover {
-  background: rgb(255 255 255 / 20%);
+.dest-hero__jump a > span {
+  padding-block: 14px;
+  font-family: 'Bricolage Grotesque', Manrope, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 .dest-hero__jump svg {
-  width: 17px;
-  height: 17px;
-  color: var(--sun);
+  width: var(--cover-action-tab-width);
+  height: auto;
+  min-height: 60px;
+  padding: 18px;
+  align-self: stretch;
+  flex: none;
+  background: var(--sun);
+  color: var(--sun-ink);
 }
 
 .dest-hero__card {
@@ -392,21 +406,6 @@
   .dest-hero__hook {
     margin-bottom: 16px;
     font-size: 1rem;
-  }
-  .dest-hero__jump {
-    max-width: calc(100% + 32px);
-    align-self: stretch;
-    flex-wrap: nowrap;
-    margin-inline: -16px;
-    padding-inline: 16px;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .dest-hero__jump::-webkit-scrollbar {
-    display: none;
-  }
-  .dest-hero__jump a {
-    flex: none;
   }
   .dest-hero__card {
     gap: 16px;

@@ -114,39 +114,63 @@
 }
 .municipality-cover__tag {
   display: inline-block;
-  padding: 8px 15px;
-  background: #ffffff22;
-  border: 1px solid #ffffff50;
-  border-radius: 25px;
+  font-size: 0.875rem;
+  font-weight: 600;
   margin: 16px 0 0;
   max-width: 100%;
 }
 .municipality-cover__planning {
-  padding: 24px;
-  border: 1px solid #ffffff50;
-  border-radius: 20px;
-  background: #ffffff14;
-  backdrop-filter: blur(18px);
+  min-width: 0;
 }
 .municipality-cover__planning h2 {
   font-size: 24px;
   margin: 0 0 18px;
 }
+.municipality-cover__planning > div {
+  display: grid;
+  gap: 12px;
+}
 .municipality-cover__planning a:not(.button) {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 0;
-  border-bottom: 1px solid #ffffff30;
-  color: inherit;
+  min-height: 62px;
+  padding: 0 0 0 18px;
+  border: 1px solid var(--media-action-text);
+  border-radius: var(--r-4);
+  background: #fff;
+  color: var(--media-action-text);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
   text-decoration: none;
+  overflow: hidden;
+}
+.municipality-cover__planning a:not(.button) svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
 }
 .municipality-cover__planning a > span {
   flex: 1;
+  padding-block: 14px;
+  font-family: 'Bricolage Grotesque', Manrope, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.municipality-cover__planning a:not(.button) > svg:last-child {
+  width: var(--cover-action-tab-width);
+  height: auto;
+  min-height: 60px;
+  padding: 18px;
+  align-self: stretch;
+  background: var(--sun);
+  color: var(--sun-ink);
 }
 .municipality-cover__planning a > strong {
   font-size: 16px;
-  color: #ffd51f;
+  color: inherit;
 }
 .municipality-cover__planning > .button {
   margin-top: 22px;
@@ -655,25 +679,13 @@
     font-size: 15px;
   }
   .municipality-cover__tag {
-    border-color: var(--line);
-    background: var(--surface);
     font-size: 13px;
   }
   .municipality-cover__planning {
     margin-top: 26px;
-    background: var(--surface);
-    border-color: var(--line);
-    padding: 20px;
-    backdrop-filter: none;
   }
   .municipality-cover__planning h2 {
     font-size: 22px;
-  }
-  .municipality-cover__planning a:not(.button) {
-    border-color: var(--line);
-  }
-  .municipality-cover__planning a > strong {
-    color: var(--brand);
   }
   .municipality-section-nav {
     padding: 10px 20px;

@@ -2,7 +2,7 @@ import { intlLocale, t } from '../../../i18n';
 import { useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, BedDouble, Expand, MapPin, Sparkles, Star, Sun } from 'lucide-react';
+import { ArrowDown, ArrowLeft, Expand, MapPin, Star } from 'lucide-react';
 import { Dialog, MediaImage } from '../../../components/ui';
 import { useTourismTypes } from '../../../contexts';
 import type { Destino } from '../../../types';
@@ -117,26 +117,30 @@ export function DestinationHero({
 
             <nav className="dest-hero__jump" aria-label={t('Ir a una sección')}>
               {signals.hasEssentials && (
-                <a href="#imprescindibles">
-                  <Sparkles aria-hidden="true" />
-                  {signals.essentials
-                    ? t('{0} imprescindibles', { 0: signals.essentials })
-                    : t('Imprescindibles')}
+                <a className="cover-action" href="#imprescindibles">
+                  <span>
+                    {signals.essentials
+                      ? t('{0} imprescindibles', { 0: signals.essentials })
+                      : t('Imprescindibles')}
+                  </span>
+                  <ArrowDown aria-hidden="true" />
                 </a>
               )}
               {!!signals.bases && (
-                <a href="#bases">
-                  <BedDouble aria-hidden="true" />
-                  {signals.fromPrice
-                    ? t('{0} bases desde {1} €', { 0: signals.bases, 1: signals.fromPrice })
-                    : signals.bases === 1
-                      ? t('1 base')
-                      : t('{0} bases', { 0: signals.bases })}
+                <a className="cover-action" href="#bases">
+                  <span>
+                    {signals.fromPrice
+                      ? t('{0} bases desde {1} €', { 0: signals.bases, 1: signals.fromPrice })
+                      : signals.bases === 1
+                        ? t('1 base')
+                        : t('{0} bases', { 0: signals.bases })}
+                  </span>
+                  <ArrowDown aria-hidden="true" />
                 </a>
               )}
-              <a href="#cuando-ir">
-                <Sun aria-hidden="true" />
-                {t('Clima y afluencia')}
+              <a className="cover-action" href="#cuando-ir">
+                <span>{t('Clima y afluencia')}</span>
+                <ArrowDown aria-hidden="true" />
               </a>
             </nav>
           </div>

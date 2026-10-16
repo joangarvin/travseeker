@@ -609,9 +609,6 @@
 .destination-card__eyebrow .tourism-mark {
   flex: none;
 }
-.trip-moods__list button {
-  min-height: 88px;
-}
 .trip-moods__icon {
   display: grid;
   place-items: center;

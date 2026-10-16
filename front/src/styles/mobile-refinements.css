@@ -306,23 +306,21 @@
   .dest-hero__hook {
     color: var(--muted);
   }
-  .dest-hero__rating,
-  .dest-hero__jump a {
-    background: var(--surface);
-    backdrop-filter: none;
-  }
   .dest-hero__rating svg {
     color: var(--warning);
   }
   .dest-hero__jump {
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-self: stretch;
+    gap: 12px;
     margin: 0;
     padding: 0;
     max-width: 100%;
     overflow: visible;
   }
-  .dest-hero__jump svg {
-    color: var(--brand);
+  .dest-hero__jump a {
+    width: 100%;
   }
   .dest-hero__card {
     width: 100%;

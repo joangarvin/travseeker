@@ -321,6 +321,61 @@ button[aria-busy='true']:not([data-loading])::after {
   }
 }
 
+/* Cover links share the same fill and press feedback across both kinds of guide. */
+.cover-action {
+  --cover-action-tab-width: 54px;
+  position: relative;
+  isolation: isolate;
+  transition: transform 160ms var(--ease-out);
+}
+
+.cover-action::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: var(--sun);
+  transform: translateX(calc(100% - var(--cover-action-tab-width)));
+  transition: transform 240ms var(--ease-out);
+  pointer-events: none;
+}
+
+.cover-action:focus-visible::before,
+.cover-action:active::before {
+  transform: translateX(0);
+  transition: none;
+}
+
+.cover-action:active:not(:focus-visible) {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cover-action:hover::before {
+    transform: translateX(0);
+  }
+
+  .cover-action:hover:not(:focus-visible) {
+    transform: translateY(-2px);
+  }
+
+  .cover-action:active:not(:focus-visible) {
+    transform: translateY(0) scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cover-action,
+  .cover-action::before {
+    transition: none !important;
+  }
+
+  .cover-action:hover:not(:focus-visible),
+  .cover-action:active:not(:focus-visible) {
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mobile-menu,
   .mobile-menu a,
