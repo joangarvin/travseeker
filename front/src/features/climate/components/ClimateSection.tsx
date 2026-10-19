@@ -1,65 +1,34 @@
-import { locale, t } from '../../../i18n';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  AlertTriangle,
-  CloudRain,
-  RefreshCw,
-  Star,
-  Sun,
-  ThermometerSun,
-  Users,
-} from 'lucide-react';
+import { t } from '../../../i18n';
+import { useEffect, useMemo, useState } from 'react';
+import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { ClimateCarousel } from './ClimateCarousel';
 import { getDestinationClimate } from '../../../services/climateService';
 import type { ClimateMonth, ClimateResponse, TemperatureUnit } from '../../../types';
 import {
   bestClimateMonths,
   crowdLabel,
-  crowdLevel,
-  listMonths,
   metricLabel,
   monthGrade,
   monthGradeLabel,
   monthScore,
-  monthSummary,
   safeStoredTemperatureUnit,
   storeTemperatureUnit,
-  temperature,
   temperatureLabel,
-  type MonthGrade,
 } from '../../../utils/climate';
 
 type Props = {
   destinationId: string;
   hasValidCoordinates: boolean;
+  destinationName: string;
 };
 
-const GRADES: MonthGrade[] = ['ideal', 'good', 'fair', 'poor'];
-
-function degrees(value: number | null, unit: TemperatureUnit) {
-  const converted = temperature(value, unit);
-  return converted == null ? '—' : `${Math.round(converted)}°`;
-}
-
-function crowdWord(value: number | null | undefined) {
-  const level = crowdLevel(value);
-  if (!level) return null;
-  const word = t(level);
-  return word.charAt(0).toLocaleUpperCase() + word.slice(1);
-}
-
-function CrowdDot({ value }: { value: number | null | undefined }) {
-  const level = crowdLevel(value);
-  return <i className={`climate-dot climate-dot--${level ?? 'none'}`} aria-hidden="true" />;
-}
-
-export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
+export function ClimateSection({ destinationId, hasValidCoordinates, destinationName }: Props) {
   const [data, setData] = useState<ClimateResponse | null>(null);
   const [loading, setLoading] = useState(hasValidCoordinates);
   const [error, setError] = useState('');
   const [retry, setRetry] = useState(0);
-  const [selectedMonth, setSelectedMonth] = useState(1);
+  const [initialMonth, setInitialMonth] = useState(1);
   const [unit, setUnit] = useState<TemperatureUnit>(() => safeStoredTemperatureUnit());
-  const monthButtons = useRef<Array<HTMLButtonElement | null>>([]);
 
   useEffect(() => {
     if (!hasValidCoordinates) {
@@ -78,7 +47,7 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
         const ranked = [...response.months].sort(
           (a, b) => (monthScore(b) ?? -1) - (monthScore(a) ?? -1) || a.month - b.month,
         );
-        setSelectedMonth(ranked[0]?.month || 1);
+        setInitialMonth(ranked[0]?.month || 1);
       })
       .catch((cause: unknown) => {
         if (cause instanceof DOMException && cause.name === 'AbortError') return;
@@ -101,54 +70,21 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
     [data],
   );
   const bestMonths = useMemo(() => bestClimateMonths(orderedMonths), [orderedMonths]);
-  const bestIds = new Set(bestMonths.map((month) => month.month));
-  const selected = orderedMonths.find((month) => month.month === selectedMonth) || orderedMonths[0];
-  const selectedScore = selected ? monthScore(selected) : null;
-  const selectedGrade = monthGrade(selectedScore);
-
-  const moveMonth = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
-    const grid = event.currentTarget.parentElement;
-    const columns = grid
-      ? getComputedStyle(grid).gridTemplateColumns.split(' ').filter(Boolean).length
-      : 4;
-    const count = orderedMonths.length;
-    let next = index;
-    if (event.key === 'ArrowRight') next = (index + 1) % count;
-    else if (event.key === 'ArrowLeft') next = (index + count - 1) % count;
-    else if (event.key === 'ArrowDown') next = Math.min(count - 1, index + columns);
-    else if (event.key === 'ArrowUp') next = Math.max(0, index - columns);
-    else if (event.key === 'Home') next = 0;
-    else if (event.key === 'End') next = count - 1;
-    else return;
-    event.preventDefault();
-    const month = orderedMonths[next];
-    if (month) setSelectedMonth(month.month);
-    monthButtons.current[next]?.focus();
-  };
+  const initial = orderedMonths.find((month) => month.month === initialMonth) || orderedMonths[0];
 
   return (
     <div className="climate-section" aria-busy={loading}>
       <header className="climate-section__heading">
         <div>
-          <p className="kicker">{t('El momento importa')}</p>
-          <h2 id="when-to-go-heading">{t('Cuándo ir')}</h2>
-          {bestMonths.length > 0 && (
-            <p className="climate-section__lede">
-              {bestMonths.length === 1
-                ? t('{0} es el mes con mejor combinación de clima y afluencia.', {
-                    0: bestMonths[0].name,
-                  })
-                : t('{0} son la mejor combinación de clima y afluencia.', {
-                    0: listMonths(
-                      bestMonths.map((month, index) =>
-                        index && locale === 'es' ? month.name.toLocaleLowerCase('es') : month.name,
-                      ),
-                    ),
-                  })}
-            </p>
-          )}
+          <h2 id="when-to-go-heading">{t('El momento también cuenta.')}</h2>
+          <p className="climate-section__lede">{t('Clima y afluencia, mes a mes.')}</p>
         </div>
-        <div className="climate-unit" role="group" aria-label={t('Unidad de temperatura')}>
+        <div
+          className="climate-unit"
+          data-unit={unit}
+          role="group"
+          aria-label={t('Unidad de temperatura')}
+        >
           {(['C', 'F'] as const).map((value) => (
             <button
               key={value}
@@ -164,17 +100,16 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
 
       {loading && (
         <div className="climate-skeleton" role="status" aria-label={t('Consultando el clima')}>
-          <span className="climate-skeleton__calendar" />
           <span className="climate-skeleton__detail" />
         </div>
       )}
 
-      {!loading && error && (
+      {!loading && (error || (data && !initial)) && (
         <div className="climate-state" role="alert">
           <AlertTriangle aria-hidden="true" />
           <div>
             <strong>{t('No podemos mostrar cuándo ir')}</strong>
-            <p>{error}</p>
+            <p>{error || t('Todavía no hay datos mensuales para este destino.')}</p>
           </div>
           {hasValidCoordinates && (
             <button type="button" onClick={() => setRetry((value) => value + 1)}>
@@ -184,7 +119,7 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
         </div>
       )}
 
-      {!loading && data && selected && (
+      {!loading && data && initial && (
         <>
           {data.stale && (
             <p className="climate-warning" role="status">
@@ -192,144 +127,14 @@ export function ClimateSection({ destinationId, hasValidCoordinates }: Props) {
               {t('Mostramos la última información guardada porque no pudimos actualizarla ahora.')}
             </p>
           )}
-          <div className="climate-planner">
-            <div className="climate-planner__calendar">
-              <div className="climate-calendar" role="group" aria-label={t('Mes del año')}>
-                {orderedMonths.map((month, index) => {
-                  const score = monthScore(month);
-                  const grade = monthGrade(score);
-                  const isSelected = selected.month === month.month;
-                  const isBest = bestIds.has(month.month);
-                  return (
-                    <button
-                      key={month.month}
-                      ref={(node) => {
-                        monthButtons.current[index] = node;
-                      }}
-                      type="button"
-                      className="climate-tile"
-                      data-grade={grade ?? 'none'}
-                      aria-label={t('{0}: {1}, máxima {2}, {3}{4}', {
-                        0: month.name,
-                        1: grade ? monthGradeLabel(grade) : t('Sin datos'),
-                        2: temperatureLabel(month.temperatureMaxC, unit),
-                        3: crowdLabel(month.crowd, true),
-                        4: isBest ? t(', recomendación principal') : '',
-                      })}
-                      aria-pressed={isSelected}
-                      tabIndex={isSelected ? 0 : -1}
-                      onClick={() => setSelectedMonth(month.month)}
-                      onKeyDown={(event) => moveMonth(event, index)}
-                    >
-                      <span className="climate-tile__top" aria-hidden="true">
-                        <b>{month.name.slice(0, 3)}</b>
-                        {isBest && <Star />}
-                      </span>
-                      {grade && (
-                        <span className="climate-tile__grade" aria-hidden="true">
-                          {monthGradeLabel(grade)}
-                        </span>
-                      )}
-                      <span className="climate-tile__temp" aria-hidden="true">
-                        <strong>{degrees(month.temperatureMaxC, unit)}</strong>
-                        <span>{degrees(month.temperatureMinC, unit)}</span>
-                      </span>
-                      <span className="climate-tile__meta" aria-hidden="true">
-                        <span>
-                          <CloudRain />
-                          {month.rainyDaysPerYear == null
-                            ? '—'
-                            : Math.round(month.rainyDaysPerYear)}
-                        </span>
-                        <span>
-                          <CrowdDot value={month.crowd} />
-                          {crowdWord(month.crowd) ?? '—'}
-                        </span>
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-              <ul className="climate-legend" aria-label={t('Leyenda')}>
-                {GRADES.map((grade) => (
-                  <li key={grade} data-grade={grade}>
-                    {monthGradeLabel(grade)}
-                  </li>
-                ))}
-                <li className="climate-legend__icon">
-                  <CloudRain aria-hidden="true" /> {t('días de lluvia')}
-                </li>
-              </ul>
-            </div>
-
-            <article
-              className="climate-detail"
-              data-grade={selectedGrade ?? 'none'}
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              <div className="climate-detail__top">
-                {selectedGrade && (
-                  <span className="climate-detail__grade">
-                    <Star aria-hidden="true" /> {monthGradeLabel(selectedGrade)} · {selectedScore}
-                    /100
-                  </span>
-                )}
-                <span className="climate-detail__eyebrow">
-                  {bestIds.has(selected.month) ? t('Nuestra recomendación') : t('Mes seleccionado')}
-                </span>
-              </div>
-              <h3>{selected.name}</h3>
-              <p className="climate-detail__summary">
-                {t('En {0} suele haber {1}.', {
-                  0: locale === 'es' ? selected.name.toLocaleLowerCase('es') : selected.name,
-                  1: monthSummary(selected),
-                })}
-              </p>
-              <dl className="climate-detail__stats">
-                <div>
-                  <dt>
-                    <ThermometerSun aria-hidden="true" /> {t('Temperatura')}
-                  </dt>
-                  <dd>
-                    {degrees(selected.temperatureMinC, unit)} –{' '}
-                    {degrees(selected.temperatureMaxC, unit)}
-                  </dd>
-                </div>
-                <div>
-                  <dt>
-                    <CloudRain aria-hidden="true" /> {t('Lluvia')}
-                  </dt>
-                  <dd>
-                    {selected.rainyDaysPerYear == null
-                      ? t('Sin datos')
-                      : t('{0} días', { 0: Math.round(selected.rainyDaysPerYear) })}
-                  </dd>
-                </div>
-                <div>
-                  <dt>
-                    <Users aria-hidden="true" /> {t('Afluencia')}
-                  </dt>
-                  <dd>
-                    <CrowdDot value={selected.crowd} />
-                    {crowdWord(selected.crowd)
-                      ? `${crowdWord(selected.crowd)} · ${Math.round(selected.crowd!)}%`
-                      : t('Sin datos')}
-                  </dd>
-                </div>
-                <div>
-                  <dt>
-                    <Sun aria-hidden="true" /> {t('Sol')}
-                  </dt>
-                  <dd>
-                    {selected.sunshineHoursPerDay == null
-                      ? t('Sin datos')
-                      : t('{0} h/día', { 0: Math.round(selected.sunshineHoursPerDay) })}
-                  </dd>
-                </div>
-              </dl>
-            </article>
-          </div>
+          <ClimateCarousel
+            key={destinationId}
+            months={orderedMonths}
+            bestMonths={bestMonths}
+            initialMonth={initial.month}
+            destinationName={destinationName}
+            unit={unit}
+          />
 
           <details className="climate-details">
             <summary>{t('Ver datos y metodología')}</summary>
