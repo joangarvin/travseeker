@@ -338,7 +338,7 @@ export function DestinationPlanningSection({
                           <span />
                         )}
                         <span className="base-card__check" aria-hidden="true">
-                          {active && <Check />}
+                          <Check />
                         </span>
                       </span>
                       <span className="base-card__name">{base.name}</span>
@@ -356,7 +356,10 @@ export function DestinationPlanningSection({
                       <ModeList modes={base.modes} />
                     </button>
                     {base.municipio.guideEnabled === true ? (
-                      <Link className="base-card__guide-link" to={`/municipio/${base.municipio.id}`}>
+                      <Link
+                        className="base-card__guide-link"
+                        to={`/municipio/${base.municipio.id}`}
+                      >
                         {t('Explorar {0}', { 0: base.name })} →
                       </Link>
                     ) : (

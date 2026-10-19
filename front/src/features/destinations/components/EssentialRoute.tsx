@@ -1,7 +1,7 @@
 import { t } from '../../../i18n';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronDown, Plus } from 'lucide-react';
+import { Check, ChevronDown, Plus } from 'lucide-react';
 import type { EssentialGroup, EssentialItem } from '../../../types';
 import { imageUrl, plain, safeHtml } from '../../../utils';
 import { MediaImage } from '../../../components/ui';
@@ -158,11 +158,16 @@ export function EssentialRoute({
               {filters.map(({ key, title, count }) => (
                 <button
                   type="button"
+                  aria-label={t('{0} ({1})', { 0: title, 1: count })}
                   aria-pressed={key === activeFilter}
                   onClick={() => selectFilter(key)}
                   key={key}
                 >
-                  {title} <span>{count}</span>
+                  <span className="essential-filter__label">{title}</span>
+                  <span className="essential-filter__count">
+                    {key === activeFilter && <Check aria-hidden="true" />}
+                    {count}
+                  </span>
                 </button>
               ))}
             </div>

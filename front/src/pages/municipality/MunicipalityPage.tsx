@@ -14,7 +14,7 @@ import {
   Utensils,
 } from 'lucide-react';
 import { Shell, PageMeta } from '../../components/layout';
-import { Button, Dialog, Loader, Notice, MediaImage } from '../../components/ui';
+import { Button, Dialog, Loader, Notice, MediaImage, Toast } from '../../components/ui';
 import { useAuth } from '../../contexts';
 import { ExternalMapGate } from '../../features/privacy/CookieConsent';
 import { DestinationTripDialog } from '../../features/destinations/components/DestinationTripDialog';
@@ -58,7 +58,10 @@ export default function MunicipalityPage() {
   const [destinationConfirmed, setDestinationConfirmed] = useState(false);
   const [tripLoading, setTripLoading] = useState(false);
   const [tripError, setTripError] = useState('');
-  const [success, setSuccess] = useState<{ message: string; url?: string } | null>(null);
+  const [tripDialogOpen, setTripDialogOpen] = useState(true);
+  const [success, setSuccess] = useState<{ message: string; url?: string; error?: boolean } | null>(
+    null,
+  );
   const descriptionId = useId();
   useEffect(() => {
     const controller = new AbortController();
@@ -66,6 +69,8 @@ export default function MunicipalityPage() {
     setError('');
     setMunicipality(null);
     setExpanded(false);
+    setSuccess(null);
+    setTripChoice(null);
     api<Municipio>(`/municipios/${id}`, { signal: controller.signal })
       .then(setMunicipality)
       .catch((cause) => {
@@ -115,6 +120,13 @@ export default function MunicipalityPage() {
     [token],
   );
   const startTrip = (record?: MunicipalityRecord) => {
+    if (tripChoice) {
+      setTripDialogOpen(true);
+      setSuccess(null);
+      return;
+    }
+    setTripDialogOpen(true);
+    setSuccess(null);
     const destinationId = municipality?.destinos?.[0]?.id;
     if (!destinationId || !token) return;
     const plannedItem = record
@@ -283,16 +295,6 @@ export default function MunicipalityPage() {
           <a href="#ubicacion">Cómo llegar</a>
         </nav>
         <div className="municipality-page__body">
-          {success && (
-            <Notice
-              tone="success"
-              action={
-                success.url ? <Link to={success.url}>Ver el día del viaje →</Link> : undefined
-              }
-            >
-              {success.message}
-            </Notice>
-          )}
           <section id="sobre" className="municipality-intro">
             <div>
               <p className="eyebrow">CONOCE EL LUGAR</p>
@@ -621,16 +623,42 @@ export default function MunicipalityPage() {
                 collectionsLoading={false}
                 collectionsError=""
                 token={token}
+                open={tripDialogOpen}
+                onDismiss={() => setTripDialogOpen(false)}
+                onFailed={(message) => setSuccess({ message, error: true })}
                 onRetryCollections={() => void loadTrip(tripChoice.destinationId)}
                 onClose={() => setTripChoice(null)}
-                onAdded={(message, url) => {
-                  setSuccess({ message, url });
-                  setTripChoice(null);
+                onAdded={(message, url, notify) => {
+                  if (notify) setSuccess({ message, url });
                 }}
               />
             )}
           </>
         ))}
+      {success && (
+        <Toast
+          tone={success.error ? 'error' : 'success'}
+          className="action-toast"
+          onDismiss={() => setSuccess(null)}
+          action={
+            success.url ? (
+              <Link to={success.url}>{t('Ver mi viaje')}</Link>
+            ) : success.error ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setTripDialogOpen(true);
+                  setSuccess(null);
+                }}
+              >
+                {t('Reintentar')}
+              </button>
+            ) : undefined
+          }
+        >
+          {success.message}
+        </Toast>
+      )}
     </Shell>
   );
 }

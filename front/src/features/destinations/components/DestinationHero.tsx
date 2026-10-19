@@ -15,7 +15,6 @@ type DestinationHeroProps = {
   rating?: { average: number; count: number };
   onBack: () => void;
   actions: ReactNode;
-  feedback: ReactNode;
 };
 
 function LevelDots({ level }: { level: number | null }) {
@@ -29,13 +28,7 @@ function LevelDots({ level }: { level: number | null }) {
   );
 }
 
-export function DestinationHero({
-  destination,
-  rating,
-  onBack,
-  actions,
-  feedback,
-}: DestinationHeroProps) {
+export function DestinationHero({ destination, rating, onBack, actions }: DestinationHeroProps) {
   const [photoOpen, setPhotoOpen] = useState(false);
   const { tourismTypes: catalog } = useTourismTypes();
   const name = destination.nombre.trim();
@@ -183,9 +176,6 @@ export function DestinationHero({
             )}
 
             <div className="dest-hero__actions">{actions}</div>
-            <div className="dest-hero__feedback" aria-live="polite">
-              {feedback}
-            </div>
           </aside>
         </div>
       </header>

@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { t, intlLocale } from '../../../i18n';
 import { Link } from 'react-router-dom';
 import {
+  ArrowRight,
+  Check,
   ChevronDown,
   Info,
   MessageSquareHeart,
@@ -29,10 +31,15 @@ const statusLabels = {
   flagged: 'En revisión',
 };
 const DISTRIBUTION_THRESHOLD = 5;
+const ratingLabels = ['Elige tu puntuación', 'Muy mala', 'Mala', 'Normal', 'Buena', 'Excelente'];
 
 function Stars({ value, size = 15 }: { value: number; size?: number }) {
   return (
-    <span className="review__rating" aria-hidden="true" style={{ ['--star-size' as string]: `${size}px` }}>
+    <span
+      className="review__rating"
+      aria-hidden="true"
+      style={{ ['--star-size' as string]: `${size}px` }}
+    >
       {Array.from({ length: 5 }, (_, index) => (
         <Star key={index} className={index < value ? 'is-filled' : ''} />
       ))}
@@ -157,14 +164,18 @@ export function DestinationReviews({
     submitReview,
   } = reviewState;
   const [formOpen, setFormOpen] = useState(false);
+  const [hoverRating, setHoverRating] = useState<number | null>(null);
+  const displayedRating = (reviewPending ? null : hoverRating) ?? rating;
   const compose = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!formOpen || ownLoading) return;
     compose.current?.scrollIntoView({ block: 'start', behavior: 'instant' });
     compose.current
-      ?.querySelector<HTMLInputElement>('input[name="rating"]:checked, input[name="rating"]')
+      ?.querySelector<HTMLElement>(
+        reviewConfirmation ? 'button' : 'input[name="rating"]:checked, input[name="rating"]',
+      )
       ?.focus({ preventScroll: true });
-  }, [formOpen, ownLoading]);
+  }, [formOpen, ownLoading, reviewConfirmation]);
   const [starFilter, setStarFilter] = useState(0);
   const [monthFilter, setMonthFilter] = useState('');
   const [partyFilter, setPartyFilter] = useState('');
@@ -207,12 +218,25 @@ export function DestinationReviews({
   const firstLabel = t('Escribir la primera');
   const action = authenticated ? (
     <Button
+      className={formOpen ? 'reviews__close' : undefined}
+      variant={formOpen ? 'quiet' : 'primary'}
+      disabled={reviewPending}
       aria-expanded={formOpen}
       aria-controls="review-compose"
-      onClick={() => setFormOpen(!formOpen)}
+      onClick={() => {
+        setFormOpen(!formOpen);
+        setHoverRating(null);
+        if (formOpen && count === 0) {
+          requestAnimationFrame(() =>
+            document
+              .querySelector<HTMLButtonElement>('#opiniones .reviews__invitation .button')
+              ?.focus({ preventScroll: true }),
+          );
+        }
+      }}
     >
       {formOpen ? <X aria-hidden="true" /> : <PencilLine aria-hidden="true" />}
-      {formOpen ? t('Cerrar formulario') : actionLabel}
+      {formOpen ? t('Cerrar') : actionLabel}
     </Button>
   ) : (
     <Link className="button button--primary" to="/auth" state={loginState}>
@@ -400,7 +424,11 @@ export function DestinationReviews({
               {!filtered.length && (
                 <p className="reviews__no-results">{t('No hay opiniones con estos filtros.')}</p>
               )}
-              {!hasFilters && filtered.length > 0 && filtered.length < 3 && !formOpen && ghostAction}
+              {!hasFilters &&
+                filtered.length > 0 &&
+                filtered.length < 3 &&
+                !formOpen &&
+                ghostAction}
             </div>
             {visibleReviewCount < filtered.length && (
               <Button
@@ -422,20 +450,17 @@ export function DestinationReviews({
             </span>
             <div>
               <h3>{t('Aún nadie ha opinado sobre {0}', { 0: destinationName })}</h3>
-              <p>
-                {t('¿Has estado? Cuenta qué te ayudó y qué conviene saber antes de ir.')}
-              </p>
+              <p>{t('¿Has estado? Cuenta qué te ayudó y qué conviene saber antes de ir.')}</p>
             </div>
             {firstAction}
           </div>
         )
       )}
-      {authenticated && ownReview && !reviewConfirmation && (
+      {authenticated && ownReview && (!reviewConfirmation || !formOpen) && (
         <p className="reviews__own-status" role="status">
           {t('Tu reseña')}: <strong>{t(statusLabels[ownReview.status])}</strong>
         </p>
       )}
-      {reviewConfirmation && <Notice tone="success">{reviewConfirmation}</Notice>}
       {authenticated && formOpen && (
         <div ref={compose} id="review-compose" className="reviews__compose">
           {ownLoading ? (
@@ -456,44 +481,75 @@ export function DestinationReviews({
               {t('Verifica tu email antes de compartir tu experiencia.')}{' '}
               <Link to="/perfil">{t('Ir a mi perfil')}</Link>
             </Notice>
+          ) : reviewConfirmation ? (
+            <div className="review-form__success">
+              <span className="review-form__success-mark" aria-hidden="true">
+                <Check />
+              </span>
+              <h3>{t('Gracias por compartirlo.')}</h3>
+              <p role="status">{reviewConfirmation}</p>
+              <Button className="review-form__send" onClick={edit}>
+                {t('Editar mi reseña')}
+                <PencilLine aria-hidden="true" />
+              </Button>
+            </div>
           ) : (
-            <form className="review-form" onSubmit={submitReview}>
+            <form
+              className="review-form"
+              onSubmit={submitReview}
+              aria-busy={reviewPending || undefined}
+            >
               <div className="review-form__intro">
-                <h3>{ownReview ? t('Actualiza tu experiencia') : t('Cuenta cómo fue')}</h3>
+                <h3>{ownReview ? t('Actualiza tu experiencia') : t('¿Cómo fue tu viaje?')}</h3>
                 <p>
                   {ownReview
                     ? t(
                         'Al enviar, sustituirás tu reseña anterior y volverá a revisión antes de publicarse.',
                       )
-                    : t('Tu reseña se revisará antes de publicarse.')}
+                    : t('Lo que tú viviste puede ayudar a quien viene después.')}
                 </p>
               </div>
               <fieldset className="review-form__fields" disabled={reviewPending}>
                 <legend className="sr-only">{t('Tu reseña')}</legend>
                 <fieldset className="review-rating">
                   <legend>{t('Tu puntuación')}</legend>
-                  <div>
-                    {[1, 2, 3, 4, 5].map((value) => (
-                      <label key={value} className={value <= rating ? 'is-filled' : ''}>
-                        <input
-                          type="radio"
-                          name="rating"
-                          value={value}
-                          required
-                          checked={rating === value}
-                          onChange={() => {
-                            setRating(value);
-                            edit();
+                  <div className="review-rating__line">
+                    <div
+                      className="review-rating__stars"
+                      onPointerLeave={() => setHoverRating(null)}
+                    >
+                      {[1, 2, 3, 4, 5].map((value) => (
+                        <label
+                          key={value}
+                          className={value <= displayedRating ? 'is-filled' : ''}
+                          onPointerEnter={(event) => {
+                            if (event.pointerType === 'mouse' && !reviewPending)
+                              setHoverRating(value);
                           }}
-                        />
-                        <Star aria-hidden="true" />
-                        <span className="sr-only">{t('{0} de 5 estrellas', { 0: value })}</span>
-                      </label>
-                    ))}
+                        >
+                          <input
+                            type="radio"
+                            name="rating"
+                            value={value}
+                            required
+                            checked={rating === value}
+                            onFocus={() => setHoverRating(null)}
+                            onChange={() => {
+                              setRating(value);
+                              setHoverRating(null);
+                              edit();
+                            }}
+                          />
+                          <Star aria-hidden="true" />
+                          <span className="sr-only">{t('{0} de 5 estrellas', { 0: value })}</span>
+                        </label>
+                      ))}
+                    </div>
+                    <p className="review-rating__label">
+                      {t(ratingLabels[displayedRating])}
+                      {displayedRating > 0 && <> · {displayedRating}/5</>}
+                    </p>
                   </div>
-                  <p aria-live="polite">
-                    {rating ? t('{0} de 5 estrellas', { 0: rating }) : t('Sin seleccionar')}
-                  </p>
                 </fieldset>
                 <div className="review-form__context">
                   <Field label={t('Mes de visita (opcional)')} htmlFor="review-month">
@@ -545,21 +601,31 @@ export function DestinationReviews({
                     minLength={20}
                     maxLength={1000}
                     required
-                    aria-describedby="review-counter"
-                    placeholder={t(
-                      '¿Qué te ayudó a disfrutar el destino y qué conviene saber antes de ir?',
-                    )}
+                    aria-describedby="review-help review-counter"
+                    placeholder={t('¿Qué repetirías? ¿Qué te habría gustado saber antes de ir?')}
                   />
                 </Field>
-                <p id="review-counter" className="review-form__counter">
-                  {comment.length}
-                  {t('/1000 caracteres · mínimo 20')}
-                </p>
+                <div className="review-form__counter">
+                  <span id="review-help" data-ready={comment.trim().length >= 20}>
+                    {comment.trim().length >= 20
+                      ? t('Lista para enviar')
+                      : t('Escribe al menos 20 caracteres')}
+                  </span>
+                  <span id="review-counter">{comment.length} / 1000</span>
+                </div>
                 {reviewError && <Notice tone="error">{reviewError}</Notice>}
-                <Button type="submit" loading={reviewPending} loadingLabel={t('Enviando…')}>
-                  <PencilLine aria-hidden="true" />
-                  {t('Enviar para revisión')}
-                </Button>
+                <div className="review-form__footer">
+                  <p>{t('Revisaremos tu opinión antes de publicarla.')}</p>
+                  <Button
+                    className="review-form__send"
+                    type="submit"
+                    loading={reviewPending}
+                    loadingLabel={t('Enviando…')}
+                  >
+                    {t('Enviar para revisión')}
+                    <ArrowRight aria-hidden="true" />
+                  </Button>
+                </div>
               </fieldset>
             </form>
           )}

@@ -1,4 +1,4 @@
-import { Check, GitCompare, MapPin, Sparkles } from 'lucide-react';
+import { Check, GitCompare, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { catalogName, t } from '../../../i18n';
 import { Loader, MediaImage, Notice } from '../../../components/ui';
@@ -104,8 +104,7 @@ export function RelatedDestinations({
                   />
                   {affinity != null && (
                     <span className="related-option__affinity">
-                      <Sparkles aria-hidden="true" />
-                      <b>{affinity}%</b> {t('afinidad')}
+                      <b>{affinity}%</b> {t('de coincidencia')}
                     </span>
                   )}
                 </Link>
@@ -132,7 +131,11 @@ export function RelatedDestinations({
                     ) : (
                       <small>{t(plain(item.ubicacion))}</small>
                     )}
-                    <Link className="related-option__compare" to={`/comparar?${params}`}>
+                    <Link
+                      className="related-option__compare"
+                      to={`/comparar?${params}`}
+                      aria-label={t('Comparar {0}', { 0: item.nombre.trim() })}
+                    >
                       <GitCompare aria-hidden="true" />
                       {t('Comparar')}
                     </Link>

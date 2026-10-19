@@ -549,9 +549,13 @@
   border-radius: 50%;
   background: var(--surface);
   color: var(--ink);
+  transition:
+    transform var(--motion-fast) var(--ease-out),
+    background-color var(--motion-fast) ease,
+    border-color var(--motion-fast) ease;
 }
-.base-strip__nav button:hover:not(:disabled) {
-  border-color: var(--ink);
+.base-strip__nav button:active:not(:disabled) {
+  transform: scale(0.93);
 }
 .base-strip__nav button:disabled {
   opacity: 0.35;
@@ -560,6 +564,7 @@
 .base-strip__nav svg {
   width: 20px;
   height: 20px;
+  transition: transform var(--motion-fast) var(--ease-out);
 }
 
 .base-strip__list {
@@ -569,7 +574,8 @@
   grid-auto-flow: column;
   gap: 12px;
   margin: 0;
-  padding: 4px 4px 12px;
+  padding: 8px 4px 12px;
+  margin-block-start: -4px;
   margin-inline: -4px;
   overflow-x: auto;
   list-style: none;
@@ -596,15 +602,8 @@
   font: inherit;
   text-align: start;
   transition:
-    border-color 0.2s var(--ease-out),
-    translate 0.2s var(--ease-out),
-    box-shadow 0.2s var(--ease-out);
-}
-@media (hover: hover) {
-  .base-card:hover {
-    translate: 0 -3px;
-    border-color: var(--line-strong);
-  }
+    border-color var(--motion-fast) ease,
+    box-shadow var(--motion-fast) var(--ease-out);
 }
 .base-card[aria-pressed='true'] {
   border-color: var(--brand);
@@ -629,6 +628,8 @@
   white-space: nowrap;
 }
 .base-card__check {
+  position: relative;
+  isolation: isolate;
   display: grid;
   width: 24px;
   height: 24px;
@@ -636,15 +637,41 @@
   place-items: center;
   border: 2px solid var(--line-strong);
   border-radius: 50%;
+  color: var(--brand-on-solid);
+  transition: border-color var(--motion-fast) ease;
+}
+.base-card__check::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -2px;
+  border-radius: 50%;
+  background: var(--brand-solid);
+  opacity: 0;
+  transform: scale(0.9);
+  transition:
+    opacity var(--motion-fast) ease,
+    transform var(--motion-ui) var(--ease-out);
 }
 .base-card[aria-pressed='true'] .base-card__check {
   border-color: var(--brand);
-  background: var(--brand);
-  color: var(--brand-on-solid);
+}
+.base-card[aria-pressed='true'] .base-card__check::before {
+  opacity: 1;
+  transform: scale(1);
 }
 .base-card__check svg {
   width: 14px;
   height: 14px;
+  opacity: 0;
+  transform: scale(0.8) rotate(-12deg);
+  transition:
+    opacity var(--motion-fast) ease,
+    transform var(--motion-ui) var(--ease-out);
+}
+.base-card[aria-pressed='true'] .base-card__check svg {
+  opacity: 1;
+  transform: scale(1) rotate(0);
 }
 .base-card__name {
   font-family: 'Bricolage Grotesque', Manrope, sans-serif;
@@ -745,14 +772,19 @@
 
 @media (prefers-reduced-motion: reduce) {
   .base-card,
+  .base-card__check,
+  .base-card__check::before,
+  .base-card__check svg,
+  .base-strip__nav button,
+  .base-strip__nav svg,
   .budget-breakdown > span {
     transition: none;
   }
   .budget-estimator {
     animation: none;
   }
-  .base-card:hover {
-    translate: none;
+  .base-strip__nav button:active:not(:disabled) {
+    transform: none;
   }
 }
 
@@ -765,6 +797,10 @@
   border: 1px solid var(--line);
   border-radius: var(--r-3);
   overflow: hidden;
+  transition:
+    transform var(--motion-fast) var(--ease-out),
+    border-color var(--motion-fast) ease,
+    box-shadow var(--motion-fast) var(--ease-out);
 }
 .base-card-shell[data-selected='true'] {
   border-color: var(--brand);
@@ -777,9 +813,6 @@
   box-shadow: none;
   min-width: 0;
 }
-.base-card-shell > .base-card:hover {
-  translate: none;
-}
 .base-card-shell > .base-card__guide-link {
   margin: 0 16px;
   padding: 12px 0;
@@ -790,4 +823,48 @@
 .base-card-shell > :focus-visible {
   outline: 3px solid var(--brand);
   outline-offset: -4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .base-card-shell:has(> .base-card:hover) {
+    transform: translateY(-3px);
+    border-color: var(--brand);
+    box-shadow: 0 7px 16px color-mix(in srgb, var(--brand) 10%, transparent);
+  }
+  .base-card-shell[data-selected='true']:has(> .base-card:hover) {
+    box-shadow:
+      0 0 0 3px color-mix(in srgb, var(--brand) 22%, transparent),
+      0 7px 16px color-mix(in srgb, var(--brand) 10%, transparent);
+  }
+  .base-card:hover .base-card__check {
+    border-color: var(--brand);
+  }
+  .base-strip__nav button:hover:not(:disabled) {
+    background: var(--brand-soft);
+    border-color: var(--brand);
+    color: var(--brand);
+  }
+  .base-strip__nav button:first-child:hover:not(:disabled) svg {
+    transform: translateX(-2px);
+  }
+  .base-strip__nav button:last-child:hover:not(:disabled) svg {
+    transform: translateX(2px);
+  }
+}
+.base-card-shell:has(> .base-card:active) {
+  transform: translateY(0) scale(0.985);
+  transition-duration: 100ms;
+}
+.base-card:focus-visible .base-card__check::before,
+.base-card:focus-visible .base-card__check svg {
+  transition: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .base-strip__list > .base-card-shell {
+    transition: none;
+  }
+  .base-card-shell:has(> .base-card:is(:hover, :active)),
+  .base-strip__nav button:hover:not(:disabled) svg {
+    transform: none;
+  }
 }

@@ -357,14 +357,6 @@
   height: 20px;
 }
 
-.dest-hero__feedback:empty {
-  display: none;
-}
-.dest-hero__feedback {
-  display: grid;
-  gap: 8px;
-}
-
 .dest-hero :is(a, button):focus-visible {
   outline: 3px solid var(--sun);
   outline-offset: 3px;

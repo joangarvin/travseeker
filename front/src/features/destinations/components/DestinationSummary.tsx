@@ -1,11 +1,13 @@
-import { useId, useState } from 'react';
-import { ArrowRight, ChevronDown, Map, Navigation } from 'lucide-react';
+import { lazy, Suspense, useId, useState } from 'react';
+import { ArrowUpRight, ChevronDown, Navigation } from 'lucide-react';
 import { t } from '../../../i18n';
 import { useActivities } from '../../../contexts/ActivityContext';
 import { ExternalMapGate } from '../../privacy/CookieConsent';
 import type { Destino } from '../../../types';
 import { excerptAtWord, plain, safeHtml, validCoordinates } from '../../../utils';
 import { activityDefinition, activityValues } from '../../activities/activities';
+
+const DestinationLocationMap = lazy(() => import('./DestinationLocationMap'));
 
 type DestinationSummaryProps = {
   destination: Destino;
@@ -16,7 +18,6 @@ export function DestinationSummary({ destination, mapUrl }: DestinationSummaryPr
   const { activities } = useActivities();
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const descriptionId = useId();
-  const [mapActive, setMapActive] = useState(false);
   const description = plain(destination.descripcion).replace(/\s+/g, ' ').trim();
   const introduction =
     description.match(/^.+?[.!?](?=\s|$)/)?.[0] || excerptAtWord(description, 300);
@@ -25,18 +26,6 @@ export function DestinationSummary({ destination, mapUrl }: DestinationSummaryPr
   const activityTypes = [...new Set(activityValues(destination.tipoTurismoSecundario))].map(
     (value) => activityDefinition(value, activities),
   );
-  const mapSource = coordinates
-    ? `https://www.openstreetmap.org/export/embed.html?${new URLSearchParams({
-        bbox: [
-          Math.max(-180, coordinates.longitude - 0.28),
-          Math.max(-90, coordinates.latitude - 0.17),
-          Math.min(180, coordinates.longitude + 0.28),
-          Math.min(90, coordinates.latitude + 0.17),
-        ].join(','),
-        layer: 'mapnik',
-        marker: `${coordinates.latitude},${coordinates.longitude}`,
-      })}`
-    : null;
 
   return (
     <section id="resumen" className="dest-summary" aria-labelledby="summary-title" data-reveal>
@@ -86,27 +75,17 @@ export function DestinationSummary({ destination, mapUrl }: DestinationSummaryPr
           <p>
             {destination.nombre.trim()} · {destination.ubicacion}
           </p>
-          {mapSource ? (
+          {coordinates ? (
             <div className="dest-summary__map">
               <ExternalMapGate>
-                <iframe
-                  key={mapSource}
-                  src={mapSource}
-                  title={t('Mapa de {0}', { 0: destination.nombre.trim() })}
-                  loading="lazy"
-                  referrerPolicy="no-referrer"
-                  tabIndex={mapActive ? 0 : -1}
-                  className={mapActive ? 'is-active' : undefined}
-                />
-                <button
-                  className="dest-summary__map-toggle"
-                  type="button"
-                  aria-pressed={mapActive}
-                  onClick={() => setMapActive((active) => !active)}
-                >
-                  <Map aria-hidden="true" />
-                  {mapActive ? t('Bloquear mapa') : t('Explorar mapa')}
-                </button>
+                <Suspense fallback={<p role="status">{t('Cargando mapa')}</p>}>
+                  <DestinationLocationMap
+                    key={`${coordinates.latitude},${coordinates.longitude}`}
+                    latitude={coordinates.latitude}
+                    longitude={coordinates.longitude}
+                    name={destination.nombre.trim()}
+                  />
+                </Suspense>
               </ExternalMapGate>
             </div>
           ) : (
@@ -117,8 +96,13 @@ export function DestinationSummary({ destination, mapUrl }: DestinationSummaryPr
           {coordinates && (
             <div className="dest-summary__map-actions">
               {mapUrl && (
-                <a href={mapUrl} target="_blank" rel="noreferrer">
-                  {t('Abrir mapa')} <ArrowRight aria-hidden="true" />
+                <a
+                  className="dest-summary__open-map"
+                  href={mapUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {t('Abrir mapa')} <ArrowUpRight aria-hidden="true" />
                 </a>
               )}
               <a

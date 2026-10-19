@@ -1,7 +1,7 @@
 import { t, locale, languageUrl } from '../../i18n';
 import { DestinationReviews } from '../../features/destinations/components/DestinationReviews';
 import { useDestinationReviews } from '../../features/destinations/hooks/useDestinationReviews';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -26,7 +26,7 @@ import {
   validCoordinates,
 } from '../../utils';
 import type { CollectionSummary, Destino, EssentialItem } from '../../types';
-import { Button, Loader, Notice } from '../../components/ui';
+import { Button, Loader, Notice, Toast } from '../../components/ui';
 import { PageMeta, Shell } from '../../components/layout';
 import { RelatedDestinations } from '../../features/destinations/components/RelatedDestinations';
 import { DestinationNav } from '../../features/destinations/components/DestinationNav';
@@ -87,20 +87,37 @@ export default function DestinationPage() {
   const [collectionsLoading, setCollectionsLoading] = useState(false);
   const [collectionsError, setCollectionsError] = useState('');
   const [favoritePending, setFavoritePending] = useState(false);
-  const [favoriteError, setFavoriteError] = useState('');
-  const [favoriteFeedback, setFavoriteFeedback] = useState('');
-  const [tripFeedback, setTripFeedback] = useState('');
-  const [addedTripUrl, setAddedTripUrl] = useState<string | undefined>();
-  const [compareError, setCompareError] = useState('');
+  const [tripDialogOpen, setTripDialogOpen] = useState(false);
+  const [feedback, setFeedback] = useState<{
+    id: number;
+    message: string;
+    tone: 'success' | 'error';
+    action?: ReactNode;
+  } | null>(null);
+  const feedbackSequence = useRef(0);
+  const favoriteBusy = useRef(false);
+  const currentDestination = useRef(id);
+  const notify = (message: string, tone: 'success' | 'error' = 'success', action?: ReactNode) => {
+    if (currentDestination.current !== id) return;
+    setFeedback({ id: ++feedbackSequence.current, message, tone, action });
+  };
+  const openTripDialog = (item: EssentialItem | null) => {
+    if (tripDialogItem === undefined) setTripDialogItem(item);
+    setTripDialogOpen(true);
+    setFeedback(null);
+  };
   const [sharePending, setSharePending] = useState(false);
-  const [shareError, setShareError] = useState('');
-  const [shareFeedback, setShareFeedback] = useState('');
+
   useEffect(() => {
     const controller = new AbortController();
     window.scrollTo(0, 0);
     setLoading(true);
     setError('');
     setDestino(null);
+    currentDestination.current = id;
+    setFeedback(null);
+    setTripDialogItem(undefined);
+    setTripDialogOpen(false);
     setSelectedBaseMunicipioId(undefined);
     setEssentialFilter(ALL_ESSENTIALS);
     void api<Destino>(`/destinos/${id}`, { signal: controller.signal })
@@ -168,7 +185,6 @@ export default function DestinationPage() {
     setCollections([]);
     setFavorite(false);
     setCollectionsError('');
-    setFavoriteError('');
     if (!token) return () => controller.abort();
 
     void loadCollections(controller.signal);
@@ -182,41 +198,61 @@ export default function DestinationPage() {
       })
       .catch((cause) => {
         if (!controller.signal.aborted) {
-          setFavoriteError(
+          notify(
             cause instanceof Error ? cause.message : t('No se pudo comprobar el guardado'),
+            'error',
           );
         }
       });
     return () => controller.abort();
   }, [id, token]);
 
-  const toggleFavorite = async () => {
-    if (!token) return;
+  const toggleFavorite = async (restore?: boolean) => {
+    if (!token || favoriteBusy.current) return;
+    favoriteBusy.current = true;
     setFavoritePending(true);
-    setFavoriteError('');
-    setFavoriteFeedback('');
     try {
-      await api(`/favoritos/${id}`, { method: favorite ? 'DELETE' : 'POST' }, token);
-      setFavorite((value) => !value);
-      setFavoriteFeedback(favorite ? t('Destino retirado de guardados.') : t('Destino guardado.'));
-    } catch (cause) {
-      setFavoriteError(
-        cause instanceof Error ? cause.message : t('No se pudo actualizar el guardado'),
+      await api(`/favoritos/${id}`, { method: (restore ?? !favorite) ? 'POST' : 'DELETE' }, token);
+      if (currentDestination.current !== id) return;
+      setFavorite(restore ?? !favorite);
+      notify(
+        restore !== undefined
+          ? t('Cambio deshecho.')
+          : favorite
+            ? t('Destino retirado de guardados.')
+            : t('Destino guardado.'),
+        'success',
+        restore !== undefined ? undefined : (
+          <button type="button" onClick={() => void toggleFavorite(favorite)}>
+            {t('Deshacer')}
+          </button>
+        ),
       );
+    } catch (cause) {
+      if (currentDestination.current === id)
+        notify(
+          cause instanceof Error ? cause.message : t('No se pudo actualizar el guardado'),
+          'error',
+        );
     } finally {
+      favoriteBusy.current = false;
       setFavoritePending(false);
     }
   };
 
   const toggleComparison = () => {
-    setCompareError('');
-    if (!compare.toggle(id)) setCompareError(t('Puedes comparar un máximo de cuatro destinos.'));
+    const wasSelected = compare.ids.includes(id);
+    if (!compare.toggle(id)) notify(t('Puedes comparar un máximo de cuatro destinos.'), 'error');
+    else
+      notify(
+        wasSelected ? t('Destino retirado del comparador.') : t('Destino añadido al comparador.'),
+        'success',
+        <Link to="/comparar">{t('Comparar')}</Link>,
+      );
   };
 
   const shareDestination = async () => {
     setSharePending(true);
-    setShareError('');
-    setShareFeedback('');
     const url = languageUrl(locale);
     const shareData = {
       title: destino?.nombre.trim() || 'TravSeeker',
@@ -226,18 +262,18 @@ export default function DestinationPage() {
     try {
       if (navigator.share && (!navigator.canShare || navigator.canShare(shareData))) {
         await navigator.share(shareData);
-        setShareFeedback(t('Destino compartido.'));
+        notify(t('Destino compartido.'));
       } else {
         await navigator.clipboard.writeText(url);
-        setShareFeedback(t('Enlace copiado.'));
+        notify(t('Enlace copiado.'));
       }
     } catch (cause) {
       if (cause instanceof DOMException && cause.name === 'AbortError') return;
       try {
         await navigator.clipboard.writeText(url);
-        setShareFeedback(t('Enlace copiado.'));
+        notify(t('Enlace copiado.'));
       } catch {
-        setShareError(t('No se pudo compartir. Copia la dirección desde el navegador.'));
+        notify(t('No se pudo compartir. Copia la dirección desde el navegador.'), 'error');
       }
     } finally {
       setSharePending(false);
@@ -289,7 +325,6 @@ export default function DestinationPage() {
   const destinationMapUrl = coordinates ? openStreetMapUrl(coordinates) : null;
   const loginState = { returnTo: location.pathname + location.search };
 
-
   return (
     <Shell>
       <DestinationSchema destino={destino} />
@@ -302,7 +337,7 @@ export default function DestinationPage() {
         actions={
           <>
             {user ? (
-              <Button onClick={() => setTripDialogItem(null)}>
+              <Button onClick={() => openTripDialog(null)}>
                 <BookmarkPlus aria-hidden="true" /> {t('Añadir a un viaje')}
               </Button>
             ) : (
@@ -356,30 +391,12 @@ export default function DestinationPage() {
             </Button>
           </>
         }
-        feedback={
-          <>
-            {favoriteError && <Notice tone="error">{favoriteError}</Notice>}
-            {favoriteFeedback && <Notice tone="success">{favoriteFeedback}</Notice>}
-            {tripFeedback && (
-              <Notice tone="success">
-                {tripFeedback}{' '}
-                {addedTripUrl && <Link to={addedTripUrl}>{t('Ver el día en tu viaje')}</Link>}
-              </Notice>
-            )}
-            {compareError && <Notice tone="error">{compareError}</Notice>}
-            {shareError && <Notice tone="error">{shareError}</Notice>}
-            {shareFeedback && <Notice tone="success">{shareFeedback}</Notice>}
-          </>
-        }
       />
 
       <DestinationNav key={id} destination={destino} />
 
       <div className="destination-guide">
-        <DestinationSummary
-          destination={destino}
-          mapUrl={destinationMapUrl}
-        />
+        <DestinationSummary destination={destino} mapUrl={destinationMapUrl} />
 
         <section
           id="cuando-ir"
@@ -387,7 +404,11 @@ export default function DestinationPage() {
           aria-labelledby="when-to-go-heading"
           data-reveal
         >
-          <ClimateSection destinationId={destino.id} hasValidCoordinates={Boolean(coordinates)} />
+          <ClimateSection
+            destinationName={destino.nombre.trim()}
+            destinationId={destino.id}
+            hasValidCoordinates={Boolean(coordinates)}
+          />
         </section>
 
         <div id="imprescindibles" data-tour="essentials" className="destination-anchor">
@@ -411,7 +432,7 @@ export default function DestinationPage() {
             coverAlt={t('Vista principal de {0}', { 0: destino.nombre.trim() })}
             authenticated={Boolean(user)}
             loginState={loginState}
-            onAddToTrip={(item) => setTripDialogItem(item)}
+            onAddToTrip={openTripDialog}
           />
         </div>
 
@@ -495,16 +516,48 @@ export default function DestinationPage() {
           collectionsLoading={collectionsLoading}
           collectionsError={collectionsError}
           token={token}
+          open={tripDialogOpen}
+          onDismiss={() => setTripDialogOpen(false)}
+          onFailed={(message) =>
+            notify(
+              message,
+              'error',
+              <button
+                type="button"
+                onClick={() => {
+                  setFeedback(null);
+                  setTripDialogOpen(true);
+                }}
+              >
+                {t('Reintentar')}
+              </button>,
+            )
+          }
           plannedItem={tripDialogItem}
           defaultMunicipioId={selectedBaseMunicipioId}
           onRetryCollections={() => void loadCollections()}
-          onClose={() => setTripDialogItem(undefined)}
-          onAdded={(message, tripUrl) => {
-            setTripFeedback(message);
-            setAddedTripUrl(tripUrl);
+          onClose={() => {
+            setTripDialogItem(undefined);
+            setTripDialogOpen(false);
+          }}
+          onAdded={(message, tripUrl, showNotice) => {
+            if (showNotice)
+              notify(message, 'success', <Link to={tripUrl}>{t('Ver mi viaje')}</Link>);
             void loadCollections();
           }}
         />
+      )}
+      {feedback && (
+        <Toast
+          key={feedback.id}
+          tone={feedback.tone}
+          className="action-toast"
+          duration={feedback.tone === 'error' ? 0 : 6500}
+          action={feedback.action}
+          onDismiss={() => setFeedback(null)}
+        >
+          {feedback.message}
+        </Toast>
       )}
     </Shell>
   );
