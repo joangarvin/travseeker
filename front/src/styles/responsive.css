@@ -238,32 +238,10 @@
   .map-workspace {
     height: calc(100dvh - 64px);
   }
-  .map-toolbar {
-    grid-template-columns: 1fr auto;
-    min-height: 148px;
-    padding: 12px;
-  }
-  .map-toolbar__title {
-    min-width: 0;
-  }
-  .map-search {
-    grid-column: 1 / 3;
-    grid-row: 2;
-  }
-  .map-toolbar__actions {
-    grid-column: 2;
-    grid-row: 1;
-  }
-  .map-toolbar h1 {
-    font-size: 1.8rem;
-  }
-  .map-toolbar > div:last-child .icon-button {
-    display: inline-grid;
-  }
   .map-layout {
     position: relative;
     grid-template-columns: 1fr;
-    height: calc(100dvh - 212px);
+    height: 100%;
   }
   .map-layout > .map-canvas {
     grid-column: 1;
@@ -301,30 +279,11 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .map-list {
-    position: absolute;
-    z-index: 600;
-    inset: auto 0 0;
-    width: 100%;
-    max-height: 56%;
-    border-top: 1px solid var(--line-strong);
     border-right: 0;
-    box-shadow: 0 -20px 48px rgb(10 14 28 / 18%);
+    min-height: 0;
   }
-  .map-list > button {
-    min-height: 112px;
-  }
-  .map-selected {
-    right: 12px;
-    bottom: 12px;
-    grid-template-columns: 84px 1fr auto;
-    width: calc(100% - 24px);
-  }
-  .map-selected > img {
-    width: 84px;
-    height: 96px;
-  }
-  .map-selected h2 {
-    font-size: 1.25rem;
+  .map-layout--list > .map-canvas {
+    display: none;
   }
   .map-watermark {
     display: none;
@@ -345,7 +304,7 @@
   .map-legend > span {
     white-space: nowrap;
   }
-  .map-canvas:has(.map-selected) .map-legend {
+  .map-canvas:has(.map-detail) .map-legend {
     display: none;
   }
   .compare-picker {
@@ -579,20 +538,6 @@
   }
   .destination-hero__content h1 {
     font-size: 3.8rem;
-  }
-  .map-toolbar .button {
-    position: relative;
-    width: 44px;
-    padding-inline: 0;
-    font-size: 0;
-  }
-  .map-toolbar__actions .button b {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-  }
-  .map-toolbar .button svg {
-    width: 20px;
   }
   .itinerary article {
     grid-template-columns: 28px 1fr;

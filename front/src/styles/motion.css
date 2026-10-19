@@ -118,11 +118,6 @@
   animation: map-filters-enter 220ms var(--ease-drawer) both;
 }
 
-.map-list[data-motion-trigger='pointer'] {
-  transform-origin: left center;
-  animation: map-list-enter 240ms var(--ease-drawer) both;
-}
-
 /* Universal button contract: color confirms every press; motion is pointer/touch only. */
 button {
   --button-press-tint: color-mix(in srgb, currentColor 16%, transparent);
@@ -280,13 +275,6 @@ button[aria-busy='true']:not([data-loading])::after {
   from {
     opacity: 0;
     transform: translateY(-10px) scale(0.985);
-  }
-}
-
-@keyframes map-list-enter {
-  from {
-    opacity: 0;
-    transform: translateX(-18px);
   }
 }
 

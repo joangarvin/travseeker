@@ -643,18 +643,6 @@
 }
 
 /* Rich map */
-.map-toolbar {
-  display: grid;
-  grid-template-columns: auto minmax(240px, 440px) auto;
-}
-.map-toolbar__title {
-  min-width: 220px;
-}
-.map-toolbar__actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
 .map-toolbar__actions .button b {
   display: grid;
   place-items: center;
@@ -665,38 +653,11 @@
   border-radius: 50%;
   font-size: 0.66rem;
 }
-.map-search {
-  display: grid;
-  grid-template-columns: 36px 1fr;
-  align-items: center;
-  border-bottom: 1px solid var(--line-strong);
-}
-.map-search svg {
-  justify-self: center;
-}
-.map-search input {
-  height: 48px;
-  border: 0;
-  background: transparent;
-}
-.map-search input:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: -2px;
-}
 .map-list__match {
   color: var(--brand) !important;
   font-weight: 800;
   letter-spacing: 0 !important;
   text-transform: none !important;
-}
-.map-list > button {
-  min-height: 136px;
-}
-.map-list > button > span {
-  gap: 2px;
-}
-.map-list .tourism-mark {
-  margin-top: 5px;
 }
 .map-legend {
   position: absolute;
@@ -737,9 +698,6 @@
 .map-watermark {
   top: 16px;
   bottom: auto;
-}
-.map-selected {
-  bottom: 112px;
 }
 
 /* Upload controls */

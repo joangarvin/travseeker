@@ -1,7 +1,7 @@
 import { ExternalMapGate, useConsent } from '../../features/privacy/CookieConsent';
 import { t, intlLocale } from '../../i18n';
-import { useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   CircleMarker,
   MapContainer,
@@ -9,15 +9,14 @@ import {
   Popup,
   TileLayer,
   useMap,
-  useMapEvents,
   ZoomControl,
 } from 'react-leaflet';
 import { divIcon } from 'leaflet';
 import {
   List,
+  Check,
   LocateFixed,
   Map as MapIcon,
-  MapPin,
   Search,
   SlidersHorizontal,
   X,
@@ -44,6 +43,7 @@ import type { Destino, FilterOptions, SearchFilters } from '../../types';
 import { Empty, Loader, MediaImage } from '../../components/ui';
 import { Shell } from '../../components/layout';
 import { useTourismTypes } from '../../contexts';
+import { MapDestinationDetails } from './MapDestinationDetails';
 
 export default function MapPage() {
   const { maps } = useConsent();
@@ -58,7 +58,7 @@ export default function MapPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [destinos, setDestinos] = useState<Destino[]>([]);
   const [filters, setFilters] = useState<SearchFilters>(() =>
-    Object.fromEntries(searchParams.entries()),
+    Object.fromEntries([...searchParams.entries()].filter(([key]) => key !== 'lang')),
   );
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
     locations: ['Costa', 'Interior', 'Isla', 'Montaña'],
@@ -69,6 +69,8 @@ export default function MapPage() {
   const [listOpen, setListOpen] = useState(
     () => typeof window === 'undefined' || !window.matchMedia('(max-width: 760px)').matches,
   );
+  const listRef = useRef<HTMLElement>(null);
+  const mapViewRef = useRef<HTMLButtonElement>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [motionSource, setMotionSource] = useState<'pointer' | 'keyboard'>('keyboard');
   const [loading, setLoading] = useState(true);
@@ -94,9 +96,19 @@ export default function MapPage() {
     Object.entries(filters).forEach(([key, value]) => {
       if (value) nextParams.set(key, value);
     });
-    setSearchParams(nextParams, { replace: true });
+    setSearchParams(
+      (current) => {
+        const language = current.get('lang');
+        if (language) nextParams.set('lang', language);
+        return nextParams;
+      },
+      { replace: true },
+    );
     api<Destino[]>(`/mapa${queryString(filters)}`, { signal: controller.signal })
-      .then(setDestinos)
+      .then((items) => {
+        setDestinos(items);
+        setSelected((previous) => (items.some((item) => item.id === previous) ? previous : null));
+      })
       .catch((cause) =>
         controller.signal.aborted
           ? undefined
@@ -109,6 +121,23 @@ export default function MapPage() {
   }, [filters, setSearchParams, retry]);
 
   const active = useMemo(() => destinos.find((item) => item.id === selected), [destinos, selected]);
+  useEffect(() => {
+    if (!selected || !listOpen) return;
+    const frame = requestAnimationFrame(() =>
+      listRef.current
+        ?.querySelector('[data-selected="true"]')
+        ?.scrollIntoView({ block: 'nearest', behavior: 'instant' }),
+    );
+    return () => cancelAnimationFrame(frame);
+  }, [selected, listOpen]);
+  const closeSelected = () => {
+    const previous = selected;
+    setSelected(null);
+    requestAnimationFrame(() => {
+      const row = previous && document.getElementById(`map-result-${previous}`);
+      (row || mapViewRef.current)?.focus({ preventScroll: true });
+    });
+  };
   const update = (key: keyof SearchFilters, value: string) =>
     setFilters((current) => ({ ...current, [key]: value }));
   const filterCount = Object.entries(filters).filter(([key, value]) => key !== 'q' && value).length;
@@ -119,21 +148,48 @@ export default function MapPage() {
 
   return (
     <Shell footer={false}>
-      <section className="map-workspace">
+      <section
+        className="map-workspace"
+        onKeyDown={(event) => {
+          if (event.key === 'Escape' && active && !filtersOpen) {
+            event.preventDefault();
+            closeSelected();
+          }
+        }}
+      >
         <header className="map-toolbar">
           <div className="map-toolbar__title">
             <h1>{t('El mapa')}</h1>
-            <span>{loading ? 'Buscando…' : t('{0} destinos', { 0: destinos.length })}</span>
+            <span aria-live="polite">
+              {loading ? t('Buscando…') : t('{0} destinos', { 0: destinos.length })}
+            </span>
           </div>
-          <label className="map-search">
+          <div className="map-search">
             <Search aria-hidden />
-            <span className="sr-only">{t('Buscar en el mapa')}</span>
+            <label className="sr-only" htmlFor="map-query">
+              {t('Buscar en el mapa')}
+            </label>
             <input
+              id="map-query"
+              type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder={t('Destino, municipio o actividad')}
             />
-          </label>
+            {query && (
+              <button
+                type="button"
+                className="map-search__clear"
+                aria-label={t('Borrar búsqueda')}
+                onClick={() => {
+                  setQuery('');
+                  document.getElementById('map-query')?.focus();
+                }}
+              >
+                <X aria-hidden="true" />
+              </button>
+            )}
+          </div>
           <div className="map-toolbar__actions">
             <button
               className="button button--secondary"
@@ -141,22 +197,37 @@ export default function MapPage() {
                 setMotionSource(event.detail > 0 ? 'pointer' : 'keyboard');
                 setFiltersOpen((value) => !value);
               }}
+              aria-label={t('Filtros')}
               aria-expanded={filtersOpen}
               aria-controls="map-filters"
             >
               <SlidersHorizontal /> {t('Filtros')} {filterCount > 0 && <b>{filterCount}</b>}
             </button>
-            <button
-              className="icon-button"
-              onClick={(event) => {
-                setMotionSource(event.detail > 0 ? 'pointer' : 'keyboard');
-                setListOpen((value) => !value);
-              }}
-              aria-label={listOpen ? t('Ver solo el mapa') : t('Mostrar lista de destinos')}
-              title={listOpen ? t('Ver solo el mapa') : t('Mostrar lista')}
-            >
-              {listOpen ? <MapIcon /> : <List />}
-            </button>
+            <div className="map-view-switch" role="group" aria-label={t('Vista del mapa')}>
+              <button
+                type="button"
+                aria-pressed={listOpen}
+                onClick={(event) => {
+                  setMotionSource(event.detail > 0 ? 'pointer' : 'keyboard');
+                  setListOpen(true);
+                }}
+              >
+                <List aria-hidden="true" />
+                {t('Lista')}
+              </button>
+              <button
+                ref={mapViewRef}
+                type="button"
+                aria-pressed={!listOpen}
+                onClick={(event) => {
+                  setMotionSource(event.detail > 0 ? 'pointer' : 'keyboard');
+                  setListOpen(false);
+                }}
+              >
+                <MapIcon aria-hidden="true" />
+                {t('Mapa')}
+              </button>
+            </div>
           </div>
         </header>
         {filtersOpen && (
@@ -261,45 +332,63 @@ export default function MapPage() {
             </button>
           </div>
         )}
-        <div className={`map-layout ${listOpen ? '' : 'map-layout--closed'}`}>
+        <div className={`map-layout ${listOpen ? 'map-layout--list' : 'map-layout--closed'}`}>
           {listOpen && (
-            <aside
-              className="map-list"
-              aria-label={t('Destinos del mapa')}
-              data-motion-trigger={motionSource}
-            >
+            <aside ref={listRef} className="map-list" aria-label={t('Destinos del mapa')}>
               {loading ? (
                 <Loader />
               ) : error ? (
                 <Empty title={t('El mapa no está disponible')}>{error}</Empty>
               ) : destinos.length ? (
-                destinos.map((destino, index) => (
-                  <button
-                    key={destino.id}
-                    onClick={() => {
-                      setSelected(destino.id);
-                      if (window.matchMedia('(max-width: 760px)').matches) setListOpen(false);
-                    }}
-                    className={selected === destino.id ? 'is-active' : ''}
-                    aria-pressed={selected === destino.id}
-                  >
-                    <MediaImage src={imageUrl(destino.imagen)} alt="" loading="lazy" />
-                    <span>
-                      <small>
-                        {String(index + 1).padStart(2, '0')} · {plain(destino.ubicacion)}
-                      </small>
-                      <b>{destino.nombre.trim()}</b>
-                      {destino.searchMatch && (
-                        <small className="map-list__match">{t(destino.searchMatch.label)}</small>
-                      )}
-                      <em>
-                        {t('Presupuesto')}: {t(plain(destino.presupuesto))} · {t('Afluencia')}:{' '}
-                        {t(plain(destino.masificacion))}
-                      </em>
-                      <TourismMark value={destino.tipoTurismoPrincipal} compact />
-                    </span>
-                  </button>
-                ))
+                <ol className="map-results">
+                  {destinos.map((destino, index) => (
+                    <li
+                      key={destino.id}
+                      className="map-list__item"
+                      data-selected={selected === destino.id}
+                    >
+                      <button
+                        id={`map-result-${destino.id}`}
+                        type="button"
+                        onClick={(event) => {
+                          setMotionSource(event.detail > 0 ? 'pointer' : 'keyboard');
+                          setSelected(destino.id);
+                          if (window.matchMedia('(max-width: 760px)').matches) setListOpen(false);
+                        }}
+                        className="map-result"
+                        aria-pressed={selected === destino.id}
+                        aria-controls={
+                          selected === destino.id && maps ? `map-detail-${destino.id}` : undefined
+                        }
+                      >
+                        <MediaImage src={imageUrl(destino.imagen)} alt="" loading="lazy" />
+                        <span className="map-result__body">
+                          <span className="map-result__eyebrow">
+                            <small>
+                              {String(index + 1).padStart(2, '0')} · {plain(destino.ubicacion)}
+                            </small>
+                            <Check aria-hidden="true" />
+                          </span>
+                          <strong className="map-result__name">{destino.nombre.trim()}</strong>
+                          {destino.searchMatch && (
+                            <small className="map-list__match">
+                              {t(destino.searchMatch.label)}
+                            </small>
+                          )}
+                          <span className="map-result__facts">
+                            <span>
+                              {t('Presupuesto')} <b>{t(plain(destino.presupuesto))}</b>
+                            </span>
+                            <span>
+                              {t('Afluencia')} <b>{t(plain(destino.masificacion))}</b>
+                            </span>
+                          </span>
+                          <TourismMark value={destino.tipoTurismoPrincipal} compact />
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ol>
               ) : (
                 <Empty title={t('Ningún destino coincide')}>
                   {t('Prueba con otra zona o elimina algún filtro.')}
@@ -335,7 +424,35 @@ export default function MapPage() {
                 <ZoomControl position="bottomright" />
                 <MapSizeSync layoutKey={`${listOpen}-${filtersOpen}`} />
                 <MapViewport destinations={destinos} selected={active} />
-                <MapPoints destinations={destinos} selectedId={selected} onSelect={setSelected} />
+                <MapPoints
+                  destinations={destinos}
+                  selectedId={selected}
+                  onSelect={(id) => {
+                    setMotionSource('pointer');
+                    setSelected(id);
+                  }}
+                />
+                {active?.latitud != null && active.longitud != null && (
+                  <Popup
+                    key={active.id}
+                    position={[active.latitud, active.longitud]}
+                    className="map-destination-popup"
+                    offset={[0, -15]}
+                    minWidth={220}
+                    maxWidth={300}
+                    maxHeight={350}
+                    autoPanPadding={[16, 16]}
+                    closeButton={false}
+                    closeOnClick={false}
+                    closeOnEscapeKey={false}
+                  >
+                    <MapDestinationDetails
+                      destination={active}
+                      onClose={closeSelected}
+                      motionSource={motionSource}
+                    />
+                  </Popup>
+                )}
               </MapContainer>
             </ExternalMapGate>
             {maps && !tilesReady && !tilesFailed && (
@@ -353,25 +470,6 @@ export default function MapPage() {
                 </span>
               </div>
             )}
-            {active && (
-              <article className="map-selected">
-                <MediaImage src={imageUrl(active.imagen)} alt="" />
-                <div>
-                  <TourismMark value={active.tipoTurismoPrincipal} compact />
-                  <span>{plain(active.ubicacion)}</span>
-                  <h2>{active.nombre.trim()}</h2>
-                  <p>
-                    {t(plain(active.presupuesto))} · {t(plain(active.masificacion))}
-                  </p>
-                  <Link to={`/destino/${active.id}`}>
-                    {t('Ver destino')} <MapPin />
-                  </Link>
-                </div>
-                <button onClick={() => setSelected(null)} aria-label={t('Cerrar')}>
-                  <X />
-                </button>
-              </article>
-            )}
             <div className="map-legend" aria-label={t('Leyenda de tipos de turismo')}>
               {legendTypes.map((type) => (
                 <span
@@ -387,10 +485,14 @@ export default function MapPage() {
               ))}
             </div>
             <div className="map-watermark">
-              <LocateFixed /> {t('Mueve el mapa o elige un resultado')}
+              <LocateFixed aria-hidden="true" />{' '}
+              {active?.nombre.trim() || t('Mueve el mapa o elige un resultado')}
             </div>
           </div>
         </div>
+        <p className="sr-only" role="status">
+          {active ? t('Destino seleccionado: {0}', { 0: active.nombre.trim() }) : ''}
+        </p>
       </section>
     </Shell>
   );
@@ -472,8 +574,16 @@ function MapPoints({
 }) {
   const map = useMap();
   const { tourismTypes: tourismCatalog } = useTourismTypes();
-  const [zoom, setZoom] = useState(map.getZoom());
-  useMapEvents({ zoomend: () => setZoom(map.getZoom()) });
+  const subscribeToZoom = useCallback(
+    (notify: () => void) => {
+      map.on('zoomend', notify);
+      return () => {
+        map.off('zoomend', notify);
+      };
+    },
+    [map],
+  );
+  const zoom = useSyncExternalStore(subscribeToZoom, () => map.getZoom());
   const groups = useMemo(() => {
     const located = destinations.filter(
       (destination) => destination.latitud != null && destination.longitud != null,
@@ -528,27 +638,17 @@ function MapPoints({
         return (
           <CircleMarker
             key={destination.id}
+            className="map-marker"
             center={[destination.latitud!, destination.longitud!]}
             radius={active ? 13 : 9}
             pathOptions={{
-              className: `map-marker ${active ? 'is-selected' : ''}`,
-              color: type.colorValue,
+              color: active ? 'var(--ink)' : 'var(--surface)',
               fillColor: type.colorValue,
               weight: active ? 4 : 3,
               fillOpacity: 1,
             }}
             eventHandlers={{ click: () => onSelect(destination.id) }}
-          >
-            <Popup>
-              <div className="map-popup">
-                <MediaImage src={imageUrl(destination.imagen)} alt="" />
-                <TourismMark value={destination.tipoTurismoPrincipal} compact />
-                <strong>{destination.nombre}</strong>
-                <span>{plain(destination.ubicacion)}</span>
-                <Link to={`/destino/${destination.id}`}>{t('Abrir destino')}</Link>
-              </div>
-            </Popup>
-          </CircleMarker>
+          />
         );
       })}
     </>
