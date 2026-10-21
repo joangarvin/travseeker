@@ -206,6 +206,21 @@ function catalogRecord(record) {
   );
   return {
     ...result,
+    ...(essentialItem.preparationComplete !== undefined
+      ? {
+          preparationComplete:
+            result.preparationComplete ?? essentialItem.preparationComplete,
+        }
+      : {}),
+    ...(essentialItem.showOnWebsite !== undefined
+      ? { showOnWebsite: result.showOnWebsite ?? essentialItem.showOnWebsite }
+      : {}),
+    ...(essentialItem.countryCode
+      ? {
+          countryCode: result.countryCode || essentialItem.countryCode,
+          region: result.region ?? essentialItem.region,
+        }
+      : {}),
     translations,
     nombre: stripHtmlToText(essentialItem.title),
     descripcion: stripHtmlToText(essentialItem.description),

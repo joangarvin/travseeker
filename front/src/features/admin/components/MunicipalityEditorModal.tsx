@@ -321,6 +321,7 @@ export function MunicipalityEditorModal({
                 token={token}
                 ids={form[`${kind}Ids`] || form[kind]?.map((row) => row.id) || []}
                 initialRecords={form[kind]}
+                geography={{ countryCode: form.countryCode, region: form.region }}
                 onChange={(ids) => onChange({ ...form, [`${kind}Ids`]: ids })}
                 onEditingChange={setCatalogEditing}
               />
@@ -328,7 +329,7 @@ export function MunicipalityEditorModal({
           ))}
           <p>
             Guarda el municipio para confirmar sus datos, asociaciones y orden. Su publicación se
-            gestiona en Revisión editorial.
+            gestiona en Publicación por países.
           </p>
           <Button type="submit" disabled={catalogEditing || !detailReady} loading={isSaving}>
             {t('Guardar municipio')}

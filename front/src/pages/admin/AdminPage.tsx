@@ -536,7 +536,7 @@ export default function AdminPage() {
     );
   }
 
-  if (!params.has('tab') && params.get('view') !== 'legacy') {
+  if (!params.has('tab') && params.get('view') !== 'legacy' && !requestedEditor) {
     return (
       <Shell footer={false}>
         <PublicationWorkspace

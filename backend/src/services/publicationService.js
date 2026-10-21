@@ -95,7 +95,7 @@ async function list(query = {}) {
     regions: regionRows.map((r) => r.region),
   };
 }
-async function update(resource, id, body) {
+async function update(resource, id, body, actorId) {
   const config = resourceConfig(resource);
   let model = config.model;
   let recordId = id;
@@ -153,6 +153,10 @@ async function update(resource, id, body) {
           ? { guideEnabled: input.preparationComplete && input.showOnWebsite }
           : {}),
       };
+      if (config.editorial && record.editorialStatus !== data.editorialStatus) {
+        data.reviewedAt = input.preparationComplete ? new Date() : null;
+        data.reviewedById = input.preparationComplete ? actorId || null : null;
+      }
       await tx[model].update({ where: { id: recordId }, data });
       if (model === "destino") {
         await tx.place.updateMany({

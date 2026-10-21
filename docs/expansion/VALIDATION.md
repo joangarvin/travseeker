@@ -1,26 +1,23 @@
-# Validación de los prototipos 1 y 2
+# Validación de la integración del flujo
 
 ## Comprobaciones automáticas
 
-- 47 pruebas correctas: las 44 existentes y 3 del modelo aislado de publicación.
-- Lint completo sin errores.
-- TypeScript y build de la aplicación correctos.
-- Sin importaciones de prototipos en la aplicación de producción.
+- Frontend: 47 pruebas correctas, lint completo y build con TypeScript correctos.
+- Backend: 148 pruebas correctas; la integración aislada se omite sin su variable explícita.
+- PostgreSQL local desechable: 7 pruebas correctas de migración idempotente, conservación de visibilidad, consultas públicas, catálogos anidados, edición sin perder estados y permisos HTTP.
+- Las pruebas de integración rechazan cualquier base distinta de la instancia local de revisión.
 
 ## Comprobaciones en navegador
 
-- Mesa, Flujo y Territorio revisados en escritorio de 1440 px y vistas móviles de 390 y 320 px.
-- Sin desbordamiento horizontal del documento. Las barras de navegación territorial admiten desplazamiento interno.
-- Tema claro y oscuro, selección de variantes mediante teclado y foco visible.
-- Editor con guardado explícito, validación, mensaje de éxito, persistencia tras recargar, fallo simulado y protección del borrador al cerrar.
-- Creación de un registro nuevo, comprobación de descripción mínima al marcar Acabado y estado inicial oculto.
-- País y región conservados al pasar de Destinos a Hoteles y tras recargar.
-- Un país oculto bloquea las fichas con Mostrar: Sí. Al publicar el país, se muestran solo las fichas elegibles.
-- Francia en Próximamente muestra un anuncio sin exponer sus fichas.
-- Hoteles en preparación no permiten activar Mostrar.
-- Tutorial de cinco pasos, ejercicio independiente y controles adaptados a móvil.
-- Consola del navegador sin errores.
+- Panel real conectado a API real con registros sintéticos en http://localhost:5177/admin?lang=es.
+- Escritorio y móvil de 390 y 320 px. Sin desbordamiento horizontal del documento; el tablero y los catálogos mantienen desplazamiento interno cuando es necesario.
+- Guardado explícito persistente tras recargar, validación, protección de cambios pendientes y apertura de los editores completos de destinos y hoteles.
+- País y región conservados al cambiar de catálogo. Los catálogos globales se distinguen de los territoriales.
+- País oculto bloquea las fichas con Mostrar: Sí; Próximamente expone solo nombres, sin enlaces a contenido incompleto.
+- Tutorial de cinco pasos con práctica independiente, teclado, foco visible y adaptación móvil.
+- Vista integrada final sin errores de consola.
+- Capturas en front/output/playwright/expansion-flujo-integrado-escritorio.png y expansion-flujo-integrado-movil.png.
 
-## Límites de esta fase
+## Despliegue pendiente
 
-Las vistas públicas son simulaciones. No se han modificado API, base de datos, permisos, rutas públicas ni el panel real. La protección real de contenido oculto en enlaces directos, buscador y mapas se implementará después de elegir una propuesta. Los datos de demostración se guardan en almacenamiento local separado.
+La implementación está en new/expansion. No se ha aplicado la migración a la base de datos compartida ni se ha desplegado. Seguir IMPLEMENTATION.md para generar Prisma, ejecutar la migración y publicar backend y frontend juntos. Los prototipos se han retirado al integrar el flujo real.

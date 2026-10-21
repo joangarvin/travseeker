@@ -33,6 +33,7 @@ type Props = {
   ids: string[];
   initialRecords?: MunicipalityRecord[];
   initialEditRecord?: MunicipalityRecord | null;
+  geography?: { countryCode?: string; region?: string };
   onChange: (ids: string[]) => void;
   onEditingChange: (editing: boolean) => void;
 };
@@ -47,6 +48,7 @@ export function MunicipalityCatalogEditor({
   ids,
   initialRecords = EMPTY_RECORDS,
   initialEditRecord,
+  geography,
   onChange,
   onEditingChange,
 }: Props) {
@@ -272,7 +274,16 @@ export function MunicipalityCatalogEditor({
           type="button"
           variant="secondary"
           disabled={!!draft}
-          onClick={() => edit({ nombre: '', isPublished: false, ...creationContext() })}
+          onClick={() =>
+            edit({
+              nombre: '',
+              isPublished: false,
+              ...creationContext(),
+              ...(geography?.countryCode
+                ? { countryCode: geography.countryCode, region: geography.region || '' }
+                : {}),
+            })
+          }
         >
           <Plus />
           Crear {names[kind]}

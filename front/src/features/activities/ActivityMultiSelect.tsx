@@ -1,8 +1,9 @@
+import { useEditorTaxonomy } from '../admin/hooks/useEditorTaxonomy';
 import { t } from '../../i18n';
 import { useState } from 'react';
 import { Check, Plus, Search } from 'lucide-react';
 import { useActivities } from '../../contexts';
-import { activityDefinition, activityTypes, activityValues } from './activities';
+import { activityDefinition, activityValues } from './activities';
 
 type ActivityMultiSelectProps = {
   id: string;
@@ -25,15 +26,23 @@ export function ActivityMultiSelect({
   onChange,
   onRequestCreate,
 }: ActivityMultiSelectProps) {
-  const { activities } = useActivities();
+  const { activities: publicActivities } = useActivities();
+  const { records: activities, internal } = useEditorTaxonomy(
+    'activities',
+    publicActivities,
+    !!onRequestCreate,
+  );
   const [query, setQuery] = useState('');
   const selectedValues = activityValues(value);
   const hintId = hint ? `${id}-hint` : undefined;
   const normalizedQuery = query.trim().toLocaleLowerCase('es');
 
   const options = activityValues([
-    ...activities.filter((activity) => activity.isActive).map((activity) => activity.name),
-    ...(activities.length ? [] : activityTypes.map((activity) => activity.label)),
+    ...activities
+      .filter((activity) =>
+        internal ? activity.editorialStatus !== 'archived' : activity.isActive,
+      )
+      .map((activity) => activity.name),
     ...suggestions,
     ...selectedValues,
   ]);

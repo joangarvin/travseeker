@@ -96,6 +96,10 @@ function bool(value, label) {
   return value;
 }
 function publicationInput(body, { teaser = false, global = false } = {}) {
+  if (!body || typeof body !== "object" || Array.isArray(body))
+    throw Object.assign(new Error("Datos de publicación no válidos"), {
+      status: 400,
+    });
   const preparationComplete = bool(body.preparationComplete, "Preparación");
   const showOnWebsite = bool(body.showOnWebsite, "Mostrar");
   if (showOnWebsite && !preparationComplete && !teaser)

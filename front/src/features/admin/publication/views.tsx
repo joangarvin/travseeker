@@ -4,6 +4,7 @@ export function Badge({ value }: { value: Result }) {
   return <span className={`ex-badge ex-badge--${value}`}>{labels[value]}</span>;
 }
 export function Flow({ entries, onEdit }: { entries: Entry[]; onEdit: (entry: Entry) => void }) {
+  if (!entries.length) return null;
   const columns: Result[] = ['draft', 'ready', 'public', 'upcoming', 'blocked'];
   return (
     <div className="ex-board">
@@ -13,7 +14,11 @@ export function Flow({ entries, onEdit }: { entries: Entry[]; onEdit: (entry: En
             entries.some((e) => e.state === state) || ['draft', 'ready', 'public'].includes(state),
         )
         .map((state) => (
-          <section className="ex-column" key={state}>
+          <section
+            className="ex-column"
+            key={state}
+            data-empty={!entries.some((e) => e.state === state) || undefined}
+          >
             <header>
               <span className={`ex-state-mark ex-state-mark--${state}`} />
               <h3>{labels[state]}</h3>

@@ -211,7 +211,7 @@
   color: var(--muted);
 }
 .ex-context select,
-.ex-status-filter select,
+.ex-status-filter,
 .ex-fields select {
   border: 1px solid var(--line);
   background: var(--surface);
@@ -1432,4 +1432,63 @@
 .admin-publication .ex-metrics button[aria-pressed='true'] {
   border-color: var(--brand);
   background: var(--brand-soft);
+}
+
+.ex-country-scope {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 0 0 18px;
+  max-width: 65ch;
+}
+@media (max-width: 760px) {
+  .admin-publication .ex-top {
+    display: block;
+  }
+  .admin-publication .ex-top > strong {
+    display: block;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .admin-publication .ex-top > div {
+    display: flex;
+    margin-top: 14px;
+    gap: 10px;
+  }
+  .admin-publication .ex-top .ex-btn {
+    flex: 1;
+    font-size: 11px;
+    padding: 10px 12px;
+    min-height: 44px;
+    line-height: 1.5;
+  }
+  .admin-publication .ex-column[data-empty] {
+    display: none;
+  }
+  .admin-publication .ex-pagination {
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 11px;
+  }
+  .admin-publication .ex-pagination .ex-btn {
+    padding: 10px 12px;
+  }
+}
+
+.ex-toolbar > .ex-status-filter {
+  width: auto;
+  flex-shrink: 0;
+}
+.ex-toolbar > span {
+  white-space: nowrap;
+}
+.ex-toolbar > .ex-link {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .ex-toolbar > .ex-status-filter {
+    flex: 1;
+    min-width: 0;
+  }
 }

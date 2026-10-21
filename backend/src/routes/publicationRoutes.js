@@ -37,7 +37,12 @@ router.patch(
   "/records/:resource/:id",
   asyncHandler(async (req, res) =>
     res.json(
-      await service.update(req.params.resource, req.params.id, req.body),
+      await service.update(
+        req.params.resource,
+        req.params.id,
+        req.body,
+        req.user.id,
+      ),
     ),
   ),
 );

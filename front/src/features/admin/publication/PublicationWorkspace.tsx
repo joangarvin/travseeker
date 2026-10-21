@@ -10,6 +10,12 @@ import {
   ArrowUpRight,
   ArrowLeft,
   ArrowRight,
+  MapPin,
+  Building2,
+  Compass,
+  BedDouble,
+  Utensils,
+  Signpost,
 } from 'lucide-react';
 import { Dialog, Notice, Loader } from '../../../components/ui';
 import { api } from '../../../services/api';
@@ -18,6 +24,20 @@ import Tutorial from './Tutorial';
 import { Flow, Countries, Badge } from './views';
 import { resources, labels, outcome, type Country, type Entry, type Result } from './model';
 import type { AdminTab } from '../types';
+const resourceIcons: Record<string, typeof MapPin> = {
+  destinos: MapPin,
+  municipios: Building2,
+  actividades: Compass,
+  hoteles: BedDouble,
+  restaurantes: Utensils,
+  places: MapPin,
+  'tipos-actividad': Compass,
+  'tipos-viaje': Signpost,
+};
+function ResourceIcon({ resource }: { resource: string }) {
+  const Icon = resourceIcons[resource] || Layers;
+  return <Icon size={18} aria-hidden="true" />;
+}
 type Props = {
   token: string;
   onOpenCatalog: (tab: AdminTab, entry?: Entry) => Promise<void>;
@@ -173,6 +193,7 @@ export function PublicationWorkspace({ token, onOpenCatalog, onLegacy }: Props) 
     );
   };
   const chooseCountry = (code: string) => {
+    setResource('destinos');
     setContext({ country: code, region: '' });
     setArea('content');
     setQuery('');
@@ -294,6 +315,7 @@ export function PublicationWorkspace({ token, onOpenCatalog, onLegacy }: Props) 
                 setOffset(0);
               }}
             >
+              <ResourceIcon resource={r.id} />
               {r.name}
               <span>{summary[r.id] ?? '—'}</span>
             </button>
@@ -430,6 +452,7 @@ export function PublicationWorkspace({ token, onOpenCatalog, onLegacy }: Props) 
                 />
               </label>
               <select
+                className="ex-status-filter"
                 aria-label="Resultado público"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value as Result | '')}

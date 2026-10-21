@@ -1,7 +1,8 @@
+import { useEditorTaxonomy } from '../admin/hooks/useEditorTaxonomy';
 import { t } from '../../i18n';
 import { Check } from 'lucide-react';
 import { useTourismTypes } from '../../contexts';
-import { tourismColorStyle, tourismDefinition, tourismTypes, tourismValues } from './tourism';
+import { tourismColorStyle, tourismDefinition, tourismValues } from './tourism';
 
 type TourismMultiSelectProps = {
   id: string;
@@ -26,12 +27,17 @@ export function TourismMultiSelect({
   onChange,
   onRequestCreate,
 }: TourismMultiSelectProps) {
-  const { tourismTypes: catalog } = useTourismTypes();
+  const { tourismTypes: publicCatalog } = useTourismTypes();
+  const { records: catalog, internal } = useEditorTaxonomy(
+    'tourism-types',
+    publicCatalog,
+    !!onRequestCreate,
+  );
   const selectedValues = tourismValues(value);
   const hintId = hint ? `${id}-hint` : undefined;
-  const options = catalog.length
-    ? catalog.filter((type) => type.isActive).map((type) => tourismDefinition(type.name, catalog))
-    : tourismTypes;
+  const options = catalog
+    .filter((type) => (internal ? type.editorialStatus !== 'archived' : type.isActive))
+    .map((type) => tourismDefinition(type.name, catalog));
 
   const toggle = (option: string) => {
     const nextValues = selectedValues.includes(option)

@@ -239,6 +239,52 @@ test(
               .essentialGroups[0].items.length,
             1,
           );
+          const {
+            publicGuideInclude,
+            flattenGuide,
+          } = require("../src/domain/municipalityCatalog");
+          let guide = await prisma.municipio.findUnique({
+            where: { id: town.id },
+            include: publicGuideInclude,
+          });
+          assert.equal(flattenGuide(guide).hoteles.length, 0);
+          await publication.update("hoteles", hotel.id, {
+            preparationComplete: true,
+            showOnWebsite: true,
+            countryCode: "PT",
+            region: "Norte",
+          });
+          guide = await prisma.municipio.findUnique({
+            where: { id: town.id },
+            include: publicGuideInclude,
+          });
+          assert.equal(flattenGuide(guide).hoteles.length, 1);
+          // A normal destination edit must not hide or re-publish its essential records.
+          await prisma.tourismType.upsert({
+            where: { slug: "publication-test-cultural" },
+            create: {
+              name: "Publication Test Cultural",
+              slug: "publication-test-cultural",
+              isActive: false,
+              editorialStatus: "draft",
+            },
+            update: {},
+          });
+          const admin = require("../src/services/adminService");
+          const full = await admin.getDestino(destination.id);
+          await admin.updateDestino(destination.id, {
+            ...full,
+            tipoTurismoPrincipal: "Publication Test Cultural",
+            imagen: "https://example.test/cover.jpg",
+          });
+          assert.equal(
+            (
+              await prisma.essentialItem.findUnique({
+                where: { id: essential.id },
+              })
+            ).showOnWebsite,
+            true,
+          );
           await prisma.municipio.delete({ where: { id: town.id } });
           await prisma.hotel.delete({ where: { id: hotel.id } });
         },
@@ -278,6 +324,19 @@ test(
             `${baseUrl}/api/admin/publication/countries`,
           );
           assert.equal(response.status, 401);
+          assert.equal(
+            (
+              await fetch(`${baseUrl}/api/admin/publication/countries/PT`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  preparationComplete: true,
+                  showOnWebsite: true,
+                }),
+              })
+            ).status,
+            401,
+          );
           const viewer = await prisma.user.create({
             data: {
               email: `publication-test-${Date.now()}@example.test`,
