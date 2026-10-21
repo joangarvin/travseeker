@@ -1,0 +1,504 @@
+.agenda-date-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 16px;
+  margin: 0 0 8px;
+  scrollbar-width: thin;
+}
+.agenda-date-strip button {
+  display: grid;
+  place-items: center;
+  flex: 1 0 64px;
+  gap: 3px;
+  min-height: 96px;
+  max-width: none;
+  padding: 10px 8px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  transition:
+    background-color var(--motion-fast) ease,
+    border-color var(--motion-fast) ease;
+}
+.agenda-date-strip small {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.agenda-date-strip strong {
+  font-size: 22px;
+  line-height: 1.15;
+}
+.agenda-date-strip span {
+  font-size: 10px;
+  color: var(--muted);
+}
+.agenda-date-strip i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--line);
+}
+.agenda-date-strip i[data-filled] {
+  background: var(--brand);
+}
+.agenda-date-strip button[aria-pressed='true'] {
+  background: var(--sun);
+  border-color: var(--sun);
+  color: var(--sun-ink);
+}
+.agenda-date-strip button[aria-pressed='true'] :is(small, span) {
+  color: var(--sun-ink);
+}
+.trip-workspace .trip-agenda--agenda .trip-agenda__layout {
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 24px;
+}
+.trip-workspace .trip-agenda--agenda .itinerary-day {
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: none;
+}
+.trip-agenda--agenda .itinerary-day__content {
+  padding: 28px;
+}
+.trip-agenda--agenda .itinerary-day__content > header {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+  border: 0;
+  padding: 0 0 20px;
+}
+.trip-agenda--agenda .itinerary-day__content > header > div:first-child {
+  flex: 1;
+  min-width: 0;
+}
+.trip-agenda--agenda .itinerary-day__content h3 {
+  font-size: 28px;
+  line-height: 1.12;
+  margin: 8px 0 0;
+  overflow-wrap: anywhere;
+}
+.agenda-day-count {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.agenda-base {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 10px 0;
+  border-block: 1px solid var(--line);
+  font-size: 13px;
+}
+.agenda-base svg {
+  width: 16px;
+  height: 16px;
+  color: var(--brand);
+}
+.agenda-base button,
+.agenda-notes button {
+  min-height: 44px;
+  width: auto;
+  padding: 8px 0 8px 12px;
+  margin-left: auto;
+  border: 0;
+  background: transparent;
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 700;
+}
+.agenda-activities-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 36px;
+  margin-bottom: 12px;
+}
+.trip-agenda--agenda .trip-agenda__activities {
+  padding: 24px 0 20px;
+}
+.trip-agenda--agenda .trip-agenda__activities h4 {
+  margin: 0;
+  font:
+    700 14px Manrope,
+    sans-serif;
+  letter-spacing: 0;
+  color: var(--ink);
+}
+.agenda-text-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: auto;
+  min-height: 44px;
+  padding: 8px 0 8px 10px;
+  border: 0;
+  background: transparent;
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 700;
+}
+.agenda-text-button svg {
+  width: 16px;
+  height: 16px;
+}
+.agenda-empty {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px;
+  background: var(--canvas);
+  border-radius: 12px;
+}
+.agenda-empty > svg {
+  width: 28px;
+  height: 28px;
+  margin-top: 2px;
+  color: var(--brand);
+}
+.agenda-empty strong {
+  font-size: 15px;
+}
+.agenda-empty p {
+  margin: 6px 0 16px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.trip-workspace .trip-agenda--agenda .agenda-empty .button {
+  width: auto;
+  min-height: 44px;
+  padding: 10px 16px;
+  font-size: 13px;
+  background: var(--sun);
+  color: var(--sun-ink);
+}
+.trip-agenda--agenda .trip-agenda__activity {
+  gap: 12px;
+  padding: 14px 0;
+}
+.agenda-activity-order {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--brand-soft);
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 800;
+}
+.trip-agenda--agenda .trip-agenda__activity > div:first-of-type {
+  min-width: 0;
+}
+.trip-agenda--agenda .trip-agenda__activity-link {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.trip-agenda--agenda .trip-agenda__activity small {
+  font-size: 12px;
+}
+.trip-agenda--agenda .trip-agenda__day-actions {
+  padding: 16px 0 0;
+}
+.trip-agenda--agenda .trip-agenda__day-actions .button {
+  width: auto;
+  min-height: 44px;
+  padding: 8px 14px;
+  font-size: 12px;
+}
+.agenda-notes {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.agenda-notes > svg {
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+  color: var(--muted);
+}
+.agenda-notes > div {
+  flex: 1;
+  min-width: 0;
+}
+.agenda-notes h4 {
+  margin: 0;
+  font:
+    700 14px Manrope,
+    sans-serif;
+  letter-spacing: 0;
+}
+.agenda-notes p {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.65;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.agenda-notes button {
+  align-self: center;
+  padding-top: 0;
+}
+.agenda-day-arrows {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0;
+}
+.agenda-day-arrows button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+  min-height: 44px;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+}
+.agenda-day-arrows > span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.agenda-day-arrows button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.agenda-day-arrows svg {
+  width: 16px;
+  height: 16px;
+}
+.trip-workspace .agenda-route-summary {
+  padding: 22px;
+  background: var(--surface);
+  box-shadow: none;
+  border-radius: 16px;
+}
+.agenda-route-summary .kicker {
+  color: var(--brand);
+  font-size: 11px;
+}
+.agenda-route-summary h3 {
+  font-size: 18px;
+  line-height: 1.2;
+  margin: 0 0 16px;
+  overflow-wrap: anywhere;
+}
+.agenda-route-summary ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.agenda-route-summary button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 60px;
+  padding: 8px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+}
+.agenda-route-summary li:last-child button {
+  border: 0;
+}
+.agenda-route-summary button > span:nth-child(2) {
+  display: grid;
+  gap: 4px;
+  flex: 1;
+}
+.agenda-route-summary strong {
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+.agenda-route-summary small {
+  font-size: 11px;
+}
+.agenda-route-summary button > svg {
+  width: 14px;
+  height: 14px;
+}
+.agenda-route-dot {
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  flex: none;
+}
+.agenda-route-summary li[data-current] button {
+  color: var(--ink);
+}
+.agenda-route-summary li[data-current] .agenda-route-dot {
+  background: var(--sun);
+  border-color: var(--sun);
+  box-shadow: 0 0 0 4px var(--sun);
+}
+.trip-workspace .trip-agenda--agenda .trip-budget {
+  border-radius: 16px;
+}
+.trip-workspace .trip-agenda--agenda .trip-budget__total {
+  background: var(--brand-solid);
+  color: var(--brand-on-solid);
+}
+.trip-workspace .trip-agenda--agenda .trip-budget__total :is(h3, p, strong, small) {
+  color: inherit;
+}
+.trip-workspace .trip-agenda--agenda .trip-budget__total .button {
+  background: var(--brand-on-solid);
+  color: var(--brand-solid);
+}
+.agenda-activity-dialog.modal,
+.agenda-notes-dialog.modal,
+.agenda-base-dialog.modal {
+  width: min(100%, 600px);
+  border-radius: 20px;
+}
+.agenda-activity-dialog .public-dialog__heading h2,
+.agenda-notes-dialog .public-dialog__heading h2,
+.agenda-base-dialog .public-dialog__heading h2 {
+  font-size: 28px;
+  line-height: 1.15;
+}
+.agenda-activity-dialog .trip-agenda__add {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+.agenda-notes-dialog textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+.trip-agenda--agenda .itinerary-day__calendar {
+  font-size: 12px;
+  margin-top: 16px;
+}
+.trip-agenda--agenda .itinerary-day__content {
+  transition:
+    opacity 180ms var(--ease-out),
+    transform 180ms var(--ease-out);
+}
+@starting-style {
+  .trip-agenda--agenda[data-day-motion='on'] .is-active .itinerary-day__content {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .agenda-date-strip button:not([aria-pressed='true']):hover {
+    background: var(--surface-muted);
+  }
+  .agenda-route-summary button:hover strong {
+    color: var(--brand);
+  }
+  .agenda-base button:hover,
+  .agenda-notes button:hover,
+  .agenda-day-arrows button:not(:disabled):hover {
+    text-decoration: underline;
+  }
+}
+.agenda-date-strip button:active:not(:focus-visible) {
+  transform: scale(0.97);
+}
+@media (max-width: 1000px) {
+  .trip-workspace .trip-agenda--agenda .trip-agenda__layout {
+    grid-template-columns: minmax(0, 1fr) 235px;
+    gap: 16px;
+  }
+}
+@media (max-width: 760px) {
+  .trip-workspace .trip-agenda--agenda .trip-agenda__layout {
+    display: block;
+  }
+  .agenda-date-strip {
+    gap: 6px;
+  }
+  .agenda-date-strip button {
+    flex: 0 0 52px;
+    min-height: 86px;
+  }
+  .agenda-date-strip strong {
+    font-size: 20px;
+  }
+  .trip-agenda--agenda .itinerary-day__content {
+    padding: 20px;
+  }
+  .trip-agenda--agenda .itinerary-day__content h3 {
+    font-size: 25px;
+  }
+  .agenda-empty {
+    padding: 16px;
+    gap: 12px;
+  }
+  .agenda-empty > svg {
+    width: 22px;
+    height: 22px;
+  }
+  .agenda-base {
+    font-size: 12px;
+  }
+  .agenda-notes {
+    gap: 8px;
+  }
+  .agenda-notes > svg {
+    display: none;
+  }
+  .agenda-notes h4 {
+    font-size: 13px;
+  }
+  .agenda-day-arrows > span {
+    display: none;
+  }
+  .agenda-day-arrows button {
+    font-size: 11px;
+    gap: 6px;
+  }
+  .trip-agenda--agenda .trip-agenda__aside {
+    margin-top: 18px;
+  }
+  .trip-agenda--agenda .trip-agenda__aside > .trip-budget {
+    order: -1;
+  }
+  .agenda-day-count {
+    font-size: 11px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .trip-agenda--agenda .itinerary-day__content,
+  .agenda-date-strip button {
+    transition: none;
+    transform: none !important;
+  }
+}
+@media print {
+  .trip-agenda--agenda .itinerary-day__content {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.trip-workspace .trip-agenda--agenda .trip-budget__total > button {
+  background: var(--brand-on-solid);
+  color: var(--brand-solid);
+  border-color: var(--brand-on-solid);
+}

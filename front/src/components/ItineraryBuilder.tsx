@@ -1,12 +1,23 @@
 import { DayActivities } from '../features/itinerary/components/DayActivities';
 import { ItineraryDayEditor } from '../features/itinerary/components/ItineraryDayEditor';
-import type { ReactNode } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
+import {
+  AgendaDateStrip,
+  AgendaDayArrows,
+  AgendaRouteSummary,
+} from '../features/itinerary/components/AgendaNavigation';
 import { Link } from 'react-router-dom';
 import { t } from '../i18n';
 import {
   ArrowDown,
   ArrowUp,
   CalendarPlus,
+  CalendarDays,
+  Check,
+  Clock3,
+  CircleDot,
+  StickyNote,
+  WandSparkles,
   Download,
   GripVertical,
   MapPin,
@@ -18,7 +29,7 @@ import {
 } from 'lucide-react';
 import type { CollectionDetail, ItineraryDay } from '../types';
 import { downloadICalFile, generateGoogleCalendarUrl } from '../utils/itineraryExport';
-import { Button, Dialog, Empty, Field, MediaImage, Notice } from './ui';
+import { Button, Dialog, Empty, Field, MediaImage, Notice, Toast } from './ui';
 import { imageUrl } from '../utils';
 import { destinationFor, normalizeDays } from '../features/itinerary/itineraryModel';
 import {
@@ -99,6 +110,20 @@ export function ItineraryBuilder({
     hasPartialRoute,
   } = useItineraryRoutes(collection, days);
 
+  const [animateDay, setAnimateDay] = useState(false);
+  const [notesIndex, setNotesIndex] = useState<number | null>(null);
+  const [noteDraft, setNoteDraft] = useState('');
+  const [baseIndex, setBaseIndex] = useState<number | null>(null);
+  const [baseDraft, setBaseDraft] = useState('');
+  const noteInput = useRef<HTMLTextAreaElement>(null);
+  const selectDay = (index: number) => {
+    setSelectedDay(index);
+    setEditingDay(null);
+    setAddingActivity(null);
+    setNotesIndex(null);
+    setBaseIndex(null);
+  };
+
   const exportICal = () => {
     if (!downloadICalFile({ ...collection, itinerary: days })) {
       setFeedback(t('Añade una fecha de inicio para exportar el calendario'));
@@ -125,7 +150,13 @@ export function ItineraryBuilder({
   }
 
   return (
-    <section className="itinerary-builder trip-agenda" aria-labelledby="itinerary-builder-title">
+    <section
+      className="itinerary-builder trip-agenda trip-agenda--agenda"
+      aria-labelledby="itinerary-builder-title"
+      data-day-motion={animateDay ? 'on' : 'off'}
+      onPointerDownCapture={() => setAnimateDay(true)}
+      onKeyDownCapture={() => setAnimateDay(false)}
+    >
       {generationOpen && (
         <Dialog
           title={t('Crear nueva propuesta')}
@@ -147,62 +178,66 @@ export function ItineraryBuilder({
         <h1>{collection.nombre}</h1>
         {collection.descripcion && <p>{collection.descripcion}</p>}
       </div>
-      <header className="itinerary-builder__header">
-        <div>
-          <p className="kicker">{t('Tu plan de viaje')}</p>
-          <h2 id="itinerary-builder-title">{t('Día a día')}</h2>
-          <p>
-            {canEdit
-              ? t('Ordena las paradas, elige dónde hacer base y anota el plan.')
-              : t('La secuencia compartida del viaje, parada a parada.')}
-          </p>
-        </div>
-        <div className="itinerary-builder__exports no-print">
-          <Button variant="secondary" disabled={!hasDates} onClick={exportICal}>
-            <Download /> iCal
-          </Button>
-          <Button variant="secondary" onClick={() => window.print()}>
-            <Printer /> {t('Imprimir / PDF')}
-          </Button>
-          {!hasDates && <small>{t('Añade fechas para exportar a iCal.')}</small>}
-        </div>
-      </header>
+      <div className="trip-agenda__intro">
+        <header className="itinerary-builder__header">
+          <div>
+            <h2 id="itinerary-builder-title">{t('Día a día')}</h2>
+            <p>
+              {canEdit
+                ? t('Ordena las paradas, elige dónde hacer base y anota el plan.')
+                : t('La secuencia compartida del viaje, parada a parada.')}
+            </p>
+          </div>
+          <div className="itinerary-builder__exports no-print">
+            <Button variant="secondary" disabled={!hasDates} onClick={exportICal}>
+              <Download /> iCal
+            </Button>
+            <Button variant="secondary" onClick={() => window.print()}>
+              <Printer /> {t('Imprimir / PDF')}
+            </Button>
+            {!hasDates && <small>{t('Añade fechas para exportar a iCal.')}</small>}
+          </div>
+        </header>
 
-      <div className="itinerary-summary" aria-live="polite">
-        <span>
-          <b>{days.length}</b> {days.length === 1 ? t('día') : t('días')}
-        </span>
-        <span>
-          <b>
-            {routesLoading ? '…' : `${hasPartialRoute ? '≈' : ''}${Math.round(totalDistance)} km`}
-          </b>{' '}
-          {unavailableRouteCount ? t('distancia parcial') : t('distancia estimada')}
-        </span>
-        <span>
-          <b>
-            {routesLoading ? '…' : totalDuration ? formatDuration(totalDuration) : t('Sin dato')}
-          </b>{' '}
-          {hasPartialRoute
-            ? t('{0}/{1} tramos por carretera', {
-                0: exactRouteCount,
-                1: segments.filter((segment) => segment.source !== 'stay').length,
-              })
-            : t('en carretera')}
-        </span>
+        <div className="itinerary-summary" aria-live="polite" aria-busy={routesLoading}>
+          <span>
+            <CalendarDays aria-hidden="true" />
+            <b>{days.length}</b> {days.length === 1 ? t('día') : t('días')}
+          </span>
+          <span>
+            <Route aria-hidden="true" />
+            <b>
+              {routesLoading ? '…' : `${hasPartialRoute ? '≈' : ''}${Math.round(totalDistance)} km`}
+            </b>{' '}
+            {unavailableRouteCount ? t('distancia parcial') : t('distancia estimada')}
+          </span>
+          <span>
+            <Clock3 aria-hidden="true" />
+            <b>
+              {routesLoading ? '…' : totalDuration ? formatDuration(totalDuration) : t('Sin dato')}
+            </b>{' '}
+            {hasPartialRoute
+              ? t('{0}/{1} tramos por carretera', {
+                  0: exactRouteCount,
+                  1: segments.filter((segment) => segment.source !== 'stay').length,
+                })
+              : t('en carretera')}
+          </span>
+        </div>
+        {!routesLoading && hasPartialRoute && (
+          <p className="route-confidence">
+            <Route aria-hidden="true" />{' '}
+            {fallbackRouteCount
+              ? t('{0} {1} distancia en línea recta.', {
+                  0: fallbackRouteCount,
+                  1: fallbackRouteCount === 1 ? t('tramo usa') : t('tramos usan'),
+                })
+              : ''}{' '}
+            {unavailableRouteCount ? t('{0} sin coordenadas.', { 0: unavailableRouteCount }) : ''}{' '}
+            {t('Los tiempos solo incluyen rutas verificadas.')}
+          </p>
+        )}
       </div>
-      {!routesLoading && hasPartialRoute && (
-        <p className="route-confidence">
-          <Route aria-hidden="true" />{' '}
-          {fallbackRouteCount
-            ? t('{0} {1} distancia en línea recta.', {
-                0: fallbackRouteCount,
-                1: fallbackRouteCount === 1 ? t('tramo usa') : t('tramos usan'),
-              })
-            : ''}{' '}
-          {unavailableRouteCount ? t('{0} sin coordenadas.', { 0: unavailableRouteCount }) : ''}{' '}
-          {t('Los tiempos solo incluyen rutas verificadas.')}
-        </p>
-      )}
 
       {suggestedDraft && (
         <Notice tone="info">
@@ -221,68 +256,81 @@ export function ItineraryBuilder({
         </Notice>
       )}
       {canEdit && (
-        <div className="itinerary-builder__toolbar no-print">
-          <Button
-            variant="secondary"
-            onClick={() => (days.length ? setGenerationOpen(true) : autoGenerate())}
-          >
-            <Route /> {t('Autogenerar')}
-          </Button>
-          <Button variant="secondary" disabled={days.length < 3} onClick={improveRoute}>
-            <Route /> {t('Mejorar ruta')}
-          </Button>
-          {previousRoute && (
-            <Button variant="secondary" onClick={undoRoute}>
-              {t('Deshacer ruta')}
+        <div
+          className="itinerary-builder__toolbar no-print"
+          aria-label={t('Herramientas del itinerario')}
+        >
+          <div className="trip-agenda__tools">
+            <Button
+              variant="secondary"
+              disabled={saving}
+              onClick={() => (days.length ? setGenerationOpen(true) : autoGenerate())}
+            >
+              <WandSparkles aria-hidden="true" /> {t('Autogenerar')}
             </Button>
-          )}
-          <Button variant="secondary" onClick={addDay}>
-            <Plus /> {t('Añadir día')}
-          </Button>
-          <Button loading={saving} disabled={!dirty} onClick={() => void save()}>
-            <Save /> {t('Guardar cambios')}
-          </Button>
-          <span>
-            {suggestedDraft
-              ? t('Propuesta sin guardar')
-              : dirty
-                ? t('Cambios sin guardar')
-                : t('Todo guardado')}
-          </span>
+            <Button variant="secondary" disabled={saving || days.length < 3} onClick={improveRoute}>
+              <Route aria-hidden="true" /> {t('Mejorar ruta')}
+            </Button>
+            {previousRoute && (
+              <Button variant="secondary" disabled={saving} onClick={undoRoute}>
+                {t('Deshacer ruta')}
+              </Button>
+            )}
+            <Button variant="secondary" disabled={saving} onClick={addDay}>
+              <Plus aria-hidden="true" /> {t('Añadir día')}
+            </Button>
+          </div>
+          <div className="trip-agenda__save">
+            <span
+              className="trip-agenda__save-status"
+              data-state={saving ? 'saving' : dirty || suggestedDraft ? 'pending' : 'saved'}
+              role="status"
+              key={saving ? 'saving' : dirty || suggestedDraft ? 'pending' : 'saved'}
+            >
+              {dirty || suggestedDraft || saving ? (
+                <CircleDot aria-hidden="true" />
+              ) : (
+                <Check aria-hidden="true" />
+              )}
+              {saving
+                ? t('Guardando…')
+                : suggestedDraft
+                  ? t('Propuesta sin guardar')
+                  : dirty
+                    ? t('Cambios sin guardar')
+                    : t('Todo guardado')}
+            </span>
+            <Button
+              loading={saving}
+              loadingLabel={t('Guardando…')}
+              disabled={!dirty}
+              onClick={() => void save()}
+            >
+              <Save aria-hidden="true" /> {t('Guardar cambios')}
+            </Button>
+          </div>
         </div>
       )}
-      {feedback && (
-        <Notice tone={feedbackTone}>
-          {feedback}
-          {feedbackTone === 'error' && <>{t('. Revisa tu conexión y vuelve a intentarlo.')}</>}
-        </Notice>
-      )}
+      {feedback &&
+        (feedbackTone === 'error' ? (
+          <Notice tone="error">
+            {feedback}
+            {t('. Revisa tu conexión y vuelve a intentarlo.')}
+          </Notice>
+        ) : (
+          <Toast duration={4000} onDismiss={() => setFeedback('')}>
+            {feedback}
+          </Toast>
+        ))}
 
+      <AgendaDateStrip
+        days={days}
+        selected={activeDay}
+        onSelect={selectDay}
+        collection={collection}
+      />
       <div className="trip-agenda__layout">
         <div className="trip-agenda__main">
-          <div className="trip-agenda__days no-print" aria-label={t('Seleccionar día')}>
-            {days.map((day, index) => (
-              <button
-                type="button"
-                key={index}
-                aria-pressed={activeDay === index}
-                onClick={() => {
-                  setSelectedDay(index);
-                  setEditingDay(null);
-                  setAddingActivity(null);
-                }}
-              >
-                <strong>
-                  {t('Día')} {index + 1} ·{' '}
-                  {destinationFor(collection, day.destinationId)?.nombre || t('Destino')}
-                </strong>
-                <small>{formatDayDate(day.date)}</small>
-                <small>
-                  {day.plannedActivities?.length || 0} {t('actividades')}
-                </small>
-              </button>
-            ))}
-          </div>
           <ol className="itinerary-timeline">
             {days.map((day, index) => {
               const destination =
@@ -321,6 +369,9 @@ export function ItineraryBuilder({
                             <Link to={`/destino/${destination.id}`}>{destination.nombre}</Link>
                           </h3>
                         </div>
+                        <span className="agenda-day-count">
+                          {index + 1} / {days.length}
+                        </span>
                         {canEdit && editingDay === index && (
                           <div className="itinerary-day__order no-print">
                             <GripVertical aria-hidden="true" />
@@ -364,6 +415,34 @@ export function ItineraryBuilder({
                         )}
                       </header>
 
+                      <div className={`agenda-base ${canEdit ? 'no-print' : ''}`}>
+                        <MapPin aria-hidden="true" />
+                        <span>
+                          {day.baseMunicipioId ? (
+                            <>
+                              {t('Base en')}{' '}
+                              <strong>
+                                {municipios.find((item) => item.id === day.baseMunicipioId)
+                                  ?.nombre || t('Municipio')}
+                              </strong>
+                            </>
+                          ) : (
+                            t('Sin base concreta')
+                          )}
+                        </span>
+                        {canEdit && editingDay !== index && (
+                          <button
+                            onClick={() => {
+                              setBaseIndex(index);
+                              setBaseDraft(day.baseMunicipioId || '');
+                            }}
+                          >
+                            {t('Cambiar')}
+                            <span className="sr-only"> {t('Municipio base')}</span>
+                          </button>
+                        )}
+                      </div>
+
                       <DayActivities
                         day={day}
                         destination={destination}
@@ -380,29 +459,29 @@ export function ItineraryBuilder({
                           onChange={(patch) => updateDay(index, patch)}
                         />
                       ) : (
-                        <div className={`itinerary-day__readonly ${canEdit ? 'no-print' : ''}`}>
-                          {day.baseMunicipioId && (
-                            <p>
-                              <MapPin /> {t('Base:')}{' '}
-                              {municipios.find((item) => item.id === day.baseMunicipioId)?.nombre}
-                            </p>
-                          )}
-                          {canEdit ? (
-                            <Field label={t('Notas del día')} htmlFor={`agenda-notes-${index}`}>
-                              <textarea
-                                id={`agenda-notes-${index}`}
-                                maxLength={1200}
-                                value={day.notes || ''}
-                                placeholder={t('Reservas, horarios, ideas…')}
-                                onChange={(event) =>
-                                  updateDay(index, { notes: event.target.value })
-                                }
-                              />
-                            </Field>
-                          ) : (
-                            day.notes && <p>{day.notes}</p>
-                          )}
-                        </div>
+                        (canEdit || day.notes) && (
+                          <section className={`agenda-notes ${canEdit ? 'no-print' : ''}`}>
+                            <StickyNote aria-hidden="true" />
+                            <div>
+                              <h4>{t('Notas del día')}</h4>
+                              <p>
+                                {day.notes ||
+                                  t('Guarda aquí ideas, recordatorios o detalles de tu plan.')}
+                              </p>
+                            </div>
+                            {canEdit && (
+                              <button
+                                onClick={() => {
+                                  setNotesIndex(index);
+                                  setNoteDraft(day.notes || '');
+                                }}
+                              >
+                                {day.notes ? t('Editar') : t('Añadir')}
+                                <span className="sr-only"> {t('Notas del día')}</span>
+                              </button>
+                            )}
+                          </section>
+                        )
                       )}
 
                       {canEdit && (
@@ -442,33 +521,89 @@ export function ItineraryBuilder({
               );
             })}
           </ol>
+          <AgendaDayArrows days={days} selected={activeDay} onSelect={selectDay} />
         </div>
         <aside className="trip-agenda__aside no-print">
-          <article className="trip-agenda__route">
-            <p className="kicker">{t('Tu ruta')}</p>
-            <h3>{collection.nombre}</h3>
-            {days
-              .filter(
-                (day, index) => index === 0 || days[index - 1].destinationId !== day.destinationId,
-              )
-              .map((day, index) => (
-                <Link key={`${day.destinationId}-${index}`} to={`/destino/${day.destinationId}`}>
-                  {destinationFor(collection, day.destinationId)?.nombre || day.destinationId}
-                </Link>
-              ))}
-          </article>
+          <AgendaRouteSummary
+            days={days}
+            selected={activeDay}
+            onSelect={selectDay}
+            collection={collection}
+          />
           {budget}
-          <article className="trip-agenda__route">
-            <p className="kicker">{t('El grupo')}</p>
-            <h3>
-              {collection.travelerCount || 2} {t('viajeros')}
-            </h3>
-            <p>
-              {t('{0} colaboradores con acceso al plan.', { 0: collection.members?.length || 0 })}
-            </p>
-          </article>
         </aside>
       </div>
+      {canEdit && notesIndex !== null && days[notesIndex] && (
+        <Dialog
+          className="agenda-notes-dialog"
+          title={t('Notas · Día {0}', { 0: notesIndex + 1 })}
+          onClose={() => setNotesIndex(null)}
+          initialFocusRef={noteInput}
+        >
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              updateDay(notesIndex, { notes: noteDraft.trim() });
+              setNotesIndex(null);
+            }}
+          >
+            <Field label={t('Notas del día')} htmlFor="agenda-note-draft">
+              <textarea
+                ref={noteInput}
+                id="agenda-note-draft"
+                rows={5}
+                maxLength={1200}
+                value={noteDraft}
+                onChange={(event) => setNoteDraft(event.target.value)}
+                placeholder={t('Reservas, horarios, ideas…')}
+              />
+            </Field>
+            <div className="form-actions">
+              <Button variant="secondary" onClick={() => setNotesIndex(null)}>
+                {t('Cancelar')}
+              </Button>
+              <Button type="submit">{t('Aplicar nota')}</Button>
+            </div>
+          </form>
+        </Dialog>
+      )}
+      {canEdit && baseIndex !== null && days[baseIndex] && (
+        <Dialog
+          className="agenda-base-dialog"
+          title={t('Municipio base')}
+          description={destinationFor(collection, days[baseIndex].destinationId)?.nombre}
+          onClose={() => setBaseIndex(null)}
+        >
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              updateDay(baseIndex, { baseMunicipioId: baseDraft || undefined });
+              setBaseIndex(null);
+            }}
+          >
+            <Field label={t('Municipio base')} htmlFor="agenda-base-draft">
+              <select
+                id="agenda-base-draft"
+                value={baseDraft}
+                onChange={(event) => setBaseDraft(event.target.value)}
+              >
+                <option value="">{t('Sin base concreta')}</option>
+                {destinationFor(collection, days[baseIndex].destinationId)?.municipios?.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.nombre}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <div className="form-actions">
+              <Button variant="secondary" onClick={() => setBaseIndex(null)}>
+                {t('Cancelar')}
+              </Button>
+              <Button type="submit">{t('Cambiar base')}</Button>
+            </div>
+          </form>
+        </Dialog>
+      )}
     </section>
   );
 }

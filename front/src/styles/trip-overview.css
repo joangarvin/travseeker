@@ -1,0 +1,498 @@
+.trip-overview {
+  padding: 28px clamp(16px, 4vw, 64px) 72px;
+  max-width: 1600px;
+  margin: auto;
+}
+.trip-overview-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.trip-overview-heading .kicker {
+  color: var(--brand);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  margin: 0 0 10px;
+}
+.trip-overview-heading h2 {
+  margin: 0 0 12px;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.trip-overview-heading > div > p:last-child {
+  margin: 0;
+  max-width: 65ch;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.trip-overview .button {
+  width: auto;
+  min-height: 44px;
+  padding: 10px 16px;
+  font-size: 13px;
+}
+.trip-overview-basics {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-bottom: 24px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.trip-overview-basics > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.trip-overview-basics svg {
+  width: 17px;
+  height: 17px;
+  color: var(--brand);
+}
+.trip-overview-basics button {
+  width: auto;
+  min-height: 44px;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 700;
+}
+.trip-overview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 24px;
+  align-items: start;
+}
+.trip-overview-grid > div,
+.trip-overview-grid > aside {
+  min-width: 0;
+}
+.trip-overview-aside {
+  display: grid;
+  gap: 18px;
+}
+.trip-overview-route {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+}
+.trip-overview-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.trip-overview-card-heading h3 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.2;
+}
+.trip-overview-card-heading > span {
+  color: var(--muted);
+  font-size: 12px;
+}
+.trip-overview-stops {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.trip-overview-stops > button {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  text-align: left;
+  gap: 9px;
+  width: 100%;
+  min-height: 178px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--canvas);
+  color: var(--ink);
+  transition:
+    background-color var(--motion-fast) ease,
+    border-color var(--motion-fast) ease;
+}
+.trip-overview-stop-number {
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 800;
+}
+.trip-overview-stops strong {
+  font-size: 17px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+}
+.trip-overview-stops small {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: auto;
+}
+.trip-overview-stops > button > span:last-of-type {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+  padding-right: 16px;
+  overflow-wrap: anywhere;
+}
+.trip-overview-stops > button > svg {
+  position: absolute;
+  right: 14px;
+  top: 16px;
+  width: 17px;
+  height: 17px;
+  color: var(--brand);
+  transition: transform var(--motion-fast) var(--ease-out);
+}
+.trip-overview-stats {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding-top: 20px;
+  margin-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 12px;
+  color: var(--muted);
+}
+.trip-overview-stats > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.trip-overview-stats svg {
+  width: 16px;
+  height: 16px;
+  color: var(--brand);
+}
+.trip-overview-stats strong {
+  color: var(--ink);
+  font-size: 14px;
+}
+.trip-overview-flexible {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 22px 0;
+  margin-top: 4px;
+}
+.trip-overview-small-icon,
+.trip-overview-access-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+.trip-overview-small-icon svg,
+.trip-overview-access-icon svg {
+  width: 19px;
+  height: 19px;
+}
+.trip-overview-flexible h3 {
+  margin: 0 0 8px;
+  font:
+    700 15px Manrope,
+    sans-serif;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+.trip-overview-flexible p {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+.trip-overview-text-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  width: auto;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 700;
+}
+.trip-overview-text-button svg {
+  width: 15px;
+  height: 15px;
+  transition: transform var(--motion-fast) var(--ease-out);
+}
+.trip-overview-access {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+}
+.trip-overview-access > div {
+  min-width: 0;
+}
+.trip-overview-access h3 {
+  margin: 2px 0 6px;
+  font:
+    700 14px Manrope,
+    sans-serif;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+.trip-overview-access p {
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 0;
+  color: var(--muted);
+}
+.trip-overview-access > .trip-overview-text-button {
+  grid-column: 2;
+  justify-self: start;
+}
+.trip-overview-private {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 12px;
+}
+.trip-overview-private svg {
+  width: 13px;
+  height: 13px;
+}
+.trip-workspace .trip-overview .trip-budget {
+  border-radius: 18px;
+}
+.trip-workspace .trip-overview .trip-budget__total {
+  background: var(--brand-solid);
+  color: var(--brand-on-solid);
+}
+.trip-workspace .trip-overview .trip-budget__total :is(p, strong, small) {
+  color: inherit;
+}
+.trip-workspace .trip-overview .trip-budget__total > button {
+  background: var(--brand-on-solid);
+  color: var(--brand-solid);
+  border-color: var(--brand-on-solid);
+}
+.trip-overview-empty {
+  padding: 24px 0;
+}
+.trip-overview-empty > svg {
+  width: 28px;
+  height: 28px;
+  color: var(--brand);
+}
+.trip-overview-empty h4 {
+  font-size: 22px;
+  margin: 16px 0 8px;
+}
+.trip-overview-empty p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 0 0 16px;
+}
+.trip-overview-people-dialog.modal {
+  width: min(100%, 600px);
+  border-radius: 20px;
+}
+.trip-overview-people-dialog ul {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+}
+.trip-overview-people-dialog li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.trip-overview-people-dialog li > span {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--brand-soft);
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 800;
+}
+.trip-overview-people-dialog li > div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+}
+.trip-overview-people-dialog small {
+  font-size: 12px;
+  color: var(--muted);
+}
+.trip-overview-people-dialog > p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.trip-overview {
+  transition:
+    opacity 180ms var(--ease-out),
+    transform 180ms var(--ease-out);
+}
+@starting-style {
+  .trip-overview {
+    opacity: 0.1;
+    transform: translateY(4px);
+  }
+}
+.trip-overview[data-keyboard] {
+  transition: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .trip-overview-stops > button:hover {
+    border-color: var(--brand);
+    background: var(--brand-soft);
+  }
+  .trip-overview-stops > button:hover > svg,
+  .trip-overview-text-button:hover svg {
+    transform: translate(2px, -2px);
+  }
+  .trip-overview-basics button:hover {
+    text-decoration: underline;
+  }
+}
+.trip-overview-stops > button:active:not(:focus-visible) {
+  transform: scale(0.98);
+}
+@media (max-width: 1100px) {
+  .trip-overview-grid {
+    grid-template-columns: minmax(0, 1fr) 250px;
+    gap: 20px;
+  }
+  .trip-overview-stops {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .trip-overview-heading {
+    align-items: flex-start;
+  }
+  .trip-overview-heading > .button {
+    flex-shrink: 0;
+  }
+}
+@media (max-width: 760px) {
+  .trip-overview-heading {
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .trip-overview-heading h2 {
+    font-size: 29px;
+  }
+  .trip-overview-heading > div > p:last-child {
+    font-size: 13px;
+  }
+  .trip-overview-basics {
+    gap: 10px 18px;
+    font-size: 12px;
+    margin-bottom: 18px;
+  }
+  .trip-overview-grid {
+    display: block;
+  }
+  .trip-overview-aside {
+    margin-top: 20px;
+  }
+  .trip-overview-route {
+    padding: 20px;
+    border-radius: 16px;
+  }
+  .trip-overview-card-heading {
+    margin-bottom: 16px;
+  }
+  .trip-overview-card-heading h3 {
+    font-size: 18px;
+  }
+  .trip-overview-stops {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .trip-overview-stops > button {
+    min-height: 0;
+    padding: 16px 16px 16px 52px;
+    gap: 6px;
+  }
+  .trip-overview-stops .trip-overview-stop-number {
+    position: absolute;
+    top: 18px;
+    left: 16px;
+  }
+  .trip-overview-stops strong {
+    font-size: 17px;
+    margin: 0;
+    padding-right: 16px;
+  }
+  .trip-overview-stops small {
+    margin-top: 4px;
+  }
+  .trip-overview-stats {
+    gap: 10px 16px;
+    font-size: 11px;
+  }
+  .trip-overview-flexible {
+    padding: 20px 0;
+    gap: 12px;
+  }
+  .trip-overview-flexible h3 {
+    font-size: 14px;
+  }
+  .trip-overview-flexible p {
+    font-size: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .trip-overview,
+  .trip-overview * {
+    transition: none !important;
+    animation: none !important;
+  }
+  .trip-overview-stops > button:active {
+    transform: none !important;
+  }
+}
+@media print {
+  .trip-overview {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .trip-overview-grid {
+    display: block;
+  }
+  .trip-overview-stops {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

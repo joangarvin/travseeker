@@ -1,26 +1,16 @@
-import { ParticipantAvatars } from '../../features/collections/components/ParticipantAvatars';
+import { TripHeader } from '../../features/collections/components/TripHeader';
 import { TripOverview } from '../../features/collections/components/TripOverview';
 import { useCollectionSharing } from '../../features/collections/hooks/useCollectionSharing';
-import { t, intlLocale } from '../../i18n';
+import { t } from '../../i18n';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import {
-  Calendar,
-  Edit3,
-  LayoutDashboard,
-  LayoutGrid,
-  MapPin,
-  Route,
-  Share2,
-  Trash2,
-  Users,
-} from 'lucide-react';
+import { LayoutDashboard, LayoutGrid, Route, Trash2 } from 'lucide-react';
 import { Shell } from '../../components/layout';
-import { Button, Loader, MediaImage, Notice } from '../../components/ui';
+import { Button, Loader, Notice, Toast } from '../../components/ui';
 import { useAuth } from '../../contexts';
 import { api } from '../../services/api';
 import type { CollectionDetail, ItineraryDay } from '../../types';
-import { imageUrl } from '../../utils';
+import { withoutDestination } from '../../features/collections/destinationsModel';
 import { TripDestinations } from '../../features/collections/components/TripDestinations';
 import { addTripDays, getTripDuration } from '../../utils/tripDuration';
 import { CollectionBudgetSummary, type TripBudgetScenario } from '../../components/BudgetEstimator';
@@ -46,6 +36,7 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
   const [deletePending, setDeletePending] = useState(false);
   const [view, setView] = useState<'overview' | 'destinations' | 'itinerary'>('itinerary');
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [settingsMessage, setSettingsMessage] = useState('');
   const [shareOpen, setShareOpen] = useState(false);
   const [itineraryDirty, setItineraryDirty] = useState(false);
   const [budgetDraft, setBudgetDraft] = useState<ItineraryDay[] | null>(null);
@@ -98,18 +89,17 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
   }, [loadCollection]);
 
   const removeDestination = async (destinationId: string) => {
-    if (!token || !id) return;
+    if (!token || !id) throw new Error(t('No se pudo identificar el viaje'));
     if (
       itineraryDirty &&
       !confirm(t('Hay cambios sin guardar. Quitar el destino los descartará. ¿Continuar?'))
     )
-      return;
+      return false;
     setActionPending(true);
     try {
       await api(`/colecciones/${id}/items/${destinationId}`, { method: 'DELETE' }, token);
-      await loadCollection();
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : t('No se pudo quitar el destino'));
+      setCollection((current) => (current ? withoutDestination(current, destinationId) : current));
+      return true;
     } finally {
       setActionPending(false);
     }
@@ -135,6 +125,7 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
           }
         : current,
     );
+    setSettingsMessage(t('Datos del viaje guardados'));
   };
 
   const removeCollection = async () => {
@@ -249,11 +240,6 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
     );
   }
 
-  const visibilityLabel = publicView
-    ? t('Viaje compartido')
-    : collection.visibility === 'shared'
-      ? t('Viaje con enlace activo')
-      : t('Viaje privado');
   const canEdit = !publicView && collection.role !== 'viewer';
   const isOwner = !publicView && collection.role === 'owner';
   const budget = (compact = false) => (
@@ -273,59 +259,21 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
           <Link to="/colecciones">← {t('Tus viajes')}</Link>
           <span>/ {collection.nombre}</span>
         </div>
-        <header className="trip-workspace-header trip-workspace-header--cover">
-          {collection.items[0] && (
-            <MediaImage
-              className="trip-workspace-header__photo"
-              src={imageUrl(collection.items[0].destino.imagen)}
-              alt=""
-              fetchPriority="high"
-              sizes="100vw"
-            />
-          )}
-          <div className="trip-workspace-header__title">
-            <p className="kicker">{visibilityLabel}</p>
-            <h1>{collection.nombre}</h1>
-            <p>{collection.descripcion || t('Un viaje en construcción.')}</p>
-          </div>
-          {isOwner && (
-            <div className="heading-actions no-print">
-              <Button variant="secondary" onClick={openSettings}>
-                <Edit3 /> {t('Editar viaje')}
-              </Button>
-              <Button
-                variant="secondary"
-                disabled={actionPending}
-                onClick={() => setShareOpen(true)}
-              >
-                <Share2 /> {t('Compartir')}
-              </Button>
-            </div>
-          )}
-          {error && (
-            <Notice tone="error">
-              {error}{' '}
-              <button type="button" onClick={() => void loadCollection()}>
-                {t('Reintentar')}
-              </button>
-            </Notice>
-          )}
-          <div className="trip-workspace-header__facts">
-            <span>
-              <Calendar /> {formatTripDates(collection.startDate, collection.endDate)}
-            </span>
-            <span>
-              <Users /> {collection.travelerCount || 2} {t('viajeros')}
-            </span>
-            <span>
-              <MapPin /> {collection.items.length} {t('destinos')}
-            </span>
-            <span>
-              <Users /> {(collection.members?.length || 0) + 1} {t('participantes')}
-            </span>
-          </div>
-          <ParticipantAvatars collection={collection} />
-        </header>
+        <TripHeader
+          collection={collection}
+          publicView={publicView}
+          pending={actionPending}
+          onEdit={openSettings}
+          onShare={() => setShareOpen(true)}
+        />
+        {error && (
+          <Notice tone="error">
+            {error}{' '}
+            <button type="button" onClick={() => void loadCollection()}>
+              {t('Reintentar')}
+            </button>
+          </Notice>
+        )}
 
         <div
           className="collection-view-switch collection-view-switch--three no-print"
@@ -367,7 +315,7 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
             onOpenDay={openDay}
             onShare={() => setShareOpen(true)}
             isOwner={isOwner}
-            budget={budget()}
+            budget={budget(true)}
           />
         ) : null}
         <div hidden={view !== 'destinations'}>
@@ -376,6 +324,7 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
             canEdit={canEdit}
             pending={actionPending}
             onOpenDay={openDay}
+            onOpenAgenda={() => setView('itinerary')}
             onRemove={removeDestination}
             onSaveNotes={saveDestinationNotes}
           />
@@ -431,20 +380,11 @@ export default function CollectionPage({ publicView = false }: CollectionPagePro
           </section>
         )}
       </div>
+      {settingsMessage && (
+        <Toast duration={5000} onDismiss={() => setSettingsMessage('')}>
+          {settingsMessage}
+        </Toast>
+      )}
     </Shell>
   );
-}
-
-function formatTripDates(startDate?: string | null, endDate?: string | null) {
-  if (!startDate) return t('Fechas abiertas');
-  const formatter = new Intl.DateTimeFormat(intlLocale, {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-    timeZone: 'UTC',
-  });
-  const start = formatter.format(new Date(`${startDate.slice(0, 10)}T00:00:00.000Z`));
-  if (!endDate) return t('Desde el {0}', { 0: start });
-  const end = formatter.format(new Date(`${endDate.slice(0, 10)}T00:00:00.000Z`));
-  return `${start} — ${end}`;
 }

@@ -39,3 +39,14 @@
 
 @import './municipality.css';
 @import './action-feedback.css';
+@import './trip-forms.css';
+
+@import './trip-header.css';
+
+@import './trip-planning.css';
+
+@import './agenda-workspace.css';
+
+@import './trip-overview.css';
+
+@import './trip-destinations.css';

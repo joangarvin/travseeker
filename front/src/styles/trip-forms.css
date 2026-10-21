@@ -1,0 +1,277 @@
+.modal.trip-form-dialog {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 560px);
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  overflow: hidden;
+  border-radius: 20px;
+}
+.trip-form-dialog .public-dialog__heading {
+  flex: none;
+  margin: 0;
+  padding: 24px 72px 24px 24px;
+  background: var(--brand-solid);
+  color: var(--brand-on-solid);
+}
+.trip-form-dialog .public-dialog__heading h2 {
+  margin: 0 0 8px;
+  font-size: 1.75rem;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: inherit;
+}
+.trip-form-dialog .public-dialog__heading p {
+  color: color-mix(in srgb, var(--brand-on-solid) 90%, var(--brand-solid));
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.trip-form-dialog .modal__close {
+  z-index: 1;
+  top: 16px;
+  right: 16px;
+  background: color-mix(in srgb, var(--brand-on-solid) 15%, var(--brand-solid));
+  color: var(--brand-on-solid);
+}
+.trip-form-dialog .modal__close:hover {
+  background: color-mix(in srgb, var(--brand-on-solid) 25%, var(--brand-solid));
+}
+.trip-form-dialog > form {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 0;
+}
+.trip-form-dialog__body {
+  padding: 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.trip-form-dialog fieldset {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.trip-form-dialog .field {
+  gap: 8px;
+  margin: 0;
+}
+.trip-form-dialog .field > label {
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+.trip-form-dialog :is(input, textarea) {
+  min-width: 0;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 1rem;
+}
+.trip-form-dialog textarea {
+  min-height: 72px;
+  max-height: 144px;
+  resize: vertical;
+}
+.trip-form-dialog input:disabled {
+  background: var(--surface-muted);
+  color: var(--muted);
+}
+.trip-form__dates {
+  display: grid;
+  gap: 12px;
+}
+.trip-form__section-heading,
+.trip-form__travelers {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.trip-form__section-heading > span,
+.trip-form__travelers label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+.trip-form__section-heading svg,
+.trip-form__travelers svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+.trip-form__section-heading > button {
+  min-height: 44px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--brand);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+.trip-form__section-heading > button:hover {
+  background: var(--brand-soft);
+}
+.trip-form__date-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.trip-form__date-grid .field > label {
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.8125rem;
+}
+.trip-form__duration {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.trip-form__duration strong {
+  color: var(--ink);
+}
+.trip-form__duration[data-error='true'] {
+  color: var(--danger);
+}
+.trip-form__travelers p {
+  margin: 6px 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.trip-form__stepper {
+  display: flex;
+  flex: none;
+  align-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.trip-form__stepper > button {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 46px;
+  border: 0;
+  background: var(--surface-muted);
+  color: var(--ink);
+  transition: transform var(--motion-fast) var(--ease-out);
+}
+.trip-form__stepper > button:not(:disabled):not(:focus-visible):active {
+  transform: scale(0.92);
+}
+.trip-form__stepper > button:disabled {
+  color: var(--muted);
+}
+.trip-form__stepper > :focus-visible {
+  outline-offset: -4px;
+}
+.trip-form-dialog .trip-form__stepper > input {
+  appearance: textfield;
+  width: 48px;
+  height: 46px;
+  min-height: 0;
+  padding: 4px;
+  border: 0;
+  border-radius: 0;
+  text-align: center;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.trip-form__stepper input::-webkit-inner-spin-button,
+.trip-form__stepper input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.trip-form__date-warning {
+  padding: 14px;
+  border: 1px solid var(--danger);
+  border-radius: 12px;
+  color: var(--danger);
+}
+.trip-form__date-warning p {
+  margin: 0 0 8px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.trip-form__date-warning label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 0.875rem;
+  color: var(--ink);
+}
+.trip-form-dialog .trip-form__date-warning input {
+  flex: none;
+  width: 20px;
+  min-height: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--brand-solid);
+}
+.trip-form-dialog__body > .notice {
+  margin: 16px 0 0;
+}
+.trip-form-dialog__actions {
+  display: flex;
+  flex: none;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+@media (max-width: 600px) {
+  .modal-backdrop:has(.trip-form-dialog) {
+    align-items: end;
+    padding: 12px;
+  }
+  .modal.trip-form-dialog {
+    max-height: calc(100dvh - 24px);
+    border-radius: 16px;
+  }
+  .trip-form-dialog .public-dialog__heading {
+    padding: 22px 64px 20px 20px;
+  }
+  .trip-form-dialog .public-dialog__heading h2 {
+    font-size: 1.5rem;
+  }
+  .trip-form-dialog__body {
+    padding: 20px;
+  }
+  .trip-form-dialog__actions {
+    padding: 14px 20px max(14px, env(safe-area-inset-bottom));
+  }
+  .trip-form-dialog__actions > .button:last-child {
+    flex: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .trip-form__stepper > button {
+    transition: none;
+    transform: none !important;
+  }
+}
+@media (max-width: 360px) {
+  .trip-form__date-grid {
+    grid-template-columns: 1fr;
+  }
+  .trip-form__travelers {
+    flex-wrap: wrap;
+  }
+}

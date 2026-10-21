@@ -59,27 +59,22 @@ export default function CollectionsPage() {
   }: NewCollectionInput) => {
     if (!token) return;
 
-    try {
-      const created = await api<CollectionSummary>(
-        '/colecciones',
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            nombre: name,
-            descripcion: description,
-            color: 'cobalt',
-            startDate: startDate || null,
-            endDate: endDate || null,
-            travelerCount,
-          }),
-        },
-        token,
-      );
-      navigate(`/colecciones/${created.id}`);
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : t('No se pudo crear el viaje'));
-      throw cause;
-    }
+    const created = await api<CollectionSummary>(
+      '/colecciones',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          nombre: name,
+          descripcion: description,
+          color: 'cobalt',
+          startDate: startDate || null,
+          endDate: endDate || null,
+          travelerCount,
+        }),
+      },
+      token,
+    );
+    navigate(`/colecciones/${created.id}`);
   };
 
   const visibleCollections = useMemo(() => {

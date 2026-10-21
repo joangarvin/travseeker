@@ -18,6 +18,8 @@ type DialogProps = {
   children: ReactNode;
   initialFocusRef?: React.RefObject<HTMLElement | null>;
   className?: string;
+  busy?: boolean;
+  closeOnBackdrop?: boolean;
 };
 
 export function Dialog({
@@ -27,6 +29,8 @@ export function Dialog({
   children,
   initialFocusRef,
   className = '',
+  busy = false,
+  closeOnBackdrop = true,
 }: DialogProps) {
   const titleId = useId();
   const descriptionId = useId();
@@ -34,8 +38,10 @@ export function Dialog({
   const closeRef = useRef(onClose);
 
   useEffect(() => {
-    closeRef.current = onClose;
-  }, [onClose]);
+    closeRef.current = () => {
+      if (!busy) onClose();
+    };
+  }, [onClose, busy]);
 
   useEffect(() => {
     const previousFocus =
@@ -82,7 +88,7 @@ export function Dialog({
   }, [initialFocusRef]);
 
   return (
-    <div className="modal-backdrop" onMouseDown={onClose}>
+    <div className="modal-backdrop" onMouseDown={closeOnBackdrop && !busy ? onClose : undefined}>
       <section
         ref={dialogRef}
         className={`modal public-dialog ${className}`.trim()}
@@ -93,7 +99,13 @@ export function Dialog({
         tabIndex={-1}
         onMouseDown={(event) => event.stopPropagation()}
       >
-        <button className="modal__close" type="button" onClick={onClose} aria-label={t('Cerrar')}>
+        <button
+          className="modal__close"
+          type="button"
+          onClick={onClose}
+          disabled={busy}
+          aria-label={t('Cerrar')}
+        >
           <X aria-hidden="true" />
         </button>
         <header className="public-dialog__heading">

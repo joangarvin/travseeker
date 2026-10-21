@@ -1,13 +1,23 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { Route, Share2 } from 'lucide-react';
-import { t } from '../../../i18n';
-import { Button, MediaImage } from '../../../components/ui';
+import { ArrowUpRight, CalendarDays, Check, Lock, Link2, MapPin, Route, Users } from 'lucide-react';
+import { intlLocale, t } from '../../../i18n';
+import { Button, Dialog } from '../../../components/ui';
 import type { CollectionDetail } from '../../../types';
-import { imageUrl } from '../../../utils';
 import { getTripDuration } from '../../../utils/tripDuration';
-import { ParticipantAvatars } from './ParticipantAvatars';
+import { resolveItineraryDate } from '../../../utils/itineraryExport';
+import { groupOverviewStays } from '../overviewModel';
 
+type Props = {
+  collection: CollectionDetail;
+  canEdit: boolean;
+  isOwner: boolean;
+  onOpenSettings: () => void;
+  onChangeView: (view: 'overview' | 'destinations' | 'itinerary') => void;
+  onOpenDay: (day: number) => void;
+  onShare: () => void;
+  budget: ReactNode;
+};
 export function TripOverview({
   collection,
   canEdit,
@@ -17,162 +27,299 @@ export function TripOverview({
   onOpenDay,
   onShare,
   budget,
-}: {
-  collection: CollectionDetail;
-  canEdit: boolean;
-  isOwner: boolean;
-  onOpenSettings: () => void;
-  onChangeView: (view: 'overview' | 'destinations' | 'itinerary') => void;
-  onOpenDay: (day: number) => void;
-  onShare: () => void;
-  budget: ReactNode;
-}) {
-  const activities = collection.itinerary.reduce(
-    (sum, day) => sum + (day.plannedActivities?.length || 0),
-    0,
-  );
-  const emptyDays = collection.itinerary
-    .map((day, index) => ({ day, index }))
-    .filter(({ day }) => !day.plannedActivities?.length);
+}: Props) {
+  const [peopleOpen, setPeopleOpen] = useState(false);
+  const [keyboard, setKeyboard] = useState(false);
+  const days = collection.itinerary || [];
+  const activities = days.reduce((sum, day) => sum + (day.plannedActivities?.length || 0), 0);
+  const firstFree = days.findIndex((day) => !day.plannedActivities?.length);
+  const freeDays = days.filter((day) => !day.plannedActivities?.length).length;
   const duration = getTripDuration({
     startDate: collection.startDate,
     endDate: collection.endDate,
-    itineraryLength: collection.itinerary.length,
+    itineraryLength: days.length,
     destinationCount: collection.items.length,
   });
-  const cover = collection.items[0]?.destino;
+  const stays = groupOverviewStays(days);
+  const scheduledIds = new Set(stays.map((stay) => stay.destinationId));
+  const cards = [
+    ...stays.map((stay) => ({
+      ...stay,
+      destination: collection.items.find((item) => item.destino.id === stay.destinationId)?.destino,
+    })),
+    ...collection.items
+      .filter((item) => !scheduledIds.has(item.destino.id))
+      .map((item) => ({
+        destinationId: item.destino.id,
+        destination: item.destino,
+        startIndex: null,
+        endIndex: null,
+        days: [],
+      })),
+  ];
+  const formatter = new Intl.DateTimeFormat(intlLocale, {
+    day: 'numeric',
+    month: 'short',
+    timeZone: 'UTC',
+  });
+  const shortDate = (value: string) =>
+    formatter.format(new Date(`${value.slice(0, 10)}T00:00:00Z`));
+  const range = (start?: string | null, end?: string | null) =>
+    !start
+      ? t('Fechas por decidir')
+      : end && start.slice(0, 10) !== end.slice(0, 10)
+        ? `${shortDate(start)}–${shortDate(end)}`
+        : shortDate(start);
+  const people = [
+    ...(collection.owner ? [{ user: collection.owner, role: 'owner' }] : []),
+    ...(collection.members || []),
+  ];
+  const peopleTitle =
+    people.length > 2
+      ? t('{0} personas con acceso', { 0: people.length })
+      : people.map(({ user }) => user.nombre || t('Viajero')).join(' · ');
+  const viewAgenda = () => onChangeView('itinerary');
   return (
-    <div className="trip-summary">
-      <section className="trip-summary__hero">
-        {cover && <MediaImage src={imageUrl(cover.imagen)} alt="" loading="lazy" />}
+    <section
+      className="trip-overview"
+      aria-labelledby="trip-overview-title"
+      data-keyboard={keyboard || undefined}
+      onPointerDownCapture={() => setKeyboard(false)}
+      onKeyDownCapture={() => setKeyboard(true)}
+    >
+      <header className="trip-overview-heading">
         <div>
           <p className="kicker">{t('Tu viaje, de un vistazo')}</p>
-          <h2>
+          <h2 id="trip-overview-title">
             {collection.items.length
-              ? collection.items.map((item) => item.destino.nombre).join(' → ')
+              ? t('Todo encaja en una ruta.')
               : t('Tu próxima aventura empieza aquí')}
           </h2>
-          <p>
-            {collection.descripcion || t('Dale forma a la ruta y deja espacio para descubrir.')}
-          </p>
-          <Button onClick={() => onChangeView('itinerary')}>
-            <Route />
-            {t('Continuar en la agenda')}
-          </Button>
+          <p>{t('La visión general del viaje y los accesos para seguir dándole forma.')}</p>
         </div>
-      </section>
-      <div className="trip-summary__facts">
-        {[
-          {
-            label: t('Duración'),
-            value: `${duration.days} ${t('días')} · ${duration.nights} ${t('noches')}`,
-          },
-          { label: t('Destinos'), value: collection.items.length },
-          { label: t('Actividades'), value: activities },
-          { label: t('Viajeros'), value: collection.travelerCount || 2 },
-        ].map((fact) => (
-          <article key={fact.label}>
-            <small>{fact.label}</small>
-            <strong>{fact.value}</strong>
-          </article>
-        ))}
+        {collection.items.length > 0 && (
+          <Button onClick={viewAgenda}>
+            <Route aria-hidden="true" />
+            {canEdit ? t('Continuar en la agenda') : t('Consultar la agenda')}
+          </Button>
+        )}
+      </header>
+      <div className="trip-overview-basics">
+        <span>
+          <CalendarDays aria-hidden="true" />
+          {range(collection.startDate, collection.endDate)}
+          {(duration.source === 'dates' || duration.source === 'itinerary') && (
+            <>
+              {' '}
+              · {duration.days} {t(duration.days === 1 ? 'día' : 'días')}
+            </>
+          )}
+        </span>
+        <span>
+          <Users aria-hidden="true" />
+          {collection.travelerCount || 2}{' '}
+          {t(collection.travelerCount === 1 ? 'viajero' : 'viajeros')}
+        </span>
+        {canEdit && <button onClick={onOpenSettings}>{t('Ajustar datos')}</button>}
       </div>
-      <div className="trip-summary__grid">
-        <section className="trip-summary__card">
-          <p className="kicker">{t('Lo que queda por preparar')}</p>
-          <h3>
-            {emptyDays.length || !collection.startDate || !collection.itinerary.length
-              ? t('El siguiente paso')
-              : t('Tu plan está listo')}
-          </h3>
-          {!collection.startDate && (
-            <div className="trip-summary__task">
-              <span>{t('Elegir las fechas del viaje')}</span>
-              {isOwner && (
-                <Button variant="secondary" onClick={onOpenSettings}>
-                  {t('Elegir fechas')}
-                </Button>
-              )}
+      <div className="trip-overview-grid">
+        <div>
+          <section className="trip-overview-route">
+            <div className="trip-overview-card-heading">
+              <h3>{t('Las paradas de tu viaje')}</h3>
+              {cards.length > 0 && <span>{range(collection.startDate, collection.endDate)}</span>}
             </div>
-          )}
-          {!collection.items.length && (
-            <Link className="button button--primary" to="/">
-              {t('Descubrir destinos')}
-            </Link>
-          )}
-          {!collection.itinerary.length && collection.items.length > 0 && (
-            <Button onClick={() => onChangeView('itinerary')}>{t('Preparar itinerario')}</Button>
-          )}
-          {emptyDays.map(({ day, index }) => (
-            <div className="trip-summary__task" key={index}>
+            {cards.length ? (
+              <div className="trip-overview-stops">
+                {cards.map((card, i) => {
+                  const first = card.days[0],
+                    last = card.days.at(-1);
+                  const firstDate = first ? resolveItineraryDate(first, collection) : undefined;
+                  const lastDate = last ? resolveItineraryDate(last, collection) : undefined;
+                  const bases = [
+                    ...new Set(card.days.map((day) => day.baseMunicipioId).filter(Boolean)),
+                  ];
+                  const base =
+                    bases.length > 1
+                      ? t('Varias bases')
+                      : bases.length === 1
+                        ? card.destination?.municipios?.find((m) => m.id === bases[0])?.nombre
+                        : undefined;
+                  const assigned = card.startIndex !== null;
+                  return (
+                    <button
+                      type="button"
+                      key={`${card.destinationId}-${card.startIndex}`}
+                      onClick={() =>
+                        card.startIndex !== null
+                          ? onOpenDay(card.startIndex)
+                          : onChangeView('destinations')
+                      }
+                    >
+                      <span className="trip-overview-stop-number">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <strong>{card.destination?.nombre || t('Destino')}</strong>
+                      <small>
+                        {assigned
+                          ? firstDate
+                            ? range(firstDate, lastDate)
+                            : card.startIndex === card.endIndex
+                              ? t('Día {0}', { 0: card.startIndex! + 1 })
+                              : t('Días {0}–{1}', {
+                                  0: card.startIndex! + 1,
+                                  1: card.endIndex! + 1,
+                                })
+                          : t('Aún sin días asignados')}
+                      </small>
+                      <span>
+                        {assigned && (
+                          <>
+                            {card.days.length} {t(card.days.length === 1 ? 'día' : 'días')} ·{' '}
+                          </>
+                        )}
+                        {base
+                          ? bases.length > 1
+                            ? base
+                            : t('Base en {0}', { 0: base })
+                          : t('Sin base concreta')}
+                      </span>
+                      <ArrowUpRight aria-hidden="true" />
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="trip-overview-empty">
+                <MapPin aria-hidden="true" />
+                <h4>{t('Elige por dónde empezar')}</h4>
+                <p>{t('Añade destinos al viaje y vuelve aquí para ver cómo encaja la ruta.')}</p>
+                {canEdit && (
+                  <Link className="button button--primary" to="/">
+                    {t('Descubrir destinos')}
+                  </Link>
+                )}
+              </div>
+            )}
+            <div className="trip-overview-stats">
               <span>
-                {t('Día')} {day.dayNumber} ·{' '}
-                {
-                  collection.items.find((item) => item.destino.id === day.destinationId)?.destino
-                    .nombre
-                }
-                <small>{t('Sin actividades todavía')}</small>
+                <MapPin aria-hidden="true" />
+                <strong>{collection.items.length}</strong>
+                {t(collection.items.length === 1 ? 'destino' : 'destinos')}
               </span>
-              <Button variant="secondary" onClick={() => onOpenDay(index)}>
-                {canEdit ? t('Planificar día') : t('Ver día')}
-              </Button>
+              <span>
+                <Check aria-hidden="true" />
+                <strong>{activities}</strong>
+                {t(activities === 1 ? 'actividad' : 'actividades')}
+              </span>
+              <span>
+                <CalendarDays aria-hidden="true" />
+                <strong>{days.length - freeDays}</strong>
+                {t(days.length - freeDays === 1 ? 'día con planes' : 'días con planes')}
+              </span>
             </div>
-          ))}
-          {!emptyDays.length && collection.startDate && collection.itinerary.length > 0 && (
-            <p>
-              {t(
-                'Las fechas y las actividades están preparadas. Puedes seguir ajustando la agenda.',
-              )}
-            </p>
-          )}
-        </section>
-        <section className="trip-summary__card">
-          <p className="kicker">{t('Tu ruta')}</p>
-          <h3>{t('Parada a parada')}</h3>
-          <ol className="trip-summary__route">
-            {collection.itinerary.map((day, index) => (
-              <li key={index}>
-                <button type="button" onClick={() => onOpenDay(index)}>
-                  <span>{String(index + 1).padStart(2, '0')}</span>
-                  <div>
-                    <strong>
-                      {collection.items.find((item) => item.destino.id === day.destinationId)
-                        ?.destino.nombre || t('Destino')}
-                    </strong>
-                    <small>
-                      {day.plannedActivities?.length || 0} {t('actividades')}
-                    </small>
-                  </div>
+          </section>
+          {days.length > 0 ? (
+            <section className="trip-overview-flexible">
+              <span className="trip-overview-small-icon">
+                <Route aria-hidden="true" />
+              </span>
+              <div>
+                <h3>
+                  {freeDays
+                    ? t(
+                        freeDays === 1
+                          ? '1 día con espacio para improvisar'
+                          : '{0} días con espacio para improvisar',
+                        { 0: freeDays },
+                      )
+                    : t('Todos los días tienen algún plan')}
+                </h3>
+                <p>
+                  {freeDays
+                    ? t('Los días libres forman parte del viaje. Añade ideas cuando te apetezca.')
+                    : t('Puedes seguir ajustando la agenda y dejar huecos para descubrir.')}
+                </p>
+                <button
+                  className="trip-overview-text-button"
+                  onClick={() => onOpenDay(firstFree < 0 ? 0 : firstFree)}
+                >
+                  {canEdit && freeDays ? t('Explorar un día libre') : t('Ver la agenda')}
+                  <ArrowUpRight aria-hidden="true" />
                 </button>
+              </div>
+            </section>
+          ) : (
+            collection.items.length > 0 && (
+              <section className="trip-overview-flexible">
+                <span className="trip-overview-small-icon">
+                  <Route aria-hidden="true" />
+                </span>
+                <div>
+                  <h3>{t('Todavía sin paradas')}</h3>
+                  <p>{t('Distribuye los destinos por días para dar forma a la ruta.')}</p>
+                  <button className="trip-overview-text-button" onClick={viewAgenda}>
+                    {canEdit ? t('Preparar itinerario') : t('Ver la agenda')}
+                    <ArrowUpRight aria-hidden="true" />
+                  </button>
+                </div>
+              </section>
+            )
+          )}
+        </div>
+        <aside className="trip-overview-aside">
+          {budget}
+          <section className="trip-overview-access">
+            <span className="trip-overview-access-icon">
+              <Users aria-hidden="true" />
+            </span>
+            <div>
+              <h3>{peopleTitle || t('Personas con acceso')}</h3>
+              <p>
+                {t('Personas con acceso')} · {people.length}
+              </p>
+              <span className="trip-overview-private">
+                {collection.visibility === 'shared' ? (
+                  <Link2 aria-hidden="true" />
+                ) : (
+                  <Lock aria-hidden="true" />
+                )}
+                {collection.visibility === 'shared' ? t('Enlace activo') : t('Viaje privado')}
+              </span>
+            </div>
+            <button
+              className="trip-overview-text-button"
+              onClick={isOwner ? onShare : () => setPeopleOpen(true)}
+            >
+              {isOwner ? t('Gestionar acceso') : t('Ver personas')}
+              <ArrowUpRight aria-hidden="true" />
+            </button>
+          </section>
+        </aside>
+      </div>
+      {peopleOpen && (
+        <Dialog
+          className="trip-overview-people-dialog"
+          title={t('Personas con acceso')}
+          onClose={() => setPeopleOpen(false)}
+        >
+          <ul>
+            {people.map(({ user, role }) => (
+              <li key={user.id}>
+                <span aria-hidden="true">{(user.nombre || '?').slice(0, 2).toUpperCase()}</span>
+                <div>
+                  <strong>{user.nombre || t('Viajero')}</strong>
+                  <small>
+                    {t(role === 'owner' ? 'Propietario' : role === 'editor' ? 'Editor' : 'Lector')}
+                  </small>
+                </div>
               </li>
             ))}
-          </ol>
-          {!collection.itinerary.length && <p>{t('Todavía sin paradas')}</p>}
-        </section>
-        <section className="trip-summary__card">
-          <p className="kicker">{t('El grupo')}</p>
-          <h3>
-            {collection.travelerCount || 2} {t('viajeros')}
-          </h3>
-          <ParticipantAvatars collection={collection} />
-          <p>
-            {collection.members?.length || 0} {t('colaboradores')}
-          </p>
-          {isOwner && (
-            <div className="trip-destination__actions">
-              <Button variant="secondary" onClick={onOpenSettings}>
-                {t('Editar viajeros')}
-              </Button>
-              <Button onClick={onShare}>
-                <Share2 />
-                {t('Gestionar acceso')}
-              </Button>
-            </div>
-          )}
-          <p className="muted">{t('Compartir es opcional. Puedes mantener tu viaje privado.')}</p>
-        </section>
-      </div>
-      {budget}
-    </div>
+          </ul>
+          <p>{t('Compartir es opcional. Puedes mantener tu viaje privado.')}</p>
+          <Button onClick={() => setPeopleOpen(false)}>{t('Cerrar')}</Button>
+        </Dialog>
+      )}
+    </section>
   );
 }
