@@ -1,6 +1,6 @@
 # Integración de Flujo: países y publicación
 
-Rama `new/expansion`. Se integra la variante Flujo. Los editores completos existentes siguen disponibles desde «Crear o editar fichas» y «Abrir ficha completa».
+Rama `new/expansion`. Se integra la variante Flujo. La nueva interfaz sustituye al panel anterior. «Crear ficha» y el título o «Editar ficha» de cada tarjeta abren los editores completos sobre el flujo. «Publicación» abre los controles territoriales y de visibilidad. Revisión editorial y Reseñas se gestionan desde el mismo menú lateral; los enlaces antiguos de administración abren también esta interfaz.
 
 ## Preparación de una instalación
 
@@ -9,7 +9,7 @@ Rama `new/expansion`. Se integra la variante Flujo. Los editores completos exist
 3. Ejecutar `npm run db:migrate-country-publication` con la DATABASE_URL de esa instalación.
 4. Reiniciar backend y desplegar el frontend de la misma revisión.
 
-La migración es transaccional e idempotente. Crea España visible y Portugal, Francia y Marruecos ocultos. Asigna inicialmente los registros existentes a España y conserva su visibilidad previa. Repetirla no vuelve a publicar registros ocultados posteriormente. No se ha ejecutado contra la base compartida durante el desarrollo.
+La migración es transaccional e idempotente. Crea España visible y Portugal, Francia y Marruecos ocultos. Asigna inicialmente los registros existentes a España y conserva su visibilidad previa. Repetirla no vuelve a publicar registros ocultados posteriormente. Aplicada al catálogo compartido el 21 de octubre de 2026 por petición del usuario, tras realizar copia de seguridad privada en backend/backups/. Se verificaron los recuentos y las API autenticadas de países, resumen, destinos, municipios y actividades. El backend local se reinició con el cliente Prisma actualizado.
 
 ## Modelo
 
@@ -26,3 +26,9 @@ El panel de publicación modifica los estados y la asignación territorial; el c
 ## Revisión aislada
 
 Las pruebas de integración solo aceptan `EXPANSION_TEST_DATABASE_URL=postgresql://joan@127.0.0.1:55439/postgres`. No deben utilizar una base compartida. El script `scripts/seed-publication-review.js` tiene la misma restricción y crea únicamente registros identificados como demostración y una cuenta de revisión local.
+
+## Acceso al catálogo real en desarrollo
+
+El panel local de revisión en localhost:5177 se ha conectado al backend real de desarrollo (3001), igual que la aplicación de 127.0.0.1:5176. La cuenta sintética del entorno aislado no sirve para esta base: se debe iniciar sesión con una cuenta administrativa habitual. El script de datos sintéticos sigue restringido a su instancia desechable.
+
+Los orígenes adicionales autorizados para sesiones por cookie se configuran explícitamente con FRONTEND_ORIGINS (separados por comas). CORS y la protección CSRF comparten esa lista junto a FRONTEND_URL; no se admiten orígenes arbitrarios. En desarrollo están autorizados los dos enlaces locales usados para esta revisión.

@@ -125,17 +125,10 @@ export function PlaceEditorModal({
           </Field>
         </div>
 
-        <label className="setting-row">
-          <span>
-            <b>{t('Visible en la ficha pública')}</b>
-            <small>{t('Desactívalo para conservarlo sin mostrarlo.')}</small>
-          </span>
-          <input
-            type="checkbox"
-            checked={form.isActive !== false}
-            onChange={(event) => onChange({ ...form, isActive: event.target.checked })}
-          />
-        </label>
+        <p className="muted">
+          La preparación y la visibilidad pública se gestionan desde los controles Acabado y Mostrar
+          del flujo.
+        </p>
 
         <CoordinatePicker
           compact

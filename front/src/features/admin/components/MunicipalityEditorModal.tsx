@@ -113,17 +113,6 @@ export function MunicipalityEditorModal({
         <fieldset className="municipality-guide-fields" disabled={!detailReady || isSaving}>
           <div hidden={section !== 'informacion'}>
             <div className="municipality-guide-access">
-              <label htmlFor="mun-guide-enabled">
-                <input
-                  id="mun-guide-enabled"
-                  type="checkbox"
-                  checked={form.guideEnabled === true}
-                  aria-describedby="mun-guide-access-hint"
-                  disabled
-                  readOnly
-                />
-                {t('Permitir acceso público a la ficha')}
-              </label>
               <p id="mun-guide-access-hint">
                 {t(
                   'La preparación y la visibilidad se gestionan desde Publicación por países. Guarda primero la ficha y utiliza allí los controles Acabado y Mostrar.',

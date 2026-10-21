@@ -104,17 +104,10 @@ export function ActivityEditorModal({
               onChange={(event) => setForm({ ...form, sortOrder: Number(event.target.value) })}
             />
           </Field>
-          <label className="activity-editor__status">
-            <input
-              type="checkbox"
-              checked={form.isActive !== false}
-              onChange={(event) => setForm({ ...form, isActive: event.target.checked })}
-            />
-            <span>
-              <b>{t('Actividad visible')}</b>
-              <small>{t('Aparece en filtros y selectores públicos.')}</small>
-            </span>
-          </label>
+          <p className="muted">
+            La preparación y la visibilidad pública se gestionan desde los controles Acabado y
+            Mostrar del flujo.
+          </p>
         </div>
 
         <footer className="modal-actions">

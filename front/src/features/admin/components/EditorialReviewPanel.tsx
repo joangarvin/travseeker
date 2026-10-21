@@ -268,7 +268,11 @@ export function EditorialReviewPanel({
         <div>
           <span className="kicker">{t('Publicación')}</span>
           <h2>{t('Revisión editorial')}</h2>
-          <p>{t('Una única cola para controlar qué contenido llega a TravSeeker.')}</p>
+          <p>
+            {t(
+              'Revisa la calidad editorial de todos los países. La visibilidad final se gestiona en el flujo de cada catálogo.',
+            )}
+          </p>
         </div>
         <div
           className="editorial-review__queue"

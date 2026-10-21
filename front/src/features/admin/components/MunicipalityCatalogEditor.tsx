@@ -32,7 +32,10 @@ type Props = {
   token: string;
   ids: string[];
   initialRecords?: MunicipalityRecord[];
-  initialEditRecord?: MunicipalityRecord | null;
+  initialEditRecord?: Partial<MunicipalityRecord> | null;
+  editorOnly?: boolean;
+  onCancel?: () => void;
+  onSavingChange?: (saving: boolean) => void;
   geography?: { countryCode?: string; region?: string };
   onChange: (ids: string[]) => void;
   onEditingChange: (editing: boolean) => void;
@@ -49,6 +52,9 @@ export function MunicipalityCatalogEditor({
   initialRecords = EMPTY_RECORDS,
   initialEditRecord,
   geography,
+  editorOnly = false,
+  onCancel,
+  onSavingChange,
   onChange,
   onEditingChange,
 }: Props) {
@@ -171,8 +177,18 @@ export function MunicipalityCatalogEditor({
     }
   };
   useEffect(() => {
-    onEditingChange(!!draft || saving);
-  }, [draft, saving, onEditingChange]);
+    onEditingChange(
+      saving ||
+        (editorOnly ? JSON.stringify(draft) !== JSON.stringify(initialEditRecord) : !!draft),
+    );
+  }, [draft, saving, onEditingChange, editorOnly, initialEditRecord]);
+  useEffect(
+    () => () => {
+      onEditingChange(false);
+      onSavingChange?.(false);
+    },
+    [onEditingChange, onSavingChange],
+  );
   const edit = (value: Partial<MunicipalityRecord> | null) => {
     setDraft(value);
     setError('');
@@ -208,14 +224,22 @@ export function MunicipalityCatalogEditor({
     }
   };
   useEffect(() => {
-    if (!standalone || (!draft && !saving)) return;
+    if (
+      !standalone ||
+      (!draft && !saving) ||
+      (editorOnly && !saving && JSON.stringify(draft) === JSON.stringify(initialEditRecord))
+    )
+      return;
     const protect = (event: BeforeUnloadEvent) => {
       event.preventDefault();
       event.returnValue = '';
     };
     window.addEventListener('beforeunload', protect);
     return () => window.removeEventListener('beforeunload', protect);
-  }, [standalone, draft, saving]);
+  }, [standalone, draft, saving, editorOnly, initialEditRecord]);
+  useEffect(() => {
+    onSavingChange?.(saving);
+  }, [saving, onSavingChange]);
   const Heading = standalone ? 'h2' : 'h3';
   const move = (index: number, direction: number) => {
     const next = [...ids];
@@ -227,21 +251,27 @@ export function MunicipalityCatalogEditor({
   );
   return (
     <section className="municipality-catalog-editor">
-      <header>
-        <Heading>
-          {kind === 'actividades'
-            ? 'Actividades'
-            : kind === 'hoteles'
-              ? 'Hoteles y alojamientos'
-              : 'Restaurantes'}
-        </Heading>
-        <span>{standalone ? `${records.length} fichas cargadas` : `${ids.length} asociados`}</span>
-      </header>
-      <p>
-        {standalone
-          ? 'Gestiona las fichas compartidas. Una actividad puede aparecer en municipios y ser un imprescindible de un destino; sus datos se editan una sola vez.'
-          : 'Asocia una ficha existente o crea una nueva. Quitarla del municipio conserva la ficha en el catálogo.'}
-      </p>
+      {!editorOnly && (
+        <>
+          <header>
+            <Heading>
+              {kind === 'actividades'
+                ? 'Actividades'
+                : kind === 'hoteles'
+                  ? 'Hoteles y alojamientos'
+                  : 'Restaurantes'}
+            </Heading>
+            <span>
+              {standalone ? `${records.length} fichas cargadas` : `${ids.length} asociados`}
+            </span>
+          </header>
+          <p>
+            {standalone
+              ? 'Gestiona las fichas compartidas. Una actividad puede aparecer en municipios y ser un imprescindible de un destino; sus datos se editan una sola vez.'
+              : 'Asocia una ficha existente o crea una nueva. Quitarla del municipio conserva la ficha en el catálogo.'}
+          </p>
+        </>
+      )}
       {message && <Notice tone="success">{message}</Notice>}
       {error && (
         <Notice
@@ -255,193 +285,201 @@ export function MunicipalityCatalogEditor({
           {error}
         </Notice>
       )}
-      <div className="municipality-catalog-editor__tools">
-        <label>
-          <Search aria-hidden />
-          <input
-            aria-label={`Buscar ${kind}`}
-            disabled={!!draft || saving}
-            value={query}
-            onChange={(event) => {
-              setOffset(0);
-              setQuery(event.target.value);
-              setAll(true);
-            }}
-            placeholder={`Buscar en el catálogo de ${kind}`}
-          />
-        </label>
-        <Button
-          type="button"
-          variant="secondary"
-          disabled={!!draft}
-          onClick={() =>
-            edit({
-              nombre: '',
-              isPublished: false,
-              ...creationContext(),
-              ...(geography?.countryCode
-                ? { countryCode: geography.countryCode, region: geography.region || '' }
-                : {}),
-            })
-          }
-        >
-          <Plus />
-          Crear {names[kind]}
-        </Button>
-      </div>
-      {kind === 'actividades' && !standalone && (
-        <Button
-          type="button"
-          variant="secondary"
-          disabled={!!draft || saving}
-          onClick={() => setImportOpen((value) => !value)}
-        >
-          Reutilizar un imprescindible de un destino
-        </Button>
-      )}
-      {standalone && kind === 'actividades' && onManageHighlights && (
-        <div className="municipality-source-picker">
-          <label>
-            Imprescindibles de un destino
-            <select
-              value={highlightDestination}
-              disabled={!!draft || saving}
-              onChange={(event) => setHighlightDestination(event.target.value)}
+      {!editorOnly && (
+        <>
+          <div className="municipality-catalog-editor__tools">
+            <label>
+              <Search aria-hidden />
+              <input
+                aria-label={`Buscar ${kind}`}
+                disabled={!!draft || saving}
+                value={query}
+                onChange={(event) => {
+                  setOffset(0);
+                  setQuery(event.target.value);
+                  setAll(true);
+                }}
+                placeholder={`Buscar en el catálogo de ${kind}`}
+              />
+            </label>
+            <Button
+              type="button"
+              variant="secondary"
+              disabled={!!draft}
+              onClick={() =>
+                edit({
+                  nombre: '',
+                  isPublished: false,
+                  ...creationContext(),
+                  ...(geography?.countryCode
+                    ? { countryCode: geography.countryCode, region: geography.region || '' }
+                    : {}),
+                })
+              }
             >
-              <option value="">Selecciona un destino</option>
-              {destinations.map((row) => (
-                <option key={row.id} value={row.id}>
-                  {row.nombre}
-                </option>
-              ))}
-            </select>
-          </label>
-          <Button
-            type="button"
-            variant="secondary"
-            disabled={!highlightDestination || !!draft || saving}
-            onClick={() => onManageHighlights(highlightDestination)}
-          >
-            Elegir actividades imprescindibles
-          </Button>
-        </div>
-      )}
-      {importOpen && (
-        <div className="municipality-source-picker">
-          <p>
-            Busca por el título en el campo del catálogo. La actividad mantiene sus datos
-            compartidos con el destino original.
-          </p>
-          <label>
-            Actividad existente
-            <select value={sourceId} onChange={(event) => setSourceId(event.target.value)}>
-              <option value="">Selecciona una actividad</option>
-              {sources.map((source) => (
-                <option key={source.id} value={source.id}>
-                  {source.destino} · {source.nombre}
-                </option>
-              ))}
-            </select>
-          </label>
-          <Button
-            type="button"
-            loading={saving}
-            disabled={!sourceId}
-            onClick={() => void importSource()}
-          >
-            Asociar actividad existente
-          </Button>
-        </div>
-      )}
-      {!standalone && (
-        <button
-          type="button"
-          className="button button--quiet"
-          onClick={() => setAll((value) => !value)}
-        >
-          {all ? 'Ver solo asociados' : 'Explorar catálogo completo'}
-        </button>
-      )}
-      {loading && <p role="status">Cargando catálogo…</p>}
-      <ul className="municipality-catalog-editor__list">
-        {(all
-          ? filtered
-          : ids
-              .map((id) => records.find((row) => row.id === id))
-              .filter((row): row is MunicipalityRecord => !!row)
-        ).map((row) => {
-          const index = ids.indexOf(row.id);
-          return (
-            <li key={row.id}>
+              <Plus />
+              Crear {names[kind]}
+            </Button>
+          </div>
+          {kind === 'actividades' && !standalone && (
+            <Button
+              type="button"
+              variant="secondary"
+              disabled={!!draft || saving}
+              onClick={() => setImportOpen((value) => !value)}
+            >
+              Reutilizar un imprescindible de un destino
+            </Button>
+          )}
+          {standalone && kind === 'actividades' && onManageHighlights && (
+            <div className="municipality-source-picker">
               <label>
-                {!standalone && (
-                  <input
-                    type="checkbox"
-                    checked={index >= 0}
-                    disabled={!!draft}
-                    onChange={() =>
-                      onChange(index >= 0 ? ids.filter((id) => id !== row.id) : [...ids, row.id])
-                    }
-                  />
-                )}
-                <span>
-                  <strong>{row.nombre}</strong>
-                  <small>
-                    {row.preparationComplete && row.showOnWebsite ? 'Mostrar activado' : 'Oculto'}
-                    {row.address ? ` · ${row.address}` : ''}
-                    {row.essentialItemId ? ' · Imprescindible de un destino' : ''}
-                  </small>
-                </span>
-              </label>
-              <div>
-                {!standalone && index >= 0 && (
-                  <>
-                    <button
-                      type="button"
-                      disabled={index === 0 || !!draft}
-                      onClick={() => move(index, -1)}
-                      aria-label={`Subir ${row.nombre}`}
-                    >
-                      <ArrowUp />
-                    </button>
-                    <button
-                      type="button"
-                      disabled={index === ids.length - 1 || !!draft}
-                      onClick={() => move(index, 1)}
-                      aria-label={`Bajar ${row.nombre}`}
-                    >
-                      <ArrowDown />
-                    </button>
-                  </>
-                )}
-                <button
-                  type="button"
-                  disabled={!!draft}
-                  onClick={() => edit(row)}
-                  aria-label={`Editar ${row.nombre}`}
+                Imprescindibles de un destino
+                <select
+                  value={highlightDestination}
+                  disabled={!!draft || saving}
+                  onChange={(event) => setHighlightDestination(event.target.value)}
                 >
-                  <Edit3 />
-                </button>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-      {standalone && !loading && !records.length && (
-        <p>No hay fichas que coincidan con la búsqueda. Puedes crear una nueva.</p>
-      )}
-      {standalone && hasMore && (
-        <Button
-          type="button"
-          variant="secondary"
-          disabled={loading || !!draft}
-          onClick={() => setOffset((value) => value + 100)}
-        >
-          Cargar más fichas
-        </Button>
-      )}
-      {!draft && !ids.length && !all && (
-        <p>Todavía no hay {kind} asociados. Explora el catálogo o crea una ficha.</p>
+                  <option value="">Selecciona un destino</option>
+                  {destinations.map((row) => (
+                    <option key={row.id} value={row.id}>
+                      {row.nombre}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={!highlightDestination || !!draft || saving}
+                onClick={() => onManageHighlights(highlightDestination)}
+              >
+                Elegir actividades imprescindibles
+              </Button>
+            </div>
+          )}
+          {importOpen && (
+            <div className="municipality-source-picker">
+              <p>
+                Busca por el título en el campo del catálogo. La actividad mantiene sus datos
+                compartidos con el destino original.
+              </p>
+              <label>
+                Actividad existente
+                <select value={sourceId} onChange={(event) => setSourceId(event.target.value)}>
+                  <option value="">Selecciona una actividad</option>
+                  {sources.map((source) => (
+                    <option key={source.id} value={source.id}>
+                      {source.destino} · {source.nombre}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <Button
+                type="button"
+                loading={saving}
+                disabled={!sourceId}
+                onClick={() => void importSource()}
+              >
+                Asociar actividad existente
+              </Button>
+            </div>
+          )}
+          {!standalone && (
+            <button
+              type="button"
+              className="button button--quiet"
+              onClick={() => setAll((value) => !value)}
+            >
+              {all ? 'Ver solo asociados' : 'Explorar catálogo completo'}
+            </button>
+          )}
+          {loading && <p role="status">Cargando catálogo…</p>}
+          <ul className="municipality-catalog-editor__list">
+            {(all
+              ? filtered
+              : ids
+                  .map((id) => records.find((row) => row.id === id))
+                  .filter((row): row is MunicipalityRecord => !!row)
+            ).map((row) => {
+              const index = ids.indexOf(row.id);
+              return (
+                <li key={row.id}>
+                  <label>
+                    {!standalone && (
+                      <input
+                        type="checkbox"
+                        checked={index >= 0}
+                        disabled={!!draft}
+                        onChange={() =>
+                          onChange(
+                            index >= 0 ? ids.filter((id) => id !== row.id) : [...ids, row.id],
+                          )
+                        }
+                      />
+                    )}
+                    <span>
+                      <strong>{row.nombre}</strong>
+                      <small>
+                        {row.preparationComplete && row.showOnWebsite
+                          ? 'Mostrar activado'
+                          : 'Oculto'}
+                        {row.address ? ` · ${row.address}` : ''}
+                        {row.essentialItemId ? ' · Imprescindible de un destino' : ''}
+                      </small>
+                    </span>
+                  </label>
+                  <div>
+                    {!standalone && index >= 0 && (
+                      <>
+                        <button
+                          type="button"
+                          disabled={index === 0 || !!draft}
+                          onClick={() => move(index, -1)}
+                          aria-label={`Subir ${row.nombre}`}
+                        >
+                          <ArrowUp />
+                        </button>
+                        <button
+                          type="button"
+                          disabled={index === ids.length - 1 || !!draft}
+                          onClick={() => move(index, 1)}
+                          aria-label={`Bajar ${row.nombre}`}
+                        >
+                          <ArrowDown />
+                        </button>
+                      </>
+                    )}
+                    <button
+                      type="button"
+                      disabled={!!draft}
+                      onClick={() => edit(row)}
+                      aria-label={`Editar ${row.nombre}`}
+                    >
+                      <Edit3 />
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+          {standalone && !loading && !records.length && (
+            <p>No hay fichas que coincidan con la búsqueda. Puedes crear una nueva.</p>
+          )}
+          {standalone && hasMore && (
+            <Button
+              type="button"
+              variant="secondary"
+              disabled={loading || !!draft}
+              onClick={() => setOffset((value) => value + 100)}
+            >
+              Cargar más fichas
+            </Button>
+          )}
+          {!draft && !ids.length && !all && (
+            <p>Todavía no hay {kind} asociados. Explora el catálogo o crea una ficha.</p>
+          )}
+        </>
       )}
       {draft && (
         <fieldset className="municipality-record-form" disabled={saving}>
@@ -516,7 +554,21 @@ export function MunicipalityCatalogEditor({
             <Button type="button" loading={saving} onClick={() => void save()}>
               Guardar ficha en el catálogo
             </Button>
-            <Button type="button" variant="quiet" disabled={saving} onClick={() => edit(null)}>
+            <Button
+              type="button"
+              variant="quiet"
+              disabled={saving}
+              onClick={() => {
+                if (
+                  editorOnly &&
+                  JSON.stringify(draft) !== JSON.stringify(initialEditRecord) &&
+                  !confirm('¿Descartar los cambios sin guardar?')
+                )
+                  return;
+                edit(null);
+                onCancel?.();
+              }}
+            >
               <X />
               Cancelar
             </Button>

@@ -7,23 +7,17 @@ import { useAdminTaxonomies } from '../../features/admin/hooks/useAdminTaxonomie
 import { markEditorSaved } from '../../utils/editorDraft';
 import { useSearchParams } from 'react-router-dom';
 import { t } from '../../i18n';
-import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { ShieldCheck } from 'lucide-react';
-import { PageHeading, Shell } from '../../components/layout';
-import { Empty, Loader, Notice } from '../../components/ui';
+import { Shell } from '../../components/layout';
+import { Empty, Loader, Dialog } from '../../components/ui';
 import { useActivities, useAuth, useTourismTypes } from '../../contexts';
-import { ActivitiesPanel } from '../../features/admin/components/ActivitiesPanel';
 import { ActivityDeleteDialog } from '../../features/admin/components/ActivityDeleteDialog';
 import { ActivityEditorModal } from '../../features/admin/components/ActivityEditorModal';
-import { TourismTypesPanel } from '../../features/admin/components/TourismTypesPanel';
 import { TourismTypeEditorModal } from '../../features/admin/components/TourismTypeEditorModal';
 import { TourismTypeDeleteDialog } from '../../features/admin/components/TourismTypeDeleteDialog';
-import { AdminNavigation } from '../../features/admin/components/AdminNavigation';
-import { DestinationsPanel } from '../../features/admin/components/DestinationsPanel';
-import { MunicipalitiesPanel } from '../../features/admin/components/MunicipalitiesPanel';
 import { MunicipalityEditorModal } from '../../features/admin/components/MunicipalityEditorModal';
 import { PlaceEditorModal } from '../../features/admin/components/PlaceEditorModal';
-import { PlacesPanel } from '../../features/admin/components/PlacesPanel';
 import { ReviewsPanel } from '../../features/admin/components/ReviewsPanel';
 import {
   EditorialReviewPanel,
@@ -41,10 +35,6 @@ import {
   EMPTY_DESTINATION,
   EMPTY_MUNICIPALITY,
   EMPTY_PLACE,
-  filterActivities,
-  filterDestinationChoices,
-  filterPlaces,
-  filterTourismTypes,
 } from '../../features/admin/adminCatalog';
 import { api } from '../../services/api';
 import type {
@@ -81,15 +71,17 @@ export default function AdminPage() {
     ? (requestedTab as AdminTab)
     : 'editorial';
   const [catalogEditing, setCatalogEditing] = useState(false);
-  const [catalogInitial, setCatalogInitial] = useState<MunicipalityRecord | null>(null);
+  const [catalogInitial, setCatalogInitial] = useState<Partial<MunicipalityRecord> | null>(null);
+  const [catalogOpen, setCatalogOpen] = useState(false);
+  const [catalogSaving, setCatalogSaving] = useState(false);
+  const [catalogKind, setCatalogKind] = useState<'actividades' | 'hoteles' | 'restaurantes'>(
+    'actividades',
+  );
+  const [management, setManagement] = useState<'editorial' | 'reviews' | null>(
+    requestedTab === 'reviews' || requestedTab === 'editorial' ? requestedTab : null,
+  );
+  const [placeChoices, setPlaceChoices] = useState<Destino[]>([]);
   const setActiveTab = (tab: AdminTab) => {
-    if (catalogEditing) {
-      setFeedback({
-        tone: 'error',
-        text: 'Guarda o cancela la ficha que estás editando antes de cambiar de sección.',
-      });
-      return;
-    }
     setCatalogInitial(null);
     setOffset(0);
     setCatalogStatus('all');
@@ -109,17 +101,13 @@ export default function AdminPage() {
     useAdminReviews(token);
   const [editorialRevision, setEditorialRevision] = useState(0);
   const [editorialItems, setEditorialItems] = useState<EditorialItem[]>([]);
-  const [destinationQuery, setDestinationQuery] = useState(() =>
+  const [destinationQuery] = useState(() =>
     activeTab === 'destinos' ? params.get('q') || '' : '',
   );
-  const [municipalityQuery, setMunicipalityQuery] = useState(() =>
+  const [municipalityQuery] = useState(() =>
     activeTab === 'municipios' ? params.get('q') || '' : '',
   );
   const [reviewQuery, setReviewQuery] = useState('');
-  const [placeQuery, setPlaceQuery] = useState('');
-  const [placeDestinationQuery, setPlaceDestinationQuery] = useState('');
-  const [activityQuery, setActivityQuery] = useState('');
-  const [travelTypeQuery, setTravelTypeQuery] = useState('');
   const [isDestinationLoading, setIsDestinationLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [feedback, setFeedback] = useState<AdminFeedback | null>(null);
@@ -146,10 +134,6 @@ export default function AdminPage() {
     setTravelTypes,
     selectedDestinationId,
     setSelectedDestinationId,
-    placesLoading,
-    isLoading,
-    catalogTotal,
-    serverCounts,
     refreshCounts,
     loadAdminData,
     loadPlaces,
@@ -207,22 +191,6 @@ export default function AdminPage() {
       { replace: true },
     );
   }, [activeTab, activeQuery]);
-  const filteredPlaces = useMemo(() => filterPlaces(places, placeQuery), [placeQuery, places]);
-
-  const filteredActivities = useMemo(
-    () => filterActivities(activities, activityQuery),
-    [activities, activityQuery],
-  );
-  const filteredTravelTypes = useMemo(
-    () => filterTourismTypes(travelTypes, travelTypeQuery),
-    [travelTypeQuery, travelTypes],
-  );
-
-  const destinationChoices = useMemo(
-    () => filterDestinationChoices(destinations, placeDestinationQuery),
-    [destinations, placeDestinationQuery],
-  );
-
   const loadMunicipalityOptions = () =>
     api<Municipio[]>('/admin/municipios?options=1', {}, token).then(setMunicipalityOptions);
 
@@ -536,280 +504,174 @@ export default function AdminPage() {
     );
   }
 
-  if (!params.has('tab') && params.get('view') !== 'legacy' && !requestedEditor) {
-    return (
-      <Shell footer={false}>
-        <PublicationWorkspace
-          token={token!}
-          onLegacy={() => setActiveTab('editorial')}
-          onOpenCatalog={async (tab, entry?: PublicationEntry) => {
-            let record:
-              | (MunicipalityRecord & Activity & TourismType & Place & { destinoId: string })
-              | undefined;
-            if (entry && !['destinos', 'municipios'].includes(tab))
-              record = await api(
-                `/admin/publication/source/${entry.resource}/${encodeURIComponent(entry.id)}`,
-                {},
-                token,
-              );
-            if (entry && tab === 'municipios')
-              setMunicipalityForm(await api<Municipio>(`/admin/municipios/${entry.id}`, {}, token));
-            if (entry && tab === 'destinos') await openDestination({ id: entry.id });
-            setActiveTab(tab);
-            if (record) {
-              if (['catalogo-actividades', 'hoteles', 'restaurantes'].includes(tab))
-                setCatalogInitial(record);
-              else if (tab === 'actividades') setActivityForm(record);
-              else if (tab === 'tipos-viaje') setTravelTypeForm(record);
-              else {
-                setSelectedDestinationId(record.destinoId);
-                setPlaceForm(record);
-              }
-            }
-          }}
-        />
-      </Shell>
-    );
-  }
-
-  const resourceCounts: Record<AdminTab, number> = {
-    editorial:
-      serverCounts.editorial ??
-      editorialItems.filter((item) => item.editorialStatus === 'pending').length,
-    destinos: serverCounts.destinos ?? destinations.length,
-    'tipos-viaje': serverCounts['tourism-types'] ?? travelTypes.length,
-    actividades: serverCounts.activities ?? activities.length,
-    municipios: serverCounts.municipios ?? municipalities.length,
-    reviews: serverCounts.reviews ?? reviews.length,
-    places: serverCounts.places ?? places.length,
-    'catalogo-actividades': serverCounts.activityCatalog ?? 0,
-    hoteles: serverCounts.hoteles ?? 0,
-    restaurantes: serverCounts.restaurantes ?? 0,
-  };
-
   return (
     <Shell footer={false}>
-      <div className="admin-heading">
-        <p className="muted">
-          El estado editorial y la visibilidad pública son independientes. La visibilidad se
-          gestiona en Publicación por países. Las nuevas fichas heredan el país de creación:{' '}
-          {creationContext().countryCode}
-          {creationContext().region ? ` · ${creationContext().region}` : ''}.
-        </p>
-        <button
-          type="button"
-          className="button button--secondary"
-          onClick={() => {
-            if (catalogEditing) {
-              setFeedback({
-                tone: 'error',
-                text: 'Guarda o cancela la ficha antes de cambiar de sección.',
+      <PublicationWorkspace
+        token={token!}
+        initialTab={requestedTab}
+        onResourceChange={setActiveTab}
+        revision={editorialRevision}
+        feedback={feedback}
+        onDelete={async (entry) => {
+          if (entry.resource === 'tipos-actividad') {
+            setActivityToDelete(
+              await api<Activity>(
+                `/admin/publication/source/${entry.resource}/${entry.id}`,
+                {},
+                token,
+              ),
+            );
+            return;
+          }
+          if (entry.resource === 'tipos-viaje') {
+            setTravelTypeToDelete(
+              await api<TourismType>(
+                `/admin/publication/source/${entry.resource}/${entry.id}`,
+                {},
+                token,
+              ),
+            );
+            return;
+          }
+          if (['destinos', 'municipios', 'places'].includes(entry.resource))
+            await removeResource(entry.resource as AdminResource, entry.id);
+        }}
+        management={management}
+        onManagementChange={(value) => {
+          setManagement(value);
+          if (value) setActiveTab(value);
+        }}
+        managementContent={
+          management === 'editorial' ? (
+            <EditorialReviewPanel
+              revision={editorialRevision}
+              onEdit={(item) => void editEditorialItem(item)}
+              onTransition={transitionEditorial}
+            />
+          ) : management === 'reviews' ? (
+            <ReviewsPanel
+              reviews={reviews}
+              query={reviewQuery}
+              onQueryChange={setReviewQuery}
+              onModerate={moderateReview}
+              onBulkModerate={moderateReviews}
+              onBulkDelete={deleteReviews}
+            />
+          ) : null
+        }
+        onOpenCatalog={async (tab, entry?: PublicationEntry) => {
+          let record:
+            | (MunicipalityRecord & Activity & TourismType & Place & { destinoId: string })
+            | undefined;
+          if (entry && !['destinos', 'municipios'].includes(tab))
+            record = await api(
+              `/admin/publication/source/${entry.resource}/${encodeURIComponent(entry.id)}`,
+              {},
+              token,
+            );
+          setFeedback(null);
+          if (['actividades', 'tipos-viaje'].includes(tab)) setActiveTab(tab);
+          if (entry && tab === 'municipios')
+            setMunicipalityForm(await api<Municipio>(`/admin/municipios/${entry.id}`, {}, token));
+          if (entry && tab === 'destinos') await openDestination({ id: entry.id });
+          if (!entry) {
+            if (tab === 'destinos') {
+              await loadMunicipalityOptions();
+              setDestinationForm({ ...EMPTY_DESTINATION, ...creationContext() });
+            } else if (tab === 'municipios')
+              setMunicipalityForm({ ...EMPTY_MUNICIPALITY, ...creationContext() });
+            else if (tab === 'actividades')
+              setActivityForm({ name: '', icon: 'Compass', sortOrder: 0, isActive: true });
+            else if (tab === 'tipos-viaje')
+              setTravelTypeForm({
+                name: '',
+                description: '',
+                icon: 'Compass',
+                colorKey: 'otro',
+                colorValue: '#5f6470',
+                sortOrder: 100,
+                isActive: true,
               });
-              return;
+            else if (tab === 'places') {
+              setPlaceChoices(await api<Destino[]>('/admin/destinos?options=1', {}, token));
+              setSelectedDestinationId('');
+              setPlaceForm({ ...EMPTY_PLACE, ...creationContext() });
+            } else {
+              setCatalogKind(
+                tab === 'catalogo-actividades'
+                  ? 'actividades'
+                  : (tab as 'hoteles' | 'restaurantes'),
+              );
+              setCatalogInitial({ nombre: '', isPublished: false, ...creationContext() });
+              setCatalogOpen(true);
             }
-            setParams((current) => {
-              const next = new URLSearchParams(current);
-              next.delete('tab');
-              next.delete('view');
-              next.delete('edit');
-              return next;
-            });
+          }
+          if (record) {
+            if (['catalogo-actividades', 'hoteles', 'restaurantes'].includes(tab)) {
+              setCatalogKind(
+                tab === 'catalogo-actividades'
+                  ? 'actividades'
+                  : (tab as 'hoteles' | 'restaurantes'),
+              );
+              setCatalogInitial(record);
+              setCatalogOpen(true);
+            } else if (tab === 'actividades') setActivityForm(record);
+            else if (tab === 'tipos-viaje') setTravelTypeForm(record);
+            else {
+              setSelectedDestinationId(record.destinoId);
+              setPlaceForm(record);
+            }
+          }
+        }}
+      />
+      {isDestinationLoading && (
+        <div role="status" className="admin-editor-loading">
+          <Loader />
+          Abriendo ficha…
+        </div>
+      )}
+      {catalogOpen && token && (
+        <Dialog
+          title={catalogInitial?.id ? 'Editar ficha' : 'Crear ficha'}
+          busy={catalogSaving}
+          onClose={() => {
+            if (
+              !catalogSaving &&
+              (!catalogEditing || confirm('¿Cerrar la ficha? Se perderán los cambios sin guardar.'))
+            ) {
+              setCatalogOpen(false);
+              setCatalogInitial(null);
+            }
           }}
+          className="admin-catalog-dialog"
         >
-          Publicación por países
-        </button>
-        <PageHeading title={t('Administración')}>
-          <p>{t('Gestiona destinos, municipios, actividades, hoteles, restaurantes y reseñas.')}</p>
-        </PageHeading>
-      </div>
-
-      <div className="admin-layout">
-        <AdminNavigation activeTab={activeTab} counts={resourceCounts} onChange={setActiveTab} />
-
-        <section
-          key={activeTab}
-          className="admin-workspace"
-          aria-busy={isLoading}
-          id="admin-panel"
-          role="tabpanel"
-          aria-labelledby={`admin-tab-${activeTab}`}
-        >
-          {feedback && (
-            <Notice tone={feedback.tone}>
-              {feedback.text}
-              {feedback.tone === 'error' && (
-                <button
-                  type="button"
-                  className="button button--quiet"
-                  onClick={() => {
-                    setFeedback(null);
-                    if (requestedEditor && !destinationForm)
-                      void openDestination({ id: requestedEditor });
-                    else void loadAdminData();
-                    if (activeTab === 'places') void loadPlaces();
-                  }}
-                >
-                  {t('Reintentar')}
-                </button>
-              )}
-            </Notice>
-          )}
-          {isLoading && <p role="status">{t('Cargando…')}</p>}
-          <>
-            {['catalogo-actividades', 'hoteles', 'restaurantes'].includes(activeTab) && token && (
-              <MunicipalityCatalogEditor
-                key={`${activeTab}:${catalogInitial?.id || 'list'}`}
-                standalone
-                initialEditRecord={catalogInitial}
-                revision={editorialRevision}
-                onManageHighlights={(id) => void openDestination({ id }, 'essentials')}
-                kind={
-                  activeTab === 'catalogo-actividades'
-                    ? 'actividades'
-                    : activeTab === 'hoteles'
-                      ? 'hoteles'
-                      : 'restaurantes'
-                }
-                token={token}
-                ids={[]}
-                onChange={() => {}}
-                onEditingChange={setCatalogEditing}
-                onSaved={() => {
-                  setFeedback(null);
-                  void refreshCounts();
-                }}
-              />
-            )}
-            {activeTab === 'editorial' && (
-              <EditorialReviewPanel
-                revision={editorialRevision}
-                onEdit={(item) => void editEditorialItem(item)}
-                onTransition={transitionEditorial}
-              />
-            )}
-            {activeTab === 'destinos' && (
-              <DestinationsPanel
-                total={catalogTotal}
-                status={catalogStatus}
-                onStatusChange={setCatalogStatus}
-                destinations={destinations}
-                query={destinationQuery}
-                isEditorLoading={isDestinationLoading}
-                onQueryChange={setDestinationQuery}
-                onCreate={() => {
-                  void loadMunicipalityOptions()
-                    .then(() => setDestinationForm({ ...EMPTY_DESTINATION, ...creationContext() }))
-                    .catch((cause) => setFeedback({ tone: 'error', text: cause.message }));
-                }}
-                onEdit={(destination) => void openDestination(destination)}
-                onDelete={(id) => void removeResource('destinos', id)}
-              />
-            )}
-
-            {activeTab === 'actividades' && (
-              <ActivitiesPanel
-                activities={filteredActivities}
-                query={activityQuery}
-                onQueryChange={setActivityQuery}
-                onCreate={() =>
-                  setActivityForm({ name: '', icon: 'Compass', sortOrder: 0, isActive: true })
-                }
-                onEdit={setActivityForm}
-                onDelete={setActivityToDelete}
-              />
-            )}
-            {activeTab === 'tipos-viaje' && (
-              <TourismTypesPanel
-                types={filteredTravelTypes}
-                query={travelTypeQuery}
-                onQueryChange={setTravelTypeQuery}
-                onCreate={() =>
-                  setTravelTypeForm({
-                    name: '',
-                    description: '',
-                    icon: 'Compass',
-                    colorKey: 'otro',
-                    colorValue: '#5f6470',
-                    sortOrder: 100,
-                    isActive: true,
-                  })
-                }
-                onEdit={setTravelTypeForm}
-                onDelete={setTravelTypeToDelete}
-              />
-            )}
-
-            {activeTab === 'municipios' && (
-              <MunicipalitiesPanel
-                total={catalogTotal}
-                status={catalogStatus}
-                onStatusChange={setCatalogStatus}
-                municipalities={municipalities}
-                query={municipalityQuery}
-                onQueryChange={setMunicipalityQuery}
-                onCreate={() =>
-                  setMunicipalityForm({ ...EMPTY_MUNICIPALITY, ...creationContext() })
-                }
-                onEdit={setMunicipalityForm}
-                onDelete={(id) => void removeResource('municipios', id)}
-              />
-            )}
-
-            {activeTab === 'reviews' && (
-              <ReviewsPanel
-                reviews={reviews}
-                query={reviewQuery}
-                onQueryChange={setReviewQuery}
-                onModerate={moderateReview}
-                onBulkModerate={moderateReviews}
-                onBulkDelete={deleteReviews}
-              />
-            )}
-
-            {activeTab === 'places' && (
-              <PlacesPanel
-                loading={placesLoading}
-                places={filteredPlaces}
-                destinations={destinationChoices}
-                selectedDestinationId={selectedDestinationId}
-                placeQuery={placeQuery}
-                destinationQuery={placeDestinationQuery}
-                onPlaceQueryChange={setPlaceQuery}
-                onDestinationQueryChange={setPlaceDestinationQuery}
-                onDestinationChange={setSelectedDestinationId}
-                onCreate={() => setPlaceForm({ ...EMPTY_PLACE, ...creationContext() })}
-                onEdit={setPlaceForm}
-                onDelete={(id) => void removeResource('places', id)}
-              />
-            )}
-          </>
-          {['destinos', 'municipios'].includes(activeTab) && (
-            <nav className="pagination" aria-label={t('Páginas del catálogo')}>
-              <button
-                type="button"
-                className="button button--quiet"
-                disabled={offset === 0 || isLoading}
-                onClick={() => setOffset((value) => Math.max(0, value - 40))}
-              >
-                {t('Anterior')}
-              </button>
-              <span>
-                {t('{0} resultados', { 0: catalogTotal })} ·{' '}
-                {t('Página {0}', { 0: Math.floor(offset / 40) + 1 })}
-              </span>
-              <button
-                type="button"
-                className="button button--quiet"
-                disabled={offset + 40 >= catalogTotal || isLoading}
-                onClick={() => setOffset((value) => value + 40)}
-              >
-                {t('Siguiente')}
-              </button>
-            </nav>
-          )}
-        </section>
-      </div>
-
+          <MunicipalityCatalogEditor
+            key={`${catalogKind}:${catalogInitial?.id || 'new'}`}
+            standalone
+            editorOnly
+            initialEditRecord={catalogInitial}
+            kind={catalogKind}
+            token={token}
+            ids={[]}
+            onChange={() => {}}
+            onEditingChange={setCatalogEditing}
+            onSavingChange={setCatalogSaving}
+            onManageHighlights={(id) => void openDestination({ id }, 'essentials')}
+            onSaved={() => {
+              setCatalogEditing(false);
+              setCatalogSaving(false);
+              setEditorialRevision((value) => value + 1);
+              setCatalogOpen(false);
+              setCatalogInitial(null);
+              setFeedback({
+                tone: 'success',
+                text: 'Ficha guardada. Puedes revisar su publicación en el flujo.',
+              });
+            }}
+            onCancel={() => setCatalogOpen(false)}
+          />
+        </Dialog>
+      )}
       {destinationForm && token && (
         <DestinationEditor
           initial={destinationForm}
@@ -848,7 +710,28 @@ export default function AdminPage() {
         />
       )}
 
-      {placeForm && (
+      {placeForm && !placeForm.id && !selectedDestinationId && (
+        <Dialog title="Destino del nuevo lugar" onClose={() => setPlaceForm(null)}>
+          <label>
+            Elige el destino al que pertenece
+            <select
+              aria-label="Destino del lugar"
+              value={selectedDestinationId}
+              onChange={(event) => setSelectedDestinationId(event.target.value)}
+            >
+              <option value="">Selecciona un destino</option>
+              {placeChoices
+                .filter((d) => !d.countryCode || d.countryCode === creationContext().countryCode)
+                .map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.nombre}
+                  </option>
+                ))}
+            </select>
+          </label>
+        </Dialog>
+      )}
+      {placeForm && (placeForm.id || selectedDestinationId) && (
         <PlaceEditorModal
           error={feedback?.tone === 'error' ? feedback.text : undefined}
           form={placeForm}
@@ -873,7 +756,10 @@ export default function AdminPage() {
         <ActivityDeleteDialog
           activity={activityToDelete}
           isDeleting={isSaving}
-          onConfirm={() => void deleteActivity()}
+          onConfirm={async () => {
+            await deleteActivity();
+            setEditorialRevision((n) => n + 1);
+          }}
           onClose={() => setActivityToDelete(null)}
         />
       )}
@@ -890,7 +776,10 @@ export default function AdminPage() {
         <TourismTypeDeleteDialog
           type={travelTypeToDelete}
           isDeleting={isSaving}
-          onConfirm={() => void deleteTravelType()}
+          onConfirm={async () => {
+            await deleteTravelType();
+            setEditorialRevision((n) => n + 1);
+          }}
           onClose={() => setTravelTypeToDelete(null)}
         />
       )}

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   Globe2,
   BookOpen,
@@ -41,7 +41,14 @@ function ResourceIcon({ resource }: { resource: string }) {
 type Props = {
   token: string;
   onOpenCatalog: (tab: AdminTab, entry?: Entry) => Promise<void>;
-  onLegacy: () => void;
+  revision?: number;
+  initialTab?: string | null;
+  onResourceChange: (tab: AdminTab) => void;
+  feedback?: { tone: 'success' | 'error'; text: string } | null;
+  onDelete: (entry: Entry) => Promise<void>;
+  management: 'editorial' | 'reviews' | null;
+  onManagementChange: (value: 'editorial' | 'reviews' | null) => void;
+  managementContent: ReactNode;
 };
 type Page = {
   items: Entry[];
@@ -69,9 +76,22 @@ function initialContext() {
     return { country: 'ES', region: '' };
   }
 }
-export function PublicationWorkspace({ token, onOpenCatalog, onLegacy }: Props) {
+export function PublicationWorkspace({
+  token,
+  onOpenCatalog,
+  revision: externalRevision,
+  initialTab,
+  onResourceChange,
+  feedback,
+  onDelete,
+  management,
+  onManagementChange,
+  managementContent,
+}: Props) {
   const [context, setContext] = useState(initialContext);
-  const [resource, setResource] = useState('destinos');
+  const [resource, setResource] = useState(
+    resources.find((r) => r.tab === initialTab)?.id || 'destinos',
+  );
   const [area, setArea] = useState<'content' | 'countries'>('content');
   const [countries, setCountries] = useState<Country[]>([]);
   const [pageKey, setPageKey] = useState('');
@@ -154,7 +174,17 @@ export function PublicationWorkspace({ token, onOpenCatalog, onLegacy }: Props) 
       clearTimeout(timer);
       controller.abort();
     };
-  }, [token, resource, context.country, context.region, query, filter, offset, revision]);
+  }, [
+    token,
+    resource,
+    context.country,
+    context.region,
+    query,
+    filter,
+    offset,
+    revision,
+    externalRevision,
+  ]);
   useEffect(() => {
     if (!dirty) return;
     const guard = (e: BeforeUnloadEvent) => {
@@ -194,6 +224,7 @@ export function PublicationWorkspace({ token, onOpenCatalog, onLegacy }: Props) 
   };
   const chooseCountry = (code: string) => {
     setResource('destinos');
+    onResourceChange('destinos');
     setContext({ country: code, region: '' });
     setArea('content');
     setQuery('');
@@ -255,6 +286,8 @@ export function PublicationWorkspace({ token, onOpenCatalog, onLegacy }: Props) 
     }
   }
   async function advanced(entry?: Entry) {
+    if (busy) return;
+    setError('');
     if (dirty) {
       setDiscard(true);
       return;
@@ -265,7 +298,9 @@ export function PublicationWorkspace({ token, onOpenCatalog, onLegacy }: Props) 
       await onOpenCatalog((entry?.editorTab || config.tab) as AdminTab, entry);
       setModal(null);
     } catch (cause) {
-      setDialogError(cause instanceof Error ? cause.message : 'No se pudo abrir la ficha');
+      const message = cause instanceof Error ? cause.message : 'No se pudo abrir la ficha';
+      if (modal) setDialogError(message);
+      else setError(message);
     } finally {
       setBusy(false);
     }
@@ -286,9 +321,6 @@ export function PublicationWorkspace({ token, onOpenCatalog, onLegacy }: Props) 
       <header className="ex-top">
         <strong>Administración · Publicación por países</strong>
         <div>
-          <button className="ex-btn" onClick={onLegacy}>
-            Catálogo detallado
-          </button>
           <button className="ex-btn" onClick={() => setModal({ kind: 'tutorial' })}>
             <BookOpen size={17} />
             Guía del equipo
@@ -298,7 +330,13 @@ export function PublicationWorkspace({ token, onOpenCatalog, onLegacy }: Props) 
       <div className="ex-shell">
         <nav className="ex-sidebar" aria-label="Catálogos">
           <span className="ex-eyebrow">ESPACIO EDITORIAL</span>
-          <button aria-pressed={area === 'countries'} onClick={() => setArea('countries')}>
+          <button
+            aria-pressed={!management && area === 'countries'}
+            onClick={() => {
+              onManagementChange(null);
+              setArea('countries');
+            }}
+          >
             <Globe2 size={18} />
             Países<span>{countries.length}</span>
           </button>
@@ -306,8 +344,10 @@ export function PublicationWorkspace({ token, onOpenCatalog, onLegacy }: Props) 
           {resources.map((r) => (
             <button
               key={r.id}
-              aria-pressed={area === 'content' && resource === r.id}
+              aria-pressed={!management && area === 'content' && resource === r.id}
               onClick={() => {
+                onManagementChange(null);
+                onResourceChange(r.tab);
                 setResource(r.id);
                 setArea('content');
                 setQuery('');
@@ -320,6 +360,21 @@ export function PublicationWorkspace({ token, onOpenCatalog, onLegacy }: Props) 
               <span>{summary[r.id] ?? '—'}</span>
             </button>
           ))}
+          <span className="ex-sidebar-label">SUPERVISIÓN</span>
+          <button
+            aria-pressed={management === 'editorial'}
+            onClick={() => onManagementChange('editorial')}
+          >
+            <BookOpen size={18} />
+            Revisión editorial
+          </button>
+          <button
+            aria-pressed={management === 'reviews'}
+            onClick={() => onManagementChange('reviews')}
+          >
+            <Layers size={18} />
+            Reseñas
+          </button>
           <div className="ex-global-note">
             <Layers size={18} />
             <strong>Tipos compartidos</strong>
@@ -331,214 +386,238 @@ export function PublicationWorkspace({ token, onOpenCatalog, onLegacy }: Props) 
           </button>
         </nav>
         <section className="ex-main" aria-label="Publicación y catálogos">
-          <div className="ex-context">
-            <div>
-              <Globe2 size={20} />
-              <span>
-                Contexto de trabajo<small>Se conserva al cambiar de catálogo.</small>
-              </span>
-            </div>
-            <label>
-              País
-              <select
-                value={context.country}
-                onChange={(e) => setContext({ country: e.target.value, region: '' })}
-              >
-                <option value="">Todos los países</option>
-                {countries.map((c) => (
-                  <option key={c.code} value={c.code}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Región
-              <select
-                value={context.region}
-                disabled={!context.country || global || area === 'countries' || !isCurrentPage}
-                onChange={(e) => setContext({ ...context, region: e.target.value })}
-              >
-                <option value="">Todas las regiones</option>
-                {[...new Set([...page.regions, ...(context.region ? [context.region] : [])])].map(
-                  (region) => (
-                    <option key={region}>{region}</option>
-                  ),
-                )}
-              </select>
-            </label>
-          </div>
-          <header className="ex-heading">
-            <div>
-              <span className="ex-eyebrow">PREPARAR NO ES PUBLICAR</span>
-              <h1>
-                {area === 'countries'
-                  ? 'Un catálogo. Más países.'
-                  : `${config.name}${!global && selected ? ` en ${selected.name}` : ''}`}
-              </h1>
-              <p>Completa las fichas, comprueba su visibilidad y decide cuándo publicarlas.</p>
-            </div>
-            {area === 'content' && (
-              <button className="ex-btn ex-btn--primary" onClick={() => void advanced()}>
-                <Plus size={18} />
-                Crear o editar fichas
-              </button>
-            )}
-          </header>
-          {error && (
-            <Notice
-              tone="error"
-              action={
-                <button className="ex-link" onClick={() => setRevision((r) => r + 1)}>
-                  Reintentar
-                </button>
-              }
-            >
-              {error}
-            </Notice>
-          )}
-          {notice && (
-            <div className="ex-feedback" role="status">
-              <Check size={18} />
-              <span>{notice}</span>
-              <button aria-label="Cerrar aviso" onClick={() => setNotice('')}>
-                ×
-              </button>
-            </div>
-          )}
-          {global && area === 'content' && (
-            <p className="ex-global-alert">
-              Catálogo global: los filtros de país y región no se aplican a los tipos compartidos.
-            </p>
-          )}
-          {area === 'content' && (
-            <div className="ex-metrics">
-              {(['draft', 'ready', 'public', 'blocked'] as Result[]).map((state) => (
-                <button
-                  key={state}
-                  aria-pressed={filter === state}
-                  onClick={() => setFilter(filter === state ? '' : state)}
-                >
-                  <span>{labels[state]}</span>
-                  <strong>{isCurrentPage ? page.counts[state] || 0 : '…'}</strong>
-                </button>
-              ))}
-            </div>
-          )}
-          {selected && !global && area === 'content' && selected.state !== 'public' && (
-            <div className="ex-country-alert">
-              <Globe2 size={20} />
-              <div>
-                <strong>{selected.name} aún no está publicado.</strong>
-                <p>
-                  Las fichas con Mostrar: Sí seguirán ocultas hasta que el país esté acabado y
-                  visible.
-                </p>
-              </div>
-              <button className="ex-link" onClick={() => openCountry(selected)}>
-                Gestionar país <ArrowUpRight size={16} />
-              </button>
-            </div>
-          )}
-          {area === 'content' && (
-            <div className="ex-toolbar">
-              <label>
-                <Search size={18} />
-                <input
-                  aria-label="Buscar contenido"
-                  placeholder="Buscar contenido"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                />
-              </label>
-              <select
-                className="ex-status-filter"
-                aria-label="Resultado público"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value as Result | '')}
-              >
-                <option value="">Todos los estados</option>
-                {Object.entries(labels).map(([state, label]) => (
-                  <option key={state} value={state}>
-                    {label}
-                  </option>
-                ))}
-              </select>
-              <span>{isCurrentPage ? page.total : '…'} resultados</span>
-              {selected && !global && (
-                <button className="ex-link" onClick={() => void openPreview(selected.code)}>
-                  <Eye size={17} />
-                  Vista pública
-                </button>
-              )}
-            </div>
-          )}
-          {loading || (!isCurrentPage && !error) ? (
-            <Loader label="Cargando publicación…" />
+          {feedback && <Notice tone={feedback.tone}>{feedback.text}</Notice>}
+          {management ? (
+            <>
+              <header className="ex-heading">
+                <h1>{management === 'editorial' ? 'Revisión editorial' : 'Reseñas'}</h1>
+              </header>
+              {managementContent}
+            </>
           ) : (
-            !error && (
-              <>
-                {area === 'countries' ? (
-                  <>
-                    <p className="ex-country-scope">
-                      Vista global de países. El selector territorial se aplica al contenido de cada
-                      catálogo.
-                    </p>
-                    <Countries
-                      countries={countries}
-                      onEdit={openCountry}
-                      onSelect={chooseCountry}
-                      onPreview={(code) => void openPreview(code)}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <p className="ex-country-scope">
-                      Las columnas muestran las fichas de esta página. Los contadores superiores
-                      incluyen todos los resultados.
-                    </p>
-                    <Flow entries={page.items} onEdit={open} />
-                    {!page.items.length && (
-                      <div className="ex-empty">
-                        <h3>No hay fichas con estos filtros.</h3>
-                        <button
-                          className="ex-btn"
-                          onClick={() => {
-                            setQuery('');
-                            setFilter('');
-                            setContext({ ...context, region: '' });
-                          }}
-                        >
-                          Limpiar filtros
-                        </button>
-                      </div>
-                    )}
-                    <div className="ex-pagination">
-                      <button
-                        className="ex-btn"
-                        disabled={offset === 0}
-                        onClick={() => setOffset((n) => Math.max(0, n - 40))}
-                      >
-                        <ArrowLeft size={17} />
-                        Anterior
-                      </button>
-                      <span>
-                        {page.total ? offset + 1 : 0}–{Math.min(offset + 40, page.total)} de{' '}
-                        {page.total}
-                      </span>
-                      <button
-                        className="ex-btn"
-                        disabled={offset + 40 >= page.total}
-                        onClick={() => setOffset((n) => n + 40)}
-                      >
-                        Siguiente
-                        <ArrowRight size={17} />
-                      </button>
-                    </div>
-                  </>
+            <>
+              <div className="ex-context">
+                <div>
+                  <Globe2 size={20} />
+                  <span>
+                    Contexto de trabajo<small>Se conserva al cambiar de catálogo.</small>
+                  </span>
+                </div>
+                <label>
+                  País
+                  <select
+                    value={context.country}
+                    onChange={(e) => setContext({ country: e.target.value, region: '' })}
+                  >
+                    <option value="">Todos los países</option>
+                    {countries.map((c) => (
+                      <option key={c.code} value={c.code}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Región
+                  <select
+                    value={context.region}
+                    disabled={!context.country || global || area === 'countries' || !isCurrentPage}
+                    onChange={(e) => setContext({ ...context, region: e.target.value })}
+                  >
+                    <option value="">Todas las regiones</option>
+                    {[
+                      ...new Set([...page.regions, ...(context.region ? [context.region] : [])]),
+                    ].map((region) => (
+                      <option key={region}>{region}</option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+              <header className="ex-heading">
+                <div>
+                  <span className="ex-eyebrow">PREPARAR NO ES PUBLICAR</span>
+                  <h1>
+                    {area === 'countries'
+                      ? 'Un catálogo. Más países.'
+                      : `${config.name}${!global && selected ? ` en ${selected.name}` : ''}`}
+                  </h1>
+                  <p>Completa las fichas, comprueba su visibilidad y decide cuándo publicarlas.</p>
+                </div>
+                {area === 'content' && (
+                  <button
+                    className="ex-btn ex-btn--primary"
+                    disabled={busy || (!global && !selected)}
+                    title={
+                      !global && !selected ? 'Selecciona un país para crear fichas' : undefined
+                    }
+                    onClick={() => void advanced()}
+                  >
+                    <Plus size={18} />
+                    Crear ficha
+                  </button>
                 )}
-              </>
-            )
+              </header>
+              {error && (
+                <Notice
+                  tone="error"
+                  action={
+                    <button className="ex-link" onClick={() => setRevision((r) => r + 1)}>
+                      Reintentar
+                    </button>
+                  }
+                >
+                  {error}
+                </Notice>
+              )}
+              {notice && (
+                <div className="ex-feedback" role="status">
+                  <Check size={18} />
+                  <span>{notice}</span>
+                  <button aria-label="Cerrar aviso" onClick={() => setNotice('')}>
+                    ×
+                  </button>
+                </div>
+              )}
+              {global && area === 'content' && (
+                <p className="ex-global-alert">
+                  Catálogo global: los filtros de país y región no se aplican a los tipos
+                  compartidos.
+                </p>
+              )}
+              {area === 'content' && (
+                <div className="ex-metrics">
+                  {(['draft', 'ready', 'public', 'blocked'] as Result[]).map((state) => (
+                    <button
+                      key={state}
+                      aria-pressed={filter === state}
+                      onClick={() => setFilter(filter === state ? '' : state)}
+                    >
+                      <span>{labels[state]}</span>
+                      <strong>{isCurrentPage ? page.counts[state] || 0 : '…'}</strong>
+                    </button>
+                  ))}
+                </div>
+              )}
+              {selected && !global && area === 'content' && selected.state !== 'public' && (
+                <div className="ex-country-alert">
+                  <Globe2 size={20} />
+                  <div>
+                    <strong>{selected.name} aún no está publicado.</strong>
+                    <p>
+                      Las fichas con Mostrar: Sí seguirán ocultas hasta que el país esté acabado y
+                      visible.
+                    </p>
+                  </div>
+                  <button className="ex-link" onClick={() => openCountry(selected)}>
+                    Gestionar país <ArrowUpRight size={16} />
+                  </button>
+                </div>
+              )}
+              {area === 'content' && (
+                <div className="ex-toolbar">
+                  <label>
+                    <Search size={18} />
+                    <input
+                      aria-label="Buscar contenido"
+                      placeholder="Buscar contenido"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                    />
+                  </label>
+                  <select
+                    className="ex-status-filter"
+                    aria-label="Resultado público"
+                    value={filter}
+                    onChange={(e) => setFilter(e.target.value as Result | '')}
+                  >
+                    <option value="">Todos los estados</option>
+                    {Object.entries(labels).map(([state, label]) => (
+                      <option key={state} value={state}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                  <span>{isCurrentPage ? page.total : '…'} resultados</span>
+                  {selected && !global && (
+                    <button className="ex-link" onClick={() => void openPreview(selected.code)}>
+                      <Eye size={17} />
+                      Vista pública
+                    </button>
+                  )}
+                </div>
+              )}
+              {loading || (!isCurrentPage && !error) ? (
+                <Loader label="Cargando publicación…" />
+              ) : (
+                !error && (
+                  <>
+                    {area === 'countries' ? (
+                      <>
+                        <p className="ex-country-scope">
+                          Vista global de países. El selector territorial se aplica al contenido de
+                          cada catálogo.
+                        </p>
+                        <Countries
+                          countries={countries}
+                          onEdit={openCountry}
+                          onSelect={chooseCountry}
+                          onPreview={(code) => void openPreview(code)}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <p className="ex-country-scope">
+                          Las columnas muestran las fichas de esta página. Los contadores superiores
+                          incluyen todos los resultados.
+                        </p>
+                        <Flow
+                          entries={page.items}
+                          onEdit={open}
+                          onOpen={(entry) => void advanced(entry)}
+                        />
+                        {!page.items.length && (
+                          <div className="ex-empty">
+                            <h3>No hay fichas con estos filtros.</h3>
+                            <button
+                              className="ex-btn"
+                              onClick={() => {
+                                setQuery('');
+                                setFilter('');
+                                setContext({ ...context, region: '' });
+                              }}
+                            >
+                              Limpiar filtros
+                            </button>
+                          </div>
+                        )}
+                        <div className="ex-pagination">
+                          <button
+                            className="ex-btn"
+                            disabled={offset === 0}
+                            onClick={() => setOffset((n) => Math.max(0, n - 40))}
+                          >
+                            <ArrowLeft size={17} />
+                            Anterior
+                          </button>
+                          <span>
+                            {page.total ? offset + 1 : 0}–{Math.min(offset + 40, page.total)} de{' '}
+                            {page.total}
+                          </span>
+                          <button
+                            className="ex-btn"
+                            disabled={offset + 40 >= page.total}
+                            onClick={() => setOffset((n) => n + 40)}
+                          >
+                            Siguiente
+                            <ArrowRight size={17} />
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </>
+                )
+              )}
+            </>
           )}
         </section>
       </div>
@@ -684,6 +763,31 @@ export function PublicationWorkspace({ token, onOpenCatalog, onLegacy }: Props) 
                   </div>
                 )}
                 <div className="ex-dialog-actions">
+                  {modal.kind === 'entry' &&
+                    ['destinos', 'municipios', 'places', 'tipos-actividad', 'tipos-viaje'].includes(
+                      modal.draft.resource,
+                    ) && (
+                      <button
+                        className="ex-btn ex-btn--danger"
+                        disabled={busy || dirty}
+                        onClick={async () => {
+                          setBusy(true);
+                          try {
+                            await onDelete(modal.draft);
+                            setModal(null);
+                            setRevision((n) => n + 1);
+                          } catch (cause) {
+                            setDialogError(
+                              cause instanceof Error ? cause.message : 'No se pudo eliminar',
+                            );
+                          } finally {
+                            setBusy(false);
+                          }
+                        }}
+                      >
+                        Eliminar ficha
+                      </button>
+                    )}
                   <button className="ex-btn" disabled={busy} onClick={close}>
                     Cancelar
                   </button>

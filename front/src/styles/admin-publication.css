@@ -1492,3 +1492,92 @@
     min-width: 0;
   }
 }
+
+.ex-record-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+.ex-record-title svg {
+  flex-shrink: 0;
+}
+.ex-publication-action {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+.ex-record-card > .ex-link {
+  margin-top: 14px;
+  color: var(--brand);
+}
+.ex-record-card:has(button:hover) {
+  border-color: var(--brand);
+}
+.admin-catalog-dialog {
+  width: min(960px, calc(100vw - 32px));
+}
+.admin-catalog-dialog .municipality-catalog-editor fieldset {
+  min-width: 0;
+}
+.admin-editor-loading {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 110;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 8px 30px #0002;
+}
+.ex-btn--danger {
+  color: var(--danger, #b3261e);
+  margin-right: auto;
+}
+.ex-record-title strong {
+  font:
+    700 18px/1.25 'Bricolage Grotesque',
+    sans-serif;
+  letter-spacing: -0.025em;
+}
+.ex-record-card {
+  cursor: default;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+.ex-column {
+  max-height: 680px;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+.ex-column > header {
+  position: sticky;
+  top: -14px;
+  z-index: 1;
+  background: var(--surface-muted);
+  padding: 14px 0 12px;
+  margin-top: -14px;
+}
+@media (max-width: 760px) {
+  .ex-column {
+    max-height: none;
+    overflow-y: visible;
+  }
+  .ex-column > header {
+    position: static;
+  }
+}
