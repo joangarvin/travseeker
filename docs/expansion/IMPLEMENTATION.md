@@ -36,8 +36,10 @@ Los orígenes adicionales autorizados para sesiones por cookie se configuran exp
 
 ## Exploración pública por país
 
-La home añade un mosaico después de los destinos existentes. `/pais/:code` muestra una panorámica, información básica, mapa opcional y catálogo paginado. Ambas superficies utilizan el ancho disponible con márgenes adaptables. No reemplazan los controles ni recomendaciones anteriores.
+La home añade un mosaico después de los destinos existentes. `/pais/:code` muestra una panorámica, información básica con mapa lateral visible y catálogo paginado. Ambas superficies utilizan el ancho disponible con márgenes adaptables. No reemplazan los controles ni recomendaciones anteriores.
 
 `GET /api/paises` devuelve países públicos con destinos visibles y anuncios mínimos. `GET /api/paises/:code` filtra por publicación del país y del destino; admite `q`, `region`, `type` y `offset`. Los países ocultos devuelven 404 y los próximos no exponen imágenes ni fichas. Se reutilizan los estados existentes sin migración adicional.
 
 La página de país reutiliza `SearchBox` y `HomeFilterPanel` de inicio: presupuesto, afluencia, mes, ubicación, tipos de viaje y actividades. El buscador usa el mismo motor de búsqueda por contenido y tolerancia a erratas. El servicio compartido acepta un ámbito territorial interno que fija el país desde la ruta; los parámetros enviados por el cliente no pueden sustituirlo. Los filtros se guardan en la URL, distinguiendo la edición de su aplicación y permitiendo limpiar y volver a intentar. Las opciones de ubicación se obtienen del país visible. La composición móvil del buscador también se comparte sin cambiar el aspecto anterior de inicio.
+
+El resumen territorial agrupa título, descripción, acceso al catálogo y datos prácticos a la izquierda. El mapa ocupa una columna propia y pasa debajo en móvil, con enlace para abrirlo en grande. Se ha retirado el desplegable: el iframe utiliza carga diferida y solo se monta cuando el consentimiento de mapas externos está activo; en caso contrario se muestra el control de configuración existente. Comprobado a 1440, 390 y 320 px.

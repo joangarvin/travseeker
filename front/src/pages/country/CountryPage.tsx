@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowDown, ArrowLeft, Globe2, Map } from 'lucide-react';
+import { ArrowDown, ArrowLeft, ArrowUpRight, Globe2, Map } from 'lucide-react';
 import { Shell, PageMeta } from '../../components/layout';
 import { Empty, Loader, MediaImage, Notice } from '../../components/ui';
 import { ExternalMapGate } from '../../features/privacy/CookieConsent';
@@ -25,8 +25,7 @@ export default function CountryPage() {
     [loading, setLoading] = useState(true),
     [error, setError] = useState(''),
     [missing, setMissing] = useState(false),
-    [revision, setRevision] = useState(0),
-    [mapOpen, setMapOpen] = useState(false);
+    [revision, setRevision] = useState(0);
   const searchKey = params.toString();
   const offset = Math.max(0, parseInt(params.get('offset') || '0', 10) || 0);
   useEffect(() => {
@@ -172,61 +171,66 @@ export default function CountryPage() {
             <figcaption>{data.imageAlt}</figcaption>
           </figure>
         )}
-        <header className="country-page__intro">
-          <div>
+        <div
+          className={`country-page__overview ${data.bbox ? '' : 'country-page__overview--text'}`}
+        >
+          <header className="country-page__intro">
             <p className="kicker">{t('Encuentra tu próximo destino')}</p>
             <h1>{data.name}</h1>
-          </div>
-          <div>
-            {data.description && <p>{data.description}</p>}
+            {data.description && <p className="country-page__description">{data.description}</p>}
             <a href="#country-destinations" className="button button--sun">
               {t('Explorar destinos')}
               <ArrowDown size={17} aria-hidden />
             </a>
-          </div>
-        </header>
-        <dl className="country-page__facts">
-          <div>
-            <dt>{t('En esta guía')}</dt>
-            <dd>{t('{0} destinos', { 0: data.destinationCount || 0 })}</dd>
-          </div>
-          {data.currency && (
-            <div>
-              <dt>{t('Moneda')}</dt>
-              <dd>{data.currency}</dd>
-            </div>
+            <dl className="country-page__facts">
+              <div>
+                <dt>{t('En esta guía')}</dt>
+                <dd>{t('{0} destinos', { 0: data.destinationCount || 0 })}</dd>
+              </div>
+              {data.currency && (
+                <div>
+                  <dt>{t('Moneda')}</dt>
+                  <dd>{data.currency}</dd>
+                </div>
+              )}
+              {data.languages && (
+                <div>
+                  <dt>{t('Idiomas')}</dt>
+                  <dd>{data.languages}</dd>
+                </div>
+              )}
+            </dl>
+          </header>
+          {data.bbox && (
+            <section className="country-page__map" aria-labelledby="country-map-title">
+              <div className="country-page__map-heading">
+                <h2 id="country-map-title">
+                  <Map size={20} aria-hidden />
+                  {t('Dónde está')}
+                </h2>
+                <a
+                  className="country-page__map-link"
+                  href={`https://www.openstreetmap.org/?bbox=${data.bbox.join('%2C')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t('Abrir mapa')}
+                  <ArrowUpRight size={17} aria-hidden />
+                </a>
+              </div>
+              <div className="country-page__map-canvas">
+                <ExternalMapGate>
+                  <iframe
+                    title={t('Mapa de {0}', { 0: data.name })}
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    src={`https://www.openstreetmap.org/export/embed.html?bbox=${data.bbox.join('%2C')}&layer=mapnik`}
+                  />
+                </ExternalMapGate>
+              </div>
+            </section>
           )}
-          {data.languages && (
-            <div>
-              <dt>{t('Idiomas')}</dt>
-              <dd>{data.languages}</dd>
-            </div>
-          )}
-        </dl>
-        {data.bbox && (
-          <details
-            className="country-page__map"
-            onToggle={(event) => setMapOpen(event.currentTarget.open)}
-          >
-            <summary>
-              <span>
-                <Map size={20} aria-hidden />
-                {t('Ubicar {0}', { 0: data.name })}
-              </span>
-              <span>{t('Ver mapa')}</span>
-            </summary>
-            {mapOpen && (
-              <ExternalMapGate>
-                <iframe
-                  title={t('Mapa de {0}', { 0: data.name })}
-                  loading="lazy"
-                  referrerPolicy="no-referrer"
-                  src={`https://www.openstreetmap.org/export/embed.html?bbox=${data.bbox.join('%2C')}&layer=mapnik`}
-                />
-              </ExternalMapGate>
-            )}
-          </details>
-        )}
+        </div>
         <section
           className="country-page__destinations"
           id="country-destinations"
