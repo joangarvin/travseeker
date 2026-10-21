@@ -7,3 +7,5 @@ La superficie aislada de prototipos se ha retirado al integrar la propuesta eleg
 Los estados acordados son En preparación · Oculto, Próximamente, Listo para publicar, Publicado y Oculto por país. La preparación y la intención de mostrar se guardan por separado. Los tipos de viaje y actividad son globales.
 
 Véanse `IMPLEMENTATION.md`, `TUTORIAL_ADMIN.md` y `VALIDATION.md` para despliegue, uso y verificación.
+
+La exploración de funcionalidades 3 y 4 (inicio centrado en destinos y sección secundaria de países) está documentada en PROTOTYPES_PUBLIC.md, con propuestas aisladas Franja, Mosaico y Lista.
