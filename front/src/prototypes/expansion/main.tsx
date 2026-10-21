@@ -408,6 +408,7 @@ function App() {
             ).map((state) => (
               <button
                 key={state}
+                aria-pressed={(area === 'countries' ? countryFilter : filter) === state}
                 className={
                   (area === 'countries' ? countryFilter : filter) === state ? 'is-active' : ''
                 }
@@ -519,6 +520,17 @@ function App() {
               area={area}
             />
           </div>
+          {area === 'countries' &&
+            countryFilter &&
+            !data.countries.some((c) => countryResult(c) === countryFilter) && (
+              <div className="ex-empty">
+                <Globe2 size={26} />
+                <h3>No hay países en este estado.</h3>
+                <button className="ex-btn" onClick={() => setCountryFilter('')}>
+                  Ver todos los países
+                </button>
+              </div>
+            )}
           {area === 'content' && !entries.length && (
             <div className="ex-empty">
               <Search size={25} />
@@ -742,13 +754,15 @@ function App() {
                     <label>
                       Descripción
                       <textarea
+                        aria-label="Descripción"
+                        aria-describedby="expansion-description-help"
                         rows={3}
                         maxLength={1200}
                         value={modal.draft.description}
                         disabled={busy}
                         onChange={(e) => updateEntry({ description: e.target.value })}
                       />
-                      <small>
+                      <small id="expansion-description-help">
                         Para marcar Acabado: nombre, región y una descripción de al menos 20
                         caracteres en esta demostración.
                       </small>
