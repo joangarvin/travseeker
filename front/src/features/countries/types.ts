@@ -1,4 +1,4 @@
-import type { Destino } from '../../types';
+import type { Destino, FilterOptions } from '../../types';
 import type { Translations } from '../../i18n';
 export type CountrySummary = {
   code: string;
@@ -13,6 +13,7 @@ export type CountryPageData = CountrySummary & {
   languages?: string;
   bbox?: number[] | null;
   imageAlt?: string;
+  filterOptions?: FilterOptions;
   regions?: string[];
   types?: { name: string; value: string; translations?: Translations }[];
   items?: Destino[];

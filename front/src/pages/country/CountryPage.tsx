@@ -1,6 +1,6 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowDown, ArrowLeft, ArrowRight, Globe2, Map } from 'lucide-react';
+import { ArrowDown, ArrowLeft, Globe2, Map } from 'lucide-react';
 import { Shell, PageMeta } from '../../components/layout';
 import { Empty, Loader, MediaImage, Notice } from '../../components/ui';
 import { ExternalMapGate } from '../../features/privacy/CookieConsent';
@@ -8,27 +8,40 @@ import { DestinationCard } from '../../features/destinations/components/Destinat
 import { api, ApiError } from '../../services/api';
 import { imageUrl } from '../../utils';
 import { t } from '../../i18n';
+import { SearchBox } from '../../features/search/SearchBox';
+import { HomeFilterPanel } from '../../features/search/HomeFilterPanel';
+import { getActiveFilterChips } from '../../utils/filterFallbackEngine';
+import type { SearchFilters } from '../../types';
 import type { CountryPageData } from '../../features/countries/types';
 export default function CountryPage() {
   const { code = '' } = useParams();
   const [params, setParams] = useSearchParams();
   const [data, setData] = useState<CountryPageData | null>(null),
-    [query, setQuery] = useState(params.get('q') || ''),
+    [filters, setFilters] = useState<SearchFilters>(() => ({
+      ...Object.fromEntries(params),
+      tipoTurismo: params.get('tipoTurismo') || params.get('type') || '',
+    })),
+    [filtersOpen, setFiltersOpen] = useState(false),
     [loading, setLoading] = useState(true),
     [error, setError] = useState(''),
     [missing, setMissing] = useState(false),
     [revision, setRevision] = useState(0),
     [mapOpen, setMapOpen] = useState(false);
-  const q = params.get('q') || '',
-    region = params.get('region') || '',
-    type = params.get('type') || '',
-    offset = Math.max(0, parseInt(params.get('offset') || '0', 10) || 0);
+  const searchKey = params.toString();
+  const offset = Math.max(0, parseInt(params.get('offset') || '0', 10) || 0);
+  useEffect(() => {
+    const current = new URLSearchParams(searchKey);
+    setFilters({
+      ...Object.fromEntries(current),
+      tipoTurismo: current.get('tipoTurismo') || current.get('type') || '',
+    });
+  }, [searchKey]);
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true);
     setError('');
     setMissing(false);
-    const search = new URLSearchParams({ q, region, type, offset: String(offset) });
+    const search = new URLSearchParams(searchKey);
     api<CountryPageData>(`/paises/${encodeURIComponent(code)}?${search}`, {
       signal: controller.signal,
     })
@@ -45,25 +58,21 @@ export default function CountryPage() {
         if (!controller.signal.aborted) setLoading(false);
       });
     return () => controller.abort();
-  }, [code, q, region, type, offset, revision]);
-  function filter(values: Record<string, string>) {
+  }, [code, searchKey, revision]);
+  function apply(next = filters) {
     setParams((current) => {
-      const next = new URLSearchParams(current);
-      next.delete('offset');
-      for (const [key, value] of Object.entries(values)) {
-        if (value) next.set(key, value);
-        else next.delete(key);
+      const p = new URLSearchParams();
+      if (current.get('lang')) p.set('lang', current.get('lang')!);
+      for (const [key, value] of Object.entries(next)) {
+        if (value && key !== 'offset' && key !== 'type') p.set(key, value);
       }
-      return next;
+      return p;
     });
+    setFiltersOpen(false);
   }
   function reset() {
-    setQuery('');
-    filter({ q: '', region: '', type: '' });
-  }
-  function search(event: FormEvent) {
-    event.preventDefault();
-    filter({ q: query.trim() });
+    setFilters({});
+    apply({});
   }
   function paginate(next: number) {
     setParams((current) => {
@@ -231,50 +240,27 @@ export default function CountryPage() {
             </div>
             <p role="status">{t('{0} resultados', { 0: data.total || 0 })}</p>
           </header>
-          <div className="country-page__filters">
-            <form onSubmit={search}>
-              <label htmlFor="country-search">{t('Buscar destino')}</label>
-              <div>
-                <input
-                  id="country-search"
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  placeholder={t('Destino o región')}
-                />
-                <button className="button button--secondary" type="submit">
-                  {t('Buscar')}
-                  <ArrowRight size={16} aria-hidden />
-                </button>
-              </div>
-            </form>
-            {!!data.regions?.length && (
-              <label>
-                {t('Región')}
-                <select value={region} onChange={(event) => filter({ region: event.target.value })}>
-                  <option value="">{t('Todas las regiones')}</option>
-                  {data.regions.map((r) => (
-                    <option key={r}>{r}</option>
-                  ))}
-                </select>
-              </label>
-            )}
+          <div className="country-page__search">
+            <SearchBox
+              value={filters.q || ''}
+              onChange={(q) => setFilters((current) => ({ ...current, q }))}
+              onSubmit={() => apply()}
+              loading={loading}
+            />
+            <HomeFilterPanel
+              filters={filters}
+              isOpen={filtersOpen}
+              activeCount={getActiveFilterChips(filters).length}
+              locations={data.filterOptions?.locations || []}
+              locationLabels={data.filterOptions?.locationLabels}
+              activities={data.filterOptions?.activities || []}
+              onToggle={() => setFiltersOpen((open) => !open)}
+              onUpdate={(key, value) => setFilters((current) => ({ ...current, [key]: value }))}
+              onClear={reset}
+              onApply={() => apply()}
+              loading={loading}
+            />
           </div>
-          {!!data.types?.length && (
-            <div className="country-page__themes" aria-label={t('Tipos de viaje')}>
-              <button aria-pressed={!type} onClick={() => filter({ type: '' })}>
-                {t('Todos los planes')}
-              </button>
-              {data.types.map((item) => (
-                <button
-                  key={item.value}
-                  aria-pressed={type === item.value}
-                  onClick={() => filter({ type: item.value })}
-                >
-                  {item.name}
-                </button>
-              ))}
-            </div>
-          )}
           {error && (
             <Notice tone="error">
               {error}

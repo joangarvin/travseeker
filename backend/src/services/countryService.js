@@ -1,7 +1,6 @@
 const { prisma } = require("../config/database");
 const { publicGeography, publicGlobal } = require("../domain/publication");
-const { LIST_SELECT } = require("../constants/selects");
-const { mapTourismTypes } = require("../domain/destinationMapping");
+const destinations = require("./destinoService");
 const profiles = {
   ES: {
     en: "Spain",
@@ -114,44 +113,20 @@ async function page(rawCode, query = {}, locale = "es") {
   if (!c.preparationComplete) return basic;
   const { q, region, type, offset } = normalizeQuery(query);
   const scope = visible(code);
-  const where = {
-    ...scope,
-    ...(region ? { region } : {}),
-    ...(q
-      ? {
-          OR: [
-            { nombre: { contains: q, mode: "insensitive" } },
-            { region: { contains: q, mode: "insensitive" } },
-            { ubicacion: { contains: q, mode: "insensitive" } },
-          ],
-        }
-      : {}),
-    ...(type
-      ? {
-          tourismTypeLinks: {
-            some: {
-              tourismType: {
-                name: type,
-                ...publicGlobal({
-                  isActive: true,
-                  editorialStatus: "published",
-                }),
-              },
-            },
-          },
-        }
-      : {}),
-  };
-  const [items, total, regions, types, cover, destinationCount] =
+  const [catalog, filterOptions, regions, types, cover, destinationCount] =
     await Promise.all([
-      prisma.destino.findMany({
-        where,
-        select: { ...LIST_SELECT, region: true },
-        orderBy: { nombre: "asc" },
-        skip: offset,
-        take: 24,
-      }),
-      prisma.destino.count({ where }),
+      destinations.searchDestinosPage(
+        {
+          ...query,
+          q,
+          tipoTurismo: query.tipoTurismo || type,
+          lang: locale,
+          limit: "24",
+          offset: String(offset),
+        },
+        { countryCode: code, ...(region ? { region } : {}) },
+      ),
+      destinations.getFilterOptions(locale, { countryCode: code }),
       prisma.destino.groupBy({
         by: ["region"],
         where: { ...scope, region: { not: "" } },
@@ -188,10 +163,9 @@ async function page(rawCode, query = {}, locale = "es") {
     destinationCount,
     regions: regions.map((r) => r.region),
     types: types.map((t) => ({ ...t, value: t.name })),
-    items: items.map(mapTourismTypes),
-    total,
+    filterOptions,
+    ...catalog,
     offset,
-    hasMore: offset + items.length < total,
   };
 }
 module.exports = { list, page, normalizeQuery };

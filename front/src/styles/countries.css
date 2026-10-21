@@ -246,84 +246,11 @@ a.country-mosaic__card:focus-visible {
   scroll-margin-top: 110px;
   padding-top: 15px;
 }
-.country-page__filters {
-  display: flex;
-  align-items: end;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin: 24px 0;
+.country-page__search {
+  margin-block: 24px 32px;
 }
-.country-page__filters form {
-  flex: 1;
-  min-width: 0;
-  max-width: 620px;
-}
-.country-page__filters form > div {
-  display: flex;
-  gap: 10px;
-  margin-top: 9px;
-}
-.country-page__filters input {
-  min-width: 0;
-  flex: 1;
-}
-.country-page__filters input,
-.country-page__filters select {
-  min-height: 48px;
-  background: var(--surface);
-  border: 1px solid var(--line-strong);
-  border-radius: 10px;
-  padding: 10px 14px;
-  color: var(--ink);
-  font: inherit;
-  width: 100%;
-}
-.country-page__filters label {
-  display: block;
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-.country-page__filters > label {
-  min-width: 190px;
-}
-.country-page__filters select {
-  display: block;
-  margin-top: 9px;
-}
-.country-page__filters button {
-  min-height: 48px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.country-page__themes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 24px 0 32px;
-}
-.country-page__themes > button {
-  border: 1px solid var(--line);
-  background: var(--surface);
-  color: var(--ink);
-  min-height: 44px;
-  padding: 10px 18px;
-  border-radius: 99px;
-  font: inherit;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-.country-page__themes > button[aria-pressed='true'] {
-  background: var(--sun);
-  color: var(--sun-ink);
-  border-color: var(--sun);
-}
-.country-page__themes button:active {
-  transform: scale(0.97);
-}
-.country-page__themes button {
-  transition: transform 160ms var(--ease-out);
+.country-page__search .search-box-group {
+  max-width: 800px;
 }
 .country-page__grid {
   display: grid;
@@ -412,23 +339,6 @@ a.country-mosaic__card:focus-visible {
     text-align: right;
     font-size: 0.85rem;
   }
-  .country-page__filters form {
-    flex-basis: 100%;
-    max-width: none;
-  }
-  .country-page__filters > label {
-    width: 100%;
-    min-width: 0;
-  }
-  .country-page__filters form > div {
-    gap: 8px;
-  }
-  .country-page__filters button {
-    padding-inline: 16px;
-  }
-  .country-page__filters button svg {
-    display: none;
-  }
   .country-page__pagination {
     gap: 10px;
     font-size: 0.8rem;
@@ -445,12 +355,10 @@ a.country-mosaic__card:focus-visible {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .country-mosaic__card > img,
-  .country-page__themes button {
+  .country-mosaic__card > img {
     transition: none;
   }
-  .country-mosaic__card:hover > img,
-  .country-page__themes button:active {
+  .country-mosaic__card:hover > img {
     transform: none;
   }
 }

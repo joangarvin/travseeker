@@ -47,7 +47,7 @@
   .home-filter-chip {
     min-height: 44px;
   }
-  .home-hero .search-box {
+  :is(.home-hero, .country-page) .search-box {
     grid-template-columns: 40px minmax(0, 1fr);
     gap: 0;
     overflow: visible;
@@ -55,11 +55,11 @@
     border-radius: 0;
     background: transparent;
   }
-  .home-hero .search-box > svg {
+  :is(.home-hero, .country-page) .search-box > svg {
     grid-area: 1 / 1;
     z-index: 1;
   }
-  .home-hero .search-box input {
+  :is(.home-hero, .country-page) .search-box input {
     grid-area: 1 / 1 / 2 / 3;
     width: 100%;
     height: 56px;
@@ -68,14 +68,14 @@
     border-radius: 14px;
     background: var(--surface);
   }
-  .home-hero .search-box button {
+  :is(.home-hero, .country-page) .search-box button {
     margin-top: 10px;
     min-height: 48px;
     border-radius: 14px;
     background: var(--brand-solid);
     color: var(--brand-on-solid);
   }
-  .home-hero .search-box__help {
+  :is(.home-hero, .country-page) .search-box__help {
     margin-left: 0;
   }
   .destination-guide .related__grid {

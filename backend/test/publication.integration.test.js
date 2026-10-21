@@ -327,6 +327,8 @@ test(
               ...base,
               id: "publication-test-country-" + i,
               nombre: "Country destination " + String(i).padStart(2, "0"),
+              presupuesto: i === 0 ? "Alto" : "Medio",
+              ubicacion: i === 0 ? "Costa" : "Interior",
               countryCode: "ZZ",
               region: i < 10 ? "North" : "South",
               editorialStatus: "published",
@@ -355,10 +357,48 @@ test(
             (await countries.page("ZZ", { region: "North" })).total,
             10,
           );
+          assert.equal(
+            (await countries.page("ZZ", { presupuesto: "Alto" })).total,
+            1,
+          );
+          assert.equal(
+            (await countries.page("ZZ", { ubicacion: "Costa" })).total,
+            1,
+          );
+          assert.equal(
+            (
+              await countries.page("ZZ", {
+                presupuesto: "Alto",
+                ubicacion: "Interior",
+              })
+            ).total,
+            0,
+          );
+          assert.equal(
+            (await countries.page("ZZ", { tipoTurismo: "Naturaleza" })).total,
+            0,
+          );
+          const scoped = await countries.page("ZZ", {
+            q: "Country destination",
+            countryCode: "ES",
+            month: "8",
+            avoidCrowds: "true",
+          });
+          assert.equal(scoped.total, 27);
+          assert.ok(
+            scoped.items.every((d) =>
+              d.id.startsWith("publication-test-country-"),
+            ),
+          );
+          assert.deepEqual(first.filterOptions.locations, [
+            "Costa",
+            "Interior",
+          ]);
           await prisma.destino.update({
             where: { id: "publication-test-country-0" },
             data: { showOnWebsite: false },
           });
+          publicCache.clear();
           assert.equal((await countries.page("ZZ")).total, 26);
           await prisma.country.update({
             where: { code: "ZZ" },

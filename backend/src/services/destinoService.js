@@ -187,9 +187,9 @@ function textSearchWhere(query, structuredWhere) {
   return { ...rest, AND: clauses };
 }
 
-async function searchDestinosPage(query) {
+async function searchDestinosPage(query, scope = {}) {
   const { hasQuery, limit, offset } = parsePagination(query);
-  const where = publicEditorialWhere(buildWhereClause(query));
+  const where = publicEditorialWhere({ ...buildWhereClause(query), ...scope });
 
   if (hasQuery) {
     // Fuzzy ranking needs the candidate set before it can score and sort it.
@@ -424,10 +424,10 @@ async function getStats() {
   };
 }
 
-async function getFilterOptions(locale = "es") {
+async function getFilterOptions(locale = "es", scope = {}) {
   const [destinations, activityCatalog] = await Promise.all([
     prisma.destino.findMany({
-      where: { editorialStatus: "published", ...publicGeography() },
+      where: { editorialStatus: "published", ...publicGeography(scope) },
       select: { ubicacion: true, translations: true },
     }),
     prisma.activity.findMany({
