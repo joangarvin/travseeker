@@ -1,8 +1,15 @@
-const reviewService = require('../services/reviewService');
-const { asyncHandler } = require('../utils/asyncHandler');
+const { prisma } = require("../config/database");
+const { publicGeography } = require("../domain/publication");
+const reviewService = require("../services/reviewService");
+const { asyncHandler } = require("../utils/asyncHandler");
 
 const list = asyncHandler(async (req, res) => {
   const { destinoId } = req.params;
+  const visible = await prisma.destino.findFirst({
+    where: publicGeography({ id: destinoId, editorialStatus: "published" }),
+    select: { id: true },
+  });
+  if (!visible) return res.status(404).json({ error: "Destino no encontrado" });
   const [reviews, stats] = await Promise.all([
     reviewService.listReviews(destinoId),
     reviewService.getReviewStats(destinoId),
@@ -12,12 +19,15 @@ const list = asyncHandler(async (req, res) => {
 
 const upsert = asyncHandler(async (req, res) => {
   const { destinoId } = req.params;
-  const review = await reviewService.upsertReview(req.user.id, destinoId, { ...req.body, rating: Number(req.body.rating) });
+  const review = await reviewService.upsertReview(req.user.id, destinoId, {
+    ...req.body,
+    rating: Number(req.body.rating),
+  });
   res.status(201).json(review);
 });
 
 const mine = asyncHandler(async (req, res) => {
-  res.set('Cache-Control', 'private, no-store');
+  res.set("Cache-Control", "private, no-store");
   res.json(await reviewService.getOwnReview(req.user.id, req.params.destinoId));
 });
 
@@ -30,7 +40,9 @@ const moderate = asyncHandler(async (req, res) => {
 });
 
 const moderateBatch = asyncHandler(async (req, res) => {
-  res.json(await reviewService.moderateReviews(req.body.reviewIds, req.body.status));
+  res.json(
+    await reviewService.moderateReviews(req.body.reviewIds, req.body.status),
+  );
 });
 
 const removeBatch = asyncHandler(async (req, res) => {
@@ -38,8 +50,20 @@ const removeBatch = asyncHandler(async (req, res) => {
 });
 
 const remove = asyncHandler(async (req, res) => {
-  const result = await reviewService.deleteReview(req.user.id, req.params.destinoId);
+  const result = await reviewService.deleteReview(
+    req.user.id,
+    req.params.destinoId,
+  );
   res.json(result);
 });
 
-module.exports = { list, mine, upsert, remove, listForAdmin, moderate, moderateBatch, removeBatch };
+module.exports = {
+  list,
+  mine,
+  upsert,
+  remove,
+  listForAdmin,
+  moderate,
+  moderateBatch,
+  removeBatch,
+};

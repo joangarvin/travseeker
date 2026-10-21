@@ -1,10 +1,14 @@
-const { prisma } = require('../config/database');
-const { LIST_SELECT } = require('../constants/selects');
+const { publicGeography } = require("../domain/publication");
+const { prisma } = require("../config/database");
+const { LIST_SELECT } = require("../constants/selects");
 
 async function listFavoritos(userId) {
   const favoritos = await prisma.favorito.findMany({
-    where: { userId, destino: { editorialStatus: 'published' } },
-    orderBy: { createdAt: 'desc' },
+    where: {
+      userId,
+      destino: { editorialStatus: "published", ...publicGeography() },
+    },
+    orderBy: { createdAt: "desc" },
     include: { destino: { select: LIST_SELECT } },
   });
 
@@ -27,11 +31,15 @@ async function getFavoriteIds(userId) {
 
 async function addFavorito(userId, destinoId) {
   const destino = await prisma.destino.findFirst({
-    where: { id: destinoId, editorialStatus: 'published' },
+    where: {
+      id: destinoId,
+      editorialStatus: "published",
+      ...publicGeography(),
+    },
     select: { id: true },
   });
   if (!destino) {
-    const error = new Error('Destino no encontrado');
+    const error = new Error("Destino no encontrado");
     error.status = 404;
     throw error;
   }
@@ -52,7 +60,7 @@ async function removeFavorito(userId, destinoId) {
     where: { userId_destinoId: { userId, destinoId } },
   });
   if (!favorito) {
-    const error = new Error('Favorito no encontrado');
+    const error = new Error("Favorito no encontrado");
     error.status = 404;
     throw error;
   }

@@ -49,6 +49,7 @@ app.get("/api/health", (_req, res) => {
   res.json({ ok: true, service: "travseeker-api" });
 });
 
+app.use("/api/proximamente", require("./routes/upcomingRoutes"));
 app.get("/api/destacados", destinoController.getDestacados);
 app.get("/api/stats", destinoController.getStats);
 app.get("/api/mapa", destinoController.getMapa);

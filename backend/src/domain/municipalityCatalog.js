@@ -1,3 +1,8 @@
+const {
+  publicGeography,
+  publicExperience,
+  geographyInput,
+} = require("./publication");
 const { stripHtmlToText } = require("../utils/sanitizeContent");
 const CATALOGS = Object.freeze({
   actividades: {
@@ -91,6 +96,7 @@ function normalizeCatalog(payload, kind) {
     fail("Estado de publicación no válido");
   return {
     ...data,
+    ...geographyInput(payload),
     ...coordinates(payload),
     imagen: url(payload.imagen),
     website: url(payload.website),
@@ -225,30 +231,20 @@ const guideInclude = Object.fromEntries(
   ]),
 );
 const publicGuideInclude = Object.fromEntries(
-  Object.keys(guideInclude).map((key) => [
+  Object.entries(guideInclude).map(([key, value]) => [
     key,
     {
-      ...guideInclude[key],
+      ...value,
       where: {
-        record: {
-          isPublished: true,
-          ...(key === "activityLinks"
-            ? {
-                OR: [
-                  { essentialItemId: null },
-                  {
-                    essentialItem: {
-                      group: { destino: { editorialStatus: "published" } },
-                    },
-                  },
-                ],
-              }
-            : {}),
-        },
+        record:
+          key === "activityLinks"
+            ? publicExperience()
+            : publicGeography({ isPublished: true }),
       },
     },
   ]),
 );
+
 function flattenGuide(row) {
   if (!row) return row;
   const result = { ...row };

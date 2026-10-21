@@ -1,3 +1,8 @@
+const {
+  publicGeography,
+  publicGlobal,
+  publicExperience,
+} = require("../domain/publication");
 const { cachedPublic } = require("../cache/publicData");
 const { prisma } = require("../config/database");
 const { buildWhereClause } = require("../utils/buildWhereClause");
@@ -22,12 +27,20 @@ const {
   publicEditorialWhere,
 } = require("../domain/editorial");
 
-const searchCandidates = cachedPublic("searchCandidates", (where) => prisma.destino.findMany({
-  where, select: SEARCH_LIST_SELECT, orderBy: [{ updatedAt: "desc" }, { id: "asc" }],
-}));
+const searchCandidates = cachedPublic("searchCandidates", (where) =>
+  prisma.destino.findMany({
+    where,
+    select: SEARCH_LIST_SELECT,
+    orderBy: [{ updatedAt: "desc" }, { id: "asc" }],
+  }),
+);
 
 function prepareSearchResults(destinations, query) {
-  const searched = rankDestinationSearch(destinations.map(mapDestinationRelations), query.q, query.lang);
+  const searched = rankDestinationSearch(
+    destinations.map(mapDestinationRelations),
+    query.q,
+    query.lang,
+  );
   const prepared = searched.map(mapDestinationRelations);
   const seasonal = rankForSeason(prepared, {
     month: normalizeMonth(query.month),
@@ -88,7 +101,11 @@ function textSearchWhere(query, structuredWhere) {
       {
         municipioLinks: {
           some: {
-            municipio: { nombre: contains, editorialStatus: "published" },
+            municipio: {
+              nombre: contains,
+              editorialStatus: "published",
+              ...publicGeography(),
+            },
           },
         },
       },
@@ -99,6 +116,7 @@ function textSearchWhere(query, structuredWhere) {
               name: contains,
               isActive: true,
               editorialStatus: "published",
+              ...publicGlobal(),
             },
           },
         },
@@ -110,6 +128,7 @@ function textSearchWhere(query, structuredWhere) {
               name: contains,
               isActive: true,
               editorialStatus: "published",
+              ...publicGlobal(),
             },
           },
         },
@@ -120,6 +139,7 @@ function textSearchWhere(query, structuredWhere) {
             nombre: contains,
             isActive: true,
             editorialStatus: "published",
+            ...publicGeography(),
           },
         },
       },
@@ -131,7 +151,26 @@ function textSearchWhere(query, structuredWhere) {
               {
                 items: {
                   some: {
-                    OR: [{ title: contains }, { description: contains }, { catalogActivity: { OR: [{ nombre: contains }, { descripcion: contains }, { essentialItem: { OR: [{ title: contains }, { description: contains }] } }] } }],
+                    OR: [
+                      { title: contains },
+                      { description: contains },
+                      {
+                        catalogActivity: {
+                          OR: [
+                            { nombre: contains },
+                            { descripcion: contains },
+                            {
+                              essentialItem: {
+                                OR: [
+                                  { title: contains },
+                                  { description: contains },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
                   },
                 },
               },
@@ -200,29 +239,65 @@ async function getDestinoById(id) {
     where: publicDestinationByIdWhere(id),
     include: {
       municipioLinks: {
-        where: { municipio: { editorialStatus: "published" } },
+        where: {
+          municipio: { editorialStatus: "published", ...publicGeography() },
+        },
         include: { municipio: true },
       },
       places: {
-        where: { isActive: true, editorialStatus: "published" },
+        where: {
+          ...publicGeography({ isActive: true, editorialStatus: "published" }),
+        },
         orderBy: [{ sortOrder: "asc" }, { nombre: "asc" }],
       },
       essentialGroups: {
         orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
         include: {
           items: {
+            where: publicGeography({
+              OR: [
+                { catalogActivityId: null },
+                { catalogActivity: publicExperience() },
+              ],
+            }),
             orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
-            include: { place: true, catalogActivity: { include: { essentialItem: { include: { group: { select: { destino: { select: { editorialStatus: true } } } } } } } } },
+            include: {
+              place: {
+                where: publicGeography({
+                  isActive: true,
+                  editorialStatus: "published",
+                }),
+              },
+              catalogActivity: {
+                include: {
+                  essentialItem: {
+                    include: {
+                      group: {
+                        select: {
+                          destino: { select: { editorialStatus: true } },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },
       activityLinks: {
-        where: { activity: { isActive: true, editorialStatus: "published" } },
+        where: {
+          activity: {
+            ...publicGlobal({ isActive: true, editorialStatus: "published" }),
+          },
+        },
         include: { activity: true },
       },
       tourismTypeLinks: {
         where: {
-          tourismType: { isActive: true, editorialStatus: "published" },
+          tourismType: {
+            ...publicGlobal({ isActive: true, editorialStatus: "published" }),
+          },
         },
         include: { tourismType: true },
       },
@@ -230,7 +305,14 @@ async function getDestinoById(id) {
   });
   if (!destino) return null;
   destino.essentialGroups?.forEach((group) => {
-    group.items = group.items.filter(item => !item.catalogActivity || (item.catalogActivity.isPublished && (!item.catalogActivity.essentialItem || item.catalogActivity.essentialItem.group.destino.editorialStatus === "published")));
+    group.items = group.items.filter(
+      (item) =>
+        !item.catalogActivity ||
+        (item.catalogActivity.isPublished &&
+          (!item.catalogActivity.essentialItem ||
+            item.catalogActivity.essentialItem.group.destino.editorialStatus ===
+              "published")),
+    );
     group.items?.forEach((item) => {
       if (
         item.place?.editorialStatus !== "published" ||
@@ -246,7 +328,7 @@ async function getDestinoById(id) {
 
 async function getDestacados(limit = 6) {
   const destinos = await prisma.destino.findMany({
-    where: { editorialStatus: "published" },
+    where: { editorialStatus: "published", ...publicGeography() },
     orderBy: { updatedAt: "desc" },
     take: Math.min(Math.max(limit, 1), 12),
     select: LIST_SELECT,
@@ -265,7 +347,11 @@ async function getRelacionados(id) {
   if (!destino) return null;
 
   const candidates = await prisma.destino.findMany({
-    where: { id: { not: destino.id }, editorialStatus: "published" },
+    where: {
+      id: { not: destino.id },
+      editorialStatus: "published",
+      ...publicGeography(),
+    },
     select: RELATED_SELECT,
   });
   return rankRelated(mapTourismTypes(destino), candidates.map(mapTourismTypes));
@@ -301,7 +387,11 @@ async function compareDestinos(ids) {
   }
 
   const destinos = await prisma.destino.findMany({
-    where: { id: { in: ids }, editorialStatus: "published" },
+    where: {
+      id: { in: ids },
+      editorialStatus: "published",
+      ...publicGeography(),
+    },
     select: COMPARE_SELECT,
   });
 
@@ -313,9 +403,14 @@ async function compareDestinos(ids) {
 
 async function getStats() {
   const [total, reviewAgg] = await Promise.all([
-    prisma.destino.count({ where: { editorialStatus: "published" } }),
+    prisma.destino.count({
+      where: { editorialStatus: "published", ...publicGeography() },
+    }),
     prisma.review.aggregate({
-      where: { status: "published" },
+      where: {
+        status: "published",
+        destino: publicGeography({ editorialStatus: "published" }),
+      },
       _avg: { rating: true },
       _count: { rating: true },
     }),
@@ -332,11 +427,13 @@ async function getStats() {
 async function getFilterOptions(locale = "es") {
   const [destinations, activityCatalog] = await Promise.all([
     prisma.destino.findMany({
-      where: { editorialStatus: "published" },
+      where: { editorialStatus: "published", ...publicGeography() },
       select: { ubicacion: true, translations: true },
     }),
     prisma.activity.findMany({
-      where: { isActive: true, editorialStatus: "published" },
+      where: {
+        ...publicGlobal({ isActive: true, editorialStatus: "published" }),
+      },
       orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
       select: { name: true },
     }),
@@ -361,12 +458,27 @@ async function getFilterOptions(locale = "es") {
 
 module.exports = {
   searchDestinos: cachedPublic("destinoService.searchDestinos", searchDestinos),
-  searchDestinosPage: cachedPublic("destinoService.searchDestinosPage", searchDestinosPage),
+  searchDestinosPage: cachedPublic(
+    "destinoService.searchDestinosPage",
+    searchDestinosPage,
+  ),
   getDestinoById: cachedPublic("destinoService.getDestinoById", getDestinoById),
   getDestacados: cachedPublic("destinoService.getDestacados", getDestacados),
-  getRelacionados: cachedPublic("destinoService.getRelacionados", getRelacionados),
-  getMapaDestinos: cachedPublic("destinoService.getMapaDestinos", getMapaDestinos),
-  compareDestinos: cachedPublic("destinoService.compareDestinos", compareDestinos),
+  getRelacionados: cachedPublic(
+    "destinoService.getRelacionados",
+    getRelacionados,
+  ),
+  getMapaDestinos: cachedPublic(
+    "destinoService.getMapaDestinos",
+    getMapaDestinos,
+  ),
+  compareDestinos: cachedPublic(
+    "destinoService.compareDestinos",
+    compareDestinos,
+  ),
   getStats: cachedPublic("destinoService.getStats", getStats),
-  getFilterOptions: cachedPublic("destinoService.getFilterOptions", getFilterOptions),
+  getFilterOptions: cachedPublic(
+    "destinoService.getFilterOptions",
+    getFilterOptions,
+  ),
 };

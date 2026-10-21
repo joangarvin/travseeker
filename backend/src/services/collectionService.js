@@ -1,3 +1,4 @@
+const { publicGeography } = require("../domain/publication");
 const {
   cleanCollectionText,
   optionalDate,
@@ -45,7 +46,9 @@ async function listCollections(userId) {
     orderBy: { updatedAt: "desc" },
     include: {
       items: {
-        where: { destino: { editorialStatus: "published" } },
+        where: {
+          destino: { editorialStatus: "published", ...publicGeography() },
+        },
         take: 4,
         orderBy: { createdAt: "desc" },
         include: { destino: { select: { imagen: true } } },
@@ -67,7 +70,9 @@ async function getCollection(userId, id) {
     include: {
       user: { select: { id: true, nombre: true, avatarUrl: true } },
       items: {
-        where: { destino: { editorialStatus: "published" } },
+        where: {
+          destino: { editorialStatus: "published", ...publicGeography() },
+        },
         orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
         include: { destino: { select: COLLECTION_DESTINATION_SELECT } },
       },
@@ -234,7 +239,9 @@ async function getPublicCollection(shareToken) {
         orderBy: { createdAt: "asc" },
       },
       items: {
-        where: { destino: { editorialStatus: "published" } },
+        where: {
+          destino: { editorialStatus: "published", ...publicGeography() },
+        },
         orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
         include: { destino: { select: COLLECTION_DESTINATION_SELECT } },
       },
@@ -258,7 +265,11 @@ async function addItem(userId, collectionId, destinoId, notas) {
   await getAccess(userId, collectionId, "editor");
 
   const destino = await prisma.destino.findFirst({
-    where: { id: destinoId, editorialStatus: "published" },
+    where: {
+      id: destinoId,
+      editorialStatus: "published",
+      ...publicGeography(),
+    },
     select: { id: true },
   });
   if (!destino) {

@@ -18,16 +18,24 @@ const {
 test("los filtros públicos siempre exigen contenido publicado", () => {
   assert.deepEqual(publicEditorialWhere({ presupuesto: "Medio" }), {
     presupuesto: "Medio",
+    country: { is: { preparationComplete: true, showOnWebsite: true } },
     editorialStatus: "published",
+    preparationComplete: true,
+    showOnWebsite: true,
   });
   assert.deepEqual(publicActiveEditorialWhere({ sortOrder: 3 }), {
     sortOrder: 3,
     editorialStatus: "published",
+    preparationComplete: true,
+    showOnWebsite: true,
     isActive: true,
   });
   assert.deepEqual(publicDestinationByIdWhere("destino-oculto"), {
     id: "destino-oculto",
+    country: { is: { preparationComplete: true, showOnWebsite: true } },
     editorialStatus: "published",
+    preparationComplete: true,
+    showOnWebsite: true,
   });
 });
 
@@ -40,10 +48,7 @@ test("las relaciones públicas seleccionan solo catálogos publicados", () => {
     SEARCH_LIST_SELECT.activityLinks.where.activity.editorialStatus,
     "published",
   );
-  assert.equal(
-    SEARCH_LIST_SELECT.places.where.editorialStatus,
-    "published",
-  );
+  assert.equal(SEARCH_LIST_SELECT.places.where.editorialStatus, "published");
   assert.equal(
     COMPARE_SELECT.activityLinks.where.activity.editorialStatus,
     "published",
@@ -54,7 +59,10 @@ test("valida recursos, selección por lotes y transiciones editoriales", () => {
   assert.equal(validateEditorialResource("destinos").model, "destino");
   assert.deepEqual(validateEditorialIds(["a", "b"]), ["a", "b"]);
   assert.doesNotThrow(() => assertEditorialTransition("pending", "published"));
-  assert.throws(() => assertEditorialTransition("published", "pending"), /No se puede/);
+  assert.throws(
+    () => assertEditorialTransition("published", "pending"),
+    /No se puede/,
+  );
   assert.throws(() => validateEditorialIds(["a", "a"]), /identificadores/);
   assert.throws(() => validateEditorialResource("reviews"), /no válido/);
 });

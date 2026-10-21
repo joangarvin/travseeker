@@ -1,3 +1,8 @@
+const {
+  publicGeography,
+  publicGlobal,
+  publicExperience,
+} = require("../domain/publication");
 const LIST_SELECT = {
   id: true,
   nombre: true,
@@ -11,7 +16,11 @@ const LIST_SELECT = {
   mesesMayJunSeptOct: true,
   mesesNovAbril: true,
   tourismTypeLinks: {
-    where: { tourismType: { isActive: true, editorialStatus: "published" } },
+    where: {
+      tourismType: {
+        ...publicGlobal({ isActive: true, editorialStatus: "published" }),
+      },
+    },
     include: { tourismType: true },
   },
 };
@@ -31,7 +40,11 @@ const MAP_SELECT = {
   mesesMayJunSeptOct: true,
   mesesNovAbril: true,
   tourismTypeLinks: {
-    where: { tourismType: { isActive: true, editorialStatus: "published" } },
+    where: {
+      tourismType: {
+        ...publicGlobal({ isActive: true, editorialStatus: "published" }),
+      },
+    },
     include: { tourismType: true },
   },
 };
@@ -40,17 +53,25 @@ const SEARCH_RELATIONS = {
   descripcion: true,
   imprescindibles: true,
   municipioLinks: {
-    where: { municipio: { editorialStatus: "published" } },
+    where: {
+      municipio: { editorialStatus: "published", ...publicGeography() },
+    },
     select: {
       municipio: { select: { id: true, nombre: true, translations: true } },
     },
   },
   activityLinks: {
-    where: { activity: { isActive: true, editorialStatus: "published" } },
+    where: {
+      activity: {
+        ...publicGlobal({ isActive: true, editorialStatus: "published" }),
+      },
+    },
     include: { activity: true },
   },
   places: {
-    where: { isActive: true, editorialStatus: "published" },
+    where: {
+      ...publicGeography({ isActive: true, editorialStatus: "published" }),
+    },
     select: { nombre: true, translations: true },
   },
   essentialGroups: {
@@ -58,8 +79,19 @@ const SEARCH_RELATIONS = {
       title: true,
       translations: true,
       items: {
-        where: { OR: [{ catalogActivityId: null }, { catalogActivity: { isPublished: true, OR: [{ essentialItemId: null }, { essentialItem: { group: { destino: { editorialStatus: "published" } } } }] } }] },
-        select: { title: true, description: true, translations: true, catalogActivity: { include: { essentialItem: true } } },
+        where: {
+          ...publicGeography(),
+          OR: [
+            { catalogActivityId: null },
+            { catalogActivity: publicExperience() },
+          ],
+        },
+        select: {
+          title: true,
+          description: true,
+          translations: true,
+          catalogActivity: { include: { essentialItem: true } },
+        },
       },
     },
   },
@@ -89,11 +121,19 @@ const COMPARE_SELECT = {
   mesesMayJunSeptOct: true,
   mesesNovAbril: true,
   activityLinks: {
-    where: { activity: { isActive: true, editorialStatus: "published" } },
+    where: {
+      activity: {
+        ...publicGlobal({ isActive: true, editorialStatus: "published" }),
+      },
+    },
     include: { activity: true },
   },
   tourismTypeLinks: {
-    where: { tourismType: { isActive: true, editorialStatus: "published" } },
+    where: {
+      tourismType: {
+        ...publicGlobal({ isActive: true, editorialStatus: "published" }),
+      },
+    },
     include: { tourismType: true },
   },
 };

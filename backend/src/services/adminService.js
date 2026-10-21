@@ -109,7 +109,10 @@ const destinationRelations = {
     include: {
       items: {
         orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
-        include: { place: true, catalogActivity: { include: { essentialItem: true } } },
+        include: {
+          place: true,
+          catalogActivity: { include: { essentialItem: true } },
+        },
       },
     },
   },
@@ -139,6 +142,17 @@ async function syncDestinationEssentials(
   essentialGroups,
 ) {
   if (!Array.isArray(essentialGroups)) return;
+  const geography = await transaction.destino.findUniqueOrThrow({
+    where: { id: destinoId },
+    select: { countryCode: true, region: true },
+  });
+  const existingPublication = await transaction.essentialItem.findMany({
+    where: { group: { destinoId } },
+    select: { id: true, preparationComplete: true, showOnWebsite: true },
+  });
+  const publicationById = new Map(
+    existingPublication.map((item) => [item.id, item]),
+  );
   const placeIds = [
     ...new Set(
       essentialGroups.flatMap((group) =>
@@ -162,23 +176,79 @@ async function syncDestinationEssentials(
     }
   }
 
-  const sharedIds = essentialGroups.flatMap(group => group.items.map(item => item.catalogActivityId).filter(Boolean));
-  if (new Set(sharedIds).size !== sharedIds.length) throw Object.assign(new Error("Una actividad ya está marcada como imprescindible en este destino"), { status: 400 });
-  const ids = essentialGroups.flatMap(group => group.items.map(item => item.id).filter(Boolean));
-  const foreignItems = await transaction.essentialItem.count({ where: { id: { in: ids }, group: { destinoId: { not: destinoId } } } });
-  if (foreignItems) throw Object.assign(new Error("Una actividad pertenece a otro destino. Reutilízala desde el catálogo."), { status: 400 });
-  const linked = await transaction.experience.findMany({ where: { essentialItemId: { in: ids } }, select: { id: true, essentialItemId: true } });
-  for (const group of essentialGroups) for (const item of group.items) {
-    if (!item.catalogActivityId) continue;
-    const activity = await transaction.experience.findUnique({ where: { id: item.catalogActivityId }, include: { essentialItem: true } });
-    if (!activity) throw Object.assign(new Error("La actividad seleccionada ya no existe"), { status: 400 });
-    const shared = require("../domain/municipalityCatalog").catalogRecord(activity);
-    Object.assign(item, { title: shared.nombre, description: shared.descripcion || null, imageUrl: shared.imagen || null, imageAlt: shared.imagenAlt || null, duration: shared.duration || null, bestTime: shared.bestTime || null, officialUrl: shared.website || null });
-  }
-  const sourceRecords = await transaction.experience.findMany({ where: { essentialItem: { group: { destinoId } } }, include: { essentialItem: true } });
+  const sharedIds = essentialGroups.flatMap((group) =>
+    group.items.map((item) => item.catalogActivityId).filter(Boolean),
+  );
+  if (new Set(sharedIds).size !== sharedIds.length)
+    throw Object.assign(
+      new Error(
+        "Una actividad ya está marcada como imprescindible en este destino",
+      ),
+      { status: 400 },
+    );
+  const ids = essentialGroups.flatMap((group) =>
+    group.items.map((item) => item.id).filter(Boolean),
+  );
+  const foreignItems = await transaction.essentialItem.count({
+    where: { id: { in: ids }, group: { destinoId: { not: destinoId } } },
+  });
+  if (foreignItems)
+    throw Object.assign(
+      new Error(
+        "Una actividad pertenece a otro destino. Reutilízala desde el catálogo.",
+      ),
+      { status: 400 },
+    );
+  const linked = await transaction.experience.findMany({
+    where: { essentialItemId: { in: ids } },
+    select: { id: true, essentialItemId: true },
+  });
+  for (const group of essentialGroups)
+    for (const item of group.items) {
+      if (!item.catalogActivityId) continue;
+      const activity = await transaction.experience.findUnique({
+        where: { id: item.catalogActivityId },
+        include: { essentialItem: true },
+      });
+      if (!activity)
+        throw Object.assign(
+          new Error("La actividad seleccionada ya no existe"),
+          { status: 400 },
+        );
+      const shared = require("../domain/municipalityCatalog").catalogRecord(
+        activity,
+      );
+      Object.assign(item, {
+        title: shared.nombre,
+        description: shared.descripcion || null,
+        imageUrl: shared.imagen || null,
+        imageAlt: shared.imagenAlt || null,
+        duration: shared.duration || null,
+        bestTime: shared.bestTime || null,
+        officialUrl: shared.website || null,
+      });
+    }
+  const sourceRecords = await transaction.experience.findMany({
+    where: { essentialItem: { group: { destinoId } } },
+    include: { essentialItem: true },
+  });
   for (const sourceRecord of sourceRecords) {
-    const shared = require("../domain/municipalityCatalog").catalogRecord(sourceRecord);
-    await transaction.experience.update({ where: { id: sourceRecord.id }, data: { nombre: shared.nombre, descripcion: shared.descripcion, imagen: shared.imagen, imagenAlt: shared.imagenAlt, duration: shared.duration, bestTime: shared.bestTime, website: shared.website, translations: shared.translations } });
+    const shared = require("../domain/municipalityCatalog").catalogRecord(
+      sourceRecord,
+    );
+    await transaction.experience.update({
+      where: { id: sourceRecord.id },
+      data: {
+        nombre: shared.nombre,
+        descripcion: shared.descripcion,
+        imagen: shared.imagen,
+        imagenAlt: shared.imagenAlt,
+        duration: shared.duration,
+        bestTime: shared.bestTime,
+        website: shared.website,
+        translations: shared.translations,
+      },
+    });
   }
   await transaction.essentialGroup.deleteMany({ where: { destinoId } });
   for (const group of essentialGroups) {
@@ -189,11 +259,25 @@ async function syncDestinationEssentials(
         icon: group.icon,
         translations: group.translations,
         sortOrder: group.sortOrder,
-        items: { create: group.items },
+        items: {
+          create: group.items.map((item) => {
+            const previous = publicationById.get(item.id);
+            return {
+              ...item,
+              ...geography,
+              preparationComplete: previous?.preparationComplete || false,
+              showOnWebsite: previous?.showOnWebsite || false,
+            };
+          }),
+        },
       },
     });
   }
-  for (const record of linked) await transaction.experience.update({ where: { id: record.id }, data: { essentialItemId: record.essentialItemId } });
+  for (const record of linked)
+    await transaction.experience.update({
+      where: { id: record.id },
+      data: { essentialItemId: record.essentialItemId },
+    });
 }
 
 async function listDestinos(query = {}) {
@@ -467,10 +551,17 @@ async function listPlaces(destinoId) {
   });
 }
 async function createPlace(destinoId, payload, createdById) {
+  const geography = await prisma.destino.findUnique({
+    where: { id: destinoId },
+    select: { countryCode: true, region: true },
+  });
+  if (!geography)
+    throw Object.assign(new Error("Destino no encontrado"), { status: 404 });
   return prisma.place.create({
     data: {
       destinoId,
       ...normalizePlace(payload),
+      ...geography,
       isActive: false,
       editorialStatus: "pending",
       createdById,

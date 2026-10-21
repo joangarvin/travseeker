@@ -1,0 +1,309 @@
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+const url = process.env.EXPANSION_TEST_DATABASE_URL;
+test(
+  "country publication: migration, real queries, nested visibility and admin permissions",
+  { skip: !url },
+  async (t) => {
+    // This test is forbidden against a configured/shared database.
+    assert.match(url, /^postgresql:\/\/[^@]+@127\.0\.0\.1:55439\/postgres$/);
+    process.env.DATABASE_URL = url;
+    const { prisma, pool } = require("../src/config/database");
+    const publication = require("../src/services/publicationService");
+    const destinations = require("../src/services/destinoService");
+    const { publicCache } = require("../src/cache/publicData");
+    const sql = fs.readFileSync(
+      path.join(
+        __dirname,
+        "../prisma/migrations/20261021000000_country_publication/migration.sql",
+      ),
+      "utf8",
+    );
+    let server;
+    try {
+      await prisma.$transaction((tx) => tx.$executeRawUnsafe(sql));
+      const base = {
+        tipoTurismoPrincipal: "Cultural",
+        tipoTurismoSecundario: "",
+        presupuesto: "Medio",
+        masificacion: "Medio",
+        mesesJulioAgosto: 50,
+        mesesNovAbril: 20,
+        mesesMayJunSeptOct: 30,
+        ubicacion: "Portugal",
+        descripcion:
+          "Una descripción suficientemente completa para las pruebas.",
+        imprescindibles: "",
+        imagen: "",
+      };
+      await prisma.destino.deleteMany({
+        where: { id: { startsWith: "publication-test-" } },
+      });
+      await prisma.country.update({
+        where: { code: "PT" },
+        data: { preparationComplete: true, showOnWebsite: false },
+      });
+      await prisma.destino.create({
+        data: {
+          ...base,
+          id: "publication-test-legacy",
+          nombre: "Legacy",
+          editorialStatus: "published",
+          preparationComplete: true,
+          showOnWebsite: true,
+        },
+      });
+      await t.test(
+        "migration preserves existing public records and does not re-enable hidden ones",
+        async () => {
+          await prisma.$executeRawUnsafe(
+            'ALTER TABLE "Destino" DROP COLUMN "preparationComplete", DROP COLUMN "showOnWebsite"',
+          );
+          await prisma.$transaction((tx) => tx.$executeRawUnsafe(sql));
+          assert.equal(
+            (
+              await prisma.destino.findUnique({
+                where: { id: "publication-test-legacy" },
+              })
+            ).showOnWebsite,
+            true,
+          );
+          await prisma.destino.update({
+            where: { id: "publication-test-legacy" },
+            data: { showOnWebsite: false },
+          });
+          await prisma.$transaction((tx) => tx.$executeRawUnsafe(sql));
+          assert.equal(
+            (
+              await prisma.destino.findUnique({
+                where: { id: "publication-test-legacy" },
+              })
+            ).showOnWebsite,
+            false,
+          );
+        },
+      );
+      const destination = await prisma.destino.create({
+        data: {
+          ...base,
+          id: "publication-test-porto",
+          nombre: "Oporto prueba",
+          countryCode: "PT",
+          region: "Norte",
+          editorialStatus: "published",
+          preparationComplete: true,
+          showOnWebsite: true,
+        },
+      });
+      await t.test(
+        "country gate blocks ID, list, map, compare and recommendations candidates",
+        async () => {
+          assert.equal(await destinations.getDestinoById(destination.id), null);
+          assert.ok(
+            !(
+              await destinations.compareDestinos([
+                destination.id,
+                "publication-test-legacy",
+              ])
+            ).length,
+          );
+          assert.ok(
+            !(await destinations.getMapaDestinos({})).some(
+              (d) => d.id === destination.id,
+            ),
+          );
+          const list = await publication.list({
+            resource: "destinos",
+            country: "PT",
+            region: "Norte",
+          });
+          assert.equal(
+            list.items.find((d) => d.id === destination.id).state,
+            "blocked",
+          );
+        },
+      );
+      await t.test(
+        "finished hidden, published and upcoming states stay independent",
+        async () => {
+          await publication.updateCountry("PT", {
+            preparationComplete: true,
+            showOnWebsite: true,
+          });
+          assert.ok(await destinations.getDestinoById(destination.id));
+          await publication.update("destinos", destination.id, {
+            preparationComplete: true,
+            showOnWebsite: false,
+            countryCode: "PT",
+            region: "Norte",
+          });
+          assert.equal(await destinations.getDestinoById(destination.id), null);
+          assert.equal(
+            (
+              await publication.list({
+                resource: "destinos",
+                country: "PT",
+                state: "ready",
+              })
+            ).total,
+            1,
+          );
+          await publication.update("destinos", destination.id, {
+            preparationComplete: false,
+            showOnWebsite: true,
+            countryCode: "PT",
+            region: "Norte",
+          });
+          assert.equal(await destinations.getDestinoById(destination.id), null);
+          assert.equal(
+            (await publication.preview("PT")).items.find(
+              (d) => d.id === destination.id,
+            ).state,
+            "upcoming",
+          );
+          await publication.update("destinos", destination.id, {
+            preparationComplete: true,
+            showOnWebsite: true,
+            countryCode: "PT",
+            region: "Norte",
+          });
+        },
+      );
+      await t.test(
+        "nested places, essential activities and municipality catalogue obey visibility",
+        async () => {
+          const town = await prisma.municipio.create({
+            data: {
+              nombre: "Villa de prueba",
+              precios: "80",
+              conexiones: "Bus",
+              countryCode: "PT",
+              region: "Norte",
+              editorialStatus: "published",
+              preparationComplete: true,
+              showOnWebsite: true,
+              guideEnabled: true,
+              descripcion: "Descripción de la villa suficientemente completa.",
+            },
+          });
+          await prisma.destinoMunicipio.create({
+            data: { destinoId: destination.id, municipioId: town.id },
+          });
+          const group = await prisma.essentialGroup.create({
+            data: { destinoId: destination.id, title: "Ideas" },
+          });
+          const essential = await prisma.essentialItem.create({
+            data: {
+              groupId: group.id,
+              title: "Paseo de prueba",
+              description:
+                "Una experiencia de prueba con descripción suficiente.",
+              countryCode: "PT",
+              preparationComplete: true,
+              showOnWebsite: false,
+            },
+          });
+          const hotel = await prisma.hotel.create({
+            data: {
+              nombre: "Hotel de prueba",
+              descripcion: "Descripción de hotel suficientemente completa.",
+              countryCode: "PT",
+              preparationComplete: true,
+              showOnWebsite: false,
+              isPublished: true,
+            },
+          });
+          await prisma.municipioHotel.create({
+            data: { municipioId: town.id, recordId: hotel.id },
+          });
+          const view = await destinations.getDestinoById(destination.id);
+          assert.equal(view.essentialGroups[0].items.length, 0);
+          const source = await publication.list({
+            resource: "actividades",
+            country: "PT",
+          });
+          assert.ok(
+            source.items.some((e) => e.id === `source_${essential.id}`),
+          );
+          await publication.update("actividades", `source_${essential.id}`, {
+            preparationComplete: true,
+            showOnWebsite: true,
+            countryCode: "PT",
+            region: "Norte",
+          });
+          publicCache.clear();
+          assert.equal(
+            (await destinations.getDestinoById(destination.id))
+              .essentialGroups[0].items.length,
+            1,
+          );
+          await prisma.municipio.delete({ where: { id: town.id } });
+          await prisma.hotel.delete({ where: { id: hotel.id } });
+        },
+      );
+      await t.test(
+        "global taxonomies ignore geographic filters and invalid input is rejected",
+        async () => {
+          await assert.rejects(
+            publication.update("destinos", destination.id, {
+              preparationComplete: "yes",
+              showOnWebsite: false,
+              countryCode: "PT",
+              region: "Norte",
+            }),
+            (e) => e.status === 400,
+          );
+          await assert.rejects(
+            publication.list({ resource: "user" }),
+            (e) => e.status === 400,
+          );
+          await publication.list({
+            resource: "tipos-actividad",
+            country: "PT",
+          });
+          await publication.summary({ country: "PT", region: "Norte" });
+          await publication.countries();
+        },
+      );
+      await t.test(
+        "HTTP routes reject anonymous and non-admin users",
+        async () => {
+          const app = require("../src/app");
+          server = app.listen(0, "127.0.0.1");
+          await new Promise((resolve) => server.once("listening", resolve));
+          const baseUrl = `http://127.0.0.1:${server.address().port}`;
+          const response = await fetch(
+            `${baseUrl}/api/admin/publication/countries`,
+          );
+          assert.equal(response.status, 401);
+          const viewer = await prisma.user.create({
+            data: {
+              email: `publication-test-${Date.now()}@example.test`,
+              passwordHash: "test-only",
+              role: "user",
+            },
+          });
+          const token = require("../src/utils/jwt").signToken(viewer.id);
+          assert.equal(
+            (
+              await fetch(`${baseUrl}/api/admin/publication/countries`, {
+                headers: { Authorization: `Bearer ${token}` },
+              })
+            ).status,
+            403,
+          );
+          await prisma.user.delete({ where: { id: viewer.id } });
+        },
+      );
+    } finally {
+      if (server) await new Promise((resolve) => server.close(resolve));
+      await prisma.destino.deleteMany({
+        where: { id: { startsWith: "publication-test-" } },
+      });
+      await prisma.$disconnect();
+      await pool.end();
+    }
+  },
+);

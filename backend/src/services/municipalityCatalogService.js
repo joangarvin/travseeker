@@ -10,7 +10,9 @@ const fail = (message, status = 400) => {
 async function saveCatalogRecord(tx, kind, payload, id) {
   const { model } = catalogConfig(kind);
   if (id?.startsWith("source_") && model === "experience") {
-    const source = await saveCatalogRecord(tx, kind, { essentialItemId: id.slice(7) });
+    const source = await saveCatalogRecord(tx, kind, {
+      essentialItemId: id.slice(7),
+    });
     return saveCatalogRecord(tx, kind, payload, source.id);
   }
   if (!id && model === "experience" && payload.essentialItemId) {
@@ -21,13 +23,23 @@ async function saveCatalogRecord(tx, kind, payload, id) {
       include: { group: { include: { destino: true } } },
     });
     if (!source) fail("Actividad no encontrada", 404);
-    if (source.catalogActivityId) return catalogRecord(await tx.experience.findUniqueOrThrow({ where: { id: source.catalogActivityId }, include: { essentialItem: true } }));
+    if (source.catalogActivityId)
+      return catalogRecord(
+        await tx.experience.findUniqueOrThrow({
+          where: { id: source.catalogActivityId },
+          include: { essentialItem: true },
+        }),
+      );
     return catalogRecord(
       await tx.experience.upsert({
         where: { essentialItemId: source.id },
         update: {},
         create: {
           essentialItemId: source.id,
+          countryCode: source.countryCode,
+          region: source.region,
+          preparationComplete: source.preparationComplete,
+          showOnWebsite: source.showOnWebsite,
           nombre: source.title,
           descripcion: source.description || "",
           imagen: source.imageUrl || "",

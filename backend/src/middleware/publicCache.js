@@ -16,8 +16,7 @@ function publicDataCache(req, res, next) {
     res.json = (body) => {
       // Browser reuse is short; private avoids accidentally caching CORS headers
       // at a shared proxy. Server-side caching provides the main database savings.
-      if (res.statusCode === 200)
-        res.set("Cache-Control", "private, max-age=60");
+      if (res.statusCode === 200) res.set("Cache-Control", "private, no-cache");
       return json(body);
     };
   }

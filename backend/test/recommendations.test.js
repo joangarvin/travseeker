@@ -112,8 +112,20 @@ test("el servicio excluye destinos guardados y nunca recomienda contenido sin pu
   try {
     const ranked = await getRecommendations("usuario", 1);
     assert.deepEqual(queries, [
-      { id: { in: ["guardado", "viaje"] }, editorialStatus: "published" },
-      { editorialStatus: "published", id: { notIn: ["guardado", "viaje"] } },
+      {
+        id: { in: ["guardado", "viaje"] },
+        editorialStatus: "published",
+        preparationComplete: true,
+        showOnWebsite: true,
+        country: { is: { preparationComplete: true, showOnWebsite: true } },
+      },
+      {
+        editorialStatus: "published",
+        id: { notIn: ["guardado", "viaje"] },
+        preparationComplete: true,
+        showOnWebsite: true,
+        country: { is: { preparationComplete: true, showOnWebsite: true } },
+      },
     ]);
     assert.equal(ranked[0].reason, "Podría encajar contigo");
   } finally {

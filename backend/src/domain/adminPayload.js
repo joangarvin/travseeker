@@ -1,3 +1,4 @@
+const { geographyInput } = require("./publication");
 const { translationData } = require("./localization");
 const {
   parseTags,
@@ -31,6 +32,7 @@ function normalizeDestinationPayload(data, essentialGroups = null) {
   ];
   return {
     ...translationData(data, "destination"),
+    ...geographyInput(data),
     nombre: String(data.nombre || "").trim(),
     tipoTurismoPrincipal: serializeTags(primaryTypes),
     tipoTurismoSecundario: serializeTags(secondaryTypes),
@@ -112,6 +114,7 @@ function normalizeMunicipioPayload(payload) {
   }
   return {
     ...translationData(payload, "municipality"),
+    ...geographyInput(payload),
     ...require("./municipalityCatalog").guideFields(payload),
     nombre,
     precios: stripHtmlToText(payload.precios),
@@ -143,6 +146,7 @@ function normalizePlace(payload) {
   }
   return {
     ...translationData(payload, "place"),
+    ...geographyInput(payload),
     nombre,
     categoria,
     latitud,

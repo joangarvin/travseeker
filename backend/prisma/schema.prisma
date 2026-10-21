@@ -7,7 +7,13 @@ generator client {
 }
 
 model Destino {
-  translations Json @default("{}")
+  preparationComplete Boolean @default(false)
+  showOnWebsite       Boolean @default(false)
+  countryCode         String  @default("ES")
+  region              String  @default("")
+  country             Country @relation(fields: [countryCode], references: [code])
+
+  translations          Json            @default("{}")
   id                    String          @id @default(uuid())
   nombre                String
   tipoTurismoPrincipal  String
@@ -46,6 +52,7 @@ model Destino {
   @@index([editorialStatus, updatedAt])
   @@index([createdById])
   @@index([reviewedById])
+  @@index([countryCode, region, preparationComplete, showOnWebsite], map: "Destino_publication_idx")
 }
 
 model ClimateCache {
@@ -67,7 +74,10 @@ model ClimateCache {
 }
 
 model Activity {
-  translations Json @default("{}")
+  preparationComplete Boolean @default(false)
+  showOnWebsite       Boolean @default(false)
+
+  translations    Json            @default("{}")
   id              String          @id @default(uuid())
   name            String          @unique
   slug            String          @unique
@@ -104,7 +114,10 @@ model DestinoActivity {
 }
 
 model TourismType {
-  translations Json @default("{}")
+  preparationComplete Boolean @default(false)
+  showOnWebsite       Boolean @default(false)
+
+  translations    Json            @default("{}")
   id              String          @id @default(uuid())
   name            String          @unique
   slug            String          @unique
@@ -144,7 +157,13 @@ model DestinoTourismType {
 }
 
 model Place {
-  translations Json @default("{}")
+  preparationComplete Boolean @default(false)
+  showOnWebsite       Boolean @default(false)
+  countryCode         String  @default("ES")
+  region              String  @default("")
+  country             Country @relation(fields: [countryCode], references: [code])
+
+  translations    Json            @default("{}")
   id              String          @id @default(uuid())
   destinoId       String
   nombre          String
@@ -172,17 +191,18 @@ model Place {
   @@index([editorialStatus, destinoId, sortOrder])
   @@index([createdById])
   @@index([reviewedById])
+  @@index([countryCode, region, preparationComplete, showOnWebsite], map: "Place_publication_idx")
 }
 
 model EssentialGroup {
-  translations Json @default("{}")
-  id        String   @id @default(uuid())
-  destinoId String
-  title     String
-  icon      String   @default("Compass")
-  sortOrder Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  translations Json     @default("{}")
+  id           String   @id @default(uuid())
+  destinoId    String
+  title        String
+  icon         String   @default("Compass")
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   destino Destino         @relation(fields: [destinoId], references: [id], onDelete: Cascade)
   items   EssentialItem[]
@@ -191,36 +211,49 @@ model EssentialGroup {
 }
 
 model EssentialItem {
-  catalogActivityId String?
-  catalogActivity Experience? @relation("FeaturedActivity", fields: [catalogActivityId], references: [id], onDelete: SetNull)
-  @@index([catalogActivityId])
+  preparationComplete Boolean @default(false)
+  showOnWebsite       Boolean @default(false)
+  countryCode         String  @default("ES")
+  region              String  @default("")
+  country             Country @relation(fields: [countryCode], references: [code])
+
+  catalogActivityId      String?
+  catalogActivity        Experience? @relation("FeaturedActivity", fields: [catalogActivityId], references: [id], onDelete: SetNull)
   municipalityExperience Experience?
-  translations Json @default("{}")
-  id                  String   @id @default(uuid())
-  groupId             String
-  placeId             String?
-  title               String
-  description         String?
-  icon                String?
-  imageUrl            String?
-  imageAlt            String?
-  duration            String?
-  bestTime            String?
-  reservationRequired Boolean?
-  officialUrl         String?
-  sortOrder           Int      @default(0)
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  translations           Json        @default("{}")
+  id                     String      @id @default(uuid())
+  groupId                String
+  placeId                String?
+  title                  String
+  description            String?
+  icon                   String?
+  imageUrl               String?
+  imageAlt               String?
+  duration               String?
+  bestTime               String?
+  reservationRequired    Boolean?
+  officialUrl            String?
+  sortOrder              Int         @default(0)
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
 
   group EssentialGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
   place Place?         @relation(fields: [placeId], references: [id], onDelete: SetNull)
 
+  @@index([catalogActivityId])
   @@index([groupId, sortOrder])
   @@index([placeId])
+  @@index([countryCode, region, preparationComplete, showOnWebsite], map: "EssentialItem_publication_idx")
 }
 
 model Municipio {
-  translations Json @default("{}")
+  preparationComplete Boolean @default(false)
+  showOnWebsite       Boolean @default(false)
+  countryCode         String  @default("ES")
+  region              String  @default("")
+  country             Country @relation(fields: [countryCode], references: [code])
+
+  translations    Json            @default("{}")
   id              String          @id @default(uuid())
   nombre          String
   precios         String
@@ -234,25 +267,26 @@ model Municipio {
   createdById     String?
   reviewedById    String?
 
-  descripcion String @default("")
-  guideEnabled Boolean @default(false)
-  imagen String @default("")
-  imagenAlt String @default("")
-  imageAttribution Json @default("{}")
-  ubicacion String @default("")
-  website String @default("")
-  mejorEpoca String @default("")
-  consejos String @default("")
-  activityLinks MunicipioExperience[]
-  hotelLinks MunicipioHotel[]
-  restaurantLinks MunicipioRestaurant[]
-  destinoLinks DestinoMunicipio[]
-  createdBy    User?              @relation("MunicipioCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
-  reviewedBy   User?              @relation("MunicipioReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
+  descripcion      String                @default("")
+  guideEnabled     Boolean               @default(false)
+  imagen           String                @default("")
+  imagenAlt        String                @default("")
+  imageAttribution Json                  @default("{}")
+  ubicacion        String                @default("")
+  website          String                @default("")
+  mejorEpoca       String                @default("")
+  consejos         String                @default("")
+  activityLinks    MunicipioExperience[]
+  hotelLinks       MunicipioHotel[]
+  restaurantLinks  MunicipioRestaurant[]
+  destinoLinks     DestinoMunicipio[]
+  createdBy        User?                 @relation("MunicipioCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  reviewedBy       User?                 @relation("MunicipioReviewedBy", fields: [reviewedById], references: [id], onDelete: SetNull)
 
   @@index([editorialStatus, nombre])
   @@index([createdById])
   @@index([reviewedById])
+  @@index([countryCode, region, preparationComplete, showOnWebsite], map: "Municipio_publication_idx")
 }
 
 model DestinoMunicipio {
@@ -465,102 +499,144 @@ model Favorito {
 }
 
 model Experience {
-  translations Json @default("{}")
-  featuredItems EssentialItem[] @relation("FeaturedActivity")
-  essentialItemId String? @unique
-  essentialItem EssentialItem? @relation(fields: [essentialItemId], references: [id], onDelete: SetNull)
-  id String @id @default(uuid())
-  nombre String @default("")
-  descripcion String @default("")
-  imagen String @default("")
-  imagenAlt String @default("")
-  address String @default("")
-  website String @default("")
-  bookingUrl String @default("")
-  phone String @default("")
-  price String @default("")
-  duration String @default("")
-  bestTime String @default("")
-  category String @default("")
-  latitud Float?
-  longitud Float?
-  isPublished Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  municipioLinks MunicipioExperience[]
+  preparationComplete Boolean @default(false)
+  showOnWebsite       Boolean @default(false)
+  countryCode         String  @default("ES")
+  region              String  @default("")
+  country             Country @relation(fields: [countryCode], references: [code])
+
+  translations    Json                  @default("{}")
+  featuredItems   EssentialItem[]       @relation("FeaturedActivity")
+  essentialItemId String?               @unique
+  essentialItem   EssentialItem?        @relation(fields: [essentialItemId], references: [id], onDelete: SetNull)
+  id              String                @id @default(uuid())
+  nombre          String                @default("")
+  descripcion     String                @default("")
+  imagen          String                @default("")
+  imagenAlt       String                @default("")
+  address         String                @default("")
+  website         String                @default("")
+  bookingUrl      String                @default("")
+  phone           String                @default("")
+  price           String                @default("")
+  duration        String                @default("")
+  bestTime        String                @default("")
+  category        String                @default("")
+  latitud         Float?
+  longitud        Float?
+  isPublished     Boolean               @default(false)
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  municipioLinks  MunicipioExperience[]
+
   @@index([isPublished, nombre])
+  @@index([countryCode, region, preparationComplete, showOnWebsite], map: "Experience_publication_idx")
 }
 
 model MunicipioExperience {
   municipioId String
-  recordId String
-  sortOrder Int @default(0)
-  municipio Municipio @relation(fields: [municipioId], references: [id], onDelete: Cascade)
-  record Experience @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  recordId    String
+  sortOrder   Int        @default(0)
+  municipio   Municipio  @relation(fields: [municipioId], references: [id], onDelete: Cascade)
+  record      Experience @relation(fields: [recordId], references: [id], onDelete: Cascade)
+
   @@id([municipioId, recordId])
   @@index([recordId])
 }
 
 model Hotel {
-  id String @id @default(uuid())
-  nombre String @default("")
-  descripcion String @default("")
-  imagen String @default("")
-  imagenAlt String @default("")
-  address String @default("")
-  website String @default("")
-  bookingUrl String @default("")
-  phone String @default("")
-  price String @default("")
-  stars String @default("")
-  amenities String @default("")
-  latitud Float?
-  longitud Float?
-  isPublished Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  preparationComplete Boolean @default(false)
+  showOnWebsite       Boolean @default(false)
+  countryCode         String  @default("ES")
+  region              String  @default("")
+  country             Country @relation(fields: [countryCode], references: [code])
+
+  id             String           @id @default(uuid())
+  nombre         String           @default("")
+  descripcion    String           @default("")
+  imagen         String           @default("")
+  imagenAlt      String           @default("")
+  address        String           @default("")
+  website        String           @default("")
+  bookingUrl     String           @default("")
+  phone          String           @default("")
+  price          String           @default("")
+  stars          String           @default("")
+  amenities      String           @default("")
+  latitud        Float?
+  longitud       Float?
+  isPublished    Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
   municipioLinks MunicipioHotel[]
+
   @@index([isPublished, nombre])
+  @@index([countryCode, region, preparationComplete, showOnWebsite], map: "Hotel_publication_idx")
 }
 
 model MunicipioHotel {
   municipioId String
-  recordId String
-  sortOrder Int @default(0)
-  municipio Municipio @relation(fields: [municipioId], references: [id], onDelete: Cascade)
-  record Hotel @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  recordId    String
+  sortOrder   Int       @default(0)
+  municipio   Municipio @relation(fields: [municipioId], references: [id], onDelete: Cascade)
+  record      Hotel     @relation(fields: [recordId], references: [id], onDelete: Cascade)
+
   @@id([municipioId, recordId])
   @@index([recordId])
 }
 
 model Restaurant {
-  id String @id @default(uuid())
-  nombre String @default("")
-  descripcion String @default("")
-  imagen String @default("")
-  imagenAlt String @default("")
-  address String @default("")
-  website String @default("")
-  bookingUrl String @default("")
-  phone String @default("")
-  price String @default("")
-  cuisine String @default("")
-  openingHours String @default("")
-  latitud Float?
-  longitud Float?
-  isPublished Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  preparationComplete Boolean @default(false)
+  showOnWebsite       Boolean @default(false)
+  countryCode         String  @default("ES")
+  region              String  @default("")
+  country             Country @relation(fields: [countryCode], references: [code])
+
+  id             String                @id @default(uuid())
+  nombre         String                @default("")
+  descripcion    String                @default("")
+  imagen         String                @default("")
+  imagenAlt      String                @default("")
+  address        String                @default("")
+  website        String                @default("")
+  bookingUrl     String                @default("")
+  phone          String                @default("")
+  price          String                @default("")
+  cuisine        String                @default("")
+  openingHours   String                @default("")
+  latitud        Float?
+  longitud       Float?
+  isPublished    Boolean               @default(false)
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
   municipioLinks MunicipioRestaurant[]
+
   @@index([isPublished, nombre])
+  @@index([countryCode, region, preparationComplete, showOnWebsite], map: "Restaurant_publication_idx")
 }
 
 model MunicipioRestaurant {
   municipioId String
-  recordId String
-  sortOrder Int @default(0)
-  municipio Municipio @relation(fields: [municipioId], references: [id], onDelete: Cascade)
-  record Restaurant @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  recordId    String
+  sortOrder   Int        @default(0)
+  municipio   Municipio  @relation(fields: [municipioId], references: [id], onDelete: Cascade)
+  record      Restaurant @relation(fields: [recordId], references: [id], onDelete: Cascade)
+
   @@id([municipioId, recordId])
   @@index([recordId])
+}
+
+model Country {
+  code                String          @id
+  name                String
+  preparationComplete Boolean         @default(false)
+  showOnWebsite       Boolean         @default(false)
+  updatedAt           DateTime        @updatedAt
+  destinations        Destino[]
+  municipalities      Municipio[]
+  places              Place[]
+  essentials          EssentialItem[]
+  experiences         Experience[]
+  hotels              Hotel[]
+  restaurants         Restaurant[]
 }

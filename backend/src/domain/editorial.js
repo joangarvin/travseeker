@@ -1,3 +1,4 @@
+const { publicGeography, publicGlobal } = require("./publication");
 const EDITORIAL_STATUSES = Object.freeze([
   "draft",
   "pending",
@@ -41,11 +42,15 @@ const ALLOWED_TRANSITIONS = Object.freeze({
 });
 
 function publicEditorialWhere(extra = {}) {
-  return { ...extra, editorialStatus: "published" };
+  return publicGeography({ ...extra, editorialStatus: "published" });
 }
 
 function publicActiveEditorialWhere(extra = {}) {
-  return { ...extra, editorialStatus: "published", isActive: true };
+  return publicGlobal({
+    ...extra,
+    editorialStatus: "published",
+    isActive: true,
+  });
 }
 
 function publicDestinationByIdWhere(id) {
@@ -78,9 +83,9 @@ function validateEditorialIds(ids, limit = 100) {
     error.status = 400;
     throw error;
   }
-  const cleanIds = [...new Set(ids.map((id) => String(id || "").trim()))].filter(
-    Boolean,
-  );
+  const cleanIds = [
+    ...new Set(ids.map((id) => String(id || "").trim())),
+  ].filter(Boolean);
   if (cleanIds.length !== ids.length || cleanIds.length > limit) {
     const error = new Error(
       cleanIds.length > limit

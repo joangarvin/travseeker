@@ -1,3 +1,4 @@
+const { publicGeography, publicGlobal } = require("../domain/publication");
 const { cachedPublic } = require("../cache/publicData");
 const { translationData } = require("../domain/localization");
 const { prisma } = require("../config/database");
@@ -89,13 +90,15 @@ async function assertUnique(data, excludedId) {
 
 async function listPublic() {
   const rows = await prisma.tourismType.findMany({
-    where: { isActive: true, editorialStatus: "published" },
+    where: publicGlobal({ isActive: true, editorialStatus: "published" }),
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
     include: {
       _count: {
         select: {
           destinationLinks: {
-            where: { destino: { editorialStatus: "published" } },
+            where: {
+              destino: publicGeography({ editorialStatus: "published" }),
+            },
           },
         },
       },

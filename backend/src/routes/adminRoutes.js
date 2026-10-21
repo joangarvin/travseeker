@@ -9,6 +9,7 @@ const { requireAuth, requireAdmin } = require("../middleware/auth");
 const router = Router();
 
 router.use(requireAuth, requireAdmin);
+router.use("/publication", require("./publicationRoutes"));
 router.use("/fichas", require("./municipalityCatalogRoutes"));
 
 router.get("/counts", editorialController.adminCounts);

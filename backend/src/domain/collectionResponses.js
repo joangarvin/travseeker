@@ -1,3 +1,4 @@
+const { publicGeography, publicGlobal } = require("./publication");
 const { flattenGuide, publicGuideInclude } = require("./municipalityCatalog");
 const { LIST_SELECT } = require("../constants/selects");
 const { cleanMunicipalityFields } = require("../utils/sanitizeContent");
@@ -7,7 +8,9 @@ const COLLECTION_DESTINATION_SELECT = {
   latitud: true,
   longitud: true,
   municipioLinks: {
-    where: { municipio: { editorialStatus: "published" } },
+    where: {
+      municipio: { editorialStatus: "published", ...publicGeography() },
+    },
     select: {
       municipio: {
         select: {
@@ -26,7 +29,11 @@ const COLLECTION_DESTINATION_SELECT = {
     },
   },
   activityLinks: {
-    where: { activity: { isActive: true, editorialStatus: "published" } },
+    where: {
+      activity: {
+        ...publicGlobal({ isActive: true, editorialStatus: "published" }),
+      },
+    },
     include: { activity: true },
   },
 };

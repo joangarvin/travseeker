@@ -1,3 +1,4 @@
+const { publicGeography } = require("../domain/publication");
 const { Router } = require("express");
 const { prisma } = require("../config/database");
 const { asyncHandler } = require("../utils/asyncHandler");
@@ -10,11 +11,18 @@ router.get(
   "/:id",
   asyncHandler(async (req, res) => {
     const row = await prisma.municipio.findFirst({
-      where: { id: req.params.id, editorialStatus: "published", guideEnabled: true },
+      where: {
+        id: req.params.id,
+        editorialStatus: "published",
+        ...publicGeography(),
+        guideEnabled: true,
+      },
       include: {
         ...publicGuideInclude,
         destinoLinks: {
-          where: { destino: { editorialStatus: "published" } },
+          where: {
+            destino: { editorialStatus: "published", ...publicGeography() },
+          },
           include: {
             destino: {
               select: { id: true, nombre: true, imagen: true, ubicacion: true },

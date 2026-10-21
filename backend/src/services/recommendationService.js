@@ -1,3 +1,4 @@
+const { publicGeography } = require("../domain/publication");
 const { prisma } = require("../config/database");
 const { rankRecommendations } = require("../domain/recommendations");
 
@@ -40,7 +41,11 @@ async function getRecommendations(userId, limit = 8) {
 
   const liked = likedIds.length
     ? await prisma.destino.findMany({
-        where: { id: { in: likedIds }, editorialStatus: "published" },
+        where: {
+          id: { in: likedIds },
+          editorialStatus: "published",
+          ...publicGeography(),
+        },
         select: DISPLAY_SELECT,
       })
     : [];
@@ -48,6 +53,7 @@ async function getRecommendations(userId, limit = 8) {
   const candidates = await prisma.destino.findMany({
     where: {
       editorialStatus: "published",
+      ...publicGeography(),
       ...(likedIds.length ? { id: { notIn: likedIds } } : {}),
     },
     select: DISPLAY_SELECT,
