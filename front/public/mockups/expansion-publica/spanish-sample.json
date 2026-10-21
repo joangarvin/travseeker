@@ -1,0 +1,62 @@
+[
+  {
+    "id": "9742def1-10cf-46ad-acb3-0d65714881ef",
+    "name": "Costa Blanca",
+    "image": "https://res.cloudinary.com/dq5npqrdd/image/upload/v1784291543/travseeker/destinos/9742def1-10cf-46ad-acb3-0d65714881ef.jpg"
+  },
+  {
+    "id": "018daea6-c567-4d64-9afc-fd3e7209568e",
+    "name": "Pinares de Soria y Burgos",
+    "image": "https://res.cloudinary.com/dq5npqrdd/image/upload/v1784379448/travseeker/destinos/018daea6-c567-4d64-9afc-fd3e7209568e.jpg"
+  },
+  {
+    "id": "048ea539-3bb2-43cb-b2fb-c0ddc67aeac0",
+    "name": "Costa de la Luz",
+    "image": "https://res.cloudinary.com/dq5npqrdd/image/upload/v1784293255/travseeker/destinos/048ea539-3bb2-43cb-b2fb-c0ddc67aeac0.jpg"
+  },
+  {
+    "id": "04cda3f6-a7f0-4e88-8174-2bb7347d49e4",
+    "name": "Cuenca de Pamplona",
+    "image": "https://res.cloudinary.com/dq5npqrdd/image/upload/v1784293660/travseeker/destinos/04cda3f6-a7f0-4e88-8174-2bb7347d49e4.jpg"
+  },
+  {
+    "id": "147d1bb9-5edb-48b5-810e-03d3c0ada0e1",
+    "name": "Campiña Sur Extremeña",
+    "image": "https://res.cloudinary.com/dq5npqrdd/image/upload/v1784291148/travseeker/destinos/147d1bb9-5edb-48b5-810e-03d3c0ada0e1.jpg"
+  },
+  {
+    "id": "1dcac407-5288-4626-b58f-6407ab89142c",
+    "name": "Costa del Sol",
+    "image": "https://res.cloudinary.com/dq5npqrdd/image/upload/v1784293598/travseeker/destinos/1dcac407-5288-4626-b58f-6407ab89142c.jpg"
+  },
+  {
+    "id": "1e852923-8681-48ee-95af-d3111839125a",
+    "name": "Gran Canaria",
+    "image": "https://res.cloudinary.com/dq5npqrdd/image/upload/v1784297486/travseeker/destinos/1e852923-8681-48ee-95af-d3111839125a.jpg"
+  },
+  {
+    "id": "2047d57b-ac9f-46e5-8fb4-c8b6b687d94f",
+    "name": "Valencia",
+    "image": "https://res.cloudinary.com/dq5npqrdd/image/upload/v1784557527/travseeker/destinos/2047d57b-ac9f-46e5-8fb4-c8b6b687d94f.jpg"
+  },
+  {
+    "id": "2121d5b2-1ea3-4aaa-8a89-b5b11151c4b4",
+    "name": "Campo de Calatrava",
+    "image": "https://res.cloudinary.com/dq5npqrdd/image/upload/v1784291202/travseeker/destinos/2121d5b2-1ea3-4aaa-8a89-b5b11151c4b4.jpg"
+  },
+  {
+    "id": "23736d72-bf4f-4a2e-97ca-72829739a05a",
+    "name": "Pirineo Aragonés",
+    "image": "https://res.cloudinary.com/dq5npqrdd/image/upload/v1784379673/travseeker/destinos/23736d72-bf4f-4a2e-97ca-72829739a05a.jpg"
+  },
+  {
+    "id": "2877712c-8603-4e82-a881-c1a17661e0c6",
+    "name": "Desierto de Tabernas",
+    "image": "https://res.cloudinary.com/dq5npqrdd/image/upload/v1784296758/travseeker/destinos/2877712c-8603-4e82-a881-c1a17661e0c6.jpg"
+  },
+  {
+    "id": "2b04d728-79e1-4686-8b48-7d5705522861",
+    "name": "Bajo Aragón",
+    "image": "https://res.cloudinary.com/dq5npqrdd/image/upload/v1784290785/travseeker/destinos/2b04d728-79e1-4686-8b48-7d5705522861.jpg"
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "Lisbon": {
+    "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Lisboa_-_Portugal_%2852597836992%29.jpg/960px-Lisboa_-_Portugal_%2852597836992%29.jpg",
+    "source": "https://en.wikipedia.org/wiki/Lisbon"
+  },
+  "Porto": {
+    "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/Puente_Don_Luis_I%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_13.JPG/960px-Puente_Don_Luis_I%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_13.JPG",
+    "source": "https://en.wikipedia.org/wiki/Porto"
+  },
+  "Paris": {
+    "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4b/La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg/960px-La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg",
+    "source": "https://en.wikipedia.org/wiki/Paris"
+  },
+  "Nice": {
+    "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/ba/Promenade_des_Anglais_Nice_IMG_1255.jpg/960px-Promenade_des_Anglais_Nice_IMG_1255.jpg",
+    "source": "https://en.wikipedia.org/wiki/Nice"
+  },
+  "Marrakesh": {
+    "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/Pavillon_Menarag%C3%A4rten.jpg/960px-Pavillon_Menarag%C3%A4rten.jpg",
+    "source": "https://en.wikipedia.org/wiki/Marrakesh"
+  },
+  "Essaouira": {
+    "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/65/%22Ein_bemerkenswertes_historisches_Denkmal%22._16.jpg/960px-%22Ein_bemerkenswertes_historisches_Denkmal%22._16.jpg",
+    "source": "https://en.wikipedia.org/wiki/Essaouira"
+  }
+}
