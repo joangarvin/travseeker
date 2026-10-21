@@ -119,12 +119,15 @@ export function MunicipalityEditorModal({
                   type="checkbox"
                   checked={form.guideEnabled === true}
                   aria-describedby="mun-guide-access-hint"
-                  onChange={(event) => onChange({ ...form, guideEnabled: event.target.checked })}
+                  disabled
+                  readOnly
                 />
                 {t('Permitir acceso público a la ficha')}
               </label>
               <p id="mun-guide-access-hint">
-                {t('Si está desactivado, el botón mostrará «Próximamente» y la ficha no se podrá abrir. El municipio debe estar publicado para permitir el acceso.')}
+                {t(
+                  'La preparación y la visibilidad se gestionan desde Publicación por países. Guarda primero la ficha y utiliza allí los controles Acabado y Mostrar.',
+                )}
               </p>
             </div>
             <ImageUploader

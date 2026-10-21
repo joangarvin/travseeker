@@ -1,3 +1,4 @@
+import { UpcomingContent } from '../../components/UpcomingContent';
 import { t } from '../../i18n';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -416,6 +417,7 @@ export default function Home() {
           </>
         )}
       </section>
+      <UpcomingContent />
     </Shell>
   );
 }

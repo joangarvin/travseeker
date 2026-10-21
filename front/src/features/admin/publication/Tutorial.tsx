@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Publication from './Publication';
 import { Badge } from './views';
-import { countryResult } from './model';
+import { outcome } from './model';
 const steps = [
   {
     title: 'Empieza sin publicar',
@@ -44,7 +44,7 @@ export default function Tutorial() {
           <Publication ready={ready} show={show} onReady={setReady} onShow={setShow} />
           <div className="ex-result">
             <span>Resultado de tu prueba</span>
-            <Badge value={countryResult({ id: 'demo', name: 'Ejemplo', ready, show })} />
+            <Badge value={outcome(ready, show, undefined, true)} />
           </div>
         </>
       ) : (

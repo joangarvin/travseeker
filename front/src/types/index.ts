@@ -18,6 +18,10 @@ export type EditorialStatus = 'draft' | 'pending' | 'published' | 'archived';
 export type EditorialActor = Pick<User, 'id' | 'email' | 'nombre' | 'apellidos' | 'avatarUrl'>;
 
 export type EditorialFields = {
+  countryCode?: string;
+  region?: string;
+  preparationComplete?: boolean;
+  showOnWebsite?: boolean;
   translations?: Translations;
   displayName?: string;
   editorialStatus: EditorialStatus;
@@ -296,6 +300,10 @@ export type FilterOptions = {
 
 export type MunicipalityCatalog = 'actividades' | 'hoteles' | 'restaurantes';
 export type MunicipalityRecord = {
+  countryCode?: string;
+  region?: string;
+  preparationComplete?: boolean;
+  showOnWebsite?: boolean;
   essentialItemId?: string | null;
   id: string;
   nombre: string;

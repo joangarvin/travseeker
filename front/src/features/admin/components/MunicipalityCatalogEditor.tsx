@@ -1,3 +1,4 @@
+import { creationContext } from '../publication/creationContext';
 import { useEffect, useState } from 'react';
 import { Plus, Search, ArrowUp, ArrowDown, Edit3, X } from 'lucide-react';
 import { api } from '../../../services/api';
@@ -31,6 +32,7 @@ type Props = {
   token: string;
   ids: string[];
   initialRecords?: MunicipalityRecord[];
+  initialEditRecord?: MunicipalityRecord | null;
   onChange: (ids: string[]) => void;
   onEditingChange: (editing: boolean) => void;
 };
@@ -44,6 +46,7 @@ export function MunicipalityCatalogEditor({
   token,
   ids,
   initialRecords = EMPTY_RECORDS,
+  initialEditRecord,
   onChange,
   onEditingChange,
 }: Props) {
@@ -54,7 +57,7 @@ export function MunicipalityCatalogEditor({
   const [importOpen, setImportOpen] = useState(false);
   const [records, setRecords] = useState(initialRecords);
   const [query, setQuery] = useState('');
-  const [draft, setDraft] = useState<Partial<MunicipalityRecord> | null>(null);
+  const [draft, setDraft] = useState<Partial<MunicipalityRecord> | null>(initialEditRecord || null);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -269,7 +272,7 @@ export function MunicipalityCatalogEditor({
           type="button"
           variant="secondary"
           disabled={!!draft}
-          onClick={() => edit({ nombre: '', isPublished: false })}
+          onClick={() => edit({ nombre: '', isPublished: false, ...creationContext() })}
         >
           <Plus />
           Crear {names[kind]}
@@ -373,7 +376,7 @@ export function MunicipalityCatalogEditor({
                 <span>
                   <strong>{row.nombre}</strong>
                   <small>
-                    {row.isPublished ? 'Publicado' : 'Borrador'}
+                    {row.preparationComplete && row.showOnWebsite ? 'Mostrar activado' : 'Oculto'}
                     {row.address ? ` · ${row.address}` : ''}
                     {row.essentialItemId ? ' · Imprescindible de un destino' : ''}
                   </small>
@@ -494,14 +497,10 @@ export function MunicipalityCatalogEditor({
               </Field>
             ))}
           </div>
-          <label>
-            <input
-              type="checkbox"
-              checked={draft.isPublished === true}
-              onChange={(event) => setDraft({ ...draft, isPublished: event.target.checked })}
-            />{' '}
-            Publicar esta ficha
-          </label>
+          <p className="muted">
+            Guarda la información de la ficha aquí. Su preparación y visibilidad se gestionan desde
+            Publicación por países; las nuevas fichas empiezan ocultas.
+          </p>
           <div className="municipality-catalog-editor__tools">
             <Button type="button" loading={saving} onClick={() => void save()}>
               Guardar ficha en el catálogo

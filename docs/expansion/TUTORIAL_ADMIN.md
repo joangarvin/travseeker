@@ -13,6 +13,6 @@
 
 Comprueba la tarjeta de resultado: indica qué verá el visitante. La vista pública simulada excluye contenido oculto y no publica nada por sí sola.
 
-## Sobre estos prototipos
+## Guardado y vista previa
 
-Todos los registros son de demostración. Los cambios se guardan solo en este navegador y no modifican la administración real. Si falla el guardado, el borrador permanece abierto para reintentarlo. El tutorial interactivo incluye un ejercicio independiente que no cambia el catálogo.
+Los controles del panel guardan cambios reales en la base de datos al pulsar Guardar cambios. Si falla el guardado, el borrador permanece abierto para reintentarlo. La vista previa no publica nada por sí sola. El ejercicio dentro del tutorial es independiente y nunca modifica el catálogo.

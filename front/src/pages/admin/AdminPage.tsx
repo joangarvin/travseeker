@@ -1,3 +1,6 @@
+import { creationContext } from '../../features/admin/publication/creationContext';
+import { PublicationWorkspace } from '../../features/admin/publication/PublicationWorkspace';
+import type { Entry as PublicationEntry } from '../../features/admin/publication/model';
 import { useAdminData } from '../../features/admin/hooks/useAdminData';
 import { useAdminReviews } from '../../features/admin/hooks/useAdminReviews';
 import { useAdminTaxonomies } from '../../features/admin/hooks/useAdminTaxonomies';
@@ -48,6 +51,7 @@ import type {
   Activity,
   Destino,
   EditorialStatus,
+  MunicipalityRecord,
   Municipio,
   Place,
   TourismType,
@@ -77,6 +81,7 @@ export default function AdminPage() {
     ? (requestedTab as AdminTab)
     : 'editorial';
   const [catalogEditing, setCatalogEditing] = useState(false);
+  const [catalogInitial, setCatalogInitial] = useState<MunicipalityRecord | null>(null);
   const setActiveTab = (tab: AdminTab) => {
     if (catalogEditing) {
       setFeedback({
@@ -85,6 +90,7 @@ export default function AdminPage() {
       });
       return;
     }
+    setCatalogInitial(null);
     setOffset(0);
     setCatalogStatus('all');
     setFeedback(null);
@@ -530,6 +536,42 @@ export default function AdminPage() {
     );
   }
 
+  if (!params.has('tab') && params.get('view') !== 'legacy') {
+    return (
+      <Shell footer={false}>
+        <PublicationWorkspace
+          token={token!}
+          onLegacy={() => setActiveTab('editorial')}
+          onOpenCatalog={async (tab, entry?: PublicationEntry) => {
+            let record:
+              | (MunicipalityRecord & Activity & TourismType & Place & { destinoId: string })
+              | undefined;
+            if (entry && !['destinos', 'municipios'].includes(tab))
+              record = await api(
+                `/admin/publication/source/${entry.resource}/${encodeURIComponent(entry.id)}`,
+                {},
+                token,
+              );
+            if (entry && tab === 'municipios')
+              setMunicipalityForm(await api<Municipio>(`/admin/municipios/${entry.id}`, {}, token));
+            if (entry && tab === 'destinos') await openDestination({ id: entry.id });
+            setActiveTab(tab);
+            if (record) {
+              if (['catalogo-actividades', 'hoteles', 'restaurantes'].includes(tab))
+                setCatalogInitial(record);
+              else if (tab === 'actividades') setActivityForm(record);
+              else if (tab === 'tipos-viaje') setTravelTypeForm(record);
+              else {
+                setSelectedDestinationId(record.destinoId);
+                setPlaceForm(record);
+              }
+            }
+          }}
+        />
+      </Shell>
+    );
+  }
+
   const resourceCounts: Record<AdminTab, number> = {
     editorial:
       serverCounts.editorial ??
@@ -548,6 +590,34 @@ export default function AdminPage() {
   return (
     <Shell footer={false}>
       <div className="admin-heading">
+        <p className="muted">
+          El estado editorial y la visibilidad pública son independientes. La visibilidad se
+          gestiona en Publicación por países. Las nuevas fichas heredan el país de creación:{' '}
+          {creationContext().countryCode}
+          {creationContext().region ? ` · ${creationContext().region}` : ''}.
+        </p>
+        <button
+          type="button"
+          className="button button--secondary"
+          onClick={() => {
+            if (catalogEditing) {
+              setFeedback({
+                tone: 'error',
+                text: 'Guarda o cancela la ficha antes de cambiar de sección.',
+              });
+              return;
+            }
+            setParams((current) => {
+              const next = new URLSearchParams(current);
+              next.delete('tab');
+              next.delete('view');
+              next.delete('edit');
+              return next;
+            });
+          }}
+        >
+          Publicación por países
+        </button>
         <PageHeading title={t('Administración')}>
           <p>{t('Gestiona destinos, municipios, actividades, hoteles, restaurantes y reseñas.')}</p>
         </PageHeading>
@@ -588,7 +658,9 @@ export default function AdminPage() {
           <>
             {['catalogo-actividades', 'hoteles', 'restaurantes'].includes(activeTab) && token && (
               <MunicipalityCatalogEditor
+                key={`${activeTab}:${catalogInitial?.id || 'list'}`}
                 standalone
+                initialEditRecord={catalogInitial}
                 revision={editorialRevision}
                 onManageHighlights={(id) => void openDestination({ id }, 'essentials')}
                 kind={
@@ -626,7 +698,7 @@ export default function AdminPage() {
                 onQueryChange={setDestinationQuery}
                 onCreate={() => {
                   void loadMunicipalityOptions()
-                    .then(() => setDestinationForm({ ...EMPTY_DESTINATION }))
+                    .then(() => setDestinationForm({ ...EMPTY_DESTINATION, ...creationContext() }))
                     .catch((cause) => setFeedback({ tone: 'error', text: cause.message }));
                 }}
                 onEdit={(destination) => void openDestination(destination)}
@@ -675,7 +747,9 @@ export default function AdminPage() {
                 municipalities={municipalities}
                 query={municipalityQuery}
                 onQueryChange={setMunicipalityQuery}
-                onCreate={() => setMunicipalityForm({ ...EMPTY_MUNICIPALITY })}
+                onCreate={() =>
+                  setMunicipalityForm({ ...EMPTY_MUNICIPALITY, ...creationContext() })
+                }
                 onEdit={setMunicipalityForm}
                 onDelete={(id) => void removeResource('municipios', id)}
               />
@@ -703,7 +777,7 @@ export default function AdminPage() {
                 onPlaceQueryChange={setPlaceQuery}
                 onDestinationQueryChange={setPlaceDestinationQuery}
                 onDestinationChange={setSelectedDestinationId}
-                onCreate={() => setPlaceForm({ ...EMPTY_PLACE })}
+                onCreate={() => setPlaceForm({ ...EMPTY_PLACE, ...creationContext() })}
                 onEdit={setPlaceForm}
                 onDelete={(id) => void removeResource('places', id)}
               />
