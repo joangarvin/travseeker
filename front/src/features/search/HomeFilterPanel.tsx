@@ -13,6 +13,7 @@ type HomeFilterPanelProps = {
   locations: string[];
   locationLabels?: Record<string, string>;
   activities: string[];
+  countries?: { code: string; name: string }[];
   onToggle: () => void;
   onUpdate: (key: keyof SearchFilters, value: string) => void;
   onClear: () => void;
@@ -31,6 +32,7 @@ export function HomeFilterPanel({
   locations,
   locationLabels = {},
   activities,
+  countries = [],
   onToggle,
   onUpdate,
   onClear,
@@ -102,6 +104,22 @@ export function HomeFilterPanel({
           <div className="home-filter-panel__grid">
             <fieldset className="travel-filter-group">
               <legend>{t('Dónde quieres ir')}</legend>
+              <label>
+                {t('País')}
+                <select
+                  id="home-country"
+                  aria-label={t('País')}
+                  value={filters.countryCode || ''}
+                  onChange={(event) => onUpdate('countryCode', event.target.value)}
+                >
+                  <option value="">{t('Todos los países')}</option>
+                  {countries.map((country) => (
+                    <option key={country.code} value={country.code}>
+                      {t(country.name)}
+                    </option>
+                  ))}
+                </select>
+              </label>
               <label>
                 {t('Ubicación')}
                 <select

@@ -20,6 +20,10 @@ function buildWhereClause(query) {
   const { presupuesto, masificacion, ubicacion, tipoTurismo, actividades } =
     query;
   const where = {};
+  if (query.countryCode) {
+    // Always retain the requested scope, including unknown/hidden codes (no results).
+    where.countryCode = String(query.countryCode).trim().toUpperCase();
+  }
 
   if (presupuesto) {
     where.presupuesto = { contains: presupuesto };

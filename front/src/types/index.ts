@@ -282,6 +282,7 @@ export interface ItineraryDay {
 }
 
 export type SearchFilters = {
+  countryCode?: string;
   q?: string;
   month?: string;
   presupuesto?: string;
@@ -293,6 +294,7 @@ export type SearchFilters = {
 };
 
 export type FilterOptions = {
+  countries?: { code: string; name: string }[];
   locationLabels?: Record<string, string>;
   locations: string[];
   activities: string[];

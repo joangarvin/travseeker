@@ -1991,5 +1991,7 @@
   "Actualizando destinos…": "Updating destinations…",
   "No hay destinos con estos filtros": "No destinations match these filters",
   "Prueba con otra búsqueda o tipo de viaje.": "Try another search or travel style.",
-  "País no encontrado": "Country not found"
+  "País no encontrado": "Country not found",
+  "País": "Country",
+  "Todos los países": "All countries"
 }

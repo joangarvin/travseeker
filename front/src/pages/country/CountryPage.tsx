@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ArrowDown, ArrowLeft, ArrowUpRight, Globe2, Map } from 'lucide-react';
 import { Shell, PageMeta } from '../../components/layout';
 import { Empty, Loader, MediaImage, Notice } from '../../components/ui';
@@ -15,10 +15,12 @@ import type { SearchFilters } from '../../types';
 import type { CountryPageData } from '../../features/countries/types';
 export default function CountryPage() {
   const { code = '' } = useParams();
+  const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const [data, setData] = useState<CountryPageData | null>(null),
     [filters, setFilters] = useState<SearchFilters>(() => ({
       ...Object.fromEntries(params),
+      countryCode: code.toUpperCase(),
       tipoTurismo: params.get('tipoTurismo') || params.get('type') || '',
     })),
     [filtersOpen, setFiltersOpen] = useState(false),
@@ -32,12 +34,14 @@ export default function CountryPage() {
     const current = new URLSearchParams(searchKey);
     setFilters({
       ...Object.fromEntries(current),
+      countryCode: code.toUpperCase(),
       tipoTurismo: current.get('tipoTurismo') || current.get('type') || '',
     });
-  }, [searchKey]);
+  }, [code, searchKey]);
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true);
+    setData((current) => (current?.code === code.toUpperCase() ? current : null));
     setError('');
     setMissing(false);
     const search = new URLSearchParams(searchKey);
@@ -59,19 +63,23 @@ export default function CountryPage() {
     return () => controller.abort();
   }, [code, searchKey, revision]);
   function apply(next = filters) {
-    setParams((current) => {
-      const p = new URLSearchParams();
-      if (current.get('lang')) p.set('lang', current.get('lang')!);
-      for (const [key, value] of Object.entries(next)) {
-        if (value && key !== 'offset' && key !== 'type') p.set(key, value);
-      }
-      return p;
-    });
+    const p = new URLSearchParams();
+    if (params.get('lang')) p.set('lang', params.get('lang')!);
+    for (const [key, value] of Object.entries(next)) {
+      if (value && !['offset', 'type', 'countryCode'].includes(key)) p.set(key, value);
+    }
+    const nextCountry = next.countryCode || '';
+    if (nextCountry !== code.toUpperCase()) {
+      navigate(`${nextCountry ? `/pais/${nextCountry.toLowerCase()}` : '/'}?${p}`);
+    } else {
+      setParams(p);
+    }
     setFiltersOpen(false);
   }
   function reset() {
-    setFilters({});
-    apply({});
+    const defaults = { countryCode: code.toUpperCase() };
+    setFilters(defaults);
+    apply(defaults);
   }
   function paginate(next: number) {
     setParams((current) => {
@@ -255,6 +263,7 @@ export default function CountryPage() {
               filters={filters}
               isOpen={filtersOpen}
               activeCount={getActiveFilterChips(filters).length}
+              countries={data.filterOptions?.countries}
               locations={data.filterOptions?.locations || []}
               locationLabels={data.filterOptions?.locationLabels}
               activities={data.filterOptions?.activities || []}

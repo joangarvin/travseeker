@@ -255,6 +255,7 @@ export default function Home() {
             filters={filters}
             isOpen={filtersOpen}
             activeCount={draftActiveCount}
+            countries={filterOptions.countries}
             locations={filterOptions.locations}
             locationLabels={filterOptions.locationLabels}
             activities={filterOptions.activities}

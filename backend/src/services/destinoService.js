@@ -425,7 +425,7 @@ async function getStats() {
 }
 
 async function getFilterOptions(locale = "es", scope = {}) {
-  const [destinations, activityCatalog] = await Promise.all([
+  const [destinations, activityCatalog, countries] = await Promise.all([
     prisma.destino.findMany({
       where: { editorialStatus: "published", ...publicGeography(scope) },
       select: { ubicacion: true, translations: true },
@@ -436,6 +436,15 @@ async function getFilterOptions(locale = "es", scope = {}) {
       },
       orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
       select: { name: true },
+    }),
+    prisma.country.findMany({
+      where: {
+        preparationComplete: true,
+        showOnWebsite: true,
+        destinations: { some: publicEditorialWhere() },
+      },
+      select: { code: true, name: true },
+      orderBy: { name: "asc" },
     }),
   ]);
   const locations = [
@@ -453,7 +462,7 @@ async function getFilterOptions(locale = "es", scope = {}) {
         locationLabels[name] = translated[index];
       });
   }
-  return { locations, activities, locationLabels };
+  return { locations, activities, locationLabels, countries };
 }
 
 module.exports = {

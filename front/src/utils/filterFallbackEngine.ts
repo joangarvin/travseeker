@@ -24,6 +24,7 @@ export type FallbackResult<T = Destino> = FilterRelaxationCandidate & {
 
 const FILTER_LABELS: Partial<Record<SearchFilterKey, string>> = {
   q: 'Búsqueda',
+  countryCode: 'País',
   month: 'Mes',
   presupuesto: 'Presupuesto',
   masificacion: 'Afluencia',
@@ -60,6 +61,8 @@ function monthLabel(value: string) {
 
 function valueLabel(key: SearchFilterKey, value: string) {
   if (key === 'month') return monthLabel(value);
+  if (key === 'countryCode')
+    return `${t('País')}: ${new Intl.DisplayNames([intlLocale], { type: 'region' }).of(value) || value}`;
   if (key === 'avoidCrowds') return t(FILTER_LABELS.avoidCrowds || 'Evitar aglomeraciones');
   return `${t(FILTER_LABELS[key] || key)}: ${
     key === 'q'

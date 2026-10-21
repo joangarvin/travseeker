@@ -341,10 +341,51 @@ test(
             false,
           );
           await assert.rejects(countries.page("ZZ"), (e) => e.status === 404);
+          publicCache.clear();
+          assert.equal(
+            (await destinations.searchDestinosPage({ countryCode: "ZZ" }))
+              .total,
+            0,
+          );
+          assert.ok(
+            !(await destinations.getFilterOptions()).countries.some(
+              (c) => c.code === "ZZ",
+            ),
+          );
           await prisma.country.update({
             where: { code: "ZZ" },
             data: { preparationComplete: true, showOnWebsite: true },
           });
+          publicCache.clear();
+          assert.ok(
+            (await destinations.getFilterOptions()).countries.some(
+              (c) => c.code === "ZZ",
+            ),
+          );
+          const countryResults = await destinations.searchDestinosPage({
+            countryCode: "zz",
+            limit: "24",
+          });
+          assert.equal(countryResults.total, 27);
+          assert.ok(
+            countryResults.items.every((d) =>
+              d.id.startsWith("publication-test-country-"),
+            ),
+          );
+          assert.equal(
+            (
+              await destinations.searchDestinosPage({
+                countryCode: "ZZ",
+                presupuesto: "Alto",
+              })
+            ).total,
+            1,
+          );
+          assert.equal(
+            (await destinations.searchDestinosPage({ countryCode: "XX" }))
+              .total,
+            0,
+          );
           const first = await countries.page("zz");
           assert.equal(first.total, 27);
           assert.equal(first.items.length, 24);
@@ -409,6 +450,17 @@ test(
             name: "Test country",
             status: "upcoming",
           });
+          publicCache.clear();
+          assert.ok(
+            !(await destinations.getFilterOptions()).countries.some(
+              (c) => c.code === "ZZ",
+            ),
+          );
+          assert.equal(
+            (await destinations.searchDestinosPage({ countryCode: "ZZ" }))
+              .total,
+            0,
+          );
           const teaser = (await countries.list()).find((c) => c.code === "ZZ");
           assert.deepEqual(teaser, {
             code: "ZZ",
