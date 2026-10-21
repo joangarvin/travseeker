@@ -8,4 +8,4 @@ Los estados acordados son En preparación · Oculto, Próximamente, Listo para p
 
 Véanse `IMPLEMENTATION.md`, `TUTORIAL_ADMIN.md` y `VALIDATION.md` para despliegue, uso y verificación.
 
-La exploración de funcionalidades 3 y 4 (inicio centrado en destinos y sección secundaria de países) está documentada en PROTOTYPES_PUBLIC.md, con propuestas aisladas Franja, Mosaico y Lista.
+Las funcionalidades públicas 3 y 4 combinan Mosaico en la home y Franja en la página de país. La elección y la integración están documentadas en PROTOTYPES_PUBLIC.md. Los prototipos retirados se conservan en el historial de Git.

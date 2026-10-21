@@ -32,3 +32,10 @@ Las pruebas de integración solo aceptan `EXPANSION_TEST_DATABASE_URL=postgresql
 El panel local de revisión en localhost:5177 se ha conectado al backend real de desarrollo (3001), igual que la aplicación de 127.0.0.1:5176. La cuenta sintética del entorno aislado no sirve para esta base: se debe iniciar sesión con una cuenta administrativa habitual. El script de datos sintéticos sigue restringido a su instancia desechable.
 
 Los orígenes adicionales autorizados para sesiones por cookie se configuran explícitamente con FRONTEND_ORIGINS (separados por comas). CORS y la protección CSRF comparten esa lista junto a FRONTEND_URL; no se admiten orígenes arbitrarios. En desarrollo están autorizados los dos enlaces locales usados para esta revisión.
+
+
+## Exploración pública por país
+
+La home añade un mosaico después de los destinos existentes. `/pais/:code` muestra una panorámica, información básica, mapa opcional y catálogo paginado. Ambas superficies utilizan el ancho disponible con márgenes adaptables. No reemplazan los controles ni recomendaciones anteriores.
+
+`GET /api/paises` devuelve países públicos con destinos visibles y anuncios mínimos. `GET /api/paises/:code` filtra por publicación del país y del destino; admite `q`, `region`, `type` y `offset`. Los países ocultos devuelven 404 y los próximos no exponen imágenes ni fichas. Se reutilizan los estados existentes sin migración adicional.

@@ -4,7 +4,7 @@
 
 ## Alcance y decisión de jerarquía
 
-Exploración aislada en `/mockups/expansion-publica.html`. No modifica el inicio, las rutas públicas ni la configuración real de publicación.
+La exploración aislada se conserva en el historial de Git. Tras la elección se retiraron sus archivos y se integraron las superficies nuevas en la aplicación real.
 
 Tras revisar las primeras direcciones, el usuario aclaró que TravSeeker debe seguir recomendando destinos. Las tres propuestas mantienen el mismo inicio: portada de un destino, búsqueda, tipos de viaje, filtros y recomendaciones. Explorar por país aparece después de las recomendaciones, como alternativa de navegación. No se utiliza el país como entrada obligatoria ni como protagonista de la portada.
 
@@ -44,4 +44,12 @@ La muestra española procede de las API públicas del catálogo existente. Las i
 
 Las capturas revisadas están en `front/output/playwright/expansion-publica-*-seccion.png`, `expansion-publica-*-pais.png` y `expansion-publica-inicio-revisado.png`.
 
-La elección de variante queda pendiente. La integración se realizará después de seleccionarla.
+## Elección e integración
+
+Se eligió **Mosaico para la sección inferior de la home** y **Franja para la página de país**. Ambas ocupan todo el ancho disponible, con los márgenes laterales habituales. La portada, búsqueda, recomendaciones y tarjetas existentes de la home se conservan.
+
+Rutas: `/#countries` y `/pais/es`. El contenido procede de `/api/paises` y `/api/paises/:code`, con búsqueda, tipos de viaje y paginación de 24 destinos. Las regiones aparecen únicamente cuando existen en el catálogo. La imagen procede de un destino publicado del país. Los mapas se cargan bajo demanda y respetan el consentimiento existente.
+
+La visibilidad administrativa se aplica en servidor: países ocultos devuelven 404; Próximamente expone únicamente nombre y estado. No se publican destinos de muestra ni se cambian estados del catálogo compartido. Esta integración no requiere otra migración.
+
+Se añadieron pruebas PostgreSQL aisladas de visibilidad, proyección mínima, filtros y paginación. Las capturas de la integración están en `front/output/playwright/country-*.png`.

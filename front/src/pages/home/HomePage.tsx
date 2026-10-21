@@ -1,3 +1,4 @@
+import { CountryMosaic } from '../../features/countries/CountryMosaic';
 import { UpcomingContent } from '../../components/UpcomingContent';
 import { t } from '../../i18n';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -419,6 +420,7 @@ export default function Home() {
           </>
         )}
       </section>
+      <CountryMosaic />
       <UpcomingContent />
     </Shell>
   );

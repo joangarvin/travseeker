@@ -314,6 +314,75 @@ test(
         },
       );
       await t.test(
+        "country pages enforce country and destination visibility, pagination and teaser projections",
+        async () => {
+          const countries = require("../src/services/countryService");
+          await prisma.country.upsert({
+            where: { code: "ZZ" },
+            create: { code: "ZZ", name: "Test country" },
+            update: { preparationComplete: false, showOnWebsite: false },
+          });
+          await prisma.destino.createMany({
+            data: Array.from({ length: 27 }, (_, i) => ({
+              ...base,
+              id: "publication-test-country-" + i,
+              nombre: "Country destination " + String(i).padStart(2, "0"),
+              countryCode: "ZZ",
+              region: i < 10 ? "North" : "South",
+              editorialStatus: "published",
+              preparationComplete: true,
+              showOnWebsite: true,
+            })),
+          });
+          assert.equal(
+            (await countries.list()).some((c) => c.code === "ZZ"),
+            false,
+          );
+          await assert.rejects(countries.page("ZZ"), (e) => e.status === 404);
+          await prisma.country.update({
+            where: { code: "ZZ" },
+            data: { preparationComplete: true, showOnWebsite: true },
+          });
+          const first = await countries.page("zz");
+          assert.equal(first.total, 27);
+          assert.equal(first.items.length, 24);
+          assert.equal(first.hasMore, true);
+          assert.equal(
+            (await countries.page("ZZ", { offset: 24 })).items.length,
+            3,
+          );
+          assert.equal(
+            (await countries.page("ZZ", { region: "North" })).total,
+            10,
+          );
+          await prisma.destino.update({
+            where: { id: "publication-test-country-0" },
+            data: { showOnWebsite: false },
+          });
+          assert.equal((await countries.page("ZZ")).total, 26);
+          await prisma.country.update({
+            where: { code: "ZZ" },
+            data: { preparationComplete: false, showOnWebsite: true },
+          });
+          assert.deepEqual(await countries.page("ZZ"), {
+            code: "ZZ",
+            name: "Test country",
+            status: "upcoming",
+          });
+          const teaser = (await countries.list()).find((c) => c.code === "ZZ");
+          assert.deepEqual(teaser, {
+            code: "ZZ",
+            name: "Test country",
+            status: "upcoming",
+          });
+          await prisma.country.update({
+            where: { code: "ZZ" },
+            data: { showOnWebsite: false },
+          });
+          await assert.rejects(countries.page("ZZ"), (e) => e.status === 404);
+        },
+      );
+      await t.test(
         "HTTP routes reject anonymous and non-admin users",
         async () => {
           const app = require("../src/app");
@@ -361,6 +430,7 @@ test(
       await prisma.destino.deleteMany({
         where: { id: { startsWith: "publication-test-" } },
       });
+      await prisma.country.deleteMany({ where: { code: "ZZ" } });
       await prisma.$disconnect();
       await pool.end();
     }
