@@ -80,7 +80,14 @@ export function DestinationHero({ destination, rating, onBack, actions }: Destin
         <div className="dest-hero__layout">
           <div className={`dest-hero__intro${titleSize}`}>
             <p className="dest-hero__location">
-              <MapPin aria-hidden="true" /> {t(plain(destination.ubicacion)) || t('España')}
+              <MapPin aria-hidden="true" />
+              {[
+                destination.country?.name && t(destination.country.name),
+                destination.region?.trim(),
+                t(plain(destination.ubicacion)),
+              ]
+                .filter(Boolean)
+                .join(' · ')}
             </p>
             <h1>{name}</h1>
 

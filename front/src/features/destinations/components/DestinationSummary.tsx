@@ -53,6 +53,25 @@ export function DestinationSummary({ destination, mapUrl }: DestinationSummaryPr
               </button>
             )}
           </header>
+          {destination.practicalInfo && (
+            <section className="dest-summary__practical" aria-labelledby="summary-practical-title">
+              <h3 id="summary-practical-title">{t('Información práctica')}</h3>
+              <dl>
+                {destination.practicalInfo.currency && (
+                  <div>
+                    <dt>{t('Moneda')}</dt>
+                    <dd>{destination.practicalInfo.currency}</dd>
+                  </div>
+                )}
+                {destination.practicalInfo.languages && (
+                  <div>
+                    <dt>{t('Idiomas')}</dt>
+                    <dd>{destination.practicalInfo.languages}</dd>
+                  </div>
+                )}
+              </dl>
+            </section>
+          )}
           {activityTypes.length > 0 && (
             <section
               className="dest-summary__activities"
@@ -73,7 +92,13 @@ export function DestinationSummary({ destination, mapUrl }: DestinationSummaryPr
         <section className="dest-summary__location" aria-labelledby="summary-map-title">
           <h3 id="summary-map-title">{t('Dónde está')}</h3>
           <p>
-            {destination.nombre.trim()} · {destination.ubicacion}
+            {[
+              destination.country?.name && t(destination.country.name),
+              destination.region?.trim(),
+              destination.ubicacion,
+            ]
+              .filter(Boolean)
+              .join(' · ')}
           </p>
           {coordinates ? (
             <div className="dest-summary__map">

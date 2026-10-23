@@ -389,3 +389,34 @@
     padding: 6px;
   }
 }
+
+/* Country information complements the existing summary without changing its layout. */
+.dest-summary__practical {
+  margin-block: 28px;
+}
+.dest-summary__practical dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin: 16px 0 0;
+}
+.dest-summary__practical dl > div {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+.dest-summary__practical dt {
+  color: var(--muted);
+  font-size: 0.875rem;
+  margin-bottom: 6px;
+}
+.dest-summary__practical dd {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.5;
+}
+@media (max-width: 600px) {
+  .dest-summary__practical dl {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

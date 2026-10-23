@@ -135,6 +135,8 @@ export type TourismType = EditorialFields & {
 };
 
 export type Destino = EditorialFields & {
+  country?: { code: string; name: string };
+  practicalInfo?: { currency: string; languages: string } | null;
   id: string;
   nombre: string;
   tipoTurismoPrincipal: string;

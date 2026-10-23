@@ -45,3 +45,8 @@ La página de país reutiliza `SearchBox` y `HomeFilterPanel` de inicio: presupu
 El resumen territorial agrupa título, descripción, acceso al catálogo y datos prácticos a la izquierda. El mapa ocupa una columna propia y pasa debajo en móvil, con enlace para abrirlo en grande. Se ha retirado el desplegable: el iframe utiliza carga diferida y solo se monta cuando el consentimiento de mapas externos está activo; en caso contrario se muestra el control de configuración existente. Comprobado a 1440, 390 y 320 px.
 
 El filtro compartido incluye País con Todos los países como valor general. Las opciones proceden de países publicados con al menos un destino público; no se ofrecen países próximos ni ocultos. Inicio aplica `countryCode` también a búsquedas, paginación y mapa. En una página de país el actual aparece seleccionado: al aplicar otro se cambia de página conservando las preferencias, y Todos los países vuelve al catálogo general. Limpiar dentro del país mantiene el ámbito de esa página. Las sugerencias de relajación de filtros no eliminan el país solicitado.
+
+
+## Información territorial en la ficha de destino
+
+La ficha existente incluye el nombre del país y su región si está informada, y muestra moneda e idiomas en el resumen. El detalle público selecciona únicamente nombre y código de la relación Country y reutiliza `domain/countryInfo.js`, también utilizado por la página de país. El perfil desconocido devuelve null para no presentar información de España por defecto. Se conserva la disposición y las funcionalidades anteriores de la ficha. No se ha creado una ruta de ficha internacional ni se han cambiado datos de publicación.

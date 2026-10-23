@@ -5,6 +5,7 @@ const {
 } = require("../domain/publication");
 const { cachedPublic } = require("../cache/publicData");
 const { prisma } = require("../config/database");
+const { countryPracticalInfo } = require("../domain/countryInfo");
 const { buildWhereClause } = require("../utils/buildWhereClause");
 const {
   LIST_SELECT,
@@ -234,10 +235,11 @@ async function searchDestinos(query) {
   return (await searchDestinosPage(query)).items;
 }
 
-async function getDestinoById(id) {
+async function getDestinoById(id, locale = "es") {
   const destino = await prisma.destino.findFirst({
     where: publicDestinationByIdWhere(id),
     include: {
+      country: { select: { code: true, name: true } },
       municipioLinks: {
         where: {
           municipio: { editorialStatus: "published", ...publicGeography() },
@@ -323,7 +325,10 @@ async function getDestinoById(id) {
       }
     });
   });
-  return mapDestinationRelations(destino);
+  return {
+    ...mapDestinationRelations(destino),
+    practicalInfo: countryPracticalInfo(destino.countryCode, locale),
+  };
 }
 
 async function getDestacados(limit = 6) {

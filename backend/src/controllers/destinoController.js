@@ -12,7 +12,10 @@ const search = asyncHandler(async (req, res) => {
 });
 
 const getById = asyncHandler(async (req, res) => {
-  const destino = await destinoService.getDestinoById(req.params.id);
+  const destino = await destinoService.getDestinoById(
+    req.params.id,
+    req.locale,
+  );
   if (!destino) return res.status(404).json({ error: "Destino no encontrado" });
   res.json(destino);
 });
