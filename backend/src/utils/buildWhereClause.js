@@ -25,6 +25,8 @@ function buildWhereClause(query) {
     where.countryCode = String(query.countryCode).trim().toUpperCase();
   }
 
+  if (query.region) where.region = String(query.region).trim();
+
   if (presupuesto) {
     where.presupuesto = { contains: presupuesto };
   }

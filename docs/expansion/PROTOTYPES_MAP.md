@@ -1,50 +1,13 @@
-# Prototipo 6: exploración territorial en el mapa
+# Atlas: propuesta seleccionada e integrada
 
 23 de octubre de 2026 · rama `new/expansion`.
 
-## Alcance corregido
+Atlas sustituye el mapa público en `/mapa`. Las propuestas Dividido y Lista se han retirado junto al selector de prototipos; el historial de Git conserva la exploración previa.
 
-La funcionalidad 5 amplía la ficha existente. No hay una ficha internacional distinta ni se cambia su diseño. Se añaden país y región en la ubicación, y moneda e idiomas en el resumen cuando están disponibles. Se conserva el acceso actual de Cómo llegar. Los metadatos generales reutilizan el perfil de país; los campos desconocidos no se inventan. No requiere migración ni modifica registros compartidos.
+- Usa únicamente destinos publicados de la API real, con país y región disponibles. No incorpora ejemplos internacionales ficticios ni altera publicaciones.
+- Hasta zoom 4 muestra agrupaciones por país; desde zoom 5 muestra destinos individuales con el color de su tipo principal, nombre y leyenda. Pulsar un país acerca el mapa sin aplicar un filtro.
+- Mantiene los filtros compartidos de Descubrir, búsqueda, mapa/lista, enlace a la ficha existente y consentimiento de cartografía.
+- Selección y filtros quedan en la URL y responden al historial del navegador. Encuadre, cerrar, anterior/siguiente, comparación real de hasta cuatro destinos, guardados autenticados y compartir aportan feedback textual.
+- En móvil la ficha ocupa una fila debajo del mapa. Los controles tienen objetivos táctiles de 44 px, foco visible y animaciones breves que respetan movimiento reducido.
 
-Las variantes de rediseño de ficha se descartaron por indicación del usuario. La exploración aislada que queda corresponde únicamente al mapa; no modifica `/mapa`.
-
-## Propuestas
-
-`/mockups/expansion-explorar.html?pagina=mapa&v=1`
-
-| Número | Propuesta | Organización | Coste |
-| --- | --- | --- | --- |
-| 1 | Dividido | Lista y mapa simultáneos; en móvil se alternan con un control explícito. | Hay que cambiar de vista en móvil. |
-| 2 | Atlas | Mapa protagonista y ficha breve del destino seleccionado. | Menos espacio para comparar varios resultados. |
-| 3 | Lista | Destinos agrupados por país y mapa contextual lateral, encima en móvil. | Recorrido más largo de la lista. |
-
-El selector inferior y las teclas 1–3 cambian de propuesta. La elección se conserva en `v`. En Atlas el selector se coloca arriba para no cubrir la ficha flotante. Las flechas izquierda/derecha también cambian de variante cuando el foco no está en un campo.
-
-## Interacciones y datos
-
-- Búsqueda, país, región y tipo de viaje; filtros en la URL y foco conservado tras aplicar un selector.
-- Encuadre de resultados y agrupación de marcadores por país al alejar el mapa. Selección desde tarjeta o mapa.
-- Vista previa de demostración internacional; los destinos españoles enlazan a su ficha actual.
-- Escenario ampliado con 7 ejemplos y escenario España con 3. No altera la publicación real.
-- Cartografía OpenStreetMap bajo petición, con reintento si falla. La elección pertenece al prototipo y no cambia las preferencias de privacidad de la web.
-- Temas claro/oscuro, cierre de ventanas mediante Escape, foco visible y movimiento reducido.
-- Imágenes españolas del catálogo e internacionales enlazadas desde Wikimedia, sin descargarlas ni subirlas. Fotos y datos abre las páginas de autoría y licencia. Leaflet procede del paquete instalado y conserva su licencia.
-
-## Validación
-
-Las tres variantes se revisaron en escritorio y móvil, incluyendo 320 px sin desbordamiento. Se comprobaron país, escenario España, búsqueda vacía y recuperación, selección y alternancia móvil. La ficha real se revisó con los datos añadidos a 320 px y en escritorio. Capturas en `front/output/playwright/prototipo6-*.png` y `destino-datos-pais-*.png`.
-
-Tests existentes de frontend/backend, lint y build ejecutados. El ensayo PostgreSQL no se ha ejecutado en esta revisión; no se ha modificado la base compartida. La selección del mapa queda pendiente.
-
-
-## Refinamiento de Atlas
-
-La propuesta 2 se refinó manteniendo el mapa real sin sustituir la página pública. Añade Volver a descubrir, historial atrás/adelante para filtros y selección, vista Mapa/Lista, panel de filtros con aplicar/cancelar/restablecer, preferencias activas eliminables y recuperación de búsquedas vacías.
-
-El detalle seleccionado se puede cerrar y ampliar, con navegación anterior/siguiente y estados deshabilitados en los extremos. Guardados y comparación (máximo tres) son locales y exclusivos del prototipo. Compartir copia una URL con destino y preferencias; si no hay acceso al portapapeles, ofrece el enlace para copiarlo manualmente. No se solicitan permisos de ubicación.
-
-En móvil se reduce la cabecera, se reserva una fila independiente para el detalle y se conserva la atribución del mapa. El panel de filtros deja Aplicar visible a 320 px; el detalle ampliado crece sin recortar acciones. El encuadre usa el espacio disponible y la selección no recrea el mapa. Los controles de zoom y navegación táctil tienen 44 px; la carga y los errores de cartografía, resultados, guardado y comparación ofrecen feedback textual accesible.
-
-Las entradas y cambios de información usan transform/opacity de 160–200 ms y respetan movimiento reducido. El selector de variantes mantiene su comportamiento y estilo originales; su franja superior es solo del prototipo.
-
-Revisión a 1440, 390 y 320 px: filtros combinados, cancelación, búsqueda sin resultados, alternancia y selección desde lista, cierre y ampliación de detalle, guardado, comparación, copia del enlace y navegación nativa atrás/adelante. Sin errores de consola en la revisión final. Sintaxis JavaScript y build comprobados. Capturas: `front/output/playwright/atlas-refinado-desktop.png` y `atlas-refinado-mobile.png`.
+La ficha de destino conserva su diseño y sus datos internacionales añadidos anteriormente. No requiere migraciones ni cambios de contenido.

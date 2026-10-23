@@ -284,6 +284,7 @@ export interface ItineraryDay {
 }
 
 export type SearchFilters = {
+  region?: string;
   countryCode?: string;
   q?: string;
   month?: string;

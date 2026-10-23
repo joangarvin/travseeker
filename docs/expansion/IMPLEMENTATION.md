@@ -50,3 +50,7 @@ El filtro compartido incluye País con Todos los países como valor general. Las
 ## Información territorial en la ficha de destino
 
 La ficha existente incluye el nombre del país y su región si está informada, y muestra moneda e idiomas en el resumen. El detalle público selecciona únicamente nombre y código de la relación Country y reutiliza `domain/countryInfo.js`, también utilizado por la página de país. El perfil desconocido devuelve null para no presentar información de España por defecto. Se conserva la disposición y las funcionalidades anteriores de la ficha. No se ha creado una ruta de ficha internacional ni se han cambiado datos de publicación.
+
+## Mapa Atlas integrado
+
+El mapa público agrupa por país hasta zoom 4 y expone destinos por tipo de viaje desde zoom 5. La API incluye país y región sin migrar datos. Se reutilizan los filtros y servicios reales, manteniendo las reglas de publicación y el consentimiento para cartografía. Los prototipos descartados se conservan en el historial de Git.

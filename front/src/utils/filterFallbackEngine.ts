@@ -25,6 +25,7 @@ export type FallbackResult<T = Destino> = FilterRelaxationCandidate & {
 const FILTER_LABELS: Partial<Record<SearchFilterKey, string>> = {
   q: 'Búsqueda',
   countryCode: 'País',
+  region: 'Región',
   month: 'Mes',
   presupuesto: 'Presupuesto',
   masificacion: 'Afluencia',

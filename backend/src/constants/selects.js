@@ -27,6 +27,9 @@ const LIST_SELECT = {
 
 const MAP_SELECT = {
   id: true,
+  countryCode: true,
+  region: true,
+  country: { select: { code: true, name: true } },
   nombre: true,
   translations: true,
   latitud: true,

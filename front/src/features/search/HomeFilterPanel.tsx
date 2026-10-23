@@ -19,6 +19,7 @@ type HomeFilterPanelProps = {
   onClear: () => void;
   onApply: () => void;
   loading?: boolean;
+  panelOnly?: boolean;
 };
 
 const months = Array.from({ length: 12 }, (_, index) => String(index + 1));
@@ -38,59 +39,63 @@ export function HomeFilterPanel({
   onClear,
   onApply,
   loading = false,
+  panelOnly = false,
 }: HomeFilterPanelProps) {
   return (
     <div className="home-filter-control">
-      <div className="home-filter-chips" role="group" aria-label={t('Atajos de filtro')}>
-        <button
-          id="home-filter-trigger"
-          className={`home-filter-chip ${isOpen ? 'is-open' : ''} ${activeCount > 0 ? 'is-active' : ''}`}
-          type="button"
-          onClick={onToggle}
-          aria-expanded={isOpen}
-          aria-controls="home-filter-panel"
-        >
-          <SlidersHorizontal aria-hidden />
-          {t('Filtros')}
-          {activeCount > 0 && <b>{activeCount}</b>}
-        </button>
-        <button
-          className="home-filter-chip"
-          type="button"
-          onClick={() => {
-            if (!isOpen) onToggle();
-            window.setTimeout(() => document.getElementById('home-budget')?.focus(), 80);
-          }}
-        >
-          {t('Presupuesto')}
-        </button>
-        <button
-          className="home-filter-chip"
-          type="button"
-          onClick={() => {
-            if (!isOpen) onToggle();
-            window.setTimeout(() => document.getElementById('home-crowd')?.focus(), 80);
-          }}
-        >
-          {t('Afluencia')}
-        </button>
-        <button
-          className="home-filter-chip"
-          type="button"
-          onClick={() => {
-            if (!isOpen) onToggle();
-            window.setTimeout(() => document.getElementById('home-month')?.focus(), 80);
-          }}
-        >
-          {t('Temporada')}
-        </button>
-      </div>
+      {!panelOnly && (
+        <div className="home-filter-chips" role="group" aria-label={t('Atajos de filtro')}>
+          <button
+            id="home-filter-trigger"
+            className={`home-filter-chip ${isOpen ? 'is-open' : ''} ${activeCount > 0 ? 'is-active' : ''}`}
+            type="button"
+            onClick={onToggle}
+            aria-expanded={isOpen}
+            aria-controls="home-filter-panel"
+          >
+            <SlidersHorizontal aria-hidden />
+            {t('Filtros')}
+            {activeCount > 0 && <b>{activeCount}</b>}
+          </button>
+          <button
+            className="home-filter-chip"
+            type="button"
+            onClick={() => {
+              if (!isOpen) onToggle();
+              window.setTimeout(() => document.getElementById('home-budget')?.focus(), 80);
+            }}
+          >
+            {t('Presupuesto')}
+          </button>
+          <button
+            className="home-filter-chip"
+            type="button"
+            onClick={() => {
+              if (!isOpen) onToggle();
+              window.setTimeout(() => document.getElementById('home-crowd')?.focus(), 80);
+            }}
+          >
+            {t('Afluencia')}
+          </button>
+          <button
+            className="home-filter-chip"
+            type="button"
+            onClick={() => {
+              if (!isOpen) onToggle();
+              window.setTimeout(() => document.getElementById('home-month')?.focus(), 80);
+            }}
+          >
+            {t('Temporada')}
+          </button>
+        </div>
+      )}
 
       {isOpen && (
         <form
           id="home-filter-panel"
           className="home-filter-panel"
-          aria-labelledby="home-filter-trigger"
+          aria-labelledby={panelOnly ? undefined : 'home-filter-trigger'}
+          aria-label={panelOnly ? t('Preferencias de viaje') : undefined}
           onSubmit={(event) => {
             event.preventDefault();
             onApply();
