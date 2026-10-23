@@ -379,7 +379,7 @@ async function getMapaDestinos(query) {
   });
 }
 
-async function compareDestinos(ids) {
+async function compareDestinos(ids, locale = "es") {
   if (!Array.isArray(ids) || ids.length < 2) {
     const error = new Error("Selecciona al menos dos destinos para comparar");
     error.status = 400;
@@ -402,7 +402,10 @@ async function compareDestinos(ids) {
 
   const order = new Map(ids.map((id, i) => [id, i]));
   return destinos
-    .map((destination) => mapTourismTypes(mapActivities(destination)))
+    .map((destination) => ({
+      ...mapTourismTypes(mapActivities(destination)),
+      practicalInfo: countryPracticalInfo(destination.countryCode, locale),
+    }))
     .sort((a, b) => order.get(a.id) - order.get(b.id));
 }
 

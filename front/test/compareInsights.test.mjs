@@ -39,3 +39,33 @@ test('budget recommendations compare catalog levels in their intended order', ()
     ['Medio-Bajo'],
   );
 });
+
+test('international editorial budgets abstain even when countries share a currency', async () => {
+  const { canCompareBudgets } = await import('../src/utils/compareInsights.ts');
+  assert.equal(
+    canCompareBudgets([
+      { countryCode: 'ES', presupuesto: 'Medio' },
+      { countryCode: 'PT', presupuesto: 'Bajo' },
+    ]),
+    false,
+  );
+  assert.equal(
+    canCompareBudgets([
+      { country: { code: 'ES' }, presupuesto: 'Medio' },
+      { countryCode: 'ES', presupuesto: 'Bajo' },
+    ]),
+    true,
+  );
+  assert.equal(
+    canCompareBudgets([{ presupuesto: 'Medio' }, { countryCode: 'ES', presupuesto: 'Bajo' }]),
+    false,
+  );
+  assert.equal(
+    canCompareBudgets([
+      { countryCode: 'ES', presupuesto: 'Sin datos' },
+      { countryCode: 'ES', presupuesto: 'Bajo' },
+    ]),
+    false,
+  );
+  assert.equal(canCompareBudgets([{ countryCode: 'ES', presupuesto: 'Medio' }]), false);
+});

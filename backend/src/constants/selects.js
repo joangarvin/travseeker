@@ -112,6 +112,8 @@ const SEARCH_MAP_SELECT = {
 
 const COMPARE_SELECT = {
   id: true,
+  countryCode: true,
+  country: { select: { code: true, name: true } },
   nombre: true,
   translations: true,
   imagen: true,

@@ -46,7 +46,7 @@ const compare = asyncHandler(async (req, res) => {
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-  const destinos = await destinoService.compareDestinos(ids);
+  const destinos = await destinoService.compareDestinos(ids, req.locale);
   res.json(destinos);
 });
 
