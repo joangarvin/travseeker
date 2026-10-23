@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useSyncExternalStore } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useSyncExternalStore } from 'react';
 import { GeoJSON, Marker, Tooltip, useMap } from 'react-leaflet';
 import { divIcon, latLngBounds, point } from 'leaflet';
 import { useTourismTypes } from '../../contexts';
@@ -94,7 +94,7 @@ export function AtlasViewport({
   }, [map, selected, visible]);
   return null;
 }
-export function AtlasMapPoints({
+export const AtlasMapPoints = memo(function AtlasMapPoints({
   destinations,
   selectedId,
   onSelect,
@@ -207,47 +207,91 @@ export function AtlasMapPoints({
                 (p) => Math.abs(p.x - position.x) < 190 && Math.abs(p.y - position.y) < 65,
               )));
         if (showLabel) labelPositions.push(position);
-        const photo = responsiveImageUrl(imageUrl(d.imagen), 96),
-          name = d.nombre.trim();
         return (
-          <Marker
+          <AtlasPhotoMarker
             key={group.key}
-            position={[group.lat, group.lng]}
-            zIndexOffset={active ? 1000 : showLabel ? 100 : 0}
-            title={
+            destination={d}
+            lat={group.lat}
+            lng={group.lng}
+            count={group.items.length}
+            color={color}
+            type={type}
+            active={active}
+            showLabel={showLabel}
+            onActivate={() =>
               cluster
-                ? t('Explorar {0} destinos cercanos', { 0: group.items.length })
-                : `${name} · ${type.displayLabel || t(type.label)}`
+                ? zoomTo(
+                    group.items,
+                    t('Explorando {0} destinos cercanos', { 0: group.items.length }),
+                  )
+                : onSelect(d.id)
             }
-            icon={divIcon({
-              className: `atlas-photo-marker ${active ? 'is-selected' : ''} ${showLabel ? 'has-label' : ''} ${cluster ? 'is-cluster' : ''}`,
-              html: `<span class="atlas-photo-pin" style="--marker-color:${color}"><span class="atlas-photo-pin__image">${photo ? `<img src="${escapeText(photo)}" alt="" loading="lazy" draggable="false"/>` : '<span aria-hidden="true">↗</span>'}</span>${cluster ? `<b class="atlas-photo-pin__count">${group.items.length}</b>` : ''}${showLabel ? `<span class="atlas-photo-pin__label"><strong>${escapeText(name)}</strong>${active ? `<small>${escapeText(type.displayLabel || t(type.label))}</small>` : ''}</span>` : ''}</span>`,
-              iconSize: showLabel ? [200, 52] : [52, 52],
-              iconAnchor: [26, 52],
-            })}
-            eventHandlers={{
-              click: () =>
-                cluster
-                  ? zoomTo(
-                      group.items,
-                      t('Explorando {0} destinos cercanos', { 0: group.items.length }),
-                    )
-                  : onSelect(d.id),
-            }}
-          >
-            <Tooltip direction="top" offset={[0, -48]}>
-              {cluster ? (
-                t('Explorar {0} destinos cercanos', { 0: group.items.length })
-              ) : (
-                <>
-                  <type.Icon size={16} aria-hidden="true" /> {name} ·{' '}
-                  {type.displayLabel || t(type.label)}
-                </>
-              )}
-            </Tooltip>
-          </Marker>
+          />
         );
       })}
     </>
   );
-}
+});
+
+// Keep the DivIcon object stable across zoom/layout and unrelated React updates.
+// Leaflet setIcon replaces innerHTML (and therefore the image) whenever that object changes.
+const AtlasPhotoMarker = memo(function AtlasPhotoMarker({
+  destination,
+  lat,
+  lng,
+  count,
+  color,
+  type,
+  active,
+  showLabel,
+  onActivate,
+}: {
+  destination: Destino;
+  lat: number;
+  lng: number;
+  count: number;
+  color: string;
+  type: ReturnType<typeof tourismDefinition>;
+  active: boolean;
+  showLabel: boolean;
+  onActivate: () => void;
+}) {
+  const cluster = count > 1,
+    name = destination.nombre.trim(),
+    typeLabel = type.displayLabel || t(type.label),
+    photo = responsiveImageUrl(imageUrl(destination.imagen), 96);
+  const icon = useMemo(
+    () =>
+      divIcon({
+        className: `atlas-photo-marker ${active ? 'is-selected' : ''} ${showLabel ? 'has-label' : ''} ${cluster ? 'is-cluster' : ''}`,
+        html: `<span class="atlas-photo-pin" style="--marker-color:${color}"><span class="atlas-photo-pin__image">${photo ? `<img src="${escapeText(photo)}" alt="" width="42" height="42" decoding="async" draggable="false"/>` : '<span aria-hidden="true">↗</span>'}</span>${cluster ? `<b class="atlas-photo-pin__count">${count}</b>` : ''}${showLabel ? `<span class="atlas-photo-pin__label"><strong>${escapeText(name)}</strong>${active ? `<small>${escapeText(typeLabel)}</small>` : ''}</span>` : ''}</span>`,
+        iconSize: showLabel ? [200, 52] : [52, 52],
+        iconAnchor: [26, 52],
+      }),
+    [active, showLabel, cluster, color, photo, count, name, typeLabel],
+  );
+  const position = useMemo(() => [lat, lng] as [number, number], [lat, lng]);
+  const events = useMemo(() => ({ click: onActivate }), [onActivate]);
+  const title = cluster
+    ? t('Explorar {0} destinos cercanos', { 0: count })
+    : `${name} · ${typeLabel}`;
+  return (
+    <Marker
+      position={position}
+      title={title}
+      icon={icon}
+      zIndexOffset={active ? 1000 : showLabel ? 100 : 0}
+      eventHandlers={events}
+    >
+      <Tooltip direction="top" offset={[0, -48]}>
+        {cluster ? (
+          title
+        ) : (
+          <>
+            <type.Icon size={16} aria-hidden="true" /> {name} · {typeLabel}
+          </>
+        )}
+      </Tooltip>
+    </Marker>
+  );
+});

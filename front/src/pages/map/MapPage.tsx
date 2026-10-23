@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
+import { MapContainer, ZoomControl } from 'react-leaflet';
 import {
   ArrowLeft,
   List,
@@ -29,6 +29,7 @@ import { imageUrl, plain, queryString } from '../../utils';
 import type { Destino, FilterOptions, SearchFilters } from '../../types';
 import { MapDestinationDetails } from './MapDestinationDetails';
 import { AtlasMapPoints, AtlasViewport } from './AtlasMapLayers';
+import { AtlasCartography } from './AtlasCartography';
 
 const filterKeys = [
   'q',
@@ -70,9 +71,6 @@ export default function MapPage() {
     [error, setError] = useState(''),
     [retry, setRetry] = useState(0),
     [fitVersion, setFitVersion] = useState(0),
-    [tilesReady, setTilesReady] = useState(false),
-    [tileVersion, setTileVersion] = useState(0),
-    [tilesFailed, setTilesFailed] = useState(false),
     [message, setMessage] = useState(''),
     [motionSource, setMotionSource] = useState<'pointer' | 'keyboard'>('keyboard');
   const viewRef = useRef<HTMLButtonElement>(null);
@@ -122,17 +120,20 @@ export default function MapPage() {
     });
     setFiltersOpen(false);
   }
-  function select(id: string, source: 'pointer' | 'keyboard' = 'pointer') {
-    setMotionSource(source);
-    setParams((p) => {
-      const n = new URLSearchParams(p);
-      n.set('destino', id);
-      n.delete('vista');
-      return n;
-    });
-    const d = destinations.find((d) => d.id === id);
-    if (d) setMessage(t('Destino seleccionado: {0}', { 0: d.nombre.trim() }));
-  }
+  const select = useCallback(
+    function select(id: string, source: 'pointer' | 'keyboard' = 'pointer') {
+      setMotionSource(source);
+      setParams((p) => {
+        const n = new URLSearchParams(p);
+        n.set('destino', id);
+        n.delete('vista');
+        return n;
+      });
+      const d = destinations.find((d) => d.id === id);
+      if (d) setMessage(t('Destino seleccionado: {0}', { 0: d.nombre.trim() }));
+    },
+    [destinations, setParams],
+  );
   function close() {
     setParams((p) => {
       const n = new URLSearchParams(p);
@@ -270,20 +271,7 @@ export default function MapPage() {
                 zoomControl={false}
                 className="atlas-map__leaflet"
               >
-                <TileLayer
-                  key={tileVersion}
-                  url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                  maxZoom={19}
-                  eventHandlers={{
-                    loading: () => {
-                      setTilesReady(false);
-                      setTilesFailed(false);
-                    },
-                    load: () => setTilesReady(true),
-                    tileerror: () => setTilesFailed(true),
-                  }}
-                />
+                <AtlasCartography mobile={isMobile} onList={() => changeView(true)} />
                 <ZoomControl position="topleft" />
                 <AtlasViewport
                   destinations={destinations}
@@ -294,33 +282,11 @@ export default function MapPage() {
                 <AtlasMapPoints
                   destinations={destinations}
                   selectedId={selected}
-                  onSelect={(id) => select(id)}
+                  onSelect={select}
                   onNotice={setMessage}
                 />
               </MapContainer>
             </ExternalMapGate>
-            {maps && !tilesReady && !tilesFailed && (
-              <p className="atlas-map__map-state" role="status">
-                {t('Cargando cartografía')}
-              </p>
-            )}
-            {maps && tilesFailed && !tilesReady && (
-              <p className="atlas-map__map-state" role="alert">
-                {t('No se pudo cargar la cartografía')}{' '}
-                <button
-                  onClick={() => {
-                    if (isMobile) changeView(true);
-                    else {
-                      setTilesFailed(false);
-                      setTilesReady(false);
-                      setTileVersion((n) => n + 1);
-                    }
-                  }}
-                >
-                  {t(isMobile ? 'Lista' : 'Reintentar')}
-                </button>
-              </p>
-            )}
             <button
               type="button"
               className="button atlas-map__fit"

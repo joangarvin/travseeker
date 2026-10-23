@@ -46,23 +46,42 @@ export function clusterMapDestinations(
     x: number;
     y: number;
   }[] = [];
+  const cells = new Map<string, number[]>();
   for (const single of groupMapDestinations(destinations, COUNTRY_ZOOM_MAX + 1)) {
     const d = single.items[0],
-      position = project(single.lat, single.lng);
-    const group =
-      radius > 0 && d.id !== selectedId
-        ? groups.find(
-            (g) =>
-              g.items[0].id !== selectedId &&
-              mapCountryCode(g.items[0]) === mapCountryCode(d) &&
-              Math.hypot(g.x - position.x, g.y - position.y) < radius,
-          )
-        : undefined;
-    if (group) {
+      position = project(single.lat, single.lng),
+      country = mapCountryCode(d);
+    const cellX = radius > 0 ? Math.floor(position.x / radius) : 0,
+      cellY = radius > 0 ? Math.floor(position.y / radius) : 0;
+    let target = -1;
+    if (radius > 0 && d.id !== selectedId) {
+      for (let dx = -1; dx <= 1; dx++)
+        for (let dy = -1; dy <= 1; dy++) {
+          for (const index of cells.get(`${country}:${cellX + dx}:${cellY + dy}`) || []) {
+            const g = groups[index];
+            if (
+              (target < 0 || index < target) &&
+              Math.hypot(g.x - position.x, g.y - position.y) < radius
+            )
+              target = index;
+          }
+        }
+    }
+    if (target >= 0) {
+      const group = groups[target],
+        count = group.items.length;
+      group.lat = (group.lat * count + single.lat) / (count + 1);
+      group.lng = (group.lng * count + single.lng) / (count + 1);
       group.items.push(d);
-      group.lat = group.items.reduce((n, item) => n + item.latitud!, 0) / group.items.length;
-      group.lng = group.items.reduce((n, item) => n + item.longitud!, 0) / group.items.length;
-    } else groups.push({ ...single, ...position });
+    } else {
+      const index = groups.push({ ...single, ...position }) - 1;
+      if (radius > 0 && d.id !== selectedId) {
+        const key = `${country}:${cellX}:${cellY}`;
+        const bucket = cells.get(key) || [];
+        bucket.push(index);
+        cells.set(key, bucket);
+      }
+    }
   }
   return groups;
 }

@@ -23,3 +23,13 @@ Los destinos usan fotografías con aro del tipo principal y rótulos progresivos
 En escritorio se muestra solo el mapa, incluso al abrir una URL de lista. El selector Mapa/Lista permanece en móvil y sin recrear el mapa al redimensionar. Las animaciones respetan movimiento reducido.
 
 Validación: API real del puerto 3001 con 77 resultados ES; tests de agrupación, metadatos incompletos y marcadores próximos; lint y build. La revisión visual de esta iteración no se ha completado: la herramienta de navegador no pudo iniciar su runtime. Las capturas de la iteración anterior no acreditan estos cambios.
+
+## Corrección de miniaturas y rendimiento al navegar
+
+Las imágenes de los pines tenían menos especificidad que `.leaflet-container .leaflet-marker-pane img` de Leaflet, que establece `width:auto`. Se limita la corrección a las miniaturas propias (posición absoluta, tamaño al 100%, límites explícitos) para no afectar las teselas.
+
+Los eventos de cartografía se gestionan en AtlasCartography; ya no actualizan MapPage por cada carga durante el movimiento. AtlasMapPoints está memoizado con callback de selección estable. Cada pin memoriza su DivIcon y posición: las actualizaciones ajenas al contenido no ejecutan setIcon ni sustituyen su imagen. Las miniaturas tienen dimensiones y decodificación asíncrona, conservando el tamaño Cloudinary de 96 px. Las sombras usan box-shadow en lugar de filtros de composición sobre las fotografías.
+
+La capa solicita teselas al terminar el arrastre y no para escalas intermedias del zoom. La agrupación usa celdas espaciales vecinas y medias incrementales en lugar de comparar con todos los grupos y recalcular sumas completas. Un ensayo de 10.000 destinos verifica integridad, separación por país y selección individual; no constituye una medición de FPS del mapa.
+
+Tests, lint y build comprobados. Revisión visual pendiente por fallo de arranque de la herramienta de navegador; no hay capturas nuevas de esta corrección.

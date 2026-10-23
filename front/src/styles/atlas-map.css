@@ -689,7 +689,6 @@
 }
 /* Country silhouettes and photographic destination pins. Leaflet owns marker transforms. */
 .atlas-country-outline {
-  filter: drop-shadow(0 3px 4px #3047f228);
   transition:
     fill-opacity 180ms cubic-bezier(0.23, 1, 0.32, 1),
     stroke-width 180ms cubic-bezier(0.23, 1, 0.32, 1);
@@ -763,8 +762,8 @@
   background: var(--surface);
   color: var(--ink);
   border-radius: 28px;
-  filter: drop-shadow(0 3px 5px #11121735);
-  transition: filter 180ms cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 3px 8px #11121735;
+  transition: box-shadow 180ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .atlas-photo-pin__image {
   display: grid;
@@ -781,7 +780,12 @@
   color: white;
   box-shadow: inset 0 0 0 2px white;
 }
-.atlas-photo-pin__image img {
+.atlas-map__leaflet .leaflet-marker-pane .atlas-photo-pin__image > img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  max-width: 100% !important;
+  max-height: 100% !important;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -856,7 +860,7 @@
 }
 @media (hover: hover) and (pointer: fine) {
   .atlas-photo-marker:hover .atlas-photo-pin {
-    filter: drop-shadow(0 5px 9px #11121760);
+    box-shadow: 0 5px 12px #11121745;
   }
   .atlas-country-marker:hover .atlas-country-card {
     box-shadow:

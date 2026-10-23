@@ -59,3 +59,23 @@ test('nearby photo pins cluster by country, keep selection separate and split wh
   assert.equal(selected.find((g) => g.items[0].id === 'es-1').items.length, 1);
   assert.equal(clusterMapDestinations(items, project, 0, null).length, 4);
 });
+
+test('spatial clustering preserves every destination across cell boundaries at catalogue scale', () => {
+  const items = Array.from({ length: 10000 }, (_, i) => ({
+    id: String(i),
+    countryCode: i % 2 ? 'ES' : 'PT',
+    latitud: 35 + (i % 100) * 0.05,
+    longitud: -10 + Math.floor(i / 100) * 0.05,
+  }));
+  const groups = clusterMapDestinations(
+    items,
+    (lat, lng) => ({ x: lng * 100, y: lat * 100 }),
+    52,
+    '5000',
+  );
+  const ids = groups.flatMap((g) => g.items.map((d) => d.id));
+  assert.equal(ids.length, items.length);
+  assert.equal(new Set(ids).size, items.length);
+  assert.ok(groups.every((g) => g.items.every((d) => d.countryCode === g.items[0].countryCode)));
+  assert.equal(groups.find((g) => g.items[0].id === '5000').items.length, 1);
+});
