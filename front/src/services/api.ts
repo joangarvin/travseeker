@@ -1,5 +1,6 @@
 import { createRequestCache, isPublicDataPath, withAbort } from './publicRequestCache';
 import { t } from '../i18n';
+import { withReadRetry } from './readRetry';
 import { locale, serverMessage } from '../i18n';
 // Production uses the Vercel proxy so session cookies belong to the website.
 // Calling Render directly makes them third-party cookies, which Safari blocks.
@@ -40,30 +41,43 @@ export async function api<T>(
   const method = (options.method || 'GET').toUpperCase();
   const cacheable =
     method === 'GET' && isPublicDataPath(path) && !options.cache && !options.headers;
-  const request = async () => {
-    const response = await fetch(`${API_BASE_URL}${path}`, {
-      ...options,
-      headers,
-      credentials: 'include',
-      signal: cacheable ? undefined : options.signal,
-      cache: cacheable && Date.now() < bypassBrowserCacheUntil ? 'no-store' : options.cache,
-    });
-    const data = await response.json().catch(() => ({}));
+  const request = () =>
+    withReadRetry(
+      async () => {
+        const response = await fetch(`${API_BASE_URL}${path}`, {
+          ...options,
+          headers,
+          credentials: 'include',
+          signal: cacheable ? undefined : options.signal,
+          cache: cacheable && Date.now() < bypassBrowserCacheUntil ? 'no-store' : options.cache,
+        });
+        // Reading the body can itself fail on a reset connection; keep it inside
+        // the read retry and never turn a truncated response into a successful {}.
+        const body = await response.text();
+        let data;
+        try {
+          data = body ? JSON.parse(body) : {};
+        } catch {
+          throw new ApiError(t('Respuesta no válida del servidor'), response.status);
+        }
 
-    if (!response.ok) {
-      throw new ApiError(
-        serverMessage(data.error || t('No se pudo completar la operación')),
-        response.status,
-      );
-    }
+        if (!response.ok) {
+          throw new ApiError(
+            serverMessage(data?.error || t('No se pudo completar la operación')),
+            response.status,
+          );
+        }
 
-    if (!['GET', 'HEAD', 'OPTIONS'].includes(method)) {
-      publicRequests.clear();
-      // Invalidate the browser's short HTTP cache too after an edit.
-      bypassBrowserCacheUntil = Date.now() + 60_000;
-    }
-    return data as T;
-  };
+        if (!['GET', 'HEAD', 'OPTIONS'].includes(method)) {
+          publicRequests.clear();
+          // Invalidate the browser's short HTTP cache too after an edit.
+          bypassBrowserCacheUntil = Date.now() + 60_000;
+        }
+        return data as T;
+      },
+      method,
+      cacheable ? undefined : options.signal,
+    );
   if (!cacheable) return request();
   const [pathname, query = ''] = path.split('?');
   const params = new URLSearchParams(query);

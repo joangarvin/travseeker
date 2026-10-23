@@ -445,6 +445,8 @@ test(
             where: { code: "ZZ" },
             data: { preparationComplete: false, showOnWebsite: true },
           });
+          // SQL fixtures bypass the HTTP invalidation middleware.
+          publicCache.clear();
           assert.deepEqual(await countries.page("ZZ"), {
             code: "ZZ",
             name: "Test country",
@@ -471,6 +473,7 @@ test(
             where: { code: "ZZ" },
             data: { showOnWebsite: false },
           });
+          publicCache.clear();
           await assert.rejects(countries.page("ZZ"), (e) => e.status === 404);
         },
       );
@@ -515,6 +518,63 @@ test(
             403,
           );
           await prisma.user.delete({ where: { id: viewer.id } });
+          const admin = await prisma.user.create({
+            data: {
+              email: `publication-cache-admin-${Date.now()}@example.test`,
+              passwordHash: "test-only",
+              role: "admin",
+            },
+          });
+          const adminToken = require("../src/utils/jwt").signToken(admin.id);
+          const headers = {
+            Authorization: `Bearer ${adminToken}`,
+            "Content-Type": "application/json",
+          };
+          try {
+            // Exercise real successful writes, not a manually cleared test cache.
+            const expose = await fetch(
+              `${baseUrl}/api/admin/publication/countries/ZZ`,
+              {
+                method: "PATCH",
+                headers,
+                body: JSON.stringify({
+                  preparationComplete: false,
+                  showOnWebsite: true,
+                }),
+              },
+            );
+            assert.equal(expose.status, 200);
+            await expose.json();
+            const warm = await fetch(`${baseUrl}/api/paises/ZZ`);
+            assert.equal(warm.status, 200);
+            assert.equal((await warm.json()).status, "upcoming");
+            assert.ok(
+              (await (await fetch(`${baseUrl}/api/paises`)).json()).some(
+                (c) => c.code === "ZZ",
+              ),
+            );
+            const hide = await fetch(
+              `${baseUrl}/api/admin/publication/countries/ZZ`,
+              {
+                method: "PATCH",
+                headers,
+                body: JSON.stringify({
+                  preparationComplete: false,
+                  showOnWebsite: false,
+                }),
+              },
+            );
+            assert.equal(hide.status, 200);
+            await hide.json();
+            assert.equal((await fetch(`${baseUrl}/api/paises/ZZ`)).status, 404);
+            assert.ok(
+              !(await (await fetch(`${baseUrl}/api/paises`)).json()).some(
+                (c) => c.code === "ZZ",
+              ),
+            );
+          } finally {
+            await prisma.user.delete({ where: { id: admin.id } });
+          }
         },
       );
     } finally {

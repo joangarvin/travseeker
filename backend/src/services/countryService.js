@@ -1,6 +1,7 @@
 const { prisma } = require("../config/database");
 const { publicGeography, publicGlobal } = require("../domain/publication");
 const destinations = require("./destinoService");
+const { cachedPublic } = require("../cache/publicData");
 const { profiles } = require("../domain/countryInfo");
 function normalizeQuery(query = {}) {
   return {
@@ -17,7 +18,7 @@ function countryName(c, locale) {
 }
 const visible = (code) =>
   publicGeography({ countryCode: code, editorialStatus: "published" });
-async function list(locale = "es") {
+const loadList = cachedPublic("countryList", async function (locale) {
   const rows = await prisma.country.findMany({
     where: { showOnWebsite: true },
     orderBy: { name: "asc" },
@@ -55,77 +56,107 @@ async function list(locale = "es") {
           ]
         : [],
   );
+});
+const loadPage = cachedPublic(
+  "countryPage",
+  async function (rawCode, query, locale) {
+    const code = String(rawCode).toUpperCase();
+    if (!/^[A-Z]{2}$/.test(code))
+      throw Object.assign(new Error("País no encontrado"), { status: 404 });
+    const c = await prisma.country.findFirst({
+      where: { code, showOnWebsite: true },
+      select: { code: true, name: true, preparationComplete: true },
+    });
+    if (!c)
+      throw Object.assign(new Error("País no encontrado"), { status: 404 });
+    const basic = {
+      code: c.code,
+      name: countryName(c, locale),
+      status: c.preparationComplete ? "public" : "upcoming",
+    };
+    if (!c.preparationComplete) return basic;
+    const { q, region, type, offset } = normalizeQuery(query);
+    const scope = visible(code);
+    const [catalog, filterOptions, regions, types, cover, destinationCount] =
+      await Promise.all([
+        destinations.searchDestinosPage(
+          {
+            ...query,
+            q,
+            tipoTurismo: query.tipoTurismo || type,
+            lang: locale,
+            limit: "24",
+            offset: String(offset),
+          },
+          { countryCode: code, ...(region ? { region } : {}) },
+        ),
+        destinations.getFilterOptions(locale, { countryCode: code }),
+        prisma.destino.groupBy({
+          by: ["region"],
+          where: { ...scope, region: { not: "" } },
+          orderBy: { region: "asc" },
+        }),
+        prisma.tourismType.findMany({
+          where: {
+            ...publicGlobal({ isActive: true, editorialStatus: "published" }),
+            destinationLinks: { some: { destino: scope } },
+          },
+          select: { name: true, translations: true },
+          orderBy: { sortOrder: "asc" },
+        }),
+        prisma.destino.findFirst({
+          where: { ...scope, imagen: { not: "" } },
+          select: { imagen: true, nombre: true },
+          orderBy: { nombre: "asc" },
+        }),
+        prisma.destino.count({ where: scope }),
+      ]);
+    const profile = profiles[code];
+    return {
+      ...basic,
+      description: profile
+        ? locale === "en"
+          ? profile.description
+          : profile.es
+        : "",
+      currency: profile?.currency[locale === "en" ? 1 : 0] || "",
+      languages: profile?.languages[locale === "en" ? 1 : 0] || "",
+      bbox: profile?.bbox || null,
+      image: cover?.imagen || "",
+      imageAlt: cover?.nombre || basic.name,
+      destinationCount,
+      regions: regions.map((r) => r.region),
+      types: types.map((t) => ({ ...t, value: t.name })),
+      filterOptions,
+      ...catalog,
+      offset,
+    };
+  },
+);
+function list(locale = "es") {
+  return loadList(locale === "en" ? "en" : "es");
 }
-async function page(rawCode, query = {}, locale = "es") {
-  const code = String(rawCode).toUpperCase();
-  if (!/^[A-Z]{2}$/.test(code))
-    throw Object.assign(new Error("País no encontrado"), { status: 404 });
-  const c = await prisma.country.findFirst({
-    where: { code, showOnWebsite: true },
-    select: { code: true, name: true, preparationComplete: true },
-  });
-  if (!c) throw Object.assign(new Error("País no encontrado"), { status: 404 });
-  const basic = {
-    code: c.code,
-    name: countryName(c, locale),
-    status: c.preparationComplete ? "public" : "upcoming",
+function page(rawCode, query = {}, locale = "es") {
+  // Canonical keys avoid one cache entry per tracking/ignored query parameter.
+  const normalized = normalizeQuery(query);
+  const filters = {
+    ...normalized,
+    type: "",
+    tipoTurismo: String(query.tipoTurismo || normalized.type),
   };
-  if (!c.preparationComplete) return basic;
-  const { q, region, type, offset } = normalizeQuery(query);
-  const scope = visible(code);
-  const [catalog, filterOptions, regions, types, cover, destinationCount] =
-    await Promise.all([
-      destinations.searchDestinosPage(
-        {
-          ...query,
-          q,
-          tipoTurismo: query.tipoTurismo || type,
-          lang: locale,
-          limit: "24",
-          offset: String(offset),
-        },
-        { countryCode: code, ...(region ? { region } : {}) },
-      ),
-      destinations.getFilterOptions(locale, { countryCode: code }),
-      prisma.destino.groupBy({
-        by: ["region"],
-        where: { ...scope, region: { not: "" } },
-        orderBy: { region: "asc" },
-      }),
-      prisma.tourismType.findMany({
-        where: {
-          ...publicGlobal({ isActive: true, editorialStatus: "published" }),
-          destinationLinks: { some: { destino: scope } },
-        },
-        select: { name: true, translations: true },
-        orderBy: { sortOrder: "asc" },
-      }),
-      prisma.destino.findFirst({
-        where: { ...scope, imagen: { not: "" } },
-        select: { imagen: true, nombre: true },
-        orderBy: { nombre: "asc" },
-      }),
-      prisma.destino.count({ where: scope }),
-    ]);
-  const profile = profiles[code];
-  return {
-    ...basic,
-    description: profile
-      ? locale === "en"
-        ? profile.description
-        : profile.es
-      : "",
-    currency: profile?.currency[locale === "en" ? 1 : 0] || "",
-    languages: profile?.languages[locale === "en" ? 1 : 0] || "",
-    bbox: profile?.bbox || null,
-    image: cover?.imagen || "",
-    imageAlt: cover?.nombre || basic.name,
-    destinationCount,
-    regions: regions.map((r) => r.region),
-    types: types.map((t) => ({ ...t, value: t.name })),
-    filterOptions,
-    ...catalog,
-    offset,
-  };
+  for (const key of [
+    "presupuesto",
+    "masificacion",
+    "ubicacion",
+    "actividades",
+    "month",
+    "avoidCrowds",
+  ])
+    if (query[key]) filters[key] = String(query[key]);
+  return loadPage(
+    String(rawCode).trim().toUpperCase(),
+    filters,
+    locale === "en" ? "en" : "es",
+  );
 }
 module.exports = { list, page, normalizeQuery };

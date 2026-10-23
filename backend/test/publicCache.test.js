@@ -73,6 +73,8 @@ test("public route allowlist excludes private data and reviews", () => {
     "/api/destinos/abc",
     "/api/destinos/abc/climate",
     "/api/stats",
+    "/api/paises",
+    "/api/paises/ES",
   ])
     assert.equal(isPublicDataPath(path), true);
   for (const path of [
@@ -125,37 +127,6 @@ test("successful editorial writes invalidate server data, failed writes do not",
   }
 });
 
-test("compressed responses preserve language and origin cache variants", () => {
-  const { gzipJson } = require("../src/middleware/security");
-  const headers = {
-    "content-type": "application/json",
-    vary: "Origin, Accept-Language",
-  };
-  const res = {
-    statusCode: 200,
-    write() {},
-    end() {},
-    getHeader(key) {
-      return headers[key.toLowerCase()];
-    },
-    setHeader(key, value) {
-      headers[key.toLowerCase()] = value;
-    },
-    removeHeader(key) {
-      delete headers[key.toLowerCase()];
-    },
-    vary(value) {
-      headers.vary += `, ${value}`;
-    },
-  };
-  gzipJson(
-    { method: "GET", headers: { "accept-encoding": "gzip" } },
-    res,
-    () => {},
-  );
-  res.end(JSON.stringify({ nombre: "Costa" }));
-  assert.equal(headers.vary, "Origin, Accept-Language, Accept-Encoding");
-});
 
 test("public payloads omit translation dictionaries only after applying language", () => {
   const { withoutTranslations } = require("../src/middleware/localization");

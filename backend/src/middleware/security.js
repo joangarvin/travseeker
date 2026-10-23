@@ -1,4 +1,5 @@
-const zlib = require("node:zlib");
+const { compressedJson } = require("../cache/compressedJson");
+const { isPublicDataPath } = require("./publicCache");
 const { env } = require("../config/env");
 
 function securityHeaders(_req, res, next) {
@@ -59,46 +60,45 @@ function csrfProtection(req, res, next) {
 }
 
 function gzipJson(req, res, next) {
-  const acceptsGzip = String(req.headers["accept-encoding"] || "").includes(
-    "gzip",
-  );
-  if (!acceptsGzip || req.method === "HEAD") return next();
-
-  const originalWrite = res.write.bind(res);
-  const originalEnd = res.end.bind(res);
-  const chunks = [];
-
-  res.write = (chunk, encoding, callback) => {
-    if (chunk)
-      chunks.push(
-        Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk, encoding),
-      );
-    if (typeof callback === "function") callback();
-    return true;
-  };
-  res.end = (chunk, encoding, callback) => {
-    if (chunk)
-      chunks.push(
-        Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk, encoding),
-      );
-    const body = Buffer.concat(chunks);
+  // Intercept the serialized response, not the global write/end stream contract.
+  const send = res.send.bind(res);
+  res.send = (value) => {
     const contentType = String(res.getHeader("Content-Type") || "");
     if (
-      !body.length ||
-      res.statusCode === 204 ||
       !contentType.includes("application/json") ||
-      res.getHeader("Content-Encoding")
-    ) {
-      return originalEnd(body.length ? body : chunk, undefined, callback);
-    }
-    const compressed = zlib.gzipSync(body);
-    res.setHeader("Content-Encoding", "gzip");
+      res.headersSent ||
+      req.method === "HEAD" ||
+      [204, 304].includes(res.statusCode) ||
+      res.getHeader("Content-Encoding") ||
+      !(typeof value === "string" || Buffer.isBuffer(value))
+    )
+      return send(value);
     res.vary("Accept-Encoding");
-    res.removeHeader("Content-Length");
-    res.setHeader("Content-Length", compressed.length);
-    return originalEnd(compressed, undefined, callback);
+    const body = Buffer.isBuffer(value) ? value : Buffer.from(value);
+    if (
+      body.length < 1024 ||
+      !req.headers["accept-encoding"] ||
+      req.acceptsEncodings("gzip", "identity") !== "gzip"
+    )
+      return send(value);
+    // Small JSON stays uncompressed. Large responses use the worker pool with
+    // low-cost compression rather than blocking Node's event loop per visitor.
+    compressedJson
+      .read(body, res.statusCode === 200 && isPublicDataPath(req.path))
+      .then(
+        (compressed) => {
+          if (res.destroyed || res.writableEnded) return;
+          res.setHeader("Content-Encoding", "gzip");
+          res.removeHeader("Content-Length");
+          send(compressed);
+        },
+        () => {
+          if (!res.destroyed && !res.writableEnded) send(value);
+        },
+      );
+    return res;
   };
-  return next();
+  next();
 }
 
 const authWriteRateLimit = createRateLimiter({
