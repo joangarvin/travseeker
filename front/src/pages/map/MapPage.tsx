@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import {
@@ -42,6 +42,12 @@ const filterKeys = [
   'actividades',
   'avoidCrowds',
 ];
+const mobileViewport = () => matchMedia('(max-width: 760px)').matches;
+const subscribeViewport = (notify: () => void) => {
+  const query = matchMedia('(max-width: 760px)');
+  query.addEventListener('change', notify);
+  return () => query.removeEventListener('change', notify);
+};
 export default function MapPage() {
   const [params, setParams] = useSearchParams(),
     { maps } = useConsent(),
@@ -51,9 +57,10 @@ export default function MapPage() {
     () => Object.fromEntries([...params].filter(([k]) => filterKeys.includes(k))) as SearchFilters,
     [params],
   );
+  const isMobile = useSyncExternalStore(subscribeViewport, mobileViewport);
   const filterKey = queryString(filters),
     selected = params.get('destino'),
-    listOpen = params.get('vista') === 'lista';
+    listOpen = isMobile && params.get('vista') === 'lista';
   const [destinations, setDestinations] = useState<Destino[]>([]),
     [options, setOptions] = useState<FilterOptions>({ locations: [], activities: [] }),
     [query, setQuery] = useState(filters.q || ''),
@@ -64,6 +71,7 @@ export default function MapPage() {
     [retry, setRetry] = useState(0),
     [fitVersion, setFitVersion] = useState(0),
     [tilesReady, setTilesReady] = useState(false),
+    [tileVersion, setTileVersion] = useState(0),
     [tilesFailed, setTilesFailed] = useState(false),
     [message, setMessage] = useState(''),
     [motionSource, setMotionSource] = useState<'pointer' | 'keyboard'>('keyboard');
@@ -131,7 +139,9 @@ export default function MapPage() {
       n.delete('destino');
       return n;
     });
-    viewRef.current?.focus({ preventScroll: true });
+    (
+      viewRef.current || document.querySelector<HTMLButtonElement>('.atlas-map__filter-trigger')
+    )?.focus({ preventScroll: true });
     setMessage(t('Detalle cerrado. Puedes elegir otro destino.'));
   }
   return (
@@ -200,21 +210,23 @@ export default function MapPage() {
             <p role="status">
               {loading ? t('Buscando…') : t('{0} destinos', { 0: destinations.length })}
             </p>
-            <div className="atlas-map__view-switch" role="group" aria-label={t('Vista del mapa')}>
-              <button
-                ref={viewRef}
-                type="button"
-                aria-pressed={!listOpen}
-                onClick={() => changeView(false)}
-              >
-                <MapIcon aria-hidden="true" />
-                {t('Mapa')}
-              </button>
-              <button type="button" aria-pressed={listOpen} onClick={() => changeView(true)}>
-                <List aria-hidden="true" />
-                {t('Lista')}
-              </button>
-            </div>
+            {isMobile && (
+              <div className="atlas-map__view-switch" role="group" aria-label={t('Vista del mapa')}>
+                <button
+                  ref={viewRef}
+                  type="button"
+                  aria-pressed={!listOpen}
+                  onClick={() => changeView(false)}
+                >
+                  <MapIcon aria-hidden="true" />
+                  {t('Mapa')}
+                </button>
+                <button type="button" aria-pressed={listOpen} onClick={() => changeView(true)}>
+                  <List aria-hidden="true" />
+                  {t('Lista')}
+                </button>
+              </div>
+            )}
           </div>
           {!!chips.length && (
             <div className="atlas-map__chips" aria-label={t('Filtros aplicados')}>
@@ -259,6 +271,7 @@ export default function MapPage() {
                 className="atlas-map__leaflet"
               >
                 <TileLayer
+                  key={tileVersion}
                   url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                   maxZoom={19}
@@ -294,7 +307,18 @@ export default function MapPage() {
             {maps && tilesFailed && !tilesReady && (
               <p className="atlas-map__map-state" role="alert">
                 {t('No se pudo cargar la cartografía')}{' '}
-                <button onClick={() => changeView(true)}>{t('Lista')}</button>
+                <button
+                  onClick={() => {
+                    if (isMobile) changeView(true);
+                    else {
+                      setTilesFailed(false);
+                      setTilesReady(false);
+                      setTileVersion((n) => n + 1);
+                    }
+                  }}
+                >
+                  {t(isMobile ? 'Lista' : 'Reintentar')}
+                </button>
               </p>
             )}
             <button

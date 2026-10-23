@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { groupMapDestinations } from '../src/pages/map/mapGeography.ts';
+import { groupMapDestinations, clusterMapDestinations } from '../src/pages/map/mapGeography.ts';
 const destinations = [
   { id: 'es-1', countryCode: 'ES', latitud: 40, longitud: -3 },
   { id: 'es-2', countryCode: 'ES', latitud: 42, longitud: -1 },
@@ -22,7 +22,7 @@ test('distant view groups by country and closer view exposes each destination', 
   );
   assert.equal(destinations.length, 3);
 });
-test('invalid positions are excluded and unknown countries are not merged', () => {
+test('invalid positions are excluded and missing metadata never produces a pile of labels', () => {
   const groups = groupMapDestinations(
     [
       { id: 'none', latitud: null, longitud: 0 },
@@ -32,9 +32,30 @@ test('invalid positions are excluded and unknown countries are not merged', () =
     ],
     4,
   );
-  assert.equal(groups.length, 2);
+  assert.equal(groups.length, 1);
   assert.deepEqual(
-    groups.map((g) => g.items[0].id),
+    groups[0].items.map((g) => g.id),
     ['a', 'b'],
   );
+});
+
+test('country relation and mixed case codes resolve to one country', () => {
+  const groups = groupMapDestinations(
+    [
+      { id: 'a', countryCode: ' es ', latitud: 40, longitud: 0 },
+      { id: 'b', country: { code: 'ES', name: 'España' }, latitud: 41, longitud: 0 },
+    ],
+    4,
+  );
+  assert.equal(groups.length, 1);
+  assert.equal(groups[0].key, 'ES');
+  assert.equal(groups[0].items.length, 2);
+});
+test('nearby photo pins cluster by country, keep selection separate and split when zoomed', () => {
+  const items = [...destinations, { id: 'es-3', countryCode: 'ES', latitud: 40.1, longitud: -3 }];
+  const project = (lat, lng) => ({ x: lng * 10, y: lat * 10 });
+  assert.equal(clusterMapDestinations(items, project, 52, null).length, 2);
+  const selected = clusterMapDestinations(items, project, 52, 'es-1');
+  assert.equal(selected.find((g) => g.items[0].id === 'es-1').items.length, 1);
+  assert.equal(clusterMapDestinations(items, project, 0, null).length, 4);
 });

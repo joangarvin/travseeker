@@ -2014,5 +2014,7 @@
   "Comparar destino": "Compare destination",
   "Destino anterior": "Previous destination",
   "Destino siguiente": "Next destination",
-  "No se pudo comprobar el guardado. Vuelve a abrir el destino.": "Saved status could not be checked. Reopen the destination."
+  "No se pudo comprobar el guardado. Vuelve a abrir el destino.": "Saved status could not be checked. Reopen the destination.",
+  "Explorar {0} destinos cercanos": "Explore {0} nearby destinations",
+  "Explorando {0} destinos cercanos": "Exploring {0} nearby destinations"
 }
