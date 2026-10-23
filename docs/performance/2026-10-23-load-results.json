@@ -1,0 +1,1990 @@
+{
+  "date": "2026-10-23",
+  "environment": {
+    "node": "25.8.1",
+    "platform": "macOS arm64",
+    "api": "isolated Express process",
+    "database": "isolated local PostgreSQL",
+    "dbPoolMax": 5,
+    "serverCache": "default enabled; warm across stages",
+    "dataset": {
+      "destinations": 77,
+      "municipalities": 831,
+      "essentials": 2417,
+      "accounts": 0,
+      "privateTrips": 0
+    }
+  },
+  "totalRequests": 118637,
+  "totalJourneys": 7831,
+  "scenarios": {
+    "baseline": {
+      "started": "2026-10-23T15:24:11.094Z",
+      "description": "Anonymous HTTP journeys; no real browser rendering, writes, external providers or private data",
+      "stages": [
+        {
+          "users": 1,
+          "durationSeconds": 12.26,
+          "completedJourneys": 17,
+          "requests": 257,
+          "errors": 0,
+          "p50ms": 11.7,
+          "p95ms": 24.2,
+          "p99ms": 135.6,
+          "maxms": 295.2,
+          "bytes": 2551456,
+          "requestsPerSecond": 21,
+          "endpoints": {
+            "html": {
+              "requests": 17,
+              "errors": 0,
+              "p50ms": 4.4,
+              "p95ms": 5.8,
+              "p99ms": 5.8,
+              "maxms": 5.8,
+              "bytes": 20723
+            },
+            "asset": {
+              "requests": 2,
+              "errors": 0,
+              "p50ms": 6.9,
+              "p95ms": 10.8,
+              "p99ms": 10.8,
+              "maxms": 10.8,
+              "bytes": 773803
+            },
+            "discover": {
+              "requests": 17,
+              "errors": 0,
+              "p50ms": 10.7,
+              "p95ms": 14.1,
+              "p99ms": 14.1,
+              "maxms": 14.1,
+              "bytes": 441666
+            },
+            "featured": {
+              "requests": 17,
+              "errors": 0,
+              "p50ms": 11.8,
+              "p95ms": 13.6,
+              "p99ms": 13.6,
+              "maxms": 13.6,
+              "bytes": 22711
+            },
+            "stats": {
+              "requests": 17,
+              "errors": 0,
+              "p50ms": 11.7,
+              "p95ms": 13.4,
+              "p99ms": 13.4,
+              "maxms": 13.4,
+              "bytes": 1037
+            },
+            "filters": {
+              "requests": 17,
+              "errors": 0,
+              "p50ms": 12.2,
+              "p95ms": 14.4,
+              "p99ms": 14.4,
+              "maxms": 14.4,
+              "bytes": 6303
+            },
+            "activities": {
+              "requests": 17,
+              "errors": 0,
+              "p50ms": 13.1,
+              "p95ms": 14.5,
+              "p99ms": 14.5,
+              "maxms": 14.5,
+              "bytes": 37247
+            },
+            "types": {
+              "requests": 17,
+              "errors": 0,
+              "p50ms": 13.4,
+              "p95ms": 14.7,
+              "p99ms": 14.7,
+              "maxms": 14.7,
+              "bytes": 16067
+            },
+            "countries": {
+              "requests": 17,
+              "errors": 0,
+              "p50ms": 16.1,
+              "p95ms": 17.2,
+              "p99ms": 17.2,
+              "maxms": 17.2,
+              "bytes": 3652
+            },
+            "map": {
+              "requests": 17,
+              "errors": 0,
+              "p50ms": 12.4,
+              "p95ms": 19,
+              "p99ms": 19,
+              "maxms": 19,
+              "bytes": 137750
+            },
+            "search": {
+              "requests": 17,
+              "errors": 0,
+              "p50ms": 7.6,
+              "p95ms": 295.2,
+              "p99ms": 295.2,
+              "maxms": 295.2,
+              "bytes": 347520
+            },
+            "detail": {
+              "requests": 17,
+              "errors": 0,
+              "p50ms": 19.6,
+              "p95ms": 25.1,
+              "p99ms": 25.1,
+              "maxms": 25.1,
+              "bytes": 145432
+            },
+            "related": {
+              "requests": 17,
+              "errors": 0,
+              "p50ms": 21.1,
+              "p95ms": 27.3,
+              "p99ms": 27.3,
+              "maxms": 27.3,
+              "bytes": 73582
+            },
+            "reviews": {
+              "requests": 17,
+              "errors": 0,
+              "p50ms": 12.3,
+              "p95ms": 20,
+              "p99ms": 20,
+              "maxms": 20,
+              "bytes": 1564
+            },
+            "compare": {
+              "requests": 17,
+              "errors": 0,
+              "p50ms": 4.1,
+              "p95ms": 8,
+              "p99ms": 8,
+              "maxms": 8,
+              "bytes": 70594
+            },
+            "country": {
+              "requests": 17,
+              "errors": 0,
+              "p50ms": 7.2,
+              "p95ms": 13.3,
+              "p99ms": 13.3,
+              "maxms": 13.3,
+              "bytes": 451805
+            }
+          },
+          "failures": []
+        },
+        {
+          "users": 10,
+          "durationSeconds": 12.61,
+          "completedJourneys": 181,
+          "requests": 2735,
+          "errors": 0,
+          "p50ms": 8.2,
+          "p95ms": 34.4,
+          "p99ms": 50.4,
+          "maxms": 76.3,
+          "bytes": 26738147,
+          "requestsPerSecond": 216.9,
+          "endpoints": {
+            "html": {
+              "requests": 181,
+              "errors": 0,
+              "p50ms": 1,
+              "p95ms": 6.4,
+              "p99ms": 49.1,
+              "maxms": 51.3,
+              "bytes": 220639
+            },
+            "asset": {
+              "requests": 20,
+              "errors": 0,
+              "p50ms": 44,
+              "p95ms": 51.1,
+              "p99ms": 51.6,
+              "maxms": 51.6,
+              "bytes": 7738030
+            },
+            "featured": {
+              "requests": 181,
+              "errors": 0,
+              "p50ms": 8.3,
+              "p95ms": 26.8,
+              "p99ms": 41.8,
+              "maxms": 52.8,
+              "bytes": 241583
+            },
+            "stats": {
+              "requests": 181,
+              "errors": 0,
+              "p50ms": 8.6,
+              "p95ms": 26.8,
+              "p99ms": 41.8,
+              "maxms": 52.7,
+              "bytes": 11041
+            },
+            "filters": {
+              "requests": 181,
+              "errors": 0,
+              "p50ms": 9.4,
+              "p95ms": 27,
+              "p99ms": 42,
+              "maxms": 52.7,
+              "bytes": 66779
+            },
+            "activities": {
+              "requests": 181,
+              "errors": 0,
+              "p50ms": 10.7,
+              "p95ms": 28.4,
+              "p99ms": 42.5,
+              "maxms": 53,
+              "bytes": 395311
+            },
+            "types": {
+              "requests": 181,
+              "errors": 0,
+              "p50ms": 11.6,
+              "p95ms": 28.5,
+              "p99ms": 42.5,
+              "maxms": 53.1,
+              "bytes": 171651
+            },
+            "countries": {
+              "requests": 181,
+              "errors": 0,
+              "p50ms": 24.2,
+              "p95ms": 48.9,
+              "p99ms": 55.1,
+              "maxms": 56.5,
+              "bytes": 38916
+            },
+            "discover": {
+              "requests": 181,
+              "errors": 0,
+              "p50ms": 9.2,
+              "p95ms": 27.2,
+              "p99ms": 51.2,
+              "maxms": 52.8,
+              "bytes": 4703358
+            },
+            "map": {
+              "requests": 181,
+              "errors": 0,
+              "p50ms": 10.9,
+              "p95ms": 28.9,
+              "p99ms": 35.7,
+              "maxms": 38.7,
+              "bytes": 1465570
+            },
+            "search": {
+              "requests": 181,
+              "errors": 0,
+              "p50ms": 12.3,
+              "p95ms": 29.6,
+              "p99ms": 48.1,
+              "maxms": 51,
+              "bytes": 3726506
+            },
+            "detail": {
+              "requests": 181,
+              "errors": 0,
+              "p50ms": 4,
+              "p95ms": 26.4,
+              "p99ms": 70.2,
+              "maxms": 76.3,
+              "bytes": 1577125
+            },
+            "related": {
+              "requests": 181,
+              "errors": 0,
+              "p50ms": 4.3,
+              "p95ms": 24.5,
+              "p99ms": 66,
+              "maxms": 67.1,
+              "bytes": 801986
+            },
+            "reviews": {
+              "requests": 181,
+              "errors": 0,
+              "p50ms": 13.6,
+              "p95ms": 41.9,
+              "p99ms": 60.1,
+              "maxms": 62.3,
+              "bytes": 16652
+            },
+            "compare": {
+              "requests": 181,
+              "errors": 0,
+              "p50ms": 1.5,
+              "p95ms": 4.5,
+              "p99ms": 5.6,
+              "maxms": 6.2,
+              "bytes": 751955
+            },
+            "country": {
+              "requests": 181,
+              "errors": 0,
+              "p50ms": 11.2,
+              "p95ms": 27.5,
+              "p99ms": 41.3,
+              "maxms": 41.7,
+              "bytes": 4811045
+            }
+          },
+          "failures": []
+        },
+        {
+          "users": 25,
+          "durationSeconds": 12.53,
+          "completedJourneys": 475,
+          "requests": 7175,
+          "errors": 0,
+          "p50ms": 3.7,
+          "p95ms": 15.8,
+          "p99ms": 58.4,
+          "maxms": 129.8,
+          "bytes": 69116837,
+          "requestsPerSecond": 572.4,
+          "endpoints": {
+            "html": {
+              "requests": 475,
+              "errors": 0,
+              "p50ms": 0.6,
+              "p95ms": 8.8,
+              "p99ms": 23.1,
+              "maxms": 23.3,
+              "bytes": 579025
+            },
+            "asset": {
+              "requests": 50,
+              "errors": 0,
+              "p50ms": 106.5,
+              "p95ms": 125.9,
+              "p99ms": 129.8,
+              "maxms": 129.8,
+              "bytes": 19345075
+            },
+            "featured": {
+              "requests": 475,
+              "errors": 0,
+              "p50ms": 3.6,
+              "p95ms": 12.1,
+              "p99ms": 55.5,
+              "maxms": 62.7,
+              "bytes": 634013
+            },
+            "stats": {
+              "requests": 475,
+              "errors": 0,
+              "p50ms": 3.6,
+              "p95ms": 12.1,
+              "p99ms": 55.5,
+              "maxms": 62.7,
+              "bytes": 28975
+            },
+            "filters": {
+              "requests": 475,
+              "errors": 0,
+              "p50ms": 3.7,
+              "p95ms": 12.1,
+              "p99ms": 55.4,
+              "maxms": 62.7,
+              "bytes": 175285
+            },
+            "types": {
+              "requests": 475,
+              "errors": 0,
+              "p50ms": 4.2,
+              "p95ms": 12.5,
+              "p99ms": 55.7,
+              "maxms": 63.1,
+              "bytes": 450401
+            },
+            "activities": {
+              "requests": 475,
+              "errors": 0,
+              "p50ms": 4,
+              "p95ms": 12.4,
+              "p99ms": 55.6,
+              "maxms": 62.9,
+              "bytes": 1037557
+            },
+            "countries": {
+              "requests": 475,
+              "errors": 0,
+              "p50ms": 7.9,
+              "p95ms": 25.8,
+              "p99ms": 58.4,
+              "maxms": 63.2,
+              "bytes": 102124
+            },
+            "discover": {
+              "requests": 475,
+              "errors": 0,
+              "p50ms": 3.6,
+              "p95ms": 14.4,
+              "p99ms": 51,
+              "maxms": 62.7,
+              "bytes": 12342966
+            },
+            "map": {
+              "requests": 475,
+              "errors": 0,
+              "p50ms": 4.6,
+              "p95ms": 14.9,
+              "p99ms": 30,
+              "maxms": 37.1,
+              "bytes": 3846226
+            },
+            "search": {
+              "requests": 475,
+              "errors": 0,
+              "p50ms": 4,
+              "p95ms": 15.5,
+              "p99ms": 29,
+              "maxms": 38.1,
+              "bytes": 9773496
+            },
+            "detail": {
+              "requests": 475,
+              "errors": 0,
+              "p50ms": 2,
+              "p95ms": 7.1,
+              "p99ms": 21.5,
+              "maxms": 37,
+              "bytes": 4108072
+            },
+            "related": {
+              "requests": 475,
+              "errors": 0,
+              "p50ms": 2.2,
+              "p95ms": 7.7,
+              "p99ms": 15.8,
+              "maxms": 32.6,
+              "bytes": 2091084
+            },
+            "reviews": {
+              "requests": 475,
+              "errors": 0,
+              "p50ms": 4.9,
+              "p95ms": 20.8,
+              "p99ms": 28,
+              "maxms": 33.3,
+              "bytes": 43700
+            },
+            "compare": {
+              "requests": 475,
+              "errors": 0,
+              "p50ms": 0.8,
+              "p95ms": 4.6,
+              "p99ms": 7.9,
+              "maxms": 21.5,
+              "bytes": 1933239
+            },
+            "country": {
+              "requests": 475,
+              "errors": 0,
+              "p50ms": 5.7,
+              "p95ms": 15.7,
+              "p99ms": 23.7,
+              "maxms": 29.4,
+              "bytes": 12625599
+            }
+          },
+          "failures": []
+        },
+        {
+          "users": 50,
+          "durationSeconds": 12.62,
+          "completedJourneys": 900,
+          "requests": 13600,
+          "errors": 114,
+          "p50ms": 5.3,
+          "p95ms": 33.8,
+          "p99ms": 78.1,
+          "maxms": 228.1,
+          "bytes": 133012194,
+          "requestsPerSecond": 1078,
+          "endpoints": {
+            "html": {
+              "requests": 900,
+              "errors": 0,
+              "p50ms": 0.5,
+              "p95ms": 19.6,
+              "p99ms": 27.9,
+              "maxms": 32.4,
+              "bytes": 1097100
+            },
+            "asset": {
+              "requests": 100,
+              "errors": 0,
+              "p50ms": 186.7,
+              "p95ms": 218,
+              "p99ms": 220.1,
+              "maxms": 228.1,
+              "bytes": 38690150
+            },
+            "featured": {
+              "requests": 900,
+              "errors": 14,
+              "p50ms": 4.9,
+              "p95ms": 20.1,
+              "p99ms": 59.9,
+              "maxms": 77.8,
+              "bytes": 1182575
+            },
+            "stats": {
+              "requests": 900,
+              "errors": 16,
+              "p50ms": 5,
+              "p95ms": 20,
+              "p99ms": 54.6,
+              "maxms": 77.3,
+              "bytes": 53924
+            },
+            "filters": {
+              "requests": 900,
+              "errors": 18,
+              "p50ms": 5.3,
+              "p95ms": 19.8,
+              "p99ms": 54.6,
+              "maxms": 77.3,
+              "bytes": 325438
+            },
+            "activities": {
+              "requests": 900,
+              "errors": 19,
+              "p50ms": 5.6,
+              "p95ms": 20.2,
+              "p99ms": 54.8,
+              "maxms": 71.1,
+              "bytes": 1924286
+            },
+            "types": {
+              "requests": 900,
+              "errors": 19,
+              "p50ms": 5.7,
+              "p95ms": 20.5,
+              "p99ms": 55,
+              "maxms": 75.6,
+              "bytes": 835426
+            },
+            "countries": {
+              "requests": 900,
+              "errors": 17,
+              "p50ms": 13.8,
+              "p95ms": 53.7,
+              "p99ms": 81.7,
+              "maxms": 132.6,
+              "bytes": 189848
+            },
+            "discover": {
+              "requests": 900,
+              "errors": 11,
+              "p50ms": 5.1,
+              "p95ms": 21.5,
+              "p99ms": 67.8,
+              "maxms": 78.7,
+              "bytes": 23100915
+            },
+            "map": {
+              "requests": 900,
+              "errors": 0,
+              "p50ms": 6.9,
+              "p95ms": 30.7,
+              "p99ms": 60.4,
+              "maxms": 106.1,
+              "bytes": 7287525
+            },
+            "search": {
+              "requests": 900,
+              "errors": 0,
+              "p50ms": 7.2,
+              "p95ms": 33.5,
+              "p99ms": 59.6,
+              "maxms": 104.7,
+              "bytes": 18511393
+            },
+            "detail": {
+              "requests": 900,
+              "errors": 0,
+              "p50ms": 3.3,
+              "p95ms": 10,
+              "p99ms": 32.5,
+              "maxms": 142.4,
+              "bytes": 8056675
+            },
+            "related": {
+              "requests": 900,
+              "errors": 0,
+              "p50ms": 3.6,
+              "p95ms": 10.9,
+              "p99ms": 32.1,
+              "maxms": 123.1,
+              "bytes": 3963253
+            },
+            "reviews": {
+              "requests": 900,
+              "errors": 0,
+              "p50ms": 11.1,
+              "p95ms": 43.9,
+              "p99ms": 65.6,
+              "maxms": 78.8,
+              "bytes": 82800
+            },
+            "compare": {
+              "requests": 900,
+              "errors": 0,
+              "p50ms": 1.4,
+              "p95ms": 7.4,
+              "p99ms": 15.1,
+              "maxms": 66.5,
+              "bytes": 3788661
+            },
+            "country": {
+              "requests": 900,
+              "errors": 0,
+              "p50ms": 10.1,
+              "p95ms": 34.8,
+              "p99ms": 47.2,
+              "maxms": 60.1,
+              "bytes": 23922225
+            }
+          },
+          "failures": [
+            {
+              "label": "discover",
+              "ms": 20.396042000000307,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "featured",
+              "ms": 20.456665999998222,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "stats",
+              "ms": 20.47820900000079,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "countries",
+              "ms": 20.497416999998677,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "filters",
+              "ms": 20.51204200000211,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "activities",
+              "ms": 20.528041999998095,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "types",
+              "ms": 20.541583999998693,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "discover",
+              "ms": 20.097750000000815,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "featured",
+              "ms": 20.112374999996973,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "stats",
+              "ms": 20.13116599999921,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "countries",
+              "ms": 20.143917000001238,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "filters",
+              "ms": 20.15350000000035,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "activities",
+              "ms": 20.153458000000683,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "types",
+              "ms": 20.132458000000042,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "discover",
+              "ms": 19.602791999997862,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "featured",
+              "ms": 19.596500000006927,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "stats",
+              "ms": 19.61170900000434,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "countries",
+              "ms": 19.61804100000154,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "filters",
+              "ms": 19.621459000001778,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "activities",
+              "ms": 19.624292000000423,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            }
+          ]
+        },
+        {
+          "users": 100,
+          "durationSeconds": 13.07,
+          "completedJourneys": 1002,
+          "requests": 15230,
+          "errors": 361,
+          "p50ms": 49.6,
+          "p95ms": 290.1,
+          "p99ms": 436.2,
+          "maxms": 997.5,
+          "bytes": 181236961,
+          "requestsPerSecond": 1165.6,
+          "endpoints": {
+            "html": {
+              "requests": 1002,
+              "errors": 0,
+              "p50ms": 0.5,
+              "p95ms": 37,
+              "p99ms": 40.3,
+              "maxms": 40.7,
+              "bytes": 1221438
+            },
+            "asset": {
+              "requests": 200,
+              "errors": 0,
+              "p50ms": 365.1,
+              "p95ms": 432.6,
+              "p99ms": 437.6,
+              "maxms": 438.8,
+              "bytes": 77380300
+            },
+            "featured": {
+              "requests": 1002,
+              "errors": 48,
+              "p50ms": 63.7,
+              "p95ms": 180.2,
+              "p99ms": 203.9,
+              "maxms": 250,
+              "bytes": 1273311
+            },
+            "stats": {
+              "requests": 1002,
+              "errors": 51,
+              "p50ms": 65.6,
+              "p95ms": 183.5,
+              "p99ms": 209.7,
+              "maxms": 250.2,
+              "bytes": 58011
+            },
+            "filters": {
+              "requests": 1002,
+              "errors": 55,
+              "p50ms": 67.8,
+              "p95ms": 184.3,
+              "p99ms": 217.1,
+              "maxms": 251.2,
+              "bytes": 349413
+            },
+            "activities": {
+              "requests": 1002,
+              "errors": 57,
+              "p50ms": 69.3,
+              "p95ms": 184.9,
+              "p99ms": 219.9,
+              "maxms": 253.4,
+              "bytes": 2063925
+            },
+            "types": {
+              "requests": 1002,
+              "errors": 57,
+              "p50ms": 71.1,
+              "p95ms": 185.6,
+              "p99ms": 220.2,
+              "maxms": 253.7,
+              "bytes": 896185
+            },
+            "discover": {
+              "requests": 1002,
+              "errors": 42,
+              "p50ms": 63.6,
+              "p95ms": 172.2,
+              "p99ms": 190.7,
+              "maxms": 248.7,
+              "bytes": 24946173
+            },
+            "countries": {
+              "requests": 1002,
+              "errors": 51,
+              "p50ms": 236.2,
+              "p95ms": 342.7,
+              "p99ms": 369.2,
+              "maxms": 393.1,
+              "bytes": 204472
+            },
+            "map": {
+              "requests": 1002,
+              "errors": 0,
+              "p50ms": 60.8,
+              "p95ms": 217.8,
+              "p99ms": 493.3,
+              "maxms": 510.8,
+              "bytes": 8113122
+            },
+            "search": {
+              "requests": 1002,
+              "errors": 0,
+              "p50ms": 74.6,
+              "p95ms": 136.8,
+              "p99ms": 611,
+              "maxms": 795.9,
+              "bytes": 20589026
+            },
+            "detail": {
+              "requests": 1002,
+              "errors": 0,
+              "p50ms": 6.4,
+              "p95ms": 422.7,
+              "p99ms": 535.6,
+              "maxms": 997.5,
+              "bytes": 8834632
+            },
+            "related": {
+              "requests": 1002,
+              "errors": 0,
+              "p50ms": 6.3,
+              "p95ms": 323.7,
+              "p99ms": 519.6,
+              "maxms": 954.8,
+              "bytes": 4406598
+            },
+            "reviews": {
+              "requests": 1002,
+              "errors": 0,
+              "p50ms": 79.6,
+              "p95ms": 337.4,
+              "p99ms": 758,
+              "maxms": 788.6,
+              "bytes": 92184
+            },
+            "compare": {
+              "requests": 1002,
+              "errors": 0,
+              "p50ms": 1.8,
+              "p95ms": 51.3,
+              "p99ms": 348.2,
+              "maxms": 419,
+              "bytes": 4174563
+            },
+            "country": {
+              "requests": 1002,
+              "errors": 0,
+              "p50ms": 62,
+              "p95ms": 284.4,
+              "p99ms": 362.4,
+              "maxms": 394.6,
+              "bytes": 26633608
+            }
+          },
+          "failures": [
+            {
+              "label": "featured",
+              "ms": 13.4877919999999,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "stats",
+              "ms": 13.519583000001148,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "countries",
+              "ms": 13.534040999998979,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "filters",
+              "ms": 13.55095799999981,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "activities",
+              "ms": 13.564707999998063,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "types",
+              "ms": 13.575208000002021,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "discover",
+              "ms": 13.063499999996566,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "featured",
+              "ms": 13.070374999995693,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "stats",
+              "ms": 13.076874999998836,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "countries",
+              "ms": 13.07558400000562,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "filters",
+              "ms": 13.069082999994862,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "activities",
+              "ms": 13.065458999997645,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "types",
+              "ms": 13.07233300000371,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "discover",
+              "ms": 12.565708000001905,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "featured",
+              "ms": 12.570665999999619,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "stats",
+              "ms": 12.57762499999808,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "countries",
+              "ms": 12.584666000002471,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "filters",
+              "ms": 12.59166600000026,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "activities",
+              "ms": 12.592167000002519,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            },
+            {
+              "label": "types",
+              "ms": 12.597625000002154,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed"
+            }
+          ]
+        }
+      ]
+    },
+    "ramped": {
+      "started": "2026-10-23T15:28:40.015Z",
+      "description": "Anonymous HTTP journeys; no real browser rendering, writes, external providers or private data",
+      "stages": [
+        {
+          "users": 100,
+          "rampMillisecondsPerUser": 25,
+          "thinkMilliseconds": 200,
+          "startedAt": "2026-10-23T15:28:40.052Z",
+          "endedAt": "2026-10-23T15:28:55.325Z",
+          "durationSeconds": 15.27,
+          "completedJourneys": 1214,
+          "requests": 18410,
+          "errors": 0,
+          "p50ms": 67.8,
+          "p95ms": 230.8,
+          "p99ms": 324.6,
+          "maxms": 488.5,
+          "bytes": 204926441,
+          "requestsPerSecond": 1205.5,
+          "endpoints": {
+            "html": {
+              "requests": 1214,
+              "errors": 0,
+              "p50ms": 0.5,
+              "p95ms": 1,
+              "p99ms": 1.7,
+              "maxms": 3.7,
+              "bytes": 1479866
+            },
+            "asset": {
+              "requests": 200,
+              "errors": 0,
+              "p50ms": 9.2,
+              "p95ms": 11.3,
+              "p99ms": 12.5,
+              "maxms": 12.9,
+              "bytes": 77380300
+            },
+            "featured": {
+              "requests": 1214,
+              "errors": 0,
+              "p50ms": 119.8,
+              "p95ms": 189.4,
+              "p99ms": 211.2,
+              "maxms": 216.6,
+              "bytes": 1620373
+            },
+            "stats": {
+              "requests": 1214,
+              "errors": 0,
+              "p50ms": 124.3,
+              "p95ms": 199.3,
+              "p99ms": 211.8,
+              "maxms": 219.1,
+              "bytes": 74054
+            },
+            "discover": {
+              "requests": 1214,
+              "errors": 0,
+              "p50ms": 105,
+              "p95ms": 160.2,
+              "p99ms": 201.7,
+              "maxms": 215.6,
+              "bytes": 31546149
+            },
+            "filters": {
+              "requests": 1214,
+              "errors": 0,
+              "p50ms": 133.7,
+              "p95ms": 202.3,
+              "p99ms": 211.8,
+              "maxms": 219.1,
+              "bytes": 447946
+            },
+            "activities": {
+              "requests": 1214,
+              "errors": 0,
+              "p50ms": 134.5,
+              "p95ms": 202.6,
+              "p99ms": 212.4,
+              "maxms": 219.9,
+              "bytes": 2651603
+            },
+            "types": {
+              "requests": 1214,
+              "errors": 0,
+              "p50ms": 138.1,
+              "p95ms": 203.6,
+              "p99ms": 212.5,
+              "maxms": 219.9,
+              "bytes": 1151211
+            },
+            "countries": {
+              "requests": 1214,
+              "errors": 0,
+              "p50ms": 256.5,
+              "p95ms": 337.4,
+              "p99ms": 356,
+              "maxms": 435.4,
+              "bytes": 261012
+            },
+            "map": {
+              "requests": 1214,
+              "errors": 0,
+              "p50ms": 48.3,
+              "p95ms": 127,
+              "p99ms": 158.6,
+              "maxms": 204.9,
+              "bytes": 9829997
+            },
+            "search": {
+              "requests": 1214,
+              "errors": 0,
+              "p50ms": 68.2,
+              "p95ms": 148.9,
+              "p99ms": 199.5,
+              "maxms": 223.7,
+              "bytes": 24992831
+            },
+            "related": {
+              "requests": 1214,
+              "errors": 0,
+              "p50ms": 7.2,
+              "p95ms": 120.5,
+              "p99ms": 230.9,
+              "maxms": 405.3,
+              "bytes": 5338469
+            },
+            "reviews": {
+              "requests": 1214,
+              "errors": 0,
+              "p50ms": 76.4,
+              "p95ms": 182.2,
+              "p99ms": 333.8,
+              "maxms": 434.7,
+              "bytes": 111688
+            },
+            "detail": {
+              "requests": 1214,
+              "errors": 0,
+              "p50ms": 7.3,
+              "p95ms": 153.2,
+              "p99ms": 319.3,
+              "maxms": 488.5,
+              "bytes": 10714058
+            },
+            "compare": {
+              "requests": 1214,
+              "errors": 0,
+              "p50ms": 1.7,
+              "p95ms": 20.1,
+              "p99ms": 193,
+              "maxms": 418.1,
+              "bytes": 5058421
+            },
+            "country": {
+              "requests": 1214,
+              "errors": 0,
+              "p50ms": 55.6,
+              "p95ms": 119.1,
+              "p99ms": 330.1,
+              "maxms": 374.1,
+              "bytes": 32268463
+            }
+          },
+          "failures": []
+        }
+      ]
+    },
+    "sustained": {
+      "started": "2026-10-23T15:29:18.925Z",
+      "description": "Anonymous HTTP journeys; no real browser rendering, writes, external providers or private data",
+      "stages": [
+        {
+          "users": 100,
+          "rampMillisecondsPerUser": 25,
+          "thinkMilliseconds": 200,
+          "startedAt": "2026-10-23T15:29:18.963Z",
+          "endedAt": "2026-10-23T15:29:42.196Z",
+          "durationSeconds": 23.23,
+          "completedJourneys": 1915,
+          "requests": 28925,
+          "errors": 0,
+          "p50ms": 76.5,
+          "p95ms": 228.3,
+          "p99ms": 324.4,
+          "maxms": 596.4,
+          "bytes": 278515657,
+          "requestsPerSecond": 1245,
+          "endpoints": {
+            "html": {
+              "requests": 1915,
+              "errors": 0,
+              "p50ms": 0.4,
+              "p95ms": 0.8,
+              "p99ms": 1.6,
+              "maxms": 4.2,
+              "bytes": 2334385
+            },
+            "asset": {
+              "requests": 200,
+              "errors": 0,
+              "p50ms": 9.1,
+              "p95ms": 10.9,
+              "p99ms": 11.8,
+              "maxms": 13.8,
+              "bytes": 77380300
+            },
+            "featured": {
+              "requests": 1915,
+              "errors": 0,
+              "p50ms": 135.5,
+              "p95ms": 193.4,
+              "p99ms": 213.7,
+              "maxms": 226.4,
+              "bytes": 2556026
+            },
+            "stats": {
+              "requests": 1915,
+              "errors": 0,
+              "p50ms": 144.5,
+              "p95ms": 202.1,
+              "p99ms": 215.4,
+              "maxms": 226.5,
+              "bytes": 116815
+            },
+            "filters": {
+              "requests": 1915,
+              "errors": 0,
+              "p50ms": 148.3,
+              "p95ms": 203.9,
+              "p99ms": 216.1,
+              "maxms": 226.4,
+              "bytes": 706605
+            },
+            "activities": {
+              "requests": 1915,
+              "errors": 0,
+              "p50ms": 149.5,
+              "p95ms": 204.4,
+              "p99ms": 216.7,
+              "maxms": 226.5,
+              "bytes": 4182724
+            },
+            "types": {
+              "requests": 1915,
+              "errors": 0,
+              "p50ms": 150.3,
+              "p95ms": 204.7,
+              "p99ms": 216.9,
+              "maxms": 226.6,
+              "bytes": 1815952
+            },
+            "discover": {
+              "requests": 1915,
+              "errors": 0,
+              "p50ms": 117.7,
+              "p95ms": 166.1,
+              "p99ms": 208.2,
+              "maxms": 226.3,
+              "bytes": 49761837
+            },
+            "countries": {
+              "requests": 1915,
+              "errors": 0,
+              "p50ms": 263.3,
+              "p95ms": 342.8,
+              "p99ms": 360.8,
+              "maxms": 378.7,
+              "bytes": 411728
+            },
+            "map": {
+              "requests": 1915,
+              "errors": 0,
+              "p50ms": 49.3,
+              "p95ms": 127.4,
+              "p99ms": 156.1,
+              "maxms": 204,
+              "bytes": 15506137
+            },
+            "search": {
+              "requests": 1915,
+              "errors": 0,
+              "p50ms": 74.6,
+              "p95ms": 152,
+              "p99ms": 205.6,
+              "maxms": 225.2,
+              "bytes": 39390445
+            },
+            "related": {
+              "requests": 1915,
+              "errors": 0,
+              "p50ms": 12.5,
+              "p95ms": 104.8,
+              "p99ms": 176.8,
+              "maxms": 565.2,
+              "bytes": 8416312
+            },
+            "reviews": {
+              "requests": 1915,
+              "errors": 0,
+              "p50ms": 71,
+              "p95ms": 170.3,
+              "p99ms": 274.9,
+              "maxms": 419.9,
+              "bytes": 176180
+            },
+            "detail": {
+              "requests": 1915,
+              "errors": 0,
+              "p50ms": 12.7,
+              "p95ms": 120.4,
+              "p99ms": 261.2,
+              "maxms": 596.4,
+              "bytes": 16894401
+            },
+            "compare": {
+              "requests": 1915,
+              "errors": 0,
+              "p50ms": 1.5,
+              "p95ms": 10.7,
+              "p99ms": 105.3,
+              "maxms": 414.5,
+              "bytes": 7964572
+            },
+            "country": {
+              "requests": 1915,
+              "errors": 0,
+              "p50ms": 53.5,
+              "p95ms": 108.3,
+              "p99ms": 289.7,
+              "maxms": 374.4,
+              "bytes": 50901238
+            }
+          },
+          "failures": []
+        },
+        {
+          "users": 200,
+          "rampMillisecondsPerUser": 25,
+          "thinkMilliseconds": 200,
+          "startedAt": "2026-10-23T15:29:43.252Z",
+          "endedAt": "2026-10-23T15:30:09.247Z",
+          "durationSeconds": 25.99,
+          "completedJourneys": 2127,
+          "requests": 32305,
+          "errors": 3,
+          "p50ms": 42,
+          "p95ms": 614.3,
+          "p99ms": 1067.4,
+          "maxms": 1537.8,
+          "bytes": 378388132,
+          "requestsPerSecond": 1242.8,
+          "endpoints": {
+            "html": {
+              "requests": 2127,
+              "errors": 0,
+              "p50ms": 0.5,
+              "p95ms": 0.9,
+              "p99ms": 1.6,
+              "maxms": 3.4,
+              "bytes": 2592813
+            },
+            "asset": {
+              "requests": 400,
+              "errors": 0,
+              "p50ms": 9.3,
+              "p95ms": 11.5,
+              "p99ms": 13.1,
+              "maxms": 24.7,
+              "bytes": 154760600
+            },
+            "discover": {
+              "requests": 2127,
+              "errors": 0,
+              "p50ms": 22.9,
+              "p95ms": 138.5,
+              "p99ms": 271.1,
+              "maxms": 422.2,
+              "bytes": 55271598
+            },
+            "featured": {
+              "requests": 2127,
+              "errors": 0,
+              "p50ms": 23.6,
+              "p95ms": 188.6,
+              "p99ms": 312.5,
+              "maxms": 495.2,
+              "bytes": 2838777
+            },
+            "stats": {
+              "requests": 2127,
+              "errors": 0,
+              "p50ms": 24,
+              "p95ms": 210.3,
+              "p99ms": 320.7,
+              "maxms": 495.8,
+              "bytes": 129747
+            },
+            "filters": {
+              "requests": 2127,
+              "errors": 0,
+              "p50ms": 26.9,
+              "p95ms": 221.6,
+              "p99ms": 330,
+              "maxms": 500.3,
+              "bytes": 784513
+            },
+            "activities": {
+              "requests": 2127,
+              "errors": 0,
+              "p50ms": 28,
+              "p95ms": 223.7,
+              "p99ms": 333.7,
+              "maxms": 501,
+              "bytes": 4644561
+            },
+            "types": {
+              "requests": 2127,
+              "errors": 1,
+              "p50ms": 28.3,
+              "p95ms": 226.3,
+              "p99ms": 334.5,
+              "maxms": 501.3,
+              "bytes": 2016583
+            },
+            "countries": {
+              "requests": 2127,
+              "errors": 0,
+              "p50ms": 509.5,
+              "p95ms": 714.1,
+              "p99ms": 793.7,
+              "maxms": 856.6,
+              "bytes": 457340
+            },
+            "map": {
+              "requests": 2127,
+              "errors": 0,
+              "p50ms": 55.8,
+              "p95ms": 145.9,
+              "p99ms": 325.8,
+              "maxms": 455.8,
+              "bytes": 17221722
+            },
+            "search": {
+              "requests": 2127,
+              "errors": 0,
+              "p50ms": 61.7,
+              "p95ms": 123.4,
+              "p99ms": 222,
+              "maxms": 413.2,
+              "bytes": 43834612
+            },
+            "related": {
+              "requests": 2127,
+              "errors": 1,
+              "p50ms": 8.3,
+              "p95ms": 944.9,
+              "p99ms": 1096.8,
+              "maxms": 1230.4,
+              "bytes": 9332653
+            },
+            "reviews": {
+              "requests": 2127,
+              "errors": 1,
+              "p50ms": 466.8,
+              "p95ms": 656.9,
+              "p99ms": 776.4,
+              "maxms": 832.4,
+              "bytes": 195592
+            },
+            "detail": {
+              "requests": 2127,
+              "errors": 0,
+              "p50ms": 9.2,
+              "p95ms": 1249.4,
+              "p99ms": 1331.2,
+              "maxms": 1537.8,
+              "bytes": 18891607
+            },
+            "compare": {
+              "requests": 2127,
+              "errors": 0,
+              "p50ms": 3.1,
+              "p95ms": 581.3,
+              "p99ms": 644.4,
+              "maxms": 809.2,
+              "bytes": 8878531
+            },
+            "country": {
+              "requests": 2127,
+              "errors": 0,
+              "p50ms": 239.3,
+              "p95ms": 562.2,
+              "p99ms": 622.5,
+              "maxms": 710.4,
+              "bytes": 56536883
+            }
+          },
+          "failures": [
+            {
+              "label": "types",
+              "ms": 0.6424169999991136,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed | ECONNRESET | read ECONNRESET"
+            },
+            {
+              "label": "related",
+              "ms": 0.40912500000194996,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+            },
+            {
+              "label": "reviews",
+              "ms": 0.4203750000015134,
+              "status": 0,
+              "bytes": 0,
+              "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "peakServerMetrics": {
+    "cpuPercent": 123.3,
+    "rssMB": 468.7,
+    "loopP99ms": 509.61,
+    "loopMaxms": 509.61,
+    "poolWaiting": 311
+  },
+  "postLoadChecks": [
+    {
+      "path": "/api/health",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "path": "/api/auth/me",
+      "status": 401,
+      "expected": 401,
+      "pass": true
+    },
+    {
+      "path": "/api/colecciones",
+      "status": 401,
+      "expected": 401,
+      "pass": true
+    },
+    {
+      "path": "/api/admin/destinos",
+      "status": 401,
+      "expected": 401,
+      "pass": true
+    },
+    {
+      "path": "/api/destinos/not-a-real-destination",
+      "status": 404,
+      "expected": 404,
+      "pass": true
+    },
+    {
+      "path": "/api/paises/ZZ",
+      "status": 404,
+      "expected": 404,
+      "pass": true
+    }
+  ],
+  "diagnosticRepeat": {
+    "started": "2026-10-23T15:27:02.647Z",
+    "description": "Anonymous HTTP journeys; no real browser rendering, writes, external providers or private data",
+    "stages": [
+      {
+        "users": 100,
+        "startedAt": "2026-10-23T15:27:02.685Z",
+        "endedAt": "2026-10-23T15:27:08.345Z",
+        "durationSeconds": 5.66,
+        "completedJourneys": 420,
+        "requests": 6500,
+        "errors": 326,
+        "p50ms": 18,
+        "p95ms": 276.7,
+        "p99ms": 388.7,
+        "maxms": 550.6,
+        "bytes": 120173492,
+        "requestsPerSecond": 1148.5,
+        "endpoints": {
+          "html": {
+            "requests": 420,
+            "errors": 0,
+            "p50ms": 0.6,
+            "p95ms": 41.8,
+            "p99ms": 49,
+            "maxms": 67.9,
+            "bytes": 511980
+          },
+          "asset": {
+            "requests": 200,
+            "errors": 0,
+            "p50ms": 336.4,
+            "p95ms": 399.1,
+            "p99ms": 403.6,
+            "maxms": 410.3,
+            "bytes": 77380300
+          },
+          "featured": {
+            "requests": 420,
+            "errors": 46,
+            "p50ms": 11.7,
+            "p95ms": 137.6,
+            "p99ms": 180.5,
+            "maxms": 201,
+            "bytes": 499156
+          },
+          "stats": {
+            "requests": 420,
+            "errors": 46,
+            "p50ms": 11.8,
+            "p95ms": 140.5,
+            "p99ms": 180.6,
+            "maxms": 201.4,
+            "bytes": 22814
+          },
+          "filters": {
+            "requests": 420,
+            "errors": 47,
+            "p50ms": 12.8,
+            "p95ms": 141.6,
+            "p99ms": 195.9,
+            "maxms": 202.5,
+            "bytes": 137587
+          },
+          "activities": {
+            "requests": 420,
+            "errors": 48,
+            "p50ms": 13.3,
+            "p95ms": 143.5,
+            "p99ms": 196.3,
+            "maxms": 203.2,
+            "bytes": 812388
+          },
+          "discover": {
+            "requests": 420,
+            "errors": 43,
+            "p50ms": 11.7,
+            "p95ms": 135.5,
+            "p99ms": 177.8,
+            "maxms": 199.3,
+            "bytes": 9796689
+          },
+          "types": {
+            "requests": 420,
+            "errors": 49,
+            "p50ms": 14.1,
+            "p95ms": 153.3,
+            "p99ms": 198.6,
+            "maxms": 203.3,
+            "bytes": 351854
+          },
+          "countries": {
+            "requests": 420,
+            "errors": 47,
+            "p50ms": 159,
+            "p95ms": 327.9,
+            "p99ms": 353.6,
+            "maxms": 363.1,
+            "bytes": 80200
+          },
+          "map": {
+            "requests": 420,
+            "errors": 0,
+            "p50ms": 45.2,
+            "p95ms": 179.1,
+            "p99ms": 269.9,
+            "maxms": 273.2,
+            "bytes": 3400587
+          },
+          "search": {
+            "requests": 420,
+            "errors": 0,
+            "p50ms": 46.4,
+            "p95ms": 134.7,
+            "p99ms": 278.7,
+            "maxms": 421.6,
+            "bytes": 8663231
+          },
+          "detail": {
+            "requests": 420,
+            "errors": 0,
+            "p50ms": 7.5,
+            "p95ms": 381.3,
+            "p99ms": 507.8,
+            "maxms": 550.6,
+            "bytes": 3713664
+          },
+          "related": {
+            "requests": 420,
+            "errors": 0,
+            "p50ms": 7.8,
+            "p95ms": 140.9,
+            "p99ms": 416.1,
+            "maxms": 469.8,
+            "bytes": 1846393
+          },
+          "reviews": {
+            "requests": 420,
+            "errors": 0,
+            "p50ms": 150.9,
+            "p95ms": 279.2,
+            "p99ms": 299,
+            "maxms": 321.5,
+            "bytes": 38640
+          },
+          "compare": {
+            "requests": 420,
+            "errors": 0,
+            "p50ms": 2.1,
+            "p95ms": 20.3,
+            "p99ms": 297.5,
+            "maxms": 328.2,
+            "bytes": 1754146
+          },
+          "country": {
+            "requests": 420,
+            "errors": 0,
+            "p50ms": 121.7,
+            "p95ms": 245.1,
+            "p99ms": 281.1,
+            "maxms": 298.3,
+            "bytes": 11163863
+          }
+        },
+        "failures": [
+          {
+            "label": "discover",
+            "ms": 16.120542,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "featured",
+            "ms": 16.145375,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "stats",
+            "ms": 16.161292000000003,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "countries",
+            "ms": 16.156791999999996,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "filters",
+            "ms": 16.167125,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "activities",
+            "ms": 16.183542000000045,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "types",
+            "ms": 16.179374999999993,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "discover",
+            "ms": 15.703709000000003,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "featured",
+            "ms": 15.722250000000031,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "stats",
+            "ms": 15.736625000000004,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "countries",
+            "ms": 15.744458000000009,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "filters",
+            "ms": 15.755625000000009,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "activities",
+            "ms": 15.749541999999963,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "types",
+            "ms": 15.75320899999997,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "discover",
+            "ms": 15.232666999999992,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "featured",
+            "ms": 15.234290999999985,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "stats",
+            "ms": 15.236667000000011,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "countries",
+            "ms": 15.22037499999999,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "filters",
+            "ms": 15.220708000000002,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          },
+          {
+            "label": "activities",
+            "ms": 15.22283299999998,
+            "status": 0,
+            "bytes": 0,
+            "error": "fetch failed | ECONNRESET | connect ECONNRESET 127.0.0.1:3003"
+          }
+        ]
+      }
+    ]
+  }
+}
