@@ -35,3 +35,16 @@ El selector inferior y las teclas 1–3 cambian de propuesta. La elección se co
 Las tres variantes se revisaron en escritorio y móvil, incluyendo 320 px sin desbordamiento. Se comprobaron país, escenario España, búsqueda vacía y recuperación, selección y alternancia móvil. La ficha real se revisó con los datos añadidos a 320 px y en escritorio. Capturas en `front/output/playwright/prototipo6-*.png` y `destino-datos-pais-*.png`.
 
 Tests existentes de frontend/backend, lint y build ejecutados. El ensayo PostgreSQL no se ha ejecutado en esta revisión; no se ha modificado la base compartida. La selección del mapa queda pendiente.
+
+
+## Refinamiento de Atlas
+
+La propuesta 2 se refinó manteniendo el mapa real sin sustituir la página pública. Añade Volver a descubrir, historial atrás/adelante para filtros y selección, vista Mapa/Lista, panel de filtros con aplicar/cancelar/restablecer, preferencias activas eliminables y recuperación de búsquedas vacías.
+
+El detalle seleccionado se puede cerrar y ampliar, con navegación anterior/siguiente y estados deshabilitados en los extremos. Guardados y comparación (máximo tres) son locales y exclusivos del prototipo. Compartir copia una URL con destino y preferencias; si no hay acceso al portapapeles, ofrece el enlace para copiarlo manualmente. No se solicitan permisos de ubicación.
+
+En móvil se reduce la cabecera, se reserva una fila independiente para el detalle y se conserva la atribución del mapa. El panel de filtros deja Aplicar visible a 320 px; el detalle ampliado crece sin recortar acciones. El encuadre usa el espacio disponible y la selección no recrea el mapa. Los controles de zoom y navegación táctil tienen 44 px; la carga y los errores de cartografía, resultados, guardado y comparación ofrecen feedback textual accesible.
+
+Las entradas y cambios de información usan transform/opacity de 160–200 ms y respetan movimiento reducido. El selector de variantes mantiene su comportamiento y estilo originales; su franja superior es solo del prototipo.
+
+Revisión a 1440, 390 y 320 px: filtros combinados, cancelación, búsqueda sin resultados, alternancia y selección desde lista, cierre y ampliación de detalle, guardado, comparación, copia del enlace y navegación nativa atrás/adelante. Sin errores de consola en la revisión final. Sintaxis JavaScript y build comprobados. Capturas: `front/output/playwright/atlas-refinado-desktop.png` y `atlas-refinado-mobile.png`.

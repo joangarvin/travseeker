@@ -10,7 +10,13 @@ import {
   button,
 } from './shared.js';
 import split from './mapa-dividido.js';
-import atlas from './mapa-atlas.js';
+import atlas, {
+  atlasDetail,
+  atlasList,
+  atlasFilters,
+  atlasSaved,
+  atlasCompared,
+} from './mapa-atlas.js';
 import list from './mapa-lista.js';
 const variants = [split, atlas, list];
 const names = ['Dividido', 'Atlas', 'Lista'];
@@ -21,11 +27,15 @@ const items = [...picker.querySelectorAll('.proto-picker-item:not(.proto-picker-
 const replay = picker.querySelector('.proto-picker-replay');
 let current = 0;
 let mountVersion = 0;
+let mapHooks = [];
 let maps = [],
   tilePermission = sessionStorage.getItem('trav-expansion-explore-maps') === 'yes',
   toastTimer;
 let storedView = null;
 let pendingFocus = null;
+state.atlasView = params.get('vista') === 'lista' ? 'lista' : 'mapa';
+state.detailClosed = false;
+state.detailExpanded = false;
 const dialog = document.getElementById('dialog');
 if (params.get('destino') && destinations.some((d) => d.id === params.get('destino')))
   state.selected = params.get('destino');
@@ -59,6 +69,7 @@ function mount(i) {
     m.remove();
   });
   maps = [];
+  mapHooks = [];
   stage.innerHTML = '';
   requestAnimationFrame(() => {
     if (version !== mountVersion) return;
@@ -73,6 +84,7 @@ function mount(i) {
 function setActive(i) {
   if (i < 0 || i >= variants.length) return;
   current = i;
+  document.body.classList.toggle('is-atlas', i === 1);
   items.forEach((el, j) => {
     el.toggleAttribute('data-active', j === i);
     if (j === i) el.setAttribute('aria-current', 'true');
@@ -93,7 +105,8 @@ document.addEventListener('keydown', (e) => {
   if (
     /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) ||
     e.target.isContentEditable ||
-    dialog.open
+    dialog.open ||
+    e.target.closest('.leaflet-container')
   )
     return;
   if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -112,7 +125,7 @@ function announce(text) {
 }
 let dialogOrigin = null;
 function showDialog(title, html) {
-  dialogOrigin = document.activeElement;
+  if (!dialog.open) dialogOrigin = document.activeElement;
   document.getElementById('dialog-title').textContent = title;
   document.getElementById('dialog-content').innerHTML = html;
   if (!dialog.open) dialog.showModal();
@@ -128,7 +141,7 @@ dialog.addEventListener('click', (e) => {
       dialog.close();
   }
 });
-function persistURL() {
+function persistURL(push = false) {
   const u = new URL(location);
   for (const [key, value] of Object.entries({
     pais: state.country,
@@ -136,23 +149,38 @@ function persistURL() {
     q: state.query,
     region: state.region,
     tema: state.theme,
+    destino: current === 1 ? state.selected : params.get('destino'),
+    vista: current === 1 ? state.atlasView || 'mapa' : '',
   })) {
     if (value) u.searchParams.set(key, value);
     else u.searchParams.delete(key);
   }
-  history.replaceState(null, '', u);
+  history[push ? 'pushState' : 'replaceState']({ prototypeAtlas: true }, '', u);
 }
-function refresh(resetView = false) {
+function refresh(resetView = false, push = false) {
   if (mode === 'mapa' && visible().length && !visible().some((d) => d.id === state.selected))
     state.selected = visible()[0].id;
   if (resetView) storedView = null;
-  persistURL();
+  persistURL(push);
   mount(current);
 }
 function selectDestination(id) {
   state.selected = id;
-  if (mode === 'mapa' && current === 1) {
-    refresh();
+  if (current === 1) {
+    state.detailClosed = false;
+    state.detailExpanded = false;
+    state.atlasView = 'mapa';
+    persistURL(true);
+    updateAtlasDetail(true);
+    const d = destinations.find((d) => d.id === id);
+    maps.forEach((m) =>
+      m.setView([d.lat, d.lng], Math.max(7, m.getZoom()), {
+        animate: !matchMedia('(prefers-reduced-motion:reduce)').matches,
+        duration: 0.25,
+      }),
+    );
+    mapHooks.forEach((h) => h.markers());
+    announce(`${d.name} seleccionado · ${countries[d.country]}`);
     return;
   }
   stage
@@ -183,13 +211,13 @@ function markerIcon(d, group = false) {
     className: `map-marker ${group ? 'group' : state.selected === d.id ? 'active' : ''}`,
     html: group ? `${countries[d.country]} · ${d.count}` : esc(d.name),
     iconSize: null,
-    iconAnchor: [0, 16],
+    iconAnchor: group && d.country === 'PT' ? [90, 16] : [0, 16],
   });
 }
 function initMaps() {
   stage.querySelectorAll('[data-map]').forEach((el) => {
     const wrap = el.closest('.map-wrap');
-    if (!tilePermission) return;
+    if (!tilePermission || (current === 1 && state.atlasView === 'lista')) return;
     wrap.querySelector('.map-request').hidden = true;
     const ds = visible();
     const map = L.map(el, {
@@ -204,9 +232,19 @@ function initMaps() {
         '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
       maxZoom: 18,
     });
+    if (current === 1) {
+      const loading = document.createElement('span');
+      loading.className = 'atlas-tile-status';
+      loading.setAttribute('role', 'status');
+      loading.textContent = 'Cargando mapa…';
+      wrap.append(loading);
+      tile.once('load', () => loading.remove());
+      tile.on('tileerror', () => loading.remove());
+    }
     tile.addTo(map);
-    tile.on('tileerror', () => {
+    tile.once('tileerror', () => {
       wrap.querySelector('.map-error').hidden = false;
+      if (current === 1) announce('No se ha podido cargar el mapa. Puedes seguir usando la lista.');
     });
     const markerLayer = L.layerGroup().addTo(map);
     function markers() {
@@ -228,7 +266,9 @@ function initMaps() {
             .on('click', () => {
               state.country = country;
               state.region = '';
-              refresh(true);
+              state.detailClosed = false;
+              refresh(true, current === 1);
+              if (current === 1) announce(`${group.length} destinos en ${countries[country]}`);
             });
         });
       } else {
@@ -244,6 +284,7 @@ function initMaps() {
         );
       }
     }
+    mapHooks.push({ map, markers });
     map.on('zoomend', markers);
     map.on('moveend', () => {
       if (mode === 'mapa') storedView = { center: map.getCenter(), zoom: map.getZoom() };
@@ -253,16 +294,35 @@ function initMaps() {
     else if (ds.length)
       map.fitBounds(
         ds.map((d) => [d.lat, d.lng]),
-        { padding: mode === 'mapa' && current === 1 ? [70, 85] : [45, 45], maxZoom: 9 },
+        { padding: current === 1 && innerWidth <= 760 ? [24, 24] : [45, 45], maxZoom: 9 },
       );
     else map.setView([42, -2], 4);
     markers();
     requestAnimationFrame(() => {
-      if (el.isConnected && maps.includes(map)) map.invalidateSize();
+      if (el.isConnected && maps.includes(map)) map.invalidateSize({ pan: false });
     });
   });
 }
 document.addEventListener('change', (e) => {
+  if (e.target.dataset.draft === 'country') {
+    const country = e.target.value,
+      select = dialog.querySelector('[data-draft=region]');
+    const regions = [
+      ...new Set(
+        destinations
+          .filter(
+            (d) =>
+              (!country || d.country === country) &&
+              (state.scenario !== 'espana' || d.country === 'ES'),
+          )
+          .map((d) => d.region),
+      ),
+    ];
+    select.innerHTML =
+      '<option value="">Todas las regiones</option>' +
+      regions.map((r) => `<option>${esc(r)}</option>`).join('');
+    return;
+  }
   const key = e.target.dataset.filter;
   if (key) {
     state[key] = e.target.value;
@@ -272,6 +332,30 @@ document.addEventListener('change', (e) => {
   }
 });
 document.addEventListener('submit', (e) => {
+  if (e.target.id === 'atlas-filter-form') {
+    e.preventDefault();
+    ['country', 'region', 'theme'].forEach(
+      (k) => (state[k] = e.target.querySelector(`[data-draft=${k}]`).value),
+    );
+    dialog.close();
+    state.detailClosed = false;
+    pendingFocus = '[data-action=atlas-filters]';
+    refresh(true, true);
+    announce(
+      `${visible().length} destinos encontrados${state.country ? ' en ' + countries[state.country] : ''}`,
+    );
+    return;
+  }
+  if (e.target.id === 'atlas-search') {
+    e.preventDefault();
+    state.query = new FormData(e.target).get('q').trim();
+    state.detailClosed = false;
+    pendingFocus = 'input[name=q]';
+    refresh(true, true);
+    announce(`${visible().length} destinos encontrados`);
+    return;
+  }
+
   if (e.target.id === 'map-filters') {
     e.preventDefault();
     state.query = new FormData(e.target).get('q').trim();
@@ -301,6 +385,11 @@ document.addEventListener('click', (e) => {
   const trigger = e.target.closest('[data-action]');
   if (!trigger) return;
   const [action, value] = trigger.dataset.action.split(':');
+  if (current === 1 && action.startsWith('atlas-')) {
+    e.preventDefault();
+    handleAtlas(action, value, trigger);
+    return;
+  }
   if (action === 'destination') {
     const d = destinations.find((d) => d.id === value);
     showDialog(
@@ -370,3 +459,209 @@ setActive(
   Math.min(2, Math.max(0, (parseInt(new URLSearchParams(location.search).get('v'), 10) || 1) - 1)),
 );
 requestAnimationFrame(() => requestAnimationFrame(() => picker.setAttribute('data-ready', '')));
+
+function updateAtlasDetail(animate = false) {
+  const workspace = stage.querySelector('.atlas-workspace');
+  if (!workspace) return;
+  workspace.classList.toggle('show-list', state.atlasView === 'lista');
+  const list = stage.querySelector('.atlas-results'),
+    slot = stage.querySelector('.atlas-detail-slot');
+  list.hidden = state.atlasView !== 'lista';
+  slot.hidden = state.atlasView === 'lista';
+  list.innerHTML = atlasList();
+  slot.innerHTML = visible().length ? atlasDetail() : '';
+  stage
+    .querySelectorAll('.atlas-view-switch button')
+    .forEach((b) =>
+      b.setAttribute(
+        'aria-pressed',
+        String(b.dataset.action === (state.atlasView === 'lista' ? 'atlas-list' : 'atlas-map')),
+      ),
+    );
+  if (animate && !matchMedia('(prefers-reduced-motion:reduce)').matches)
+    slot.querySelector('.atlas-card')?.classList.add('is-updating');
+  if (state.atlasView !== 'lista' && !maps.length) initMaps();
+  requestAnimationFrame(() => {
+    if (state.atlasView !== 'lista') maps.forEach((m) => m.invalidateSize({ pan: false }));
+  });
+}
+async function handleAtlas(action, value, trigger) {
+  if (action === 'atlas-filters') {
+    showDialog('Filtros del mapa', atlasFilters());
+    return;
+  }
+  if (action === 'atlas-reset-draft') {
+    dialog.querySelectorAll('[data-draft]').forEach((s) => (s.value = ''));
+    const region = dialog.querySelector('[data-draft=region]');
+    region.innerHTML =
+      '<option value="">Todas las regiones</option>' +
+      [
+        ...new Set(
+          destinations
+            .filter((d) => state.scenario !== 'espana' || d.country === 'ES')
+            .map((d) => d.region),
+        ),
+      ]
+        .map((r) => `<option>${esc(r)}</option>`)
+        .join('');
+    announce('Preferencias restablecidas. Aplica para ver los resultados.');
+    return;
+  }
+  if (action === 'atlas-clear') {
+    state.country = '';
+    state.region = '';
+    state.theme = '';
+    state.query = '';
+    state.detailClosed = false;
+    refresh(true, true);
+    announce('Filtros eliminados · todos los destinos disponibles');
+    return;
+  }
+  if (action === 'atlas-remove') {
+    state[value] = '';
+    if (value === 'country') state.region = '';
+    refresh(true, true);
+    announce('Filtro eliminado');
+    return;
+  }
+  if (action === 'atlas-fit') {
+    if (maps.length && visible().length)
+      maps.forEach((m) =>
+        m.fitBounds(
+          visible().map((d) => [d.lat, d.lng]),
+          {
+            padding: [45, 45],
+            maxZoom: 9,
+            animate: !matchMedia('(prefers-reduced-motion:reduce)').matches,
+            duration: 0.25,
+          },
+        ),
+      );
+    announce(
+      visible().length
+        ? 'Mapa ajustado a los resultados visibles'
+        : 'No hay destinos para encuadrar',
+    );
+    return;
+  }
+  if (action === 'atlas-map' || action === 'atlas-list') {
+    state.atlasView = action === 'atlas-list' ? 'lista' : 'mapa';
+    persistURL(true);
+    updateAtlasDetail();
+    announce(state.atlasView === 'lista' ? 'Lista de resultados abierta' : 'Vista de mapa abierta');
+    return;
+  }
+  if (action === 'atlas-close') {
+    state.detailClosed = true;
+    state.detailExpanded = false;
+    updateAtlasDetail();
+    stage.querySelector('.atlas-selection-hint button')?.focus();
+    announce('Detalle cerrado. Puedes elegir otro destino.');
+    return;
+  }
+  if (action === 'atlas-expand') {
+    state.detailExpanded = !state.detailExpanded;
+    updateAtlasDetail();
+    stage.querySelector('[data-action=atlas-expand]')?.focus();
+    return;
+  }
+  if (action === 'atlas-next' || action === 'atlas-prev') {
+    const ds = visible(),
+      i = ds.findIndex((d) => d.id === state.selected),
+      next = i + (action === 'atlas-next' ? 1 : -1);
+    if (ds[next]) selectDestination(ds[next].id);
+    stage.querySelector(`[data-action=${action}]`)?.focus();
+    return;
+  }
+  if (action === 'atlas-save') {
+    let ids;
+    try {
+      ids = JSON.parse(localStorage.getItem('trav-expansion-atlas-saved') || '[]');
+    } catch {
+      ids = [];
+    }
+    const was = ids.includes(value);
+    ids = was ? ids.filter((id) => id !== value) : [...ids, value];
+    localStorage.setItem('trav-expansion-atlas-saved', JSON.stringify(ids));
+    updateAtlasDetail();
+    stage.querySelector('[data-action^="atlas-save"]')?.focus();
+    announce(
+      was
+        ? 'Destino eliminado de los guardados de prueba'
+        : 'Destino guardado en este navegador · solo prototipo',
+    );
+    return;
+  }
+  if (action === 'atlas-compare') {
+    let ids = atlasCompared(),
+      was = ids.includes(value);
+    if (!was && ids.length >= 3) {
+      announce('Puedes comparar un máximo de 3 destinos');
+      return;
+    }
+    ids = was ? ids.filter((id) => id !== value) : [...ids, value];
+    localStorage.setItem('trav-expansion-atlas-compare', JSON.stringify(ids));
+    updateAtlasDetail();
+    stage.querySelector('.atlas-compare-count').textContent = ids.length;
+    announce(
+      was ? 'Destino eliminado de la comparación' : `Añadido a la comparación · ${ids.length} de 3`,
+    );
+    return;
+  }
+  if (action === 'atlas-comparison') {
+    const ids = atlasCompared();
+    showDialog(
+      'Comparación de prueba',
+      `<p class="muted">Selección local del prototipo. No modifica el comparador real.</p>${
+        ids.length
+          ? `<ul class="atlas-comparison-list">${ids
+              .map((id) => {
+                const d = destinations.find((d) => d.id === id);
+                return `<li><div><strong>${d.name}</strong><p class="small muted">${countries[d.country]} · ${d.theme}</p></div><button class="text-button" data-action="atlas-uncompare:${id}">Quitar</button></li>`;
+              })
+              .join('')}</ul>`
+          : '<p>Abre la información de un destino y pulsa Comparar destino para añadirlo.</p>'
+      }`,
+    );
+    return;
+  }
+  if (action === 'atlas-uncompare') {
+    localStorage.setItem(
+      'trav-expansion-atlas-compare',
+      JSON.stringify(atlasCompared().filter((id) => id !== value)),
+    );
+    handleAtlas('atlas-comparison');
+    stage.querySelector('.atlas-compare-count').textContent = atlasCompared().length;
+    updateAtlasDetail();
+    announce('Destino eliminado de la comparación');
+    return;
+  }
+  if (action === 'atlas-share') {
+    persistURL();
+    try {
+      await navigator.clipboard.writeText(location.href);
+      announce('Enlace copiado con el destino y los filtros actuales');
+    } catch {
+      showDialog(
+        'Compartir esta vista',
+        `<p>Copia este enlace para volver al destino y los filtros actuales.</p><label>Enlace del prototipo<input readonly value="${esc(location.href)}" onclick="this.select()"></label>`,
+      );
+    }
+    return;
+  }
+}
+window.addEventListener('popstate', () => {
+  const p = new URLSearchParams(location.search);
+  state.country = p.get('pais') || '';
+  state.region = p.get('region') || '';
+  state.theme = p.get('tema') || '';
+  state.query = p.get('q') || '';
+  state.scenario = p.get('escenario') || 'ampliado';
+  document.getElementById('scenario').value = state.scenario;
+  state.selected = p.get('destino') || 'lisboa';
+  state.atlasView = p.get('vista') === 'lista' ? 'lista' : 'mapa';
+  state.detailClosed = false;
+  const v = Math.max(0, Math.min(2, (parseInt(p.get('v')) || 1) - 1));
+  setActive(v);
+  announce('Vista anterior recuperada');
+});
