@@ -29,6 +29,7 @@ const report = {
   stages: [],
 };
 let current;
+let readRetry = (operation) => operation();
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 function percentile(a, p) {
   return a.length
@@ -41,18 +42,32 @@ async function request(base, path, label, validate) {
   const start = performance.now();
   let status = 0,
     bytes = 0,
-    error = "";
+    error = "",
+    transportFailures = 0,
+    wireAttempts = 0;
   try {
-    const r = await fetch(base + path, {
-      headers: {
-        "Accept-Encoding": "gzip",
-        "Accept-Language": path.includes("lang=en") ? "en" : "es",
+    const { r, body } = await readRetry(
+      async () => {
+        wireAttempts++;
+        try {
+          const r = await fetch(base + path, {
+            headers: {
+              "Accept-Encoding": "gzip",
+              "Accept-Language": path.includes("lang=en") ? "en" : "es",
+            },
+            signal: AbortSignal.timeout(10000),
+            redirect: "error",
+          });
+          const body = await r.text();
+          return { r, body };
+        } catch (error) {
+          if (error instanceof TypeError) transportFailures++;
+          throw error;
+        }
       },
-      signal: AbortSignal.timeout(10000),
-      redirect: "error",
-    });
+      base === api ? "GET" : "STATIC",
+    );
     status = r.status;
-    const body = await r.text();
     bytes = Number(r.headers.get("content-length")) || Buffer.byteLength(body);
     if (!r.ok) error = `HTTP ${status}: ${body.slice(0, 160)}`;
     else if (validate) {
@@ -64,7 +79,15 @@ async function request(base, path, label, validate) {
       .filter(Boolean)
       .join(" | ");
   }
-  const item = { label, ms: performance.now() - start, status, bytes, error };
+  const item = {
+    transportFailures,
+    wireAttempts,
+    label,
+    ms: performance.now() - start,
+    status,
+    bytes,
+    error,
+  };
   if (current) current.samples.push(item);
   return item;
 }
@@ -72,6 +95,10 @@ function summary(samples) {
   const durations = samples.map((x) => x.ms);
   return {
     requests: samples.length,
+    wireRequests: samples.reduce((n, s) => n + s.wireAttempts, 0),
+    transportFailures: samples.reduce((n, s) => n + s.transportFailures, 0),
+    recoveredReads: samples.filter((s) => !s.error && s.transportFailures > 0)
+      .length,
     errors: samples.filter((x) => x.error).length,
     p50ms: +percentile(durations, 0.5).toFixed(1),
     p95ms: +percentile(durations, 0.95).toFixed(1),
@@ -81,6 +108,13 @@ function summary(samples) {
   };
 }
 (async () => {
+  if (process.env.LOAD_READ_RETRY === "1") {
+    const { withReadRetry } =
+      await import("../../../front/src/services/readRetry.ts");
+    readRetry = withReadRetry;
+    report.readRetry =
+      "same frontend helper; one backoff retry for API GET transport failures only";
+  }
   const first = await fetch(api + "/api/mapa");
   if (!first.ok) throw new Error("Isolated API unavailable");
   const ds = await first.json();

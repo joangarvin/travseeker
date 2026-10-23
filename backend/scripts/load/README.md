@@ -39,8 +39,9 @@ Only the dedicated loopback API and frontend ports are supported. Each virtual a
 - `LOAD_SECONDS`: 1–60 seconds of traffic after the ramp; in-flight journeys finish before reporting.
 - `LOAD_RAMP_MS`: delay per arriving visitor; `0` is a synchronized arrival spike, `25` spreads 100 arrivals over 2.5 seconds.
 - `LOAD_THINK_MS`: 0–5000 ms between actions; default 200 is faster than typical human navigation.
+- `LOAD_READ_RETRY`: `1` enables the production frontend read-recovery helper for API calls only. Default `0` measures raw transport failures.
 - `LOAD_REPORT_FILE`: JSON result location. `artifacts/` is ignored by Git.
 
-Report percentiles cover end-to-end HTTP latency, decompression and JSON contract checks. Failed requests remain counted; errors are never silently retried. Unexpected statuses/contracts/network failures result in a nonzero exit code. More than 10% errors (at least 21 failures) stops subsequent stages. Always retain the difference between application HTTP errors, timeouts and injector/OS connection failures when interpreting results.
+Report percentiles cover end-to-end HTTP latency, decompression and JSON contract checks. Failed requests remain counted. The default run does not retry. `LOAD_READ_RETRY=1` imports the same frontend retry helper for API reads; reports separately count wire attempts, transport failures and recovered reads, so a successful retry does not hide the initial failure. Unexpected statuses/contracts/network failures result in a nonzero exit code. More than 10% errors (at least 21 failures) stops subsequent stages. Always retain the difference between application HTTP errors, timeouts and injector/OS connection failures when interpreting results.
 
 For real production sizing, repeat in authorized staging with equivalent hosting, data volume, proxy/CDN, geographic latency and authenticated workflows. This local experiment does not measure mobile rendering or map gesture frame rates.

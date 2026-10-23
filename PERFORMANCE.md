@@ -2,11 +2,11 @@
 
 ## Implemented
 
-- Public destination lists, details, comparisons, related destinations, map data, filters, statistics, activities, tourism types and climate use a process-local cache. The default lifetime is 15 minutes, with 256 entries and a 32 MiB serialized-data budget. Results are cloned; errors and missing records are not stored. Concurrent identical loads share the same work.
+- Public country lists/pages, destination lists, details, comparisons, related destinations, map data, filters, statistics, activities, tourism types and climate use a process-local cache. The default lifetime is 15 minutes, with 256 entries and a 32 MiB serialized-data budget. Results are cloned; errors and missing records are not stored. Concurrent identical loads share the same work.
 - English searches reuse their underlying search candidates across different search terms with the same filters. Empty English results no longer trigger an identical second database query.
 - Successful admin, upload and review HTTP writes invalidate the public server cache. In-flight older reads cannot refill it after invalidation. Reads started before a save may still finish with the previous result.
 - The frontend merges concurrent public requests and reuses results for 60 seconds, with a bounded memory cache. Cancelling one component's subscription does not cancel another's shared request. Successful writes clear the client cache and bypass browser caching for 60 seconds.
-- Public HTTP responses permit 60 seconds of private browser caching. Language, compression and CORS origin variants are preserved. Account, admin, favorites, reviews and trip responses remain uncached by this mechanism.
+- Public HTTP responses require private browser revalidation (`private, no-cache`); the application request cache still reuses reads for 60 seconds. Language, compression and CORS origin variants are preserved. Account, admin, favorites, reviews and trip responses remain uncached by this mechanism.
 - Public editorial responses omit translation dictionaries after applying the requested language, avoiding duplicate descriptions and essentials in list/map responses. Admin still receives all translations.
 - GET requests no longer send an unnecessary JSON Content-Type header, avoiding a CORS preflight for ordinary public reads when the API is on another origin.
 - Cloudinary delivery uses automatic format/quality and five reusable widths (96, 320, 640, 960, 1600). The browser chooses one candidate, not all five. Below-fold images load lazily; the main destination image keeps eager/high-priority loading. Avatars use small thumbnails. Failed images clear their srcset before showing a local fallback.
@@ -17,11 +17,11 @@
 
 Deploy/restart both frontend and backend to activate these changes. No schema migration or extra paid cache service is needed.
 
-`PUBLIC_CACHE_TTL_SECONDS` controls the backend cache (default `900`; `0` disables stored server results). Read it from the backend environment. Browser cache remains up to 60 seconds. If you change content using database scripts or SQL, restart the API or wait for expiration.
+`PUBLIC_CACHE_TTL_SECONDS` controls the backend cache (default `900`; `0` disables stored server results). Read it from the backend environment. Frontend application caching remains up to 60 seconds; HTTP responses require revalidation. If you change content using database scripts or SQL, restart the API or wait for expiration.
 
 The server cache is per process and is lost on restart. This works best with one persistent backend instance. With multiple instances or short-lived serverless functions, cache hits are lower and a save only invalidates the instance that handled it; other instances can retain old data until the configured lifetime expires. Use a shared cache/invalidation mechanism before relying on immediate publication across multiple instances. Do not add a paid cache service merely for a small, single-instance deployment.
 
-Other visitors can retain browser content for up to roughly two minutes (the short HTTP and application caches can overlap). The editing browser clears its application cache on save. Already-rendered pages update on their next load, not through live push updates.
+Other visitors can retain application-cached content for up to 60 seconds. The editing browser clears its application cache on save. Already-rendered pages update on their next load, not through live push updates.
 
 ## Keep Neon usage low
 
@@ -47,3 +47,14 @@ Official references: [image optimization](https://cloudinary.com/documentation/i
 The regression tests cover duplicate-load coalescing, expiry, bounded caches, concurrent saves, error retries, separate language keys, private endpoint exclusion, translation payload trimming, compression Vary headers, image URL sizing and safe avatar replacement. A synthetic test issues 100 concurrent identical cache reads and verifies one underlying load; this demonstrates cache behavior, not a measured production billing reduction.
 
 A local browser check with mocked API/image responses also verified that 30 concurrent identical public requests plus a repeated read issue one network call, a successful save forces the next read to make a new call, and a failed Cloudinary image makes one failed request before switching to the local fallback. No live Cloudinary uploads/deletions or Neon queries were needed for these checks.
+
+## Corrections after the 23 October load test
+
+- Country list and page reads use the existing bounded public server cache, canonical country/filter keys and separate locale entries. Concurrent duplicate loads share work. Successful admin/publication writes invalidate them through the existing middleware; direct SQL/scripts must still invalidate/restart explicitly.
+- Country endpoints now belong to the frontend public-request cache and public payload projection. Private account/trip/admin/review endpoints remain excluded.
+- JSON compression uses asynchronous gzip at best-speed above 1 KiB. Small JSON, HEAD, no-content responses and clients declining gzip remain uncompressed. Compression failure falls back to the original valid JSON; language/origin/encoding variants are preserved.
+- Identical **public serialized bytes** reuse asynchronous compression work/results, with a separate 8 MiB / 128-entry / 60-second cache. The key is a SHA-256 of the actual response bytes, so a changed response cannot reuse a previous compressed representation, even after publication changes. Private data never opts into this cache. This cache stores only compressed buffers, not another copy of the content graph.
+- GET/HEAD transport failures can retry once after a random 200–400 ms delay. Writes, HTTP errors and invalid JSON never retry. Subscribers still share the complete request/retry operation. Abort cancels an unshared operation/backoff immediately. A truncated JSON response is no longer treated as successful empty data.
+- No database pool increase, external service, schema migration or security/rate-limit weakening was introduced.
+
+Measured before/after results and limitations: [23 October solutions report](docs/performance/2026-10-23-solutions.md).

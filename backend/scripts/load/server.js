@@ -26,7 +26,15 @@ const http = require("node:http");
 const server = http.createServer((req, res) => {
   requests++;
   active++;
-  res.once("finish", () => active--);
+  let settled = false;
+  const complete = () => {
+    if (!settled) {
+      settled = true;
+      active--;
+    }
+  };
+  res.once("finish", complete);
+  res.once("close", complete);
   app(req, res);
 });
 const start = performance.now();
@@ -38,6 +46,7 @@ const timer = setInterval(() => {
     used = process.cpuUsage(cpu);
   cpu = process.cpuUsage();
   samples.push({
+    at: new Date().toISOString(),
     second: +((now - start) / 1000).toFixed(1),
     requests,
     queries,
