@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Prototipo · Mapa de destinos — TravSeeker</title>
+    <link rel="icon" href="/brand/travseeker-logo.svg" />
+
+    <link rel="stylesheet" href="./expansion-explorar/tokens.css" />
+    <link rel="stylesheet" href="./expansion-explorar/vendor/leaflet.css" />
+    <link rel="stylesheet" href="./expansion-explorar/style.css" />
+    <link rel="stylesheet" href="./expansion-explorar/picker.css" />
+  </head>
+  <body>
+    <a class="skip" href="#stage">Saltar al prototipo</a>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="TravSeeker, inicio"
+        ><img src="/brand/travseeker-logo.svg" alt="" /><strong>TravSeeker</strong></a
+      >
+      <nav aria-label="Navegación del prototipo">
+        <a href="/destino/e544b90a-8cc4-4020-bd2f-4bb032f88c32?lang=es#resumen">Ficha actual</a
+        ><a href="?pagina=mapa&v=1">Mapa internacional</a>
+      </nav>
+      <button id="theme" class="icon-button" aria-label="Cambiar tema">◐</button>
+    </header>
+    <div class="lab">
+      <span><b>PROTOTIPO 6</b> · Mapa de demostración · la ficha actual se conserva</span
+      ><label
+        >Escenario
+        <select id="scenario">
+          <option value="ampliado">Catálogo ampliado</option>
+          <option value="espana">Solo España publicada</option>
+          <option value="incompleto">Ficha con datos pendientes</option>
+          <option value="proximo">Ficha próxima</option>
+        </select></label
+      ><button id="credits" class="text-button">Fotos y datos</button>
+    </div>
+    <main id="stage" tabindex="-1"></main>
+    <nav class="proto-picker" aria-label="Prototype variants">
+      <span class="proto-picker-highlight" aria-hidden="true"></span
+      ><button class="proto-picker-item" data-active aria-current="true">Dividido</button
+      ><button class="proto-picker-item">Atlas</button
+      ><button class="proto-picker-item">Lista</button>
+    </nav>
+    <div id="feedback" class="toast" role="status" aria-live="polite"></div>
+    <dialog id="dialog">
+      <div class="dialog-head">
+        <h2 id="dialog-title"></h2>
+        <button class="icon-button" id="close-dialog" aria-label="Cerrar">×</button>
+      </div>
+      <div id="dialog-content"></div>
+    </dialog>
+    <script src="./expansion-explorar/vendor/leaflet.js"></script>
+    <script type="module" src="./expansion-explorar/app.js"></script>
+  </body>
+</html>

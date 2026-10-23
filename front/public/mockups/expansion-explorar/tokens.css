@@ -1,0 +1,157 @@
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 500 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(/fonts/bricolage-grotesque-latin-ext.woff2) format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 500 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(/fonts/bricolage-grotesque-latin.woff2) format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(/fonts/manrope-latin-ext.woff2) format('woff2');
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+    U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(/fonts/manrope-latin.woff2) format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light;
+  --canvas: #f3f5fa;
+  --surface: #ffffff;
+  --surface-muted: #e7eaf1;
+  --surface-strong: #111217;
+  --ink: #111217;
+  --ink-inverse: #f8f9fc;
+  --muted: #5f6470;
+  --line: #c6cad4;
+  --line-strong: #747987;
+  --brand: #3047f2;
+  --brand-solid: #3047f2;
+  --brand-on-solid: #ffffff;
+  --brand-hover: #2035d7;
+  --brand-soft: #dfe3ff;
+  --sun: #ffd51f;
+  --sun-ink: #171200;
+  --signal: #f05237;
+  --success: #087a55;
+  --success-ink: #ffffff;
+  --warning: #946000;
+  --danger: #b92525;
+  --tourism-cultural: #c89b1d;
+  --tourism-nature: #2e7d32;
+  --tourism-beach: #26a69a;
+  --tourism-rural: #8d6e63;
+  --tourism-mountain: #5e60ce;
+  --tourism-heritage: #ad1457;
+  --tourism-cultural-solid: #795b00;
+  --tourism-nature-solid: #256628;
+  --tourism-beach-solid: #006b63;
+  --tourism-rural-solid: #6d4c41;
+  --tourism-mountain-solid: #4b4db0;
+  --tourism-heritage-solid: #8c1046;
+  --tourism-other-solid: #5f6470;
+  --focus: #3047f2;
+  --overlay: rgb(5 7 14 / 72%);
+  --media-legend-bg: #111217;
+  --media-legend-text: #f8f9fc;
+  --media-legend-muted: #c6cad4;
+  --media-action-bg: #f8f9fc;
+  --media-action-text: #111217;
+  --media-action-border: #f8f9fc;
+  --shadow-1: 0 1px 2px rgb(10 14 28 / 8%), 0 12px 32px rgb(10 14 28 / 8%);
+  --shadow-2: 0 24px 64px rgb(10 14 28 / 22%);
+  --r-1: 4px;
+  --r-2: 8px;
+  --r-3: 12px;
+  --r-4: 20px;
+  --r-pill: 999px;
+  --control: 48px;
+  --max: 1440px;
+  --reading: 720px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --motion-fast: 160ms;
+  --motion-ui: 240ms;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --canvas: #0b0c10;
+  --surface: #16181e;
+  --surface-muted: #242730;
+  --surface-strong: #f2f4f9;
+  --ink: #f2f4f9;
+  --ink-inverse: #101116;
+  --muted: #b2b7c2;
+  --line: #414550;
+  --line-strong: #7b818e;
+  --brand: #8794ff;
+  --brand-on-solid: #ffffff;
+  --brand-hover: #a5afff;
+  --brand-soft: #282e58;
+  --sun: #ffd51f;
+  --sun-ink: #171200;
+  --signal: #ff765d;
+  --success: #55d7a3;
+  --success-ink: #071a13;
+  --warning: #ffc968;
+  --danger: #ff8383;
+  --tourism-cultural: #8794ff;
+  --tourism-nature: #53d5c2;
+  --tourism-beach: #ff8b74;
+  --tourism-rural: #f1bd5a;
+  --tourism-mountain: #bdabff;
+  --tourism-heritage: #ff94bf;
+  --focus: #ffd51f;
+  --overlay: rgb(0 0 0 / 82%);
+  --media-legend-bg: #101116;
+  --media-legend-text: #f8f9fc;
+  --media-legend-muted: #c6cad4;
+  --media-action-bg: #f8f9fc;
+  --media-action-text: #101116;
+  --media-action-border: #f8f9fc;
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 20%), 0 16px 36px rgb(0 0 0 / 22%);
+  --shadow-2: 0 28px 72px rgb(0 0 0 / 45%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}

@@ -1,0 +1,4 @@
+import { state, filters, visible, results, mapCanvas, button } from './shared.js';
+export default function () {
+  return `<div class="map-page split"><header class="map-titlebar"><div><p class="eyebrow">Descubre el lugar, después el país</p><h1>¿Dónde empieza tu viaje?</h1></div><p class="muted" role="status">${visible().length} destinos de demostración</p></header>${filters()}<div class="mobile-switch" role="group" aria-label="Vista de exploración">${button('Mapa', 'view:mapa', state.view === 'mapa' ? 'dark' : 'secondary')}${button('Lista', 'view:lista', state.view === 'lista' ? 'dark' : 'secondary')}</div><div class="split-layout view-${state.view}"><section class="results-list" aria-label="Lista de destinos">${results()}</section><section class="map-pane" aria-label="Mapa de destinos">${mapCanvas()}<button class="button map-fit" data-action="fit">Ver todos los resultados ↗</button></section></div></div>`;
+}
